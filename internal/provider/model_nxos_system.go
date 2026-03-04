@@ -932,8 +932,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 				var rarpVpcDom gjson.Result
 				rarpVpc.Get("arpVpc.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("arpVpcDom.attributes.rn").String()
-						if key == data.ArpVpcDomains[c].getRn() {
+						if v.Get("arpVpcDom.attributes.domainId").String() == strconv.FormatInt(data.ArpVpcDomains[c].DomainId.ValueInt64(), 10) {
 							rarpVpcDom = v
 							return false
 						}
@@ -1039,8 +1038,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 			var rndDom gjson.Result
 			rndInst.Get("ndInst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ndDom.attributes.rn").String()
-					if key == data.NdVrfs[c].getRn() {
+					if v.Get("ndDom.attributes.name").String() == data.NdVrfs[c].Name.ValueString() {
 						rndDom = v
 						return false
 					}
@@ -1060,8 +1058,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 				var rndIf gjson.Result
 				rndDom.Get("ndDom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("ndIf.attributes.rn").String()
-						if key == data.NdVrfs[c].Interfaces[nc].getRn() {
+						if v.Get("ndIf.attributes.id").String() == data.NdVrfs[c].Interfaces[nc].InterfaceId.ValueString() {
 							rndIf = v
 							return false
 						}

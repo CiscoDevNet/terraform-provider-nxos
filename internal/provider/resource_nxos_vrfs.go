@@ -63,7 +63,7 @@ func (r *VRFsResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage multiple vrf resources.", "l3Inst", "Layer%203/l3:Inst/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage VRF configurations on NX-OS devices, including route distinguisher, address families, and route target configurations.", "topSystem", "Top%20Level/top:System/").AddAdditionalDocs([]string{"l3Inst", "rtctrlDom", "rtctrlDomAf", "rtctrlAfCtrl", "rtctrlRttP", "rtctrlRttEntry"}, []string{"Layer%203/l3:Inst/", "Routing%20and%20Forwarding/rtctrl:Dom/", "Routing%20and%20Forwarding/rtctrl:DomAf/", "Routing%20and%20Forwarding/rtctrl:AfCtrl/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,15 +71,15 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 			},
 			"id": schema.StringAttribute{
-				MarkdownDescription: "The distinguished name of the parent object.",
+				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.ListNestedAttribute{
-				MarkdownDescription: "The list of vrf items.",
-				Required:            true,
+			"vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "List of VRFs.",
+				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
@@ -233,7 +233,7 @@ func (r *VRFsResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
-	// Post all items as children of parent
+	// Post object
 	if device.Managed {
 		body := plan.toBody()
 		_, err := device.Client.Post(plan.getDn(), body.Str)
@@ -289,9 +289,8 @@ func (r *VRFsResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "6"))
-		res, err := device.Client.GetDn(state.getDn(), queries...)
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l3Inst,rtctrlDom,rtctrlDomAf,rtctrlAfCtrl,rtctrlRttP,rtctrlRttEntry")}
+		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return
@@ -338,7 +337,6 @@ func (r *VRFsResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
 	var state VRFs
 
 	// Read state
@@ -399,11 +397,13 @@ func (r *VRFsResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	}
 
 	if device.Managed {
-		body := state.toDeleteBody(state.Items)
-		_, err := device.Client.Post(state.getDn(), body.Str)
-		if err != nil {
-			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
-			return
+		body := state.toDeleteBody()
+		if len(body.Str) > 0 {
+			_, err := device.Client.Post(state.getDn(), body.Str)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+				return
+			}
 		}
 	}
 
@@ -419,16 +419,19 @@ func (r *VRFsResource) ImportState(ctx context.Context, req resource.ImportState
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
-		if len(idParts) > 1 {
+
+		if len(idParts) != 0 && len(idParts) != 1 {
+			expectedIdentifier := "Expected import identifier with format: ''"
+			expectedIdentifier += " or '<device>'"
 			resp.Diagnostics.AddError(
 				"Unexpected Import Identifier",
-				fmt.Sprintf("Expected import identifier with format: '<device>' or empty. Got: %q", req.ID),
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 			)
 			return
 		}
 		if len(idParts) == 1 {
-			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[0])...)
-			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[0])...)
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
 		var identity VRFsIdentity
@@ -436,13 +439,13 @@ func (r *VRFsResource) ImportState(ctx context.Context, req resource.ImportState
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
-
 		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
 		}
 	}
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), "sys")...)
+	var state VRFs
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

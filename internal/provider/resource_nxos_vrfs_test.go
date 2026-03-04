@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -34,18 +35,18 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosVRFs(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.name", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.description", "My VRF1 Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.admin_state", "admin-up"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.controller_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.encap", "vxlan-103901"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.l3vni", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.routing_encap", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.route_distinguisher", "rd:unknown:0:0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.address_families.0.address_family", "ipv4-ucast"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.address_families.0.route_target_address_families.0.route_target_address_family", "ipv4-ucast"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.address_families.0.route_target_address_families.0.route_target_directions.0.direction", "import"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.address_families.0.route_target_address_families.0.route_target_directions.0.route_targets.0.route_target", "route-target:as2-nn2:2:2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.description", "My VRF1 Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.admin_state", "admin-up"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.controller_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.encap", "vxlan-103901"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.l3vni", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.routing_encap", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.route_distinguisher", "rd:unknown:0:0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.address_families.0.address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.address_families.0.route_target_address_families.0.route_target_address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.address_families.0.route_target_address_families.0.route_target_directions.0.direction", "import"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "vrfs.0.address_families.0.route_target_address_families.0.route_target_directions.0.route_targets.0.route_target", "route-target:as2-nn2:2:2"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -79,7 +80,8 @@ func TestAccNxosVRFs(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosVRFsImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		return "", nil
+
+		return fmt.Sprintf(""), nil
 	}
 }
 
@@ -103,9 +105,6 @@ resource "nxos_dme" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVRFsConfig_minimum() string {
 	config := `resource "nxos_vrfs" "test" {` + "\n"
-	config += `	items = [{` + "\n"
-	config += `		name = "VRF1"` + "\n"
-	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -116,7 +115,7 @@ func testAccNxosVRFsConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosVRFsConfig_all() string {
 	config := `resource "nxos_vrfs" "test" {` + "\n"
-	config += `	items = [{` + "\n"
+	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `		description = "My VRF1 Description"` + "\n"
 	config += `		admin_state = "admin-up"` + "\n"

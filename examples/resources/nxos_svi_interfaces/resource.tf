@@ -1,5 +1,5 @@
 resource "nxos_svi_interfaces" "example" {
-  items = [{
+  svi_interfaces = [{
     interface_id            = "vlan293"
     admin_state             = "down"
     autostate               = false
@@ -17,5 +17,6 @@ resource "nxos_svi_interfaces" "example" {
     mtu_inherit             = false
     snmp_trap_link_status   = false
     vlan_id                 = 100
+    vrf_dn                  = "sys/inst-VRF123"
   }]
 }

@@ -501,8 +501,7 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 		var ripv6Dom gjson.Result
 		ripv6Inst.Get("ipv6Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ipv6Dom.attributes.rn").String()
-				if key == data.Vrfs[c].getRn() {
+				if v.Get("ipv6Dom.attributes.name").String() == data.Vrfs[c].Name.ValueString() {
 					ripv6Dom = v
 					return false
 				}
@@ -522,8 +521,7 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 			var ripv6Route gjson.Result
 			ripv6Dom.Get("ipv6Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ipv6Route.attributes.rn").String()
-					if key == data.Vrfs[c].StaticRoutes[nc].getRn() {
+					if v.Get("ipv6Route.attributes.prefix").String() == data.Vrfs[c].StaticRoutes[nc].Prefix.ValueString() {
 						ripv6Route = v
 						return false
 					}
@@ -563,8 +561,9 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 				var ripv6Nexthop gjson.Result
 				ripv6Route.Get("ipv6Route.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("ipv6Nexthop.attributes.rn").String()
-						if key == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].getRn() {
+						if v.Get("ipv6Nexthop.attributes.nhIf").String() == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].InterfaceId.ValueString() &&
+							v.Get("ipv6Nexthop.attributes.nhAddr").String() == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Address.ValueString() &&
+							v.Get("ipv6Nexthop.attributes.nhVrf").String() == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].VrfName.ValueString() {
 							ripv6Nexthop = v
 							return false
 						}
@@ -626,8 +625,7 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 			var ripv6If gjson.Result
 			ripv6Dom.Get("ipv6Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ipv6If.attributes.rn").String()
-					if key == data.Vrfs[c].Interfaces[nc].getRn() {
+					if v.Get("ipv6If.attributes.id").String() == data.Vrfs[c].Interfaces[nc].InterfaceId.ValueString() {
 						ripv6If = v
 						return false
 					}
@@ -682,8 +680,7 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 				var ripv6Addr gjson.Result
 				ripv6If.Get("ipv6If.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("ipv6Addr.attributes.rn").String()
-						if key == data.Vrfs[c].Interfaces[nc].Addresses[nc_].getRn() {
+						if v.Get("ipv6Addr.attributes.addr").String() == data.Vrfs[c].Interfaces[nc].Addresses[nc_].Address.ValueString() {
 							ripv6Addr = v
 							return false
 						}

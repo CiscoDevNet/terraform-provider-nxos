@@ -39,12 +39,12 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type Subinterfaces struct {
-	Device types.String         `tfsdk:"device"`
-	Dn     types.String         `tfsdk:"id"`
-	Items  []SubinterfacesItems `tfsdk:"items"`
+	Device        types.String                 `tfsdk:"device"`
+	Dn            types.String                 `tfsdk:"id"`
+	Subinterfaces []SubinterfacesSubinterfaces `tfsdk:"subinterfaces"`
 }
 
-type SubinterfacesItems struct {
+type SubinterfacesSubinterfaces struct {
 	InterfaceId          types.String `tfsdk:"interface_id"`
 	AdminState           types.String `tfsdk:"admin_state"`
 	Bandwidth            types.Int64  `tfsdk:"bandwidth"`
@@ -89,20 +89,12 @@ func (data Subinterfaces) getDn() string {
 	return "sys/intf"
 }
 
+func (data SubinterfacesSubinterfaces) getRn() string {
+	return fmt.Sprintf("encrtd-[%s]", data.InterfaceId.ValueString())
+}
+
 func (data Subinterfaces) getClassName() string {
 	return "interfaceEntity"
-}
-
-func (data Subinterfaces) getItemClassName() string {
-	return "l3EncRtdIf"
-}
-
-func (data Subinterfaces) getItemDn(item SubinterfacesItems) string {
-	return fmt.Sprintf("sys/intf/encrtd-[%s]", item.InterfaceId.ValueString())
-}
-
-func (data Subinterfaces) getItemRn(item SubinterfacesItems) string {
-	return fmt.Sprintf("encrtd-[%s]", item.InterfaceId.ValueString())
 }
 
 // End of section. //template:end getPath
@@ -112,100 +104,64 @@ func (data Subinterfaces) getItemRn(item SubinterfacesItems) string {
 func (data Subinterfaces) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	var attrs string
 	childrenPath := data.getClassName() + ".children"
-
-	for _, item := range data.Items {
-		itemBody := ""
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes", map[string]interface{}{})
-		if (!item.InterfaceId.IsUnknown() && !item.InterfaceId.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"id", item.InterfaceId.ValueString())
-		}
-		if (!item.AdminState.IsUnknown() && !item.AdminState.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"adminSt", item.AdminState.ValueString())
-		}
-		if (!item.Bandwidth.IsUnknown() && !item.Bandwidth.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"bw", strconv.FormatInt(item.Bandwidth.ValueInt64(), 10))
-		}
-		if (!item.Delay.IsUnknown() && !item.Delay.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"delay", strconv.FormatInt(item.Delay.ValueInt64(), 10))
-		}
-		if (!item.Description.IsUnknown() && !item.Description.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"descr", item.Description.ValueString())
-		}
-		if (!item.Encap.IsUnknown() && !item.Encap.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"encap", item.Encap.ValueString())
-		}
-		if (!item.LinkLogging.IsUnknown() && !item.LinkLogging.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkLog", item.LinkLogging.ValueString())
-		}
-		if (!item.Medium.IsUnknown() && !item.Medium.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mediumType", item.Medium.ValueString())
-		}
-		if (!item.Mtu.IsUnknown() && !item.Mtu.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mtu", strconv.FormatInt(item.Mtu.ValueInt64(), 10))
-		}
-		if (!item.MtuInherit.IsUnknown() && !item.MtuInherit.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mtuInherit", strconv.FormatBool(item.MtuInherit.ValueBool()))
-		}
-		if (!item.RouterMac.IsUnknown() && !item.RouterMac.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"routerMac", item.RouterMac.ValueString())
-		}
-		if (!item.RouterMacIpv6Extract.IsUnknown() && !item.RouterMacIpv6Extract.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"routerMacIpv6Extract", item.RouterMacIpv6Extract.ValueString())
-		}
-		if (!item.SnmpTrap.IsUnknown() && !item.SnmpTrap.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"snmpTrap", item.SnmpTrap.ValueString())
-		}
-		var attrs string
-		itemChildrenPath := data.getItemClassName() + ".children"
+	for _, child := range data.Subinterfaces {
 		attrs = "{}"
-		if (!item.VrfDn.IsUnknown() && !item.VrfDn.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "tDn", item.VrfDn.ValueString())
+		if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
 		}
-		if attrs != "{}" || false {
-			itemBody, _ = sjson.SetRaw(itemBody, itemChildrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
-		_ = attrs
-
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
-	}
-
-	return nxos.Body{body}
-}
-
-func (data Subinterfaces) toDeleteBody(items []SubinterfacesItems) nxos.Body {
-	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	childrenPath := data.getClassName() + ".children"
-	for _, item := range items {
-		itemBody := ""
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(item))
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
-	}
-	return nxos.Body{body}
-}
-
-func (data Subinterfaces) toBodyWithDeletes(ctx context.Context, state Subinterfaces) nxos.Body {
-	body := data.toBody()
-	childrenPath := data.getClassName() + ".children"
-	for _, stateItem := range state.Items {
-		found := false
-		for _, planItem := range data.Items {
-			if planItem.InterfaceId.ValueString() != stateItem.InterfaceId.ValueString() {
-				continue
+		if (!child.Bandwidth.IsUnknown() && !child.Bandwidth.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "bw", strconv.FormatInt(child.Bandwidth.ValueInt64(), 10))
+		}
+		if (!child.Delay.IsUnknown() && !child.Delay.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "delay", strconv.FormatInt(child.Delay.ValueInt64(), 10))
+		}
+		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+		}
+		if (!child.Encap.IsUnknown() && !child.Encap.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "encap", child.Encap.ValueString())
+		}
+		if (!child.LinkLogging.IsUnknown() && !child.LinkLogging.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkLog", child.LinkLogging.ValueString())
+		}
+		if (!child.Medium.IsUnknown() && !child.Medium.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mediumType", child.Medium.ValueString())
+		}
+		if (!child.Mtu.IsUnknown() && !child.Mtu.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
+		}
+		if (!child.MtuInherit.IsUnknown() && !child.MtuInherit.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mtuInherit", strconv.FormatBool(child.MtuInherit.ValueBool()))
+		}
+		if (!child.RouterMac.IsUnknown() && !child.RouterMac.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "routerMac", child.RouterMac.ValueString())
+		}
+		if (!child.RouterMacIpv6Extract.IsUnknown() && !child.RouterMacIpv6Extract.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "routerMacIpv6Extract", child.RouterMacIpv6Extract.ValueString())
+		}
+		if (!child.SnmpTrap.IsUnknown() && !child.SnmpTrap.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "snmpTrap", child.SnmpTrap.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.l3EncRtdIf.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".l3EncRtdIf.children"
+			attrs = "{}"
+			if (!child.VrfDn.IsUnknown() && !child.VrfDn.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())
 			}
-			found = true
-			break
-		}
-		if !found {
-			itemBody := ""
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(stateItem))
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, childrenPath+".-1", itemBody)
+			if attrs != "{}" || false {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+			}
 		}
 	}
-	return body
+
+	return nxos.Body{body}
 }
 
 // End of section. //template:end toBody
@@ -213,44 +169,47 @@ func (data Subinterfaces) toBodyWithDeletes(ctx context.Context, state Subinterf
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *Subinterfaces) fromBody(res gjson.Result) {
-	data.Items = make([]SubinterfacesItems, 0)
-	res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
-		v.ForEach(func(classname, value gjson.Result) bool {
-			if classname.String() == data.getItemClassName() {
-				item := SubinterfacesItems{}
-				item.InterfaceId = types.StringValue(value.Get("attributes.id").String())
-				item.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
-				item.Bandwidth = types.Int64Value(value.Get("attributes.bw").Int())
-				item.Delay = types.Int64Value(value.Get("attributes.delay").Int())
-				item.Description = types.StringValue(value.Get("attributes.descr").String())
-				item.Encap = types.StringValue(value.Get("attributes.encap").String())
-				item.LinkLogging = types.StringValue(value.Get("attributes.linkLog").String())
-				item.Medium = types.StringValue(value.Get("attributes.mediumType").String())
-				item.Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
-				item.MtuInherit = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mtuInherit").String()))
-				item.RouterMac = types.StringValue(value.Get("attributes.routerMac").String())
-				item.RouterMacIpv6Extract = types.StringValue(value.Get("attributes.routerMacIpv6Extract").String())
-				item.SnmpTrap = types.StringValue(value.Get("attributes.snmpTrap").String())
-				{
-					var rnwRtVrfMbr gjson.Result
-					value.Get("children").ForEach(
-						func(_, nestedV gjson.Result) bool {
-							key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
-							if key == "rtvrfMbr" {
-								rnwRtVrfMbr = nestedV
-								return false
-							}
-							return true
-						},
-					)
-					item.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
-				}
-				data.Items = append(data.Items, item)
-			}
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "l3EncRtdIf" {
+						var child SubinterfacesSubinterfaces
+						child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
+						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+						child.Bandwidth = types.Int64Value(value.Get("attributes.bw").Int())
+						child.Delay = types.Int64Value(value.Get("attributes.delay").Int())
+						child.Description = types.StringValue(value.Get("attributes.descr").String())
+						child.Encap = types.StringValue(value.Get("attributes.encap").String())
+						child.LinkLogging = types.StringValue(value.Get("attributes.linkLog").String())
+						child.Medium = types.StringValue(value.Get("attributes.mediumType").String())
+						child.Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
+						child.MtuInherit = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mtuInherit").String()))
+						child.RouterMac = types.StringValue(value.Get("attributes.routerMac").String())
+						child.RouterMacIpv6Extract = types.StringValue(value.Get("attributes.routerMacIpv6Extract").String())
+						child.SnmpTrap = types.StringValue(value.Get("attributes.snmpTrap").String())
+						{
+							var rnwRtVrfMbr gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
+									if key == "rtvrfMbr" {
+										rnwRtVrfMbr = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+						}
+						data.Subinterfaces = append(data.Subinterfaces, child)
+					}
+					return true
+				},
+			)
 			return true
-		})
-		return true
-	})
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -258,114 +217,164 @@ func (data *Subinterfaces) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *Subinterfaces) updateFromBody(res gjson.Result) {
-	for i := len(data.Items) - 1; i >= 0; i-- {
-		// Find the matching item in the response by id attributes
-		var matchedValue gjson.Result
-		res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
-			v.ForEach(func(classname, value gjson.Result) bool {
-				if classname.String() == data.getItemClassName() {
-					if value.Get("attributes.id").String() != data.Items[i].InterfaceId.ValueString() {
-						return true
-					}
-					matchedValue = value
+	for c := len(data.Subinterfaces) - 1; c >= 0; c-- {
+		var rl3EncRtdIf gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("l3EncRtdIf.attributes.id").String() == data.Subinterfaces[c].InterfaceId.ValueString() {
+					rl3EncRtdIf = v
 					return false
 				}
 				return true
-			})
-			if matchedValue.Exists() {
-				return false
-			}
-			return true
-		})
-		if !matchedValue.Exists() {
-			data.Items = slices.Delete(data.Items, i, i+1)
+			},
+		)
+		if !rl3EncRtdIf.Exists() {
+			data.Subinterfaces = slices.Delete(data.Subinterfaces, c, c+1)
 			continue
 		}
-		// Found matching item, update attributes
-		if !data.Items[i].InterfaceId.IsNull() {
-			data.Items[i].InterfaceId = types.StringValue(matchedValue.Get("attributes.id").String())
+		if !data.Subinterfaces[c].InterfaceId.IsNull() {
+			data.Subinterfaces[c].InterfaceId = types.StringValue(rl3EncRtdIf.Get("l3EncRtdIf.attributes.id").String())
 		} else {
-			data.Items[i].InterfaceId = types.StringNull()
+			data.Subinterfaces[c].InterfaceId = types.StringNull()
 		}
-		if !data.Items[i].AdminState.IsNull() {
-			data.Items[i].AdminState = types.StringValue(matchedValue.Get("attributes.adminSt").String())
+		if !data.Subinterfaces[c].AdminState.IsNull() {
+			data.Subinterfaces[c].AdminState = types.StringValue(rl3EncRtdIf.Get("l3EncRtdIf.attributes.adminSt").String())
 		} else {
-			data.Items[i].AdminState = types.StringNull()
+			data.Subinterfaces[c].AdminState = types.StringNull()
 		}
-		if !data.Items[i].Bandwidth.IsNull() {
-			data.Items[i].Bandwidth = types.Int64Value(matchedValue.Get("attributes.bw").Int())
+		if !data.Subinterfaces[c].Bandwidth.IsNull() {
+			data.Subinterfaces[c].Bandwidth = types.Int64Value(rl3EncRtdIf.Get("l3EncRtdIf.attributes.bw").Int())
 		} else {
-			data.Items[i].Bandwidth = types.Int64Null()
+			data.Subinterfaces[c].Bandwidth = types.Int64Null()
 		}
-		if !data.Items[i].Delay.IsNull() {
-			data.Items[i].Delay = types.Int64Value(matchedValue.Get("attributes.delay").Int())
+		if !data.Subinterfaces[c].Delay.IsNull() {
+			data.Subinterfaces[c].Delay = types.Int64Value(rl3EncRtdIf.Get("l3EncRtdIf.attributes.delay").Int())
 		} else {
-			data.Items[i].Delay = types.Int64Null()
+			data.Subinterfaces[c].Delay = types.Int64Null()
 		}
-		if !data.Items[i].Description.IsNull() {
-			data.Items[i].Description = types.StringValue(matchedValue.Get("attributes.descr").String())
+		if !data.Subinterfaces[c].Description.IsNull() {
+			data.Subinterfaces[c].Description = types.StringValue(rl3EncRtdIf.Get("l3EncRtdIf.attributes.descr").String())
 		} else {
-			data.Items[i].Description = types.StringNull()
+			data.Subinterfaces[c].Description = types.StringNull()
 		}
-		if !data.Items[i].Encap.IsNull() {
-			data.Items[i].Encap = types.StringValue(matchedValue.Get("attributes.encap").String())
+		if !data.Subinterfaces[c].Encap.IsNull() {
+			data.Subinterfaces[c].Encap = types.StringValue(rl3EncRtdIf.Get("l3EncRtdIf.attributes.encap").String())
 		} else {
-			data.Items[i].Encap = types.StringNull()
+			data.Subinterfaces[c].Encap = types.StringNull()
 		}
-		if !data.Items[i].LinkLogging.IsNull() {
-			data.Items[i].LinkLogging = types.StringValue(matchedValue.Get("attributes.linkLog").String())
+		if !data.Subinterfaces[c].LinkLogging.IsNull() {
+			data.Subinterfaces[c].LinkLogging = types.StringValue(rl3EncRtdIf.Get("l3EncRtdIf.attributes.linkLog").String())
 		} else {
-			data.Items[i].LinkLogging = types.StringNull()
+			data.Subinterfaces[c].LinkLogging = types.StringNull()
 		}
-		if !data.Items[i].Medium.IsNull() {
-			data.Items[i].Medium = types.StringValue(matchedValue.Get("attributes.mediumType").String())
+		if !data.Subinterfaces[c].Medium.IsNull() {
+			data.Subinterfaces[c].Medium = types.StringValue(rl3EncRtdIf.Get("l3EncRtdIf.attributes.mediumType").String())
 		} else {
-			data.Items[i].Medium = types.StringNull()
+			data.Subinterfaces[c].Medium = types.StringNull()
 		}
-		if !data.Items[i].Mtu.IsNull() {
-			data.Items[i].Mtu = types.Int64Value(matchedValue.Get("attributes.mtu").Int())
+		if !data.Subinterfaces[c].Mtu.IsNull() {
+			data.Subinterfaces[c].Mtu = types.Int64Value(rl3EncRtdIf.Get("l3EncRtdIf.attributes.mtu").Int())
 		} else {
-			data.Items[i].Mtu = types.Int64Null()
+			data.Subinterfaces[c].Mtu = types.Int64Null()
 		}
-		if !data.Items[i].MtuInherit.IsNull() {
-			data.Items[i].MtuInherit = types.BoolValue(helpers.ParseNxosBoolean(matchedValue.Get("attributes.mtuInherit").String()))
+		if !data.Subinterfaces[c].MtuInherit.IsNull() {
+			data.Subinterfaces[c].MtuInherit = types.BoolValue(helpers.ParseNxosBoolean(rl3EncRtdIf.Get("l3EncRtdIf.attributes.mtuInherit").String()))
 		} else {
-			data.Items[i].MtuInherit = types.BoolNull()
+			data.Subinterfaces[c].MtuInherit = types.BoolNull()
 		}
-		if !data.Items[i].RouterMac.IsNull() {
-			data.Items[i].RouterMac = types.StringValue(matchedValue.Get("attributes.routerMac").String())
+		if !data.Subinterfaces[c].RouterMac.IsNull() {
+			data.Subinterfaces[c].RouterMac = types.StringValue(rl3EncRtdIf.Get("l3EncRtdIf.attributes.routerMac").String())
 		} else {
-			data.Items[i].RouterMac = types.StringNull()
+			data.Subinterfaces[c].RouterMac = types.StringNull()
 		}
-		if !data.Items[i].RouterMacIpv6Extract.IsNull() {
-			data.Items[i].RouterMacIpv6Extract = types.StringValue(matchedValue.Get("attributes.routerMacIpv6Extract").String())
+		if !data.Subinterfaces[c].RouterMacIpv6Extract.IsNull() {
+			data.Subinterfaces[c].RouterMacIpv6Extract = types.StringValue(rl3EncRtdIf.Get("l3EncRtdIf.attributes.routerMacIpv6Extract").String())
 		} else {
-			data.Items[i].RouterMacIpv6Extract = types.StringNull()
+			data.Subinterfaces[c].RouterMacIpv6Extract = types.StringNull()
 		}
-		if !data.Items[i].SnmpTrap.IsNull() {
-			data.Items[i].SnmpTrap = types.StringValue(matchedValue.Get("attributes.snmpTrap").String())
+		if !data.Subinterfaces[c].SnmpTrap.IsNull() {
+			data.Subinterfaces[c].SnmpTrap = types.StringValue(rl3EncRtdIf.Get("l3EncRtdIf.attributes.snmpTrap").String())
 		} else {
-			data.Items[i].SnmpTrap = types.StringNull()
+			data.Subinterfaces[c].SnmpTrap = types.StringNull()
 		}
 		{
 			var rnwRtVrfMbr gjson.Result
-			matchedValue.Get("children").ForEach(
-				func(_, nestedV gjson.Result) bool {
-					key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
+			rl3EncRtdIf.Get("l3EncRtdIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("nwRtVrfMbr.attributes.rn").String()
 					if key == "rtvrfMbr" {
-						rnwRtVrfMbr = nestedV
+						rnwRtVrfMbr = v
 						return false
 					}
 					return true
 				},
 			)
-			if !data.Items[i].VrfDn.IsNull() {
-				data.Items[i].VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+			if !data.Subinterfaces[c].VrfDn.IsNull() {
+				data.Subinterfaces[c].VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
 			} else {
-				data.Items[i].VrfDn = types.StringNull()
+				data.Subinterfaces[c].VrfDn = types.StringNull()
 			}
 		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
+func (data Subinterfaces) toDeleteBody() nxos.Body {
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	childrenPath := data.getClassName() + ".children"
+	for _, child := range data.Subinterfaces {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "l3EncRtdIf.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "l3EncRtdIf.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+
+	return nxos.Body{body}
+}
+
+func (data Subinterfaces) toBodyWithDeletes(ctx context.Context, state Subinterfaces) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
+	for _, stateChild := range state.Subinterfaces {
+		found := false
+		for _, planChild := range data.Subinterfaces {
+			if stateChild.InterfaceId == planChild.InterfaceId {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "l3EncRtdIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "l3EncRtdIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+		}
+	}
+	for di := range state.Subinterfaces {
+		for pdi := range data.Subinterfaces {
+			if state.Subinterfaces[di].InterfaceId == data.Subinterfaces[pdi].InterfaceId {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("l3EncRtdIf.attributes.rn").String() == state.Subinterfaces[di].getRn() {
+						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".l3EncRtdIf.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
+				break
+			}
+		}
+	}
+	return body
+}
+
+// End of section. //template:end toDeleteBody

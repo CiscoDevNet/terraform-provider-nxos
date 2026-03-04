@@ -38,12 +38,12 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type PhysicalInterfaces struct {
-	Device types.String              `tfsdk:"device"`
-	Dn     types.String              `tfsdk:"id"`
-	Items  []PhysicalInterfacesItems `tfsdk:"items"`
+	Device             types.String                           `tfsdk:"device"`
+	Dn                 types.String                           `tfsdk:"id"`
+	PhysicalInterfaces []PhysicalInterfacesPhysicalInterfaces `tfsdk:"physical_interfaces"`
 }
 
-type PhysicalInterfacesItems struct {
+type PhysicalInterfacesPhysicalInterfaces struct {
 	InterfaceId                    types.String `tfsdk:"interface_id"`
 	FecMode                        types.String `tfsdk:"fec_mode"`
 	AccessVlan                     types.String `tfsdk:"access_vlan"`
@@ -130,20 +130,12 @@ func (data PhysicalInterfaces) getDn() string {
 	return "sys/intf"
 }
 
+func (data PhysicalInterfacesPhysicalInterfaces) getRn() string {
+	return fmt.Sprintf("phys-[%s]", data.InterfaceId.ValueString())
+}
+
 func (data PhysicalInterfaces) getClassName() string {
 	return "interfaceEntity"
-}
-
-func (data PhysicalInterfaces) getItemClassName() string {
-	return "l1PhysIf"
-}
-
-func (data PhysicalInterfaces) getItemDn(item PhysicalInterfacesItems) string {
-	return fmt.Sprintf("sys/intf/phys-[%s]", item.InterfaceId.ValueString())
-}
-
-func (data PhysicalInterfaces) getItemRn(item PhysicalInterfacesItems) string {
-	return fmt.Sprintf("phys-[%s]", item.InterfaceId.ValueString())
 }
 
 // End of section. //template:end getPath
@@ -153,226 +145,190 @@ func (data PhysicalInterfaces) getItemRn(item PhysicalInterfacesItems) string {
 func (data PhysicalInterfaces) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	var attrs string
 	childrenPath := data.getClassName() + ".children"
-
-	for _, item := range data.Items {
-		itemBody := ""
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes", map[string]interface{}{})
-		if (!item.InterfaceId.IsUnknown() && !item.InterfaceId.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"id", item.InterfaceId.ValueString())
-		}
-		if (!item.FecMode.IsUnknown() && !item.FecMode.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"FECMode", item.FecMode.ValueString())
-		}
-		if (!item.AccessVlan.IsUnknown() && !item.AccessVlan.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"accessVlan", item.AccessVlan.ValueString())
-		}
-		if (!item.AdminState.IsUnknown() && !item.AdminState.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"adminSt", item.AdminState.ValueString())
-		}
-		if (!item.AutoNegotiation.IsUnknown() && !item.AutoNegotiation.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"autoNeg", item.AutoNegotiation.ValueString())
-		}
-		if (!item.Bandwidth.IsUnknown() && !item.Bandwidth.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"bw", strconv.FormatInt(item.Bandwidth.ValueInt64(), 10))
-		}
-		if (!item.Delay.IsUnknown() && !item.Delay.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"delay", strconv.FormatInt(item.Delay.ValueInt64(), 10))
-		}
-		if (!item.Description.IsUnknown() && !item.Description.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"descr", item.Description.ValueString())
-		}
-		if (!item.Duplex.IsUnknown() && !item.Duplex.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"duplex", item.Duplex.ValueString())
-		}
-		if (!item.Layer.IsUnknown() && !item.Layer.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"layer", item.Layer.ValueString())
-		}
-		if (!item.LinkLogging.IsUnknown() && !item.LinkLogging.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkLog", item.LinkLogging.ValueString())
-		}
-		if (!item.LinkDebounceDown.IsUnknown() && !item.LinkDebounceDown.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkDebounce", strconv.FormatInt(item.LinkDebounceDown.ValueInt64(), 10))
-		}
-		if (!item.LinkDebounceUp.IsUnknown() && !item.LinkDebounceUp.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkDebounceLinkUp", strconv.FormatInt(item.LinkDebounceUp.ValueInt64(), 10))
-		}
-		if (!item.Medium.IsUnknown() && !item.Medium.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"medium", item.Medium.ValueString())
-		}
-		if (!item.Mode.IsUnknown() && !item.Mode.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mode", item.Mode.ValueString())
-		}
-		if (!item.Mtu.IsUnknown() && !item.Mtu.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mtu", strconv.FormatInt(item.Mtu.ValueInt64(), 10))
-		}
-		if (!item.NativeVlan.IsUnknown() && !item.NativeVlan.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"nativeVlan", item.NativeVlan.ValueString())
-		}
-		if (!item.Speed.IsUnknown() && !item.Speed.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"speed", item.Speed.ValueString())
-		}
-		if (!item.SpeedGroup.IsUnknown() && !item.SpeedGroup.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"speedGroup", item.SpeedGroup.ValueString())
-		}
-		if (!item.TrunkVlans.IsUnknown() && !item.TrunkVlans.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"trunkVlans", item.TrunkVlans.ValueString())
-		}
-		if (!item.UniDirectionalEthernet.IsUnknown() && !item.UniDirectionalEthernet.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"uniDirectionalEthernet", item.UniDirectionalEthernet.ValueString())
-		}
-		if (!item.UserConfiguredFlags.IsUnknown() && !item.UserConfiguredFlags.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"userCfgdFlags", item.UserConfiguredFlags.ValueString())
-		}
-		if (!item.Beacon.IsUnknown() && !item.Beacon.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"beacon", item.Beacon.ValueString())
-		}
-		if (!item.DfeAdaptiveTuning.IsUnknown() && !item.DfeAdaptiveTuning.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"dfeAdaptiveTuning", item.DfeAdaptiveTuning.ValueString())
-		}
-		if (!item.DfeTuningDelay.IsUnknown() && !item.DfeTuningDelay.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"dfeTuningDelay", strconv.FormatInt(item.DfeTuningDelay.ValueInt64(), 10))
-		}
-		if (!item.Dot1qEtherType.IsUnknown() && !item.Dot1qEtherType.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"dot1qEtherType", strconv.FormatInt(item.Dot1qEtherType.ValueInt64(), 10))
-		}
-		if (!item.EqualizationDelay.IsUnknown() && !item.EqualizationDelay.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"equalizationDelay", strconv.FormatInt(item.EqualizationDelay.ValueInt64(), 10))
-		}
-		if (!item.InheritBandwidth.IsUnknown() && !item.InheritBandwidth.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"inhBw", strconv.FormatInt(item.InheritBandwidth.ValueInt64(), 10))
-		}
-		if (!item.ItuChannel.IsUnknown() && !item.ItuChannel.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"ituChannel", strconv.FormatInt(item.ItuChannel.ValueInt64(), 10))
-		}
-		if (!item.LinkActiveJitterManagement.IsUnknown() && !item.LinkActiveJitterManagement.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkActiveJitterMgmt", item.LinkActiveJitterManagement.ValueString())
-		}
-		if (!item.LinkFlapErrorDisable.IsUnknown() && !item.LinkFlapErrorDisable.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkFlapErrDis", item.LinkFlapErrorDisable.ValueString())
-		}
-		if (!item.LinkFlapErrorMax.IsUnknown() && !item.LinkFlapErrorMax.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkFlapErrorMax", strconv.FormatInt(item.LinkFlapErrorMax.ValueInt64(), 10))
-		}
-		if (!item.LinkFlapErrorSeconds.IsUnknown() && !item.LinkFlapErrorSeconds.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkFlapErrorSeconds", strconv.FormatInt(item.LinkFlapErrorSeconds.ValueInt64(), 10))
-		}
-		if (!item.LinkLoopback.IsUnknown() && !item.LinkLoopback.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkLoopback", item.LinkLoopback.ValueString())
-		}
-		if (!item.LinkMacUpTimer.IsUnknown() && !item.LinkMacUpTimer.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkMacUpTimer", strconv.FormatInt(item.LinkMacUpTimer.ValueInt64(), 10))
-		}
-		if (!item.LinkMaxBringUpTimer.IsUnknown() && !item.LinkMaxBringUpTimer.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkMaxBringUpTimer", strconv.FormatInt(item.LinkMaxBringUpTimer.ValueInt64(), 10))
-		}
-		if (!item.LinkTransmitReset.IsUnknown() && !item.LinkTransmitReset.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkTransmitReset", item.LinkTransmitReset.ValueString())
-		}
-		if (!item.Mdix.IsUnknown() && !item.Mdix.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mdix", item.Mdix.ValueString())
-		}
-		if (!item.MediaType.IsUnknown() && !item.MediaType.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mediaType", item.MediaType.ValueString())
-		}
-		if (!item.OpticsLoopback.IsUnknown() && !item.OpticsLoopback.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"opticsLoopback", item.OpticsLoopback.ValueString())
-		}
-		if (!item.PacketTimestampEgressSourceId.IsUnknown() && !item.PacketTimestampEgressSourceId.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"packetTimestampEgressSourceId", strconv.FormatInt(item.PacketTimestampEgressSourceId.ValueInt64(), 10))
-		}
-		if (!item.PacketTimestampIngressSourceId.IsUnknown() && !item.PacketTimestampIngressSourceId.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"packetTimestampIngressSourceId", strconv.FormatInt(item.PacketTimestampIngressSourceId.ValueInt64(), 10))
-		}
-		if (!item.PacketTimestampState.IsUnknown() && !item.PacketTimestampState.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"packetTimestampState", item.PacketTimestampState.ValueString())
-		}
-		if (!item.PortType.IsUnknown() && !item.PortType.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"portT", item.PortType.ValueString())
-		}
-		if (!item.RouterMac.IsUnknown() && !item.RouterMac.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"routerMac", item.RouterMac.ValueString())
-		}
-		if (!item.SnmpTrapState.IsUnknown() && !item.SnmpTrapState.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"snmpTrapSt", item.SnmpTrapState.ValueString())
-		}
-		if (!item.SpanMode.IsUnknown() && !item.SpanMode.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"spanMode", item.SpanMode.ValueString())
-		}
-		if (!item.Squelch.IsUnknown() && !item.Squelch.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"squelch", item.Squelch.ValueString())
-		}
-		if (!item.TransparentMode.IsUnknown() && !item.TransparentMode.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"transMode", item.TransparentMode.ValueString())
-		}
-		if (!item.TrunkLogging.IsUnknown() && !item.TrunkLogging.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"trunkLog", item.TrunkLogging.ValueString())
-		}
-		if (!item.Usage.IsUnknown() && !item.Usage.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"usage", item.Usage.ValueString())
-		}
-		if (!item.VoicePortCos.IsUnknown() && !item.VoicePortCos.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"voicePortCos", strconv.FormatInt(item.VoicePortCos.ValueInt64(), 10))
-		}
-		if (!item.VoicePortTrust.IsUnknown() && !item.VoicePortTrust.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"voicePortTrust", item.VoicePortTrust.ValueString())
-		}
-		if (!item.VoiceVlanId.IsUnknown() && !item.VoiceVlanId.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"voiceVlanId", strconv.FormatInt(item.VoiceVlanId.ValueInt64(), 10))
-		}
-		if (!item.VoiceVlanType.IsUnknown() && !item.VoiceVlanType.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"voiceVlanType", item.VoiceVlanType.ValueString())
-		}
-		var attrs string
-		itemChildrenPath := data.getItemClassName() + ".children"
+	for _, child := range data.PhysicalInterfaces {
 		attrs = "{}"
-		if (!item.VrfDn.IsUnknown() && !item.VrfDn.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "tDn", item.VrfDn.ValueString())
+		if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
 		}
-		if attrs != "{}" || false {
-			itemBody, _ = sjson.SetRaw(itemBody, itemChildrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+		if (!child.FecMode.IsUnknown() && !child.FecMode.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "FECMode", child.FecMode.ValueString())
 		}
-		_ = attrs
-
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
-	}
-
-	return nxos.Body{body}
-}
-
-func (data PhysicalInterfaces) toDeleteBody(items []PhysicalInterfacesItems) nxos.Body {
-	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	childrenPath := data.getClassName() + ".children"
-	for _, item := range items {
-		itemBody := ""
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(item))
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
-	}
-	return nxos.Body{body}
-}
-
-func (data PhysicalInterfaces) toBodyWithDeletes(ctx context.Context, state PhysicalInterfaces) nxos.Body {
-	body := data.toBody()
-	childrenPath := data.getClassName() + ".children"
-	for _, stateItem := range state.Items {
-		found := false
-		for _, planItem := range data.Items {
-			if planItem.InterfaceId.ValueString() != stateItem.InterfaceId.ValueString() {
-				continue
+		if (!child.AccessVlan.IsUnknown() && !child.AccessVlan.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "accessVlan", child.AccessVlan.ValueString())
+		}
+		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+		}
+		if (!child.AutoNegotiation.IsUnknown() && !child.AutoNegotiation.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "autoNeg", child.AutoNegotiation.ValueString())
+		}
+		if (!child.Bandwidth.IsUnknown() && !child.Bandwidth.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "bw", strconv.FormatInt(child.Bandwidth.ValueInt64(), 10))
+		}
+		if (!child.Delay.IsUnknown() && !child.Delay.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "delay", strconv.FormatInt(child.Delay.ValueInt64(), 10))
+		}
+		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+		}
+		if (!child.Duplex.IsUnknown() && !child.Duplex.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "duplex", child.Duplex.ValueString())
+		}
+		if (!child.Layer.IsUnknown() && !child.Layer.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "layer", child.Layer.ValueString())
+		}
+		if (!child.LinkLogging.IsUnknown() && !child.LinkLogging.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkLog", child.LinkLogging.ValueString())
+		}
+		if (!child.LinkDebounceDown.IsUnknown() && !child.LinkDebounceDown.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkDebounce", strconv.FormatInt(child.LinkDebounceDown.ValueInt64(), 10))
+		}
+		if (!child.LinkDebounceUp.IsUnknown() && !child.LinkDebounceUp.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkDebounceLinkUp", strconv.FormatInt(child.LinkDebounceUp.ValueInt64(), 10))
+		}
+		if (!child.Medium.IsUnknown() && !child.Medium.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "medium", child.Medium.ValueString())
+		}
+		if (!child.Mode.IsUnknown() && !child.Mode.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
+		}
+		if (!child.Mtu.IsUnknown() && !child.Mtu.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
+		}
+		if (!child.NativeVlan.IsUnknown() && !child.NativeVlan.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "nativeVlan", child.NativeVlan.ValueString())
+		}
+		if (!child.Speed.IsUnknown() && !child.Speed.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "speed", child.Speed.ValueString())
+		}
+		if (!child.SpeedGroup.IsUnknown() && !child.SpeedGroup.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "speedGroup", child.SpeedGroup.ValueString())
+		}
+		if (!child.TrunkVlans.IsUnknown() && !child.TrunkVlans.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "trunkVlans", child.TrunkVlans.ValueString())
+		}
+		if (!child.UniDirectionalEthernet.IsUnknown() && !child.UniDirectionalEthernet.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "uniDirectionalEthernet", child.UniDirectionalEthernet.ValueString())
+		}
+		if (!child.UserConfiguredFlags.IsUnknown() && !child.UserConfiguredFlags.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "userCfgdFlags", child.UserConfiguredFlags.ValueString())
+		}
+		if (!child.Beacon.IsUnknown() && !child.Beacon.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "beacon", child.Beacon.ValueString())
+		}
+		if (!child.DfeAdaptiveTuning.IsUnknown() && !child.DfeAdaptiveTuning.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dfeAdaptiveTuning", child.DfeAdaptiveTuning.ValueString())
+		}
+		if (!child.DfeTuningDelay.IsUnknown() && !child.DfeTuningDelay.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dfeTuningDelay", strconv.FormatInt(child.DfeTuningDelay.ValueInt64(), 10))
+		}
+		if (!child.Dot1qEtherType.IsUnknown() && !child.Dot1qEtherType.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dot1qEtherType", strconv.FormatInt(child.Dot1qEtherType.ValueInt64(), 10))
+		}
+		if (!child.EqualizationDelay.IsUnknown() && !child.EqualizationDelay.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "equalizationDelay", strconv.FormatInt(child.EqualizationDelay.ValueInt64(), 10))
+		}
+		if (!child.InheritBandwidth.IsUnknown() && !child.InheritBandwidth.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "inhBw", strconv.FormatInt(child.InheritBandwidth.ValueInt64(), 10))
+		}
+		if (!child.ItuChannel.IsUnknown() && !child.ItuChannel.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ituChannel", strconv.FormatInt(child.ItuChannel.ValueInt64(), 10))
+		}
+		if (!child.LinkActiveJitterManagement.IsUnknown() && !child.LinkActiveJitterManagement.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkActiveJitterMgmt", child.LinkActiveJitterManagement.ValueString())
+		}
+		if (!child.LinkFlapErrorDisable.IsUnknown() && !child.LinkFlapErrorDisable.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkFlapErrDis", child.LinkFlapErrorDisable.ValueString())
+		}
+		if (!child.LinkFlapErrorMax.IsUnknown() && !child.LinkFlapErrorMax.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkFlapErrorMax", strconv.FormatInt(child.LinkFlapErrorMax.ValueInt64(), 10))
+		}
+		if (!child.LinkFlapErrorSeconds.IsUnknown() && !child.LinkFlapErrorSeconds.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkFlapErrorSeconds", strconv.FormatInt(child.LinkFlapErrorSeconds.ValueInt64(), 10))
+		}
+		if (!child.LinkLoopback.IsUnknown() && !child.LinkLoopback.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkLoopback", child.LinkLoopback.ValueString())
+		}
+		if (!child.LinkMacUpTimer.IsUnknown() && !child.LinkMacUpTimer.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkMacUpTimer", strconv.FormatInt(child.LinkMacUpTimer.ValueInt64(), 10))
+		}
+		if (!child.LinkMaxBringUpTimer.IsUnknown() && !child.LinkMaxBringUpTimer.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkMaxBringUpTimer", strconv.FormatInt(child.LinkMaxBringUpTimer.ValueInt64(), 10))
+		}
+		if (!child.LinkTransmitReset.IsUnknown() && !child.LinkTransmitReset.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkTransmitReset", child.LinkTransmitReset.ValueString())
+		}
+		if (!child.Mdix.IsUnknown() && !child.Mdix.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mdix", child.Mdix.ValueString())
+		}
+		if (!child.MediaType.IsUnknown() && !child.MediaType.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mediaType", child.MediaType.ValueString())
+		}
+		if (!child.OpticsLoopback.IsUnknown() && !child.OpticsLoopback.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "opticsLoopback", child.OpticsLoopback.ValueString())
+		}
+		if (!child.PacketTimestampEgressSourceId.IsUnknown() && !child.PacketTimestampEgressSourceId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "packetTimestampEgressSourceId", strconv.FormatInt(child.PacketTimestampEgressSourceId.ValueInt64(), 10))
+		}
+		if (!child.PacketTimestampIngressSourceId.IsUnknown() && !child.PacketTimestampIngressSourceId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "packetTimestampIngressSourceId", strconv.FormatInt(child.PacketTimestampIngressSourceId.ValueInt64(), 10))
+		}
+		if (!child.PacketTimestampState.IsUnknown() && !child.PacketTimestampState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "packetTimestampState", child.PacketTimestampState.ValueString())
+		}
+		if (!child.PortType.IsUnknown() && !child.PortType.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "portT", child.PortType.ValueString())
+		}
+		if (!child.RouterMac.IsUnknown() && !child.RouterMac.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "routerMac", child.RouterMac.ValueString())
+		}
+		if (!child.SnmpTrapState.IsUnknown() && !child.SnmpTrapState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "snmpTrapSt", child.SnmpTrapState.ValueString())
+		}
+		if (!child.SpanMode.IsUnknown() && !child.SpanMode.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "spanMode", child.SpanMode.ValueString())
+		}
+		if (!child.Squelch.IsUnknown() && !child.Squelch.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "squelch", child.Squelch.ValueString())
+		}
+		if (!child.TransparentMode.IsUnknown() && !child.TransparentMode.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "transMode", child.TransparentMode.ValueString())
+		}
+		if (!child.TrunkLogging.IsUnknown() && !child.TrunkLogging.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "trunkLog", child.TrunkLogging.ValueString())
+		}
+		if (!child.Usage.IsUnknown() && !child.Usage.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "usage", child.Usage.ValueString())
+		}
+		if (!child.VoicePortCos.IsUnknown() && !child.VoicePortCos.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "voicePortCos", strconv.FormatInt(child.VoicePortCos.ValueInt64(), 10))
+		}
+		if (!child.VoicePortTrust.IsUnknown() && !child.VoicePortTrust.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "voicePortTrust", child.VoicePortTrust.ValueString())
+		}
+		if (!child.VoiceVlanId.IsUnknown() && !child.VoiceVlanId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "voiceVlanId", strconv.FormatInt(child.VoiceVlanId.ValueInt64(), 10))
+		}
+		if (!child.VoiceVlanType.IsUnknown() && !child.VoiceVlanType.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "voiceVlanType", child.VoiceVlanType.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.l1PhysIf.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".l1PhysIf.children"
+			attrs = "{}"
+			if (!child.VrfDn.IsUnknown() && !child.VrfDn.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())
 			}
-			found = true
-			break
-		}
-		if !found {
-			itemBody := ""
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(stateItem))
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, childrenPath+".-1", itemBody)
+			if attrs != "{}" || false {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+			}
 		}
 	}
-	return body
+
+	return nxos.Body{body}
 }
 
 // End of section. //template:end toBody
@@ -380,86 +336,89 @@ func (data PhysicalInterfaces) toBodyWithDeletes(ctx context.Context, state Phys
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *PhysicalInterfaces) fromBody(res gjson.Result) {
-	data.Items = make([]PhysicalInterfacesItems, 0)
-	res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
-		v.ForEach(func(classname, value gjson.Result) bool {
-			if classname.String() == data.getItemClassName() {
-				item := PhysicalInterfacesItems{}
-				item.InterfaceId = types.StringValue(value.Get("attributes.id").String())
-				item.FecMode = types.StringValue(value.Get("attributes.FECMode").String())
-				item.AccessVlan = types.StringValue(value.Get("attributes.accessVlan").String())
-				item.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
-				item.AutoNegotiation = types.StringValue(value.Get("attributes.autoNeg").String())
-				item.Bandwidth = types.Int64Value(value.Get("attributes.bw").Int())
-				item.Delay = types.Int64Value(value.Get("attributes.delay").Int())
-				item.Description = types.StringValue(value.Get("attributes.descr").String())
-				item.Duplex = types.StringValue(value.Get("attributes.duplex").String())
-				item.Layer = types.StringValue(value.Get("attributes.layer").String())
-				item.LinkLogging = types.StringValue(value.Get("attributes.linkLog").String())
-				item.LinkDebounceDown = types.Int64Value(value.Get("attributes.linkDebounce").Int())
-				item.LinkDebounceUp = types.Int64Value(value.Get("attributes.linkDebounceLinkUp").Int())
-				item.Medium = types.StringValue(value.Get("attributes.medium").String())
-				item.Mode = types.StringValue(value.Get("attributes.mode").String())
-				item.Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
-				item.NativeVlan = types.StringValue(value.Get("attributes.nativeVlan").String())
-				item.Speed = types.StringValue(value.Get("attributes.speed").String())
-				item.SpeedGroup = types.StringValue(value.Get("attributes.speedGroup").String())
-				item.TrunkVlans = types.StringValue(value.Get("attributes.trunkVlans").String())
-				item.UniDirectionalEthernet = types.StringValue(value.Get("attributes.uniDirectionalEthernet").String())
-				item.UserConfiguredFlags = types.StringValue(value.Get("attributes.userCfgdFlags").String())
-				item.Beacon = types.StringValue(value.Get("attributes.beacon").String())
-				item.DfeAdaptiveTuning = types.StringValue(value.Get("attributes.dfeAdaptiveTuning").String())
-				item.DfeTuningDelay = types.Int64Value(value.Get("attributes.dfeTuningDelay").Int())
-				item.Dot1qEtherType = types.Int64Value(value.Get("attributes.dot1qEtherType").Int())
-				item.EqualizationDelay = types.Int64Value(value.Get("attributes.equalizationDelay").Int())
-				item.InheritBandwidth = types.Int64Value(value.Get("attributes.inhBw").Int())
-				item.ItuChannel = types.Int64Value(value.Get("attributes.ituChannel").Int())
-				item.LinkActiveJitterManagement = types.StringValue(value.Get("attributes.linkActiveJitterMgmt").String())
-				item.LinkFlapErrorDisable = types.StringValue(value.Get("attributes.linkFlapErrDis").String())
-				item.LinkFlapErrorMax = types.Int64Value(value.Get("attributes.linkFlapErrorMax").Int())
-				item.LinkFlapErrorSeconds = types.Int64Value(value.Get("attributes.linkFlapErrorSeconds").Int())
-				item.LinkLoopback = types.StringValue(value.Get("attributes.linkLoopback").String())
-				item.LinkMacUpTimer = types.Int64Value(value.Get("attributes.linkMacUpTimer").Int())
-				item.LinkMaxBringUpTimer = types.Int64Value(value.Get("attributes.linkMaxBringUpTimer").Int())
-				item.LinkTransmitReset = types.StringValue(value.Get("attributes.linkTransmitReset").String())
-				item.Mdix = types.StringValue(value.Get("attributes.mdix").String())
-				item.MediaType = types.StringValue(value.Get("attributes.mediaType").String())
-				item.OpticsLoopback = types.StringValue(value.Get("attributes.opticsLoopback").String())
-				item.PacketTimestampEgressSourceId = types.Int64Value(value.Get("attributes.packetTimestampEgressSourceId").Int())
-				item.PacketTimestampIngressSourceId = types.Int64Value(value.Get("attributes.packetTimestampIngressSourceId").Int())
-				item.PacketTimestampState = types.StringValue(value.Get("attributes.packetTimestampState").String())
-				item.PortType = types.StringValue(value.Get("attributes.portT").String())
-				item.RouterMac = types.StringValue(value.Get("attributes.routerMac").String())
-				item.SnmpTrapState = types.StringValue(value.Get("attributes.snmpTrapSt").String())
-				item.SpanMode = types.StringValue(value.Get("attributes.spanMode").String())
-				item.Squelch = types.StringValue(value.Get("attributes.squelch").String())
-				item.TransparentMode = types.StringValue(value.Get("attributes.transMode").String())
-				item.TrunkLogging = types.StringValue(value.Get("attributes.trunkLog").String())
-				item.Usage = types.StringValue(value.Get("attributes.usage").String())
-				item.VoicePortCos = types.Int64Value(value.Get("attributes.voicePortCos").Int())
-				item.VoicePortTrust = types.StringValue(value.Get("attributes.voicePortTrust").String())
-				item.VoiceVlanId = types.Int64Value(value.Get("attributes.voiceVlanId").Int())
-				item.VoiceVlanType = types.StringValue(value.Get("attributes.voiceVlanType").String())
-				{
-					var rnwRtVrfMbr gjson.Result
-					value.Get("children").ForEach(
-						func(_, nestedV gjson.Result) bool {
-							key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
-							if key == "rtvrfMbr" {
-								rnwRtVrfMbr = nestedV
-								return false
-							}
-							return true
-						},
-					)
-					item.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
-				}
-				data.Items = append(data.Items, item)
-			}
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "l1PhysIf" {
+						var child PhysicalInterfacesPhysicalInterfaces
+						child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
+						child.FecMode = types.StringValue(value.Get("attributes.FECMode").String())
+						child.AccessVlan = types.StringValue(value.Get("attributes.accessVlan").String())
+						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+						child.AutoNegotiation = types.StringValue(value.Get("attributes.autoNeg").String())
+						child.Bandwidth = types.Int64Value(value.Get("attributes.bw").Int())
+						child.Delay = types.Int64Value(value.Get("attributes.delay").Int())
+						child.Description = types.StringValue(value.Get("attributes.descr").String())
+						child.Duplex = types.StringValue(value.Get("attributes.duplex").String())
+						child.Layer = types.StringValue(value.Get("attributes.layer").String())
+						child.LinkLogging = types.StringValue(value.Get("attributes.linkLog").String())
+						child.LinkDebounceDown = types.Int64Value(value.Get("attributes.linkDebounce").Int())
+						child.LinkDebounceUp = types.Int64Value(value.Get("attributes.linkDebounceLinkUp").Int())
+						child.Medium = types.StringValue(value.Get("attributes.medium").String())
+						child.Mode = types.StringValue(value.Get("attributes.mode").String())
+						child.Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
+						child.NativeVlan = types.StringValue(value.Get("attributes.nativeVlan").String())
+						child.Speed = types.StringValue(value.Get("attributes.speed").String())
+						child.SpeedGroup = types.StringValue(value.Get("attributes.speedGroup").String())
+						child.TrunkVlans = types.StringValue(value.Get("attributes.trunkVlans").String())
+						child.UniDirectionalEthernet = types.StringValue(value.Get("attributes.uniDirectionalEthernet").String())
+						child.UserConfiguredFlags = types.StringValue(value.Get("attributes.userCfgdFlags").String())
+						child.Beacon = types.StringValue(value.Get("attributes.beacon").String())
+						child.DfeAdaptiveTuning = types.StringValue(value.Get("attributes.dfeAdaptiveTuning").String())
+						child.DfeTuningDelay = types.Int64Value(value.Get("attributes.dfeTuningDelay").Int())
+						child.Dot1qEtherType = types.Int64Value(value.Get("attributes.dot1qEtherType").Int())
+						child.EqualizationDelay = types.Int64Value(value.Get("attributes.equalizationDelay").Int())
+						child.InheritBandwidth = types.Int64Value(value.Get("attributes.inhBw").Int())
+						child.ItuChannel = types.Int64Value(value.Get("attributes.ituChannel").Int())
+						child.LinkActiveJitterManagement = types.StringValue(value.Get("attributes.linkActiveJitterMgmt").String())
+						child.LinkFlapErrorDisable = types.StringValue(value.Get("attributes.linkFlapErrDis").String())
+						child.LinkFlapErrorMax = types.Int64Value(value.Get("attributes.linkFlapErrorMax").Int())
+						child.LinkFlapErrorSeconds = types.Int64Value(value.Get("attributes.linkFlapErrorSeconds").Int())
+						child.LinkLoopback = types.StringValue(value.Get("attributes.linkLoopback").String())
+						child.LinkMacUpTimer = types.Int64Value(value.Get("attributes.linkMacUpTimer").Int())
+						child.LinkMaxBringUpTimer = types.Int64Value(value.Get("attributes.linkMaxBringUpTimer").Int())
+						child.LinkTransmitReset = types.StringValue(value.Get("attributes.linkTransmitReset").String())
+						child.Mdix = types.StringValue(value.Get("attributes.mdix").String())
+						child.MediaType = types.StringValue(value.Get("attributes.mediaType").String())
+						child.OpticsLoopback = types.StringValue(value.Get("attributes.opticsLoopback").String())
+						child.PacketTimestampEgressSourceId = types.Int64Value(value.Get("attributes.packetTimestampEgressSourceId").Int())
+						child.PacketTimestampIngressSourceId = types.Int64Value(value.Get("attributes.packetTimestampIngressSourceId").Int())
+						child.PacketTimestampState = types.StringValue(value.Get("attributes.packetTimestampState").String())
+						child.PortType = types.StringValue(value.Get("attributes.portT").String())
+						child.RouterMac = types.StringValue(value.Get("attributes.routerMac").String())
+						child.SnmpTrapState = types.StringValue(value.Get("attributes.snmpTrapSt").String())
+						child.SpanMode = types.StringValue(value.Get("attributes.spanMode").String())
+						child.Squelch = types.StringValue(value.Get("attributes.squelch").String())
+						child.TransparentMode = types.StringValue(value.Get("attributes.transMode").String())
+						child.TrunkLogging = types.StringValue(value.Get("attributes.trunkLog").String())
+						child.Usage = types.StringValue(value.Get("attributes.usage").String())
+						child.VoicePortCos = types.Int64Value(value.Get("attributes.voicePortCos").Int())
+						child.VoicePortTrust = types.StringValue(value.Get("attributes.voicePortTrust").String())
+						child.VoiceVlanId = types.Int64Value(value.Get("attributes.voiceVlanId").Int())
+						child.VoiceVlanType = types.StringValue(value.Get("attributes.voiceVlanType").String())
+						{
+							var rnwRtVrfMbr gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
+									if key == "rtvrfMbr" {
+										rnwRtVrfMbr = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+						}
+						data.PhysicalInterfaces = append(data.PhysicalInterfaces, child)
+					}
+					return true
+				},
+			)
 			return true
-		})
-		return true
-	})
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -467,324 +426,478 @@ func (data *PhysicalInterfaces) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *PhysicalInterfaces) updateFromBody(res gjson.Result) {
-	for i := len(data.Items) - 1; i >= 0; i-- {
-		// Find the matching item in the response by id attributes
-		var matchedValue gjson.Result
-		res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
-			v.ForEach(func(classname, value gjson.Result) bool {
-				if classname.String() == data.getItemClassName() {
-					if value.Get("attributes.id").String() != data.Items[i].InterfaceId.ValueString() {
-						return true
-					}
-					matchedValue = value
+	for c := len(data.PhysicalInterfaces) - 1; c >= 0; c-- {
+		var rl1PhysIf gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("l1PhysIf.attributes.id").String() == data.PhysicalInterfaces[c].InterfaceId.ValueString() {
+					rl1PhysIf = v
 					return false
 				}
 				return true
-			})
-			if matchedValue.Exists() {
-				return false
-			}
-			return true
-		})
-		if !matchedValue.Exists() {
-			data.Items = slices.Delete(data.Items, i, i+1)
+			},
+		)
+		if !rl1PhysIf.Exists() {
+			data.PhysicalInterfaces = slices.Delete(data.PhysicalInterfaces, c, c+1)
 			continue
 		}
-		// Found matching item, update attributes
-		if !data.Items[i].InterfaceId.IsNull() {
-			data.Items[i].InterfaceId = types.StringValue(matchedValue.Get("attributes.id").String())
+		if !data.PhysicalInterfaces[c].InterfaceId.IsNull() {
+			data.PhysicalInterfaces[c].InterfaceId = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.id").String())
 		} else {
-			data.Items[i].InterfaceId = types.StringNull()
+			data.PhysicalInterfaces[c].InterfaceId = types.StringNull()
 		}
-		if !data.Items[i].FecMode.IsNull() {
-			data.Items[i].FecMode = types.StringValue(matchedValue.Get("attributes.FECMode").String())
+		if !data.PhysicalInterfaces[c].FecMode.IsNull() {
+			data.PhysicalInterfaces[c].FecMode = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.FECMode").String())
 		} else {
-			data.Items[i].FecMode = types.StringNull()
+			data.PhysicalInterfaces[c].FecMode = types.StringNull()
 		}
-		if !data.Items[i].AccessVlan.IsNull() {
-			data.Items[i].AccessVlan = types.StringValue(matchedValue.Get("attributes.accessVlan").String())
+		if !data.PhysicalInterfaces[c].AccessVlan.IsNull() {
+			data.PhysicalInterfaces[c].AccessVlan = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.accessVlan").String())
 		} else {
-			data.Items[i].AccessVlan = types.StringNull()
+			data.PhysicalInterfaces[c].AccessVlan = types.StringNull()
 		}
-		if !data.Items[i].AdminState.IsNull() {
-			data.Items[i].AdminState = types.StringValue(matchedValue.Get("attributes.adminSt").String())
+		if !data.PhysicalInterfaces[c].AdminState.IsNull() {
+			data.PhysicalInterfaces[c].AdminState = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.adminSt").String())
 		} else {
-			data.Items[i].AdminState = types.StringNull()
+			data.PhysicalInterfaces[c].AdminState = types.StringNull()
 		}
-		if !data.Items[i].AutoNegotiation.IsNull() {
-			data.Items[i].AutoNegotiation = types.StringValue(matchedValue.Get("attributes.autoNeg").String())
+		if !data.PhysicalInterfaces[c].AutoNegotiation.IsNull() {
+			data.PhysicalInterfaces[c].AutoNegotiation = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.autoNeg").String())
 		} else {
-			data.Items[i].AutoNegotiation = types.StringNull()
+			data.PhysicalInterfaces[c].AutoNegotiation = types.StringNull()
 		}
-		if !data.Items[i].Bandwidth.IsNull() {
-			data.Items[i].Bandwidth = types.Int64Value(matchedValue.Get("attributes.bw").Int())
+		if !data.PhysicalInterfaces[c].Bandwidth.IsNull() {
+			data.PhysicalInterfaces[c].Bandwidth = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.bw").Int())
 		} else {
-			data.Items[i].Bandwidth = types.Int64Null()
+			data.PhysicalInterfaces[c].Bandwidth = types.Int64Null()
 		}
-		if !data.Items[i].Delay.IsNull() {
-			data.Items[i].Delay = types.Int64Value(matchedValue.Get("attributes.delay").Int())
+		if !data.PhysicalInterfaces[c].Delay.IsNull() {
+			data.PhysicalInterfaces[c].Delay = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.delay").Int())
 		} else {
-			data.Items[i].Delay = types.Int64Null()
+			data.PhysicalInterfaces[c].Delay = types.Int64Null()
 		}
-		if !data.Items[i].Description.IsNull() {
-			data.Items[i].Description = types.StringValue(matchedValue.Get("attributes.descr").String())
+		if !data.PhysicalInterfaces[c].Description.IsNull() {
+			data.PhysicalInterfaces[c].Description = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.descr").String())
 		} else {
-			data.Items[i].Description = types.StringNull()
+			data.PhysicalInterfaces[c].Description = types.StringNull()
 		}
-		if !data.Items[i].Duplex.IsNull() {
-			data.Items[i].Duplex = types.StringValue(matchedValue.Get("attributes.duplex").String())
+		if !data.PhysicalInterfaces[c].Duplex.IsNull() {
+			data.PhysicalInterfaces[c].Duplex = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.duplex").String())
 		} else {
-			data.Items[i].Duplex = types.StringNull()
+			data.PhysicalInterfaces[c].Duplex = types.StringNull()
 		}
-		if !data.Items[i].Layer.IsNull() {
-			data.Items[i].Layer = types.StringValue(matchedValue.Get("attributes.layer").String())
+		if !data.PhysicalInterfaces[c].Layer.IsNull() {
+			data.PhysicalInterfaces[c].Layer = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.layer").String())
 		} else {
-			data.Items[i].Layer = types.StringNull()
+			data.PhysicalInterfaces[c].Layer = types.StringNull()
 		}
-		if !data.Items[i].LinkLogging.IsNull() {
-			data.Items[i].LinkLogging = types.StringValue(matchedValue.Get("attributes.linkLog").String())
+		if !data.PhysicalInterfaces[c].LinkLogging.IsNull() {
+			data.PhysicalInterfaces[c].LinkLogging = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.linkLog").String())
 		} else {
-			data.Items[i].LinkLogging = types.StringNull()
+			data.PhysicalInterfaces[c].LinkLogging = types.StringNull()
 		}
-		if !data.Items[i].LinkDebounceDown.IsNull() {
-			data.Items[i].LinkDebounceDown = types.Int64Value(matchedValue.Get("attributes.linkDebounce").Int())
+		if !data.PhysicalInterfaces[c].LinkDebounceDown.IsNull() {
+			data.PhysicalInterfaces[c].LinkDebounceDown = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.linkDebounce").Int())
 		} else {
-			data.Items[i].LinkDebounceDown = types.Int64Null()
+			data.PhysicalInterfaces[c].LinkDebounceDown = types.Int64Null()
 		}
-		if !data.Items[i].LinkDebounceUp.IsNull() {
-			data.Items[i].LinkDebounceUp = types.Int64Value(matchedValue.Get("attributes.linkDebounceLinkUp").Int())
+		if !data.PhysicalInterfaces[c].LinkDebounceUp.IsNull() {
+			data.PhysicalInterfaces[c].LinkDebounceUp = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.linkDebounceLinkUp").Int())
 		} else {
-			data.Items[i].LinkDebounceUp = types.Int64Null()
+			data.PhysicalInterfaces[c].LinkDebounceUp = types.Int64Null()
 		}
-		if !data.Items[i].Medium.IsNull() {
-			data.Items[i].Medium = types.StringValue(matchedValue.Get("attributes.medium").String())
+		if !data.PhysicalInterfaces[c].Medium.IsNull() {
+			data.PhysicalInterfaces[c].Medium = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.medium").String())
 		} else {
-			data.Items[i].Medium = types.StringNull()
+			data.PhysicalInterfaces[c].Medium = types.StringNull()
 		}
-		if !data.Items[i].Mode.IsNull() {
-			data.Items[i].Mode = types.StringValue(matchedValue.Get("attributes.mode").String())
+		if !data.PhysicalInterfaces[c].Mode.IsNull() {
+			data.PhysicalInterfaces[c].Mode = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.mode").String())
 		} else {
-			data.Items[i].Mode = types.StringNull()
+			data.PhysicalInterfaces[c].Mode = types.StringNull()
 		}
-		if !data.Items[i].Mtu.IsNull() {
-			data.Items[i].Mtu = types.Int64Value(matchedValue.Get("attributes.mtu").Int())
+		if !data.PhysicalInterfaces[c].Mtu.IsNull() {
+			data.PhysicalInterfaces[c].Mtu = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.mtu").Int())
 		} else {
-			data.Items[i].Mtu = types.Int64Null()
+			data.PhysicalInterfaces[c].Mtu = types.Int64Null()
 		}
-		if !data.Items[i].NativeVlan.IsNull() {
-			data.Items[i].NativeVlan = types.StringValue(matchedValue.Get("attributes.nativeVlan").String())
+		if !data.PhysicalInterfaces[c].NativeVlan.IsNull() {
+			data.PhysicalInterfaces[c].NativeVlan = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.nativeVlan").String())
 		} else {
-			data.Items[i].NativeVlan = types.StringNull()
+			data.PhysicalInterfaces[c].NativeVlan = types.StringNull()
 		}
-		if !data.Items[i].Speed.IsNull() {
-			data.Items[i].Speed = types.StringValue(matchedValue.Get("attributes.speed").String())
+		if !data.PhysicalInterfaces[c].Speed.IsNull() {
+			data.PhysicalInterfaces[c].Speed = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.speed").String())
 		} else {
-			data.Items[i].Speed = types.StringNull()
+			data.PhysicalInterfaces[c].Speed = types.StringNull()
 		}
-		if !data.Items[i].SpeedGroup.IsNull() {
-			data.Items[i].SpeedGroup = types.StringValue(matchedValue.Get("attributes.speedGroup").String())
+		if !data.PhysicalInterfaces[c].SpeedGroup.IsNull() {
+			data.PhysicalInterfaces[c].SpeedGroup = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.speedGroup").String())
 		} else {
-			data.Items[i].SpeedGroup = types.StringNull()
+			data.PhysicalInterfaces[c].SpeedGroup = types.StringNull()
 		}
-		if !data.Items[i].TrunkVlans.IsNull() {
-			data.Items[i].TrunkVlans = types.StringValue(matchedValue.Get("attributes.trunkVlans").String())
+		if !data.PhysicalInterfaces[c].TrunkVlans.IsNull() {
+			data.PhysicalInterfaces[c].TrunkVlans = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.trunkVlans").String())
 		} else {
-			data.Items[i].TrunkVlans = types.StringNull()
+			data.PhysicalInterfaces[c].TrunkVlans = types.StringNull()
 		}
-		if !data.Items[i].UniDirectionalEthernet.IsNull() {
-			data.Items[i].UniDirectionalEthernet = types.StringValue(matchedValue.Get("attributes.uniDirectionalEthernet").String())
+		if !data.PhysicalInterfaces[c].UniDirectionalEthernet.IsNull() {
+			data.PhysicalInterfaces[c].UniDirectionalEthernet = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.uniDirectionalEthernet").String())
 		} else {
-			data.Items[i].UniDirectionalEthernet = types.StringNull()
+			data.PhysicalInterfaces[c].UniDirectionalEthernet = types.StringNull()
 		}
-		if !data.Items[i].UserConfiguredFlags.IsNull() {
-			data.Items[i].UserConfiguredFlags = types.StringValue(matchedValue.Get("attributes.userCfgdFlags").String())
+		if !data.PhysicalInterfaces[c].UserConfiguredFlags.IsNull() {
+			data.PhysicalInterfaces[c].UserConfiguredFlags = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.userCfgdFlags").String())
 		} else {
-			data.Items[i].UserConfiguredFlags = types.StringNull()
+			data.PhysicalInterfaces[c].UserConfiguredFlags = types.StringNull()
 		}
-		if !data.Items[i].Beacon.IsNull() {
-			data.Items[i].Beacon = types.StringValue(matchedValue.Get("attributes.beacon").String())
+		if !data.PhysicalInterfaces[c].Beacon.IsNull() {
+			data.PhysicalInterfaces[c].Beacon = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.beacon").String())
 		} else {
-			data.Items[i].Beacon = types.StringNull()
+			data.PhysicalInterfaces[c].Beacon = types.StringNull()
 		}
-		if !data.Items[i].DfeAdaptiveTuning.IsNull() {
-			data.Items[i].DfeAdaptiveTuning = types.StringValue(matchedValue.Get("attributes.dfeAdaptiveTuning").String())
+		if !data.PhysicalInterfaces[c].DfeAdaptiveTuning.IsNull() {
+			data.PhysicalInterfaces[c].DfeAdaptiveTuning = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.dfeAdaptiveTuning").String())
 		} else {
-			data.Items[i].DfeAdaptiveTuning = types.StringNull()
+			data.PhysicalInterfaces[c].DfeAdaptiveTuning = types.StringNull()
 		}
-		if !data.Items[i].DfeTuningDelay.IsNull() {
-			data.Items[i].DfeTuningDelay = types.Int64Value(matchedValue.Get("attributes.dfeTuningDelay").Int())
+		if !data.PhysicalInterfaces[c].DfeTuningDelay.IsNull() {
+			data.PhysicalInterfaces[c].DfeTuningDelay = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.dfeTuningDelay").Int())
 		} else {
-			data.Items[i].DfeTuningDelay = types.Int64Null()
+			data.PhysicalInterfaces[c].DfeTuningDelay = types.Int64Null()
 		}
-		if !data.Items[i].Dot1qEtherType.IsNull() {
-			data.Items[i].Dot1qEtherType = types.Int64Value(matchedValue.Get("attributes.dot1qEtherType").Int())
+		if !data.PhysicalInterfaces[c].Dot1qEtherType.IsNull() {
+			data.PhysicalInterfaces[c].Dot1qEtherType = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.dot1qEtherType").Int())
 		} else {
-			data.Items[i].Dot1qEtherType = types.Int64Null()
+			data.PhysicalInterfaces[c].Dot1qEtherType = types.Int64Null()
 		}
-		if !data.Items[i].EqualizationDelay.IsNull() {
-			data.Items[i].EqualizationDelay = types.Int64Value(matchedValue.Get("attributes.equalizationDelay").Int())
+		if !data.PhysicalInterfaces[c].EqualizationDelay.IsNull() {
+			data.PhysicalInterfaces[c].EqualizationDelay = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.equalizationDelay").Int())
 		} else {
-			data.Items[i].EqualizationDelay = types.Int64Null()
+			data.PhysicalInterfaces[c].EqualizationDelay = types.Int64Null()
 		}
-		if !data.Items[i].InheritBandwidth.IsNull() {
-			data.Items[i].InheritBandwidth = types.Int64Value(matchedValue.Get("attributes.inhBw").Int())
+		if !data.PhysicalInterfaces[c].InheritBandwidth.IsNull() {
+			data.PhysicalInterfaces[c].InheritBandwidth = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.inhBw").Int())
 		} else {
-			data.Items[i].InheritBandwidth = types.Int64Null()
+			data.PhysicalInterfaces[c].InheritBandwidth = types.Int64Null()
 		}
-		if !data.Items[i].ItuChannel.IsNull() {
-			data.Items[i].ItuChannel = types.Int64Value(matchedValue.Get("attributes.ituChannel").Int())
+		if !data.PhysicalInterfaces[c].ItuChannel.IsNull() {
+			data.PhysicalInterfaces[c].ItuChannel = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.ituChannel").Int())
 		} else {
-			data.Items[i].ItuChannel = types.Int64Null()
+			data.PhysicalInterfaces[c].ItuChannel = types.Int64Null()
 		}
-		if !data.Items[i].LinkActiveJitterManagement.IsNull() {
-			data.Items[i].LinkActiveJitterManagement = types.StringValue(matchedValue.Get("attributes.linkActiveJitterMgmt").String())
+		if !data.PhysicalInterfaces[c].LinkActiveJitterManagement.IsNull() {
+			data.PhysicalInterfaces[c].LinkActiveJitterManagement = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.linkActiveJitterMgmt").String())
 		} else {
-			data.Items[i].LinkActiveJitterManagement = types.StringNull()
+			data.PhysicalInterfaces[c].LinkActiveJitterManagement = types.StringNull()
 		}
-		if !data.Items[i].LinkFlapErrorDisable.IsNull() {
-			data.Items[i].LinkFlapErrorDisable = types.StringValue(matchedValue.Get("attributes.linkFlapErrDis").String())
+		if !data.PhysicalInterfaces[c].LinkFlapErrorDisable.IsNull() {
+			data.PhysicalInterfaces[c].LinkFlapErrorDisable = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.linkFlapErrDis").String())
 		} else {
-			data.Items[i].LinkFlapErrorDisable = types.StringNull()
+			data.PhysicalInterfaces[c].LinkFlapErrorDisable = types.StringNull()
 		}
-		if !data.Items[i].LinkFlapErrorMax.IsNull() {
-			data.Items[i].LinkFlapErrorMax = types.Int64Value(matchedValue.Get("attributes.linkFlapErrorMax").Int())
+		if !data.PhysicalInterfaces[c].LinkFlapErrorMax.IsNull() {
+			data.PhysicalInterfaces[c].LinkFlapErrorMax = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.linkFlapErrorMax").Int())
 		} else {
-			data.Items[i].LinkFlapErrorMax = types.Int64Null()
+			data.PhysicalInterfaces[c].LinkFlapErrorMax = types.Int64Null()
 		}
-		if !data.Items[i].LinkFlapErrorSeconds.IsNull() {
-			data.Items[i].LinkFlapErrorSeconds = types.Int64Value(matchedValue.Get("attributes.linkFlapErrorSeconds").Int())
+		if !data.PhysicalInterfaces[c].LinkFlapErrorSeconds.IsNull() {
+			data.PhysicalInterfaces[c].LinkFlapErrorSeconds = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.linkFlapErrorSeconds").Int())
 		} else {
-			data.Items[i].LinkFlapErrorSeconds = types.Int64Null()
+			data.PhysicalInterfaces[c].LinkFlapErrorSeconds = types.Int64Null()
 		}
-		if !data.Items[i].LinkLoopback.IsNull() {
-			data.Items[i].LinkLoopback = types.StringValue(matchedValue.Get("attributes.linkLoopback").String())
+		if !data.PhysicalInterfaces[c].LinkLoopback.IsNull() {
+			data.PhysicalInterfaces[c].LinkLoopback = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.linkLoopback").String())
 		} else {
-			data.Items[i].LinkLoopback = types.StringNull()
+			data.PhysicalInterfaces[c].LinkLoopback = types.StringNull()
 		}
-		if !data.Items[i].LinkMacUpTimer.IsNull() {
-			data.Items[i].LinkMacUpTimer = types.Int64Value(matchedValue.Get("attributes.linkMacUpTimer").Int())
+		if !data.PhysicalInterfaces[c].LinkMacUpTimer.IsNull() {
+			data.PhysicalInterfaces[c].LinkMacUpTimer = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.linkMacUpTimer").Int())
 		} else {
-			data.Items[i].LinkMacUpTimer = types.Int64Null()
+			data.PhysicalInterfaces[c].LinkMacUpTimer = types.Int64Null()
 		}
-		if !data.Items[i].LinkMaxBringUpTimer.IsNull() {
-			data.Items[i].LinkMaxBringUpTimer = types.Int64Value(matchedValue.Get("attributes.linkMaxBringUpTimer").Int())
+		if !data.PhysicalInterfaces[c].LinkMaxBringUpTimer.IsNull() {
+			data.PhysicalInterfaces[c].LinkMaxBringUpTimer = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.linkMaxBringUpTimer").Int())
 		} else {
-			data.Items[i].LinkMaxBringUpTimer = types.Int64Null()
+			data.PhysicalInterfaces[c].LinkMaxBringUpTimer = types.Int64Null()
 		}
-		if !data.Items[i].LinkTransmitReset.IsNull() {
-			data.Items[i].LinkTransmitReset = types.StringValue(matchedValue.Get("attributes.linkTransmitReset").String())
+		if !data.PhysicalInterfaces[c].LinkTransmitReset.IsNull() {
+			data.PhysicalInterfaces[c].LinkTransmitReset = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.linkTransmitReset").String())
 		} else {
-			data.Items[i].LinkTransmitReset = types.StringNull()
+			data.PhysicalInterfaces[c].LinkTransmitReset = types.StringNull()
 		}
-		if !data.Items[i].Mdix.IsNull() {
-			data.Items[i].Mdix = types.StringValue(matchedValue.Get("attributes.mdix").String())
+		if !data.PhysicalInterfaces[c].Mdix.IsNull() {
+			data.PhysicalInterfaces[c].Mdix = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.mdix").String())
 		} else {
-			data.Items[i].Mdix = types.StringNull()
+			data.PhysicalInterfaces[c].Mdix = types.StringNull()
 		}
-		if !data.Items[i].MediaType.IsNull() {
-			data.Items[i].MediaType = types.StringValue(matchedValue.Get("attributes.mediaType").String())
+		if !data.PhysicalInterfaces[c].MediaType.IsNull() {
+			data.PhysicalInterfaces[c].MediaType = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.mediaType").String())
 		} else {
-			data.Items[i].MediaType = types.StringNull()
+			data.PhysicalInterfaces[c].MediaType = types.StringNull()
 		}
-		if !data.Items[i].OpticsLoopback.IsNull() {
-			data.Items[i].OpticsLoopback = types.StringValue(matchedValue.Get("attributes.opticsLoopback").String())
+		if !data.PhysicalInterfaces[c].OpticsLoopback.IsNull() {
+			data.PhysicalInterfaces[c].OpticsLoopback = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.opticsLoopback").String())
 		} else {
-			data.Items[i].OpticsLoopback = types.StringNull()
+			data.PhysicalInterfaces[c].OpticsLoopback = types.StringNull()
 		}
-		if !data.Items[i].PacketTimestampEgressSourceId.IsNull() {
-			data.Items[i].PacketTimestampEgressSourceId = types.Int64Value(matchedValue.Get("attributes.packetTimestampEgressSourceId").Int())
+		if !data.PhysicalInterfaces[c].PacketTimestampEgressSourceId.IsNull() {
+			data.PhysicalInterfaces[c].PacketTimestampEgressSourceId = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.packetTimestampEgressSourceId").Int())
 		} else {
-			data.Items[i].PacketTimestampEgressSourceId = types.Int64Null()
+			data.PhysicalInterfaces[c].PacketTimestampEgressSourceId = types.Int64Null()
 		}
-		if !data.Items[i].PacketTimestampIngressSourceId.IsNull() {
-			data.Items[i].PacketTimestampIngressSourceId = types.Int64Value(matchedValue.Get("attributes.packetTimestampIngressSourceId").Int())
+		if !data.PhysicalInterfaces[c].PacketTimestampIngressSourceId.IsNull() {
+			data.PhysicalInterfaces[c].PacketTimestampIngressSourceId = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.packetTimestampIngressSourceId").Int())
 		} else {
-			data.Items[i].PacketTimestampIngressSourceId = types.Int64Null()
+			data.PhysicalInterfaces[c].PacketTimestampIngressSourceId = types.Int64Null()
 		}
-		if !data.Items[i].PacketTimestampState.IsNull() {
-			data.Items[i].PacketTimestampState = types.StringValue(matchedValue.Get("attributes.packetTimestampState").String())
+		if !data.PhysicalInterfaces[c].PacketTimestampState.IsNull() {
+			data.PhysicalInterfaces[c].PacketTimestampState = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.packetTimestampState").String())
 		} else {
-			data.Items[i].PacketTimestampState = types.StringNull()
+			data.PhysicalInterfaces[c].PacketTimestampState = types.StringNull()
 		}
-		if !data.Items[i].PortType.IsNull() {
-			data.Items[i].PortType = types.StringValue(matchedValue.Get("attributes.portT").String())
+		if !data.PhysicalInterfaces[c].PortType.IsNull() {
+			data.PhysicalInterfaces[c].PortType = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.portT").String())
 		} else {
-			data.Items[i].PortType = types.StringNull()
+			data.PhysicalInterfaces[c].PortType = types.StringNull()
 		}
-		if !data.Items[i].RouterMac.IsNull() {
-			data.Items[i].RouterMac = types.StringValue(matchedValue.Get("attributes.routerMac").String())
+		if !data.PhysicalInterfaces[c].RouterMac.IsNull() {
+			data.PhysicalInterfaces[c].RouterMac = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.routerMac").String())
 		} else {
-			data.Items[i].RouterMac = types.StringNull()
+			data.PhysicalInterfaces[c].RouterMac = types.StringNull()
 		}
-		if !data.Items[i].SnmpTrapState.IsNull() {
-			data.Items[i].SnmpTrapState = types.StringValue(matchedValue.Get("attributes.snmpTrapSt").String())
+		if !data.PhysicalInterfaces[c].SnmpTrapState.IsNull() {
+			data.PhysicalInterfaces[c].SnmpTrapState = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.snmpTrapSt").String())
 		} else {
-			data.Items[i].SnmpTrapState = types.StringNull()
+			data.PhysicalInterfaces[c].SnmpTrapState = types.StringNull()
 		}
-		if !data.Items[i].SpanMode.IsNull() {
-			data.Items[i].SpanMode = types.StringValue(matchedValue.Get("attributes.spanMode").String())
+		if !data.PhysicalInterfaces[c].SpanMode.IsNull() {
+			data.PhysicalInterfaces[c].SpanMode = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.spanMode").String())
 		} else {
-			data.Items[i].SpanMode = types.StringNull()
+			data.PhysicalInterfaces[c].SpanMode = types.StringNull()
 		}
-		if !data.Items[i].Squelch.IsNull() {
-			data.Items[i].Squelch = types.StringValue(matchedValue.Get("attributes.squelch").String())
+		if !data.PhysicalInterfaces[c].Squelch.IsNull() {
+			data.PhysicalInterfaces[c].Squelch = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.squelch").String())
 		} else {
-			data.Items[i].Squelch = types.StringNull()
+			data.PhysicalInterfaces[c].Squelch = types.StringNull()
 		}
-		if !data.Items[i].TransparentMode.IsNull() {
-			data.Items[i].TransparentMode = types.StringValue(matchedValue.Get("attributes.transMode").String())
+		if !data.PhysicalInterfaces[c].TransparentMode.IsNull() {
+			data.PhysicalInterfaces[c].TransparentMode = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.transMode").String())
 		} else {
-			data.Items[i].TransparentMode = types.StringNull()
+			data.PhysicalInterfaces[c].TransparentMode = types.StringNull()
 		}
-		if !data.Items[i].TrunkLogging.IsNull() {
-			data.Items[i].TrunkLogging = types.StringValue(matchedValue.Get("attributes.trunkLog").String())
+		if !data.PhysicalInterfaces[c].TrunkLogging.IsNull() {
+			data.PhysicalInterfaces[c].TrunkLogging = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.trunkLog").String())
 		} else {
-			data.Items[i].TrunkLogging = types.StringNull()
+			data.PhysicalInterfaces[c].TrunkLogging = types.StringNull()
 		}
-		if !data.Items[i].Usage.IsNull() {
-			data.Items[i].Usage = types.StringValue(matchedValue.Get("attributes.usage").String())
+		if !data.PhysicalInterfaces[c].Usage.IsNull() {
+			data.PhysicalInterfaces[c].Usage = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.usage").String())
 		} else {
-			data.Items[i].Usage = types.StringNull()
+			data.PhysicalInterfaces[c].Usage = types.StringNull()
 		}
-		if !data.Items[i].VoicePortCos.IsNull() {
-			data.Items[i].VoicePortCos = types.Int64Value(matchedValue.Get("attributes.voicePortCos").Int())
+		if !data.PhysicalInterfaces[c].VoicePortCos.IsNull() {
+			data.PhysicalInterfaces[c].VoicePortCos = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.voicePortCos").Int())
 		} else {
-			data.Items[i].VoicePortCos = types.Int64Null()
+			data.PhysicalInterfaces[c].VoicePortCos = types.Int64Null()
 		}
-		if !data.Items[i].VoicePortTrust.IsNull() {
-			data.Items[i].VoicePortTrust = types.StringValue(matchedValue.Get("attributes.voicePortTrust").String())
+		if !data.PhysicalInterfaces[c].VoicePortTrust.IsNull() {
+			data.PhysicalInterfaces[c].VoicePortTrust = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.voicePortTrust").String())
 		} else {
-			data.Items[i].VoicePortTrust = types.StringNull()
+			data.PhysicalInterfaces[c].VoicePortTrust = types.StringNull()
 		}
-		if !data.Items[i].VoiceVlanId.IsNull() {
-			data.Items[i].VoiceVlanId = types.Int64Value(matchedValue.Get("attributes.voiceVlanId").Int())
+		if !data.PhysicalInterfaces[c].VoiceVlanId.IsNull() {
+			data.PhysicalInterfaces[c].VoiceVlanId = types.Int64Value(rl1PhysIf.Get("l1PhysIf.attributes.voiceVlanId").Int())
 		} else {
-			data.Items[i].VoiceVlanId = types.Int64Null()
+			data.PhysicalInterfaces[c].VoiceVlanId = types.Int64Null()
 		}
-		if !data.Items[i].VoiceVlanType.IsNull() {
-			data.Items[i].VoiceVlanType = types.StringValue(matchedValue.Get("attributes.voiceVlanType").String())
+		if !data.PhysicalInterfaces[c].VoiceVlanType.IsNull() {
+			data.PhysicalInterfaces[c].VoiceVlanType = types.StringValue(rl1PhysIf.Get("l1PhysIf.attributes.voiceVlanType").String())
 		} else {
-			data.Items[i].VoiceVlanType = types.StringNull()
+			data.PhysicalInterfaces[c].VoiceVlanType = types.StringNull()
 		}
 		{
 			var rnwRtVrfMbr gjson.Result
-			matchedValue.Get("children").ForEach(
-				func(_, nestedV gjson.Result) bool {
-					key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
+			rl1PhysIf.Get("l1PhysIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("nwRtVrfMbr.attributes.rn").String()
 					if key == "rtvrfMbr" {
-						rnwRtVrfMbr = nestedV
+						rnwRtVrfMbr = v
 						return false
 					}
 					return true
 				},
 			)
-			if !data.Items[i].VrfDn.IsNull() {
-				data.Items[i].VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+			if !data.PhysicalInterfaces[c].VrfDn.IsNull() {
+				data.PhysicalInterfaces[c].VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
 			} else {
-				data.Items[i].VrfDn = types.StringNull()
+				data.PhysicalInterfaces[c].VrfDn = types.StringNull()
 			}
 		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
+func (data PhysicalInterfaces) toDeleteBody() nxos.Body {
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	childrenPath := data.getClassName() + ".children"
+	for _, child := range data.PhysicalInterfaces {
+		childBody := ""
+		childBody, _ = sjson.Set(childBody, "rn", child.getRn())
+		childBody, _ = sjson.Set(childBody, "FECMode", "auto")
+		childBody, _ = sjson.Set(childBody, "accessVlan", "vlan-1")
+		childBody, _ = sjson.Set(childBody, "adminSt", "up")
+		childBody, _ = sjson.Set(childBody, "autoNeg", "on")
+		childBody, _ = sjson.Set(childBody, "bw", strconv.FormatInt(0, 10))
+		childBody, _ = sjson.Set(childBody, "delay", strconv.FormatInt(1, 10))
+		childBody, _ = sjson.Set(childBody, "duplex", "auto")
+		childBody, _ = sjson.Set(childBody, "layer", "Layer2")
+		childBody, _ = sjson.Set(childBody, "linkLog", "default")
+		childBody, _ = sjson.Set(childBody, "linkDebounce", strconv.FormatInt(100, 10))
+		childBody, _ = sjson.Set(childBody, "linkDebounceLinkUp", strconv.FormatInt(0, 10))
+		childBody, _ = sjson.Set(childBody, "medium", "broadcast")
+		childBody, _ = sjson.Set(childBody, "mode", "access")
+		childBody, _ = sjson.Set(childBody, "mtu", strconv.FormatInt(1500, 10))
+		childBody, _ = sjson.Set(childBody, "nativeVlan", "vlan-1")
+		childBody, _ = sjson.Set(childBody, "speed", "auto")
+		childBody, _ = sjson.Set(childBody, "speedGroup", "auto")
+		childBody, _ = sjson.Set(childBody, "trunkVlans", "1-4094")
+		childBody, _ = sjson.Set(childBody, "uniDirectionalEthernet", "disable")
+		childBody, _ = sjson.Set(childBody, "userCfgdFlags", "none")
+		childBody, _ = sjson.Set(childBody, "beacon", "off")
+		childBody, _ = sjson.Set(childBody, "dfeAdaptiveTuning", "enable")
+		childBody, _ = sjson.Set(childBody, "dfeTuningDelay", strconv.FormatInt(100, 10))
+		childBody, _ = sjson.Set(childBody, "dot1qEtherType", strconv.FormatInt(33024, 10))
+		childBody, _ = sjson.Set(childBody, "equalizationDelay", strconv.FormatInt(0, 10))
+		childBody, _ = sjson.Set(childBody, "inhBw", strconv.FormatInt(4294967295, 10))
+		childBody, _ = sjson.Set(childBody, "ituChannel", strconv.FormatInt(32, 10))
+		childBody, _ = sjson.Set(childBody, "linkActiveJitterMgmt", "disable")
+		childBody, _ = sjson.Set(childBody, "linkFlapErrDis", "disable")
+		childBody, _ = sjson.Set(childBody, "linkFlapErrorMax", strconv.FormatInt(30, 10))
+		childBody, _ = sjson.Set(childBody, "linkFlapErrorSeconds", strconv.FormatInt(420, 10))
+		childBody, _ = sjson.Set(childBody, "linkLoopback", "disable")
+		childBody, _ = sjson.Set(childBody, "linkMacUpTimer", strconv.FormatInt(0, 10))
+		childBody, _ = sjson.Set(childBody, "linkMaxBringUpTimer", strconv.FormatInt(0, 10))
+		childBody, _ = sjson.Set(childBody, "linkTransmitReset", "enable")
+		childBody, _ = sjson.Set(childBody, "mdix", "auto")
+		childBody, _ = sjson.Set(childBody, "mediaType", "none")
+		childBody, _ = sjson.Set(childBody, "opticsLoopback", "disable")
+		childBody, _ = sjson.Set(childBody, "packetTimestampEgressSourceId", strconv.FormatInt(0, 10))
+		childBody, _ = sjson.Set(childBody, "packetTimestampIngressSourceId", strconv.FormatInt(0, 10))
+		childBody, _ = sjson.Set(childBody, "packetTimestampState", "disable")
+		childBody, _ = sjson.Set(childBody, "portT", "unknown")
+		childBody, _ = sjson.Set(childBody, "routerMac", "not-applicable")
+		childBody, _ = sjson.Set(childBody, "snmpTrapSt", "enable")
+		childBody, _ = sjson.Set(childBody, "spanMode", "not-a-span-dest")
+		childBody, _ = sjson.Set(childBody, "squelch", "enable")
+		childBody, _ = sjson.Set(childBody, "transMode", "not-a-trans-port")
+		childBody, _ = sjson.Set(childBody, "trunkLog", "default")
+		childBody, _ = sjson.Set(childBody, "usage", "discovery")
+		childBody, _ = sjson.Set(childBody, "voicePortCos", strconv.FormatInt(-1, 10))
+		childBody, _ = sjson.Set(childBody, "voicePortTrust", "disable")
+		childBody, _ = sjson.Set(childBody, "voiceVlanId", strconv.FormatInt(0, 10))
+		childBody, _ = sjson.Set(childBody, "voiceVlanType", "none")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.l1PhysIf.attributes", childBody)
+	}
+
+	return nxos.Body{body}
+}
+
+func (data PhysicalInterfaces) toBodyWithDeletes(ctx context.Context, state PhysicalInterfaces) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
+	for _, stateChild := range state.PhysicalInterfaces {
+		found := false
+		for _, planChild := range data.PhysicalInterfaces {
+			if stateChild.InterfaceId == planChild.InterfaceId {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.FECMode", "auto")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.accessVlan", "vlan-1")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.adminSt", "up")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.autoNeg", "on")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.bw", strconv.FormatInt(0, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.delay", strconv.FormatInt(1, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.duplex", "auto")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.layer", "Layer2")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkLog", "default")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkDebounce", strconv.FormatInt(100, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkDebounceLinkUp", strconv.FormatInt(0, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.medium", "broadcast")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.mode", "access")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.mtu", strconv.FormatInt(1500, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.nativeVlan", "vlan-1")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.speed", "auto")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.speedGroup", "auto")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.trunkVlans", "1-4094")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.uniDirectionalEthernet", "disable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.userCfgdFlags", "none")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.beacon", "off")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.dfeAdaptiveTuning", "enable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.dfeTuningDelay", strconv.FormatInt(100, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.dot1qEtherType", strconv.FormatInt(33024, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.equalizationDelay", strconv.FormatInt(0, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.inhBw", strconv.FormatInt(4294967295, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.ituChannel", strconv.FormatInt(32, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkActiveJitterMgmt", "disable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkFlapErrDis", "disable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkFlapErrorMax", strconv.FormatInt(30, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkFlapErrorSeconds", strconv.FormatInt(420, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkLoopback", "disable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkMacUpTimer", strconv.FormatInt(0, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkMaxBringUpTimer", strconv.FormatInt(0, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.linkTransmitReset", "enable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.mdix", "auto")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.mediaType", "none")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.opticsLoopback", "disable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.packetTimestampEgressSourceId", strconv.FormatInt(0, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.packetTimestampIngressSourceId", strconv.FormatInt(0, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.packetTimestampState", "disable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.portT", "unknown")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.routerMac", "not-applicable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.snmpTrapSt", "enable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.spanMode", "not-a-span-dest")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.squelch", "enable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.transMode", "not-a-trans-port")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.trunkLog", "default")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.usage", "discovery")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.voicePortCos", strconv.FormatInt(-1, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.voicePortTrust", "disable")
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.voiceVlanId", strconv.FormatInt(0, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.voiceVlanType", "none")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+		}
+	}
+	for di := range state.PhysicalInterfaces {
+		for pdi := range data.PhysicalInterfaces {
+			if state.PhysicalInterfaces[di].InterfaceId == data.PhysicalInterfaces[pdi].InterfaceId {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("l1PhysIf.attributes.rn").String() == state.PhysicalInterfaces[di].getRn() {
+						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".l1PhysIf.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
+				break
+			}
+		}
+	}
+	return body
+}
+
+// End of section. //template:end toDeleteBody

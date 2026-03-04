@@ -351,8 +351,7 @@ func (data *QueuingQoS) updateFromBody(res gjson.Result) {
 		var ripqosPMapInst gjson.Result
 		ripqosPMapEntity.Get("ipqosPMapEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ipqosPMapInst.attributes.rn").String()
-				if key == data.PolicyMaps[c].getRn() {
+				if v.Get("ipqosPMapInst.attributes.name").String() == data.PolicyMaps[c].Name.ValueString() {
 					ripqosPMapInst = v
 					return false
 				}
@@ -377,8 +376,7 @@ func (data *QueuingQoS) updateFromBody(res gjson.Result) {
 			var ripqosMatchCMap gjson.Result
 			ripqosPMapInst.Get("ipqosPMapInst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ipqosMatchCMap.attributes.rn").String()
-					if key == data.PolicyMaps[c].MatchClassMaps[nc].getRn() {
+					if v.Get("ipqosMatchCMap.attributes.name").String() == data.PolicyMaps[c].MatchClassMaps[nc].Name.ValueString() {
 						ripqosMatchCMap = v
 						return false
 					}

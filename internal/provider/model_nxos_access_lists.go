@@ -680,8 +680,7 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 		var ripv4aclACL gjson.Result
 		ripv4aclAF.Get("ipv4aclAF.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ipv4aclACL.attributes.rn").String()
-				if key == data.AccessLists[c].getRn() {
+				if v.Get("ipv4aclACL.attributes.name").String() == data.AccessLists[c].Name.ValueString() {
 					ripv4aclACL = v
 					return false
 				}
@@ -721,8 +720,7 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 			var ripv4aclACE gjson.Result
 			ripv4aclACL.Get("ipv4aclACL.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ipv4aclACE.attributes.rn").String()
-					if key == data.AccessLists[c].Entries[nc].getRn() {
+					if v.Get("ipv4aclACE.attributes.seqNum").String() == strconv.FormatInt(data.AccessLists[c].Entries[nc].SequenceNumber.ValueInt64(), 10) {
 						ripv4aclACE = v
 						return false
 					}
@@ -1053,8 +1051,7 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 				var raclIf gjson.Result
 				raclIngress.Get("aclIngress.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("aclIf.attributes.rn").String()
-						if key == data.IngressInterfaces[c].getRn() {
+						if v.Get("aclIf.attributes.name").String() == data.IngressInterfaces[c].InterfaceId.ValueString() {
 							raclIf = v
 							return false
 						}
@@ -1106,8 +1103,7 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 				var raclIf gjson.Result
 				raclEgress.Get("aclEgress.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("aclIf.attributes.rn").String()
-						if key == data.EgressInterfaces[c].getRn() {
+						if v.Get("aclIf.attributes.name").String() == data.EgressInterfaces[c].InterfaceId.ValueString() {
 							raclIf = v
 							return false
 						}

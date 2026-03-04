@@ -1,8 +1,9 @@
 resource "nxos_loopback_interfaces" "example" {
-  items = [{
+  loopback_interfaces = [{
     interface_id = "lo123"
     admin_state  = "down"
     description  = "My Description"
     link_logging = "enable"
+    vrf_dn       = "sys/inst-default"
   }]
 }

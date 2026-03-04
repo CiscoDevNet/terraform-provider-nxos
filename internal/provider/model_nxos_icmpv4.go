@@ -235,8 +235,7 @@ func (data *ICMPv4) updateFromBody(res gjson.Result) {
 		var ricmpv4Dom gjson.Result
 		ricmpv4Inst.Get("icmpv4Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("icmpv4Dom.attributes.rn").String()
-				if key == data.Vrfs[c].getRn() {
+				if v.Get("icmpv4Dom.attributes.name").String() == data.Vrfs[c].Name.ValueString() {
 					ricmpv4Dom = v
 					return false
 				}
@@ -256,8 +255,7 @@ func (data *ICMPv4) updateFromBody(res gjson.Result) {
 			var ricmpv4If gjson.Result
 			ricmpv4Dom.Get("icmpv4Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("icmpv4If.attributes.rn").String()
-					if key == data.Vrfs[c].Interfaces[nc].getRn() {
+					if v.Get("icmpv4If.attributes.id").String() == data.Vrfs[c].Interfaces[nc].Id.ValueString() {
 						ricmpv4If = v
 						return false
 					}

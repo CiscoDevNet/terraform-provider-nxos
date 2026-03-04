@@ -1525,8 +1525,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 		var rbgpDom gjson.Result
 		rbgpInst.Get("bgpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("bgpDom.attributes.rn").String()
-				if key == data.Vrfs[c].getRn() {
+				if v.Get("bgpDom.attributes.name").String() == data.Vrfs[c].Name.ValueString() {
 					rbgpDom = v
 					return false
 				}
@@ -1687,8 +1686,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			var rbgpDomAf gjson.Result
 			rbgpDom.Get("bgpDom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("bgpDomAf.attributes.rn").String()
-					if key == data.Vrfs[c].AddressFamilies[nc].getRn() {
+					if v.Get("bgpDomAf.attributes.type").String() == data.Vrfs[c].AddressFamilies[nc].AddressFamily.ValueString() {
 						rbgpDomAf = v
 						return false
 					}
@@ -1893,8 +1891,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				var rbgpAdvPrefix gjson.Result
 				rbgpDomAf.Get("bgpDomAf.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("bgpAdvPrefix.attributes.rn").String()
-						if key == data.Vrfs[c].AddressFamilies[nc].AdvertisedPrefixes[nc_].getRn() {
+						if v.Get("bgpAdvPrefix.attributes.addr").String() == data.Vrfs[c].AddressFamilies[nc].AdvertisedPrefixes[nc_].Prefix.ValueString() {
 							rbgpAdvPrefix = v
 							return false
 						}
@@ -1925,8 +1922,8 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				var rbgpInterLeakP gjson.Result
 				rbgpDomAf.Get("bgpDomAf.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("bgpInterLeakP.attributes.rn").String()
-						if key == data.Vrfs[c].AddressFamilies[nc].Redistributions[nc_].getRn() {
+						if v.Get("bgpInterLeakP.attributes.proto").String() == data.Vrfs[c].AddressFamilies[nc].Redistributions[nc_].Protocol.ValueString() &&
+							v.Get("bgpInterLeakP.attributes.inst").String() == data.Vrfs[c].AddressFamilies[nc].Redistributions[nc_].ProtocolInstance.ValueString() {
 							rbgpInterLeakP = v
 							return false
 						}
@@ -1973,8 +1970,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			var rbgpPeerCont gjson.Result
 			rbgpDom.Get("bgpDom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("bgpPeerCont.attributes.rn").String()
-					if key == data.Vrfs[c].PeerTemplates[nc].getRn() {
+					if v.Get("bgpPeerCont.attributes.name").String() == data.Vrfs[c].PeerTemplates[nc].Name.ValueString() {
 						rbgpPeerCont = v
 						return false
 					}
@@ -2109,8 +2105,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				var rbgpPeerAf gjson.Result
 				rbgpPeerCont.Get("bgpPeerCont.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("bgpPeerAf.attributes.rn").String()
-						if key == data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].getRn() {
+						if v.Get("bgpPeerAf.attributes.type").String() == data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AddressFamily.ValueString() {
 							rbgpPeerAf = v
 							return false
 						}
@@ -2265,8 +2260,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			var rbgpPeer gjson.Result
 			rbgpDom.Get("bgpDom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("bgpPeer.attributes.rn").String()
-					if key == data.Vrfs[c].Peers[nc].getRn() {
+					if v.Get("bgpPeer.attributes.addr").String() == data.Vrfs[c].Peers[nc].Address.ValueString() {
 						rbgpPeer = v
 						return false
 					}
@@ -2429,8 +2423,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				var rbgpPeerAf gjson.Result
 				rbgpPeer.Get("bgpPeer.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("bgpPeerAf.attributes.rn").String()
-						if key == data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].getRn() {
+						if v.Get("bgpPeerAf.attributes.type").String() == data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AddressFamily.ValueString() {
 							rbgpPeerAf = v
 							return false
 						}
@@ -2550,8 +2543,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					var rbgpRtCtrlP gjson.Result
 					rbgpPeerAf.Get("bgpPeerAf.children").ForEach(
 						func(_, v gjson.Result) bool {
-							key := v.Get("bgpRtCtrlP.attributes.rn").String()
-							if key == data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RouteControls[nc__].getRn() {
+							if v.Get("bgpRtCtrlP.attributes.direction").String() == data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RouteControls[nc__].Direction.ValueString() {
 								rbgpRtCtrlP = v
 								return false
 							}
@@ -2577,8 +2569,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					var rbgpPfxCtrlP gjson.Result
 					rbgpPeerAf.Get("bgpPeerAf.children").ForEach(
 						func(_, v gjson.Result) bool {
-							key := v.Get("bgpPfxCtrlP.attributes.rn").String()
-							if key == data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].PrefixListControls[nc__].getRn() {
+							if v.Get("bgpPfxCtrlP.attributes.direction").String() == data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].PrefixListControls[nc__].Direction.ValueString() {
 								rbgpPfxCtrlP = v
 								return false
 							}

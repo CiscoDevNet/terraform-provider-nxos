@@ -33,10 +33,8 @@ const (
 )
 
 type YamlConfig struct {
-	Name         string `yaml:"name"`
-	DocCategory  string `yaml:"doc_category"`
-	BulkResource bool   `yaml:"bulk_resource"`
-	BulkName     string `yaml:"bulk_name"`
+	Name        string `yaml:"name"`
+	DocCategory string `yaml:"doc_category"`
 }
 
 var docPaths = []string{"./docs/data-sources/", "./docs/resources/", "./docs/actions/"}
@@ -78,34 +76,18 @@ func main() {
 	}
 
 	for i := range configs {
-		// Auto-pluralize bulk name if not explicitly set
-		if configs[i].BulkResource && configs[i].BulkName == "" {
-			name := configs[i].Name
-			if strings.HasSuffix(name, "y") {
-				configs[i].BulkName = name[:len(name)-1] + "ies"
-			} else {
-				configs[i].BulkName = name + "s"
+		name := SnakeCase(configs[i].Name)
+		for _, path := range docPaths {
+			filename := path + name + ".md"
+			content, err := os.ReadFile(filename)
+			if err != nil {
+				continue
 			}
-		}
 
-		names := []string{SnakeCase(configs[i].Name)}
-		if configs[i].BulkResource {
-			names = append(names, SnakeCase(configs[i].BulkName))
-		}
+			s := string(content)
+			s = strings.ReplaceAll(s, `subcategory: ""`, `subcategory: "`+configs[i].DocCategory+`"`)
 
-		for _, name := range names {
-			for _, path := range docPaths {
-				filename := path + name + ".md"
-				content, err := os.ReadFile(filename)
-				if err != nil {
-					continue
-				}
-
-				s := string(content)
-				s = strings.ReplaceAll(s, `subcategory: ""`, `subcategory: "`+configs[i].DocCategory+`"`)
-
-				os.WriteFile(filename, []byte(s), 0644)
-			}
+			os.WriteFile(filename, []byte(s), 0644)
 		}
 	}
 

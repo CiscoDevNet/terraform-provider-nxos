@@ -62,7 +62,7 @@ func (r *LoopbackInterfacesResource) Metadata(ctx context.Context, req resource.
 func (r *LoopbackInterfacesResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage multiple loopback_interface resources.", "l3LbRtdIf", "Layer%203/l3:LbRtdIf/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage loopback interface configurations on NX-OS devices, including administrative state, description, and VRF membership.", "interfaceEntity", "Interfaces/interface:Entity/").AddAdditionalDocs([]string{"l3LbRtdIf", "nwRtVrfMbr"}, []string{"Layer%203/l3:LbRtdIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -70,15 +70,15 @@ func (r *LoopbackInterfacesResource) Schema(ctx context.Context, req resource.Sc
 				Optional:            true,
 			},
 			"id": schema.StringAttribute{
-				MarkdownDescription: "The distinguished name of the parent object.",
+				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.ListNestedAttribute{
-				MarkdownDescription: "The list of loopback_interface items.",
-				Required:            true,
+			"loopback_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of loopback interfaces.",
+				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"interface_id": schema.StringAttribute{
@@ -155,7 +155,7 @@ func (r *LoopbackInterfacesResource) Create(ctx context.Context, req resource.Cr
 		return
 	}
 
-	// Post all items as children of parent
+	// Post object
 	if device.Managed {
 		body := plan.toBody()
 		_, err := device.Client.Post(plan.getDn(), body.Str)
@@ -211,9 +211,8 @@ func (r *LoopbackInterfacesResource) Read(ctx context.Context, req resource.Read
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
-		res, err := device.Client.GetDn(state.getDn(), queries...)
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l3LbRtdIf,nwRtVrfMbr")}
+		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return
@@ -260,7 +259,6 @@ func (r *LoopbackInterfacesResource) Update(ctx context.Context, req resource.Up
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
 	var state LoopbackInterfaces
 
 	// Read state
@@ -321,11 +319,13 @@ func (r *LoopbackInterfacesResource) Delete(ctx context.Context, req resource.De
 	}
 
 	if device.Managed {
-		body := state.toDeleteBody(state.Items)
-		_, err := device.Client.Post(state.getDn(), body.Str)
-		if err != nil {
-			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
-			return
+		body := state.toDeleteBody()
+		if len(body.Str) > 0 {
+			_, err := device.Client.Post(state.getDn(), body.Str)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+				return
+			}
 		}
 	}
 
@@ -341,16 +341,19 @@ func (r *LoopbackInterfacesResource) ImportState(ctx context.Context, req resour
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
-		if len(idParts) > 1 {
+
+		if len(idParts) != 0 && len(idParts) != 1 {
+			expectedIdentifier := "Expected import identifier with format: ''"
+			expectedIdentifier += " or '<device>'"
 			resp.Diagnostics.AddError(
 				"Unexpected Import Identifier",
-				fmt.Sprintf("Expected import identifier with format: '<device>' or empty. Got: %q", req.ID),
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 			)
 			return
 		}
 		if len(idParts) == 1 {
-			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[0])...)
-			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[0])...)
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
 		var identity LoopbackInterfacesIdentity
@@ -358,13 +361,13 @@ func (r *LoopbackInterfacesResource) ImportState(ctx context.Context, req resour
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
-
 		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
 		}
 	}
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), "sys/intf")...)
+	var state LoopbackInterfaces
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

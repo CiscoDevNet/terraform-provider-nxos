@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -34,20 +35,20 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosSubinterfaces(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.interface_id", "eth1/10.124"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.admin_state", "down"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.bandwidth", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.delay", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.encap", "vlan-124"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.link_logging", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.medium", "broadcast"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.mtu", "1500"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.mtu_inherit", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.router_mac", "AA:BB:CC:DD:EE:FF"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.router_mac_ipv6_extract", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.snmp_trap", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.vrf_dn", "sys/inst-VRF123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.interface_id", "eth1/10.124"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.encap", "vlan-124"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.medium", "broadcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.mtu_inherit", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.router_mac", "AA:BB:CC:DD:EE:FF"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.router_mac_ipv6_extract", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.snmp_trap", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "subinterfaces.0.vrf_dn", "sys/inst-VRF123"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -81,7 +82,8 @@ func TestAccNxosSubinterfaces(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosSubinterfacesImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		return "", nil
+
+		return fmt.Sprintf(""), nil
 	}
 }
 
@@ -105,9 +107,6 @@ resource "nxos_dme" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSubinterfacesConfig_minimum() string {
 	config := `resource "nxos_subinterfaces" "test" {` + "\n"
-	config += `	items = [{` + "\n"
-	config += `		interface_id = "eth1/10.124"` + "\n"
-	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -118,7 +117,7 @@ func testAccNxosSubinterfacesConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosSubinterfacesConfig_all() string {
 	config := `resource "nxos_subinterfaces" "test" {` + "\n"
-	config += `	items = [{` + "\n"
+	config += `	subinterfaces = [{` + "\n"
 	config += `		interface_id = "eth1/10.124"` + "\n"
 	config += `		admin_state = "down"` + "\n"
 	config += `		bandwidth = 1000` + "\n"

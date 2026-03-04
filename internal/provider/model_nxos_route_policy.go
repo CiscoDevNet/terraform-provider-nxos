@@ -522,8 +522,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 		var rrtpfxRuleV4 gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("rtpfxRuleV4.attributes.rn").String()
-				if key == data.Ipv4PrefixLists[c].getRn() {
+				if v.Get("rtpfxRuleV4.attributes.name").String() == data.Ipv4PrefixLists[c].Name.ValueString() {
 					rrtpfxRuleV4 = v
 					return false
 				}
@@ -553,8 +552,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 			var rrtpfxEntry gjson.Result
 			rrtpfxRuleV4.Get("rtpfxRuleV4.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("rtpfxEntry.attributes.rn").String()
-					if key == data.Ipv4PrefixLists[c].Entries[nc].getRn() {
+					if v.Get("rtpfxEntry.attributes.order").String() == strconv.FormatInt(data.Ipv4PrefixLists[c].Entries[nc].Order.ValueInt64(), 10) {
 						rrtpfxEntry = v
 						return false
 					}
@@ -606,8 +604,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 		var rrtmapRule gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("rtmapRule.attributes.rn").String()
-				if key == data.RouteMaps[c].getRn() {
+				if v.Get("rtmapRule.attributes.name").String() == data.RouteMaps[c].Name.ValueString() {
 					rrtmapRule = v
 					return false
 				}
@@ -632,8 +629,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 			var rrtmapEntry gjson.Result
 			rrtmapRule.Get("rtmapRule.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("rtmapEntry.attributes.rn").String()
-					if key == data.RouteMaps[c].Entries[nc].getRn() {
+					if v.Get("rtmapEntry.attributes.order").String() == strconv.FormatInt(data.RouteMaps[c].Entries[nc].Order.ValueInt64(), 10) {
 						rrtmapEntry = v
 						return false
 					}
@@ -735,8 +731,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					var rrtmapRsRtDstAtt gjson.Result
 					rrtmapMatchRtDst.Get("rtmapMatchRtDst.children").ForEach(
 						func(_, v gjson.Result) bool {
-							key := v.Get("rtmapRsRtDstAtt.attributes.rn").String()
-							if key == data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists[nc_].getRn() {
+							if v.Get("rtmapRsRtDstAtt.attributes.tDn").String() == data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists[nc_].PrefixListDn.ValueString() {
 								rrtmapRsRtDstAtt = v
 								return false
 							}
@@ -785,8 +780,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					var rrtregcomItem gjson.Result
 					rrtmapSetRegComm.Get("rtmapSetRegComm.children").ForEach(
 						func(_, v gjson.Result) bool {
-							key := v.Get("rtregcomItem.attributes.rn").String()
-							if key == data.RouteMaps[c].Entries[nc].SetRegularCommunityItems[nc_].getRn() {
+							if v.Get("rtregcomItem.attributes.community").String() == data.RouteMaps[c].Entries[nc].SetRegularCommunityItems[nc_].Community.ValueString() {
 								rrtregcomItem = v
 								return false
 							}
@@ -818,8 +812,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 				var rrtmapMatchRtTag gjson.Result
 				rrtmapEntry.Get("rtmapEntry.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("rtmapMatchRtTag.attributes.rn").String()
-						if key == data.RouteMaps[c].Entries[nc].MatchTags[nc_].getRn() {
+						if v.Get("rtmapMatchRtTag.attributes.tag").String() == strconv.FormatInt(data.RouteMaps[c].Entries[nc].MatchTags[nc_].Tag.ValueInt64(), 10) {
 							rrtmapMatchRtTag = v
 							return false
 						}

@@ -210,8 +210,7 @@ func (data *BridgeDomains) updateFromBody(res gjson.Result) {
 		var rl2BD gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("l2BD.attributes.rn").String()
-				if key == data.BridgeDomains[c].getRn() {
+				if v.Get("l2BD.attributes.fabEncap").String() == data.BridgeDomains[c].FabricEncap.ValueString() {
 					rl2BD = v
 					return false
 				}

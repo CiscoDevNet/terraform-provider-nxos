@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -34,23 +35,23 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosSVIInterfaces(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.interface_id", "vlan293"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.admin_state", "down"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.autostate", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.bandwidth", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.carrier_delay", "200"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.delay", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.inband_management", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.load_interval_counter_1", "90"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.load_interval_counter_2", "120"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.load_interval_counter_3", "90"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.mac_address", "00:25:B5:00:00:01"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.medium", "bcast"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.mtu", "9216"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.mtu_inherit", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.snmp_trap_link_status", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "items.0.vrf_dn", "sys/inst-VRF123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.interface_id", "vlan293"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.autostate", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.carrier_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.inband_management", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.load_interval_counter_1", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.load_interval_counter_2", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.load_interval_counter_3", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.mac_address", "00:25:B5:00:00:01"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.medium", "bcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.mtu", "9216"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.mtu_inherit", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.snmp_trap_link_status", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.vrf_dn", "sys/inst-VRF123"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -84,7 +85,8 @@ func TestAccNxosSVIInterfaces(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosSVIInterfacesImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		return "", nil
+
+		return fmt.Sprintf(""), nil
 	}
 }
 
@@ -108,9 +110,6 @@ resource "nxos_dme" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSVIInterfacesConfig_minimum() string {
 	config := `resource "nxos_svi_interfaces" "test" {` + "\n"
-	config += `	items = [{` + "\n"
-	config += `		interface_id = "vlan293"` + "\n"
-	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -121,7 +120,7 @@ func testAccNxosSVIInterfacesConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosSVIInterfacesConfig_all() string {
 	config := `resource "nxos_svi_interfaces" "test" {` + "\n"
-	config += `	items = [{` + "\n"
+	config += `	svi_interfaces = [{` + "\n"
 	config += `		interface_id = "vlan293"` + "\n"
 	config += `		admin_state = "down"` + "\n"
 	config += `		autostate = false` + "\n"

@@ -325,13 +325,10 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
 		{{- if .ChildClasses}}
-		{{- if hasNestedChildren .ChildClasses}}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "{{maxChildDepth .ChildClasses}}"))
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "{{join (allChildClassNames .ChildClasses) ","}}")}
 		{{- else}}
-		queries = append(queries, nxos.Query("rsp-subtree", "children"))
-		{{- end}}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "no")}
 		{{- end}}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {

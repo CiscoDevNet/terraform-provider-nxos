@@ -376,8 +376,7 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 		var rnvoEp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("nvoEp.attributes.rn").String()
-				if key == data.NveInterfaces[c].getRn() {
+				if v.Get("nvoEp.attributes.epId").String() == strconv.FormatInt(data.NveInterfaces[c].Id.ValueInt64(), 10) {
 					rnvoEp = v
 					return false
 				}
@@ -514,8 +513,7 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 				var rnvoNw gjson.Result
 				rnvoNws.Get("nvoNws.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("nvoNw.attributes.rn").String()
-						if key == data.NveInterfaces[c].Vnis[nc].getRn() {
+						if v.Get("nvoNw.attributes.vni").String() == strconv.FormatInt(data.NveInterfaces[c].Vnis[nc].Vni.ValueInt64(), 10) {
 							rnvoNw = v
 							return false
 						}

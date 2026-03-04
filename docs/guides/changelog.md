@@ -12,15 +12,9 @@ description: |-
 - BREAKING CHANGE: Rename `nxos_rest` resource and data source to `nxos_dme`
 - BREAKING CHANGE: Rename `nxos_user` resource and data source to `nxos_user_management`
 - BREAKING CHANGE: Remove `nxos_bridge_domain` resource and data source, bridge domain configuration is now managed as a single `nxos_bridge_domains` resource and data source
-- Add `nxos_vrfs` bulk resource
-- Add `nxos_physical_interfaces` bulk resource
-- Add `nxos_svi_interfaces` bulk resource
-- Add `nxos_loopback_interfaces` bulk resource
-- Add `nxos_port_channel_interfaces` bulk resource
-- Add `nxos_subinterfaces` bulk resource
 - Add `nxos_hsrp` resource and data source
-- BREAKING CHANGE: Remove `nxos_ipv4_vrf` resource and data source, `nxos_ipv4_vrfs` bulk resource, `nxos_ipv4_static_route` resource and data source, `nxos_ipv4_interface` resource and data source, and `nxos_ipv4_interface_address` resource and data source, IPv4 configuration is now managed as a single `nxos_ipv4` resource and data source
-- BREAKING CHANGE: Remove `nxos_ipv6_vrf` resource and data source, `nxos_ipv6_vrfs` bulk resource, `nxos_ipv6_static_route` resource and data source, `nxos_ipv6_interface` resource and data source, and `nxos_ipv6_interface_address` resource and data source, IPv6 configuration is now managed as a single `nxos_ipv6` resource and data source
+- BREAKING CHANGE: Remove `nxos_ipv4_vrf` resource and data source, `nxos_ipv4_static_route` resource and data source, `nxos_ipv4_interface` resource and data source, and `nxos_ipv4_interface_address` resource and data source, IPv4 configuration is now managed as a single `nxos_ipv4` resource and data source
+- BREAKING CHANGE: Remove `nxos_ipv6_vrf` resource and data source, `nxos_ipv6_static_route` resource and data source, `nxos_ipv6_interface` resource and data source, and `nxos_ipv6_interface_address` resource and data source, IPv6 configuration is now managed as a single `nxos_ipv6` resource and data source
 - BREAKING CHANGE: Remove `nxos_ethernet` resource and data source, ethernet configuration is now managed as part of `nxos_system` resource and data source
 - BREAKING CHANGE: Remove `nxos_bgp_instance` resource and data source, `nxos_bgp_vrf` resource and data source, `nxos_bgp_route_control` resource and data source, `nxos_bgp_graceful_restart` resource and data source, `nxos_bgp_address_family` resource and data source, `nxos_bgp_advertised_prefix` resource and data source, `nxos_bgp_route_redistribution` resource and data source, `nxos_bgp_peer_template` resource and data source, `nxos_bgp_peer_template_address_family` resource and data source, `nxos_bgp_peer_template_max_prefix` resource and data source, `nxos_bgp_peer` resource and data source, `nxos_bgp_peer_local_asn` resource and data source, `nxos_bgp_peer_address_family` resource and data source, `nxos_bgp_peer_address_family_route_control` resource and data source, and `nxos_bgp_peer_address_family_prefix_list_control` resource and data source, BGP configuration is now managed as a single `nxos_bgp` resource and data source
 - BREAKING CHANGE: Remove `nxos_ospf_instance` resource and data source, `nxos_ospf_vrf` resource and data source, `nxos_ospf_area` resource and data source, `nxos_ospf_interface` resource and data source, `nxos_ospf_authentication` resource and data source, and `nxos_ospf_max_metric` resource and data source, OSPF configuration is now managed as a single `nxos_ospf` resource and data source

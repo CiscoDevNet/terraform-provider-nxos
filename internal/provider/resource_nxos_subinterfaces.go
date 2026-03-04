@@ -63,7 +63,7 @@ func (r *SubinterfacesResource) Metadata(ctx context.Context, req resource.Metad
 func (r *SubinterfacesResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage multiple subinterface resources.", "l3EncRtdIf", "Layer%203/l3:EncRtdIf/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage subinterface configurations on NX-OS devices, including VLAN encapsulation, bandwidth, MTU, and administrative state settings.", "interfaceEntity", "Interfaces/interface:Entity/").AddAdditionalDocs([]string{"l3EncRtdIf", "nwRtVrfMbr"}, []string{"Layer%203/l3:EncRtdIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,15 +71,15 @@ func (r *SubinterfacesResource) Schema(ctx context.Context, req resource.SchemaR
 				Optional:            true,
 			},
 			"id": schema.StringAttribute{
-				MarkdownDescription: "The distinguished name of the parent object.",
+				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.ListNestedAttribute{
-				MarkdownDescription: "The list of subinterface items.",
-				Required:            true,
+			"subinterfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of subinterfaces.",
+				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"interface_id": schema.StringAttribute{
@@ -210,7 +210,7 @@ func (r *SubinterfacesResource) Create(ctx context.Context, req resource.CreateR
 		return
 	}
 
-	// Post all items as children of parent
+	// Post object
 	if device.Managed {
 		body := plan.toBody()
 		_, err := device.Client.Post(plan.getDn(), body.Str)
@@ -266,9 +266,8 @@ func (r *SubinterfacesResource) Read(ctx context.Context, req resource.ReadReque
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
-		res, err := device.Client.GetDn(state.getDn(), queries...)
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l3EncRtdIf,nwRtVrfMbr")}
+		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return
@@ -315,7 +314,6 @@ func (r *SubinterfacesResource) Update(ctx context.Context, req resource.UpdateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
 	var state Subinterfaces
 
 	// Read state
@@ -376,11 +374,13 @@ func (r *SubinterfacesResource) Delete(ctx context.Context, req resource.DeleteR
 	}
 
 	if device.Managed {
-		body := state.toDeleteBody(state.Items)
-		_, err := device.Client.Post(state.getDn(), body.Str)
-		if err != nil {
-			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
-			return
+		body := state.toDeleteBody()
+		if len(body.Str) > 0 {
+			_, err := device.Client.Post(state.getDn(), body.Str)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+				return
+			}
 		}
 	}
 
@@ -396,16 +396,19 @@ func (r *SubinterfacesResource) ImportState(ctx context.Context, req resource.Im
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
-		if len(idParts) > 1 {
+
+		if len(idParts) != 0 && len(idParts) != 1 {
+			expectedIdentifier := "Expected import identifier with format: ''"
+			expectedIdentifier += " or '<device>'"
 			resp.Diagnostics.AddError(
 				"Unexpected Import Identifier",
-				fmt.Sprintf("Expected import identifier with format: '<device>' or empty. Got: %q", req.ID),
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 			)
 			return
 		}
 		if len(idParts) == 1 {
-			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[0])...)
-			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[0])...)
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
 		var identity SubinterfacesIdentity
@@ -413,13 +416,13 @@ func (r *SubinterfacesResource) ImportState(ctx context.Context, req resource.Im
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
-
 		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
 		}
 	}
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), "sys/intf")...)
+	var state Subinterfaces
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

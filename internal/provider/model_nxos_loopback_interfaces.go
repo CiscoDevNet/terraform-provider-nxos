@@ -25,6 +25,7 @@ import (
 	"context"
 	"fmt"
 	"slices"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -37,12 +38,12 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type LoopbackInterfaces struct {
-	Device types.String              `tfsdk:"device"`
-	Dn     types.String              `tfsdk:"id"`
-	Items  []LoopbackInterfacesItems `tfsdk:"items"`
+	Device             types.String                           `tfsdk:"device"`
+	Dn                 types.String                           `tfsdk:"id"`
+	LoopbackInterfaces []LoopbackInterfacesLoopbackInterfaces `tfsdk:"loopback_interfaces"`
 }
 
-type LoopbackInterfacesItems struct {
+type LoopbackInterfacesLoopbackInterfaces struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	AdminState  types.String `tfsdk:"admin_state"`
 	Description types.String `tfsdk:"description"`
@@ -78,20 +79,12 @@ func (data LoopbackInterfaces) getDn() string {
 	return "sys/intf"
 }
 
+func (data LoopbackInterfacesLoopbackInterfaces) getRn() string {
+	return fmt.Sprintf("lb-[%s]", data.InterfaceId.ValueString())
+}
+
 func (data LoopbackInterfaces) getClassName() string {
 	return "interfaceEntity"
-}
-
-func (data LoopbackInterfaces) getItemClassName() string {
-	return "l3LbRtdIf"
-}
-
-func (data LoopbackInterfaces) getItemDn(item LoopbackInterfacesItems) string {
-	return fmt.Sprintf("sys/intf/lb-[%s]", item.InterfaceId.ValueString())
-}
-
-func (data LoopbackInterfaces) getItemRn(item LoopbackInterfacesItems) string {
-	return fmt.Sprintf("lb-[%s]", item.InterfaceId.ValueString())
 }
 
 // End of section. //template:end getPath
@@ -101,73 +94,37 @@ func (data LoopbackInterfaces) getItemRn(item LoopbackInterfacesItems) string {
 func (data LoopbackInterfaces) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	var attrs string
 	childrenPath := data.getClassName() + ".children"
-
-	for _, item := range data.Items {
-		itemBody := ""
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes", map[string]interface{}{})
-		if (!item.InterfaceId.IsUnknown() && !item.InterfaceId.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"id", item.InterfaceId.ValueString())
-		}
-		if (!item.AdminState.IsUnknown() && !item.AdminState.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"adminSt", item.AdminState.ValueString())
-		}
-		if (!item.Description.IsUnknown() && !item.Description.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"descr", item.Description.ValueString())
-		}
-		if (!item.LinkLogging.IsUnknown() && !item.LinkLogging.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"linkLog", item.LinkLogging.ValueString())
-		}
-		var attrs string
-		itemChildrenPath := data.getItemClassName() + ".children"
+	for _, child := range data.LoopbackInterfaces {
 		attrs = "{}"
-		if (!item.VrfDn.IsUnknown() && !item.VrfDn.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "tDn", item.VrfDn.ValueString())
+		if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
 		}
-		if attrs != "{}" || false {
-			itemBody, _ = sjson.SetRaw(itemBody, itemChildrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
-		_ = attrs
-
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
-	}
-
-	return nxos.Body{body}
-}
-
-func (data LoopbackInterfaces) toDeleteBody(items []LoopbackInterfacesItems) nxos.Body {
-	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	childrenPath := data.getClassName() + ".children"
-	for _, item := range items {
-		itemBody := ""
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(item))
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
-	}
-	return nxos.Body{body}
-}
-
-func (data LoopbackInterfaces) toBodyWithDeletes(ctx context.Context, state LoopbackInterfaces) nxos.Body {
-	body := data.toBody()
-	childrenPath := data.getClassName() + ".children"
-	for _, stateItem := range state.Items {
-		found := false
-		for _, planItem := range data.Items {
-			if planItem.InterfaceId.ValueString() != stateItem.InterfaceId.ValueString() {
-				continue
+		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+		}
+		if (!child.LinkLogging.IsUnknown() && !child.LinkLogging.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "linkLog", child.LinkLogging.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.l3LbRtdIf.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".l3LbRtdIf.children"
+			attrs = "{}"
+			if (!child.VrfDn.IsUnknown() && !child.VrfDn.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())
 			}
-			found = true
-			break
-		}
-		if !found {
-			itemBody := ""
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(stateItem))
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, childrenPath+".-1", itemBody)
+			if attrs != "{}" || false {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+			}
 		}
 	}
-	return body
+
+	return nxos.Body{body}
 }
 
 // End of section. //template:end toBody
@@ -175,35 +132,38 @@ func (data LoopbackInterfaces) toBodyWithDeletes(ctx context.Context, state Loop
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *LoopbackInterfaces) fromBody(res gjson.Result) {
-	data.Items = make([]LoopbackInterfacesItems, 0)
-	res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
-		v.ForEach(func(classname, value gjson.Result) bool {
-			if classname.String() == data.getItemClassName() {
-				item := LoopbackInterfacesItems{}
-				item.InterfaceId = types.StringValue(value.Get("attributes.id").String())
-				item.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
-				item.Description = types.StringValue(value.Get("attributes.descr").String())
-				item.LinkLogging = types.StringValue(value.Get("attributes.linkLog").String())
-				{
-					var rnwRtVrfMbr gjson.Result
-					value.Get("children").ForEach(
-						func(_, nestedV gjson.Result) bool {
-							key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
-							if key == "rtvrfMbr" {
-								rnwRtVrfMbr = nestedV
-								return false
-							}
-							return true
-						},
-					)
-					item.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
-				}
-				data.Items = append(data.Items, item)
-			}
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "l3LbRtdIf" {
+						var child LoopbackInterfacesLoopbackInterfaces
+						child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
+						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+						child.Description = types.StringValue(value.Get("attributes.descr").String())
+						child.LinkLogging = types.StringValue(value.Get("attributes.linkLog").String())
+						{
+							var rnwRtVrfMbr gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
+									if key == "rtvrfMbr" {
+										rnwRtVrfMbr = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+						}
+						data.LoopbackInterfaces = append(data.LoopbackInterfaces, child)
+					}
+					return true
+				},
+			)
 			return true
-		})
-		return true
-	})
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -211,69 +171,119 @@ func (data *LoopbackInterfaces) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *LoopbackInterfaces) updateFromBody(res gjson.Result) {
-	for i := len(data.Items) - 1; i >= 0; i-- {
-		// Find the matching item in the response by id attributes
-		var matchedValue gjson.Result
-		res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
-			v.ForEach(func(classname, value gjson.Result) bool {
-				if classname.String() == data.getItemClassName() {
-					if value.Get("attributes.id").String() != data.Items[i].InterfaceId.ValueString() {
-						return true
-					}
-					matchedValue = value
+	for c := len(data.LoopbackInterfaces) - 1; c >= 0; c-- {
+		var rl3LbRtdIf gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("l3LbRtdIf.attributes.id").String() == data.LoopbackInterfaces[c].InterfaceId.ValueString() {
+					rl3LbRtdIf = v
 					return false
 				}
 				return true
-			})
-			if matchedValue.Exists() {
-				return false
-			}
-			return true
-		})
-		if !matchedValue.Exists() {
-			data.Items = slices.Delete(data.Items, i, i+1)
+			},
+		)
+		if !rl3LbRtdIf.Exists() {
+			data.LoopbackInterfaces = slices.Delete(data.LoopbackInterfaces, c, c+1)
 			continue
 		}
-		// Found matching item, update attributes
-		if !data.Items[i].InterfaceId.IsNull() {
-			data.Items[i].InterfaceId = types.StringValue(matchedValue.Get("attributes.id").String())
+		if !data.LoopbackInterfaces[c].InterfaceId.IsNull() {
+			data.LoopbackInterfaces[c].InterfaceId = types.StringValue(rl3LbRtdIf.Get("l3LbRtdIf.attributes.id").String())
 		} else {
-			data.Items[i].InterfaceId = types.StringNull()
+			data.LoopbackInterfaces[c].InterfaceId = types.StringNull()
 		}
-		if !data.Items[i].AdminState.IsNull() {
-			data.Items[i].AdminState = types.StringValue(matchedValue.Get("attributes.adminSt").String())
+		if !data.LoopbackInterfaces[c].AdminState.IsNull() {
+			data.LoopbackInterfaces[c].AdminState = types.StringValue(rl3LbRtdIf.Get("l3LbRtdIf.attributes.adminSt").String())
 		} else {
-			data.Items[i].AdminState = types.StringNull()
+			data.LoopbackInterfaces[c].AdminState = types.StringNull()
 		}
-		if !data.Items[i].Description.IsNull() {
-			data.Items[i].Description = types.StringValue(matchedValue.Get("attributes.descr").String())
+		if !data.LoopbackInterfaces[c].Description.IsNull() {
+			data.LoopbackInterfaces[c].Description = types.StringValue(rl3LbRtdIf.Get("l3LbRtdIf.attributes.descr").String())
 		} else {
-			data.Items[i].Description = types.StringNull()
+			data.LoopbackInterfaces[c].Description = types.StringNull()
 		}
-		if !data.Items[i].LinkLogging.IsNull() {
-			data.Items[i].LinkLogging = types.StringValue(matchedValue.Get("attributes.linkLog").String())
+		if !data.LoopbackInterfaces[c].LinkLogging.IsNull() {
+			data.LoopbackInterfaces[c].LinkLogging = types.StringValue(rl3LbRtdIf.Get("l3LbRtdIf.attributes.linkLog").String())
 		} else {
-			data.Items[i].LinkLogging = types.StringNull()
+			data.LoopbackInterfaces[c].LinkLogging = types.StringNull()
 		}
 		{
 			var rnwRtVrfMbr gjson.Result
-			matchedValue.Get("children").ForEach(
-				func(_, nestedV gjson.Result) bool {
-					key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
+			rl3LbRtdIf.Get("l3LbRtdIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("nwRtVrfMbr.attributes.rn").String()
 					if key == "rtvrfMbr" {
-						rnwRtVrfMbr = nestedV
+						rnwRtVrfMbr = v
 						return false
 					}
 					return true
 				},
 			)
-			if !data.Items[i].VrfDn.IsNull() {
-				data.Items[i].VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+			if !data.LoopbackInterfaces[c].VrfDn.IsNull() {
+				data.LoopbackInterfaces[c].VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
 			} else {
-				data.Items[i].VrfDn = types.StringNull()
+				data.LoopbackInterfaces[c].VrfDn = types.StringNull()
 			}
 		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
+func (data LoopbackInterfaces) toDeleteBody() nxos.Body {
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	childrenPath := data.getClassName() + ".children"
+	for _, child := range data.LoopbackInterfaces {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "l3LbRtdIf.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "l3LbRtdIf.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+
+	return nxos.Body{body}
+}
+
+func (data LoopbackInterfaces) toBodyWithDeletes(ctx context.Context, state LoopbackInterfaces) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
+	for _, stateChild := range state.LoopbackInterfaces {
+		found := false
+		for _, planChild := range data.LoopbackInterfaces {
+			if stateChild.InterfaceId == planChild.InterfaceId {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "l3LbRtdIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "l3LbRtdIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+		}
+	}
+	for di := range state.LoopbackInterfaces {
+		for pdi := range data.LoopbackInterfaces {
+			if state.LoopbackInterfaces[di].InterfaceId == data.LoopbackInterfaces[pdi].InterfaceId {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("l3LbRtdIf.attributes.rn").String() == state.LoopbackInterfaces[di].getRn() {
+						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".l3LbRtdIf.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
+				break
+			}
+		}
+	}
+	return body
+}
+
+// End of section. //template:end toDeleteBody

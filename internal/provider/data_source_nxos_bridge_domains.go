@@ -168,9 +168,7 @@ func (d *BridgeDomainsDataSource) Read(ctx context.Context, req datasource.ReadR
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-
-	queries := []func(*nxos.Req){}
-	queries = append(queries, nxos.Query("rsp-subtree", "children"))
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l2BD")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -567,8 +567,7 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 		var ripqosCMapInst gjson.Result
 		ripqosCMapEntity.Get("ipqosCMapEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ipqosCMapInst.attributes.rn").String()
-				if key == data.ClassMaps[c].getRn() {
+				if v.Get("ipqosCMapInst.attributes.name").String() == data.ClassMaps[c].Name.ValueString() {
 					ripqosCMapInst = v
 					return false
 				}
@@ -593,8 +592,7 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 			var ripqosDscp gjson.Result
 			ripqosCMapInst.Get("ipqosCMapInst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ipqosDscp.attributes.rn").String()
-					if key == data.ClassMaps[c].DscpValues[nc].getRn() {
+					if v.Get("ipqosDscp.attributes.val").String() == data.ClassMaps[c].DscpValues[nc].Value.ValueString() {
 						ripqosDscp = v
 						return false
 					}
@@ -627,8 +625,7 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 		var ripqosPMapInst gjson.Result
 		ripqosPMapEntity.Get("ipqosPMapEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ipqosPMapInst.attributes.rn").String()
-				if key == data.PolicyMaps[c].getRn() {
+				if v.Get("ipqosPMapInst.attributes.name").String() == data.PolicyMaps[c].Name.ValueString() {
 					ripqosPMapInst = v
 					return false
 				}
@@ -653,8 +650,7 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 			var ripqosMatchCMap gjson.Result
 			ripqosPMapInst.Get("ipqosPMapInst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ipqosMatchCMap.attributes.rn").String()
-					if key == data.PolicyMaps[c].MatchClassMaps[nc].getRn() {
+					if v.Get("ipqosMatchCMap.attributes.name").String() == data.PolicyMaps[c].MatchClassMaps[nc].Name.ValueString() {
 						ripqosMatchCMap = v
 						return false
 					}
@@ -855,8 +851,7 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 			var ripqosIf gjson.Result
 			ripqosIngress.Get("ipqosIngress.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ipqosIf.attributes.rn").String()
-					if key == data.PolicyInterfaceIn[c].getRn() {
+					if v.Get("ipqosIf.attributes.name").String() == data.PolicyInterfaceIn[c].InterfaceId.ValueString() {
 						ripqosIf = v
 						return false
 					}

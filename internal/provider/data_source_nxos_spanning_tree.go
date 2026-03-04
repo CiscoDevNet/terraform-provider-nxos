@@ -108,15 +108,11 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Spanning tree pathcost options.",
 				Computed:            true,
 			},
-			"interfaces": schema.ListNestedAttribute{
+			"interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of Spanning Tree interfaces.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-							Computed:            true,
-						},
 						"bpdu_filter": schema.StringAttribute{
 							MarkdownDescription: "bpdufilter mode.",
 							Computed:            true,

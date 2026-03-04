@@ -22,30 +22,32 @@ resource "nxos_user_management" "example" {
   post_login_banner_owner_key   = "owner1"
   post_login_banner_message     = "Welcome to the system."
   post_login_banner_owner_tag   = "tag1"
-  users = [{
-    name                     = "user1"
-    account_status           = "active"
-    allow_expired            = "yes"
-    clear_password_history   = "no"
-    description              = "Test user account"
-    email                    = "user1@example.com"
-    expiration               = "2030-01-01T00:00:00.000+00:00"
-    expires                  = "no"
-    first_name               = "John"
-    force                    = "no"
-    last_name                = "Doe"
-    password_hash            = "unspecified"
-    phone                    = "1234567890"
-    password                 = "password123"
-    password_encryption_type = "clear"
-    shell_type               = "shellvsh"
-    unix_user_id             = 100
-    roles = [{
-      name           = "network-operator"
-      description    = "Operator role"
-      privilege_type = "readPriv"
-    }]
-  }]
+  users = {
+    "user1" = {
+      account_status           = "active"
+      allow_expired            = "yes"
+      clear_password_history   = "no"
+      description              = "Test user account"
+      email                    = "user1@example.com"
+      expiration               = "2030-01-01T00:00:00.000+00:00"
+      expires                  = "no"
+      first_name               = "John"
+      force                    = "no"
+      last_name                = "Doe"
+      password_hash            = "unspecified"
+      phone                    = "1234567890"
+      password                 = "password123"
+      password_encryption_type = "clear"
+      shell_type               = "shellvsh"
+      unix_user_id             = 100
+      roles = {
+        "network-operator" = {
+          description    = "Operator role"
+          privilege_type = "readPriv"
+        }
+      }
+    }
+  }
   tacacs_deadtime         = 5
   tacacs_description      = "TACACS+ settings"
   tacacs_key              = "secret123"
@@ -57,30 +59,32 @@ resource "nxos_user_management" "example" {
   tacacs_retries          = 3
   tacacs_source_interface = "unspecified"
   tacacs_timeout          = 10
-  tacacs_providers = [{
-    name                     = "10.1.1.1"
-    authentication_protocol  = "chap"
-    description              = "TACACS+ provider"
-    key                      = "secret123"
-    key_encryption           = "0"
-    monitoring_idle_time     = 10
-    monitoring_password      = "monpass"
-    monitoring_password_type = "0"
-    monitoring_user          = "monuser"
-    owner_key                = "owner1"
-    owner_tag                = "tag1"
-    port                     = 149
-    retries                  = 3
-    single_connection        = "yes"
-    timeout                  = 10
-  }]
-  tacacs_provider_groups = [{
-    name             = "TACACS_GROUP1"
-    deadtime         = 5
-    description      = "TACACS+ provider group"
-    owner_key        = "owner1"
-    owner_tag        = "tag1"
-    source_interface = "unspecified"
-    vrf              = "default"
-  }]
+  tacacs_providers = {
+    "10.1.1.1" = {
+      authentication_protocol  = "chap"
+      description              = "TACACS+ provider"
+      key                      = "secret123"
+      key_encryption           = "0"
+      monitoring_idle_time     = 10
+      monitoring_password      = "monpass"
+      monitoring_password_type = "0"
+      monitoring_user          = "monuser"
+      owner_key                = "owner1"
+      owner_tag                = "tag1"
+      port                     = 149
+      retries                  = 3
+      single_connection        = "yes"
+      timeout                  = 10
+    }
+  }
+  tacacs_provider_groups = {
+    "TACACS_GROUP1" = {
+      deadtime         = 5
+      description      = "TACACS+ provider group"
+      owner_key        = "owner1"
+      owner_tag        = "tag1"
+      source_interface = "unspecified"
+      vrf              = "default"
+    }
+  }
 }

@@ -31,55 +31,34 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDefaultQoS(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "class_maps.*", map[string]string{
-		"name":       "Voice",
-		"match_type": "match-any",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "class_maps.*.dscp_values.*", map[string]string{
-		"value": "ef",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "policy_maps.*", map[string]string{
-		"name":       "PM1",
-		"match_type": "match-any",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "policy_maps.*.match_class_maps.*", map[string]string{
-		"name": "Voice",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "policy_maps.*.match_class_maps.*", map[string]string{
-		"set_qos_group_id": "1",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "policy_maps.*.match_class_maps.*", map[string]string{
-		"police_bc_rate":                "200",
-		"police_bc_unit":                "mbytes",
-		"police_be_rate":                "200",
-		"police_be_unit":                "mbytes",
-		"police_cir_rate":               "10000",
-		"police_cir_unit":               "mbps",
-		"police_conform_action":         "transmit",
-		"police_conform_set_cos":        "0",
-		"police_conform_set_dscp":       "0",
-		"police_conform_set_precedence": "routine",
-		"police_conform_set_qos_group":  "0",
-		"police_exceed_action":          "transmit",
-		"police_exceed_set_cos":         "0",
-		"police_exceed_set_dscp":        "0",
-		"police_exceed_set_precedence":  "routine",
-		"police_exceed_set_qos_group":   "0",
-		"police_pir_rate":               "10000",
-		"police_pir_unit":               "mbps",
-		"police_violate_action":         "drop",
-		"police_violate_set_cos":        "0",
-		"police_violate_set_dscp":       "0",
-		"police_violate_set_precedence": "routine",
-		"police_violate_set_qos_group":  "0",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "policy_interface_in.*", map[string]string{
-		"interface_id": "eth1/10",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "policy_interface_in.*", map[string]string{
-		"policy_map_name":       "PM1",
-		"policy_map_statistics": "false",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "class_maps.Voice.match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_qos_group_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_bc_rate", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_bc_unit", "mbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_be_rate", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_be_unit", "mbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_cir_rate", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_cir_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_action", "transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_action", "transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_pir_rate", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_pir_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_action", "drop"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_interface_in.eth1/10.policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_interface_in.eth1/10.policy_map_statistics", "false"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -119,49 +98,54 @@ resource "nxos_dme" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosDefaultQoSConfig() string {
 	config := `resource "nxos_default_qos" "test" {` + "\n"
-	config += `	class_maps = [{` + "\n"
-	config += `		name = "Voice"` + "\n"
-	config += `		match_type = "match-any"` + "\n"
-	config += `		dscp_values = [{` + "\n"
-	config += `			value = "ef"` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
-	config += `	policy_maps = [{` + "\n"
-	config += `		name = "PM1"` + "\n"
-	config += `		match_type = "match-any"` + "\n"
-	config += `		match_class_maps = [{` + "\n"
-	config += `			name = "Voice"` + "\n"
-	config += `			set_qos_group_id = 1` + "\n"
-	config += `			police_bc_rate = 200` + "\n"
-	config += `			police_bc_unit = "mbytes"` + "\n"
-	config += `			police_be_rate = 200` + "\n"
-	config += `			police_be_unit = "mbytes"` + "\n"
-	config += `			police_cir_rate = 10000` + "\n"
-	config += `			police_cir_unit = "mbps"` + "\n"
-	config += `			police_conform_action = "transmit"` + "\n"
-	config += `			police_conform_set_cos = 0` + "\n"
-	config += `			police_conform_set_dscp = 0` + "\n"
-	config += `			police_conform_set_precedence = "routine"` + "\n"
-	config += `			police_conform_set_qos_group = 0` + "\n"
-	config += `			police_exceed_action = "transmit"` + "\n"
-	config += `			police_exceed_set_cos = 0` + "\n"
-	config += `			police_exceed_set_dscp = 0` + "\n"
-	config += `			police_exceed_set_precedence = "routine"` + "\n"
-	config += `			police_exceed_set_qos_group = 0` + "\n"
-	config += `			police_pir_rate = 10000` + "\n"
-	config += `			police_pir_unit = "mbps"` + "\n"
-	config += `			police_violate_action = "drop"` + "\n"
-	config += `			police_violate_set_cos = 0` + "\n"
-	config += `			police_violate_set_dscp = 0` + "\n"
-	config += `			police_violate_set_precedence = "routine"` + "\n"
-	config += `			police_violate_set_qos_group = 0` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
-	config += `	policy_interface_in = [{` + "\n"
-	config += `		interface_id = "eth1/10"` + "\n"
-	config += `		policy_map_name = "PM1"` + "\n"
-	config += `		policy_map_statistics = false` + "\n"
-	config += `	}]` + "\n"
+	config += `	class_maps = {` + "\n"
+	config += `		"Voice" = {` + "\n"
+	config += `			match_type = "match-any"` + "\n"
+	config += `			dscp_values = {` + "\n"
+	config += `				"ef" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	policy_maps = {` + "\n"
+	config += `		"PM1" = {` + "\n"
+	config += `			match_type = "match-any"` + "\n"
+	config += `			match_class_maps = {` + "\n"
+	config += `				"Voice" = {` + "\n"
+	config += `					set_qos_group_id = 1` + "\n"
+	config += `					police_bc_rate = 200` + "\n"
+	config += `					police_bc_unit = "mbytes"` + "\n"
+	config += `					police_be_rate = 200` + "\n"
+	config += `					police_be_unit = "mbytes"` + "\n"
+	config += `					police_cir_rate = 10000` + "\n"
+	config += `					police_cir_unit = "mbps"` + "\n"
+	config += `					police_conform_action = "transmit"` + "\n"
+	config += `					police_conform_set_cos = 0` + "\n"
+	config += `					police_conform_set_dscp = 0` + "\n"
+	config += `					police_conform_set_precedence = "routine"` + "\n"
+	config += `					police_conform_set_qos_group = 0` + "\n"
+	config += `					police_exceed_action = "transmit"` + "\n"
+	config += `					police_exceed_set_cos = 0` + "\n"
+	config += `					police_exceed_set_dscp = 0` + "\n"
+	config += `					police_exceed_set_precedence = "routine"` + "\n"
+	config += `					police_exceed_set_qos_group = 0` + "\n"
+	config += `					police_pir_rate = 10000` + "\n"
+	config += `					police_pir_unit = "mbps"` + "\n"
+	config += `					police_violate_action = "drop"` + "\n"
+	config += `					police_violate_set_cos = 0` + "\n"
+	config += `					police_violate_set_dscp = 0` + "\n"
+	config += `					police_violate_set_precedence = "routine"` + "\n"
+	config += `					police_violate_set_qos_group = 0` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	policy_interface_in = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `			policy_map_name = "PM1"` + "\n"
+	config += `			policy_map_statistics = false` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

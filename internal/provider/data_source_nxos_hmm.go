@@ -96,15 +96,11 @@ func (d *HMMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id.",
 				Computed:            true,
 			},
-			"interfaces": schema.ListNestedAttribute{
+			"interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of HMM Fabric Forwarding interfaces.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `vlan10`.",
-							Computed:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,

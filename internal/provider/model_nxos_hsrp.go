@@ -24,9 +24,10 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -38,36 +39,33 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type HSRP struct {
-	Device                            types.String     `tfsdk:"device"`
-	Dn                                types.String     `tfsdk:"id"`
-	AdminState                        types.String     `tfsdk:"admin_state"`
-	InstanceAdminState                types.String     `tfsdk:"instance_admin_state"`
-	Bfd                               types.String     `tfsdk:"bfd"`
-	Control                           types.String     `tfsdk:"control"`
-	ExtendedHoldInterval              types.Int64      `tfsdk:"extended_hold_interval"`
-	ExtendedHoldIntervalConfiguration types.String     `tfsdk:"extended_hold_interval_configuration"`
-	Interfaces                        []HSRPInterfaces `tfsdk:"interfaces"`
+	Device                            types.String              `tfsdk:"device"`
+	Dn                                types.String              `tfsdk:"id"`
+	AdminState                        types.String              `tfsdk:"admin_state"`
+	InstanceAdminState                types.String              `tfsdk:"instance_admin_state"`
+	Bfd                               types.String              `tfsdk:"bfd"`
+	Control                           types.String              `tfsdk:"control"`
+	ExtendedHoldInterval              types.Int64               `tfsdk:"extended_hold_interval"`
+	ExtendedHoldIntervalConfiguration types.String              `tfsdk:"extended_hold_interval_configuration"`
+	Interfaces                        map[string]HSRPInterfaces `tfsdk:"interfaces"`
 }
 
 type HSRPInterfaces struct {
-	InterfaceId                     types.String           `tfsdk:"interface_id"`
-	AdminState                      types.String           `tfsdk:"admin_state"`
-	Bfd                             types.String           `tfsdk:"bfd"`
-	BiaScope                        types.String           `tfsdk:"bia_scope"`
-	Control                         types.String           `tfsdk:"control"`
-	DelayMinimum                    types.Int64            `tfsdk:"delay_minimum"`
-	Description                     types.String           `tfsdk:"description"`
-	MacRefreshInterval              types.Int64            `tfsdk:"mac_refresh_interval"`
-	MacRefreshIntervalConfiguration types.String           `tfsdk:"mac_refresh_interval_configuration"`
-	Name                            types.String           `tfsdk:"name"`
-	ReloadDelay                     types.Int64            `tfsdk:"reload_delay"`
-	Version                         types.String           `tfsdk:"version"`
-	Groups                          []HSRPInterfacesGroups `tfsdk:"groups"`
+	AdminState                      types.String                    `tfsdk:"admin_state"`
+	Bfd                             types.String                    `tfsdk:"bfd"`
+	BiaScope                        types.String                    `tfsdk:"bia_scope"`
+	Control                         types.String                    `tfsdk:"control"`
+	DelayMinimum                    types.Int64                     `tfsdk:"delay_minimum"`
+	Description                     types.String                    `tfsdk:"description"`
+	MacRefreshInterval              types.Int64                     `tfsdk:"mac_refresh_interval"`
+	MacRefreshIntervalConfiguration types.String                    `tfsdk:"mac_refresh_interval_configuration"`
+	Name                            types.String                    `tfsdk:"name"`
+	ReloadDelay                     types.Int64                     `tfsdk:"reload_delay"`
+	Version                         types.String                    `tfsdk:"version"`
+	Groups                          map[string]HSRPInterfacesGroups `tfsdk:"groups"`
 }
 
 type HSRPInterfacesGroups struct {
-	GroupId                            types.Int64  `tfsdk:"group_id"`
-	AddressFamily                      types.String `tfsdk:"address_family"`
 	AuthenticationMd5CompatibilityMode types.String `tfsdk:"authentication_md5_compatibility_mode"`
 	AuthenticationMd5KeyChainName      types.String `tfsdk:"authentication_md5_key_chain_name"`
 	AuthenticationMd5KeyName           types.String `tfsdk:"authentication_md5_key_name"`
@@ -119,12 +117,13 @@ func (data HSRP) getDn() string {
 	return "sys/hsrp"
 }
 
-func (data HSRPInterfaces) getRn() string {
-	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
+func (data HSRPInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
 }
 
-func (data HSRPInterfacesGroups) getRn() string {
-	return fmt.Sprintf("grp-%v-%s", data.GroupId.ValueInt64(), data.AddressFamily.ValueString())
+func (data HSRPInterfacesGroups) getRn(key string) string {
+	keyParts := strings.SplitN(key, "|", 2)
+	return fmt.Sprintf("grp-%v-%s", helpers.Must(strconv.ParseInt(keyParts[0], 10, 64)), keyParts[1])
 }
 
 func (data HSRP) getClassName() string {
@@ -164,11 +163,9 @@ func (data HSRP) toBody() nxos.Body {
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
-		for _, child := range data.Interfaces {
+		for key, child := range data.Interfaces {
 			attrs = "{}"
-			if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
-				attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
-			}
+			attrs, _ = sjson.Set(attrs, "id", key)
 			if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 			}
@@ -206,14 +203,11 @@ func (data HSRP) toBody() nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".hsrpIf.children"
-				for _, child := range child.Groups {
+				for key, child := range child.Groups {
 					attrs = "{}"
-					if (!child.GroupId.IsUnknown() && !child.GroupId.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "id", strconv.FormatInt(child.GroupId.ValueInt64(), 10))
-					}
-					if (!child.AddressFamily.IsUnknown() && !child.AddressFamily.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "af", child.AddressFamily.ValueString())
-					}
+					keyParts := strings.SplitN(key, "|", 2)
+					attrs, _ = sjson.Set(attrs, "id", keyParts[0])
+					attrs, _ = sjson.Set(attrs, "af", keyParts[1])
 					if (!child.AuthenticationMd5CompatibilityMode.IsUnknown() && !child.AuthenticationMd5CompatibilityMode.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "authMd5CompatibilityMode", child.AuthenticationMd5CompatibilityMode.ValueString())
 					}
@@ -296,8 +290,8 @@ func (data *HSRP) fromBody(res gjson.Result) {
 		var rhsrpInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("hsrpInst.attributes.rn").String()
-				if key == "inst" {
+				rnValue := v.Get("hsrpInst.attributes.rn").String()
+				if rnValue == "inst" {
 					rhsrpInst = v
 					return false
 				}
@@ -315,7 +309,6 @@ func (data *HSRP) fromBody(res gjson.Result) {
 					func(classname, value gjson.Result) bool {
 						if classname.String() == "hsrpIf" {
 							var child HSRPInterfaces
-							child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
 							child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
 							child.Bfd = types.StringValue(value.Get("attributes.bfd").String())
 							child.BiaScope = types.StringValue(value.Get("attributes.biaScope").String())
@@ -327,14 +320,13 @@ func (data *HSRP) fromBody(res gjson.Result) {
 							child.Name = types.StringValue(value.Get("attributes.name").String())
 							child.ReloadDelay = types.Int64Value(value.Get("attributes.reloadDelay").Int())
 							child.Version = types.StringValue(value.Get("attributes.version").String())
+							mapKey := value.Get("attributes.id").String()
 							value.Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "hsrpGroup" {
 												var nestedChildhsrpGroup HSRPInterfacesGroups
-												nestedChildhsrpGroup.GroupId = types.Int64Value(nestedValue.Get("attributes.id").Int())
-												nestedChildhsrpGroup.AddressFamily = types.StringValue(nestedValue.Get("attributes.af").String())
 												nestedChildhsrpGroup.AuthenticationMd5CompatibilityMode = types.StringValue(nestedValue.Get("attributes.authMd5CompatibilityMode").String())
 												nestedChildhsrpGroup.AuthenticationMd5KeyChainName = types.StringValue(nestedValue.Get("attributes.authMd5KeyChainName").String())
 												nestedChildhsrpGroup.AuthenticationMd5KeyName = types.StringValue(nestedValue.Get("attributes.authMd5KeyName").String())
@@ -355,7 +347,11 @@ func (data *HSRP) fromBody(res gjson.Result) {
 												nestedChildhsrpGroup.PreemptDelayReload = types.Int64Value(nestedValue.Get("attributes.preemptDelayReload").Int())
 												nestedChildhsrpGroup.PreemptDelaySync = types.Int64Value(nestedValue.Get("attributes.preemptDelaySync").Int())
 												nestedChildhsrpGroup.Priority = types.Int64Value(nestedValue.Get("attributes.prio").Int())
-												child.Groups = append(child.Groups, nestedChildhsrpGroup)
+												nestedMapKey := nestedValue.Get("attributes.id").String() + "|" + nestedValue.Get("attributes.af").String()
+												if child.Groups == nil {
+													child.Groups = make(map[string]HSRPInterfacesGroups)
+												}
+												child.Groups[nestedMapKey] = nestedChildhsrpGroup
 											}
 											return true
 										},
@@ -363,7 +359,10 @@ func (data *HSRP) fromBody(res gjson.Result) {
 									return true
 								},
 							)
-							data.Interfaces = append(data.Interfaces, child)
+							if data.Interfaces == nil {
+								data.Interfaces = make(map[string]HSRPInterfaces)
+							}
+							data.Interfaces[mapKey] = child
 						}
 						return true
 					},
@@ -387,8 +386,8 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 	var rhsrpInst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("hsrpInst.attributes.rn").String()
-			if key == "inst" {
+			rnValue := v.Get("hsrpInst.attributes.rn").String()
+			if rnValue == "inst" {
 				rhsrpInst = v
 				return false
 			}
@@ -420,11 +419,11 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 	} else {
 		data.ExtendedHoldIntervalConfiguration = types.StringNull()
 	}
-	for c := len(data.Interfaces) - 1; c >= 0; c-- {
+	for key, item := range data.Interfaces {
 		var rhsrpIf gjson.Result
 		rhsrpInst.Get("hsrpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("hsrpIf.attributes.id").String() == data.Interfaces[c].InterfaceId.ValueString() {
+				if v.Get("hsrpIf.attributes.id").String() == key {
 					rhsrpIf = v
 					return false
 				}
@@ -432,75 +431,72 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !rhsrpIf.Exists() {
-			data.Interfaces = slices.Delete(data.Interfaces, c, c+1)
+			delete(data.Interfaces, key)
 			continue
 		}
-		if !data.Interfaces[c].InterfaceId.IsNull() {
-			data.Interfaces[c].InterfaceId = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.id").String())
+		if !item.AdminState.IsNull() {
+			item.AdminState = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.adminSt").String())
 		} else {
-			data.Interfaces[c].InterfaceId = types.StringNull()
+			item.AdminState = types.StringNull()
 		}
-		if !data.Interfaces[c].AdminState.IsNull() {
-			data.Interfaces[c].AdminState = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.adminSt").String())
+		if !item.Bfd.IsNull() {
+			item.Bfd = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.bfd").String())
 		} else {
-			data.Interfaces[c].AdminState = types.StringNull()
+			item.Bfd = types.StringNull()
 		}
-		if !data.Interfaces[c].Bfd.IsNull() {
-			data.Interfaces[c].Bfd = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.bfd").String())
+		if !item.BiaScope.IsNull() {
+			item.BiaScope = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.biaScope").String())
 		} else {
-			data.Interfaces[c].Bfd = types.StringNull()
+			item.BiaScope = types.StringNull()
 		}
-		if !data.Interfaces[c].BiaScope.IsNull() {
-			data.Interfaces[c].BiaScope = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.biaScope").String())
+		if !item.Control.IsNull() {
+			item.Control = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.ctrl").String())
 		} else {
-			data.Interfaces[c].BiaScope = types.StringNull()
+			item.Control = types.StringNull()
 		}
-		if !data.Interfaces[c].Control.IsNull() {
-			data.Interfaces[c].Control = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.ctrl").String())
+		if !item.DelayMinimum.IsNull() {
+			item.DelayMinimum = types.Int64Value(rhsrpIf.Get("hsrpIf.attributes.delayIntfMin").Int())
 		} else {
-			data.Interfaces[c].Control = types.StringNull()
+			item.DelayMinimum = types.Int64Null()
 		}
-		if !data.Interfaces[c].DelayMinimum.IsNull() {
-			data.Interfaces[c].DelayMinimum = types.Int64Value(rhsrpIf.Get("hsrpIf.attributes.delayIntfMin").Int())
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.descr").String())
 		} else {
-			data.Interfaces[c].DelayMinimum = types.Int64Null()
+			item.Description = types.StringNull()
 		}
-		if !data.Interfaces[c].Description.IsNull() {
-			data.Interfaces[c].Description = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.descr").String())
+		if !item.MacRefreshInterval.IsNull() {
+			item.MacRefreshInterval = types.Int64Value(rhsrpIf.Get("hsrpIf.attributes.macRefreshIntvl").Int())
 		} else {
-			data.Interfaces[c].Description = types.StringNull()
+			item.MacRefreshInterval = types.Int64Null()
 		}
-		if !data.Interfaces[c].MacRefreshInterval.IsNull() {
-			data.Interfaces[c].MacRefreshInterval = types.Int64Value(rhsrpIf.Get("hsrpIf.attributes.macRefreshIntvl").Int())
+		if !item.MacRefreshIntervalConfiguration.IsNull() {
+			item.MacRefreshIntervalConfiguration = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.macRefreshIntvlCfg").String())
 		} else {
-			data.Interfaces[c].MacRefreshInterval = types.Int64Null()
+			item.MacRefreshIntervalConfiguration = types.StringNull()
 		}
-		if !data.Interfaces[c].MacRefreshIntervalConfiguration.IsNull() {
-			data.Interfaces[c].MacRefreshIntervalConfiguration = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.macRefreshIntvlCfg").String())
+		if !item.Name.IsNull() {
+			item.Name = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.name").String())
 		} else {
-			data.Interfaces[c].MacRefreshIntervalConfiguration = types.StringNull()
+			item.Name = types.StringNull()
 		}
-		if !data.Interfaces[c].Name.IsNull() {
-			data.Interfaces[c].Name = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.name").String())
+		if !item.ReloadDelay.IsNull() {
+			item.ReloadDelay = types.Int64Value(rhsrpIf.Get("hsrpIf.attributes.reloadDelay").Int())
 		} else {
-			data.Interfaces[c].Name = types.StringNull()
+			item.ReloadDelay = types.Int64Null()
 		}
-		if !data.Interfaces[c].ReloadDelay.IsNull() {
-			data.Interfaces[c].ReloadDelay = types.Int64Value(rhsrpIf.Get("hsrpIf.attributes.reloadDelay").Int())
+		if !item.Version.IsNull() {
+			item.Version = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.version").String())
 		} else {
-			data.Interfaces[c].ReloadDelay = types.Int64Null()
+			item.Version = types.StringNull()
 		}
-		if !data.Interfaces[c].Version.IsNull() {
-			data.Interfaces[c].Version = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.version").String())
-		} else {
-			data.Interfaces[c].Version = types.StringNull()
-		}
-		for nc := len(data.Interfaces[c].Groups) - 1; nc >= 0; nc-- {
+		for nc := range item.Groups {
+			ncItem := item.Groups[nc]
+			keyParts := strings.SplitN(nc, "|", 2)
 			var rhsrpGroup gjson.Result
 			rhsrpIf.Get("hsrpIf.children").ForEach(
 				func(_, v gjson.Result) bool {
-					if v.Get("hsrpGroup.attributes.id").String() == strconv.FormatInt(data.Interfaces[c].Groups[nc].GroupId.ValueInt64(), 10) &&
-						v.Get("hsrpGroup.attributes.af").String() == data.Interfaces[c].Groups[nc].AddressFamily.ValueString() {
+					if v.Get("hsrpGroup.attributes.id").String() == keyParts[0] &&
+						v.Get("hsrpGroup.attributes.af").String() == keyParts[1] {
 						rhsrpGroup = v
 						return false
 					}
@@ -508,120 +504,112 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 				},
 			)
 			if !rhsrpGroup.Exists() {
-				data.Interfaces[c].Groups = slices.Delete(data.Interfaces[c].Groups, nc, nc+1)
+				delete(item.Groups, nc)
 				continue
 			}
-			if !data.Interfaces[c].Groups[nc].GroupId.IsNull() {
-				data.Interfaces[c].Groups[nc].GroupId = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.id").Int())
+			if !ncItem.AuthenticationMd5CompatibilityMode.IsNull() {
+				ncItem.AuthenticationMd5CompatibilityMode = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authMd5CompatibilityMode").String())
 			} else {
-				data.Interfaces[c].Groups[nc].GroupId = types.Int64Null()
+				ncItem.AuthenticationMd5CompatibilityMode = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].AddressFamily.IsNull() {
-				data.Interfaces[c].Groups[nc].AddressFamily = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.af").String())
+			if !ncItem.AuthenticationMd5KeyChainName.IsNull() {
+				ncItem.AuthenticationMd5KeyChainName = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authMd5KeyChainName").String())
 			} else {
-				data.Interfaces[c].Groups[nc].AddressFamily = types.StringNull()
+				ncItem.AuthenticationMd5KeyChainName = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].AuthenticationMd5CompatibilityMode.IsNull() {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5CompatibilityMode = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authMd5CompatibilityMode").String())
+			if !ncItem.AuthenticationMd5KeyName.IsNull() {
+				ncItem.AuthenticationMd5KeyName = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authMd5KeyName").String())
 			} else {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5CompatibilityMode = types.StringNull()
+				ncItem.AuthenticationMd5KeyName = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].AuthenticationMd5KeyChainName.IsNull() {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5KeyChainName = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authMd5KeyChainName").String())
+			if !ncItem.AuthenticationMd5KeyStringType.IsNull() {
+				ncItem.AuthenticationMd5KeyStringType = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authMd5KeyStringType").String())
 			} else {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5KeyChainName = types.StringNull()
+				ncItem.AuthenticationMd5KeyStringType = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].AuthenticationMd5KeyName.IsNull() {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5KeyName = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authMd5KeyName").String())
+			if !ncItem.AuthenticationMd5Timeout.IsNull() {
+				ncItem.AuthenticationMd5Timeout = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.authMd5Timeout").Int())
 			} else {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5KeyName = types.StringNull()
+				ncItem.AuthenticationMd5Timeout = types.Int64Null()
 			}
-			if !data.Interfaces[c].Groups[nc].AuthenticationMd5KeyStringType.IsNull() {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5KeyStringType = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authMd5KeyStringType").String())
+			if !ncItem.AuthenticationMd5Type.IsNull() {
+				ncItem.AuthenticationMd5Type = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authMd5Type").String())
 			} else {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5KeyStringType = types.StringNull()
+				ncItem.AuthenticationMd5Type = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].AuthenticationMd5Timeout.IsNull() {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5Timeout = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.authMd5Timeout").Int())
+			if !ncItem.AuthenticationType.IsNull() {
+				ncItem.AuthenticationType = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authType").String())
 			} else {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5Timeout = types.Int64Null()
+				ncItem.AuthenticationType = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].AuthenticationMd5Type.IsNull() {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5Type = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authMd5Type").String())
+			if !ncItem.Control.IsNull() {
+				ncItem.Control = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.ctrl").String())
 			} else {
-				data.Interfaces[c].Groups[nc].AuthenticationMd5Type = types.StringNull()
+				ncItem.Control = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].AuthenticationType.IsNull() {
-				data.Interfaces[c].Groups[nc].AuthenticationType = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.authType").String())
+			if !ncItem.Follow.IsNull() {
+				ncItem.Follow = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.follow").String())
 			} else {
-				data.Interfaces[c].Groups[nc].AuthenticationType = types.StringNull()
+				ncItem.Follow = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].Control.IsNull() {
-				data.Interfaces[c].Groups[nc].Control = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.ctrl").String())
+			if !ncItem.ForwardingLowerThreshold.IsNull() {
+				ncItem.ForwardingLowerThreshold = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.fwdLwrThrld").Int())
 			} else {
-				data.Interfaces[c].Groups[nc].Control = types.StringNull()
+				ncItem.ForwardingLowerThreshold = types.Int64Null()
 			}
-			if !data.Interfaces[c].Groups[nc].Follow.IsNull() {
-				data.Interfaces[c].Groups[nc].Follow = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.follow").String())
+			if !ncItem.HelloInterval.IsNull() {
+				ncItem.HelloInterval = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.helloIntvl").Int())
 			} else {
-				data.Interfaces[c].Groups[nc].Follow = types.StringNull()
+				ncItem.HelloInterval = types.Int64Null()
 			}
-			if !data.Interfaces[c].Groups[nc].ForwardingLowerThreshold.IsNull() {
-				data.Interfaces[c].Groups[nc].ForwardingLowerThreshold = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.fwdLwrThrld").Int())
+			if !ncItem.HoldInterval.IsNull() {
+				ncItem.HoldInterval = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.holdIntvl").Int())
 			} else {
-				data.Interfaces[c].Groups[nc].ForwardingLowerThreshold = types.Int64Null()
+				ncItem.HoldInterval = types.Int64Null()
 			}
-			if !data.Interfaces[c].Groups[nc].HelloInterval.IsNull() {
-				data.Interfaces[c].Groups[nc].HelloInterval = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.helloIntvl").Int())
+			if !ncItem.IpAddress.IsNull() {
+				ncItem.IpAddress = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.ip").String())
 			} else {
-				data.Interfaces[c].Groups[nc].HelloInterval = types.Int64Null()
+				ncItem.IpAddress = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].HoldInterval.IsNull() {
-				data.Interfaces[c].Groups[nc].HoldInterval = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.holdIntvl").Int())
+			if !ncItem.IpObtainMode.IsNull() {
+				ncItem.IpObtainMode = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.ipObtainMode").String())
 			} else {
-				data.Interfaces[c].Groups[nc].HoldInterval = types.Int64Null()
+				ncItem.IpObtainMode = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].IpAddress.IsNull() {
-				data.Interfaces[c].Groups[nc].IpAddress = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.ip").String())
+			if !ncItem.MacAddress.IsNull() {
+				ncItem.MacAddress = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.mac").String())
 			} else {
-				data.Interfaces[c].Groups[nc].IpAddress = types.StringNull()
+				ncItem.MacAddress = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].IpObtainMode.IsNull() {
-				data.Interfaces[c].Groups[nc].IpObtainMode = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.ipObtainMode").String())
+			if !ncItem.Name.IsNull() {
+				ncItem.Name = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.name").String())
 			} else {
-				data.Interfaces[c].Groups[nc].IpObtainMode = types.StringNull()
+				ncItem.Name = types.StringNull()
 			}
-			if !data.Interfaces[c].Groups[nc].MacAddress.IsNull() {
-				data.Interfaces[c].Groups[nc].MacAddress = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.mac").String())
+			if !ncItem.PreemptDelayMinimum.IsNull() {
+				ncItem.PreemptDelayMinimum = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.preemptDelayMin").Int())
 			} else {
-				data.Interfaces[c].Groups[nc].MacAddress = types.StringNull()
+				ncItem.PreemptDelayMinimum = types.Int64Null()
 			}
-			if !data.Interfaces[c].Groups[nc].Name.IsNull() {
-				data.Interfaces[c].Groups[nc].Name = types.StringValue(rhsrpGroup.Get("hsrpGroup.attributes.name").String())
+			if !ncItem.PreemptDelayReload.IsNull() {
+				ncItem.PreemptDelayReload = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.preemptDelayReload").Int())
 			} else {
-				data.Interfaces[c].Groups[nc].Name = types.StringNull()
+				ncItem.PreemptDelayReload = types.Int64Null()
 			}
-			if !data.Interfaces[c].Groups[nc].PreemptDelayMinimum.IsNull() {
-				data.Interfaces[c].Groups[nc].PreemptDelayMinimum = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.preemptDelayMin").Int())
+			if !ncItem.PreemptDelaySync.IsNull() {
+				ncItem.PreemptDelaySync = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.preemptDelaySync").Int())
 			} else {
-				data.Interfaces[c].Groups[nc].PreemptDelayMinimum = types.Int64Null()
+				ncItem.PreemptDelaySync = types.Int64Null()
 			}
-			if !data.Interfaces[c].Groups[nc].PreemptDelayReload.IsNull() {
-				data.Interfaces[c].Groups[nc].PreemptDelayReload = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.preemptDelayReload").Int())
+			if !ncItem.Priority.IsNull() {
+				ncItem.Priority = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.prio").Int())
 			} else {
-				data.Interfaces[c].Groups[nc].PreemptDelayReload = types.Int64Null()
+				ncItem.Priority = types.Int64Null()
 			}
-			if !data.Interfaces[c].Groups[nc].PreemptDelaySync.IsNull() {
-				data.Interfaces[c].Groups[nc].PreemptDelaySync = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.preemptDelaySync").Int())
-			} else {
-				data.Interfaces[c].Groups[nc].PreemptDelaySync = types.Int64Null()
-			}
-			if !data.Interfaces[c].Groups[nc].Priority.IsNull() {
-				data.Interfaces[c].Groups[nc].Priority = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.prio").Int())
-			} else {
-				data.Interfaces[c].Groups[nc].Priority = types.Int64Null()
-			}
+			item.Groups[nc] = ncItem
 		}
+		data.Interfaces[key] = item
 	}
 }
 
@@ -640,50 +628,38 @@ func (data HSRP) toBodyWithDeletes(ctx context.Context, state HSRP) nxos.Body {
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.Interfaces {
-		found := false
-		for _, planChild := range data.Interfaces {
-			if stateChild.InterfaceId == planChild.InterfaceId {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.Interfaces {
+		if _, found := data.Interfaces[stateKey]; !found {
+			stateChild := state.Interfaces[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "hsrpIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "hsrpIf.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "hsrpIf.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.hsrpInst.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.Interfaces {
-		for pdi := range data.Interfaces {
-			if state.Interfaces[di].InterfaceId == data.Interfaces[pdi].InterfaceId {
-				matchBodyPathdi := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.hsrpInst.children").Array() {
-					if mv.Get("hsrpIf.attributes.rn").String() == state.Interfaces[di].getRn() {
-						matchBodyPathdi = bodyPath + ".0.hsrpInst.children" + "." + strconv.Itoa(mi) + ".hsrpIf.children"
-						break
-					}
-				}
-				if matchBodyPathdi == "" {
-					break
-				}
-				for _, stateChild := range state.Interfaces[di].Groups {
-					found := false
-					for _, planChild := range data.Interfaces[pdi].Groups {
-						if stateChild.GroupId == planChild.GroupId && stateChild.AddressFamily == planChild.AddressFamily {
-							found = true
-							break
-						}
-					}
-					if !found {
-						deleteBody := ""
-						deleteBody, _ = sjson.Set(deleteBody, "hsrpGroup.attributes.rn", stateChild.getRn())
-						deleteBody, _ = sjson.Set(deleteBody, "hsrpGroup.attributes.status", "deleted")
-						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
-					}
-				}
+		if _, found := data.Interfaces[di]; !found {
+			continue
+		}
+		stateItemdi := state.Interfaces[di]
+		planItemdi := data.Interfaces[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.hsrpInst.children").Array() {
+			if mv.Get("hsrpIf.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.hsrpInst.children" + "." + strconv.Itoa(mi) + ".hsrpIf.children"
 				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.Groups {
+			if _, found := planItemdi.Groups[stateChildKey]; !found {
+				stateChild := stateItemdi.Groups[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "hsrpGroup.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "hsrpGroup.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 			}
 		}
 	}

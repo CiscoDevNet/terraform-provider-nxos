@@ -24,7 +24,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -39,57 +38,56 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type VPC struct {
-	Device                                  types.String    `tfsdk:"device"`
-	Dn                                      types.String    `tfsdk:"id"`
-	AdminState                              types.String    `tfsdk:"admin_state"`
-	InstanceAdminState                      types.String    `tfsdk:"instance_admin_state"`
-	Control                                 types.String    `tfsdk:"control"`
-	DomainAdminState                        types.String    `tfsdk:"domain_admin_state"`
-	DomainId                                types.Int64     `tfsdk:"domain_id"`
-	AutoRecovery                            types.String    `tfsdk:"auto_recovery"`
-	AutoRecoveryInterval                    types.Int64     `tfsdk:"auto_recovery_interval"`
-	DelayRestoreOrphanPort                  types.Int64     `tfsdk:"delay_restore_orphan_port"`
-	DelayRestoreSvi                         types.Int64     `tfsdk:"delay_restore_svi"`
-	DelayRestoreVpc                         types.Int64     `tfsdk:"delay_restore_vpc"`
-	Dscp                                    types.Int64     `tfsdk:"dscp"`
-	FastConvergence                         types.String    `tfsdk:"fast_convergence"`
-	GracefulConsistencyCheck                types.String    `tfsdk:"graceful_consistency_check"`
-	L3PeerRouter                            types.String    `tfsdk:"l3_peer_router"`
-	L3PeerRouterSyslog                      types.String    `tfsdk:"l3_peer_router_syslog"`
-	L3PeerRouterSyslogInterval              types.Int64     `tfsdk:"l3_peer_router_syslog_interval"`
-	PeerGateway                             types.String    `tfsdk:"peer_gateway"`
-	PeerIp                                  types.String    `tfsdk:"peer_ip"`
-	PeerSwitch                              types.String    `tfsdk:"peer_switch"`
-	RolePriority                            types.Int64     `tfsdk:"role_priority"`
-	SysMac                                  types.String    `tfsdk:"sys_mac"`
-	SystemPriority                          types.Int64     `tfsdk:"system_priority"`
-	Track                                   types.Int64     `tfsdk:"track"`
-	VirtualIp                               types.String    `tfsdk:"virtual_ip"`
-	DelayPeerLinkBringup                    types.Int64     `tfsdk:"delay_peer_link_bringup"`
-	ExcludeSvi                              types.String    `tfsdk:"exclude_svi"`
-	MacBpduSourceVersion2                   types.Bool      `tfsdk:"mac_bpdu_source_version_2"`
-	PeerGatewayExcludeVlan                  types.String    `tfsdk:"peer_gateway_exclude_vlan"`
-	KeepaliveDestinationIp                  types.String    `tfsdk:"keepalive_destination_ip"`
-	KeepaliveFlushTimeout                   types.Int64     `tfsdk:"keepalive_flush_timeout"`
-	KeepaliveInterval                       types.Int64     `tfsdk:"keepalive_interval"`
-	KeepalivePrecedenceType                 types.String    `tfsdk:"keepalive_precedence_type"`
-	KeepalivePrecedenceValue                types.Int64     `tfsdk:"keepalive_precedence_value"`
-	KeepaliveSourceIp                       types.String    `tfsdk:"keepalive_source_ip"`
-	KeepaliveTimeout                        types.Int64     `tfsdk:"keepalive_timeout"`
-	KeepaliveTypeOfServiceByte              types.Int64     `tfsdk:"keepalive_type_of_service_byte"`
-	KeepaliveTypeOfServiceConfigurationType types.String    `tfsdk:"keepalive_type_of_service_configuration_type"`
-	KeepaliveTypeOfServiceType              types.String    `tfsdk:"keepalive_type_of_service_type"`
-	KeepaliveTypeOfServiceValue             types.Int64     `tfsdk:"keepalive_type_of_service_value"`
-	KeepaliveUdpPort                        types.Int64     `tfsdk:"keepalive_udp_port"`
-	KeepaliveVrf                            types.String    `tfsdk:"keepalive_vrf"`
-	PeerlinkInterfaceId                     types.String    `tfsdk:"peerlink_interface_id"`
-	PeerlinkAdminState                      types.String    `tfsdk:"peerlink_admin_state"`
-	PeerlinkDescription                     types.String    `tfsdk:"peerlink_description"`
-	Interfaces                              []VPCInterfaces `tfsdk:"interfaces"`
+	Device                                  types.String             `tfsdk:"device"`
+	Dn                                      types.String             `tfsdk:"id"`
+	AdminState                              types.String             `tfsdk:"admin_state"`
+	InstanceAdminState                      types.String             `tfsdk:"instance_admin_state"`
+	Control                                 types.String             `tfsdk:"control"`
+	DomainAdminState                        types.String             `tfsdk:"domain_admin_state"`
+	DomainId                                types.Int64              `tfsdk:"domain_id"`
+	AutoRecovery                            types.String             `tfsdk:"auto_recovery"`
+	AutoRecoveryInterval                    types.Int64              `tfsdk:"auto_recovery_interval"`
+	DelayRestoreOrphanPort                  types.Int64              `tfsdk:"delay_restore_orphan_port"`
+	DelayRestoreSvi                         types.Int64              `tfsdk:"delay_restore_svi"`
+	DelayRestoreVpc                         types.Int64              `tfsdk:"delay_restore_vpc"`
+	Dscp                                    types.Int64              `tfsdk:"dscp"`
+	FastConvergence                         types.String             `tfsdk:"fast_convergence"`
+	GracefulConsistencyCheck                types.String             `tfsdk:"graceful_consistency_check"`
+	L3PeerRouter                            types.String             `tfsdk:"l3_peer_router"`
+	L3PeerRouterSyslog                      types.String             `tfsdk:"l3_peer_router_syslog"`
+	L3PeerRouterSyslogInterval              types.Int64              `tfsdk:"l3_peer_router_syslog_interval"`
+	PeerGateway                             types.String             `tfsdk:"peer_gateway"`
+	PeerIp                                  types.String             `tfsdk:"peer_ip"`
+	PeerSwitch                              types.String             `tfsdk:"peer_switch"`
+	RolePriority                            types.Int64              `tfsdk:"role_priority"`
+	SysMac                                  types.String             `tfsdk:"sys_mac"`
+	SystemPriority                          types.Int64              `tfsdk:"system_priority"`
+	Track                                   types.Int64              `tfsdk:"track"`
+	VirtualIp                               types.String             `tfsdk:"virtual_ip"`
+	DelayPeerLinkBringup                    types.Int64              `tfsdk:"delay_peer_link_bringup"`
+	ExcludeSvi                              types.String             `tfsdk:"exclude_svi"`
+	MacBpduSourceVersion2                   types.Bool               `tfsdk:"mac_bpdu_source_version_2"`
+	PeerGatewayExcludeVlan                  types.String             `tfsdk:"peer_gateway_exclude_vlan"`
+	KeepaliveDestinationIp                  types.String             `tfsdk:"keepalive_destination_ip"`
+	KeepaliveFlushTimeout                   types.Int64              `tfsdk:"keepalive_flush_timeout"`
+	KeepaliveInterval                       types.Int64              `tfsdk:"keepalive_interval"`
+	KeepalivePrecedenceType                 types.String             `tfsdk:"keepalive_precedence_type"`
+	KeepalivePrecedenceValue                types.Int64              `tfsdk:"keepalive_precedence_value"`
+	KeepaliveSourceIp                       types.String             `tfsdk:"keepalive_source_ip"`
+	KeepaliveTimeout                        types.Int64              `tfsdk:"keepalive_timeout"`
+	KeepaliveTypeOfServiceByte              types.Int64              `tfsdk:"keepalive_type_of_service_byte"`
+	KeepaliveTypeOfServiceConfigurationType types.String             `tfsdk:"keepalive_type_of_service_configuration_type"`
+	KeepaliveTypeOfServiceType              types.String             `tfsdk:"keepalive_type_of_service_type"`
+	KeepaliveTypeOfServiceValue             types.Int64              `tfsdk:"keepalive_type_of_service_value"`
+	KeepaliveUdpPort                        types.Int64              `tfsdk:"keepalive_udp_port"`
+	KeepaliveVrf                            types.String             `tfsdk:"keepalive_vrf"`
+	PeerlinkInterfaceId                     types.String             `tfsdk:"peerlink_interface_id"`
+	PeerlinkAdminState                      types.String             `tfsdk:"peerlink_admin_state"`
+	PeerlinkDescription                     types.String             `tfsdk:"peerlink_description"`
+	Interfaces                              map[string]VPCInterfaces `tfsdk:"interfaces"`
 }
 
 type VPCInterfaces struct {
-	VpcInterfaceId         types.Int64  `tfsdk:"vpc_interface_id"`
 	PortChannelInterfaceDn types.String `tfsdk:"port_channel_interface_dn"`
 }
 
@@ -121,8 +119,8 @@ func (data VPC) getDn() string {
 	return "sys/vpc"
 }
 
-func (data VPCInterfaces) getRn() string {
-	return fmt.Sprintf("if-%v", data.VpcInterfaceId.ValueInt64())
+func (data VPCInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
 func (data VPC) getClassName() string {
@@ -293,11 +291,9 @@ func (data VPC) toBody() nxos.Body {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.vpcPeerLink.attributes", attrs)
 				}
 			}
-			for _, child := range data.Interfaces {
+			for key, child := range data.Interfaces {
 				attrs = "{}"
-				if (!child.VpcInterfaceId.IsUnknown() && !child.VpcInterfaceId.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "id", strconv.FormatInt(child.VpcInterfaceId.ValueInt64(), 10))
-				}
+				attrs, _ = sjson.Set(attrs, "id", key)
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.vpcIf.attributes", attrs)
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
@@ -327,8 +323,8 @@ func (data *VPC) fromBody(res gjson.Result) {
 		var rvpcInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("vpcInst.attributes.rn").String()
-				if key == "inst" {
+				rnValue := v.Get("vpcInst.attributes.rn").String()
+				if rnValue == "inst" {
 					rvpcInst = v
 					return false
 				}
@@ -341,8 +337,8 @@ func (data *VPC) fromBody(res gjson.Result) {
 			var rvpcDom gjson.Result
 			rvpcInst.Get("vpcInst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("vpcDom.attributes.rn").String()
-					if key == "dom" {
+					rnValue := v.Get("vpcDom.attributes.rn").String()
+					if rnValue == "dom" {
 						rvpcDom = v
 						return false
 					}
@@ -378,8 +374,8 @@ func (data *VPC) fromBody(res gjson.Result) {
 				var rvpcKeepalive gjson.Result
 				rvpcDom.Get("vpcDom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("vpcKeepalive.attributes.rn").String()
-						if key == "keepalive" {
+						rnValue := v.Get("vpcKeepalive.attributes.rn").String()
+						if rnValue == "keepalive" {
 							rvpcKeepalive = v
 							return false
 						}
@@ -403,8 +399,8 @@ func (data *VPC) fromBody(res gjson.Result) {
 					var rvpcPeerLink gjson.Result
 					rvpcKeepalive.Get("vpcKeepalive.children").ForEach(
 						func(_, v gjson.Result) bool {
-							key := v.Get("vpcPeerLink.attributes.rn").String()
-							if key == "peerlink" {
+							rnValue := v.Get("vpcPeerLink.attributes.rn").String()
+							if rnValue == "peerlink" {
 								rvpcPeerLink = v
 								return false
 							}
@@ -422,13 +418,13 @@ func (data *VPC) fromBody(res gjson.Result) {
 						func(classname, value gjson.Result) bool {
 							if classname.String() == "vpcIf" {
 								var child VPCInterfaces
-								child.VpcInterfaceId = types.Int64Value(value.Get("attributes.id").Int())
+								mapKey := value.Get("attributes.id").String()
 								{
 									var rvpcRsVpcConf gjson.Result
 									value.Get("children").ForEach(
 										func(_, nestedV gjson.Result) bool {
-											key := nestedV.Get("vpcRsVpcConf.attributes.rn").String()
-											if key == "rsvpcConf" {
+											rnValue := nestedV.Get("vpcRsVpcConf.attributes.rn").String()
+											if rnValue == "rsvpcConf" {
 												rvpcRsVpcConf = nestedV
 												return false
 											}
@@ -437,7 +433,10 @@ func (data *VPC) fromBody(res gjson.Result) {
 									)
 									child.PortChannelInterfaceDn = types.StringValue(rvpcRsVpcConf.Get("vpcRsVpcConf.attributes.tDn").String())
 								}
-								data.Interfaces = append(data.Interfaces, child)
+								if data.Interfaces == nil {
+									data.Interfaces = make(map[string]VPCInterfaces)
+								}
+								data.Interfaces[mapKey] = child
 							}
 							return true
 						},
@@ -462,8 +461,8 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 	var rvpcInst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("vpcInst.attributes.rn").String()
-			if key == "inst" {
+			rnValue := v.Get("vpcInst.attributes.rn").String()
+			if rnValue == "inst" {
 				rvpcInst = v
 				return false
 			}
@@ -484,8 +483,8 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 		var rvpcDom gjson.Result
 		rvpcInst.Get("vpcInst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("vpcDom.attributes.rn").String()
-				if key == "dom" {
+				rnValue := v.Get("vpcDom.attributes.rn").String()
+				if rnValue == "dom" {
 					rvpcDom = v
 					return false
 				}
@@ -621,8 +620,8 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 			var rvpcKeepalive gjson.Result
 			rvpcDom.Get("vpcDom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("vpcKeepalive.attributes.rn").String()
-					if key == "keepalive" {
+					rnValue := v.Get("vpcKeepalive.attributes.rn").String()
+					if rnValue == "keepalive" {
 						rvpcKeepalive = v
 						return false
 					}
@@ -698,8 +697,8 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 				var rvpcPeerLink gjson.Result
 				rvpcKeepalive.Get("vpcKeepalive.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("vpcPeerLink.attributes.rn").String()
-						if key == "peerlink" {
+						rnValue := v.Get("vpcPeerLink.attributes.rn").String()
+						if rnValue == "peerlink" {
 							rvpcPeerLink = v
 							return false
 						}
@@ -723,11 +722,11 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 				}
 			}
 		}
-		for c := len(data.Interfaces) - 1; c >= 0; c-- {
+		for key, item := range data.Interfaces {
 			var rvpcIf gjson.Result
 			rvpcDom.Get("vpcDom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					if v.Get("vpcIf.attributes.id").String() == strconv.FormatInt(data.Interfaces[c].VpcInterfaceId.ValueInt64(), 10) {
+					if v.Get("vpcIf.attributes.id").String() == key {
 						rvpcIf = v
 						return false
 					}
@@ -735,32 +734,28 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 				},
 			)
 			if !rvpcIf.Exists() {
-				data.Interfaces = slices.Delete(data.Interfaces, c, c+1)
+				delete(data.Interfaces, key)
 				continue
-			}
-			if !data.Interfaces[c].VpcInterfaceId.IsNull() {
-				data.Interfaces[c].VpcInterfaceId = types.Int64Value(rvpcIf.Get("vpcIf.attributes.id").Int())
-			} else {
-				data.Interfaces[c].VpcInterfaceId = types.Int64Null()
 			}
 			{
 				var rvpcRsVpcConf gjson.Result
 				rvpcIf.Get("vpcIf.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("vpcRsVpcConf.attributes.rn").String()
-						if key == "rsvpcConf" {
+						rnValue := v.Get("vpcRsVpcConf.attributes.rn").String()
+						if rnValue == "rsvpcConf" {
 							rvpcRsVpcConf = v
 							return false
 						}
 						return true
 					},
 				)
-				if !data.Interfaces[c].PortChannelInterfaceDn.IsNull() {
-					data.Interfaces[c].PortChannelInterfaceDn = types.StringValue(rvpcRsVpcConf.Get("vpcRsVpcConf.attributes.tDn").String())
+				if !item.PortChannelInterfaceDn.IsNull() {
+					item.PortChannelInterfaceDn = types.StringValue(rvpcRsVpcConf.Get("vpcRsVpcConf.attributes.tDn").String())
 				} else {
-					data.Interfaces[c].PortChannelInterfaceDn = types.StringNull()
+					item.PortChannelInterfaceDn = types.StringNull()
 				}
 			}
+			data.Interfaces[key] = item
 		}
 	}
 }
@@ -780,36 +775,29 @@ func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC) nxos.Body {
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.Interfaces {
-		found := false
-		for _, planChild := range data.Interfaces {
-			if stateChild.VpcInterfaceId == planChild.VpcInterfaceId {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.Interfaces {
+		if _, found := data.Interfaces[stateKey]; !found {
+			stateChild := state.Interfaces[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "vpcIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "vpcIf.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "vpcIf.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.vpcInst.children"+".0.vpcDom.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.Interfaces {
-		for pdi := range data.Interfaces {
-			if state.Interfaces[di].VpcInterfaceId == data.Interfaces[pdi].VpcInterfaceId {
-				matchBodyPathdi := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.vpcInst.children"+".0.vpcDom.children").Array() {
-					if mv.Get("vpcIf.attributes.rn").String() == state.Interfaces[di].getRn() {
-						matchBodyPathdi = bodyPath + ".0.vpcInst.children" + ".0.vpcDom.children" + "." + strconv.Itoa(mi) + ".vpcIf.children"
-						break
-					}
-				}
-				if matchBodyPathdi == "" {
-					break
-				}
+		if _, found := data.Interfaces[di]; !found {
+			continue
+		}
+		stateItemdi := state.Interfaces[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.vpcInst.children"+".0.vpcDom.children").Array() {
+			if mv.Get("vpcIf.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.vpcInst.children" + ".0.vpcDom.children" + "." + strconv.Itoa(mi) + ".vpcIf.children"
 				break
 			}
+		}
+		if matchBodyPathdi == "" {
+			continue
 		}
 	}
 	return body

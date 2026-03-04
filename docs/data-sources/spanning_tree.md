@@ -42,7 +42,7 @@ data "nxos_spanning_tree" "example" {
 - `fcoe` (String) Disable spanning tree for fcoe vlan.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
-- `interfaces` (Attributes List) List of Spanning Tree interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `interfaces` (Attributes Map) List of Spanning Tree interfaces. (see [below for nested schema](#nestedatt--interfaces))
 - `l2_gateway_stp_domain_id` (Number) Spanning tree L2 Gateway Domain Id.
 - `linecard_issu` (String) Linecard ISSU type.
 - `loopguard` (String) Enable loop guard on all ports.
@@ -60,7 +60,6 @@ Read-Only:
 - `cost` (Number) Port Path Cost.
 - `description` (String) Description.
 - `guard` (String) Guard Mode.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `linecard_issu` (String) Port lc issu.
 - `link_type` (String) Link Type.
 - `mode` (String) Port mode.

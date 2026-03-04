@@ -349,18 +349,11 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
 				Optional:            true,
 			},
-			"interfaces": schema.ListNestedAttribute{
+			"interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of vPC interfaces.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"vpc_interface_id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The vPC interface identifier.").AddIntegerRangeDescription(1, 16384).String,
-							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 16384),
-							},
-						},
 						"port_channel_interface_dn": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Port-channel interface DN.").String,
 							Optional:            true,

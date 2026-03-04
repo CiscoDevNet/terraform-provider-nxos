@@ -38,69 +38,45 @@ func TestAccDataSourceNxosPIM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "extra_net", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "join_prune_delay", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "register_stop", "false"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*", map[string]string{
-		"name":                 "default",
-		"admin_state":          "enabled",
-		"bfd":                  "true",
-		"auto_enable":          "false",
-		"control":              "flush-on-restart",
-		"flush_routes":         "false",
-		"join_prune_delay":     "200",
-		"log_neighbor_changes": "false",
-		"mtu":                  "1600",
-		"register_rate_limit":  "100",
-		"rfc_strict":           "false",
-		"spt_switch_graceful":  "false",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*.interfaces.*", map[string]string{
-		"interface_id":         "eth1/10",
-		"admin_state":          "enabled",
-		"bfd":                  "enabled",
-		"dr_priority":          "10",
-		"passive":              "false",
-		"sparse_mode":          "true",
-		"border":               "false",
-		"border_router":        "false",
-		"control":              "border",
-		"description":          "MyDescription",
-		"dr_delay":             "5",
-		"join_prune_route_map": "JP_POLICY",
-		"name":                 "pim-if",
-		"neighbor_route_map":   "NEIGH_POLICY",
-		"pfm_sd_boundary":      "0",
-		"rfc_strict":           "false",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*", map[string]string{
-		"ssm_policy_name":        "SSM",
-		"ssm_policy_description": "SSM_Policy",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*", map[string]string{
-		"ssm_range_group_list_1": "232.0.0.0/8",
-		"ssm_range_group_list_2": "233.0.0.0/8",
-		"ssm_range_none":         "false",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*", map[string]string{
-		"static_rp_policy_name":        "RP",
-		"static_rp_policy_description": "Static_RP_Policy",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*.static_rps.*", map[string]string{
-		"address": "1.2.3.4",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*.static_rps.*.group_lists.*", map[string]string{
-		"address":  "224.0.0.0/4",
-		"bidir":    "true",
-		"override": "true",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*", map[string]string{
-		"anycast_rp_local_interface":  "eth1/10",
-		"anycast_rp_source_interface": "eth1/10",
-		"anycast_rp_description":      "Anycast_RP",
-		"anycast_rp_name":             "anycast-rp",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*.anycast_rp_peers.*", map[string]string{
-		"address":        "10.1.1.1/32",
-		"rp_set_address": "20.1.1.1/32",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bfd", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.control", "flush-on-restart"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.flush_routes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.join_prune_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.log_neighbor_changes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.mtu", "1600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.register_rate_limit", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.rfc_strict", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.spt_switch_graceful", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.dr_priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.passive", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.sparse_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.border", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.border_router", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.control", "border"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.description", "MyDescription"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.dr_delay", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.join_prune_route_map", "JP_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.name", "pim-if"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.neighbor_route_map", "NEIGH_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.pfm_sd_boundary", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.rfc_strict", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_policy_name", "SSM"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_policy_description", "SSM_Policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_range_group_list_1", "232.0.0.0/8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_range_group_list_2", "233.0.0.0/8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_range_none", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rp_policy_name", "RP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rp_policy_description", "Static_RP_Policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rps.1.2.3.4.group_lists.224.0.0.0/4.bidir", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rps.1.2.3.4.group_lists.224.0.0.0/4.override", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_local_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_source_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_description", "Anycast_RP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_name", "anycast-rp"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -149,61 +125,65 @@ func testAccDataSourceNxosPIMConfig() string {
 	config += `	extra_net = false` + "\n"
 	config += `	join_prune_delay = 200` + "\n"
 	config += `	register_stop = false` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		name = "default"` + "\n"
-	config += `		admin_state = "enabled"` + "\n"
-	config += `		bfd = true` + "\n"
-	config += `		auto_enable = false` + "\n"
-	config += `		control = "flush-on-restart"` + "\n"
-	config += `		flush_routes = false` + "\n"
-	config += `		join_prune_delay = 200` + "\n"
-	config += `		log_neighbor_changes = false` + "\n"
-	config += `		mtu = 1600` + "\n"
-	config += `		register_rate_limit = 100` + "\n"
-	config += `		rfc_strict = false` + "\n"
-	config += `		spt_switch_graceful = false` + "\n"
-	config += `		interfaces = [{` + "\n"
-	config += `			interface_id = "eth1/10"` + "\n"
+	config += `	vrfs = {` + "\n"
+	config += `		"default" = {` + "\n"
 	config += `			admin_state = "enabled"` + "\n"
-	config += `			bfd = "enabled"` + "\n"
-	config += `			dr_priority = 10` + "\n"
-	config += `			passive = false` + "\n"
-	config += `			sparse_mode = true` + "\n"
-	config += `			border = false` + "\n"
-	config += `			border_router = false` + "\n"
-	config += `			control = "border"` + "\n"
-	config += `			description = "MyDescription"` + "\n"
-	config += `			dr_delay = 5` + "\n"
-	config += `			join_prune_route_map = "JP_POLICY"` + "\n"
-	config += `			name = "pim-if"` + "\n"
-	config += `			neighbor_route_map = "NEIGH_POLICY"` + "\n"
-	config += `			pfm_sd_boundary = 0` + "\n"
+	config += `			bfd = true` + "\n"
+	config += `			auto_enable = false` + "\n"
+	config += `			control = "flush-on-restart"` + "\n"
+	config += `			flush_routes = false` + "\n"
+	config += `			join_prune_delay = 200` + "\n"
+	config += `			log_neighbor_changes = false` + "\n"
+	config += `			mtu = 1600` + "\n"
+	config += `			register_rate_limit = 100` + "\n"
 	config += `			rfc_strict = false` + "\n"
-	config += `		}]` + "\n"
-	config += `		ssm_policy_name = "SSM"` + "\n"
-	config += `		ssm_policy_description = "SSM_Policy"` + "\n"
-	config += `		ssm_range_group_list_1 = "232.0.0.0/8"` + "\n"
-	config += `		ssm_range_group_list_2 = "233.0.0.0/8"` + "\n"
-	config += `		ssm_range_none = false` + "\n"
-	config += `		static_rp_policy_name = "RP"` + "\n"
-	config += `		static_rp_policy_description = "Static_RP_Policy"` + "\n"
-	config += `		static_rps = [{` + "\n"
-	config += `			address = "1.2.3.4"` + "\n"
-	config += `			group_lists = [{` + "\n"
-	config += `				address = "224.0.0.0/4"` + "\n"
-	config += `				bidir = true` + "\n"
-	config += `				override = true` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `		anycast_rp_local_interface = "eth1/10"` + "\n"
-	config += `		anycast_rp_source_interface = "eth1/10"` + "\n"
-	config += `		anycast_rp_description = "Anycast_RP"` + "\n"
-	config += `		anycast_rp_name = "anycast-rp"` + "\n"
-	config += `		anycast_rp_peers = [{` + "\n"
-	config += `			address = "10.1.1.1/32"` + "\n"
-	config += `			rp_set_address = "20.1.1.1/32"` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `			spt_switch_graceful = false` + "\n"
+	config += `			interfaces = {` + "\n"
+	config += `				"eth1/10" = {` + "\n"
+	config += `					admin_state = "enabled"` + "\n"
+	config += `					bfd = "enabled"` + "\n"
+	config += `					dr_priority = 10` + "\n"
+	config += `					passive = false` + "\n"
+	config += `					sparse_mode = true` + "\n"
+	config += `					border = false` + "\n"
+	config += `					border_router = false` + "\n"
+	config += `					control = "border"` + "\n"
+	config += `					description = "MyDescription"` + "\n"
+	config += `					dr_delay = 5` + "\n"
+	config += `					join_prune_route_map = "JP_POLICY"` + "\n"
+	config += `					name = "pim-if"` + "\n"
+	config += `					neighbor_route_map = "NEIGH_POLICY"` + "\n"
+	config += `					pfm_sd_boundary = 0` + "\n"
+	config += `					rfc_strict = false` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			ssm_policy_name = "SSM"` + "\n"
+	config += `			ssm_policy_description = "SSM_Policy"` + "\n"
+	config += `			ssm_range_group_list_1 = "232.0.0.0/8"` + "\n"
+	config += `			ssm_range_group_list_2 = "233.0.0.0/8"` + "\n"
+	config += `			ssm_range_none = false` + "\n"
+	config += `			static_rp_policy_name = "RP"` + "\n"
+	config += `			static_rp_policy_description = "Static_RP_Policy"` + "\n"
+	config += `			static_rps = {` + "\n"
+	config += `				"1.2.3.4" = {` + "\n"
+	config += `					group_lists = {` + "\n"
+	config += `						"224.0.0.0/4" = {` + "\n"
+	config += `							bidir = true` + "\n"
+	config += `							override = true` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			anycast_rp_local_interface = "eth1/10"` + "\n"
+	config += `			anycast_rp_source_interface = "eth1/10"` + "\n"
+	config += `			anycast_rp_description = "Anycast_RP"` + "\n"
+	config += `			anycast_rp_name = "anycast-rp"` + "\n"
+	config += `			anycast_rp_peers = {` + "\n"
+	config += `				"10.1.1.1/32|20.1.1.1/32" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

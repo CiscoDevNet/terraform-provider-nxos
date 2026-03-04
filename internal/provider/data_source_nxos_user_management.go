@@ -160,15 +160,11 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
 				Computed:            true,
 			},
-			"users": schema.ListNestedAttribute{
+			"users": schema.MapNestedAttribute{
 				MarkdownDescription: "List of users.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Object name.",
-							Computed:            true,
-						},
 						"account_status": schema.StringAttribute{
 							MarkdownDescription: "The status of the locally-authenticated user account.",
 							Computed:            true,
@@ -233,15 +229,11 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "The UNIX identifier of the locally-authenticated user.",
 							Computed:            true,
 						},
-						"roles": schema.ListNestedAttribute{
+						"roles": schema.MapNestedAttribute{
 							MarkdownDescription: "User roles.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: "Object name.",
-										Computed:            true,
-									},
 									"description": schema.StringAttribute{
 										MarkdownDescription: "Description of the specified attribute.",
 										Computed:            true,
@@ -300,15 +292,11 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "The amount of time between authentication attempts.",
 				Computed:            true,
 			},
-			"tacacs_providers": schema.ListNestedAttribute{
+			"tacacs_providers": schema.MapNestedAttribute{
 				MarkdownDescription: "TACACS+ providers.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Object name.",
-							Computed:            true,
-						},
 						"authentication_protocol": schema.StringAttribute{
 							MarkdownDescription: "The TACACS+ authentication protocol.",
 							Computed:            true,
@@ -368,15 +356,11 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 					},
 				},
 			},
-			"tacacs_provider_groups": schema.ListNestedAttribute{
+			"tacacs_provider_groups": schema.MapNestedAttribute{
 				MarkdownDescription: "TACACS+ provider groups.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Object name.",
-							Computed:            true,
-						},
 						"deadtime": schema.Int64Attribute{
 							MarkdownDescription: "Duration for which non-reachable server is skipped.",
 							Computed:            true,

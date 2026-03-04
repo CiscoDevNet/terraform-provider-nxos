@@ -76,15 +76,11 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "VxLAN UDP Source Port Mode.",
 				Computed:            true,
 			},
-			"nve_interfaces": schema.ListNestedAttribute{
+			"nve_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "NVE interface configuration.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"id": schema.Int64Attribute{
-							MarkdownDescription: "Network Virtualization Overlay Endpoint (NVE) ID.",
-							Computed:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: "Administrative Up or Down state of the NVE.",
 							Computed:            true,
@@ -169,15 +165,11 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							MarkdownDescription: "Custom Virtual Router MAC address configuration for VPC VxLAN.",
 							Computed:            true,
 						},
-						"vnis": schema.ListNestedAttribute{
+						"vnis": schema.MapNestedAttribute{
 							MarkdownDescription: "List of VNIs.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"vni": schema.Int64Attribute{
-										MarkdownDescription: "Configure Virtual Network ID.",
-										Computed:            true,
-									},
 									"associate_vrf": schema.BoolAttribute{
 										MarkdownDescription: "Configures VNI(s) as L3 VNI.",
 										Computed:            true,

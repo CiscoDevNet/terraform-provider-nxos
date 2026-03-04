@@ -35,7 +35,7 @@ data "nxos_bridge_domains" "example" {
 
 ### Read-Only
 
-- `bridge_domains` (Attributes List) List of bridge domains. (see [below for nested schema](#nestedatt--bridge_domains))
+- `bridge_domains` (Attributes Map) List of bridge domains. (see [below for nested schema](#nestedatt--bridge_domains))
 - `id` (String) The distinguished name of the object.
 - `svi_autostate` (String) Disable/enable autoState for SVI interface.
 
@@ -50,7 +50,6 @@ Read-Only:
 - `bridge_mode` (String) The Layer 2 bridge-domain parameter mode used by the node for enabling classical bridging or bridging with the IP address.
 - `control` (String) The control state.
 - `cross_connect` (String) Enable Cross Connect on VLAN.
-- `fabric_encap` (String) The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `forwarding_control` (String) The Layer 2 bridge-domain forwarding controls.
 - `forwarding_mode` (String) The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.
 - `long_name` (Boolean) Enable or disable long name of 128 characters for VLAN.

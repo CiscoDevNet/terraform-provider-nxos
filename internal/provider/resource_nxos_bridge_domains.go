@@ -83,15 +83,11 @@ func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaR
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"bridge_domains": schema.ListNestedAttribute{
+			"bridge_domains": schema.MapNestedAttribute{
 				MarkdownDescription: "List of bridge domains.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"fabric_encap": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
-							Required:            true,
-						},
 						"access_encap": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 							Optional:            true,

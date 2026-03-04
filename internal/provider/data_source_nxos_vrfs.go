@@ -68,15 +68,11 @@ func (d *VRFsDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"vrfs": schema.ListNestedAttribute{
+			"vrfs": schema.MapNestedAttribute{
 				MarkdownDescription: "List of VRFs.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "VRF name.",
-							Computed:            true,
-						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: "Description.",
 							Computed:            true,
@@ -113,43 +109,26 @@ func (d *VRFsDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "Route Distinguisher. Value in NX-OS DME format.",
 							Computed:            true,
 						},
-						"address_families": schema.ListNestedAttribute{
+						"address_families": schema.MapNestedAttribute{
 							MarkdownDescription: "List of VRF address families.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"address_family": schema.StringAttribute{
-										MarkdownDescription: "Type.",
-										Computed:            true,
-									},
-									"route_target_address_families": schema.ListNestedAttribute{
+									"route_target_address_families": schema.MapNestedAttribute{
 										MarkdownDescription: "List of VRF route target address families.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"route_target_address_family": schema.StringAttribute{
-													MarkdownDescription: "Type.",
-													Computed:            true,
-												},
-												"route_target_directions": schema.ListNestedAttribute{
+												"route_target_directions": schema.MapNestedAttribute{
 													MarkdownDescription: "List of VRF route target directions.",
 													Computed:            true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
-															"direction": schema.StringAttribute{
-																MarkdownDescription: "Type.",
-																Computed:            true,
-															},
-															"route_targets": schema.ListNestedAttribute{
+															"route_targets": schema.MapNestedAttribute{
 																MarkdownDescription: "List of VRF route target entries.",
 																Computed:            true,
 																NestedObject: schema.NestedAttributeObject{
-																	Attributes: map[string]schema.Attribute{
-																		"route_target": schema.StringAttribute{
-																			MarkdownDescription: "Route Target. Value in NX-OS DME format.",
-																			Computed:            true,
-																		},
-																	},
+																	Attributes: map[string]schema.Attribute{},
 																},
 															},
 														},

@@ -26,7 +26,6 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -84,27 +83,16 @@ func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"keychains": schema.ListNestedAttribute{
+			"keychains": schema.MapNestedAttribute{
 				MarkdownDescription: "List of keychains.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Keychain name.").String,
-							Required:            true,
-						},
-						"keys": schema.ListNestedAttribute{
+						"keys": schema.MapNestedAttribute{
 							MarkdownDescription: "List of keys.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"key_id": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("keyId of classic key chain.").AddIntegerRangeDescription(0, 65535).String,
-										Required:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 65535),
-										},
-									},
 									"cryptographic_algorithm": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Cryptographic Algorithm used in key.").AddStringEnumDescription("NONE", "MD5", "HMAC-SHA-1", "HMAC-SHA-256", "HMAC-SHA-384", "HMAC-SHA-512", "3DES", "AES").String,
 										Optional:            true,

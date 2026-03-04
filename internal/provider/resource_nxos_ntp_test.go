@@ -45,13 +45,12 @@ func TestAccNxosNTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "master_stratum", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "passive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "rate_limit", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.name", "1.2.3.4"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.vrf", "management"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.type", "server"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.key_id", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.min_poll", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.max_poll", "6"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.preferred", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.type", "server"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.key_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.min_poll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.max_poll", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.preferred", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -118,15 +117,16 @@ func testAccNxosNTPConfig_all() string {
 	config += `	master_stratum = 4` + "\n"
 	config += `	passive = "enabled"` + "\n"
 	config += `	rate_limit = 5` + "\n"
-	config += `	servers = [{` + "\n"
-	config += `		name = "1.2.3.4"` + "\n"
-	config += `		vrf = "management"` + "\n"
-	config += `		type = "server"` + "\n"
-	config += `		key_id = 10` + "\n"
-	config += `		min_poll = 4` + "\n"
-	config += `		max_poll = 6` + "\n"
-	config += `		preferred = true` + "\n"
-	config += `	}]` + "\n"
+	config += `	servers = {` + "\n"
+	config += `		"1.2.3.4" = {` + "\n"
+	config += `			vrf = "management"` + "\n"
+	config += `			type = "server"` + "\n"
+	config += `			key_id = 10` + "\n"
+	config += `			min_poll = 4` + "\n"
+	config += `			max_poll = 6` + "\n"
+	config += `			preferred = true` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
 }

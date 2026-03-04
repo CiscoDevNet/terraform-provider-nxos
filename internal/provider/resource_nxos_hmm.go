@@ -120,15 +120,11 @@ func (r *HMMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.OneOf("no", "yes"),
 				},
 			},
-			"interfaces": schema.ListNestedAttribute{
+			"interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of HMM Fabric Forwarding interfaces.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `vlan10`.").String,
-							Required:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 							Optional:            true,

@@ -205,15 +205,11 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 				MarkdownDescription: helpers.NewAttributeDescription("A tag for enabling clients to add their own data. For example, to indicate who created this object.").String,
 				Optional:            true,
 			},
-			"users": schema.ListNestedAttribute{
+			"users": schema.MapNestedAttribute{
 				MarkdownDescription: "List of users.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
-							Required:            true,
-						},
 						"account_status": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The status of the locally-authenticated user account.").AddStringEnumDescription("active", "inactive").String,
 							Optional:            true,
@@ -302,15 +298,11 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(99, 15999),
 							},
 						},
-						"roles": schema.ListNestedAttribute{
+						"roles": schema.MapNestedAttribute{
 							MarkdownDescription: "User roles.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
-										Required:            true,
-									},
 									"description": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
 										Optional:            true,
@@ -387,15 +379,11 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 					int64validator.Between(1, 60),
 				},
 			},
-			"tacacs_providers": schema.ListNestedAttribute{
+			"tacacs_providers": schema.MapNestedAttribute{
 				MarkdownDescription: "TACACS+ providers.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
-							Required:            true,
-						},
 						"authentication_protocol": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The TACACS+ authentication protocol.").AddStringEnumDescription("pap", "chap", "mschap", "mschapv2", "ascii").String,
 							Optional:            true,
@@ -479,15 +467,11 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 					},
 				},
 			},
-			"tacacs_provider_groups": schema.ListNestedAttribute{
+			"tacacs_provider_groups": schema.MapNestedAttribute{
 				MarkdownDescription: "TACACS+ provider groups.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
-							Required:            true,
-						},
 						"deadtime": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Duration for which non-reachable server is skipped.").AddIntegerRangeDescription(0, 1440).String,
 							Optional:            true,

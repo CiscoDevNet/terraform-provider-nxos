@@ -37,8 +37,7 @@ func TestAccNxosLogging(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "all", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "level", "information"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "facilities.0.name", "spanning-tree"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "facilities.0.level", "information"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "facilities.spanning-tree.level", "information"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -97,10 +96,11 @@ func testAccNxosLoggingConfig_all() string {
 	config := `resource "nxos_logging" "test" {` + "\n"
 	config += `	all = "unspecified"` + "\n"
 	config += `	level = "information"` + "\n"
-	config += `	facilities = [{` + "\n"
-	config += `		name = "spanning-tree"` + "\n"
-	config += `		level = "information"` + "\n"
-	config += `	}]` + "\n"
+	config += `	facilities = {` + "\n"
+	config += `		"spanning-tree" = {` + "\n"
+	config += `			level = "information"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
 }

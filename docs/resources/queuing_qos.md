@@ -31,17 +31,19 @@ This resource can manage the queuing QoS configuration on NX-OS devices, includi
 
 ```terraform
 resource "nxos_queuing_qos" "example" {
-  policy_maps = [{
-    name       = "PM1"
-    match_type = "match-any"
-    match_class_maps = [{
-      name                = "c-out-q1"
-      next_class_map      = "c-out-q2"
-      previous_class_map  = "c-out-q2"
-      priority            = 1
-      remaining_bandwidth = 10
-    }]
-  }]
+  policy_maps = {
+    "PM1" = {
+      match_type = "match-any"
+      match_class_maps = {
+        "c-out-q1" = {
+          next_class_map      = "c-out-q2"
+          previous_class_map  = "c-out-q2"
+          priority            = 1
+          remaining_bandwidth = 10
+        }
+      }
+    }
+  }
   system_out_policy_map_name = "PM1"
   policy_map_statistics      = false
 }
@@ -58,7 +60,7 @@ resource "nxos_queuing_qos" "example" {
 
 - `device` (String) A device name from the provider configuration.
 - `policy_map_statistics` (Boolean) Turn on/off statistics.
-- `policy_maps` (Attributes List) List of policy maps. (see [below for nested schema](#nestedatt--policy_maps))
+- `policy_maps` (Attributes Map) List of policy maps. (see [below for nested schema](#nestedatt--policy_maps))
 
 ### Read-Only
 
@@ -67,22 +69,14 @@ resource "nxos_queuing_qos" "example" {
 <a id="nestedatt--policy_maps"></a>
 ### Nested Schema for `policy_maps`
 
-Required:
-
-- `name` (String) Name of policy-map.
-
 Optional:
 
-- `match_class_maps` (Attributes List) List of match class maps. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
+- `match_class_maps` (Attributes Map) List of match class maps. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
 - `match_type` (String) Match-any, match-all or match-first.
   - Choices: `match-any`, `match-all`, `match-first`
 
 <a id="nestedatt--policy_maps--match_class_maps"></a>
 ### Nested Schema for `policy_maps.match_class_maps`
-
-Required:
-
-- `name` (String) Match using class-map.
 
 Optional:
 

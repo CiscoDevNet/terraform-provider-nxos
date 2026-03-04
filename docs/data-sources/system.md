@@ -61,7 +61,7 @@ data "nxos_system" "example" {
 - `arp_suppression_timeout` (Number) Suppression Timeout.
 - `arp_timeout` (Number) ARP Global Timeout.
 - `arp_unnumbered_svi_software_replication` (String) ARP Packets Replication In Software For Unnumbered SVI.
-- `arp_vpc_domains` (Attributes List) ARP VPC Domain. (see [below for nested schema](#nestedatt--arp_vpc_domains))
+- `arp_vpc_domains` (Attributes Map) ARP VPC Domain. (see [below for nested schema](#nestedatt--arp_vpc_domains))
 - `ethernet_admin_link_down_syslog_level` (Number) Admin link-down syslog level.
 - `ethernet_admin_link_up_syslog_level` (Number) Admin link-up syslog level.
 - `ethernet_admin_state` (String) The administrative state of the object or policy.
@@ -95,7 +95,7 @@ data "nxos_system" "example" {
 - `nd_off_list_timeout` (Number) Off-list timeout.
 - `nd_probe_interval_for_solicit_neighbor` (Number) Probe interval.
 - `nd_solicit_neighbor_advertisement` (String) Solicit neighbor advertisement.
-- `nd_vrfs` (Attributes List) Neighbor Discovery Domain. (see [below for nested schema](#nestedatt--nd_vrfs))
+- `nd_vrfs` (Attributes Map) Neighbor Discovery Domain. (see [below for nested schema](#nestedatt--nd_vrfs))
 
 <a id="nestedatt--arp_vpc_domains"></a>
 ### Nested Schema for `arp_vpc_domains`
@@ -103,7 +103,6 @@ data "nxos_system" "example" {
 Read-Only:
 
 - `arp_sync` (String) ARP Sync.
-- `domain_id` (Number) VPC domain id.
 
 
 <a id="nestedatt--nd_vrfs"></a>
@@ -111,8 +110,7 @@ Read-Only:
 
 Read-Only:
 
-- `interfaces` (Attributes List) Neighbor Discovery Interface. (see [below for nested schema](#nestedatt--nd_vrfs--interfaces))
-- `name` (String) The name of the object.
+- `interfaces` (Attributes Map) Neighbor Discovery Interface. (see [below for nested schema](#nestedatt--nd_vrfs--interfaces))
 
 <a id="nestedatt--nd_vrfs--interfaces"></a>
 ### Nested Schema for `nd_vrfs.interfaces`
@@ -128,7 +126,6 @@ Read-Only:
 - `dns_search_list_suppress` (String) Do not send DNSSL in router advertisement.
 - `dns_suppress` (String) Do not send RDNSS in router advertisement.
 - `hop_limit` (Number) Hop limit.
-- `interface_id` (String) An identifier.
 - `mac_extract` (String) Extract next hop MAC address.
 - `mtu` (Number) MTU.
 - `neighbor_solicit_interval` (Number) Neighbor Solicit Interval.

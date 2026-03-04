@@ -39,47 +39,50 @@ resource "nxos_ipv4" "example" {
   redirect_syslog                         = "disabled"
   redirect_syslog_interval                = 120
   source_route                            = "disabled"
-  vrfs = [{
-    name                         = "VRF1"
-    auto_discard                 = "enabled"
-    icmp_errors_source_interface = "unspecified"
-    static_routes = [{
-      prefix      = "1.1.1.0/24"
-      control     = "bfd"
-      description = "My Description"
-      preference  = 2
-      tag         = 10
-      next_hops = [{
-        interface_id          = "unspecified"
-        address               = "1.2.3.4"
-        vrf_name              = "default"
-        description           = "My Description"
-        object                = 10
-        preference            = 123
-        tag                   = 10
-        name                  = "nh1"
-        rewrite_encapsulation = "unknown"
-      }]
-    }]
-    interfaces = [{
-      interface_id           = "eth1/10"
-      drop_glean             = "disabled"
-      forward                = "disabled"
-      unnumbered             = "unspecified"
-      urpf                   = "disabled"
-      directed_broadcast_acl = "ACL1"
-      directed_broadcast     = "enabled"
-      addresses = [{
-        address    = "24.63.46.49/30"
-        type       = "primary"
-        tag        = 1234
-        control    = "pervasive"
-        preference = 1
-        use_bia    = "enabled"
-        vpc_peer   = "10.0.0.1/30"
-      }]
-    }]
-  }]
+  vrfs = {
+    "VRF1" = {
+      auto_discard                 = "enabled"
+      icmp_errors_source_interface = "unspecified"
+      static_routes = {
+        "1.1.1.0/24" = {
+          control     = "bfd"
+          description = "My Description"
+          preference  = 2
+          tag         = 10
+          next_hops = {
+            "unspecified|1.2.3.4|default" = {
+              description           = "My Description"
+              object                = 10
+              preference            = 123
+              tag                   = 10
+              name                  = "nh1"
+              rewrite_encapsulation = "unknown"
+            }
+          }
+        }
+      }
+      interfaces = {
+        "eth1/10" = {
+          drop_glean             = "disabled"
+          forward                = "disabled"
+          unnumbered             = "unspecified"
+          urpf                   = "disabled"
+          directed_broadcast_acl = "ACL1"
+          directed_broadcast     = "enabled"
+          addresses = {
+            "24.63.46.49/30" = {
+              type       = "primary"
+              tag        = 1234
+              control    = "pervasive"
+              preference = 1
+              use_bia    = "enabled"
+              vpc_peer   = "10.0.0.1/30"
+            }
+          }
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -111,7 +114,7 @@ resource "nxos_ipv4" "example" {
   - Range: `30`-`1800`
 - `source_route` (String) Source-Route.
   - Choices: `enabled`, `disabled`
-- `vrfs` (Attributes List) List of IPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of IPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -120,28 +123,20 @@ resource "nxos_ipv4" "example" {
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
-Required:
-
-- `name` (String) The name of the object.
-
 Optional:
 
 - `auto_discard` (String) Auto-Discard.
   - Choices: `enabled`, `disabled`
 - `icmp_errors_source_interface` (String) ICMP errors source-interface.
-- `interfaces` (Attributes List) List of IPv4 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
-- `static_routes` (Attributes List) List of IPv4 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
+- `interfaces` (Attributes Map) List of IPv4 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `static_routes` (Attributes Map) List of IPv4 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
 
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-
 Optional:
 
-- `addresses` (Attributes List) List of IPv4 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
+- `addresses` (Attributes Map) List of IPv4 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
 - `directed_broadcast` (String) IP directed broadcast.
   - Choices: `enabled`, `disabled`
 - `directed_broadcast_acl` (String) IP directed broadcast ACL.
@@ -155,10 +150,6 @@ Optional:
 
 <a id="nestedatt--vrfs--interfaces--addresses"></a>
 ### Nested Schema for `vrfs.interfaces.addresses`
-
-Required:
-
-- `address` (String) Address.
 
 Optional:
 
@@ -180,8 +171,7 @@ Optional:
 
 Required:
 
-- `next_hops` (Attributes List) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
-- `prefix` (String) Prefix.
+- `next_hops` (Attributes Map) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
 
 Optional:
 
@@ -195,12 +185,6 @@ Optional:
 
 <a id="nestedatt--vrfs--static_routes--next_hops"></a>
 ### Nested Schema for `vrfs.static_routes.next_hops`
-
-Required:
-
-- `address` (String) Nexthop Address.
-- `interface_id` (String) Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
-- `vrf_name` (String) Nexthop VRF.
 
 Optional:
 

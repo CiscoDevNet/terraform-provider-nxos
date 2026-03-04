@@ -41,15 +41,12 @@ func TestAccDataSourceNxosNTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "master_stratum", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "passive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "rate_limit", "5"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ntp.test", "servers.*", map[string]string{
-		"name":      "1.2.3.4",
-		"vrf":       "management",
-		"type":      "server",
-		"key_id":    "10",
-		"min_poll":  "4",
-		"max_poll":  "6",
-		"preferred": "true",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.type", "server"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.key_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.min_poll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.max_poll", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.preferred", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -81,15 +78,16 @@ func testAccDataSourceNxosNTPConfig() string {
 	config += `	master_stratum = 4` + "\n"
 	config += `	passive = "enabled"` + "\n"
 	config += `	rate_limit = 5` + "\n"
-	config += `	servers = [{` + "\n"
-	config += `		name = "1.2.3.4"` + "\n"
-	config += `		vrf = "management"` + "\n"
-	config += `		type = "server"` + "\n"
-	config += `		key_id = 10` + "\n"
-	config += `		min_poll = 4` + "\n"
-	config += `		max_poll = 6` + "\n"
-	config += `		preferred = true` + "\n"
-	config += `	}]` + "\n"
+	config += `	servers = {` + "\n"
+	config += `		"1.2.3.4" = {` + "\n"
+	config += `			vrf = "management"` + "\n"
+	config += `			type = "server"` + "\n"
+	config += `			key_id = 10` + "\n"
+	config += `			min_poll = 4` + "\n"
+	config += `			max_poll = 6` + "\n"
+	config += `			preferred = true` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 
 	config += `

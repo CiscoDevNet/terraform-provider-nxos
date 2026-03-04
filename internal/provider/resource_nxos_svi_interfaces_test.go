@@ -35,23 +35,22 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosSVIInterfaces(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.interface_id", "vlan293"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.admin_state", "down"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.autostate", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.bandwidth", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.carrier_delay", "200"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.delay", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.inband_management", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.load_interval_counter_1", "90"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.load_interval_counter_2", "120"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.load_interval_counter_3", "90"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.mac_address", "00:25:B5:00:00:01"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.medium", "bcast"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.mtu", "9216"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.mtu_inherit", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.snmp_trap_link_status", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.0.vrf_dn", "sys/inst-VRF123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.autostate", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.carrier_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.inband_management", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.load_interval_counter_1", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.load_interval_counter_2", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.load_interval_counter_3", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.mac_address", "00:25:B5:00:00:01"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.medium", "bcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.mtu", "9216"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.mtu_inherit", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.snmp_trap_link_status", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interfaces.test", "svi_interfaces.vlan293.vrf_dn", "sys/inst-VRF123"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -120,25 +119,26 @@ func testAccNxosSVIInterfacesConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosSVIInterfacesConfig_all() string {
 	config := `resource "nxos_svi_interfaces" "test" {` + "\n"
-	config += `	svi_interfaces = [{` + "\n"
-	config += `		interface_id = "vlan293"` + "\n"
-	config += `		admin_state = "down"` + "\n"
-	config += `		autostate = false` + "\n"
-	config += `		bandwidth = 1000` + "\n"
-	config += `		carrier_delay = 200` + "\n"
-	config += `		delay = 10` + "\n"
-	config += `		description = "My Description"` + "\n"
-	config += `		inband_management = false` + "\n"
-	config += `		load_interval_counter_1 = 90` + "\n"
-	config += `		load_interval_counter_2 = 120` + "\n"
-	config += `		load_interval_counter_3 = 90` + "\n"
-	config += `		mac_address = "00:25:B5:00:00:01"` + "\n"
-	config += `		medium = "bcast"` + "\n"
-	config += `		mtu = 9216` + "\n"
-	config += `		mtu_inherit = false` + "\n"
-	config += `		snmp_trap_link_status = false` + "\n"
-	config += `		vrf_dn = "sys/inst-VRF123"` + "\n"
-	config += `	}]` + "\n"
+	config += `	svi_interfaces = {` + "\n"
+	config += `		"vlan293" = {` + "\n"
+	config += `			admin_state = "down"` + "\n"
+	config += `			autostate = false` + "\n"
+	config += `			bandwidth = 1000` + "\n"
+	config += `			carrier_delay = 200` + "\n"
+	config += `			delay = 10` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `			inband_management = false` + "\n"
+	config += `			load_interval_counter_1 = 90` + "\n"
+	config += `			load_interval_counter_2 = 120` + "\n"
+	config += `			load_interval_counter_3 = 90` + "\n"
+	config += `			mac_address = "00:25:B5:00:00:01"` + "\n"
+	config += `			medium = "bcast"` + "\n"
+	config += `			mtu = 9216` + "\n"
+	config += `			mtu_inherit = false` + "\n"
+	config += `			snmp_trap_link_status = false` + "\n"
+	config += `			vrf_dn = "sys/inst-VRF123"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

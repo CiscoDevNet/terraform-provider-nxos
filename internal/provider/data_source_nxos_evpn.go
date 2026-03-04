@@ -72,15 +72,11 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"vnis": schema.ListNestedAttribute{
+			"vnis": schema.MapNestedAttribute{
 				MarkdownDescription: "List of EVPN VNIs.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"encap": schema.StringAttribute{
-							MarkdownDescription: "Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
-							Computed:            true,
-						},
 						"route_distinguisher": schema.StringAttribute{
 							MarkdownDescription: "Route Distinguisher. value in NX-OS DME format.",
 							Computed:            true,
@@ -93,25 +89,16 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "Filter option used with table-map configuration for selective route download.",
 							Computed:            true,
 						},
-						"route_target_directions": schema.ListNestedAttribute{
+						"route_target_directions": schema.MapNestedAttribute{
 							MarkdownDescription: "List of EVPN VNI route target directions.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"type": schema.StringAttribute{
-										MarkdownDescription: "Type.",
-										Computed:            true,
-									},
-									"route_targets": schema.ListNestedAttribute{
+									"route_targets": schema.MapNestedAttribute{
 										MarkdownDescription: "List of EVPN VNI route target entries.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"route_target": schema.StringAttribute{
-													MarkdownDescription: "Route Target. in NX-OS DME format.",
-													Computed:            true,
-												},
-											},
+											Attributes: map[string]schema.Attribute{},
 										},
 									},
 								},

@@ -94,24 +94,16 @@ func (r *ICMPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
 				Optional:            true,
 			},
-			"vrfs": schema.ListNestedAttribute{
+			"vrfs": schema.MapNestedAttribute{
 				MarkdownDescription: "List of ICMPv4 VRF configurations.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
-							Required:            true,
-						},
-						"interfaces": schema.ListNestedAttribute{
+						"interfaces": schema.MapNestedAttribute{
 							MarkdownDescription: "List of ICMPv4 interface configurations.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"id": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
-										Required:            true,
-									},
 									"control": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("The control state. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.").AddStringEnumDescription("port-unreachable", "redirect", "unreachable").String,
 										Optional:            true,

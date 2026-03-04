@@ -24,7 +24,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -39,27 +38,24 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type EVPN struct {
-	Device     types.String `tfsdk:"device"`
-	Dn         types.String `tfsdk:"id"`
-	AdminState types.String `tfsdk:"admin_state"`
-	Vnis       []EVPNVnis   `tfsdk:"vnis"`
+	Device     types.String        `tfsdk:"device"`
+	Dn         types.String        `tfsdk:"id"`
+	AdminState types.String        `tfsdk:"admin_state"`
+	Vnis       map[string]EVPNVnis `tfsdk:"vnis"`
 }
 
 type EVPNVnis struct {
-	Encap                 types.String                    `tfsdk:"encap"`
-	RouteDistinguisher    types.String                    `tfsdk:"route_distinguisher"`
-	TableMap              types.String                    `tfsdk:"table_map"`
-	TableMapFilter        types.Bool                      `tfsdk:"table_map_filter"`
-	RouteTargetDirections []EVPNVnisRouteTargetDirections `tfsdk:"route_target_directions"`
+	RouteDistinguisher    types.String                             `tfsdk:"route_distinguisher"`
+	TableMap              types.String                             `tfsdk:"table_map"`
+	TableMapFilter        types.Bool                               `tfsdk:"table_map_filter"`
+	RouteTargetDirections map[string]EVPNVnisRouteTargetDirections `tfsdk:"route_target_directions"`
 }
 
 type EVPNVnisRouteTargetDirections struct {
-	Type         types.String                                `tfsdk:"type"`
-	RouteTargets []EVPNVnisRouteTargetDirectionsRouteTargets `tfsdk:"route_targets"`
+	RouteTargets map[string]EVPNVnisRouteTargetDirectionsRouteTargets `tfsdk:"route_targets"`
 }
 
 type EVPNVnisRouteTargetDirectionsRouteTargets struct {
-	RouteTarget types.String `tfsdk:"route_target"`
 }
 
 type EVPNIdentity struct {
@@ -90,16 +86,16 @@ func (data EVPN) getDn() string {
 	return "sys/evpn"
 }
 
-func (data EVPNVnis) getRn() string {
-	return fmt.Sprintf("bdevi-[%s]", data.Encap.ValueString())
+func (data EVPNVnis) getRn(key string) string {
+	return fmt.Sprintf("bdevi-[%s]", key)
 }
 
-func (data EVPNVnisRouteTargetDirections) getRn() string {
-	return fmt.Sprintf("rttp-%s", data.Type.ValueString())
+func (data EVPNVnisRouteTargetDirections) getRn(key string) string {
+	return fmt.Sprintf("rttp-%s", key)
 }
 
-func (data EVPNVnisRouteTargetDirectionsRouteTargets) getRn() string {
-	return fmt.Sprintf("ent-[%s]", data.RouteTarget.ValueString())
+func (data EVPNVnisRouteTargetDirectionsRouteTargets) getRn(key string) string {
+	return fmt.Sprintf("ent-[%s]", key)
 }
 
 func (data EVPN) getClassName() string {
@@ -118,11 +114,9 @@ func (data EVPN) toBody() nxos.Body {
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
-	for _, child := range data.Vnis {
+	for key, child := range data.Vnis {
 		attrs = "{}"
-		if (!child.Encap.IsUnknown() && !child.Encap.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "encap", child.Encap.ValueString())
-		}
+		attrs, _ = sjson.Set(attrs, "encap", key)
 		if (!child.RouteDistinguisher.IsUnknown() && !child.RouteDistinguisher.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "rd", child.RouteDistinguisher.ValueString())
 		}
@@ -136,20 +130,16 @@ func (data EVPN) toBody() nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlBDEvi.children"
-			for _, child := range child.RouteTargetDirections {
+			for key, child := range child.RouteTargetDirections {
 				attrs = "{}"
-				if (!child.Type.IsUnknown() && !child.Type.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "type", child.Type.ValueString())
-				}
+				attrs, _ = sjson.Set(attrs, "type", key)
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlRttP.attributes", attrs)
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlRttP.children"
-					for _, child := range child.RouteTargets {
+					for key := range child.RouteTargets {
 						attrs = "{}"
-						if (!child.RouteTarget.IsUnknown() && !child.RouteTarget.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "rtt", child.RouteTarget.ValueString())
-						}
+						attrs, _ = sjson.Set(attrs, "rtt", key)
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlRttEntry.attributes", attrs)
 					}
 				}
@@ -172,25 +162,28 @@ func (data *EVPN) fromBody(res gjson.Result) {
 				func(classname, value gjson.Result) bool {
 					if classname.String() == "rtctrlBDEvi" {
 						var child EVPNVnis
-						child.Encap = types.StringValue(value.Get("attributes.encap").String())
 						child.RouteDistinguisher = types.StringValue(value.Get("attributes.rd").String())
 						child.TableMap = types.StringValue(value.Get("attributes.tblMap").String())
 						child.TableMapFilter = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.tblMapFltr").String()))
+						mapKey := value.Get("attributes.encap").String()
 						value.Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "rtctrlRttP" {
 											var nestedChildrtctrlRttP EVPNVnisRouteTargetDirections
-											nestedChildrtctrlRttP.Type = types.StringValue(nestedValue.Get("attributes.type").String())
+											nestedMapKey := nestedValue.Get("attributes.type").String()
 											nestedValue.Get("children").ForEach(
 												func(_, nestedV gjson.Result) bool {
 													nestedV.ForEach(
 														func(nestedClassname, nestedValue gjson.Result) bool {
 															if nestedClassname.String() == "rtctrlRttEntry" {
 																var nestedChildrtctrlRttEntry EVPNVnisRouteTargetDirectionsRouteTargets
-																nestedChildrtctrlRttEntry.RouteTarget = types.StringValue(nestedValue.Get("attributes.rtt").String())
-																nestedChildrtctrlRttP.RouteTargets = append(nestedChildrtctrlRttP.RouteTargets, nestedChildrtctrlRttEntry)
+																nestedMapKey := nestedValue.Get("attributes.rtt").String()
+																if nestedChildrtctrlRttP.RouteTargets == nil {
+																	nestedChildrtctrlRttP.RouteTargets = make(map[string]EVPNVnisRouteTargetDirectionsRouteTargets)
+																}
+																nestedChildrtctrlRttP.RouteTargets[nestedMapKey] = nestedChildrtctrlRttEntry
 															}
 															return true
 														},
@@ -198,7 +191,10 @@ func (data *EVPN) fromBody(res gjson.Result) {
 													return true
 												},
 											)
-											child.RouteTargetDirections = append(child.RouteTargetDirections, nestedChildrtctrlRttP)
+											if child.RouteTargetDirections == nil {
+												child.RouteTargetDirections = make(map[string]EVPNVnisRouteTargetDirections)
+											}
+											child.RouteTargetDirections[nestedMapKey] = nestedChildrtctrlRttP
 										}
 										return true
 									},
@@ -206,7 +202,10 @@ func (data *EVPN) fromBody(res gjson.Result) {
 								return true
 							},
 						)
-						data.Vnis = append(data.Vnis, child)
+						if data.Vnis == nil {
+							data.Vnis = make(map[string]EVPNVnis)
+						}
+						data.Vnis[mapKey] = child
 					}
 					return true
 				},
@@ -226,11 +225,11 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	for c := len(data.Vnis) - 1; c >= 0; c-- {
+	for key, item := range data.Vnis {
 		var rrtctrlBDEvi gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("rtctrlBDEvi.attributes.encap").String() == data.Vnis[c].Encap.ValueString() {
+				if v.Get("rtctrlBDEvi.attributes.encap").String() == key {
 					rrtctrlBDEvi = v
 					return false
 				}
@@ -238,34 +237,30 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !rrtctrlBDEvi.Exists() {
-			data.Vnis = slices.Delete(data.Vnis, c, c+1)
+			delete(data.Vnis, key)
 			continue
 		}
-		if !data.Vnis[c].Encap.IsNull() {
-			data.Vnis[c].Encap = types.StringValue(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.encap").String())
+		if !item.RouteDistinguisher.IsNull() {
+			item.RouteDistinguisher = types.StringValue(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.rd").String())
 		} else {
-			data.Vnis[c].Encap = types.StringNull()
+			item.RouteDistinguisher = types.StringNull()
 		}
-		if !data.Vnis[c].RouteDistinguisher.IsNull() {
-			data.Vnis[c].RouteDistinguisher = types.StringValue(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.rd").String())
+		if !item.TableMap.IsNull() {
+			item.TableMap = types.StringValue(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.tblMap").String())
 		} else {
-			data.Vnis[c].RouteDistinguisher = types.StringNull()
+			item.TableMap = types.StringNull()
 		}
-		if !data.Vnis[c].TableMap.IsNull() {
-			data.Vnis[c].TableMap = types.StringValue(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.tblMap").String())
+		if !item.TableMapFilter.IsNull() {
+			item.TableMapFilter = types.BoolValue(helpers.ParseNxosBoolean(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.tblMapFltr").String()))
 		} else {
-			data.Vnis[c].TableMap = types.StringNull()
+			item.TableMapFilter = types.BoolNull()
 		}
-		if !data.Vnis[c].TableMapFilter.IsNull() {
-			data.Vnis[c].TableMapFilter = types.BoolValue(helpers.ParseNxosBoolean(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.tblMapFltr").String()))
-		} else {
-			data.Vnis[c].TableMapFilter = types.BoolNull()
-		}
-		for nc := len(data.Vnis[c].RouteTargetDirections) - 1; nc >= 0; nc-- {
+		for nc := range item.RouteTargetDirections {
+			ncItem := item.RouteTargetDirections[nc]
 			var rrtctrlRttP gjson.Result
 			rrtctrlBDEvi.Get("rtctrlBDEvi.children").ForEach(
 				func(_, v gjson.Result) bool {
-					if v.Get("rtctrlRttP.attributes.type").String() == data.Vnis[c].RouteTargetDirections[nc].Type.ValueString() {
+					if v.Get("rtctrlRttP.attributes.type").String() == nc {
 						rrtctrlRttP = v
 						return false
 					}
@@ -273,19 +268,15 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 				},
 			)
 			if !rrtctrlRttP.Exists() {
-				data.Vnis[c].RouteTargetDirections = slices.Delete(data.Vnis[c].RouteTargetDirections, nc, nc+1)
+				delete(item.RouteTargetDirections, nc)
 				continue
 			}
-			if !data.Vnis[c].RouteTargetDirections[nc].Type.IsNull() {
-				data.Vnis[c].RouteTargetDirections[nc].Type = types.StringValue(rrtctrlRttP.Get("rtctrlRttP.attributes.type").String())
-			} else {
-				data.Vnis[c].RouteTargetDirections[nc].Type = types.StringNull()
-			}
-			for nc_ := len(data.Vnis[c].RouteTargetDirections[nc].RouteTargets) - 1; nc_ >= 0; nc_-- {
+			for nc_ := range ncItem.RouteTargets {
+				nc_Item := ncItem.RouteTargets[nc_]
 				var rrtctrlRttEntry gjson.Result
 				rrtctrlRttP.Get("rtctrlRttP.children").ForEach(
 					func(_, v gjson.Result) bool {
-						if v.Get("rtctrlRttEntry.attributes.rtt").String() == data.Vnis[c].RouteTargetDirections[nc].RouteTargets[nc_].RouteTarget.ValueString() {
+						if v.Get("rtctrlRttEntry.attributes.rtt").String() == nc_ {
 							rrtctrlRttEntry = v
 							return false
 						}
@@ -293,16 +284,14 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !rrtctrlRttEntry.Exists() {
-					data.Vnis[c].RouteTargetDirections[nc].RouteTargets = slices.Delete(data.Vnis[c].RouteTargetDirections[nc].RouteTargets, nc_, nc_+1)
+					delete(ncItem.RouteTargets, nc_)
 					continue
 				}
-				if !data.Vnis[c].RouteTargetDirections[nc].RouteTargets[nc_].RouteTarget.IsNull() {
-					data.Vnis[c].RouteTargetDirections[nc].RouteTargets[nc_].RouteTarget = types.StringValue(rrtctrlRttEntry.Get("rtctrlRttEntry.attributes.rtt").String())
-				} else {
-					data.Vnis[c].RouteTargetDirections[nc].RouteTargets[nc_].RouteTarget = types.StringNull()
-				}
+				ncItem.RouteTargets[nc_] = nc_Item
 			}
+			item.RouteTargetDirections[nc] = ncItem
 		}
+		data.Vnis[key] = item
 	}
 }
 
@@ -321,82 +310,64 @@ func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN) nxos.Body {
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.Vnis {
-		found := false
-		for _, planChild := range data.Vnis {
-			if stateChild.Encap == planChild.Encap {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.Vnis {
+		if _, found := data.Vnis[stateKey]; !found {
+			stateChild := state.Vnis[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "rtctrlBDEvi.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "rtctrlBDEvi.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "rtctrlBDEvi.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	for di := range state.Vnis {
-		for pdi := range data.Vnis {
-			if state.Vnis[di].Encap == data.Vnis[pdi].Encap {
-				matchBodyPathdi := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-					if mv.Get("rtctrlBDEvi.attributes.rn").String() == state.Vnis[di].getRn() {
-						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtctrlBDEvi.children"
-						break
-					}
-				}
-				if matchBodyPathdi == "" {
+		if _, found := data.Vnis[di]; !found {
+			continue
+		}
+		stateItemdi := state.Vnis[di]
+		planItemdi := data.Vnis[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+			if mv.Get("rtctrlBDEvi.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtctrlBDEvi.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.RouteTargetDirections {
+			if _, found := planItemdi.RouteTargetDirections[stateChildKey]; !found {
+				stateChild := stateItemdi.RouteTargetDirections[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttP.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttP.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for di_ := range stateItemdi.RouteTargetDirections {
+			if _, found := planItemdi.RouteTargetDirections[di_]; !found {
+				continue
+			}
+			stateItemdi_ := stateItemdi.RouteTargetDirections[di_]
+			planItemdi_ := planItemdi.RouteTargetDirections[di_]
+			matchBodyPathdi_ := ""
+			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+				if mv.Get("rtctrlRttP.attributes.rn").String() == stateItemdi_.getRn(di_) {
+					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".rtctrlRttP.children"
 					break
 				}
-				for _, stateChild := range state.Vnis[di].RouteTargetDirections {
-					found := false
-					for _, planChild := range data.Vnis[pdi].RouteTargetDirections {
-						if stateChild.Type == planChild.Type {
-							found = true
-							break
-						}
-					}
-					if !found {
-						deleteBody := ""
-						deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttP.attributes.rn", stateChild.getRn())
-						deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttP.attributes.status", "deleted")
-						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
-					}
+			}
+			if matchBodyPathdi_ == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi_.RouteTargets {
+				if _, found := planItemdi_.RouteTargets[stateChildKey]; !found {
+					stateChild := stateItemdi_.RouteTargets[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttEntry.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttEntry.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 				}
-				for di_ := range state.Vnis[di].RouteTargetDirections {
-					for pdi_ := range data.Vnis[pdi].RouteTargetDirections {
-						if state.Vnis[di].RouteTargetDirections[di_].Type == data.Vnis[pdi].RouteTargetDirections[pdi_].Type {
-							matchBodyPathdi_ := ""
-							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-								if mv.Get("rtctrlRttP.attributes.rn").String() == state.Vnis[di].RouteTargetDirections[di_].getRn() {
-									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".rtctrlRttP.children"
-									break
-								}
-							}
-							if matchBodyPathdi_ == "" {
-								break
-							}
-							for _, stateChild := range state.Vnis[di].RouteTargetDirections[di_].RouteTargets {
-								found := false
-								for _, planChild := range data.Vnis[pdi].RouteTargetDirections[pdi_].RouteTargets {
-									if stateChild.RouteTarget == planChild.RouteTarget {
-										found = true
-										break
-									}
-								}
-								if !found {
-									deleteBody := ""
-									deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttEntry.attributes.rn", stateChild.getRn())
-									deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttEntry.attributes.status", "deleted")
-									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
-								}
-							}
-							break
-						}
-					}
-				}
-				break
 			}
 		}
 	}

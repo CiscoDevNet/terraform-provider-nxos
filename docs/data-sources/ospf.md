@@ -42,7 +42,7 @@ data "nxos_ospf" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
-- `instances` (Attributes List) List of OSPF instances. (see [below for nested schema](#nestedatt--instances))
+- `instances` (Attributes Map) List of OSPF instances. (see [below for nested schema](#nestedatt--instances))
 
 <a id="nestedatt--instances"></a>
 ### Nested Schema for `instances`
@@ -51,8 +51,7 @@ Read-Only:
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `control` (String) The control state.
-- `name` (String) OSPF instance name.
-- `vrfs` (Attributes List) List of OSPF VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+- `vrfs` (Attributes Map) List of OSPF VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
 ### Nested Schema for `instances.vrfs`
@@ -60,7 +59,7 @@ Read-Only:
 Read-Only:
 
 - `admin_state` (String) Holds the administrative state of domain.
-- `areas` (Attributes List) List of OSPF areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
+- `areas` (Attributes Map) List of OSPF areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
 - `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
 - `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
 - `capability_vrf_lite` (String) Capability vrf-lite for L3VPN or Ethernet VPN.
@@ -72,7 +71,7 @@ Read-Only:
 - `discard_route` (String) Control bits for discard-route external and internal.
 - `distance` (Number) Administrative distance preference.
 - `down_bit_ignore` (Boolean) Holds the status of Down-bit ignore.
-- `interfaces` (Attributes List) List of OSPF interfaces. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
+- `interfaces` (Attributes Map) List of OSPF interfaces. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
 - `log_adjacency_changes` (String) Adjacency change logging level.
 - `max_ecmp` (Number) Maximum Equal Cost Multi Path(ECMP).
 - `max_metric_await_convergence_bgp_asn` (String) At startup, advertise max metric until convergence of BGP ASN.
@@ -82,7 +81,6 @@ Read-Only:
 - `max_metric_external_lsa` (Number) Maximum metric value for external LSAs.
 - `max_metric_startup_interval` (Number) Time (in secs) for which max metric should be advertised at startup.
 - `max_metric_summary_lsa` (Number) Maximum metric value for summary LSAs.
-- `name` (String) VRF name.
 - `name_lookup_vrf` (String) Holds vrf name of dns-server for name-lookup.
 - `rfc1583_compatible` (Boolean) RFC 1583 compatibility for external path preferences.
 - `rfc1583_compatible_ios` (Boolean) RFC 1583 compatibility to IOS for external path preferences.
@@ -93,7 +91,6 @@ Read-Only:
 
 Read-Only:
 
-- `area_id` (String) Area identifier to which a network or interface belongs in IPv4 address format.
 - `authentication_type` (String) Authentication type can be simple, none or md5.
 - `control` (String) Area controls can be ABRs originate summary LSAs into other areas, redistributed LSAs or suppress forwarding address. Choices: `unspecified`, `summary`, `redistribute`, `suppress-fa`. Can be an empty string. Allowed formats:
   - Single value. Example: `summary`
@@ -128,7 +125,6 @@ Read-Only:
 - `cost` (Number) Specifies the cost of interface.
 - `dead_interval` (Number) Dead interval, interval after which router declares that neighbor as down.
 - `hello_interval` (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `network_type` (String) Holds the network type as point2point or broadcast.
 - `node_flag` (String) Node flag, determines if prefix attribute should have the node flag or not.
 - `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.

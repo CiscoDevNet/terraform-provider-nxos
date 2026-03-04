@@ -37,7 +37,7 @@ data "nxos_svi_interfaces" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `svi_interfaces` (Attributes List) List of SVI interfaces. (see [below for nested schema](#nestedatt--svi_interfaces))
+- `svi_interfaces` (Attributes Map) List of SVI interfaces. (see [below for nested schema](#nestedatt--svi_interfaces))
 
 <a id="nestedatt--svi_interfaces"></a>
 ### Nested Schema for `svi_interfaces`
@@ -51,7 +51,6 @@ Read-Only:
 - `delay` (Number) Specifies the administrative port delay.
 - `description` (String) Tunnel Description.
 - `inband_management` (Boolean) An in-band management interface configuration.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `vlan100`.
 - `load_interval_counter_1` (Number) Load-averaging Interval 1.
 - `load_interval_counter_2` (Number) Load-averaging Interval 2.
 - `load_interval_counter_3` (Number) Load-averaging Interval 3.

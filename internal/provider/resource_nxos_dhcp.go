@@ -206,15 +206,11 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: helpers.NewAttributeDescription("V6 Smart Relay Global Enabled.").String,
 				Optional:            true,
 			},
-			"relay_interfaces": schema.ListNestedAttribute{
+			"relay_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of DHCP relay interfaces.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-							Required:            true,
-						},
 						"information_trusted": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Information Trusted Enabled.").String,
 							Optional:            true,
@@ -242,19 +238,11 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							MarkdownDescription: helpers.NewAttributeDescription("V6 Smart Relay Enabled.").String,
 							Optional:            true,
 						},
-						"addresses": schema.ListNestedAttribute{
+						"addresses": schema.MapNestedAttribute{
 							MarkdownDescription: "List of DHCP relay addresses.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"vrf": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.").String,
-										Required:            true,
-									},
-									"address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv4 or IPv6 address.").String,
-										Required:            true,
-									},
 									"counter": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Counter.").AddIntegerRangeDescription(0, 65535).String,
 										Optional:            true,

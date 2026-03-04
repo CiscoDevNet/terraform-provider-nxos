@@ -34,21 +34,22 @@ resource "nxos_spanning_tree" "example" {
   loopguard                = "enabled"
   mode                     = "mst"
   pathcost_option          = "long"
-  interfaces = [{
-    interface_id              = "eth1/9"
-    bpdu_filter               = "enable"
-    bpdu_guard                = "enable"
-    cost                      = 100
-    guard                     = "root"
-    link_type                 = "p2p"
-    mode                      = "edge"
-    priority                  = 200
-    control                   = "bpdu-guard"
-    description               = "My interface description"
-    linecard_issu             = "auto"
-    prestandard_configuration = "enabled"
-    simulate_pvst             = "enabled"
-  }]
+  interfaces = {
+    "eth1/9" = {
+      bpdu_filter               = "enable"
+      bpdu_guard                = "enable"
+      cost                      = 100
+      guard                     = "root"
+      link_type                 = "p2p"
+      mode                      = "edge"
+      priority                  = 200
+      control                   = "bpdu-guard"
+      description               = "My interface description"
+      linecard_issu             = "auto"
+      prestandard_configuration = "enabled"
+      simulate_pvst             = "enabled"
+    }
+  }
 }
 ```
 
@@ -68,7 +69,7 @@ resource "nxos_spanning_tree" "example" {
   - Choices: `enabled`, `disabled`
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `interfaces` (Attributes List) List of Spanning Tree interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `interfaces` (Attributes Map) List of Spanning Tree interfaces. (see [below for nested schema](#nestedatt--interfaces))
 - `l2_gateway_stp_domain_id` (Number) Spanning tree L2 Gateway Domain Id.
   - Range: `0`-`200000000`
 - `linecard_issu` (String) Linecard ISSU type.
@@ -86,10 +87,6 @@ resource "nxos_spanning_tree" "example" {
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 Optional:
 

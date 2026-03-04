@@ -72,15 +72,11 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"instances": schema.ListNestedAttribute{
+			"instances": schema.MapNestedAttribute{
 				MarkdownDescription: "List of OSPF instances.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "OSPF instance name.",
-							Computed:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
@@ -89,15 +85,11 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "The control state.",
 							Computed:            true,
 						},
-						"vrfs": schema.ListNestedAttribute{
+						"vrfs": schema.MapNestedAttribute{
 							MarkdownDescription: "List of OSPF VRFs.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: "VRF name.",
-										Computed:            true,
-									},
 									"log_adjacency_changes": schema.StringAttribute{
 										MarkdownDescription: "Adjacency change logging level.",
 										Computed:            true,
@@ -162,15 +154,11 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "RFC 1583 compatibility to IOS for external path preferences.",
 										Computed:            true,
 									},
-									"areas": schema.ListNestedAttribute{
+									"areas": schema.MapNestedAttribute{
 										MarkdownDescription: "List of OSPF areas.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"area_id": schema.StringAttribute{
-													MarkdownDescription: "Area identifier to which a network or interface belongs in IPv4 address format.",
-													Computed:            true,
-												},
 												"authentication_type": schema.StringAttribute{
 													MarkdownDescription: "Authentication type can be simple, none or md5.",
 													Computed:            true,
@@ -218,15 +206,11 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "Time (in secs) for which max metric should be advertised at startup.",
 										Computed:            true,
 									},
-									"interfaces": schema.ListNestedAttribute{
+									"interfaces": schema.MapNestedAttribute{
 										MarkdownDescription: "List of OSPF interfaces.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"interface_id": schema.StringAttribute{
-													MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-													Computed:            true,
-												},
 												"admin_state": schema.StringAttribute{
 													MarkdownDescription: "The administrative state of the object or policy.",
 													Computed:            true,

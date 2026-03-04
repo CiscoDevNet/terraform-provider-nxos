@@ -91,15 +91,11 @@ func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.OneOf("low", "high", "rfc"),
 				},
 			},
-			"nve_interfaces": schema.ListNestedAttribute{
+			"nve_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "NVE interface configuration.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Network Virtualization Overlay Endpoint (NVE) ID.").String,
-							Required:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Administrative Up or Down state of the NVE.").AddStringEnumDescription("enabled", "disabled").String,
 							Optional:            true,
@@ -205,18 +201,11 @@ func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							MarkdownDescription: helpers.NewAttributeDescription("Custom Virtual Router MAC address configuration for VPC VxLAN.").String,
 							Optional:            true,
 						},
-						"vnis": schema.ListNestedAttribute{
+						"vnis": schema.MapNestedAttribute{
 							MarkdownDescription: "List of VNIs.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"vni": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Configure Virtual Network ID.").AddIntegerRangeDescription(1, 16777214).String,
-										Required:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(1, 16777214),
-										},
-									},
 									"associate_vrf": schema.BoolAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Configures VNI(s) as L3 VNI.").String,
 										Optional:            true,

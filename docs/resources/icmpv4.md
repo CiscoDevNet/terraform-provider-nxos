@@ -28,13 +28,15 @@ resource "nxos_icmpv4" "example" {
   admin_state          = "enabled"
   instance_admin_state = "enabled"
   control              = "stateful-ha"
-  vrfs = [{
-    name = "VRF1"
-    interfaces = [{
-      id      = "vlan10"
-      control = "port-unreachable"
-    }]
-  }]
+  vrfs = {
+    "VRF1" = {
+      interfaces = {
+        "vlan10" = {
+          control = "port-unreachable"
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -50,7 +52,7 @@ resource "nxos_icmpv4" "example" {
 - `device` (String) A device name from the provider configuration.
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `vrfs` (Attributes List) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -59,20 +61,12 @@ resource "nxos_icmpv4" "example" {
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
-Required:
-
-- `name` (String) The name of the object.
-
 Optional:
 
-- `interfaces` (Attributes List) List of ICMPv4 interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `interfaces` (Attributes Map) List of ICMPv4 interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
-
-Required:
-
-- `id` (String) Must match first field in the output of `show intf brief`. Example: `vlan100`.
 
 Optional:
 

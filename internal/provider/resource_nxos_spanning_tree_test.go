@@ -45,19 +45,18 @@ func TestAccNxosSpanningTree(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "loopguard", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mode", "mst"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "pathcost_option", "long"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.interface_id", "eth1/9"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.bpdu_filter", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.bpdu_guard", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.cost", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.guard", "root"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.link_type", "p2p"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.mode", "edge"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.priority", "200"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.control", "bpdu-guard"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.description", "My interface description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.linecard_issu", "auto"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.prestandard_configuration", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.simulate_pvst", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.bpdu_filter", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.bpdu_guard", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.cost", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.guard", "root"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.link_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.mode", "edge"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.priority", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.control", "bpdu-guard"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.description", "My interface description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.linecard_issu", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.prestandard_configuration", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.simulate_pvst", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -135,21 +134,22 @@ func testAccNxosSpanningTreeConfig_all() string {
 	config += `	loopguard = "enabled"` + "\n"
 	config += `	mode = "mst"` + "\n"
 	config += `	pathcost_option = "long"` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		interface_id = "eth1/9"` + "\n"
-	config += `		bpdu_filter = "enable"` + "\n"
-	config += `		bpdu_guard = "enable"` + "\n"
-	config += `		cost = 100` + "\n"
-	config += `		guard = "root"` + "\n"
-	config += `		link_type = "p2p"` + "\n"
-	config += `		mode = "edge"` + "\n"
-	config += `		priority = 200` + "\n"
-	config += `		control = "bpdu-guard"` + "\n"
-	config += `		description = "My interface description"` + "\n"
-	config += `		linecard_issu = "auto"` + "\n"
-	config += `		prestandard_configuration = "enabled"` + "\n"
-	config += `		simulate_pvst = "enabled"` + "\n"
-	config += `	}]` + "\n"
+	config += `	interfaces = {` + "\n"
+	config += `		"eth1/9" = {` + "\n"
+	config += `			bpdu_filter = "enable"` + "\n"
+	config += `			bpdu_guard = "enable"` + "\n"
+	config += `			cost = 100` + "\n"
+	config += `			guard = "root"` + "\n"
+	config += `			link_type = "p2p"` + "\n"
+	config += `			mode = "edge"` + "\n"
+	config += `			priority = 200` + "\n"
+	config += `			control = "bpdu-guard"` + "\n"
+	config += `			description = "My interface description"` + "\n"
+	config += `			linecard_issu = "auto"` + "\n"
+	config += `			prestandard_configuration = "enabled"` + "\n"
+	config += `			simulate_pvst = "enabled"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

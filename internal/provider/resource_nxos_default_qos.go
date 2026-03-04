@@ -77,15 +77,11 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"class_maps": schema.ListNestedAttribute{
+			"class_maps": schema.MapNestedAttribute{
 				MarkdownDescription: "List of class maps.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Name of class-map.").String,
-							Required:            true,
-						},
 						"match_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match-any, match-all or match-first.").AddStringEnumDescription("match-any", "match-all", "match-first").String,
 							Optional:            true,
@@ -93,30 +89,21 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 								stringvalidator.OneOf("match-any", "match-all", "match-first"),
 							},
 						},
-						"dscp_values": schema.ListNestedAttribute{
+						"dscp_values": schema.MapNestedAttribute{
 							MarkdownDescription: "List of DSCP values to match.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"value": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Dscp value.").String,
-										Required:            true,
-									},
-								},
+								Attributes: map[string]schema.Attribute{},
 							},
 						},
 					},
 				},
 			},
-			"policy_maps": schema.ListNestedAttribute{
+			"policy_maps": schema.MapNestedAttribute{
 				MarkdownDescription: "List of policy maps.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Name of policy-map.").String,
-							Required:            true,
-						},
 						"match_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match-any, match-all or match-first.").AddStringEnumDescription("match-any", "match-all", "match-first").String,
 							Optional:            true,
@@ -124,15 +111,11 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 								stringvalidator.OneOf("match-any", "match-all", "match-first"),
 							},
 						},
-						"match_class_maps": schema.ListNestedAttribute{
+						"match_class_maps": schema.MapNestedAttribute{
 							MarkdownDescription: "List of match class maps.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Match using class-map.").String,
-										Required:            true,
-									},
 									"next_class_map": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Insert before the given class-map.").String,
 										Optional:            true,
@@ -315,15 +298,11 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 			},
-			"policy_interface_in": schema.ListNestedAttribute{
+			"policy_interface_in": schema.MapNestedAttribute{
 				MarkdownDescription: "List of interfaces with ingress QoS policy assignments.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-							Required:            true,
-						},
 						"policy_map_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Policy-map Name.").String,
 							Required:            true,

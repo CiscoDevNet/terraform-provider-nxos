@@ -44,7 +44,7 @@ data "nxos_hsrp" "example" {
 - `extended_hold_interval_configuration` (String) Enables/Disables hsrp extended hold interval.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
-- `interfaces` (Attributes List) List of HSRP interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `interfaces` (Attributes Map) List of HSRP interfaces. (see [below for nested schema](#nestedatt--interfaces))
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
@@ -57,8 +57,7 @@ Read-Only:
 - `control` (String) Controls.
 - `delay_minimum` (Number) Delay in seconds, to start HSRP state machine after receiving interface moving to Up state.
 - `description` (String) Description.
-- `groups` (Attributes List) List of HSRP groups. (see [below for nested schema](#nestedatt--interfaces--groups))
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `groups` (Attributes Map) List of HSRP groups. (see [below for nested schema](#nestedatt--interfaces--groups))
 - `mac_refresh_interval` (Number) The MAC refresh interval in seconds, for the HSRP slave group on the interface.
 - `mac_refresh_interval_configuration` (String) Enables/Disables hsrp MAC refresh interval.
 - `name` (String) The name of the object.
@@ -70,7 +69,6 @@ Read-Only:
 
 Read-Only:
 
-- `address_family` (String) Group Address Family.
 - `authentication_md5_compatibility_mode` (String) Enables compatibility mode for MD5 type-7 authentication.
 - `authentication_md5_key_chain_name` (String) Authentication MD5 Key Chain Name.
 - `authentication_md5_key_name` (String) Authentication Md5 Key Name.
@@ -82,7 +80,6 @@ Read-Only:
 - `control` (String) Group control bits.
 - `follow` (String) Master name string to follow.
 - `forwarding_lower_threshold` (Number) Fowarding Lower Threshold.
-- `group_id` (Number) Group Id.
 - `hello_interval` (Number) Hello Interval.
 - `hold_interval` (Number) Hold Interval.
 - `ip_address` (String) Primary IP Address.

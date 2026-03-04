@@ -43,8 +43,9 @@ resource "nxos_vpc" "example" {
   peerlink_interface_id                        = "eth1/9"
   peerlink_admin_state                         = "enabled"
   peerlink_description                         = "My description"
-  interfaces = [{
-    vpc_interface_id          = 1
-    port_channel_interface_dn = "sys/intf/aggr-[po1]"
-  }]
+  interfaces = {
+    "1" = {
+      port_channel_interface_dn = "sys/intf/aggr-[po1]"
+    }
+  }
 }

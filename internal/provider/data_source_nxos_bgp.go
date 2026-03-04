@@ -136,15 +136,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "ID to generate Secondary RD with ID:VNI format.",
 				Computed:            true,
 			},
-			"vrfs": schema.ListNestedAttribute{
+			"vrfs": schema.MapNestedAttribute{
 				MarkdownDescription: "List of BGP VRFs.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "The name of the object.",
-							Computed:            true,
-						},
 						"router_id": schema.StringAttribute{
 							MarkdownDescription: "The BGP router ID.",
 							Computed:            true,
@@ -237,15 +233,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							MarkdownDescription: "The stale interval for routes advertised by the BGP peer.",
 							Computed:            true,
 						},
-						"address_families": schema.ListNestedAttribute{
+						"address_families": schema.MapNestedAttribute{
 							MarkdownDescription: "List of BGP address families.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"address_family": schema.StringAttribute{
-										MarkdownDescription: "Type.",
-										Computed:            true,
-									},
 									"critical_nexthop_timeout": schema.StringAttribute{
 										MarkdownDescription: "The next-hop address tracking delay timer for critical next-hop reachability routes.",
 										Computed:            true,
@@ -394,15 +386,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "Configure bestpath defer timer.",
 										Computed:            true,
 									},
-									"advertised_prefixes": schema.ListNestedAttribute{
+									"advertised_prefixes": schema.MapNestedAttribute{
 										MarkdownDescription: "List of BGP advertised prefixes.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"prefix": schema.StringAttribute{
-													MarkdownDescription: "IP address of the network or prefix to advertise.",
-													Computed:            true,
-												},
 												"route_map": schema.StringAttribute{
 													MarkdownDescription: "Route map to modify attributes.",
 													Computed:            true,
@@ -414,19 +402,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 											},
 										},
 									},
-									"redistributions": schema.ListNestedAttribute{
+									"redistributions": schema.MapNestedAttribute{
 										MarkdownDescription: "List of BGP route redistributions.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"protocol": schema.StringAttribute{
-													MarkdownDescription: "The list of protocols to match.",
-													Computed:            true,
-												},
-												"protocol_instance": schema.StringAttribute{
-													MarkdownDescription: "The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).",
-													Computed:            true,
-												},
 												"route_map": schema.StringAttribute{
 													MarkdownDescription: "The name of the default route leak policy route map. This route map name is used to control distribution.",
 													Computed:            true,
@@ -449,15 +429,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 								},
 							},
 						},
-						"peer_templates": schema.ListNestedAttribute{
+						"peer_templates": schema.MapNestedAttribute{
 							MarkdownDescription: "List of BGP peer templates.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: "The name of the object.",
-										Computed:            true,
-									},
 									"remote_asn": schema.StringAttribute{
 										MarkdownDescription: "Autonomous System Number.",
 										Computed:            true,
@@ -554,15 +530,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "Enable TTL Security Mechanism with hop counts specified for remote peers.",
 										Computed:            true,
 									},
-									"peer_template_address_families": schema.ListNestedAttribute{
+									"peer_template_address_families": schema.MapNestedAttribute{
 										MarkdownDescription: "List of BGP peer template address families.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address_family": schema.StringAttribute{
-													MarkdownDescription: "Type.",
-													Computed:            true,
-												},
 												"control": schema.StringAttribute{
 													MarkdownDescription: "Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.",
 													Computed:            true,
@@ -665,15 +637,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 								},
 							},
 						},
-						"peers": schema.ListNestedAttribute{
+						"peers": schema.MapNestedAttribute{
 							MarkdownDescription: "List of BGP peers.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"address": schema.StringAttribute{
-										MarkdownDescription: "Peer address.",
-										Computed:            true,
-									},
 									"remote_asn": schema.StringAttribute{
 										MarkdownDescription: "Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).",
 										Computed:            true,
@@ -782,15 +750,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "Local Autonomous System Number.",
 										Computed:            true,
 									},
-									"peer_address_families": schema.ListNestedAttribute{
+									"peer_address_families": schema.MapNestedAttribute{
 										MarkdownDescription: "List of BGP peer address families.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address_family": schema.StringAttribute{
-													MarkdownDescription: "Type.",
-													Computed:            true,
-												},
 												"control": schema.StringAttribute{
 													MarkdownDescription: "Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.",
 													Computed:            true,
@@ -871,15 +835,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 													MarkdownDescription: "Weight for the neighbor.",
 													Computed:            true,
 												},
-												"route_controls": schema.ListNestedAttribute{
+												"route_controls": schema.MapNestedAttribute{
 													MarkdownDescription: "List of BGP peer address family route controls.",
 													Computed:            true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
-															"direction": schema.StringAttribute{
-																MarkdownDescription: "Direction.",
-																Computed:            true,
-															},
 															"route_map_name": schema.StringAttribute{
 																MarkdownDescription: "Route Map.",
 																Computed:            true,
@@ -887,15 +847,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 														},
 													},
 												},
-												"prefix_list_controls": schema.ListNestedAttribute{
+												"prefix_list_controls": schema.MapNestedAttribute{
 													MarkdownDescription: "List of BGP peer address family prefix list controls.",
 													Computed:            true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
-															"direction": schema.StringAttribute{
-																MarkdownDescription: "Direction: Specifies whether to apply this policy in the incoming or outgoing direction.",
-																Computed:            true,
-															},
 															"list": schema.StringAttribute{
 																MarkdownDescription: "Name of list to control the route distribution.",
 																Computed:            true,

@@ -28,104 +28,108 @@ This resource can manage the IS-IS configuration on NX-OS devices, including IS-
 ```terraform
 resource "nxos_isis" "example" {
   admin_state = "enabled"
-  instances = [{
-    name         = "ISIS1"
-    admin_state  = "enabled"
-    control      = "stateful-ha"
-    flush_routes = true
-    isolate      = true
-    vrfs = [{
-      name                     = "default"
-      admin_state              = "enabled"
-      authentication_check_l1  = false
-      authentication_check_l2  = false
-      authentication_key_l1    = ""
-      authentication_key_l2    = ""
-      authentication_type_l1   = "unknown"
-      authentication_type_l2   = "unknown"
-      bandwidth_reference      = 400000
-      bandwidth_reference_unit = "mbps"
-      is_type                  = "l2"
-      metric_type              = "wide"
-      mtu                      = 2000
-      net                      = "49.0001.0000.0000.3333.00"
-      passive_default          = "l12"
-      control                  = "log-adj-changes"
-      lsp_lifetime             = 1000
-      queue_limit              = 3000
-      address_families = [{
-        address_family                          = "v4"
-        segment_routing_mpls                    = true
-        enable_bfd                              = false
-        prefix_advertise_passive_l1             = true
-        prefix_advertise_passive_l2             = true
-        control                                 = "adj-check"
-        default_information_originate           = "on"
-        default_information_originate_route_map = "rm1"
-        distance                                = 100
-        max_ecmp                                = 4
-        multi_topology                          = "st"
-        router_id_interface                     = "lo0"
-        router_id_ip_address                    = "1.2.3.4"
-        table_map                               = "rm1"
-        table_map_filter                        = "enabled"
-      }]
-      overload_startup_time         = 60
-      overload_admin_state          = "always-on"
-      overload_bgp_as_number        = 100
-      overload_bgp_as_number_string = "100"
-      overload_suppress             = "interlevel"
-    }]
-  }]
-  interfaces = [{
-    interface_id                 = "eth1/10"
-    authentication_check         = false
-    authentication_check_l1      = false
-    authentication_check_l2      = false
-    authentication_key           = ""
-    authentication_key_l1        = ""
-    authentication_key_l2        = ""
-    authentication_type          = "unknown"
-    authentication_type_l1       = "unknown"
-    authentication_type_l2       = "unknown"
-    circuit_type                 = "l2"
-    vrf                          = "default"
-    hello_interval               = 20
-    hello_interval_l1            = 20
-    hello_interval_l2            = 20
-    hello_multiplier             = 4
-    hello_multiplier_l1          = 4
-    hello_multiplier_l2          = 4
-    hello_padding                = "never"
-    instance_name                = "ISIS1"
-    metric_l1                    = 1000
-    metric_l2                    = 1000
-    mtu_check                    = true
-    mtu_check_l1                 = true
-    mtu_check_l2                 = true
-    network_type_p2p             = "on"
-    passive                      = "l1"
-    priority_l1                  = 80
-    priority_l2                  = 80
-    enable_ipv4                  = true
-    admin_state                  = "enabled"
-    csnp_interval_l1             = 30
-    csnp_interval_l2             = 30
-    control                      = "advert-tep"
-    description                  = "ISIS interface"
-    lsp_refresh_interval         = 100
-    mesh_group_blocked           = true
-    mesh_group_id                = 10
-    ipv6_metric_l1               = 1000
-    ipv6_metric_l2               = 1000
-    n_flag_clear                 = true
-    retransmit_interval          = 10
-    retransmit_throttle_interval = 100
-    suppressed_state             = true
-    ipv4_bfd                     = "enabled"
-    ipv6_bfd                     = "enabled"
-    ipv6                         = true
-  }]
+  instances = {
+    "ISIS1" = {
+      admin_state  = "enabled"
+      control      = "stateful-ha"
+      flush_routes = true
+      isolate      = true
+      vrfs = {
+        "default" = {
+          admin_state              = "enabled"
+          authentication_check_l1  = false
+          authentication_check_l2  = false
+          authentication_key_l1    = ""
+          authentication_key_l2    = ""
+          authentication_type_l1   = "unknown"
+          authentication_type_l2   = "unknown"
+          bandwidth_reference      = 400000
+          bandwidth_reference_unit = "mbps"
+          is_type                  = "l2"
+          metric_type              = "wide"
+          mtu                      = 2000
+          net                      = "49.0001.0000.0000.3333.00"
+          passive_default          = "l12"
+          control                  = "log-adj-changes"
+          lsp_lifetime             = 1000
+          queue_limit              = 3000
+          address_families = {
+            "v4" = {
+              segment_routing_mpls                    = true
+              enable_bfd                              = false
+              prefix_advertise_passive_l1             = true
+              prefix_advertise_passive_l2             = true
+              control                                 = "adj-check"
+              default_information_originate           = "on"
+              default_information_originate_route_map = "rm1"
+              distance                                = 100
+              max_ecmp                                = 4
+              multi_topology                          = "st"
+              router_id_interface                     = "lo0"
+              router_id_ip_address                    = "1.2.3.4"
+              table_map                               = "rm1"
+              table_map_filter                        = "enabled"
+            }
+          }
+          overload_startup_time         = 60
+          overload_admin_state          = "always-on"
+          overload_bgp_as_number        = 100
+          overload_bgp_as_number_string = "100"
+          overload_suppress             = "interlevel"
+        }
+      }
+    }
+  }
+  interfaces = {
+    "eth1/10" = {
+      authentication_check         = false
+      authentication_check_l1      = false
+      authentication_check_l2      = false
+      authentication_key           = ""
+      authentication_key_l1        = ""
+      authentication_key_l2        = ""
+      authentication_type          = "unknown"
+      authentication_type_l1       = "unknown"
+      authentication_type_l2       = "unknown"
+      circuit_type                 = "l2"
+      vrf                          = "default"
+      hello_interval               = 20
+      hello_interval_l1            = 20
+      hello_interval_l2            = 20
+      hello_multiplier             = 4
+      hello_multiplier_l1          = 4
+      hello_multiplier_l2          = 4
+      hello_padding                = "never"
+      instance_name                = "ISIS1"
+      metric_l1                    = 1000
+      metric_l2                    = 1000
+      mtu_check                    = true
+      mtu_check_l1                 = true
+      mtu_check_l2                 = true
+      network_type_p2p             = "on"
+      passive                      = "l1"
+      priority_l1                  = 80
+      priority_l2                  = 80
+      enable_ipv4                  = true
+      admin_state                  = "enabled"
+      csnp_interval_l1             = 30
+      csnp_interval_l2             = 30
+      control                      = "advert-tep"
+      description                  = "ISIS interface"
+      lsp_refresh_interval         = 100
+      mesh_group_blocked           = true
+      mesh_group_id                = 10
+      ipv6_metric_l1               = 1000
+      ipv6_metric_l2               = 1000
+      n_flag_clear                 = true
+      retransmit_interval          = 10
+      retransmit_throttle_interval = 100
+      suppressed_state             = true
+      ipv4_bfd                     = "enabled"
+      ipv6_bfd                     = "enabled"
+      ipv6                         = true
+    }
+  }
 }
 ```
 
@@ -137,8 +141,8 @@ resource "nxos_isis" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
-- `instances` (Attributes List) List of IS-IS instances. (see [below for nested schema](#nestedatt--instances))
-- `interfaces` (Attributes List) List of IS-IS interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `instances` (Attributes Map) List of IS-IS instances. (see [below for nested schema](#nestedatt--instances))
+- `interfaces` (Attributes Map) List of IS-IS interfaces. (see [below for nested schema](#nestedatt--interfaces))
 
 ### Read-Only
 
@@ -146,10 +150,6 @@ resource "nxos_isis" "example" {
 
 <a id="nestedatt--instances"></a>
 ### Nested Schema for `instances`
-
-Required:
-
-- `name` (String) IS-IS instance name.
 
 Optional:
 
@@ -159,18 +159,14 @@ Optional:
   - Choices: `stateful-ha`
 - `flush_routes` (Boolean) Flush ISIS Routes on non graceful controlled restart.
 - `isolate` (Boolean) Isolate ISIS Instance from other process tags.
-- `vrfs` (Attributes List) List of IS-IS VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+- `vrfs` (Attributes Map) List of IS-IS VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
 ### Nested Schema for `instances.vrfs`
 
-Required:
-
-- `name` (String) VRF name.
-
 Optional:
 
-- `address_families` (Attributes List) List of IS-IS address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
+- `address_families` (Attributes Map) List of IS-IS address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
 - `admin_state` (String) Holds ISIS Domain Administative state.
   - Choices: `enabled`, `disabled`
 - `authentication_check_l1` (Boolean) Authentication Check for ISIS DOM on Level-1.
@@ -213,11 +209,6 @@ Optional:
 <a id="nestedatt--instances--vrfs--address_families"></a>
 ### Nested Schema for `instances.vrfs.address_families`
 
-Required:
-
-- `address_family` (String) Type.
-  - Choices: `v4`, `v6`
-
 Optional:
 
 - `control` (String) The address family controls. This determines the address family to run. Note that IPv4 and IPv6 are both supported.
@@ -246,10 +237,6 @@ Optional:
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 Optional:
 

@@ -68,15 +68,11 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"access_lists": schema.ListNestedAttribute{
+			"access_lists": schema.MapNestedAttribute{
 				MarkdownDescription: "List of IPv4 Access Lists.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Name of Access lists.",
-							Computed:            true,
-						},
 						"fragments": schema.StringAttribute{
 							MarkdownDescription: "Fragments type for IPv4 and IPv6.",
 							Computed:            true,
@@ -93,15 +89,11 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 							MarkdownDescription: "Flag to denote UDF is present.",
 							Computed:            true,
 						},
-						"entries": schema.ListNestedAttribute{
+						"entries": schema.MapNestedAttribute{
 							MarkdownDescription: "Access list entries.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"sequence_number": schema.Int64Attribute{
-										MarkdownDescription: "Sequence number.",
-										Computed:            true,
-									},
 									"ack": schema.BoolAttribute{
 										MarkdownDescription: "TCP ACK flag.",
 										Computed:            true,
@@ -336,15 +328,11 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 					},
 				},
 			},
-			"ingress_interfaces": schema.ListNestedAttribute{
+			"ingress_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of interfaces with IPv4 ingress access list policy.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-							Computed:            true,
-						},
 						"access_list_name": schema.StringAttribute{
 							MarkdownDescription: "Access Control List name.",
 							Computed:            true,
@@ -352,15 +340,11 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 					},
 				},
 			},
-			"egress_interfaces": schema.ListNestedAttribute{
+			"egress_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of interfaces with IPv4 egress access list policy.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-							Computed:            true,
-						},
 						"access_list_name": schema.StringAttribute{
 							MarkdownDescription: "Access Control List name.",
 							Computed:            true,

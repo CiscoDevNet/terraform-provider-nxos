@@ -44,20 +44,19 @@ data "nxos_access_lists" "example" {
 
 ### Read-Only
 
-- `access_lists` (Attributes List) List of IPv4 Access Lists. (see [below for nested schema](#nestedatt--access_lists))
-- `egress_interfaces` (Attributes List) List of interfaces with IPv4 egress access list policy. (see [below for nested schema](#nestedatt--egress_interfaces))
+- `access_lists` (Attributes Map) List of IPv4 Access Lists. (see [below for nested schema](#nestedatt--access_lists))
+- `egress_interfaces` (Attributes Map) List of interfaces with IPv4 egress access list policy. (see [below for nested schema](#nestedatt--egress_interfaces))
 - `id` (String) The distinguished name of the object.
-- `ingress_interfaces` (Attributes List) List of interfaces with IPv4 ingress access list policy. (see [below for nested schema](#nestedatt--ingress_interfaces))
+- `ingress_interfaces` (Attributes Map) List of interfaces with IPv4 ingress access list policy. (see [below for nested schema](#nestedatt--ingress_interfaces))
 
 <a id="nestedatt--access_lists"></a>
 ### Nested Schema for `access_lists`
 
 Read-Only:
 
-- `entries` (Attributes List) Access list entries. (see [below for nested schema](#nestedatt--access_lists--entries))
+- `entries` (Attributes Map) Access list entries. (see [below for nested schema](#nestedatt--access_lists--entries))
 - `fragments` (String) Fragments type for IPv4 and IPv6.
 - `ignore_routable` (Boolean) Ignore Multicast Routed ACLs.
-- `name` (String) Name of Access lists.
 - `per_ace_statistics` (String) Per Access Control Entries statistics.
 - `udf_present` (Boolean) Flag to denote UDF is present.
 
@@ -103,7 +102,6 @@ Read-Only:
 - `remark` (String) Access-list entry comment.
 - `rev` (Boolean) TCP reversed flag.
 - `rst` (Boolean) TCP RST flag.
-- `sequence_number` (Number) Sequence number.
 - `source_address_group` (String) Source address group.
 - `source_port_1` (String) First source port.
 - `source_port_2` (String) Second source port.
@@ -133,7 +131,6 @@ Read-Only:
 Read-Only:
 
 - `access_list_name` (String) Access Control List name.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 
 <a id="nestedatt--ingress_interfaces"></a>
@@ -142,4 +139,3 @@ Read-Only:
 Read-Only:
 
 - `access_list_name` (String) Access Control List name.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.

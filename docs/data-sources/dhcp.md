@@ -53,7 +53,7 @@ data "nxos_dhcp" "example" {
 - `relay_information_option_trust` (Boolean) Relay Information Option Trust Enabled.
 - `relay_information_option_vpn` (Boolean) Relay Information Option Vpn Enabled.
 - `relay_information_trust_all` (Boolean) Relay Information Trust All Enabled.
-- `relay_interfaces` (Attributes List) List of DHCP relay interfaces. (see [below for nested schema](#nestedatt--relay_interfaces))
+- `relay_interfaces` (Attributes Map) List of DHCP relay interfaces. (see [below for nested schema](#nestedatt--relay_interfaces))
 - `relay_sub_option_circuit_id_customized` (Boolean) Relay Sub-Option Circuit-id Customized Enabled.
 - `relay_sub_option_circuit_id_format_string` (String) Relay Sub-Option Circuit-id Format String.
 - `relay_sub_option_format_non_tlv` (Boolean) Relay Option82 Sub-Option Format Non-TLV Enabled.
@@ -75,9 +75,8 @@ data "nxos_dhcp" "example" {
 
 Read-Only:
 
-- `addresses` (Attributes List) List of DHCP relay addresses. (see [below for nested schema](#nestedatt--relay_interfaces--addresses))
+- `addresses` (Attributes Map) List of DHCP relay addresses. (see [below for nested schema](#nestedatt--relay_interfaces--addresses))
 - `information_trusted` (Boolean) Information Trusted Enabled.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `options` (String) DHCP options.
 - `smart_relay` (Boolean) Smart Relay Enabled.
 - `subnet_broadcast` (Boolean) Subnet Broadcast Enabled.
@@ -89,6 +88,4 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) IPv4 or IPv6 address.
 - `counter` (Number) Counter.
-- `vrf` (String) vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.

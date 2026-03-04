@@ -31,45 +31,46 @@ resource "nxos_hsrp" "example" {
   control                              = "stateful-ha"
   extended_hold_interval               = 30
   extended_hold_interval_configuration = "disabled"
-  interfaces = [{
-    interface_id                       = "vlan10"
-    admin_state                        = "enabled"
-    bfd                                = "disabled"
-    bia_scope                          = "local"
-    control                            = "bia"
-    delay_minimum                      = 5
-    description                        = "My HSRP interface"
-    mac_refresh_interval               = 30
-    mac_refresh_interval_configuration = "disabled"
-    name                               = "myHsrpIf"
-    reload_delay                       = 5
-    version                            = "v2"
-    groups = [{
-      group_id                              = 1
-      address_family                        = "ipv4"
-      authentication_md5_compatibility_mode = "disabled"
-      authentication_md5_key_chain_name     = "myKeyChain"
-      authentication_md5_key_name           = "myKey"
-      authentication_md5_key_string_type    = "unencrypted"
-      authentication_md5_timeout            = 100
-      authentication_md5_type               = "key-string"
-      authentication_secret                 = "cisco123"
-      authentication_type                   = "simple"
-      control                               = "preempt"
-      follow                                = "masterGroup"
-      forwarding_lower_threshold            = 1
-      hello_interval                        = 1000
-      hold_interval                         = 3000
-      ip_address                            = "10.0.0.1"
-      ip_obtain_mode                        = "admin"
-      mac_address                           = "00:00:00:00:00:01"
-      name                                  = "myHsrpGroup"
-      preempt_delay_minimum                 = 10
-      preempt_delay_reload                  = 10
-      preempt_delay_sync                    = 10
-      priority                              = 110
-    }]
-  }]
+  interfaces = {
+    "vlan10" = {
+      admin_state                        = "enabled"
+      bfd                                = "disabled"
+      bia_scope                          = "local"
+      control                            = "bia"
+      delay_minimum                      = 5
+      description                        = "My HSRP interface"
+      mac_refresh_interval               = 30
+      mac_refresh_interval_configuration = "disabled"
+      name                               = "myHsrpIf"
+      reload_delay                       = 5
+      version                            = "v2"
+      groups = {
+        "1|ipv4" = {
+          authentication_md5_compatibility_mode = "disabled"
+          authentication_md5_key_chain_name     = "myKeyChain"
+          authentication_md5_key_name           = "myKey"
+          authentication_md5_key_string_type    = "unencrypted"
+          authentication_md5_timeout            = 100
+          authentication_md5_type               = "key-string"
+          authentication_secret                 = "cisco123"
+          authentication_type                   = "simple"
+          control                               = "preempt"
+          follow                                = "masterGroup"
+          forwarding_lower_threshold            = 1
+          hello_interval                        = 1000
+          hold_interval                         = 3000
+          ip_address                            = "10.0.0.1"
+          ip_obtain_mode                        = "admin"
+          mac_address                           = "00:00:00:00:00:01"
+          name                                  = "myHsrpGroup"
+          preempt_delay_minimum                 = 10
+          preempt_delay_reload                  = 10
+          preempt_delay_sync                    = 10
+          priority                              = 110
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -91,7 +92,7 @@ resource "nxos_hsrp" "example" {
   - Choices: `disabled`, `enabled`
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `interfaces` (Attributes List) List of HSRP interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `interfaces` (Attributes Map) List of HSRP interfaces. (see [below for nested schema](#nestedatt--interfaces))
 
 ### Read-Only
 
@@ -99,10 +100,6 @@ resource "nxos_hsrp" "example" {
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 Optional:
 
@@ -117,7 +114,7 @@ Optional:
 - `delay_minimum` (Number) Delay in seconds, to start HSRP state machine after receiving interface moving to Up state.
   - Range: `0`-`10000`
 - `description` (String) Description.
-- `groups` (Attributes List) List of HSRP groups. (see [below for nested schema](#nestedatt--interfaces--groups))
+- `groups` (Attributes Map) List of HSRP groups. (see [below for nested schema](#nestedatt--interfaces--groups))
 - `mac_refresh_interval` (Number) The MAC refresh interval in seconds, for the HSRP slave group on the interface.
   - Range: `0`-`10000`
 - `mac_refresh_interval_configuration` (String) Enables/Disables hsrp MAC refresh interval.
@@ -130,13 +127,6 @@ Optional:
 
 <a id="nestedatt--interfaces--groups"></a>
 ### Nested Schema for `interfaces.groups`
-
-Required:
-
-- `address_family` (String) Group Address Family.
-  - Choices: `ipv4`, `ipv6`
-- `group_id` (Number) Group Id.
-  - Range: `0`-`4095`
 
 Optional:
 

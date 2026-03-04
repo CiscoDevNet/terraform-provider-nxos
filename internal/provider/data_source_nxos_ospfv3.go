@@ -72,15 +72,11 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"instances": schema.ListNestedAttribute{
+			"instances": schema.MapNestedAttribute{
 				MarkdownDescription: "List of OSPFv3 instances.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "OSPFv3 instance name.",
-							Computed:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
@@ -93,15 +89,11 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							MarkdownDescription: "Isolate this router from OSPFv3 perspective.",
 							Computed:            true,
 						},
-						"vrfs": schema.ListNestedAttribute{
+						"vrfs": schema.MapNestedAttribute{
 							MarkdownDescription: "List of OSPFv3 VRFs.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: "VRF name.",
-										Computed:            true,
-									},
 									"admin_state": schema.StringAttribute{
 										MarkdownDescription: "OSPFv3 VRF administrative state.",
 										Computed:            true,
@@ -142,15 +134,11 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 										MarkdownDescription: "Suppress routing updates on the interface.",
 										Computed:            true,
 									},
-									"areas": schema.ListNestedAttribute{
+									"areas": schema.MapNestedAttribute{
 										MarkdownDescription: "List of OSPFv3 areas.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"area_id": schema.StringAttribute{
-													MarkdownDescription: "Area Id as an integer or ip address.",
-													Computed:            true,
-												},
 												"redistribute": schema.BoolAttribute{
 													MarkdownDescription: "Send redistributed LSAs into NSSA area.",
 													Computed:            true,
@@ -174,15 +162,11 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											},
 										},
 									},
-									"address_families": schema.ListNestedAttribute{
+									"address_families": schema.MapNestedAttribute{
 										MarkdownDescription: "List of OSPFv3 address families.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address_family_type": schema.StringAttribute{
-													MarkdownDescription: "IPv6 unicast address family type.",
-													Computed:            true,
-												},
 												"administrative_distance": schema.StringAttribute{
 													MarkdownDescription: "Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified",
 													Computed:            true,
@@ -208,15 +192,11 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
-			"interfaces": schema.ListNestedAttribute{
+			"interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of OSPFv3 interface configurations.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-							Computed:            true,
-						},
 						"advertise_secondaries": schema.BoolAttribute{
 							MarkdownDescription: "Advertise secondary IPv6 addresses.",
 							Computed:            true,

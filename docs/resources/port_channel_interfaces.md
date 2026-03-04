@@ -25,55 +25,57 @@ This resource can manage port-channel interfaces on NX-OS devices, including cha
 
 ```terraform
 resource "nxos_port_channel_interfaces" "example" {
-  port_channel_interfaces = [{
-    interface_id           = "po123"
-    port_channel_mode      = "active"
-    minimum_links          = 2
-    maximum_links          = 10
-    suspend_individual     = "disable"
-    access_vlan            = "vlan-1"
-    admin_state            = "up"
-    auto_negotiation       = "on"
-    bandwidth              = 0
-    delay                  = 1
-    description            = "My Description"
-    duplex                 = "auto"
-    layer                  = "Layer2"
-    link_logging           = "enable"
-    medium                 = "broadcast"
-    mode                   = "access"
-    mtu                    = 1500
-    native_vlan            = "unknown"
-    speed                  = "auto"
-    trunk_vlans            = "1-4094"
-    dot1q_ether_type       = 33024
-    equalization_delay     = 5
-    graceful_convergence   = "disable"
-    hash_distribution      = "adaptive"
-    inherit_bandwidth      = 1000000
-    itu_channel            = 50
-    lacp_delay_mode        = "enable"
-    lacp_vpc_convergence   = "enable"
-    link_debounce_down     = 200
-    load_defer             = "enable"
-    mdix                   = "auto"
-    optics_loopback        = "internal"
-    port_type              = "leaf"
-    pxe_transition_timeout = 5
-    router_mac             = "00:00:00:11:22:33"
-    snmp_trap_state        = "disable"
-    span_mode              = "not-a-span-dest"
-    squelch                = "disable"
-    transmission_mode      = "not-a-trans-port"
-    trunk_logging          = "enable"
-    usage                  = "discovery"
-    user_configured_flags  = "admin_layer,admin_state"
-    vrf_dn                 = "sys/inst-default"
-    members = [{
-      interface_dn = "sys/intf/phys-[eth1/11]"
-      force        = true
-    }]
-  }]
+  port_channel_interfaces = {
+    "po123" = {
+      port_channel_mode      = "active"
+      minimum_links          = 2
+      maximum_links          = 10
+      suspend_individual     = "disable"
+      access_vlan            = "vlan-1"
+      admin_state            = "up"
+      auto_negotiation       = "on"
+      bandwidth              = 0
+      delay                  = 1
+      description            = "My Description"
+      duplex                 = "auto"
+      layer                  = "Layer2"
+      link_logging           = "enable"
+      medium                 = "broadcast"
+      mode                   = "access"
+      mtu                    = 1500
+      native_vlan            = "unknown"
+      speed                  = "auto"
+      trunk_vlans            = "1-4094"
+      dot1q_ether_type       = 33024
+      equalization_delay     = 5
+      graceful_convergence   = "disable"
+      hash_distribution      = "adaptive"
+      inherit_bandwidth      = 1000000
+      itu_channel            = 50
+      lacp_delay_mode        = "enable"
+      lacp_vpc_convergence   = "enable"
+      link_debounce_down     = 200
+      load_defer             = "enable"
+      mdix                   = "auto"
+      optics_loopback        = "internal"
+      port_type              = "leaf"
+      pxe_transition_timeout = 5
+      router_mac             = "00:00:00:11:22:33"
+      snmp_trap_state        = "disable"
+      span_mode              = "not-a-span-dest"
+      squelch                = "disable"
+      transmission_mode      = "not-a-trans-port"
+      trunk_logging          = "enable"
+      usage                  = "discovery"
+      user_configured_flags  = "admin_layer,admin_state"
+      vrf_dn                 = "sys/inst-default"
+      members = {
+        "sys/intf/phys-[eth1/11]" = {
+          force = true
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -83,7 +85,7 @@ resource "nxos_port_channel_interfaces" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `port_channel_interfaces` (Attributes List) List of port-channel interfaces. (see [below for nested schema](#nestedatt--port_channel_interfaces))
+- `port_channel_interfaces` (Attributes Map) List of port-channel interfaces. (see [below for nested schema](#nestedatt--port_channel_interfaces))
 
 ### Read-Only
 
@@ -91,10 +93,6 @@ resource "nxos_port_channel_interfaces" "example" {
 
 <a id="nestedatt--port_channel_interfaces"></a>
 ### Nested Schema for `port_channel_interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `po1`.
 
 Optional:
 
@@ -140,7 +138,7 @@ Optional:
   - Choices: `auto`, `mdi`, `mdi-x`
 - `medium` (String) The administrative port medium type.
   - Choices: `broadcast`, `p2p`
-- `members` (Attributes List) List of port-channel member interfaces. (see [below for nested schema](#nestedatt--port_channel_interfaces--members))
+- `members` (Attributes Map) List of port-channel member interfaces. (see [below for nested schema](#nestedatt--port_channel_interfaces--members))
 - `minimum_links` (Number) minimum links.
   - Range: `1`-`32`
 - `mode` (String) Administrative port mode.
@@ -180,10 +178,6 @@ Optional:
 
 <a id="nestedatt--port_channel_interfaces--members"></a>
 ### Nested Schema for `port_channel_interfaces.members`
-
-Required:
-
-- `interface_dn` (String) DN of interface. For example: `sys/intf/phys-[eth1/1]`.
 
 Optional:
 

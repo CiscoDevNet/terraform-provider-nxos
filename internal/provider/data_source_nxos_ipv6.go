@@ -96,24 +96,16 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Switch-packets.",
 				Computed:            true,
 			},
-			"vrfs": schema.ListNestedAttribute{
+			"vrfs": schema.MapNestedAttribute{
 				MarkdownDescription: "List of IPv6 VRF configurations.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "VRF name.",
-							Computed:            true,
-						},
-						"static_routes": schema.ListNestedAttribute{
+						"static_routes": schema.MapNestedAttribute{
 							MarkdownDescription: "List of IPv6 static routes.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"prefix": schema.StringAttribute{
-										MarkdownDescription: "Prefix.",
-										Computed:            true,
-									},
 									"control": schema.StringAttribute{
 										MarkdownDescription: "Controls.",
 										Computed:            true,
@@ -130,23 +122,11 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "Tag.",
 										Computed:            true,
 									},
-									"next_hops": schema.ListNestedAttribute{
+									"next_hops": schema.MapNestedAttribute{
 										MarkdownDescription: "List of next hops.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"interface_id": schema.StringAttribute{
-													MarkdownDescription: "Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.",
-													Computed:            true,
-												},
-												"address": schema.StringAttribute{
-													MarkdownDescription: "Nexthop Address.",
-													Computed:            true,
-												},
-												"vrf_name": schema.StringAttribute{
-													MarkdownDescription: "Nexthop VRF.",
-													Computed:            true,
-												},
 												"description": schema.StringAttribute{
 													MarkdownDescription: "Description of the specified attribute.",
 													Computed:            true,
@@ -177,15 +157,11 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 								},
 							},
 						},
-						"interfaces": schema.ListNestedAttribute{
+						"interfaces": schema.MapNestedAttribute{
 							MarkdownDescription: "List of IPv6 interfaces.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"interface_id": schema.StringAttribute{
-										MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-										Computed:            true,
-									},
 									"auto_configuration": schema.StringAttribute{
 										MarkdownDescription: "IPv6 Stateless address autoconfig.",
 										Computed:            true,
@@ -214,15 +190,11 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "IPv6 Link Local Address.",
 										Computed:            true,
 									},
-									"addresses": schema.ListNestedAttribute{
+									"addresses": schema.MapNestedAttribute{
 										MarkdownDescription: "List of IPv6 interface addresses.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address": schema.StringAttribute{
-													MarkdownDescription: "Address.",
-													Computed:            true,
-												},
 												"type": schema.StringAttribute{
 													MarkdownDescription: "Type.",
 													Computed:            true,

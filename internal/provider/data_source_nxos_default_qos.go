@@ -68,56 +68,39 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"class_maps": schema.ListNestedAttribute{
+			"class_maps": schema.MapNestedAttribute{
 				MarkdownDescription: "List of class maps.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Name of class-map.",
-							Computed:            true,
-						},
 						"match_type": schema.StringAttribute{
 							MarkdownDescription: "Match-any, match-all or match-first.",
 							Computed:            true,
 						},
-						"dscp_values": schema.ListNestedAttribute{
+						"dscp_values": schema.MapNestedAttribute{
 							MarkdownDescription: "List of DSCP values to match.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"value": schema.StringAttribute{
-										MarkdownDescription: "Dscp value.",
-										Computed:            true,
-									},
-								},
+								Attributes: map[string]schema.Attribute{},
 							},
 						},
 					},
 				},
 			},
-			"policy_maps": schema.ListNestedAttribute{
+			"policy_maps": schema.MapNestedAttribute{
 				MarkdownDescription: "List of policy maps.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Name of policy-map.",
-							Computed:            true,
-						},
 						"match_type": schema.StringAttribute{
 							MarkdownDescription: "Match-any, match-all or match-first.",
 							Computed:            true,
 						},
-						"match_class_maps": schema.ListNestedAttribute{
+						"match_class_maps": schema.MapNestedAttribute{
 							MarkdownDescription: "List of match class maps.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: "Match using class-map.",
-										Computed:            true,
-									},
 									"next_class_map": schema.StringAttribute{
 										MarkdownDescription: "Insert before the given class-map.",
 										Computed:            true,
@@ -228,15 +211,11 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
-			"policy_interface_in": schema.ListNestedAttribute{
+			"policy_interface_in": schema.MapNestedAttribute{
 				MarkdownDescription: "List of interfaces with ingress QoS policy assignments.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-							Computed:            true,
-						},
 						"policy_map_name": schema.StringAttribute{
 							MarkdownDescription: "Policy-map Name.",
 							Computed:            true,

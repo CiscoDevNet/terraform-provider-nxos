@@ -32,13 +32,7 @@ import (
 func TestAccDataSourceNxosKeychain(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_keychain.test", "keychains.*", map[string]string{
-		"name": "KEYCHAIN1",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_keychain.test", "keychains.*.keys.*", map[string]string{
-		"key_id":                  "1",
-		"cryptographic_algorithm": "AES",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.cryptographic_algorithm", "AES"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -61,14 +55,16 @@ func TestAccDataSourceNxosKeychain(t *testing.T) {
 func testAccDataSourceNxosKeychainConfig() string {
 	config := `resource "nxos_keychain" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	keychains = [{` + "\n"
-	config += `		name = "KEYCHAIN1"` + "\n"
-	config += `		keys = [{` + "\n"
-	config += `			key_id = 1` + "\n"
-	config += `			cryptographic_algorithm = "AES"` + "\n"
-	config += `			key_string = "secret_password"` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	keychains = {` + "\n"
+	config += `		"KEYCHAIN1" = {` + "\n"
+	config += `			keys = {` + "\n"
+	config += `				"1" = {` + "\n"
+	config += `					cryptographic_algorithm = "AES"` + "\n"
+	config += `					key_string = "secret_password"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 
 	config += `

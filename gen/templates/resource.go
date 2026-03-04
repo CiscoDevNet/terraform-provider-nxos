@@ -198,7 +198,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			{{- end}}
 			{{- template "resChildrenSchema" .TfChildClasses}}
 			{{- else if eq .Type "list"}}
-			"{{.TfName}}": schema.ListNestedAttribute{
+			"{{.TfName}}": schema.MapNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
 				{{- if .Mandatory}}
 				Required:            true,
@@ -208,7 +208,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						{{- range .Attributes}}
+						{{- if not .Id}}
 						{{template "resAttrSchema" .}}
+						{{- end}}
 						{{- end}}
 						{{- template "resChildrenSchema" .TfChildClasses}}
 					},

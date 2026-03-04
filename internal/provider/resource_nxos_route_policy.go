@@ -84,15 +84,11 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"ipv4_prefix_lists": schema.ListNestedAttribute{
+			"ipv4_prefix_lists": schema.MapNestedAttribute{
 				MarkdownDescription: "List of IPv4 Prefix Lists.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
-							Required:            true,
-						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
 							Optional:            true,
@@ -104,18 +100,11 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 								stringvalidator.OneOf("IPV4"),
 							},
 						},
-						"entries": schema.ListNestedAttribute{
+						"entries": schema.MapNestedAttribute{
 							MarkdownDescription: "IPv4 Prefix List entries.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"order": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Order.").AddIntegerRangeDescription(1, 4294967294).String,
-										Required:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(1, 4294967294),
-										},
-									},
 									"action": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Action.").AddStringEnumDescription("deny", "permit").String,
 										Optional:            true,
@@ -158,15 +147,11 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 				},
 			},
-			"route_maps": schema.ListNestedAttribute{
+			"route_maps": schema.MapNestedAttribute{
 				MarkdownDescription: "List of Route Maps.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
-							Required:            true,
-						},
 						"pbr_statistics": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Route map pbr-statistics.").AddStringEnumDescription("enabled", "disabled").String,
 							Optional:            true,
@@ -174,18 +159,11 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 								stringvalidator.OneOf("enabled", "disabled"),
 							},
 						},
-						"entries": schema.ListNestedAttribute{
+						"entries": schema.MapNestedAttribute{
 							MarkdownDescription: "List of Route Map Entries.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"order": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Order.").AddIntegerRangeDescription(0, 65535).String,
-										Required:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 65535),
-										},
-									},
 									"action": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Action.").AddStringEnumDescription("deny", "permit").String,
 										Optional:            true,
@@ -281,16 +259,11 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
-									"match_route_prefix_lists": schema.ListNestedAttribute{
+									"match_route_prefix_lists": schema.MapNestedAttribute{
 										MarkdownDescription: "List of Match Route Prefix Lists.",
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"prefix_list_dn": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]`").String,
-													Required:            true,
-												},
-											},
+											Attributes: map[string]schema.Attribute{},
 										},
 									},
 									"set_regular_community_additive": schema.StringAttribute{
@@ -314,15 +287,11 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 											stringvalidator.OneOf("none", "append", "replace", "igp", "pre-bestpath"),
 										},
 									},
-									"set_regular_community_items": schema.ListNestedAttribute{
+									"set_regular_community_items": schema.MapNestedAttribute{
 										MarkdownDescription: "List of Set Community Items.",
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"community": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Community.").String,
-													Required:            true,
-												},
 												"description": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
 													Optional:            true,
@@ -334,19 +303,11 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 											},
 										},
 									},
-									"match_tags": schema.ListNestedAttribute{
+									"match_tags": schema.MapNestedAttribute{
 										MarkdownDescription: "List of Match Tags.",
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"tag": schema.Int64Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("The color of a policy label.").AddIntegerRangeDescription(0, 4294967295).String,
-													Required:            true,
-													Validators: []validator.Int64{
-														int64validator.Between(0, 4294967295),
-													},
-												},
-											},
+											Attributes: map[string]schema.Attribute{},
 										},
 									},
 								},

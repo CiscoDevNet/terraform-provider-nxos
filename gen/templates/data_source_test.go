@@ -32,34 +32,26 @@ import (
 {{- /* ==================== dsTestChecksTemplate ====================
        Recursively emits test check calls for data source TfChildClasses.
        Context: map with "Name" (string), "Children" ([]TfChildClass), "PathPrefix" (string),
-                "InList" (bool) - true when PathPrefix already contains a ".*." segment,
-                "SetPath" (string) - the "list.*" path of the nearest enclosing list (used
-                                     when InList=true to emit single-child attrs into the
-                                     parent TestCheckTypeSetElemNestedAttrs).
-       - single (not in list): emit TestCheckResourceAttr for each attr, recurse
-       - single (in list):     emit TestCheckTypeSetElemNestedAttrs on SetPath with attrs as map
-       - list:                 emit TestCheckTypeSetElemNestedAttrs; recurse with InList=true
+                "InList" (bool) - true when inside a list parent (skips TestTags checks for single children).
+       - single (not in list): emit TestCheckResourceAttr for each attr (with TestTags), recurse
+       - single (in list):     emit TestCheckResourceAttr for each attr (without TestTags), recurse
+       - list:                 emit TestCheckResourceAttr with map key paths, recurse with InList=true
        ========================================================= */}}
 {{- define "dsTestChecksTemplate"}}
 {{- $name := .Name}}
 {{- $pathPrefix := .PathPrefix}}
 {{- $inList := .InList}}
-{{- $setPath := .SetPath}}
 {{- range .Children}}
 {{- $list := .TfName}}
 {{- if eq .Type "single"}}
 {{- if $inList}}
-{{- if hasTestAttrs .Attributes}}
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$setPath}}", map[string]string{
-		{{- range .Attributes}}
-		{{- if and (not .ExcludeTest) (not .WriteOnly)}}
-		"{{.TfName}}": "{{.Example}}",
-		{{- end}}
-		{{- end}}
-	}))
+{{- range .Attributes}}
+{{- if and (not .ExcludeTest) (not .WriteOnly)}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{.TfName}}", "{{.Example}}"))
+{{- end}}
 {{- end}}
 {{- if .TfChildClasses}}
-{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix "InList" true "SetPath" $setPath)}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix "InList" true)}}
 {{- end}}
 {{- else}}
 {{- range .Attributes}}
@@ -74,22 +66,24 @@ import (
 {{- end}}
 {{- end}}
 {{- if .TfChildClasses}}
-{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix "InList" false "SetPath" "")}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix "InList" false)}}
 {{- end}}
 {{- end}}
 {{- else if eq .Type "list"}}
-{{- $newSetPath := printf "%s%s.*" $pathPrefix $list}}
-{{- if hasTestAttrs .Attributes}}
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$newSetPath}}", map[string]string{
-		{{- range .Attributes}}
-		{{- if and (not .ExcludeTest) (not .WriteOnly)}}
-		"{{.TfName}}": "{{.Example}}",
-		{{- end}}
-		{{- end}}
-	}))
+{{- $mapKey := mapKeyExample .Attributes}}
+{{- range .Attributes}}
+{{- if and (not .ExcludeTest) (not .WriteOnly) (not .Id)}}
+{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{$list}}.{{$mapKey}}.{{.TfName}}", "{{.Example}}"))
+	}
+{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{$list}}.{{$mapKey}}.{{.TfName}}", "{{.Example}}"))
+{{- end}}
+{{- end}}
 {{- end}}
 {{- if .TfChildClasses}}
-{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" (printf "%s%s.*." $pathPrefix $list) "InList" true "SetPath" $newSetPath)}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" (printf "%s%s.%s." $pathPrefix $list $mapKey) "InList" true)}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -116,7 +110,7 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
-	{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" "" "InList" false "SetPath" "")}}
+	{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" "" "InList" false)}}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -184,22 +178,25 @@ resource "nxos_dme" "PreReq{{$index}}" {
 {{- end}}
 {{- else if eq .Type "list"}}
 {{- if hasTestAttrs .Attributes}}
-	config += `{{$indent}}{{.TfName}} = [{` + "\n"
+{{- $mapKey := mapKeyExample .Attributes}}
+	config += `{{$indent}}{{.TfName}} = {` + "\n"
+	config += `{{$indent}}	"{{$mapKey}}" = {` + "\n"
 {{- range .Attributes}}
-{{- if not .ExcludeTest}}
+{{- if and (not .ExcludeTest) (not .Id)}}
 {{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
-		config += `{{$indent}}	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	}
 {{- else}}
-	config += `{{$indent}}	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 {{- end}}
 {{- end}}
 {{- end}}
 {{- if .TfChildClasses}}
-{{- template "testConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" (printf "%s\t" $indent))}}
+{{- template "testConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" (printf "%s\t\t" $indent))}}
 {{- end}}
-	config += `{{$indent}}}]` + "\n"
+	config += `{{$indent}}	}` + "\n"
+	config += `{{$indent}}}` + "\n"
 {{- end}}
 {{- end}}
 {{- end}}

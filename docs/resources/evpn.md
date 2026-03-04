@@ -26,18 +26,21 @@ This resource can manage the global EVPN configuration on NX-OS devices, includi
 ```terraform
 resource "nxos_evpn" "example" {
   admin_state = "enabled"
-  vnis = [{
-    encap               = "vxlan-123456"
-    route_distinguisher = "rd:unknown:0:0"
-    table_map           = "ROUTE_MAP1"
-    table_map_filter    = false
-    route_target_directions = [{
-      type = "import"
-      route_targets = [{
-        route_target = "route-target:as2-nn2:2:2"
-      }]
-    }]
-  }]
+  vnis = {
+    "vxlan-123456" = {
+      route_distinguisher = "rd:unknown:0:0"
+      table_map           = "ROUTE_MAP1"
+      table_map_filter    = false
+      route_target_directions = {
+        "import" = {
+          route_targets = {
+            "route-target:as2-nn2:2:2" = {
+            }
+          }
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -49,7 +52,7 @@ resource "nxos_evpn" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
-- `vnis` (Attributes List) List of EVPN VNIs. (see [below for nested schema](#nestedatt--vnis))
+- `vnis` (Attributes Map) List of EVPN VNIs. (see [below for nested schema](#nestedatt--vnis))
 
 ### Read-Only
 
@@ -58,35 +61,22 @@ resource "nxos_evpn" "example" {
 <a id="nestedatt--vnis"></a>
 ### Nested Schema for `vnis`
 
-Required:
-
-- `encap` (String) Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-
 Optional:
 
 - `route_distinguisher` (String) Route Distinguisher. value in NX-OS DME format.
-- `route_target_directions` (Attributes List) List of EVPN VNI route target directions. (see [below for nested schema](#nestedatt--vnis--route_target_directions))
+- `route_target_directions` (Attributes Map) List of EVPN VNI route target directions. (see [below for nested schema](#nestedatt--vnis--route_target_directions))
 - `table_map` (String) Route-map name for table-map command to filter routes.
 - `table_map_filter` (Boolean) Filter option used with table-map configuration for selective route download.
 
 <a id="nestedatt--vnis--route_target_directions"></a>
 ### Nested Schema for `vnis.route_target_directions`
 
-Required:
-
-- `type` (String) Type.
-  - Choices: `import`, `export`
-
 Optional:
 
-- `route_targets` (Attributes List) List of EVPN VNI route target entries. (see [below for nested schema](#nestedatt--vnis--route_target_directions--route_targets))
+- `route_targets` (Attributes Map) List of EVPN VNI route target entries. (see [below for nested schema](#nestedatt--vnis--route_target_directions--route_targets))
 
 <a id="nestedatt--vnis--route_target_directions--route_targets"></a>
 ### Nested Schema for `vnis.route_target_directions.route_targets`
-
-Required:
-
-- `route_target` (String) Route Target. in NX-OS DME format.
 
 ## Import
 

@@ -131,15 +131,11 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Register until stops.").String,
 				Optional:            true,
 			},
-			"vrfs": schema.ListNestedAttribute{
+			"vrfs": schema.MapNestedAttribute{
 				MarkdownDescription: "List of PIM VRF configurations.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-							Required:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Admin State.").AddStringEnumDescription("enabled", "disabled").String,
 							Optional:            true,
@@ -199,15 +195,11 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							MarkdownDescription: helpers.NewAttributeDescription("Graceful switch to SPT.").String,
 							Optional:            true,
 						},
-						"interfaces": schema.ListNestedAttribute{
+						"interfaces": schema.MapNestedAttribute{
 							MarkdownDescription: "List of PIM interface configurations.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"interface_id": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-										Required:            true,
-									},
 									"admin_state": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
@@ -337,24 +329,16 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
 							Optional:            true,
 						},
-						"static_rps": schema.ListNestedAttribute{
+						"static_rps": schema.MapNestedAttribute{
 							MarkdownDescription: "List of PIM Static RP configurations.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
-										Required:            true,
-									},
-									"group_lists": schema.ListNestedAttribute{
+									"group_lists": schema.MapNestedAttribute{
 										MarkdownDescription: "List of PIM Static RP group list configurations.",
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Group List address information.").String,
-													Required:            true,
-												},
 												"bidir": schema.BoolAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Flag to treat Group Ranges as BiDir.").String,
 													Optional:            true,
@@ -385,20 +369,11 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 							Optional:            true,
 						},
-						"anycast_rp_peers": schema.ListNestedAttribute{
+						"anycast_rp_peers": schema.MapNestedAttribute{
 							MarkdownDescription: "List of PIM Anycast RP peer configurations.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
-										Required:            true,
-									},
-									"rp_set_address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IP Address of node performing the function.").String,
-										Required:            true,
-									},
-								},
+								Attributes: map[string]schema.Attribute{},
 							},
 						},
 					},

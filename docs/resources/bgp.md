@@ -54,200 +54,209 @@ resource "nxos_bgp" "example" {
   nexthop_suppress_default_resolution      = "disabled"
   rd_dual                                  = "enabled"
   rd_dual_id                               = 1
-  vrfs = [{
-    name                               = "default"
-    router_id                          = "1.1.1.1"
-    alloc_index                        = 1
-    bestpath_first_always              = "disabled"
-    bestpath_interval                  = 300
-    bandwidth_reference                = 40000
-    bandwidth_reference_unit           = "mbps"
-    cluster_id                         = "1.2.3.4"
-    hold_time                          = 180
-    keepalive_interval                 = 60
-    local_asn                          = "65010"
-    max_as_limit                       = 1
-    mode                               = "fabric"
-    prefix_peer_timeout                = 90
-    prefix_peer_wait_time              = 90
-    reconnect_interval                 = 60
-    router_id_auto                     = "disabled"
-    route_control_enforce_first_as     = "disabled"
-    route_control_fib_accelerate       = "enabled"
-    route_control_log_neighbor_changes = "enabled"
-    route_control_suppress_routes      = "disabled"
-    graceful_restart_control           = "complete"
-    graceful_restart_interval          = 240
-    graceful_restart_stale_interval    = 1800
-    address_families = [{
-      address_family                         = "ipv4-ucast"
-      critical_nexthop_timeout               = "2500"
-      non_critical_nexthop_timeout           = "8000"
-      advertise_l2vpn_evpn                   = "disabled"
-      advertise_physical_ip_for_type5_routes = "disabled"
-      max_ecmp_paths                         = 2
-      max_external_ecmp_paths                = 1
-      max_external_internal_ecmp_paths       = 1
-      max_local_ecmp_paths                   = 1
-      max_mixed_ecmp_paths                   = 1
-      default_information_originate          = "disabled"
-      next_hop_route_map_name                = "ROUTEMAP1"
-      prefix_priority                        = "none"
-      retain_rt_all                          = "disabled"
-      advertise_only_active_routes           = "disabled"
-      table_map_route_map_name               = "ROUTE_MAP1"
-      vni_ethernet_tag                       = "disabled"
-      wait_igp_converged                     = "disabled"
-      advertise_system_mac                   = "disabled"
-      allocate_label_all                     = "disabled"
-      allocate_label_option_b                = "enabled"
-      allocate_label_route_map               = "LABEL_RT_MAP"
-      bestpath_origin_as_allow_invalid       = "disabled"
-      bestpath_origin_as_use_validity        = "disabled"
-      client_to_client_reflection            = "enabled"
-      default_metric                         = "100"
-      export_gateway_ip                      = "disabled"
-      igp_metric                             = 600
-      label_allocation_mode                  = "enabled"
-      max_path_unequal_cost                  = "disabled"
-      nexthop_load_balance_egress_multisite  = "disabled"
-      originate_map                          = "ORIG_MAP"
-      origin_as_validate                     = "disabled"
-      origin_as_validate_signal_ibgp         = "disabled"
-      retain_rt_route_map                    = "RETAIN_RT_MAP"
-      table_map_filter                       = "disabled"
-      timer_bestpath_defer                   = 100
-      timer_bestpath_defer_max               = 300
-      advertised_prefixes = [{
-        prefix    = "192.168.1.0/24"
-        route_map = "rt-map"
-        evpn      = "enabled"
-      }]
-      redistributions = [{
-        protocol          = "ospf"
-        protocol_instance = "OSPF1"
-        route_map         = "route_map_ospf_1"
-        scope             = "inter"
-        srv6_prefix_type  = "unspecified"
-        asn               = "65001"
-      }]
-    }]
-    peer_templates = [{
-      name                           = "SPINE-PEERS"
-      remote_asn                     = "65002"
-      description                    = "My Description"
-      peer_type                      = "fabric-internal"
-      source_interface               = "lo0"
-      admin_state                    = "enabled"
-      affinity_group                 = 0
-      asn_type                       = "none"
-      bfd_type                       = "none"
-      bmp_server_1                   = "disabled"
-      bmp_server_2                   = "disabled"
-      capability_suppress_4_byte_asn = "disabled"
-      connection_mode                = "passive"
-      peer_control                   = "bfd"
-      hold_time                      = 180
-      keepalive_interval             = 60
-      log_neighbor_changes           = "none"
-      low_memory_exempt              = "disabled"
-      max_peer_count                 = 1
-      password_type                  = "LINE"
-      password                       = "secret_password"
-      private_as_control             = "none"
-      session_template               = "SESS_TEMPLATE"
-      ebgp_multihop_ttl              = 2
-      ttl_security_hops              = 1
-      peer_template_address_families = [{
-        address_family                = "ipv4-ucast"
-        control                       = "nh-self,rr-client"
-        send_community_extended       = "enabled"
-        send_community_standard       = "enabled"
-        advertise_gateway_ip          = "enabled"
-        advertisement_interval        = 1
-        advertise_local_labeled_route = "enabled"
-        aigp                          = "disabled"
-        allowed_self_as_count         = 0
-        as_override                   = "disabled"
-        default_originate             = "disabled"
-        default_originate_route_map   = "DEF_ORIG_MAP"
-        dmz_link_bandwidth            = "disabled"
-        encapsulation_mpls            = "disabled"
-        link_bandwidth_cumulative     = "disabled"
-        nexthop_thirdparty            = "enabled"
-        rewrite_rt_asn                = "disabled"
-        soft_reconfiguration_backup   = "none"
-        site_of_origin                = "extended:as2-nn4:65001:200"
-        unsuppress_map                = "UNSUPP_MAP"
-        weight                        = "100"
-        max_prefix_action             = "restart"
-        max_prefix_number             = 10000
-        max_prefix_restart_time       = 1
-        max_prefix_threshold          = 30
-      }]
-    }]
-    peers = [{
-      address                        = "192.168.0.1"
-      remote_asn                     = "65002"
-      description                    = "My description"
-      peer_template                  = "SPINE-PEERS"
-      peer_type                      = "fabric-internal"
-      source_interface               = "lo0"
-      hold_time                      = 45
-      keepalive_interval             = 15
-      ebgp_multihop_ttl              = 5
-      peer_control                   = "bfd,dis-conn-check"
-      password_type                  = "LINE"
-      password                       = "secret_password"
-      admin_state                    = "enabled"
-      affinity_group                 = 0
-      asn_type                       = "none"
-      bfd_type                       = "none"
-      bmp_server_1                   = "disabled"
-      bmp_server_2                   = "disabled"
-      capability_suppress_4_byte_asn = "disabled"
-      connection_mode                = "passive"
-      log_neighbor_changes           = "none"
-      low_memory_exempt              = "disabled"
-      max_peer_count                 = 1
-      private_as_control             = "none"
-      session_template               = "SESS_TEMPLATE"
-      ttl_security_hops              = 1
-      local_asn_propagation          = "no-prepend"
-      local_asn                      = "65001"
-      peer_address_families = [{
-        address_family                = "ipv4-ucast"
-        control                       = "nh-self"
-        send_community_extended       = "enabled"
-        send_community_standard       = "enabled"
-        advertise_gateway_ip          = "enabled"
-        advertisement_interval        = 1
-        advertise_local_labeled_route = "enabled"
-        aigp                          = "disabled"
-        allowed_self_as_count         = 0
-        as_override                   = "disabled"
-        default_originate             = "disabled"
-        default_originate_route_map   = "DEF_ORIG_MAP"
-        dmz_link_bandwidth            = "disabled"
-        encapsulation_mpls            = "disabled"
-        link_bandwidth_cumulative     = "disabled"
-        nexthop_thirdparty            = "enabled"
-        rewrite_rt_asn                = "disabled"
-        soft_reconfiguration_backup   = "none"
-        site_of_origin                = "extended:as2-nn4:65001:200"
-        unsuppress_map                = "UNSUPP_MAP"
-        weight                        = "100"
-        route_controls = [{
-          direction      = "in"
-          route_map_name = "ROUTE_MAP1"
-        }]
-        prefix_list_controls = [{
-          direction = "in"
-          list      = "PREFIX_LIST1"
-        }]
-      }]
-    }]
-  }]
+  vrfs = {
+    "default" = {
+      router_id                          = "1.1.1.1"
+      alloc_index                        = 1
+      bestpath_first_always              = "disabled"
+      bestpath_interval                  = 300
+      bandwidth_reference                = 40000
+      bandwidth_reference_unit           = "mbps"
+      cluster_id                         = "1.2.3.4"
+      hold_time                          = 180
+      keepalive_interval                 = 60
+      local_asn                          = "65010"
+      max_as_limit                       = 1
+      mode                               = "fabric"
+      prefix_peer_timeout                = 90
+      prefix_peer_wait_time              = 90
+      reconnect_interval                 = 60
+      router_id_auto                     = "disabled"
+      route_control_enforce_first_as     = "disabled"
+      route_control_fib_accelerate       = "enabled"
+      route_control_log_neighbor_changes = "enabled"
+      route_control_suppress_routes      = "disabled"
+      graceful_restart_control           = "complete"
+      graceful_restart_interval          = 240
+      graceful_restart_stale_interval    = 1800
+      address_families = {
+        "ipv4-ucast" = {
+          critical_nexthop_timeout               = "2500"
+          non_critical_nexthop_timeout           = "8000"
+          advertise_l2vpn_evpn                   = "disabled"
+          advertise_physical_ip_for_type5_routes = "disabled"
+          max_ecmp_paths                         = 2
+          max_external_ecmp_paths                = 1
+          max_external_internal_ecmp_paths       = 1
+          max_local_ecmp_paths                   = 1
+          max_mixed_ecmp_paths                   = 1
+          default_information_originate          = "disabled"
+          next_hop_route_map_name                = "ROUTEMAP1"
+          prefix_priority                        = "none"
+          retain_rt_all                          = "disabled"
+          advertise_only_active_routes           = "disabled"
+          table_map_route_map_name               = "ROUTE_MAP1"
+          vni_ethernet_tag                       = "disabled"
+          wait_igp_converged                     = "disabled"
+          advertise_system_mac                   = "disabled"
+          allocate_label_all                     = "disabled"
+          allocate_label_option_b                = "enabled"
+          allocate_label_route_map               = "LABEL_RT_MAP"
+          bestpath_origin_as_allow_invalid       = "disabled"
+          bestpath_origin_as_use_validity        = "disabled"
+          client_to_client_reflection            = "enabled"
+          default_metric                         = "100"
+          export_gateway_ip                      = "disabled"
+          igp_metric                             = 600
+          label_allocation_mode                  = "enabled"
+          max_path_unequal_cost                  = "disabled"
+          nexthop_load_balance_egress_multisite  = "disabled"
+          originate_map                          = "ORIG_MAP"
+          origin_as_validate                     = "disabled"
+          origin_as_validate_signal_ibgp         = "disabled"
+          retain_rt_route_map                    = "RETAIN_RT_MAP"
+          table_map_filter                       = "disabled"
+          timer_bestpath_defer                   = 100
+          timer_bestpath_defer_max               = 300
+          advertised_prefixes = {
+            "192.168.1.0/24" = {
+              route_map = "rt-map"
+              evpn      = "enabled"
+            }
+          }
+          redistributions = {
+            "ospf|OSPF1" = {
+              route_map        = "route_map_ospf_1"
+              scope            = "inter"
+              srv6_prefix_type = "unspecified"
+              asn              = "65001"
+            }
+          }
+        }
+      }
+      peer_templates = {
+        "SPINE-PEERS" = {
+          remote_asn                     = "65002"
+          description                    = "My Description"
+          peer_type                      = "fabric-internal"
+          source_interface               = "lo0"
+          admin_state                    = "enabled"
+          affinity_group                 = 0
+          asn_type                       = "none"
+          bfd_type                       = "none"
+          bmp_server_1                   = "disabled"
+          bmp_server_2                   = "disabled"
+          capability_suppress_4_byte_asn = "disabled"
+          connection_mode                = "passive"
+          peer_control                   = "bfd"
+          hold_time                      = 180
+          keepalive_interval             = 60
+          log_neighbor_changes           = "none"
+          low_memory_exempt              = "disabled"
+          max_peer_count                 = 1
+          password_type                  = "LINE"
+          password                       = "secret_password"
+          private_as_control             = "none"
+          session_template               = "SESS_TEMPLATE"
+          ebgp_multihop_ttl              = 2
+          ttl_security_hops              = 1
+          peer_template_address_families = {
+            "ipv4-ucast" = {
+              control                       = "nh-self,rr-client"
+              send_community_extended       = "enabled"
+              send_community_standard       = "enabled"
+              advertise_gateway_ip          = "enabled"
+              advertisement_interval        = 1
+              advertise_local_labeled_route = "enabled"
+              aigp                          = "disabled"
+              allowed_self_as_count         = 0
+              as_override                   = "disabled"
+              default_originate             = "disabled"
+              default_originate_route_map   = "DEF_ORIG_MAP"
+              dmz_link_bandwidth            = "disabled"
+              encapsulation_mpls            = "disabled"
+              link_bandwidth_cumulative     = "disabled"
+              nexthop_thirdparty            = "enabled"
+              rewrite_rt_asn                = "disabled"
+              soft_reconfiguration_backup   = "none"
+              site_of_origin                = "extended:as2-nn4:65001:200"
+              unsuppress_map                = "UNSUPP_MAP"
+              weight                        = "100"
+              max_prefix_action             = "restart"
+              max_prefix_number             = 10000
+              max_prefix_restart_time       = 1
+              max_prefix_threshold          = 30
+            }
+          }
+        }
+      }
+      peers = {
+        "192.168.0.1" = {
+          remote_asn                     = "65002"
+          description                    = "My description"
+          peer_template                  = "SPINE-PEERS"
+          peer_type                      = "fabric-internal"
+          source_interface               = "lo0"
+          hold_time                      = 45
+          keepalive_interval             = 15
+          ebgp_multihop_ttl              = 5
+          peer_control                   = "bfd,dis-conn-check"
+          password_type                  = "LINE"
+          password                       = "secret_password"
+          admin_state                    = "enabled"
+          affinity_group                 = 0
+          asn_type                       = "none"
+          bfd_type                       = "none"
+          bmp_server_1                   = "disabled"
+          bmp_server_2                   = "disabled"
+          capability_suppress_4_byte_asn = "disabled"
+          connection_mode                = "passive"
+          log_neighbor_changes           = "none"
+          low_memory_exempt              = "disabled"
+          max_peer_count                 = 1
+          private_as_control             = "none"
+          session_template               = "SESS_TEMPLATE"
+          ttl_security_hops              = 1
+          local_asn_propagation          = "no-prepend"
+          local_asn                      = "65001"
+          peer_address_families = {
+            "ipv4-ucast" = {
+              control                       = "nh-self"
+              send_community_extended       = "enabled"
+              send_community_standard       = "enabled"
+              advertise_gateway_ip          = "enabled"
+              advertisement_interval        = 1
+              advertise_local_labeled_route = "enabled"
+              aigp                          = "disabled"
+              allowed_self_as_count         = 0
+              as_override                   = "disabled"
+              default_originate             = "disabled"
+              default_originate_route_map   = "DEF_ORIG_MAP"
+              dmz_link_bandwidth            = "disabled"
+              encapsulation_mpls            = "disabled"
+              link_bandwidth_cumulative     = "disabled"
+              nexthop_thirdparty            = "enabled"
+              rewrite_rt_asn                = "disabled"
+              soft_reconfiguration_backup   = "none"
+              site_of_origin                = "extended:as2-nn4:65001:200"
+              unsuppress_map                = "UNSUPP_MAP"
+              weight                        = "100"
+              route_controls = {
+                "in" = {
+                  route_map_name = "ROUTE_MAP1"
+                }
+              }
+              prefix_list_controls = {
+                "in" = {
+                  list = "PREFIX_LIST1"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -285,7 +294,7 @@ resource "nxos_bgp" "example" {
   - Choices: `enabled`, `disabled`
 - `rd_dual_id` (Number) ID to generate Secondary RD with ID:VNI format.
   - Range: `1`-`65535`
-- `vrfs` (Attributes List) List of BGP VRFs. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of BGP VRFs. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -294,13 +303,9 @@ resource "nxos_bgp" "example" {
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
-Required:
-
-- `name` (String) The name of the object.
-
 Optional:
 
-- `address_families` (Attributes List) List of BGP address families. (see [below for nested schema](#nestedatt--vrfs--address_families))
+- `address_families` (Attributes Map) List of BGP address families. (see [below for nested schema](#nestedatt--vrfs--address_families))
 - `alloc_index` (Number) Allocate index for vrf (Value in the range 1-8000).
   - Range: `1`-`8000`
 - `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
@@ -327,8 +332,8 @@ Optional:
   - Range: `1`-`512`
 - `mode` (String) The BGP Domain mode.
   - Choices: `fabric`, `external`, `proxy`
-- `peer_templates` (Attributes List) List of BGP peer templates. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
-- `peers` (Attributes List) List of BGP peers. (see [below for nested schema](#nestedatt--vrfs--peers))
+- `peer_templates` (Attributes Map) List of BGP peer templates. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
+- `peers` (Attributes Map) List of BGP peers. (see [below for nested schema](#nestedatt--vrfs--peers))
 - `prefix_peer_timeout` (Number) Prefix Peer Timeout in secs.
   - Range: `0`-`1200`
 - `prefix_peer_wait_time` (Number) Prefix Peer Wait Time in secs.
@@ -350,11 +355,6 @@ Optional:
 <a id="nestedatt--vrfs--address_families"></a>
 ### Nested Schema for `vrfs.address_families`
 
-Required:
-
-- `address_family` (String) Type.
-  - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
-
 Optional:
 
 - `advertise_l2vpn_evpn` (String) Advertise L2vpn Evpn.
@@ -365,7 +365,7 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `advertise_system_mac` (String) Advertise extra EVPN RT-2 with system MAC.
   - Choices: `enabled`, `disabled`
-- `advertised_prefixes` (Attributes List) List of BGP advertised prefixes. (see [below for nested schema](#nestedatt--vrfs--address_families--advertised_prefixes))
+- `advertised_prefixes` (Attributes Map) List of BGP advertised prefixes. (see [below for nested schema](#nestedatt--vrfs--address_families--advertised_prefixes))
 - `allocate_label_all` (String) Allocate labels for all routes.
   - Choices: `enabled`, `disabled`
 - `allocate_label_option_b` (String) Allow allocation of option B labels.
@@ -410,7 +410,7 @@ Optional:
 - `originate_map` (String) originate-map route map name.
 - `prefix_priority` (String) Enable prefix priority for AF
   - Choices: `none`, `high`
-- `redistributions` (Attributes List) List of BGP route redistributions. (see [below for nested schema](#nestedatt--vrfs--address_families--redistributions))
+- `redistributions` (Attributes Map) List of BGP route redistributions. (see [below for nested schema](#nestedatt--vrfs--address_families--redistributions))
 - `retain_rt_all` (String) Retain Route Target All
   - Choices: `enabled`, `disabled`
 - `retain_rt_route_map` (String) Retain Route Target Route Map.
@@ -429,10 +429,6 @@ Optional:
 <a id="nestedatt--vrfs--address_families--advertised_prefixes"></a>
 ### Nested Schema for `vrfs.address_families.advertised_prefixes`
 
-Required:
-
-- `prefix` (String) IP address of the network or prefix to advertise.
-
 Optional:
 
 - `evpn` (String) Evpn to advertise route towards evpn side.
@@ -442,12 +438,6 @@ Optional:
 
 <a id="nestedatt--vrfs--address_families--redistributions"></a>
 ### Nested Schema for `vrfs.address_families.redistributions`
-
-Required:
-
-- `protocol` (String) The list of protocols to match.
-  - Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`
-- `protocol_instance` (String) The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).
 
 Optional:
 
@@ -462,10 +452,6 @@ Optional:
 
 <a id="nestedatt--vrfs--peer_templates"></a>
 ### Nested Schema for `vrfs.peer_templates`
-
-Required:
-
-- `name` (String) The name of the object.
 
 Optional:
 
@@ -504,7 +490,7 @@ Optional:
 - `peer_control` (String) Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
-- `peer_template_address_families` (Attributes List) List of BGP peer template address families. (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families))
+- `peer_template_address_families` (Attributes Map) List of BGP peer template address families. (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families))
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`
 - `private_as_control` (String) Private AS Control.
@@ -517,11 +503,6 @@ Optional:
 
 <a id="nestedatt--vrfs--peer_templates--peer_template_address_families"></a>
 ### Nested Schema for `vrfs.peer_templates.peer_template_address_families`
-
-Required:
-
-- `address_family` (String) Type.
-  - Choices: `ipv4-ucast`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`
 
 Optional:
 
@@ -578,7 +559,6 @@ Optional:
 
 Required:
 
-- `address` (String) Peer address.
 - `local_asn` (String) Local Autonomous System Number.
 
 Optional:
@@ -617,7 +597,7 @@ Optional:
 - `password` (String) Password.
 - `password_type` (String) Password EnCrypt Type.
   - Choices: `0`, `3`, `LINE`, `6`, `7`
-- `peer_address_families` (Attributes List) List of BGP peer address families. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families))
+- `peer_address_families` (Attributes Map) List of BGP peer address families. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families))
 - `peer_control` (String) Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
@@ -634,11 +614,6 @@ Optional:
 
 <a id="nestedatt--vrfs--peers--peer_address_families"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families`
-
-Required:
-
-- `address_family` (String) Type.
-  - Choices: `ipv4-ucast`, `ipv4-mvpn`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`
 
 Optional:
 
@@ -668,10 +643,10 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
   - Choices: `enabled`, `disabled`
-- `prefix_list_controls` (Attributes List) List of BGP peer address family prefix list controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--prefix_list_controls))
+- `prefix_list_controls` (Attributes Map) List of BGP peer address family prefix list controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--prefix_list_controls))
 - `rewrite_rt_asn` (String) Auto generate RTs for EBGP neighbor.
   - Choices: `enabled`, `disabled`
-- `route_controls` (Attributes List) List of BGP peer address family route controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--route_controls))
+- `route_controls` (Attributes Map) List of BGP peer address family route controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--route_controls))
 - `send_community_extended` (String) Send-community extended.
   - Choices: `enabled`, `disabled`
 - `send_community_standard` (String) Send-community standard.
@@ -685,11 +660,6 @@ Optional:
 <a id="nestedatt--vrfs--peers--peer_address_families--prefix_list_controls"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families.prefix_list_controls`
 
-Required:
-
-- `direction` (String) Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
-  - Choices: `in`, `out`
-
 Optional:
 
 - `list` (String) Name of list to control the route distribution.
@@ -697,11 +667,6 @@ Optional:
 
 <a id="nestedatt--vrfs--peers--peer_address_families--route_controls"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families.route_controls`
-
-Required:
-
-- `direction` (String) Direction.
-  - Choices: `in`, `out`
 
 Optional:
 

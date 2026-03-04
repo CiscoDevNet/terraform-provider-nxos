@@ -41,15 +41,14 @@ data "nxos_icmpv4" "example" {
 - `control` (String) The control state.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
-- `vrfs` (Attributes List) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
 Read-Only:
 
-- `interfaces` (Attributes List) List of ICMPv4 interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
-- `name` (String) The name of the object.
+- `interfaces` (Attributes Map) List of ICMPv4 interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
@@ -59,4 +58,3 @@ Read-Only:
 - `control` (String) The control state. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:
   - Single value. Example: `unreachable`
   - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.
-- `id` (String) Must match first field in the output of `show intf brief`. Example: `vlan100`.

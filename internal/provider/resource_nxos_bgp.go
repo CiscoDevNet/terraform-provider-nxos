@@ -178,15 +178,11 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					int64validator.Between(1, 65535),
 				},
 			},
-			"vrfs": schema.ListNestedAttribute{
+			"vrfs": schema.MapNestedAttribute{
 				MarkdownDescription: "List of BGP VRFs.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
-							Required:            true,
-						},
 						"router_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The BGP router ID.").String,
 							Optional:            true,
@@ -336,18 +332,11 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 								int64validator.Between(1, 3600),
 							},
 						},
-						"address_families": schema.ListNestedAttribute{
+						"address_families": schema.MapNestedAttribute{
 							MarkdownDescription: "List of BGP address families.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"address_family": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt").String,
-										Required:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
-										},
-									},
 									"critical_nexthop_timeout": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for critical next-hop reachability routes.").String,
 										Optional:            true,
@@ -583,15 +572,11 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 											int64validator.Between(300, 300000),
 										},
 									},
-									"advertised_prefixes": schema.ListNestedAttribute{
+									"advertised_prefixes": schema.MapNestedAttribute{
 										MarkdownDescription: "List of BGP advertised prefixes.",
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"prefix": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("IP address of the network or prefix to advertise.").String,
-													Required:            true,
-												},
 												"route_map": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Route map to modify attributes.").String,
 													Optional:            true,
@@ -606,22 +591,11 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 											},
 										},
 									},
-									"redistributions": schema.ListNestedAttribute{
+									"redistributions": schema.MapNestedAttribute{
 										MarkdownDescription: "List of BGP route redistributions.",
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"protocol": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("The list of protocols to match.").AddStringEnumDescription("unspecified", "static", "direct", "bgp", "isis", "ospf", "ospfv3", "eigrp", "host", "rip", "amt", "lisp", "hmm", "am", "srv6", "dhcpv6", "icmpv6").String,
-													Required:            true,
-													Validators: []validator.String{
-														stringvalidator.OneOf("unspecified", "static", "direct", "bgp", "isis", "ospf", "ospfv3", "eigrp", "host", "rip", "amt", "lisp", "hmm", "am", "srv6", "dhcpv6", "icmpv6"),
-													},
-												},
-												"protocol_instance": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).").String,
-													Required:            true,
-												},
 												"route_map": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("The name of the default route leak policy route map. This route map name is used to control distribution.").String,
 													Optional:            true,
@@ -650,15 +624,11 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 								},
 							},
 						},
-						"peer_templates": schema.ListNestedAttribute{
+						"peer_templates": schema.MapNestedAttribute{
 							MarkdownDescription: "List of BGP peer templates.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
-										Required:            true,
-									},
 									"remote_asn": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Autonomous System Number.").String,
 										Optional:            true,
@@ -806,18 +776,11 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 											int64validator.Between(1, 254),
 										},
 									},
-									"peer_template_address_families": schema.ListNestedAttribute{
+									"peer_template_address_families": schema.MapNestedAttribute{
 										MarkdownDescription: "List of BGP peer template address families.",
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address_family": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate").String,
-													Required:            true,
-													Validators: []validator.String{
-														stringvalidator.OneOf("ipv4-ucast", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
-													},
-												},
 												"control": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.").String,
 													Optional:            true,
@@ -977,15 +940,11 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 								},
 							},
 						},
-						"peers": schema.ListNestedAttribute{
+						"peers": schema.MapNestedAttribute{
 							MarkdownDescription: "List of BGP peers.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Peer address.").String,
-										Required:            true,
-									},
 									"remote_asn": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).").String,
 										Optional:            true,
@@ -1148,18 +1107,11 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										MarkdownDescription: helpers.NewAttributeDescription("Local Autonomous System Number.").String,
 										Required:            true,
 									},
-									"peer_address_families": schema.ListNestedAttribute{
+									"peer_address_families": schema.MapNestedAttribute{
 										MarkdownDescription: "List of BGP peer address families.",
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address_family": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "ipv4-mvpn", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate").String,
-													Required:            true,
-													Validators: []validator.String{
-														stringvalidator.OneOf("ipv4-ucast", "ipv4-mvpn", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
-													},
-												},
 												"control": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.").String,
 													Optional:            true,
@@ -1285,18 +1237,11 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 													MarkdownDescription: helpers.NewAttributeDescription("Weight for the neighbor.").String,
 													Optional:            true,
 												},
-												"route_controls": schema.ListNestedAttribute{
+												"route_controls": schema.MapNestedAttribute{
 													MarkdownDescription: "List of BGP peer address family route controls.",
 													Optional:            true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
-															"direction": schema.StringAttribute{
-																MarkdownDescription: helpers.NewAttributeDescription("Direction.").AddStringEnumDescription("in", "out").String,
-																Required:            true,
-																Validators: []validator.String{
-																	stringvalidator.OneOf("in", "out"),
-																},
-															},
 															"route_map_name": schema.StringAttribute{
 																MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
 																Optional:            true,
@@ -1304,18 +1249,11 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 														},
 													},
 												},
-												"prefix_list_controls": schema.ListNestedAttribute{
+												"prefix_list_controls": schema.MapNestedAttribute{
 													MarkdownDescription: "List of BGP peer address family prefix list controls.",
 													Optional:            true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
-															"direction": schema.StringAttribute{
-																MarkdownDescription: helpers.NewAttributeDescription("Direction: Specifies whether to apply this policy in the incoming or outgoing direction.").AddStringEnumDescription("in", "out").String,
-																Required:            true,
-																Validators: []validator.String{
-																	stringvalidator.OneOf("in", "out"),
-																},
-															},
 															"list": schema.StringAttribute{
 																MarkdownDescription: helpers.NewAttributeDescription("Name of list to control the route distribution.").String,
 																Optional:            true,

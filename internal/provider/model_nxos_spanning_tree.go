@@ -24,7 +24,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -38,23 +37,22 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type SpanningTree struct {
-	Device               types.String             `tfsdk:"device"`
-	Dn                   types.String             `tfsdk:"id"`
-	AdminState           types.String             `tfsdk:"admin_state"`
-	InstanceAdminState   types.String             `tfsdk:"instance_admin_state"`
-	BridgeAssurance      types.String             `tfsdk:"bridge_assurance"`
-	Control              types.String             `tfsdk:"control"`
-	Fcoe                 types.String             `tfsdk:"fcoe"`
-	L2GatewayStpDomainId types.Int64              `tfsdk:"l2_gateway_stp_domain_id"`
-	LinecardIssu         types.String             `tfsdk:"linecard_issu"`
-	Loopguard            types.String             `tfsdk:"loopguard"`
-	Mode                 types.String             `tfsdk:"mode"`
-	PathcostOption       types.String             `tfsdk:"pathcost_option"`
-	Interfaces           []SpanningTreeInterfaces `tfsdk:"interfaces"`
+	Device               types.String                      `tfsdk:"device"`
+	Dn                   types.String                      `tfsdk:"id"`
+	AdminState           types.String                      `tfsdk:"admin_state"`
+	InstanceAdminState   types.String                      `tfsdk:"instance_admin_state"`
+	BridgeAssurance      types.String                      `tfsdk:"bridge_assurance"`
+	Control              types.String                      `tfsdk:"control"`
+	Fcoe                 types.String                      `tfsdk:"fcoe"`
+	L2GatewayStpDomainId types.Int64                       `tfsdk:"l2_gateway_stp_domain_id"`
+	LinecardIssu         types.String                      `tfsdk:"linecard_issu"`
+	Loopguard            types.String                      `tfsdk:"loopguard"`
+	Mode                 types.String                      `tfsdk:"mode"`
+	PathcostOption       types.String                      `tfsdk:"pathcost_option"`
+	Interfaces           map[string]SpanningTreeInterfaces `tfsdk:"interfaces"`
 }
 
 type SpanningTreeInterfaces struct {
-	InterfaceId              types.String `tfsdk:"interface_id"`
 	BpduFilter               types.String `tfsdk:"bpdu_filter"`
 	BpduGuard                types.String `tfsdk:"bpdu_guard"`
 	Cost                     types.Int64  `tfsdk:"cost"`
@@ -97,8 +95,8 @@ func (data SpanningTree) getDn() string {
 	return "sys/stp"
 }
 
-func (data SpanningTreeInterfaces) getRn() string {
-	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
+func (data SpanningTreeInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
 }
 
 func (data SpanningTree) getClassName() string {
@@ -150,11 +148,9 @@ func (data SpanningTree) toBody() nxos.Body {
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
-		for _, child := range data.Interfaces {
+		for key, child := range data.Interfaces {
 			attrs = "{}"
-			if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
-				attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
-			}
+			attrs, _ = sjson.Set(attrs, "id", key)
 			if (!child.BpduFilter.IsUnknown() && !child.BpduFilter.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "bpdufilter", child.BpduFilter.ValueString())
 			}
@@ -208,8 +204,8 @@ func (data *SpanningTree) fromBody(res gjson.Result) {
 		var rstpInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("stpInst.attributes.rn").String()
-				if key == "inst" {
+				rnValue := v.Get("stpInst.attributes.rn").String()
+				if rnValue == "inst" {
 					rstpInst = v
 					return false
 				}
@@ -231,7 +227,6 @@ func (data *SpanningTree) fromBody(res gjson.Result) {
 					func(classname, value gjson.Result) bool {
 						if classname.String() == "stpIf" {
 							var child SpanningTreeInterfaces
-							child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
 							child.BpduFilter = types.StringValue(value.Get("attributes.bpdufilter").String())
 							child.BpduGuard = types.StringValue(value.Get("attributes.bpduguard").String())
 							child.Cost = types.Int64Value(value.Get("attributes.cost").Int())
@@ -244,7 +239,11 @@ func (data *SpanningTree) fromBody(res gjson.Result) {
 							child.LinecardIssu = types.StringValue(value.Get("attributes.lcIssu").String())
 							child.PrestandardConfiguration = types.StringValue(value.Get("attributes.prestdCfg").String())
 							child.SimulatePvst = types.StringValue(value.Get("attributes.simulatePvst").String())
-							data.Interfaces = append(data.Interfaces, child)
+							mapKey := value.Get("attributes.id").String()
+							if data.Interfaces == nil {
+								data.Interfaces = make(map[string]SpanningTreeInterfaces)
+							}
+							data.Interfaces[mapKey] = child
 						}
 						return true
 					},
@@ -268,8 +267,8 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 	var rstpInst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("stpInst.attributes.rn").String()
-			if key == "inst" {
+			rnValue := v.Get("stpInst.attributes.rn").String()
+			if rnValue == "inst" {
 				rstpInst = v
 				return false
 			}
@@ -321,11 +320,11 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 	} else {
 		data.PathcostOption = types.StringNull()
 	}
-	for c := len(data.Interfaces) - 1; c >= 0; c-- {
+	for key, item := range data.Interfaces {
 		var rstpIf gjson.Result
 		rstpInst.Get("stpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("stpIf.attributes.id").String() == data.Interfaces[c].InterfaceId.ValueString() {
+				if v.Get("stpIf.attributes.id").String() == key {
 					rstpIf = v
 					return false
 				}
@@ -333,74 +332,70 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !rstpIf.Exists() {
-			data.Interfaces = slices.Delete(data.Interfaces, c, c+1)
+			delete(data.Interfaces, key)
 			continue
 		}
-		if !data.Interfaces[c].InterfaceId.IsNull() {
-			data.Interfaces[c].InterfaceId = types.StringValue(rstpIf.Get("stpIf.attributes.id").String())
+		if !item.BpduFilter.IsNull() {
+			item.BpduFilter = types.StringValue(rstpIf.Get("stpIf.attributes.bpdufilter").String())
 		} else {
-			data.Interfaces[c].InterfaceId = types.StringNull()
+			item.BpduFilter = types.StringNull()
 		}
-		if !data.Interfaces[c].BpduFilter.IsNull() {
-			data.Interfaces[c].BpduFilter = types.StringValue(rstpIf.Get("stpIf.attributes.bpdufilter").String())
+		if !item.BpduGuard.IsNull() {
+			item.BpduGuard = types.StringValue(rstpIf.Get("stpIf.attributes.bpduguard").String())
 		} else {
-			data.Interfaces[c].BpduFilter = types.StringNull()
+			item.BpduGuard = types.StringNull()
 		}
-		if !data.Interfaces[c].BpduGuard.IsNull() {
-			data.Interfaces[c].BpduGuard = types.StringValue(rstpIf.Get("stpIf.attributes.bpduguard").String())
+		if !item.Cost.IsNull() {
+			item.Cost = types.Int64Value(rstpIf.Get("stpIf.attributes.cost").Int())
 		} else {
-			data.Interfaces[c].BpduGuard = types.StringNull()
+			item.Cost = types.Int64Null()
 		}
-		if !data.Interfaces[c].Cost.IsNull() {
-			data.Interfaces[c].Cost = types.Int64Value(rstpIf.Get("stpIf.attributes.cost").Int())
+		if !item.Guard.IsNull() {
+			item.Guard = types.StringValue(rstpIf.Get("stpIf.attributes.guard").String())
 		} else {
-			data.Interfaces[c].Cost = types.Int64Null()
+			item.Guard = types.StringNull()
 		}
-		if !data.Interfaces[c].Guard.IsNull() {
-			data.Interfaces[c].Guard = types.StringValue(rstpIf.Get("stpIf.attributes.guard").String())
+		if !item.LinkType.IsNull() {
+			item.LinkType = types.StringValue(rstpIf.Get("stpIf.attributes.linkType").String())
 		} else {
-			data.Interfaces[c].Guard = types.StringNull()
+			item.LinkType = types.StringNull()
 		}
-		if !data.Interfaces[c].LinkType.IsNull() {
-			data.Interfaces[c].LinkType = types.StringValue(rstpIf.Get("stpIf.attributes.linkType").String())
+		if !item.Mode.IsNull() {
+			item.Mode = types.StringValue(rstpIf.Get("stpIf.attributes.mode").String())
 		} else {
-			data.Interfaces[c].LinkType = types.StringNull()
+			item.Mode = types.StringNull()
 		}
-		if !data.Interfaces[c].Mode.IsNull() {
-			data.Interfaces[c].Mode = types.StringValue(rstpIf.Get("stpIf.attributes.mode").String())
+		if !item.Priority.IsNull() {
+			item.Priority = types.Int64Value(rstpIf.Get("stpIf.attributes.priority").Int())
 		} else {
-			data.Interfaces[c].Mode = types.StringNull()
+			item.Priority = types.Int64Null()
 		}
-		if !data.Interfaces[c].Priority.IsNull() {
-			data.Interfaces[c].Priority = types.Int64Value(rstpIf.Get("stpIf.attributes.priority").Int())
+		if !item.Control.IsNull() {
+			item.Control = types.StringValue(rstpIf.Get("stpIf.attributes.ctrl").String())
 		} else {
-			data.Interfaces[c].Priority = types.Int64Null()
+			item.Control = types.StringNull()
 		}
-		if !data.Interfaces[c].Control.IsNull() {
-			data.Interfaces[c].Control = types.StringValue(rstpIf.Get("stpIf.attributes.ctrl").String())
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rstpIf.Get("stpIf.attributes.descr").String())
 		} else {
-			data.Interfaces[c].Control = types.StringNull()
+			item.Description = types.StringNull()
 		}
-		if !data.Interfaces[c].Description.IsNull() {
-			data.Interfaces[c].Description = types.StringValue(rstpIf.Get("stpIf.attributes.descr").String())
+		if !item.LinecardIssu.IsNull() {
+			item.LinecardIssu = types.StringValue(rstpIf.Get("stpIf.attributes.lcIssu").String())
 		} else {
-			data.Interfaces[c].Description = types.StringNull()
+			item.LinecardIssu = types.StringNull()
 		}
-		if !data.Interfaces[c].LinecardIssu.IsNull() {
-			data.Interfaces[c].LinecardIssu = types.StringValue(rstpIf.Get("stpIf.attributes.lcIssu").String())
+		if !item.PrestandardConfiguration.IsNull() {
+			item.PrestandardConfiguration = types.StringValue(rstpIf.Get("stpIf.attributes.prestdCfg").String())
 		} else {
-			data.Interfaces[c].LinecardIssu = types.StringNull()
+			item.PrestandardConfiguration = types.StringNull()
 		}
-		if !data.Interfaces[c].PrestandardConfiguration.IsNull() {
-			data.Interfaces[c].PrestandardConfiguration = types.StringValue(rstpIf.Get("stpIf.attributes.prestdCfg").String())
+		if !item.SimulatePvst.IsNull() {
+			item.SimulatePvst = types.StringValue(rstpIf.Get("stpIf.attributes.simulatePvst").String())
 		} else {
-			data.Interfaces[c].PrestandardConfiguration = types.StringNull()
+			item.SimulatePvst = types.StringNull()
 		}
-		if !data.Interfaces[c].SimulatePvst.IsNull() {
-			data.Interfaces[c].SimulatePvst = types.StringValue(rstpIf.Get("stpIf.attributes.simulatePvst").String())
-		} else {
-			data.Interfaces[c].SimulatePvst = types.StringNull()
-		}
+		data.Interfaces[key] = item
 	}
 }
 
@@ -450,9 +445,9 @@ func (data SpanningTree) toDeleteBody() nxos.Body {
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
-		for _, child := range data.Interfaces {
+		for key, child := range data.Interfaces {
 			childBody := ""
-			childBody, _ = sjson.Set(childBody, "rn", child.getRn())
+			childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
 			childBody, _ = sjson.Set(childBody, "bpdufilter", "default")
 			childBody, _ = sjson.Set(childBody, "bpduguard", "default")
 			childBody, _ = sjson.Set(childBody, "cost", strconv.FormatInt(0, 10))
@@ -475,17 +470,11 @@ func (data SpanningTree) toBodyWithDeletes(ctx context.Context, state SpanningTr
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.Interfaces {
-		found := false
-		for _, planChild := range data.Interfaces {
-			if stateChild.InterfaceId == planChild.InterfaceId {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.Interfaces {
+		if _, found := data.Interfaces[stateKey]; !found {
+			stateChild := state.Interfaces[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.bpdufilter", "default")
 			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.bpduguard", "default")
 			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.cost", strconv.FormatInt(0, 10))

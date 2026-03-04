@@ -72,15 +72,11 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"ipv4_prefix_lists": schema.ListNestedAttribute{
+			"ipv4_prefix_lists": schema.MapNestedAttribute{
 				MarkdownDescription: "List of IPv4 Prefix Lists.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Object name.",
-							Computed:            true,
-						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: "Description.",
 							Computed:            true,
@@ -89,15 +85,11 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 							MarkdownDescription: "Mode of ipv4 prefix-list.",
 							Computed:            true,
 						},
-						"entries": schema.ListNestedAttribute{
+						"entries": schema.MapNestedAttribute{
 							MarkdownDescription: "IPv4 Prefix List entries.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"order": schema.Int64Attribute{
-										MarkdownDescription: "Order.",
-										Computed:            true,
-									},
 									"action": schema.StringAttribute{
 										MarkdownDescription: "Action.",
 										Computed:            true,
@@ -128,28 +120,20 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 					},
 				},
 			},
-			"route_maps": schema.ListNestedAttribute{
+			"route_maps": schema.MapNestedAttribute{
 				MarkdownDescription: "List of Route Maps.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Object name.",
-							Computed:            true,
-						},
 						"pbr_statistics": schema.StringAttribute{
 							MarkdownDescription: "Route map pbr-statistics.",
 							Computed:            true,
 						},
-						"entries": schema.ListNestedAttribute{
+						"entries": schema.MapNestedAttribute{
 							MarkdownDescription: "List of Route Map Entries.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"order": schema.Int64Attribute{
-										MarkdownDescription: "Order.",
-										Computed:            true,
-									},
 									"action": schema.StringAttribute{
 										MarkdownDescription: "Action.",
 										Computed:            true,
@@ -206,16 +190,11 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 										MarkdownDescription: "Next Hop with V6 Verify Availability.",
 										Computed:            true,
 									},
-									"match_route_prefix_lists": schema.ListNestedAttribute{
+									"match_route_prefix_lists": schema.MapNestedAttribute{
 										MarkdownDescription: "List of Match Route Prefix Lists.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"prefix_list_dn": schema.StringAttribute{
-													MarkdownDescription: "DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]`",
-													Computed:            true,
-												},
-											},
+											Attributes: map[string]schema.Attribute{},
 										},
 									},
 									"set_regular_community_additive": schema.StringAttribute{
@@ -230,15 +209,11 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 										MarkdownDescription: "Criteria.",
 										Computed:            true,
 									},
-									"set_regular_community_items": schema.ListNestedAttribute{
+									"set_regular_community_items": schema.MapNestedAttribute{
 										MarkdownDescription: "List of Set Community Items.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"community": schema.StringAttribute{
-													MarkdownDescription: "Community.",
-													Computed:            true,
-												},
 												"description": schema.StringAttribute{
 													MarkdownDescription: "Description of the specified attribute.",
 													Computed:            true,
@@ -250,16 +225,11 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 											},
 										},
 									},
-									"match_tags": schema.ListNestedAttribute{
+									"match_tags": schema.MapNestedAttribute{
 										MarkdownDescription: "List of Match Tags.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"tag": schema.Int64Attribute{
-													MarkdownDescription: "The color of a policy label.",
-													Computed:            true,
-												},
-											},
+											Attributes: map[string]schema.Attribute{},
 										},
 									},
 								},

@@ -90,18 +90,11 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringvalidator.OneOf("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging"),
 				},
 			},
-			"facilities": schema.ListNestedAttribute{
+			"facilities": schema.MapNestedAttribute{
 				MarkdownDescription: "List of logging facilities.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Facility Name of individual processes subscribed for logging level.").AddStringEnumDescription("spanning-tree", "session-mgr", "radius", "security", "plugin", "cdp", "bootvar", "aaa", "interface-vlan", "vshd", "cfs", "monitor", "ntp", "acllog", "track", "pltfm_config", "lacp").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("spanning-tree", "session-mgr", "radius", "security", "plugin", "cdp", "bootvar", "aaa", "interface-vlan", "vshd", "cfs", "monitor", "ntp", "acllog", "track", "pltfm_config", "lacp"),
-							},
-						},
 						"level": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Logging severity level for individual facility name.").AddStringEnumDescription("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging").String,
 							Optional:            true,

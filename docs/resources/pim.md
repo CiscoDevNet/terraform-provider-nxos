@@ -41,66 +41,70 @@ resource "nxos_pim" "example" {
   null_register_delay            = 1000
   null_register_number_of_routes = 500
   register_stop                  = false
-  vrfs = [{
-    name                 = "default"
-    admin_state          = "enabled"
-    bfd                  = true
-    auto_enable          = false
-    control              = "flush-on-restart"
-    flush_routes         = false
-    join_prune_delay     = 200
-    log_neighbor_changes = false
-    mtu                  = 1600
-    register_rate_limit  = 100
-    rfc_strict           = false
-    spt_switch_graceful  = false
-    interfaces = [{
-      interface_id         = "eth1/10"
+  vrfs = {
+    "default" = {
       admin_state          = "enabled"
-      bfd                  = "enabled"
-      dr_priority          = 10
-      passive              = false
-      sparse_mode          = true
-      border               = false
-      border_router        = false
-      control              = "border"
-      description          = "MyDescription"
-      dr_delay             = 5
-      join_prune_route_map = "JP_POLICY"
-      name                 = "pim-if"
-      neighbor_route_map   = "NEIGH_POLICY"
-      neighbor_prefix_list = "NEIGH_PFX"
-      pfm_sd_boundary      = 0
+      bfd                  = true
+      auto_enable          = false
+      control              = "flush-on-restart"
+      flush_routes         = false
+      join_prune_delay     = 200
+      log_neighbor_changes = false
+      mtu                  = 1600
+      register_rate_limit  = 100
       rfc_strict           = false
-    }]
-    ssm_policy_name              = "SSM"
-    ssm_policy_description       = "SSM_Policy"
-    ssm_range_group_list_1       = "232.0.0.0/8"
-    ssm_range_group_list_2       = "233.0.0.0/8"
-    ssm_range_group_list_3       = "0.0.0.0"
-    ssm_range_group_list_4       = "0.0.0.0"
-    ssm_range_prefix_list        = ""
-    ssm_range_route_map          = ""
-    ssm_range_none               = false
-    static_rp_policy_name        = "RP"
-    static_rp_policy_description = "Static_RP_Policy"
-    static_rps = [{
-      address = "1.2.3.4"
-      group_lists = [{
-        address  = "224.0.0.0/4"
-        bidir    = true
-        override = true
-      }]
-    }]
-    anycast_rp_local_interface  = "eth1/10"
-    anycast_rp_source_interface = "eth1/10"
-    anycast_rp_description      = "Anycast_RP"
-    anycast_rp_name             = "anycast-rp"
-    anycast_rp_peers = [{
-      address        = "10.1.1.1/32"
-      rp_set_address = "20.1.1.1/32"
-    }]
-  }]
+      spt_switch_graceful  = false
+      interfaces = {
+        "eth1/10" = {
+          admin_state          = "enabled"
+          bfd                  = "enabled"
+          dr_priority          = 10
+          passive              = false
+          sparse_mode          = true
+          border               = false
+          border_router        = false
+          control              = "border"
+          description          = "MyDescription"
+          dr_delay             = 5
+          join_prune_route_map = "JP_POLICY"
+          name                 = "pim-if"
+          neighbor_route_map   = "NEIGH_POLICY"
+          neighbor_prefix_list = "NEIGH_PFX"
+          pfm_sd_boundary      = 0
+          rfc_strict           = false
+        }
+      }
+      ssm_policy_name              = "SSM"
+      ssm_policy_description       = "SSM_Policy"
+      ssm_range_group_list_1       = "232.0.0.0/8"
+      ssm_range_group_list_2       = "233.0.0.0/8"
+      ssm_range_group_list_3       = "0.0.0.0"
+      ssm_range_group_list_4       = "0.0.0.0"
+      ssm_range_prefix_list        = ""
+      ssm_range_route_map          = ""
+      ssm_range_none               = false
+      static_rp_policy_name        = "RP"
+      static_rp_policy_description = "Static_RP_Policy"
+      static_rps = {
+        "1.2.3.4" = {
+          group_lists = {
+            "224.0.0.0/4" = {
+              bidir    = true
+              override = true
+            }
+          }
+        }
+      }
+      anycast_rp_local_interface  = "eth1/10"
+      anycast_rp_source_interface = "eth1/10"
+      anycast_rp_description      = "Anycast_RP"
+      anycast_rp_name             = "anycast-rp"
+      anycast_rp_peers = {
+        "10.1.1.1/32|20.1.1.1/32" = {
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -125,7 +129,7 @@ resource "nxos_pim" "example" {
 - `null_register_number_of_routes` (Number) Null Register Number of Routes.
   - Range: `1`-`32000`
 - `register_stop` (Boolean) Register until stops.
-- `vrfs` (Attributes List) List of PIM VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of PIM VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -134,10 +138,6 @@ resource "nxos_pim" "example" {
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
-Required:
-
-- `name` (String) VRF name.
-
 Optional:
 
 - `admin_state` (String) Admin State.
@@ -145,14 +145,14 @@ Optional:
 - `anycast_rp_description` (String) Description of the specified attribute.
 - `anycast_rp_local_interface` (String) Local Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `anycast_rp_name` (String) Object name.
-- `anycast_rp_peers` (Attributes List) List of PIM Anycast RP peer configurations. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
+- `anycast_rp_peers` (Attributes Map) List of PIM Anycast RP peer configurations. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
 - `anycast_rp_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `auto_enable` (Boolean) Auto Enable.
 - `bfd` (Boolean) BFD.
 - `control` (String) Domain Controls.
   - Choices: `flush-on-restart`
 - `flush_routes` (Boolean) Flush Routes.
-- `interfaces` (Attributes List) List of PIM interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `interfaces` (Attributes Map) List of PIM interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
 - `join_prune_delay` (Number) Join-Prune message inter-packet delay.
   - Range: `1`-`4294967295`
 - `log_neighbor_changes` (Boolean) Log Neighbhor changes.
@@ -173,23 +173,14 @@ Optional:
 - `ssm_range_route_map` (String) Route Map.
 - `static_rp_policy_description` (String) Description of the specified attribute.
 - `static_rp_policy_name` (String) Policy name.
-- `static_rps` (Attributes List) List of PIM Static RP configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps))
+- `static_rps` (Attributes Map) List of PIM Static RP configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps))
 
 <a id="nestedatt--vrfs--anycast_rp_peers"></a>
 ### Nested Schema for `vrfs.anycast_rp_peers`
 
-Required:
-
-- `address` (String) Address.
-- `rp_set_address` (String) IP Address of node performing the function.
-
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 Optional:
 
@@ -220,20 +211,12 @@ Optional:
 <a id="nestedatt--vrfs--static_rps"></a>
 ### Nested Schema for `vrfs.static_rps`
 
-Required:
-
-- `address` (String) Address.
-
 Optional:
 
-- `group_lists` (Attributes List) List of PIM Static RP group list configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps--group_lists))
+- `group_lists` (Attributes Map) List of PIM Static RP group list configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps--group_lists))
 
 <a id="nestedatt--vrfs--static_rps--group_lists"></a>
 ### Nested Schema for `vrfs.static_rps.group_lists`
-
-Required:
-
-- `address` (String) Group List address information.
 
 Optional:
 

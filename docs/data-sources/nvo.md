@@ -39,7 +39,7 @@ data "nxos_nvo" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `nve_interfaces` (Attributes List) NVE interface configuration. (see [below for nested schema](#nestedatt--nve_interfaces))
+- `nve_interfaces` (Attributes Map) NVE interface configuration. (see [below for nested schema](#nestedatt--nve_interfaces))
 - `vxlan_udp_port` (Number) VxLAN UDP Port. Allowed value range is 1024-65535.
 - `vxlan_udp_source_port_mode` (String) VxLAN UDP Source Port Mode.
 
@@ -58,7 +58,6 @@ Read-Only:
 - `fabric_ready_time` (Number) Time in seconds after which fabric convergence is signalled.
 - `hold_down_time` (Number) Hold Down Time.
 - `host_reachability_protocol` (String) Host Reachability Protocol.
-- `id` (Number) Network Virtualization Overlay Endpoint (NVE) ID.
 - `ingress_replication_protocol_bgp` (Boolean) VxLAN Ingress Replication Protocol BGP.
 - `multicast_group_l2` (String) Base multicast group address for L2.
 - `multicast_group_l3` (String) Base multicast group address for L3.
@@ -70,7 +69,7 @@ Read-Only:
 - `suppress_mac_route` (Boolean) Suppress MAC Route.
 - `suppress_nd` (Boolean) Suppress ND enabled for those VNIs that have suppress ARP already enabled on them.
 - `virtual_mac` (String) Custom Virtual Router MAC address configuration for VPC VxLAN.
-- `vnis` (Attributes List) List of VNIs. (see [below for nested schema](#nestedatt--nve_interfaces--vnis))
+- `vnis` (Attributes Map) List of VNIs. (see [below for nested schema](#nestedatt--nve_interfaces--vnis))
 
 <a id="nestedatt--nve_interfaces--vnis"></a>
 ### Nested Schema for `nve_interfaces.vnis`
@@ -85,4 +84,3 @@ Read-Only:
 - `multisite_multicast_group` (String) Configures multisite multicast group address for VNI(s).
 - `spine_anycast_gateway` (Boolean) Enable or disable spine anycast gateway for VNI(s).
 - `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).
-- `vni` (Number) Configure Virtual Network ID.

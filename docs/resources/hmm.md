@@ -31,12 +31,13 @@ resource "nxos_hmm" "example" {
   control                 = "stateful-ha"
   limit_vlan_mac          = 100
   selective_host_probe    = "yes"
-  interfaces = [{
-    interface_id = "vlan10"
-    admin_state  = "enabled"
-    mode         = "anycastGW"
-    description  = "My Description"
-  }]
+  interfaces = {
+    "vlan10" = {
+      admin_state = "enabled"
+      mode        = "anycastGW"
+      description = "My Description"
+    }
+  }
 }
 ```
 
@@ -55,7 +56,7 @@ resource "nxos_hmm" "example" {
 - `device` (String) A device name from the provider configuration.
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `interfaces` (Attributes List) List of HMM Fabric Forwarding interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `interfaces` (Attributes Map) List of HMM Fabric Forwarding interfaces. (see [below for nested schema](#nestedatt--interfaces))
 - `limit_vlan_mac` (Number) This is to limit the number of hosts learnt by HMM in the same subnet with same MAC information.
   - Range: `5`-`4096`
 - `selective_host_probe` (String) When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id.
@@ -67,10 +68,6 @@ resource "nxos_hmm" "example" {
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `vlan10`.
 
 Optional:
 

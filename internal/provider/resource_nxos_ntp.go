@@ -147,15 +147,11 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					int64validator.Between(1, 65535),
 				},
 			},
-			"servers": schema.ListNestedAttribute{
+			"servers": schema.MapNestedAttribute{
 				MarkdownDescription: "List of NTP servers or peers.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("NTP server or peer address.").String,
-							Required:            true,
-						},
 						"vrf": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Identifies the VRF for the NTP providers.").String,
 							Optional:            true,

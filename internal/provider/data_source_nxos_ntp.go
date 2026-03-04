@@ -108,15 +108,11 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Rate-Limit NTP Control Mode Packets.",
 				Computed:            true,
 			},
-			"servers": schema.ListNestedAttribute{
+			"servers": schema.MapNestedAttribute{
 				MarkdownDescription: "List of NTP servers or peers.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "NTP server or peer address.",
-							Computed:            true,
-						},
 						"vrf": schema.StringAttribute{
 							MarkdownDescription: "Identifies the VRF for the NTP providers.",
 							Computed:            true,

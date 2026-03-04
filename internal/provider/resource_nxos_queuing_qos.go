@@ -77,15 +77,11 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"policy_maps": schema.ListNestedAttribute{
+			"policy_maps": schema.MapNestedAttribute{
 				MarkdownDescription: "List of policy maps.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Name of policy-map.").String,
-							Required:            true,
-						},
 						"match_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match-any, match-all or match-first.").AddStringEnumDescription("match-any", "match-all", "match-first").String,
 							Optional:            true,
@@ -93,15 +89,11 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 								stringvalidator.OneOf("match-any", "match-all", "match-first"),
 							},
 						},
-						"match_class_maps": schema.ListNestedAttribute{
+						"match_class_maps": schema.MapNestedAttribute{
 							MarkdownDescription: "List of match class maps.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Match using class-map.").String,
-										Required:            true,
-									},
 									"next_class_map": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Insert before the given class-map.").String,
 										Optional:            true,

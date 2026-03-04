@@ -36,94 +36,90 @@ import (
 func TestAccNxosISIS(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.name", "ISIS1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.control", "stateful-ha"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.flush_routes", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.isolate", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.name", "default"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_check_l1", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_check_l2", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_key_l1", ""))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_key_l2", ""))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_type_l1", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_type_l2", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.bandwidth_reference", "400000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.bandwidth_reference_unit", "mbps"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.is_type", "l2"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.metric_type", "wide"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.mtu", "2000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.net", "49.0001.0000.0000.3333.00"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.passive_default", "l12"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.control", "log-adj-changes"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.lsp_lifetime", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.queue_limit", "3000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.address_family", "v4"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.segment_routing_mpls", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.enable_bfd", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.prefix_advertise_passive_l1", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.prefix_advertise_passive_l2", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.control", "adj-check"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.default_information_originate", "on"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.default_information_originate_route_map", "rm1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.distance", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.max_ecmp", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.multi_topology", "st"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.router_id_interface", "lo0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.table_map", "rm1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.table_map_filter", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_startup_time", "60"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_admin_state", "always-on"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_bgp_as_number", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_bgp_as_number_string", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_suppress", "interlevel"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.interface_id", "eth1/10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_check", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_check_l1", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_check_l2", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_key", ""))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_key_l1", ""))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_key_l2", ""))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_type", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_type_l1", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_type_l2", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.circuit_type", "l2"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.vrf", "default"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_interval", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_interval_l1", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_interval_l2", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_multiplier", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_multiplier_l1", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_multiplier_l2", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_padding", "never"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.instance_name", "ISIS1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.metric_l1", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.metric_l2", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.mtu_check", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.mtu_check_l1", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.mtu_check_l2", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.network_type_p2p", "on"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.passive", "l1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.priority_l1", "80"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.priority_l2", "80"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.enable_ipv4", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.csnp_interval_l1", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.csnp_interval_l2", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.control", "advert-tep"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.description", "ISIS interface"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.lsp_refresh_interval", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.mesh_group_id", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv6_metric_l1", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv6_metric_l2", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.n_flag_clear", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.retransmit_interval", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.retransmit_throttle_interval", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.suppressed_state", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv4_bfd", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv6_bfd", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv6", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.flush_routes", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.isolate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.authentication_check_l1", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.authentication_check_l2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.authentication_key_l1", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.authentication_key_l2", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.authentication_type_l1", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.authentication_type_l2", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.is_type", "l2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.metric_type", "wide"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.mtu", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.net", "49.0001.0000.0000.3333.00"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.passive_default", "l12"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.control", "log-adj-changes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.lsp_lifetime", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.queue_limit", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.segment_routing_mpls", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.enable_bfd", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.prefix_advertise_passive_l1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.prefix_advertise_passive_l2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.control", "adj-check"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.default_information_originate", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.default_information_originate_route_map", "rm1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.distance", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.max_ecmp", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.multi_topology", "st"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.router_id_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.table_map", "rm1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.table_map_filter", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.overload_startup_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.overload_admin_state", "always-on"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.overload_bgp_as_number", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.overload_bgp_as_number_string", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.overload_suppress", "interlevel"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.authentication_check", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.authentication_check_l1", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.authentication_check_l2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.authentication_key", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.authentication_key_l1", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.authentication_key_l2", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.authentication_type", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.authentication_type_l1", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.authentication_type_l2", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.circuit_type", "l2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.hello_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.hello_interval_l1", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.hello_interval_l2", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.hello_multiplier", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.hello_multiplier_l1", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.hello_multiplier_l2", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.hello_padding", "never"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.instance_name", "ISIS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.metric_l1", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.metric_l2", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.mtu_check", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.mtu_check_l1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.mtu_check_l2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.network_type_p2p", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.passive", "l1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.priority_l1", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.priority_l2", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.enable_ipv4", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.csnp_interval_l1", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.csnp_interval_l2", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.control", "advert-tep"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.description", "ISIS interface"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.lsp_refresh_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.mesh_group_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.ipv6_metric_l1", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.ipv6_metric_l2", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.n_flag_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.retransmit_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.retransmit_throttle_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.suppressed_state", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.ipv4_bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.ipv6_bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.ipv6", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -201,102 +197,106 @@ func testAccNxosISISConfig_minimum() string {
 func testAccNxosISISConfig_all() string {
 	config := `resource "nxos_isis" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	instances = [{` + "\n"
-	config += `		name = "ISIS1"` + "\n"
-	config += `		admin_state = "enabled"` + "\n"
-	config += `		control = "stateful-ha"` + "\n"
-	config += `		flush_routes = true` + "\n"
-	config += `		isolate = true` + "\n"
-	config += `		vrfs = [{` + "\n"
-	config += `			name = "default"` + "\n"
+	config += `	instances = {` + "\n"
+	config += `		"ISIS1" = {` + "\n"
 	config += `			admin_state = "enabled"` + "\n"
+	config += `			control = "stateful-ha"` + "\n"
+	config += `			flush_routes = true` + "\n"
+	config += `			isolate = true` + "\n"
+	config += `			vrfs = {` + "\n"
+	config += `				"default" = {` + "\n"
+	config += `					admin_state = "enabled"` + "\n"
+	config += `					authentication_check_l1 = false` + "\n"
+	config += `					authentication_check_l2 = false` + "\n"
+	config += `					authentication_key_l1 = ""` + "\n"
+	config += `					authentication_key_l2 = ""` + "\n"
+	config += `					authentication_type_l1 = "unknown"` + "\n"
+	config += `					authentication_type_l2 = "unknown"` + "\n"
+	config += `					bandwidth_reference = 400000` + "\n"
+	config += `					bandwidth_reference_unit = "mbps"` + "\n"
+	config += `					is_type = "l2"` + "\n"
+	config += `					metric_type = "wide"` + "\n"
+	config += `					mtu = 2000` + "\n"
+	config += `					net = "49.0001.0000.0000.3333.00"` + "\n"
+	config += `					passive_default = "l12"` + "\n"
+	config += `					control = "log-adj-changes"` + "\n"
+	config += `					lsp_lifetime = 1000` + "\n"
+	config += `					queue_limit = 3000` + "\n"
+	config += `					address_families = {` + "\n"
+	config += `						"v4" = {` + "\n"
+	config += `							segment_routing_mpls = true` + "\n"
+	config += `							enable_bfd = false` + "\n"
+	config += `							prefix_advertise_passive_l1 = true` + "\n"
+	config += `							prefix_advertise_passive_l2 = true` + "\n"
+	config += `							control = "adj-check"` + "\n"
+	config += `							default_information_originate = "on"` + "\n"
+	config += `							default_information_originate_route_map = "rm1"` + "\n"
+	config += `							distance = 100` + "\n"
+	config += `							max_ecmp = 4` + "\n"
+	config += `							multi_topology = "st"` + "\n"
+	config += `							router_id_interface = "lo0"` + "\n"
+	config += `							table_map = "rm1"` + "\n"
+	config += `							table_map_filter = "enabled"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					overload_startup_time = 60` + "\n"
+	config += `					overload_admin_state = "always-on"` + "\n"
+	config += `					overload_bgp_as_number = 100` + "\n"
+	config += `					overload_bgp_as_number_string = "100"` + "\n"
+	config += `					overload_suppress = "interlevel"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	interfaces = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `			authentication_check = false` + "\n"
 	config += `			authentication_check_l1 = false` + "\n"
 	config += `			authentication_check_l2 = false` + "\n"
+	config += `			authentication_key = ""` + "\n"
 	config += `			authentication_key_l1 = ""` + "\n"
 	config += `			authentication_key_l2 = ""` + "\n"
+	config += `			authentication_type = "unknown"` + "\n"
 	config += `			authentication_type_l1 = "unknown"` + "\n"
 	config += `			authentication_type_l2 = "unknown"` + "\n"
-	config += `			bandwidth_reference = 400000` + "\n"
-	config += `			bandwidth_reference_unit = "mbps"` + "\n"
-	config += `			is_type = "l2"` + "\n"
-	config += `			metric_type = "wide"` + "\n"
-	config += `			mtu = 2000` + "\n"
-	config += `			net = "49.0001.0000.0000.3333.00"` + "\n"
-	config += `			passive_default = "l12"` + "\n"
-	config += `			control = "log-adj-changes"` + "\n"
-	config += `			lsp_lifetime = 1000` + "\n"
-	config += `			queue_limit = 3000` + "\n"
-	config += `			address_families = [{` + "\n"
-	config += `				address_family = "v4"` + "\n"
-	config += `				segment_routing_mpls = true` + "\n"
-	config += `				enable_bfd = false` + "\n"
-	config += `				prefix_advertise_passive_l1 = true` + "\n"
-	config += `				prefix_advertise_passive_l2 = true` + "\n"
-	config += `				control = "adj-check"` + "\n"
-	config += `				default_information_originate = "on"` + "\n"
-	config += `				default_information_originate_route_map = "rm1"` + "\n"
-	config += `				distance = 100` + "\n"
-	config += `				max_ecmp = 4` + "\n"
-	config += `				multi_topology = "st"` + "\n"
-	config += `				router_id_interface = "lo0"` + "\n"
-	config += `				table_map = "rm1"` + "\n"
-	config += `				table_map_filter = "enabled"` + "\n"
-	config += `			}]` + "\n"
-	config += `			overload_startup_time = 60` + "\n"
-	config += `			overload_admin_state = "always-on"` + "\n"
-	config += `			overload_bgp_as_number = 100` + "\n"
-	config += `			overload_bgp_as_number_string = "100"` + "\n"
-	config += `			overload_suppress = "interlevel"` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		interface_id = "eth1/10"` + "\n"
-	config += `		authentication_check = false` + "\n"
-	config += `		authentication_check_l1 = false` + "\n"
-	config += `		authentication_check_l2 = false` + "\n"
-	config += `		authentication_key = ""` + "\n"
-	config += `		authentication_key_l1 = ""` + "\n"
-	config += `		authentication_key_l2 = ""` + "\n"
-	config += `		authentication_type = "unknown"` + "\n"
-	config += `		authentication_type_l1 = "unknown"` + "\n"
-	config += `		authentication_type_l2 = "unknown"` + "\n"
-	config += `		circuit_type = "l2"` + "\n"
-	config += `		vrf = "default"` + "\n"
-	config += `		hello_interval = 20` + "\n"
-	config += `		hello_interval_l1 = 20` + "\n"
-	config += `		hello_interval_l2 = 20` + "\n"
-	config += `		hello_multiplier = 4` + "\n"
-	config += `		hello_multiplier_l1 = 4` + "\n"
-	config += `		hello_multiplier_l2 = 4` + "\n"
-	config += `		hello_padding = "never"` + "\n"
-	config += `		instance_name = "ISIS1"` + "\n"
-	config += `		metric_l1 = 1000` + "\n"
-	config += `		metric_l2 = 1000` + "\n"
-	config += `		mtu_check = true` + "\n"
-	config += `		mtu_check_l1 = true` + "\n"
-	config += `		mtu_check_l2 = true` + "\n"
-	config += `		network_type_p2p = "on"` + "\n"
-	config += `		passive = "l1"` + "\n"
-	config += `		priority_l1 = 80` + "\n"
-	config += `		priority_l2 = 80` + "\n"
-	config += `		enable_ipv4 = true` + "\n"
-	config += `		admin_state = "enabled"` + "\n"
-	config += `		csnp_interval_l1 = 30` + "\n"
-	config += `		csnp_interval_l2 = 30` + "\n"
-	config += `		control = "advert-tep"` + "\n"
-	config += `		description = "ISIS interface"` + "\n"
-	config += `		lsp_refresh_interval = 100` + "\n"
-	config += `		mesh_group_id = 10` + "\n"
-	config += `		ipv6_metric_l1 = 1000` + "\n"
-	config += `		ipv6_metric_l2 = 1000` + "\n"
-	config += `		n_flag_clear = true` + "\n"
-	config += `		retransmit_interval = 10` + "\n"
-	config += `		retransmit_throttle_interval = 100` + "\n"
-	config += `		suppressed_state = true` + "\n"
-	config += `		ipv4_bfd = "enabled"` + "\n"
-	config += `		ipv6_bfd = "enabled"` + "\n"
-	config += `		ipv6 = true` + "\n"
-	config += `	}]` + "\n"
+	config += `			circuit_type = "l2"` + "\n"
+	config += `			vrf = "default"` + "\n"
+	config += `			hello_interval = 20` + "\n"
+	config += `			hello_interval_l1 = 20` + "\n"
+	config += `			hello_interval_l2 = 20` + "\n"
+	config += `			hello_multiplier = 4` + "\n"
+	config += `			hello_multiplier_l1 = 4` + "\n"
+	config += `			hello_multiplier_l2 = 4` + "\n"
+	config += `			hello_padding = "never"` + "\n"
+	config += `			instance_name = "ISIS1"` + "\n"
+	config += `			metric_l1 = 1000` + "\n"
+	config += `			metric_l2 = 1000` + "\n"
+	config += `			mtu_check = true` + "\n"
+	config += `			mtu_check_l1 = true` + "\n"
+	config += `			mtu_check_l2 = true` + "\n"
+	config += `			network_type_p2p = "on"` + "\n"
+	config += `			passive = "l1"` + "\n"
+	config += `			priority_l1 = 80` + "\n"
+	config += `			priority_l2 = 80` + "\n"
+	config += `			enable_ipv4 = true` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			csnp_interval_l1 = 30` + "\n"
+	config += `			csnp_interval_l2 = 30` + "\n"
+	config += `			control = "advert-tep"` + "\n"
+	config += `			description = "ISIS interface"` + "\n"
+	config += `			lsp_refresh_interval = 100` + "\n"
+	config += `			mesh_group_id = 10` + "\n"
+	config += `			ipv6_metric_l1 = 1000` + "\n"
+	config += `			ipv6_metric_l2 = 1000` + "\n"
+	config += `			n_flag_clear = true` + "\n"
+	config += `			retransmit_interval = 10` + "\n"
+	config += `			retransmit_throttle_interval = 100` + "\n"
+	config += `			suppressed_state = true` + "\n"
+	config += `			ipv4_bfd = "enabled"` + "\n"
+	config += `			ipv6_bfd = "enabled"` + "\n"
+	config += `			ipv6 = true` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -24,13 +24,14 @@ This resource can manage loopback interface configurations on NX-OS devices, inc
 
 ```terraform
 resource "nxos_loopback_interfaces" "example" {
-  loopback_interfaces = [{
-    interface_id = "lo123"
-    admin_state  = "down"
-    description  = "My Description"
-    link_logging = "enable"
-    vrf_dn       = "sys/inst-default"
-  }]
+  loopback_interfaces = {
+    "lo123" = {
+      admin_state  = "down"
+      description  = "My Description"
+      link_logging = "enable"
+      vrf_dn       = "sys/inst-default"
+    }
+  }
 }
 ```
 
@@ -40,7 +41,7 @@ resource "nxos_loopback_interfaces" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `loopback_interfaces` (Attributes List) List of loopback interfaces. (see [below for nested schema](#nestedatt--loopback_interfaces))
+- `loopback_interfaces` (Attributes Map) List of loopback interfaces. (see [below for nested schema](#nestedatt--loopback_interfaces))
 
 ### Read-Only
 
@@ -48,10 +49,6 @@ resource "nxos_loopback_interfaces" "example" {
 
 <a id="nestedatt--loopback_interfaces"></a>
 ### Nested Schema for `loopback_interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `lo123`.
 
 Optional:
 

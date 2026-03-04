@@ -41,10 +41,9 @@ func TestAccNxosHMM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "administrative_distance", "150"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "limit_vlan_mac", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.0.interface_id", "vlan10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.0.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.0.mode", "anycastGW"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.vlan10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.vlan10.mode", "anycastGW"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.vlan10.description", "My Description"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -146,12 +145,13 @@ func testAccNxosHMMConfig_all() string {
 	config += `	administrative_distance = 150` + "\n"
 	config += `	control = "stateful-ha"` + "\n"
 	config += `	limit_vlan_mac = 100` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		interface_id = "vlan10"` + "\n"
-	config += `		admin_state = "enabled"` + "\n"
-	config += `		mode = "anycastGW"` + "\n"
-	config += `		description = "My Description"` + "\n"
-	config += `	}]` + "\n"
+	config += `	interfaces = {` + "\n"
+	config += `		"vlan10" = {` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			mode = "anycastGW"` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config

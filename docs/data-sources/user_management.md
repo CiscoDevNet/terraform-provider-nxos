@@ -74,12 +74,12 @@ data "nxos_user_management" "example" {
 - `tacacs_name` (String) Object name.
 - `tacacs_owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `tacacs_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
-- `tacacs_provider_groups` (Attributes List) TACACS+ provider groups. (see [below for nested schema](#nestedatt--tacacs_provider_groups))
-- `tacacs_providers` (Attributes List) TACACS+ providers. (see [below for nested schema](#nestedatt--tacacs_providers))
+- `tacacs_provider_groups` (Attributes Map) TACACS+ provider groups. (see [below for nested schema](#nestedatt--tacacs_provider_groups))
+- `tacacs_providers` (Attributes Map) TACACS+ providers. (see [below for nested schema](#nestedatt--tacacs_providers))
 - `tacacs_retries` (Number) The number of attempts that the authentication method is tried.
 - `tacacs_source_interface` (String) Source Interface.
 - `tacacs_timeout` (Number) The amount of time between authentication attempts.
-- `users` (Attributes List) List of users. (see [below for nested schema](#nestedatt--users))
+- `users` (Attributes Map) List of users. (see [below for nested schema](#nestedatt--users))
 
 <a id="nestedatt--tacacs_provider_groups"></a>
 ### Nested Schema for `tacacs_provider_groups`
@@ -88,7 +88,6 @@ Read-Only:
 
 - `deadtime` (Number) Duration for which non-reachable server is skipped.
 - `description` (String) Description of the specified attribute.
-- `name` (String) Object name.
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `source_interface` (String) Source Interface.
@@ -108,7 +107,6 @@ Read-Only:
 - `monitoring_password` (String) Periodic Server Monitoring Password.
 - `monitoring_password_type` (String) Monitoring password type.
 - `monitoring_user` (String) Periodic Server Monitoring Username.
-- `name` (String) Object name.
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `port` (Number) The service port number for the TACACS+ service.
@@ -132,12 +130,11 @@ Read-Only:
 - `first_name` (String) The first name of the locally-authenticated user.
 - `force` (String) Delete user entry forcibly.
 - `last_name` (String) The last name of the locally-authenticated user.
-- `name` (String) Object name.
 - `password` (String) The system user password.
 - `password_encryption_type` (String) Password Encryption Type.
 - `password_hash` (String) Generate password hash for clear text password.
 - `phone` (String) The phone number of the locally-authenticated user.
-- `roles` (Attributes List) User roles. (see [below for nested schema](#nestedatt--users--roles))
+- `roles` (Attributes Map) User roles. (see [below for nested schema](#nestedatt--users--roles))
 - `shell_type` (String) User Shelltype Access.
 - `unix_user_id` (Number) The UNIX identifier of the locally-authenticated user.
 
@@ -147,5 +144,4 @@ Read-Only:
 Read-Only:
 
 - `description` (String) Description of the specified attribute.
-- `name` (String) Object name.
 - `privilege_type` (String) The privilege type for a user role.

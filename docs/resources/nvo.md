@@ -28,41 +28,43 @@ This resource can manage the NVO (Network Virtualization Overlay) configuration 
 resource "nxos_nvo" "example" {
   vxlan_udp_port             = 4789
   vxlan_udp_source_port_mode = "high"
-  nve_interfaces = [{
-    id                                 = 1
-    admin_state                        = "enabled"
-    advertise_virtual_mac              = true
-    hold_down_time                     = 60
-    host_reachability_protocol         = "bgp"
-    ingress_replication_protocol_bgp   = true
-    multicast_group_l2                 = "0.0.0.0"
-    multicast_group_l3                 = "0.0.0.0"
-    multisite_source_interface         = "unspecified"
-    source_interface                   = "lo0"
-    suppress_arp                       = true
-    suppress_mac_route                 = false
-    anycast_source_interface           = "unspecified"
-    configuration_source               = "cli"
-    controller_id                      = 0
-    description                        = "My NVE interface"
-    encapsulation_type                 = "vxlan"
-    fabric_ready_time                  = 30
-    multicast_routing_source_interface = "unspecified"
-    multisite_virtual_mac              = "00:00:00:00:00:00"
-    suppress_nd                        = false
-    virtual_mac                        = "00:00:00:00:00:00"
-    vnis = [{
-      vni                           = 103100
-      associate_vrf                 = false
-      multicast_group               = "0.0.0.0"
-      multisite_ingress_replication = "disable"
-      suppress_arp                  = "off"
-      legacy_mode                   = false
-      multisite_multicast_group     = "0.0.0.0"
-      spine_anycast_gateway         = false
-      ingress_replication_protocol  = "bgp"
-    }]
-  }]
+  nve_interfaces = {
+    "1" = {
+      admin_state                        = "enabled"
+      advertise_virtual_mac              = true
+      hold_down_time                     = 60
+      host_reachability_protocol         = "bgp"
+      ingress_replication_protocol_bgp   = true
+      multicast_group_l2                 = "0.0.0.0"
+      multicast_group_l3                 = "0.0.0.0"
+      multisite_source_interface         = "unspecified"
+      source_interface                   = "lo0"
+      suppress_arp                       = true
+      suppress_mac_route                 = false
+      anycast_source_interface           = "unspecified"
+      configuration_source               = "cli"
+      controller_id                      = 0
+      description                        = "My NVE interface"
+      encapsulation_type                 = "vxlan"
+      fabric_ready_time                  = 30
+      multicast_routing_source_interface = "unspecified"
+      multisite_virtual_mac              = "00:00:00:00:00:00"
+      suppress_nd                        = false
+      virtual_mac                        = "00:00:00:00:00:00"
+      vnis = {
+        "103100" = {
+          associate_vrf                 = false
+          multicast_group               = "0.0.0.0"
+          multisite_ingress_replication = "disable"
+          suppress_arp                  = "off"
+          legacy_mode                   = false
+          multisite_multicast_group     = "0.0.0.0"
+          spine_anycast_gateway         = false
+          ingress_replication_protocol  = "bgp"
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -72,7 +74,7 @@ resource "nxos_nvo" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `nve_interfaces` (Attributes List) NVE interface configuration. (see [below for nested schema](#nestedatt--nve_interfaces))
+- `nve_interfaces` (Attributes Map) NVE interface configuration. (see [below for nested schema](#nestedatt--nve_interfaces))
 - `vxlan_udp_port` (Number) VxLAN UDP Port. Allowed value range is 1024-65535.
   - Range: `1024`-`65535`
 - `vxlan_udp_source_port_mode` (String) VxLAN UDP Source Port Mode.
@@ -84,10 +86,6 @@ resource "nxos_nvo" "example" {
 
 <a id="nestedatt--nve_interfaces"></a>
 ### Nested Schema for `nve_interfaces`
-
-Required:
-
-- `id` (Number) Network Virtualization Overlay Endpoint (NVE) ID.
 
 Optional:
 
@@ -119,15 +117,10 @@ Optional:
 - `suppress_mac_route` (Boolean) Suppress MAC Route.
 - `suppress_nd` (Boolean) Suppress ND enabled for those VNIs that have suppress ARP already enabled on them.
 - `virtual_mac` (String) Custom Virtual Router MAC address configuration for VPC VxLAN.
-- `vnis` (Attributes List) List of VNIs. (see [below for nested schema](#nestedatt--nve_interfaces--vnis))
+- `vnis` (Attributes Map) List of VNIs. (see [below for nested schema](#nestedatt--nve_interfaces--vnis))
 
 <a id="nestedatt--nve_interfaces--vnis"></a>
 ### Nested Schema for `nve_interfaces.vnis`
-
-Required:
-
-- `vni` (Number) Configure Virtual Network ID.
-  - Range: `1`-`16777214`
 
 Optional:
 

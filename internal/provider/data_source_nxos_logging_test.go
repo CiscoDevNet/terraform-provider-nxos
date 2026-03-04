@@ -31,10 +31,7 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosLogging(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_logging.test", "facilities.*", map[string]string{
-		"name":  "spanning-tree",
-		"level": "information",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "facilities.spanning-tree.level", "information"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -58,10 +55,11 @@ func testAccDataSourceNxosLoggingConfig() string {
 	config := `resource "nxos_logging" "test" {` + "\n"
 	config += `	all = "unspecified"` + "\n"
 	config += `	level = "information"` + "\n"
-	config += `	facilities = [{` + "\n"
-	config += `		name = "spanning-tree"` + "\n"
-	config += `		level = "information"` + "\n"
-	config += `	}]` + "\n"
+	config += `	facilities = {` + "\n"
+	config += `		"spanning-tree" = {` + "\n"
+	config += `			level = "information"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -24,7 +24,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -38,76 +37,73 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type UserManagement struct {
-	Device                     types.String                         `tfsdk:"device"`
-	Dn                         types.String                         `tfsdk:"id"`
-	AlphabetSequence           types.Int64                          `tfsdk:"alphabet_sequence"`
-	Description                types.String                         `tfsdk:"description"`
-	KeyboardSequence           types.Int64                          `tfsdk:"keyboard_sequence"`
-	MaxLogins                  types.Int64                          `tfsdk:"max_logins"`
-	MinUnique                  types.Int64                          `tfsdk:"min_unique"`
-	PasswordGraceTime          types.Int64                          `tfsdk:"password_grace_time"`
-	PasswordLifeTime           types.Int64                          `tfsdk:"password_life_time"`
-	PasswordMaxLength          types.Int64                          `tfsdk:"password_max_length"`
-	PasswordMinLength          types.Int64                          `tfsdk:"password_min_length"`
-	PasswordSecureMode         types.String                         `tfsdk:"password_secure_mode"`
-	PasswordStrengthCheck      types.String                         `tfsdk:"password_strength_check"`
-	PasswordWarningTime        types.Int64                          `tfsdk:"password_warning_time"`
-	ServicePasswordRecovery    types.String                         `tfsdk:"service_password_recovery"`
-	PreLoginBannerDescription  types.String                         `tfsdk:"pre_login_banner_description"`
-	PreLoginBannerName         types.String                         `tfsdk:"pre_login_banner_name"`
-	PreLoginBannerOwnerKey     types.String                         `tfsdk:"pre_login_banner_owner_key"`
-	PreLoginBannerMessage      types.String                         `tfsdk:"pre_login_banner_message"`
-	PreLoginBannerOwnerTag     types.String                         `tfsdk:"pre_login_banner_owner_tag"`
-	PostLoginBannerDescription types.String                         `tfsdk:"post_login_banner_description"`
-	PostLoginBannerName        types.String                         `tfsdk:"post_login_banner_name"`
-	PostLoginBannerOwnerKey    types.String                         `tfsdk:"post_login_banner_owner_key"`
-	PostLoginBannerMessage     types.String                         `tfsdk:"post_login_banner_message"`
-	PostLoginBannerOwnerTag    types.String                         `tfsdk:"post_login_banner_owner_tag"`
-	Users                      []UserManagementUsers                `tfsdk:"users"`
-	TacacsDeadtime             types.Int64                          `tfsdk:"tacacs_deadtime"`
-	TacacsDescription          types.String                         `tfsdk:"tacacs_description"`
-	TacacsKey                  types.String                         `tfsdk:"tacacs_key"`
-	TacacsKeyEncryption        types.String                         `tfsdk:"tacacs_key_encryption"`
-	TacacsLoggingLevel         types.Int64                          `tfsdk:"tacacs_logging_level"`
-	TacacsName                 types.String                         `tfsdk:"tacacs_name"`
-	TacacsOwnerKey             types.String                         `tfsdk:"tacacs_owner_key"`
-	TacacsOwnerTag             types.String                         `tfsdk:"tacacs_owner_tag"`
-	TacacsRetries              types.Int64                          `tfsdk:"tacacs_retries"`
-	TacacsSourceInterface      types.String                         `tfsdk:"tacacs_source_interface"`
-	TacacsTimeout              types.Int64                          `tfsdk:"tacacs_timeout"`
-	TacacsProviders            []UserManagementTacacsProviders      `tfsdk:"tacacs_providers"`
-	TacacsProviderGroups       []UserManagementTacacsProviderGroups `tfsdk:"tacacs_provider_groups"`
+	Device                     types.String                                  `tfsdk:"device"`
+	Dn                         types.String                                  `tfsdk:"id"`
+	AlphabetSequence           types.Int64                                   `tfsdk:"alphabet_sequence"`
+	Description                types.String                                  `tfsdk:"description"`
+	KeyboardSequence           types.Int64                                   `tfsdk:"keyboard_sequence"`
+	MaxLogins                  types.Int64                                   `tfsdk:"max_logins"`
+	MinUnique                  types.Int64                                   `tfsdk:"min_unique"`
+	PasswordGraceTime          types.Int64                                   `tfsdk:"password_grace_time"`
+	PasswordLifeTime           types.Int64                                   `tfsdk:"password_life_time"`
+	PasswordMaxLength          types.Int64                                   `tfsdk:"password_max_length"`
+	PasswordMinLength          types.Int64                                   `tfsdk:"password_min_length"`
+	PasswordSecureMode         types.String                                  `tfsdk:"password_secure_mode"`
+	PasswordStrengthCheck      types.String                                  `tfsdk:"password_strength_check"`
+	PasswordWarningTime        types.Int64                                   `tfsdk:"password_warning_time"`
+	ServicePasswordRecovery    types.String                                  `tfsdk:"service_password_recovery"`
+	PreLoginBannerDescription  types.String                                  `tfsdk:"pre_login_banner_description"`
+	PreLoginBannerName         types.String                                  `tfsdk:"pre_login_banner_name"`
+	PreLoginBannerOwnerKey     types.String                                  `tfsdk:"pre_login_banner_owner_key"`
+	PreLoginBannerMessage      types.String                                  `tfsdk:"pre_login_banner_message"`
+	PreLoginBannerOwnerTag     types.String                                  `tfsdk:"pre_login_banner_owner_tag"`
+	PostLoginBannerDescription types.String                                  `tfsdk:"post_login_banner_description"`
+	PostLoginBannerName        types.String                                  `tfsdk:"post_login_banner_name"`
+	PostLoginBannerOwnerKey    types.String                                  `tfsdk:"post_login_banner_owner_key"`
+	PostLoginBannerMessage     types.String                                  `tfsdk:"post_login_banner_message"`
+	PostLoginBannerOwnerTag    types.String                                  `tfsdk:"post_login_banner_owner_tag"`
+	Users                      map[string]UserManagementUsers                `tfsdk:"users"`
+	TacacsDeadtime             types.Int64                                   `tfsdk:"tacacs_deadtime"`
+	TacacsDescription          types.String                                  `tfsdk:"tacacs_description"`
+	TacacsKey                  types.String                                  `tfsdk:"tacacs_key"`
+	TacacsKeyEncryption        types.String                                  `tfsdk:"tacacs_key_encryption"`
+	TacacsLoggingLevel         types.Int64                                   `tfsdk:"tacacs_logging_level"`
+	TacacsName                 types.String                                  `tfsdk:"tacacs_name"`
+	TacacsOwnerKey             types.String                                  `tfsdk:"tacacs_owner_key"`
+	TacacsOwnerTag             types.String                                  `tfsdk:"tacacs_owner_tag"`
+	TacacsRetries              types.Int64                                   `tfsdk:"tacacs_retries"`
+	TacacsSourceInterface      types.String                                  `tfsdk:"tacacs_source_interface"`
+	TacacsTimeout              types.Int64                                   `tfsdk:"tacacs_timeout"`
+	TacacsProviders            map[string]UserManagementTacacsProviders      `tfsdk:"tacacs_providers"`
+	TacacsProviderGroups       map[string]UserManagementTacacsProviderGroups `tfsdk:"tacacs_provider_groups"`
 }
 
 type UserManagementUsers struct {
-	Name                   types.String               `tfsdk:"name"`
-	AccountStatus          types.String               `tfsdk:"account_status"`
-	AllowExpired           types.String               `tfsdk:"allow_expired"`
-	ClearPasswordHistory   types.String               `tfsdk:"clear_password_history"`
-	Description            types.String               `tfsdk:"description"`
-	Email                  types.String               `tfsdk:"email"`
-	Expiration             types.String               `tfsdk:"expiration"`
-	Expires                types.String               `tfsdk:"expires"`
-	FirstName              types.String               `tfsdk:"first_name"`
-	Force                  types.String               `tfsdk:"force"`
-	LastName               types.String               `tfsdk:"last_name"`
-	PasswordHash           types.String               `tfsdk:"password_hash"`
-	Phone                  types.String               `tfsdk:"phone"`
-	Password               types.String               `tfsdk:"password"`
-	PasswordEncryptionType types.String               `tfsdk:"password_encryption_type"`
-	ShellType              types.String               `tfsdk:"shell_type"`
-	UnixUserId             types.Int64                `tfsdk:"unix_user_id"`
-	Roles                  []UserManagementUsersRoles `tfsdk:"roles"`
+	AccountStatus          types.String                        `tfsdk:"account_status"`
+	AllowExpired           types.String                        `tfsdk:"allow_expired"`
+	ClearPasswordHistory   types.String                        `tfsdk:"clear_password_history"`
+	Description            types.String                        `tfsdk:"description"`
+	Email                  types.String                        `tfsdk:"email"`
+	Expiration             types.String                        `tfsdk:"expiration"`
+	Expires                types.String                        `tfsdk:"expires"`
+	FirstName              types.String                        `tfsdk:"first_name"`
+	Force                  types.String                        `tfsdk:"force"`
+	LastName               types.String                        `tfsdk:"last_name"`
+	PasswordHash           types.String                        `tfsdk:"password_hash"`
+	Phone                  types.String                        `tfsdk:"phone"`
+	Password               types.String                        `tfsdk:"password"`
+	PasswordEncryptionType types.String                        `tfsdk:"password_encryption_type"`
+	ShellType              types.String                        `tfsdk:"shell_type"`
+	UnixUserId             types.Int64                         `tfsdk:"unix_user_id"`
+	Roles                  map[string]UserManagementUsersRoles `tfsdk:"roles"`
 }
 
 type UserManagementUsersRoles struct {
-	Name          types.String `tfsdk:"name"`
 	Description   types.String `tfsdk:"description"`
 	PrivilegeType types.String `tfsdk:"privilege_type"`
 }
 
 type UserManagementTacacsProviders struct {
-	Name                   types.String `tfsdk:"name"`
 	AuthenticationProtocol types.String `tfsdk:"authentication_protocol"`
 	Description            types.String `tfsdk:"description"`
 	Key                    types.String `tfsdk:"key"`
@@ -125,7 +121,6 @@ type UserManagementTacacsProviders struct {
 }
 
 type UserManagementTacacsProviderGroups struct {
-	Name            types.String `tfsdk:"name"`
 	Deadtime        types.Int64  `tfsdk:"deadtime"`
 	Description     types.String `tfsdk:"description"`
 	OwnerKey        types.String `tfsdk:"owner_key"`
@@ -162,20 +157,20 @@ func (data UserManagement) getDn() string {
 	return "sys/userext"
 }
 
-func (data UserManagementUsers) getRn() string {
-	return fmt.Sprintf("user-[%s]", data.Name.ValueString())
+func (data UserManagementUsers) getRn(key string) string {
+	return fmt.Sprintf("user-[%s]", key)
 }
 
-func (data UserManagementUsersRoles) getRn() string {
-	return fmt.Sprintf("role-[%s]", data.Name.ValueString())
+func (data UserManagementUsersRoles) getRn(key string) string {
+	return fmt.Sprintf("role-[%s]", key)
 }
 
-func (data UserManagementTacacsProviders) getRn() string {
-	return fmt.Sprintf("tacacsplusprovider-[%s]", data.Name.ValueString())
+func (data UserManagementTacacsProviders) getRn(key string) string {
+	return fmt.Sprintf("tacacsplusprovider-[%s]", key)
 }
 
-func (data UserManagementTacacsProviderGroups) getRn() string {
-	return fmt.Sprintf("tacacsplusprovidergroup-[%s]", data.Name.ValueString())
+func (data UserManagementTacacsProviderGroups) getRn(key string) string {
+	return fmt.Sprintf("tacacsplusprovidergroup-[%s]", key)
 }
 
 func (data UserManagement) getClassName() string {
@@ -268,11 +263,9 @@ func (data UserManagement) toBody() nxos.Body {
 	if attrs != "{}" || false {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaPostLoginBanner.attributes", attrs)
 	}
-	for _, child := range data.Users {
+	for key, child := range data.Users {
 		attrs = "{}"
-		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-		}
+		attrs, _ = sjson.Set(attrs, "name", key)
 		if (!child.AccountStatus.IsUnknown() && !child.AccountStatus.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "accountStatus", child.AccountStatus.ValueString())
 		}
@@ -332,11 +325,9 @@ func (data UserManagement) toBody() nxos.Body {
 				attrs, _ = sjson.Set(attrs, "name", "all")
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
-				for _, child := range child.Roles {
+				for key, child := range child.Roles {
 					attrs = "{}"
-					if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-					}
+					attrs, _ = sjson.Set(attrs, "name", key)
 					if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 					}
@@ -387,11 +378,9 @@ func (data UserManagement) toBody() nxos.Body {
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
-		for _, child := range data.TacacsProviders {
+		for key, child := range data.TacacsProviders {
 			attrs = "{}"
-			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-			}
+			attrs, _ = sjson.Set(attrs, "name", key)
 			if (!child.AuthenticationProtocol.IsUnknown() && !child.AuthenticationProtocol.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "authProtocol", child.AuthenticationProtocol.ValueString())
 			}
@@ -436,11 +425,9 @@ func (data UserManagement) toBody() nxos.Body {
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaTacacsPlusProvider.attributes", attrs)
 		}
-		for _, child := range data.TacacsProviderGroups {
+		for key, child := range data.TacacsProviderGroups {
 			attrs = "{}"
-			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-			}
+			attrs, _ = sjson.Set(attrs, "name", key)
 			if (!child.Deadtime.IsUnknown() && !child.Deadtime.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "deadtime", strconv.FormatInt(child.Deadtime.ValueInt64(), 10))
 			}
@@ -488,8 +475,8 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 		var raaaPreLoginBanner gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("aaaPreLoginBanner.attributes.rn").String()
-				if key == "preloginbanner" {
+				rnValue := v.Get("aaaPreLoginBanner.attributes.rn").String()
+				if rnValue == "preloginbanner" {
 					raaaPreLoginBanner = v
 					return false
 				}
@@ -506,8 +493,8 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 		var raaaPostLoginBanner gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("aaaPostLoginBanner.attributes.rn").String()
-				if key == "postloginbanner" {
+				rnValue := v.Get("aaaPostLoginBanner.attributes.rn").String()
+				if rnValue == "postloginbanner" {
 					raaaPostLoginBanner = v
 					return false
 				}
@@ -526,7 +513,6 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 				func(classname, value gjson.Result) bool {
 					if classname.String() == "aaaUser" {
 						var child UserManagementUsers
-						child.Name = types.StringValue(value.Get("attributes.name").String())
 						child.AccountStatus = types.StringValue(value.Get("attributes.accountStatus").String())
 						child.AllowExpired = types.StringValue(value.Get("attributes.allowExpired").String())
 						child.ClearPasswordHistory = types.StringValue(value.Get("attributes.clearPwdHistory").String())
@@ -541,12 +527,13 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 						child.Phone = types.StringValue(value.Get("attributes.phone").String())
 						child.ShellType = types.StringValue(value.Get("attributes.shelltype").String())
 						child.UnixUserId = types.Int64Value(value.Get("attributes.unixUserId").Int())
+						mapKey := value.Get("attributes.name").String()
 						{
 							var raaaUserDomain gjson.Result
 							value.Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
-									key := nestedV.Get("aaaUserDomain.attributes.rn").String()
-									if key == "userdomain-[all]" {
+									rnValue := nestedV.Get("aaaUserDomain.attributes.rn").String()
+									if rnValue == "userdomain-[all]" {
 										raaaUserDomain = nestedV
 										return false
 									}
@@ -559,10 +546,13 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "aaaUserRole" {
 												var nestedChildaaaUserRole UserManagementUsersRoles
-												nestedChildaaaUserRole.Name = types.StringValue(nestedValue.Get("attributes.name").String())
 												nestedChildaaaUserRole.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
 												nestedChildaaaUserRole.PrivilegeType = types.StringValue(nestedValue.Get("attributes.privType").String())
-												child.Roles = append(child.Roles, nestedChildaaaUserRole)
+												nestedMapKey := nestedValue.Get("attributes.name").String()
+												if child.Roles == nil {
+													child.Roles = make(map[string]UserManagementUsersRoles)
+												}
+												child.Roles[nestedMapKey] = nestedChildaaaUserRole
 											}
 											return true
 										},
@@ -571,7 +561,10 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 								},
 							)
 						}
-						data.Users = append(data.Users, child)
+						if data.Users == nil {
+							data.Users = make(map[string]UserManagementUsers)
+						}
+						data.Users[mapKey] = child
 					}
 					return true
 				},
@@ -583,8 +576,8 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 		var raaaTacacsPlusEp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("aaaTacacsPlusEp.attributes.rn").String()
-				if key == "tacacsext" {
+				rnValue := v.Get("aaaTacacsPlusEp.attributes.rn").String()
+				if rnValue == "tacacsext" {
 					raaaTacacsPlusEp = v
 					return false
 				}
@@ -607,7 +600,6 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 					func(classname, value gjson.Result) bool {
 						if classname.String() == "aaaTacacsPlusProvider" {
 							var child UserManagementTacacsProviders
-							child.Name = types.StringValue(value.Get("attributes.name").String())
 							child.AuthenticationProtocol = types.StringValue(value.Get("attributes.authProtocol").String())
 							child.Description = types.StringValue(value.Get("attributes.descr").String())
 							child.KeyEncryption = types.StringValue(value.Get("attributes.keyEnc").String())
@@ -620,7 +612,11 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 							child.Retries = types.Int64Value(value.Get("attributes.retries").Int())
 							child.SingleConnection = types.StringValue(value.Get("attributes.singleConnection").String())
 							child.Timeout = types.Int64Value(value.Get("attributes.timeout").Int())
-							data.TacacsProviders = append(data.TacacsProviders, child)
+							mapKey := value.Get("attributes.name").String()
+							if data.TacacsProviders == nil {
+								data.TacacsProviders = make(map[string]UserManagementTacacsProviders)
+							}
+							data.TacacsProviders[mapKey] = child
 						}
 						return true
 					},
@@ -634,14 +630,17 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 					func(classname, value gjson.Result) bool {
 						if classname.String() == "aaaTacacsPlusProviderGroup" {
 							var child UserManagementTacacsProviderGroups
-							child.Name = types.StringValue(value.Get("attributes.name").String())
 							child.Deadtime = types.Int64Value(value.Get("attributes.deadtime").Int())
 							child.Description = types.StringValue(value.Get("attributes.descr").String())
 							child.OwnerKey = types.StringValue(value.Get("attributes.ownerKey").String())
 							child.OwnerTag = types.StringValue(value.Get("attributes.ownerTag").String())
 							child.SourceInterface = types.StringValue(value.Get("attributes.srcIf").String())
 							child.Vrf = types.StringValue(value.Get("attributes.vrf").String())
-							data.TacacsProviderGroups = append(data.TacacsProviderGroups, child)
+							mapKey := value.Get("attributes.name").String()
+							if data.TacacsProviderGroups == nil {
+								data.TacacsProviderGroups = make(map[string]UserManagementTacacsProviderGroups)
+							}
+							data.TacacsProviderGroups[mapKey] = child
 						}
 						return true
 					},
@@ -725,8 +724,8 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 	var raaaPreLoginBanner gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("aaaPreLoginBanner.attributes.rn").String()
-			if key == "preloginbanner" {
+			rnValue := v.Get("aaaPreLoginBanner.attributes.rn").String()
+			if rnValue == "preloginbanner" {
 				raaaPreLoginBanner = v
 				return false
 			}
@@ -761,8 +760,8 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 	var raaaPostLoginBanner gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("aaaPostLoginBanner.attributes.rn").String()
-			if key == "postloginbanner" {
+			rnValue := v.Get("aaaPostLoginBanner.attributes.rn").String()
+			if rnValue == "postloginbanner" {
 				raaaPostLoginBanner = v
 				return false
 			}
@@ -794,11 +793,11 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 	} else {
 		data.PostLoginBannerOwnerTag = types.StringNull()
 	}
-	for c := len(data.Users) - 1; c >= 0; c-- {
+	for key, item := range data.Users {
 		var raaaUser gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("aaaUser.attributes.name").String() == data.Users[c].Name.ValueString() {
+				if v.Get("aaaUser.attributes.name").String() == key {
 					raaaUser = v
 					return false
 				}
@@ -806,101 +805,97 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !raaaUser.Exists() {
-			data.Users = slices.Delete(data.Users, c, c+1)
+			delete(data.Users, key)
 			continue
 		}
-		if !data.Users[c].Name.IsNull() {
-			data.Users[c].Name = types.StringValue(raaaUser.Get("aaaUser.attributes.name").String())
+		if !item.AccountStatus.IsNull() {
+			item.AccountStatus = types.StringValue(raaaUser.Get("aaaUser.attributes.accountStatus").String())
 		} else {
-			data.Users[c].Name = types.StringNull()
+			item.AccountStatus = types.StringNull()
 		}
-		if !data.Users[c].AccountStatus.IsNull() {
-			data.Users[c].AccountStatus = types.StringValue(raaaUser.Get("aaaUser.attributes.accountStatus").String())
+		if !item.AllowExpired.IsNull() {
+			item.AllowExpired = types.StringValue(raaaUser.Get("aaaUser.attributes.allowExpired").String())
 		} else {
-			data.Users[c].AccountStatus = types.StringNull()
+			item.AllowExpired = types.StringNull()
 		}
-		if !data.Users[c].AllowExpired.IsNull() {
-			data.Users[c].AllowExpired = types.StringValue(raaaUser.Get("aaaUser.attributes.allowExpired").String())
+		if !item.ClearPasswordHistory.IsNull() {
+			item.ClearPasswordHistory = types.StringValue(raaaUser.Get("aaaUser.attributes.clearPwdHistory").String())
 		} else {
-			data.Users[c].AllowExpired = types.StringNull()
+			item.ClearPasswordHistory = types.StringNull()
 		}
-		if !data.Users[c].ClearPasswordHistory.IsNull() {
-			data.Users[c].ClearPasswordHistory = types.StringValue(raaaUser.Get("aaaUser.attributes.clearPwdHistory").String())
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(raaaUser.Get("aaaUser.attributes.descr").String())
 		} else {
-			data.Users[c].ClearPasswordHistory = types.StringNull()
+			item.Description = types.StringNull()
 		}
-		if !data.Users[c].Description.IsNull() {
-			data.Users[c].Description = types.StringValue(raaaUser.Get("aaaUser.attributes.descr").String())
+		if !item.Email.IsNull() {
+			item.Email = types.StringValue(raaaUser.Get("aaaUser.attributes.email").String())
 		} else {
-			data.Users[c].Description = types.StringNull()
+			item.Email = types.StringNull()
 		}
-		if !data.Users[c].Email.IsNull() {
-			data.Users[c].Email = types.StringValue(raaaUser.Get("aaaUser.attributes.email").String())
+		if !item.Expiration.IsNull() {
+			item.Expiration = types.StringValue(raaaUser.Get("aaaUser.attributes.expiration").String())
 		} else {
-			data.Users[c].Email = types.StringNull()
+			item.Expiration = types.StringNull()
 		}
-		if !data.Users[c].Expiration.IsNull() {
-			data.Users[c].Expiration = types.StringValue(raaaUser.Get("aaaUser.attributes.expiration").String())
+		if !item.Expires.IsNull() {
+			item.Expires = types.StringValue(raaaUser.Get("aaaUser.attributes.expires").String())
 		} else {
-			data.Users[c].Expiration = types.StringNull()
+			item.Expires = types.StringNull()
 		}
-		if !data.Users[c].Expires.IsNull() {
-			data.Users[c].Expires = types.StringValue(raaaUser.Get("aaaUser.attributes.expires").String())
+		if !item.FirstName.IsNull() {
+			item.FirstName = types.StringValue(raaaUser.Get("aaaUser.attributes.firstName").String())
 		} else {
-			data.Users[c].Expires = types.StringNull()
+			item.FirstName = types.StringNull()
 		}
-		if !data.Users[c].FirstName.IsNull() {
-			data.Users[c].FirstName = types.StringValue(raaaUser.Get("aaaUser.attributes.firstName").String())
+		if !item.Force.IsNull() {
+			item.Force = types.StringValue(raaaUser.Get("aaaUser.attributes.force").String())
 		} else {
-			data.Users[c].FirstName = types.StringNull()
+			item.Force = types.StringNull()
 		}
-		if !data.Users[c].Force.IsNull() {
-			data.Users[c].Force = types.StringValue(raaaUser.Get("aaaUser.attributes.force").String())
+		if !item.LastName.IsNull() {
+			item.LastName = types.StringValue(raaaUser.Get("aaaUser.attributes.lastName").String())
 		} else {
-			data.Users[c].Force = types.StringNull()
+			item.LastName = types.StringNull()
 		}
-		if !data.Users[c].LastName.IsNull() {
-			data.Users[c].LastName = types.StringValue(raaaUser.Get("aaaUser.attributes.lastName").String())
+		if !item.PasswordHash.IsNull() {
+			item.PasswordHash = types.StringValue(raaaUser.Get("aaaUser.attributes.passwordHash").String())
 		} else {
-			data.Users[c].LastName = types.StringNull()
+			item.PasswordHash = types.StringNull()
 		}
-		if !data.Users[c].PasswordHash.IsNull() {
-			data.Users[c].PasswordHash = types.StringValue(raaaUser.Get("aaaUser.attributes.passwordHash").String())
+		if !item.Phone.IsNull() {
+			item.Phone = types.StringValue(raaaUser.Get("aaaUser.attributes.phone").String())
 		} else {
-			data.Users[c].PasswordHash = types.StringNull()
+			item.Phone = types.StringNull()
 		}
-		if !data.Users[c].Phone.IsNull() {
-			data.Users[c].Phone = types.StringValue(raaaUser.Get("aaaUser.attributes.phone").String())
+		if !item.ShellType.IsNull() {
+			item.ShellType = types.StringValue(raaaUser.Get("aaaUser.attributes.shelltype").String())
 		} else {
-			data.Users[c].Phone = types.StringNull()
+			item.ShellType = types.StringNull()
 		}
-		if !data.Users[c].ShellType.IsNull() {
-			data.Users[c].ShellType = types.StringValue(raaaUser.Get("aaaUser.attributes.shelltype").String())
+		if !item.UnixUserId.IsNull() {
+			item.UnixUserId = types.Int64Value(raaaUser.Get("aaaUser.attributes.unixUserId").Int())
 		} else {
-			data.Users[c].ShellType = types.StringNull()
-		}
-		if !data.Users[c].UnixUserId.IsNull() {
-			data.Users[c].UnixUserId = types.Int64Value(raaaUser.Get("aaaUser.attributes.unixUserId").Int())
-		} else {
-			data.Users[c].UnixUserId = types.Int64Null()
+			item.UnixUserId = types.Int64Null()
 		}
 		{
 			var raaaUserDomain gjson.Result
 			raaaUser.Get("aaaUser.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("aaaUserDomain.attributes.rn").String()
-					if key == "userdomain-[all]" {
+					rnValue := v.Get("aaaUserDomain.attributes.rn").String()
+					if rnValue == "userdomain-[all]" {
 						raaaUserDomain = v
 						return false
 					}
 					return true
 				},
 			)
-			for nc := len(data.Users[c].Roles) - 1; nc >= 0; nc-- {
+			for nc := range item.Roles {
+				ncItem := item.Roles[nc]
 				var raaaUserRole gjson.Result
 				raaaUserDomain.Get("aaaUserDomain.children").ForEach(
 					func(_, v gjson.Result) bool {
-						if v.Get("aaaUserRole.attributes.name").String() == data.Users[c].Roles[nc].Name.ValueString() {
+						if v.Get("aaaUserRole.attributes.name").String() == nc {
 							raaaUserRole = v
 							return false
 						}
@@ -908,32 +903,29 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !raaaUserRole.Exists() {
-					data.Users[c].Roles = slices.Delete(data.Users[c].Roles, nc, nc+1)
+					delete(item.Roles, nc)
 					continue
 				}
-				if !data.Users[c].Roles[nc].Name.IsNull() {
-					data.Users[c].Roles[nc].Name = types.StringValue(raaaUserRole.Get("aaaUserRole.attributes.name").String())
+				if !ncItem.Description.IsNull() {
+					ncItem.Description = types.StringValue(raaaUserRole.Get("aaaUserRole.attributes.descr").String())
 				} else {
-					data.Users[c].Roles[nc].Name = types.StringNull()
+					ncItem.Description = types.StringNull()
 				}
-				if !data.Users[c].Roles[nc].Description.IsNull() {
-					data.Users[c].Roles[nc].Description = types.StringValue(raaaUserRole.Get("aaaUserRole.attributes.descr").String())
+				if !ncItem.PrivilegeType.IsNull() {
+					ncItem.PrivilegeType = types.StringValue(raaaUserRole.Get("aaaUserRole.attributes.privType").String())
 				} else {
-					data.Users[c].Roles[nc].Description = types.StringNull()
+					ncItem.PrivilegeType = types.StringNull()
 				}
-				if !data.Users[c].Roles[nc].PrivilegeType.IsNull() {
-					data.Users[c].Roles[nc].PrivilegeType = types.StringValue(raaaUserRole.Get("aaaUserRole.attributes.privType").String())
-				} else {
-					data.Users[c].Roles[nc].PrivilegeType = types.StringNull()
-				}
+				item.Roles[nc] = ncItem
 			}
 		}
+		data.Users[key] = item
 	}
 	var raaaTacacsPlusEp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("aaaTacacsPlusEp.attributes.rn").String()
-			if key == "tacacsext" {
+			rnValue := v.Get("aaaTacacsPlusEp.attributes.rn").String()
+			if rnValue == "tacacsext" {
 				raaaTacacsPlusEp = v
 				return false
 			}
@@ -990,11 +982,11 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 	} else {
 		data.TacacsTimeout = types.Int64Null()
 	}
-	for c := len(data.TacacsProviders) - 1; c >= 0; c-- {
+	for key, item := range data.TacacsProviders {
 		var raaaTacacsPlusProvider gjson.Result
 		raaaTacacsPlusEp.Get("aaaTacacsPlusEp.children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("aaaTacacsPlusProvider.attributes.name").String() == data.TacacsProviders[c].Name.ValueString() {
+				if v.Get("aaaTacacsPlusProvider.attributes.name").String() == key {
 					raaaTacacsPlusProvider = v
 					return false
 				}
@@ -1002,80 +994,76 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !raaaTacacsPlusProvider.Exists() {
-			data.TacacsProviders = slices.Delete(data.TacacsProviders, c, c+1)
+			delete(data.TacacsProviders, key)
 			continue
 		}
-		if !data.TacacsProviders[c].Name.IsNull() {
-			data.TacacsProviders[c].Name = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.name").String())
+		if !item.AuthenticationProtocol.IsNull() {
+			item.AuthenticationProtocol = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.authProtocol").String())
 		} else {
-			data.TacacsProviders[c].Name = types.StringNull()
+			item.AuthenticationProtocol = types.StringNull()
 		}
-		if !data.TacacsProviders[c].AuthenticationProtocol.IsNull() {
-			data.TacacsProviders[c].AuthenticationProtocol = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.authProtocol").String())
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.descr").String())
 		} else {
-			data.TacacsProviders[c].AuthenticationProtocol = types.StringNull()
+			item.Description = types.StringNull()
 		}
-		if !data.TacacsProviders[c].Description.IsNull() {
-			data.TacacsProviders[c].Description = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.descr").String())
+		if !item.KeyEncryption.IsNull() {
+			item.KeyEncryption = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.keyEnc").String())
 		} else {
-			data.TacacsProviders[c].Description = types.StringNull()
+			item.KeyEncryption = types.StringNull()
 		}
-		if !data.TacacsProviders[c].KeyEncryption.IsNull() {
-			data.TacacsProviders[c].KeyEncryption = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.keyEnc").String())
+		if !item.MonitoringIdleTime.IsNull() {
+			item.MonitoringIdleTime = types.Int64Value(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.monitoringIdleTime").Int())
 		} else {
-			data.TacacsProviders[c].KeyEncryption = types.StringNull()
+			item.MonitoringIdleTime = types.Int64Null()
 		}
-		if !data.TacacsProviders[c].MonitoringIdleTime.IsNull() {
-			data.TacacsProviders[c].MonitoringIdleTime = types.Int64Value(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.monitoringIdleTime").Int())
+		if !item.MonitoringPasswordType.IsNull() {
+			item.MonitoringPasswordType = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.monitoringPasswordType").String())
 		} else {
-			data.TacacsProviders[c].MonitoringIdleTime = types.Int64Null()
+			item.MonitoringPasswordType = types.StringNull()
 		}
-		if !data.TacacsProviders[c].MonitoringPasswordType.IsNull() {
-			data.TacacsProviders[c].MonitoringPasswordType = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.monitoringPasswordType").String())
+		if !item.MonitoringUser.IsNull() {
+			item.MonitoringUser = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.monitoringUser").String())
 		} else {
-			data.TacacsProviders[c].MonitoringPasswordType = types.StringNull()
+			item.MonitoringUser = types.StringNull()
 		}
-		if !data.TacacsProviders[c].MonitoringUser.IsNull() {
-			data.TacacsProviders[c].MonitoringUser = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.monitoringUser").String())
+		if !item.OwnerKey.IsNull() {
+			item.OwnerKey = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.ownerKey").String())
 		} else {
-			data.TacacsProviders[c].MonitoringUser = types.StringNull()
+			item.OwnerKey = types.StringNull()
 		}
-		if !data.TacacsProviders[c].OwnerKey.IsNull() {
-			data.TacacsProviders[c].OwnerKey = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.ownerKey").String())
+		if !item.OwnerTag.IsNull() {
+			item.OwnerTag = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.ownerTag").String())
 		} else {
-			data.TacacsProviders[c].OwnerKey = types.StringNull()
+			item.OwnerTag = types.StringNull()
 		}
-		if !data.TacacsProviders[c].OwnerTag.IsNull() {
-			data.TacacsProviders[c].OwnerTag = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.ownerTag").String())
+		if !item.Port.IsNull() {
+			item.Port = types.Int64Value(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.port").Int())
 		} else {
-			data.TacacsProviders[c].OwnerTag = types.StringNull()
+			item.Port = types.Int64Null()
 		}
-		if !data.TacacsProviders[c].Port.IsNull() {
-			data.TacacsProviders[c].Port = types.Int64Value(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.port").Int())
+		if !item.Retries.IsNull() {
+			item.Retries = types.Int64Value(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.retries").Int())
 		} else {
-			data.TacacsProviders[c].Port = types.Int64Null()
+			item.Retries = types.Int64Null()
 		}
-		if !data.TacacsProviders[c].Retries.IsNull() {
-			data.TacacsProviders[c].Retries = types.Int64Value(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.retries").Int())
+		if !item.SingleConnection.IsNull() {
+			item.SingleConnection = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.singleConnection").String())
 		} else {
-			data.TacacsProviders[c].Retries = types.Int64Null()
+			item.SingleConnection = types.StringNull()
 		}
-		if !data.TacacsProviders[c].SingleConnection.IsNull() {
-			data.TacacsProviders[c].SingleConnection = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.singleConnection").String())
+		if !item.Timeout.IsNull() {
+			item.Timeout = types.Int64Value(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.timeout").Int())
 		} else {
-			data.TacacsProviders[c].SingleConnection = types.StringNull()
+			item.Timeout = types.Int64Null()
 		}
-		if !data.TacacsProviders[c].Timeout.IsNull() {
-			data.TacacsProviders[c].Timeout = types.Int64Value(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.timeout").Int())
-		} else {
-			data.TacacsProviders[c].Timeout = types.Int64Null()
-		}
+		data.TacacsProviders[key] = item
 	}
-	for c := len(data.TacacsProviderGroups) - 1; c >= 0; c-- {
+	for key, item := range data.TacacsProviderGroups {
 		var raaaTacacsPlusProviderGroup gjson.Result
 		raaaTacacsPlusEp.Get("aaaTacacsPlusEp.children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("aaaTacacsPlusProviderGroup.attributes.name").String() == data.TacacsProviderGroups[c].Name.ValueString() {
+				if v.Get("aaaTacacsPlusProviderGroup.attributes.name").String() == key {
 					raaaTacacsPlusProviderGroup = v
 					return false
 				}
@@ -1083,44 +1071,40 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !raaaTacacsPlusProviderGroup.Exists() {
-			data.TacacsProviderGroups = slices.Delete(data.TacacsProviderGroups, c, c+1)
+			delete(data.TacacsProviderGroups, key)
 			continue
 		}
-		if !data.TacacsProviderGroups[c].Name.IsNull() {
-			data.TacacsProviderGroups[c].Name = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.name").String())
+		if !item.Deadtime.IsNull() {
+			item.Deadtime = types.Int64Value(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.deadtime").Int())
 		} else {
-			data.TacacsProviderGroups[c].Name = types.StringNull()
+			item.Deadtime = types.Int64Null()
 		}
-		if !data.TacacsProviderGroups[c].Deadtime.IsNull() {
-			data.TacacsProviderGroups[c].Deadtime = types.Int64Value(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.deadtime").Int())
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.descr").String())
 		} else {
-			data.TacacsProviderGroups[c].Deadtime = types.Int64Null()
+			item.Description = types.StringNull()
 		}
-		if !data.TacacsProviderGroups[c].Description.IsNull() {
-			data.TacacsProviderGroups[c].Description = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.descr").String())
+		if !item.OwnerKey.IsNull() {
+			item.OwnerKey = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.ownerKey").String())
 		} else {
-			data.TacacsProviderGroups[c].Description = types.StringNull()
+			item.OwnerKey = types.StringNull()
 		}
-		if !data.TacacsProviderGroups[c].OwnerKey.IsNull() {
-			data.TacacsProviderGroups[c].OwnerKey = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.ownerKey").String())
+		if !item.OwnerTag.IsNull() {
+			item.OwnerTag = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.ownerTag").String())
 		} else {
-			data.TacacsProviderGroups[c].OwnerKey = types.StringNull()
+			item.OwnerTag = types.StringNull()
 		}
-		if !data.TacacsProviderGroups[c].OwnerTag.IsNull() {
-			data.TacacsProviderGroups[c].OwnerTag = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.ownerTag").String())
+		if !item.SourceInterface.IsNull() {
+			item.SourceInterface = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.srcIf").String())
 		} else {
-			data.TacacsProviderGroups[c].OwnerTag = types.StringNull()
+			item.SourceInterface = types.StringNull()
 		}
-		if !data.TacacsProviderGroups[c].SourceInterface.IsNull() {
-			data.TacacsProviderGroups[c].SourceInterface = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.srcIf").String())
+		if !item.Vrf.IsNull() {
+			item.Vrf = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.vrf").String())
 		} else {
-			data.TacacsProviderGroups[c].SourceInterface = types.StringNull()
+			item.Vrf = types.StringNull()
 		}
-		if !data.TacacsProviderGroups[c].Vrf.IsNull() {
-			data.TacacsProviderGroups[c].Vrf = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.vrf").String())
-		} else {
-			data.TacacsProviderGroups[c].Vrf = types.StringNull()
-		}
+		data.TacacsProviderGroups[key] = item
 	}
 }
 
@@ -1186,9 +1170,9 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
-	for _, child := range data.Users {
+	for key, child := range data.Users {
 		deleteBody := ""
-		deleteBody, _ = sjson.Set(deleteBody, "aaaUser.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "aaaUser.attributes.rn", child.getRn(key))
 		deleteBody, _ = sjson.Set(deleteBody, "aaaUser.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
@@ -1213,15 +1197,15 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
-		for _, child := range data.TacacsProviders {
+		for key, child := range data.TacacsProviders {
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProvider.attributes.rn", child.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProvider.attributes.rn", child.getRn(key))
 			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProvider.attributes.status", "deleted")
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
-		for _, child := range data.TacacsProviderGroups {
+		for key, child := range data.TacacsProviderGroups {
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.rn", child.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.rn", child.getRn(key))
 			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.status", "deleted")
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
@@ -1234,79 +1218,55 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.Users {
-		found := false
-		for _, planChild := range data.Users {
-			if stateChild.Name == planChild.Name {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.Users {
+		if _, found := data.Users[stateKey]; !found {
+			stateChild := state.Users[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "aaaUser.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "aaaUser.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "aaaUser.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	for di := range state.Users {
-		for pdi := range data.Users {
-			if state.Users[di].Name == data.Users[pdi].Name {
-				matchBodyPathdi := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-					if mv.Get("aaaUser.attributes.rn").String() == state.Users[di].getRn() {
-						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".aaaUser.children"
-						break
-					}
-				}
-				if matchBodyPathdi == "" {
-					break
-				}
-				for _, stateChild := range state.Users[di].Roles {
-					found := false
-					for _, planChild := range data.Users[pdi].Roles {
-						if stateChild.Name == planChild.Name {
-							found = true
-							break
-						}
-					}
-					if !found {
-						deleteBody := ""
-						deleteBody, _ = sjson.Set(deleteBody, "aaaUserRole.attributes.rn", stateChild.getRn())
-						deleteBody, _ = sjson.Set(deleteBody, "aaaUserRole.attributes.status", "deleted")
-						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.aaaUserDomain.children"+".-1", deleteBody)
-					}
-				}
+		if _, found := data.Users[di]; !found {
+			continue
+		}
+		stateItemdi := state.Users[di]
+		planItemdi := data.Users[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+			if mv.Get("aaaUser.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".aaaUser.children"
 				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateKey := range stateItemdi.Roles {
+			if _, found := planItemdi.Roles[stateKey]; !found {
+				stateChild := stateItemdi.Roles[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aaaUserRole.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "aaaUserRole.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.aaaUserDomain.children"+".-1", deleteBody)
 			}
 		}
 	}
-	for _, stateChild := range state.TacacsProviders {
-		found := false
-		for _, planChild := range data.TacacsProviders {
-			if stateChild.Name == planChild.Name {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.TacacsProviders {
+		if _, found := data.TacacsProviders[stateKey]; !found {
+			stateChild := state.TacacsProviders[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProvider.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProvider.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProvider.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.aaaTacacsPlusEp.children"+".-1", deleteBody)
 		}
 	}
-	for _, stateChild := range state.TacacsProviderGroups {
-		found := false
-		for _, planChild := range data.TacacsProviderGroups {
-			if stateChild.Name == planChild.Name {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.TacacsProviderGroups {
+		if _, found := data.TacacsProviderGroups[stateKey]; !found {
+			stateChild := state.TacacsProviderGroups[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.aaaTacacsPlusEp.children"+".-1", deleteBody)
 		}

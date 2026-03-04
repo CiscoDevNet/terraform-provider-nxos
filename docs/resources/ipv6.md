@@ -35,47 +35,50 @@ resource "nxos_ipv6" "example" {
   queue_packets                  = "enabled"
   static_neighbor_outside_subnet = "enabled"
   switch_packets                 = "all"
-  vrfs = [{
-    name = "VRF1"
-    static_routes = [{
-      prefix      = "2001:db8:3333:4444:5555:6666:102:304/128"
-      control     = "bfd"
-      description = "My Description"
-      preference  = 10
-      tag         = 100
-      next_hops = [{
-        interface_id          = "unspecified"
-        address               = "a:b::c:d/128"
-        vrf_name              = "default"
-        description           = "My Description"
-        object                = 10
-        preference            = 123
-        tag                   = 10
-        name                  = "nh-name"
-        rewrite_encapsulation = "vlan-1"
-      }]
-    }]
-    interfaces = [{
-      interface_id               = "eth1/10"
-      auto_configuration         = "disabled"
-      default_route              = "disabled"
-      forward                    = "disabled"
-      link_local_address_use_bia = "disabled"
-      use_link_local_address     = "disabled"
-      urpf                       = "disabled"
-      link_local_address         = "2001:db8:3333:4444:5555:6666:7777:8888"
-      addresses = [{
-        address                 = "2001:db8:3333:4444:5555:6666:7777:8888"
-        type                    = "primary"
-        tag                     = 1234
-        aggregate_prefix_length = 64
-        control                 = "anycast"
-        preference              = 10
-        use_bia                 = "enabled"
-        vpc_peer                = "2001:db8::1"
-      }]
-    }]
-  }]
+  vrfs = {
+    "VRF1" = {
+      static_routes = {
+        "2001:db8:3333:4444:5555:6666:102:304/128" = {
+          control     = "bfd"
+          description = "My Description"
+          preference  = 10
+          tag         = 100
+          next_hops = {
+            "unspecified|a:b::c:d/128|default" = {
+              description           = "My Description"
+              object                = 10
+              preference            = 123
+              tag                   = 10
+              name                  = "nh-name"
+              rewrite_encapsulation = "vlan-1"
+            }
+          }
+        }
+      }
+      interfaces = {
+        "eth1/10" = {
+          auto_configuration         = "disabled"
+          default_route              = "disabled"
+          forward                    = "disabled"
+          link_local_address_use_bia = "disabled"
+          use_link_local_address     = "disabled"
+          urpf                       = "disabled"
+          link_local_address         = "2001:db8:3333:4444:5555:6666:7777:8888"
+          addresses = {
+            "2001:db8:3333:4444:5555:6666:7777:8888" = {
+              type                    = "primary"
+              tag                     = 1234
+              aggregate_prefix_length = 64
+              control                 = "anycast"
+              preference              = 10
+              use_bia                 = "enabled"
+              vpc_peer                = "2001:db8::1"
+            }
+          }
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -99,7 +102,7 @@ resource "nxos_ipv6" "example" {
   - Choices: `enabled`, `disabled`
 - `switch_packets` (String) Switch-packets.
   - Choices: `disabled`, `all`, `lla`
-- `vrfs` (Attributes List) List of IPv6 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of IPv6 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -108,25 +111,17 @@ resource "nxos_ipv6" "example" {
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
-Required:
-
-- `name` (String) VRF name.
-
 Optional:
 
-- `interfaces` (Attributes List) List of IPv6 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
-- `static_routes` (Attributes List) List of IPv6 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
+- `interfaces` (Attributes Map) List of IPv6 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `static_routes` (Attributes Map) List of IPv6 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
 
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-
 Optional:
 
-- `addresses` (Attributes List) List of IPv6 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
+- `addresses` (Attributes Map) List of IPv6 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
 - `auto_configuration` (String) IPv6 Stateless address autoconfig.
   - Choices: `enabled`, `disabled`
 - `default_route` (String) Default Route Addition with Nexthop as RA Source Address.
@@ -143,10 +138,6 @@ Optional:
 
 <a id="nestedatt--vrfs--interfaces--addresses"></a>
 ### Nested Schema for `vrfs.interfaces.addresses`
-
-Required:
-
-- `address` (String) Address.
 
 Optional:
 
@@ -171,8 +162,7 @@ Optional:
 
 Required:
 
-- `next_hops` (Attributes List) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
-- `prefix` (String) Prefix.
+- `next_hops` (Attributes Map) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
 
 Optional:
 
@@ -186,12 +176,6 @@ Optional:
 
 <a id="nestedatt--vrfs--static_routes--next_hops"></a>
 ### Nested Schema for `vrfs.static_routes.next_hops`
-
-Required:
-
-- `address` (String) Nexthop Address.
-- `interface_id` (String) Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
-- `vrf_name` (String) Nexthop VRF.
 
 Optional:
 

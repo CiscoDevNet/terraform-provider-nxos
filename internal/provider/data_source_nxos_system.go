@@ -220,15 +220,11 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "ARP Global Timeout.",
 				Computed:            true,
 			},
-			"arp_vpc_domains": schema.ListNestedAttribute{
+			"arp_vpc_domains": schema.MapNestedAttribute{
 				MarkdownDescription: "ARP VPC Domain.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"domain_id": schema.Int64Attribute{
-							MarkdownDescription: "VPC domain id.",
-							Computed:            true,
-						},
 						"arp_sync": schema.StringAttribute{
 							MarkdownDescription: "ARP Sync.",
 							Computed:            true,
@@ -280,24 +276,16 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "Solicit neighbor advertisement.",
 				Computed:            true,
 			},
-			"nd_vrfs": schema.ListNestedAttribute{
+			"nd_vrfs": schema.MapNestedAttribute{
 				MarkdownDescription: "Neighbor Discovery Domain.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "The name of the object.",
-							Computed:            true,
-						},
-						"interfaces": schema.ListNestedAttribute{
+						"interfaces": schema.MapNestedAttribute{
 							MarkdownDescription: "Neighbor Discovery Interface.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"interface_id": schema.StringAttribute{
-										MarkdownDescription: "An identifier.",
-										Computed:            true,
-									},
 									"boot_file_url": schema.StringAttribute{
 										MarkdownDescription: "The URL for a boot file in string.",
 										Computed:            true,

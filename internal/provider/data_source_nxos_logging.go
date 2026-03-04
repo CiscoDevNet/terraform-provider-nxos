@@ -76,15 +76,11 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Logging severity level for all the facilites.",
 				Computed:            true,
 			},
-			"facilities": schema.ListNestedAttribute{
+			"facilities": schema.MapNestedAttribute{
 				MarkdownDescription: "List of logging facilities.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Facility Name of individual processes subscribed for logging level.",
-							Computed:            true,
-						},
 						"level": schema.StringAttribute{
 							MarkdownDescription: "Logging severity level for individual facility name.",
 							Computed:            true,

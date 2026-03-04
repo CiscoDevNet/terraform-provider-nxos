@@ -48,27 +48,25 @@ data "nxos_ipv6" "example" {
 - `queue_packets` (String) Queue-packets.
 - `static_neighbor_outside_subnet` (String) Static Neighbor Outside Subnet.
 - `switch_packets` (String) Switch-packets.
-- `vrfs` (Attributes List) List of IPv6 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of IPv6 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
 Read-Only:
 
-- `interfaces` (Attributes List) List of IPv6 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
-- `name` (String) VRF name.
-- `static_routes` (Attributes List) List of IPv6 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
+- `interfaces` (Attributes Map) List of IPv6 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `static_routes` (Attributes Map) List of IPv6 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
 
 Read-Only:
 
-- `addresses` (Attributes List) List of IPv6 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
+- `addresses` (Attributes Map) List of IPv6 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
 - `auto_configuration` (String) IPv6 Stateless address autoconfig.
 - `default_route` (String) Default Route Addition with Nexthop as RA Source Address.
 - `forward` (String) IPv6 forward.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `link_local_address` (String) IPv6 Link Local Address.
 - `link_local_address_use_bia` (String) IPv6 Link Local Use BIA.
 - `urpf` (String) IPv6 URPF Info.
@@ -79,7 +77,6 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) Address.
 - `aggregate_prefix_length` (Number) Prefix-Length for AM Route Aggregation.
 - `control` (String) The control state.
 - `preference` (Number) Preference.
@@ -97,9 +94,8 @@ Read-Only:
 
 - `control` (String) Controls.
 - `description` (String) Description of the specified attribute.
-- `next_hops` (Attributes List) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
+- `next_hops` (Attributes Map) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
 - `preference` (Number) Preference.
-- `prefix` (String) Prefix.
 - `tag` (Number) Tag.
 
 <a id="nestedatt--vrfs--static_routes--next_hops"></a>
@@ -107,12 +103,9 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) Nexthop Address.
 - `description` (String) Description of the specified attribute.
-- `interface_id` (String) Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
 - `name` (String) Next hop name.
 - `object` (Number) Object to be tracked.
 - `preference` (Number) Route preference.
 - `rewrite_encapsulation` (String) Rewrite Encapsulation.
 - `tag` (Number) Tag value.
-- `vrf_name` (String) Nexthop VRF.

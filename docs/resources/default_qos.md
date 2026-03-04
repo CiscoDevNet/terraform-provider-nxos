@@ -34,51 +34,56 @@ This resource can manage the default QoS configuration on NX-OS devices, includi
 
 ```terraform
 resource "nxos_default_qos" "example" {
-  class_maps = [{
-    name       = "Voice"
-    match_type = "match-any"
-    dscp_values = [{
-      value = "ef"
-    }]
-  }]
-  policy_maps = [{
-    name       = "PM1"
-    match_type = "match-any"
-    match_class_maps = [{
-      name                          = "Voice"
-      next_class_map                = "Voice"
-      previous_class_map            = "Voice"
-      set_qos_group_id              = 1
-      police_bc_rate                = 200
-      police_bc_unit                = "mbytes"
-      police_be_rate                = 200
-      police_be_unit                = "mbytes"
-      police_cir_rate               = 10000
-      police_cir_unit               = "mbps"
-      police_conform_action         = "transmit"
-      police_conform_set_cos        = 0
-      police_conform_set_dscp       = 0
-      police_conform_set_precedence = "routine"
-      police_conform_set_qos_group  = 0
-      police_exceed_action          = "transmit"
-      police_exceed_set_cos         = 0
-      police_exceed_set_dscp        = 0
-      police_exceed_set_precedence  = "routine"
-      police_exceed_set_qos_group   = 0
-      police_pir_rate               = 10000
-      police_pir_unit               = "mbps"
-      police_violate_action         = "drop"
-      police_violate_set_cos        = 0
-      police_violate_set_dscp       = 0
-      police_violate_set_precedence = "routine"
-      police_violate_set_qos_group  = 0
-    }]
-  }]
-  policy_interface_in = [{
-    interface_id          = "eth1/10"
-    policy_map_name       = "PM1"
-    policy_map_statistics = false
-  }]
+  class_maps = {
+    "Voice" = {
+      match_type = "match-any"
+      dscp_values = {
+        "ef" = {
+        }
+      }
+    }
+  }
+  policy_maps = {
+    "PM1" = {
+      match_type = "match-any"
+      match_class_maps = {
+        "Voice" = {
+          next_class_map                = "Voice"
+          previous_class_map            = "Voice"
+          set_qos_group_id              = 1
+          police_bc_rate                = 200
+          police_bc_unit                = "mbytes"
+          police_be_rate                = 200
+          police_be_unit                = "mbytes"
+          police_cir_rate               = 10000
+          police_cir_unit               = "mbps"
+          police_conform_action         = "transmit"
+          police_conform_set_cos        = 0
+          police_conform_set_dscp       = 0
+          police_conform_set_precedence = "routine"
+          police_conform_set_qos_group  = 0
+          police_exceed_action          = "transmit"
+          police_exceed_set_cos         = 0
+          police_exceed_set_dscp        = 0
+          police_exceed_set_precedence  = "routine"
+          police_exceed_set_qos_group   = 0
+          police_pir_rate               = 10000
+          police_pir_unit               = "mbps"
+          police_violate_action         = "drop"
+          police_violate_set_cos        = 0
+          police_violate_set_dscp       = 0
+          police_violate_set_precedence = "routine"
+          police_violate_set_qos_group  = 0
+        }
+      }
+    }
+  }
+  policy_interface_in = {
+    "eth1/10" = {
+      policy_map_name       = "PM1"
+      policy_map_statistics = false
+    }
+  }
 }
 ```
 
@@ -87,10 +92,10 @@ resource "nxos_default_qos" "example" {
 
 ### Optional
 
-- `class_maps` (Attributes List) List of class maps. (see [below for nested schema](#nestedatt--class_maps))
+- `class_maps` (Attributes Map) List of class maps. (see [below for nested schema](#nestedatt--class_maps))
 - `device` (String) A device name from the provider configuration.
-- `policy_interface_in` (Attributes List) List of interfaces with ingress QoS policy assignments. (see [below for nested schema](#nestedatt--policy_interface_in))
-- `policy_maps` (Attributes List) List of policy maps. (see [below for nested schema](#nestedatt--policy_maps))
+- `policy_interface_in` (Attributes Map) List of interfaces with ingress QoS policy assignments. (see [below for nested schema](#nestedatt--policy_interface_in))
+- `policy_maps` (Attributes Map) List of policy maps. (see [below for nested schema](#nestedatt--policy_maps))
 
 ### Read-Only
 
@@ -99,22 +104,14 @@ resource "nxos_default_qos" "example" {
 <a id="nestedatt--class_maps"></a>
 ### Nested Schema for `class_maps`
 
-Required:
-
-- `name` (String) Name of class-map.
-
 Optional:
 
-- `dscp_values` (Attributes List) List of DSCP values to match. (see [below for nested schema](#nestedatt--class_maps--dscp_values))
+- `dscp_values` (Attributes Map) List of DSCP values to match. (see [below for nested schema](#nestedatt--class_maps--dscp_values))
 - `match_type` (String) Match-any, match-all or match-first.
   - Choices: `match-any`, `match-all`, `match-first`
 
 <a id="nestedatt--class_maps--dscp_values"></a>
 ### Nested Schema for `class_maps.dscp_values`
-
-Required:
-
-- `value` (String) Dscp value.
 
 
 
@@ -123,7 +120,6 @@ Required:
 
 Required:
 
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `policy_map_name` (String) Policy-map Name.
 
 Optional:
@@ -134,13 +130,9 @@ Optional:
 <a id="nestedatt--policy_maps"></a>
 ### Nested Schema for `policy_maps`
 
-Required:
-
-- `name` (String) Name of policy-map.
-
 Optional:
 
-- `match_class_maps` (Attributes List) List of match class maps. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
+- `match_class_maps` (Attributes Map) List of match class maps. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
 - `match_type` (String) Match-any, match-all or match-first.
   - Choices: `match-any`, `match-all`, `match-first`
 
@@ -149,7 +141,6 @@ Optional:
 
 Required:
 
-- `name` (String) Match using class-map.
 - `police_cir_rate` (Number) CIR.
   - Range: `0`-`100000000000`
 

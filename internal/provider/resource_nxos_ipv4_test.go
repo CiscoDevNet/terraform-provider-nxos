@@ -43,37 +43,30 @@ func TestAccNxosIPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "redirect_syslog", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "redirect_syslog_interval", "120"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "source_route", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.name", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.auto_discard", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.icmp_errors_source_interface", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.prefix", "1.1.1.0/24"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.control", "bfd"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.preference", "2"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.tag", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.interface_id", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.address", "1.2.3.4"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.vrf_name", "default"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.object", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.preference", "123"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.tag", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.name", "nh1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.rewrite_encapsulation", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.interface_id", "eth1/10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.drop_glean", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.forward", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.unnumbered", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.urpf", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.directed_broadcast_acl", "ACL1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.directed_broadcast", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.address", "24.63.46.49/30"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.type", "primary"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.tag", "1234"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.control", "pervasive"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.preference", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.use_bia", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.vpc_peer", "10.0.0.1/30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.auto_discard", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.icmp_errors_source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.control", "bfd"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.preference", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.tag", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.next_hops.unspecified|1.2.3.4|default.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.next_hops.unspecified|1.2.3.4|default.object", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.next_hops.unspecified|1.2.3.4|default.preference", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.next_hops.unspecified|1.2.3.4|default.tag", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.next_hops.unspecified|1.2.3.4|default.name", "nh1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.next_hops.unspecified|1.2.3.4|default.rewrite_encapsulation", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.drop_glean", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.unnumbered", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.urpf", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.directed_broadcast_acl", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.directed_broadcast", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.addresses.24.63.46.49/30.type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.addresses.24.63.46.49/30.tag", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.addresses.24.63.46.49/30.control", "pervasive"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.addresses.24.63.46.49/30.preference", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.addresses.24.63.46.49/30.use_bia", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.VRF1.interfaces.eth1/10.addresses.24.63.46.49/30.vpc_peer", "10.0.0.1/30"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -155,47 +148,50 @@ func testAccNxosIPv4Config_all() string {
 	config += `	redirect_syslog = "disabled"` + "\n"
 	config += `	redirect_syslog_interval = 120` + "\n"
 	config += `	source_route = "disabled"` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		name = "VRF1"` + "\n"
-	config += `		auto_discard = "enabled"` + "\n"
-	config += `		icmp_errors_source_interface = "unspecified"` + "\n"
-	config += `		static_routes = [{` + "\n"
-	config += `			prefix = "1.1.1.0/24"` + "\n"
-	config += `			control = "bfd"` + "\n"
-	config += `			description = "My Description"` + "\n"
-	config += `			preference = 2` + "\n"
-	config += `			tag = 10` + "\n"
-	config += `			next_hops = [{` + "\n"
-	config += `				interface_id = "unspecified"` + "\n"
-	config += `				address = "1.2.3.4"` + "\n"
-	config += `				vrf_name = "default"` + "\n"
-	config += `				description = "My Description"` + "\n"
-	config += `				object = 10` + "\n"
-	config += `				preference = 123` + "\n"
-	config += `				tag = 10` + "\n"
-	config += `				name = "nh1"` + "\n"
-	config += `				rewrite_encapsulation = "unknown"` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `		interfaces = [{` + "\n"
-	config += `			interface_id = "eth1/10"` + "\n"
-	config += `			drop_glean = "disabled"` + "\n"
-	config += `			forward = "disabled"` + "\n"
-	config += `			unnumbered = "unspecified"` + "\n"
-	config += `			urpf = "disabled"` + "\n"
-	config += `			directed_broadcast_acl = "ACL1"` + "\n"
-	config += `			directed_broadcast = "enabled"` + "\n"
-	config += `			addresses = [{` + "\n"
-	config += `				address = "24.63.46.49/30"` + "\n"
-	config += `				type = "primary"` + "\n"
-	config += `				tag = 1234` + "\n"
-	config += `				control = "pervasive"` + "\n"
-	config += `				preference = 1` + "\n"
-	config += `				use_bia = "enabled"` + "\n"
-	config += `				vpc_peer = "10.0.0.1/30"` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	vrfs = {` + "\n"
+	config += `		"VRF1" = {` + "\n"
+	config += `			auto_discard = "enabled"` + "\n"
+	config += `			icmp_errors_source_interface = "unspecified"` + "\n"
+	config += `			static_routes = {` + "\n"
+	config += `				"1.1.1.0/24" = {` + "\n"
+	config += `					control = "bfd"` + "\n"
+	config += `					description = "My Description"` + "\n"
+	config += `					preference = 2` + "\n"
+	config += `					tag = 10` + "\n"
+	config += `					next_hops = {` + "\n"
+	config += `						"unspecified|1.2.3.4|default" = {` + "\n"
+	config += `							description = "My Description"` + "\n"
+	config += `							object = 10` + "\n"
+	config += `							preference = 123` + "\n"
+	config += `							tag = 10` + "\n"
+	config += `							name = "nh1"` + "\n"
+	config += `							rewrite_encapsulation = "unknown"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			interfaces = {` + "\n"
+	config += `				"eth1/10" = {` + "\n"
+	config += `					drop_glean = "disabled"` + "\n"
+	config += `					forward = "disabled"` + "\n"
+	config += `					unnumbered = "unspecified"` + "\n"
+	config += `					urpf = "disabled"` + "\n"
+	config += `					directed_broadcast_acl = "ACL1"` + "\n"
+	config += `					directed_broadcast = "enabled"` + "\n"
+	config += `					addresses = {` + "\n"
+	config += `						"24.63.46.49/30" = {` + "\n"
+	config += `							type = "primary"` + "\n"
+	config += `							tag = 1234` + "\n"
+	config += `							control = "pervasive"` + "\n"
+	config += `							preference = 1` + "\n"
+	config += `							use_bia = "enabled"` + "\n"
+	config += `							vpc_peer = "10.0.0.1/30"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

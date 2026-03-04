@@ -188,15 +188,11 @@ func (d *DHCPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "V6 Smart Relay Global Enabled.",
 				Computed:            true,
 			},
-			"relay_interfaces": schema.ListNestedAttribute{
+			"relay_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of DHCP relay interfaces.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-							Computed:            true,
-						},
 						"information_trusted": schema.BoolAttribute{
 							MarkdownDescription: "Information Trusted Enabled.",
 							Computed:            true,
@@ -221,19 +217,11 @@ func (d *DHCPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "V6 Smart Relay Enabled.",
 							Computed:            true,
 						},
-						"addresses": schema.ListNestedAttribute{
+						"addresses": schema.MapNestedAttribute{
 							MarkdownDescription: "List of DHCP relay addresses.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"vrf": schema.StringAttribute{
-										MarkdownDescription: "vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.",
-										Computed:            true,
-									},
-									"address": schema.StringAttribute{
-										MarkdownDescription: "IPv4 or IPv6 address.",
-										Computed:            true,
-									},
 									"counter": schema.Int64Attribute{
 										MarkdownDescription: "Counter.",
 										Computed:            true,

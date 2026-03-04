@@ -9,19 +9,20 @@ resource "nxos_spanning_tree" "example" {
   loopguard                = "enabled"
   mode                     = "mst"
   pathcost_option          = "long"
-  interfaces = [{
-    interface_id              = "eth1/9"
-    bpdu_filter               = "enable"
-    bpdu_guard                = "enable"
-    cost                      = 100
-    guard                     = "root"
-    link_type                 = "p2p"
-    mode                      = "edge"
-    priority                  = 200
-    control                   = "bpdu-guard"
-    description               = "My interface description"
-    linecard_issu             = "auto"
-    prestandard_configuration = "enabled"
-    simulate_pvst             = "enabled"
-  }]
+  interfaces = {
+    "eth1/9" = {
+      bpdu_filter               = "enable"
+      bpdu_guard                = "enable"
+      cost                      = 100
+      guard                     = "root"
+      link_type                 = "p2p"
+      mode                      = "edge"
+      priority                  = 200
+      control                   = "bpdu-guard"
+      description               = "My interface description"
+      linecard_issu             = "auto"
+      prestandard_configuration = "enabled"
+      simulate_pvst             = "enabled"
+    }
+  }
 }

@@ -34,13 +34,7 @@ func TestAccDataSourceNxosICMPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv4.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv4.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv4.test", "control", "stateful-ha"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_icmpv4.test", "vrfs.*", map[string]string{
-		"name": "VRF1",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_icmpv4.test", "vrfs.*.interfaces.*", map[string]string{
-		"id":      "vlan10",
-		"control": "port-unreachable",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv4.test", "vrfs.VRF1.interfaces.vlan10.control", "port-unreachable"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -85,13 +79,15 @@ func testAccDataSourceNxosICMPv4Config() string {
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
 	config += `	control = "stateful-ha"` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		name = "VRF1"` + "\n"
-	config += `		interfaces = [{` + "\n"
-	config += `			id = "vlan10"` + "\n"
-	config += `			control = "port-unreachable"` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	vrfs = {` + "\n"
+	config += `		"VRF1" = {` + "\n"
+	config += `			interfaces = {` + "\n"
+	config += `				"vlan10" = {` + "\n"
+	config += `					control = "port-unreachable"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

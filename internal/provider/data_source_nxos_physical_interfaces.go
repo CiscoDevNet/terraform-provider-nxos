@@ -68,15 +68,11 @@ func (d *PhysicalInterfacesDataSource) Schema(ctx context.Context, req datasourc
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"physical_interfaces": schema.ListNestedAttribute{
+			"physical_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of physical interfaces.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-							Computed:            true,
-						},
 						"fec_mode": schema.StringAttribute{
 							MarkdownDescription: "FEC Mode.",
 							Computed:            true,

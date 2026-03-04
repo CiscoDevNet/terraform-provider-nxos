@@ -83,15 +83,11 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"vnis": schema.ListNestedAttribute{
+			"vnis": schema.MapNestedAttribute{
 				MarkdownDescription: "List of EVPN VNIs.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"encap": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
-							Required:            true,
-						},
 						"route_distinguisher": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher. value in NX-OS DME format.").String,
 							Optional:            true,
@@ -104,28 +100,16 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							MarkdownDescription: helpers.NewAttributeDescription("Filter option used with table-map configuration for selective route download.").String,
 							Optional:            true,
 						},
-						"route_target_directions": schema.ListNestedAttribute{
+						"route_target_directions": schema.MapNestedAttribute{
 							MarkdownDescription: "List of EVPN VNI route target directions.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("import", "export").String,
-										Required:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("import", "export"),
-										},
-									},
-									"route_targets": schema.ListNestedAttribute{
+									"route_targets": schema.MapNestedAttribute{
 										MarkdownDescription: "List of EVPN VNI route target entries.",
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"route_target": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Route Target. in NX-OS DME format.").String,
-													Required:            true,
-												},
-											},
+											Attributes: map[string]schema.Attribute{},
 										},
 									},
 								},

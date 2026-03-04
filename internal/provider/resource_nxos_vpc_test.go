@@ -79,8 +79,7 @@ func TestAccNxosVPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_interface_id", "eth1/9"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_description", "My description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "interfaces.0.vpc_interface_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "interfaces.0.port_channel_interface_dn", "sys/intf/aggr-[po1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "interfaces.1.port_channel_interface_dn", "sys/intf/aggr-[po1]"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -220,10 +219,11 @@ func testAccNxosVPCConfig_all() string {
 	config += `	peerlink_interface_id = "eth1/9"` + "\n"
 	config += `	peerlink_admin_state = "enabled"` + "\n"
 	config += `	peerlink_description = "My description"` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		vpc_interface_id = 1` + "\n"
-	config += `		port_channel_interface_dn = "sys/intf/aggr-[po1]"` + "\n"
-	config += `	}]` + "\n"
+	config += `	interfaces = {` + "\n"
+	config += `		"1" = {` + "\n"
+	config += `			port_channel_interface_dn = "sys/intf/aggr-[po1]"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config

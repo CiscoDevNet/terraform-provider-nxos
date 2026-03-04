@@ -31,30 +31,13 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosVRFs(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrfs.test", "vrfs.*", map[string]string{
-		"name":          "VRF1",
-		"description":   "My VRF1 Description",
-		"admin_state":   "admin-up",
-		"controller_id": "1",
-		"encap":         "vxlan-103901",
-		"l3vni":         "false",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrfs.test", "vrfs.*", map[string]string{
-		"routing_encap":       "unknown",
-		"route_distinguisher": "rd:unknown:0:0",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrfs.test", "vrfs.*.address_families.*", map[string]string{
-		"address_family": "ipv4-ucast",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrfs.test", "vrfs.*.address_families.*.route_target_address_families.*", map[string]string{
-		"route_target_address_family": "ipv4-ucast",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrfs.test", "vrfs.*.address_families.*.route_target_address_families.*.route_target_directions.*", map[string]string{
-		"direction": "import",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrfs.test", "vrfs.*.address_families.*.route_target_address_families.*.route_target_directions.*.route_targets.*", map[string]string{
-		"route_target": "route-target:as2-nn2:2:2",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrfs.test", "vrfs.VRF1.description", "My VRF1 Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrfs.test", "vrfs.VRF1.admin_state", "admin-up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrfs.test", "vrfs.VRF1.controller_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrfs.test", "vrfs.VRF1.encap", "vxlan-103901"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrfs.test", "vrfs.VRF1.l3vni", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrfs.test", "vrfs.VRF1.routing_encap", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrfs.test", "vrfs.VRF1.route_distinguisher", "rd:unknown:0:0"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -87,28 +70,33 @@ resource "nxos_dme" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosVRFsConfig() string {
 	config := `resource "nxos_vrfs" "test" {` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		name = "VRF1"` + "\n"
-	config += `		description = "My VRF1 Description"` + "\n"
-	config += `		admin_state = "admin-up"` + "\n"
-	config += `		controller_id = 1` + "\n"
-	config += `		encap = "vxlan-103901"` + "\n"
-	config += `		l3vni = false` + "\n"
-	config += `		routing_encap = "unknown"` + "\n"
-	config += `		route_distinguisher = "rd:unknown:0:0"` + "\n"
-	config += `		address_families = [{` + "\n"
-	config += `			address_family = "ipv4-ucast"` + "\n"
-	config += `			route_target_address_families = [{` + "\n"
-	config += `				route_target_address_family = "ipv4-ucast"` + "\n"
-	config += `				route_target_directions = [{` + "\n"
-	config += `					direction = "import"` + "\n"
-	config += `					route_targets = [{` + "\n"
-	config += `						route_target = "route-target:as2-nn2:2:2"` + "\n"
-	config += `					}]` + "\n"
-	config += `				}]` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	vrfs = {` + "\n"
+	config += `		"VRF1" = {` + "\n"
+	config += `			description = "My VRF1 Description"` + "\n"
+	config += `			admin_state = "admin-up"` + "\n"
+	config += `			controller_id = 1` + "\n"
+	config += `			encap = "vxlan-103901"` + "\n"
+	config += `			l3vni = false` + "\n"
+	config += `			routing_encap = "unknown"` + "\n"
+	config += `			route_distinguisher = "rd:unknown:0:0"` + "\n"
+	config += `			address_families = {` + "\n"
+	config += `				"ipv4-ucast" = {` + "\n"
+	config += `					route_target_address_families = {` + "\n"
+	config += `						"ipv4-ucast" = {` + "\n"
+	config += `							route_target_directions = {` + "\n"
+	config += `								"import" = {` + "\n"
+	config += `									route_targets = {` + "\n"
+	config += `										"route-target:as2-nn2:2:2" = {` + "\n"
+	config += `										}` + "\n"
+	config += `									}` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

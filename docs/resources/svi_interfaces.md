@@ -24,26 +24,27 @@ This resource can manage SVI (Switch Virtual Interface) configurations on NX-OS 
 
 ```terraform
 resource "nxos_svi_interfaces" "example" {
-  svi_interfaces = [{
-    interface_id            = "vlan293"
-    admin_state             = "down"
-    autostate               = false
-    bandwidth               = 1000
-    carrier_delay           = 200
-    delay                   = 10
-    description             = "My Description"
-    inband_management       = false
-    load_interval_counter_1 = 90
-    load_interval_counter_2 = 120
-    load_interval_counter_3 = 90
-    mac_address             = "00:25:B5:00:00:01"
-    medium                  = "bcast"
-    mtu                     = 9216
-    mtu_inherit             = false
-    snmp_trap_link_status   = false
-    vlan_id                 = 100
-    vrf_dn                  = "sys/inst-VRF123"
-  }]
+  svi_interfaces = {
+    "vlan293" = {
+      admin_state             = "down"
+      autostate               = false
+      bandwidth               = 1000
+      carrier_delay           = 200
+      delay                   = 10
+      description             = "My Description"
+      inband_management       = false
+      load_interval_counter_1 = 90
+      load_interval_counter_2 = 120
+      load_interval_counter_3 = 90
+      mac_address             = "00:25:B5:00:00:01"
+      medium                  = "bcast"
+      mtu                     = 9216
+      mtu_inherit             = false
+      snmp_trap_link_status   = false
+      vlan_id                 = 100
+      vrf_dn                  = "sys/inst-VRF123"
+    }
+  }
 }
 ```
 
@@ -53,7 +54,7 @@ resource "nxos_svi_interfaces" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `svi_interfaces` (Attributes List) List of SVI interfaces. (see [below for nested schema](#nestedatt--svi_interfaces))
+- `svi_interfaces` (Attributes Map) List of SVI interfaces. (see [below for nested schema](#nestedatt--svi_interfaces))
 
 ### Read-Only
 
@@ -61,10 +62,6 @@ resource "nxos_svi_interfaces" "example" {
 
 <a id="nestedatt--svi_interfaces"></a>
 ### Nested Schema for `svi_interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `vlan100`.
 
 Optional:
 

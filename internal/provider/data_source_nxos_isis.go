@@ -72,15 +72,11 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"instances": schema.ListNestedAttribute{
+			"instances": schema.MapNestedAttribute{
 				MarkdownDescription: "List of IS-IS instances.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "IS-IS instance name.",
-							Computed:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
@@ -97,15 +93,11 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "Isolate ISIS Instance from other process tags.",
 							Computed:            true,
 						},
-						"vrfs": schema.ListNestedAttribute{
+						"vrfs": schema.MapNestedAttribute{
 							MarkdownDescription: "List of IS-IS VRFs.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: "VRF name.",
-										Computed:            true,
-									},
 									"admin_state": schema.StringAttribute{
 										MarkdownDescription: "Holds ISIS Domain Administative state.",
 										Computed:            true,
@@ -174,15 +166,11 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "Holds the ISIS queue limit retransmit value.",
 										Computed:            true,
 									},
-									"address_families": schema.ListNestedAttribute{
+									"address_families": schema.MapNestedAttribute{
 										MarkdownDescription: "List of IS-IS address families.",
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address_family": schema.StringAttribute{
-													MarkdownDescription: "Type.",
-													Computed:            true,
-												},
 												"segment_routing_mpls": schema.BoolAttribute{
 													MarkdownDescription: "Segment routing for MPLS.",
 													Computed:            true,
@@ -268,15 +256,11 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 					},
 				},
 			},
-			"interfaces": schema.ListNestedAttribute{
+			"interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of IS-IS interfaces.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-							Computed:            true,
-						},
 						"authentication_check": schema.BoolAttribute{
 							MarkdownDescription: "Enabling Authentication check for ISIS interface without specific Level.",
 							Computed:            true,

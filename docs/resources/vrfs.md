@@ -28,30 +28,35 @@ This resource can manage VRF configurations on NX-OS devices, including route di
 
 ```terraform
 resource "nxos_vrfs" "example" {
-  vrfs = [{
-    name                = "VRF1"
-    description         = "My VRF1 Description"
-    admin_state         = "admin-up"
-    controller_id       = 1
-    encap               = "vxlan-103901"
-    l3vni               = false
-    oui                 = "000000"
-    vpn_id              = "100:200"
-    routing_encap       = "unknown"
-    route_distinguisher = "rd:unknown:0:0"
-    address_families = [{
-      address_family = "ipv4-ucast"
-      route_target_address_families = [{
-        route_target_address_family = "ipv4-ucast"
-        route_target_directions = [{
-          direction = "import"
-          route_targets = [{
-            route_target = "route-target:as2-nn2:2:2"
-          }]
-        }]
-      }]
-    }]
-  }]
+  vrfs = {
+    "VRF1" = {
+      description         = "My VRF1 Description"
+      admin_state         = "admin-up"
+      controller_id       = 1
+      encap               = "vxlan-103901"
+      l3vni               = false
+      oui                 = "000000"
+      vpn_id              = "100:200"
+      routing_encap       = "unknown"
+      route_distinguisher = "rd:unknown:0:0"
+      address_families = {
+        "ipv4-ucast" = {
+          route_target_address_families = {
+            "ipv4-ucast" = {
+              route_target_directions = {
+                "import" = {
+                  route_targets = {
+                    "route-target:as2-nn2:2:2" = {
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -61,7 +66,7 @@ resource "nxos_vrfs" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `vrfs` (Attributes List) List of VRFs. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of VRFs. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -70,13 +75,9 @@ resource "nxos_vrfs" "example" {
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
-Required:
-
-- `name` (String) VRF name.
-
 Optional:
 
-- `address_families` (Attributes List) List of VRF address families. (see [below for nested schema](#nestedatt--vrfs--address_families))
+- `address_families` (Attributes Map) List of VRF address families. (see [below for nested schema](#nestedatt--vrfs--address_families))
 - `admin_state` (String) VRF Admin State.
   - Choices: `shutdown`, `admin-up`
 - `controller_id` (Number) Controller ID.
@@ -92,45 +93,26 @@ Optional:
 <a id="nestedatt--vrfs--address_families"></a>
 ### Nested Schema for `vrfs.address_families`
 
-Required:
-
-- `address_family` (String) Type.
-  - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
-
 Optional:
 
-- `route_target_address_families` (Attributes List) List of VRF route target address families. (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families))
+- `route_target_address_families` (Attributes Map) List of VRF route target address families. (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families))
 
 <a id="nestedatt--vrfs--address_families--route_target_address_families"></a>
 ### Nested Schema for `vrfs.address_families.route_target_address_families`
 
-Required:
-
-- `route_target_address_family` (String) Type.
-  - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
-
 Optional:
 
-- `route_target_directions` (Attributes List) List of VRF route target directions. (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families--route_target_directions))
+- `route_target_directions` (Attributes Map) List of VRF route target directions. (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families--route_target_directions))
 
 <a id="nestedatt--vrfs--address_families--route_target_address_families--route_target_directions"></a>
 ### Nested Schema for `vrfs.address_families.route_target_address_families.route_target_directions`
 
-Required:
-
-- `direction` (String) Type.
-  - Choices: `import`, `export`
-
 Optional:
 
-- `route_targets` (Attributes List) List of VRF route target entries. (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families--route_target_directions--route_targets))
+- `route_targets` (Attributes Map) List of VRF route target entries. (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families--route_target_directions--route_targets))
 
 <a id="nestedatt--vrfs--address_families--route_target_address_families--route_target_directions--route_targets"></a>
 ### Nested Schema for `vrfs.address_families.route_target_address_families.route_target_directions.route_targets`
-
-Required:
-
-- `route_target` (String) Route Target. Value in NX-OS DME format.
 
 ## Import
 

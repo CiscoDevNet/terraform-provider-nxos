@@ -24,8 +24,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -38,37 +38,32 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type IPv6 struct {
-	Device                      types.String `tfsdk:"device"`
-	Dn                          types.String `tfsdk:"id"`
-	AccessListMatchLocal        types.String `tfsdk:"access_list_match_local"`
-	AdminState                  types.String `tfsdk:"admin_state"`
-	Control                     types.String `tfsdk:"control"`
-	DropNdFragments             types.String `tfsdk:"drop_nd_fragments"`
-	QueuePackets                types.String `tfsdk:"queue_packets"`
-	StaticNeighborOutsideSubnet types.String `tfsdk:"static_neighbor_outside_subnet"`
-	SwitchPackets               types.String `tfsdk:"switch_packets"`
-	Vrfs                        []IPv6Vrfs   `tfsdk:"vrfs"`
+	Device                      types.String        `tfsdk:"device"`
+	Dn                          types.String        `tfsdk:"id"`
+	AccessListMatchLocal        types.String        `tfsdk:"access_list_match_local"`
+	AdminState                  types.String        `tfsdk:"admin_state"`
+	Control                     types.String        `tfsdk:"control"`
+	DropNdFragments             types.String        `tfsdk:"drop_nd_fragments"`
+	QueuePackets                types.String        `tfsdk:"queue_packets"`
+	StaticNeighborOutsideSubnet types.String        `tfsdk:"static_neighbor_outside_subnet"`
+	SwitchPackets               types.String        `tfsdk:"switch_packets"`
+	Vrfs                        map[string]IPv6Vrfs `tfsdk:"vrfs"`
 }
 
 type IPv6Vrfs struct {
-	Name         types.String           `tfsdk:"name"`
-	StaticRoutes []IPv6VrfsStaticRoutes `tfsdk:"static_routes"`
-	Interfaces   []IPv6VrfsInterfaces   `tfsdk:"interfaces"`
+	StaticRoutes map[string]IPv6VrfsStaticRoutes `tfsdk:"static_routes"`
+	Interfaces   map[string]IPv6VrfsInterfaces   `tfsdk:"interfaces"`
 }
 
 type IPv6VrfsStaticRoutes struct {
-	Prefix      types.String                   `tfsdk:"prefix"`
-	Control     types.String                   `tfsdk:"control"`
-	Description types.String                   `tfsdk:"description"`
-	Preference  types.Int64                    `tfsdk:"preference"`
-	Tag         types.Int64                    `tfsdk:"tag"`
-	NextHops    []IPv6VrfsStaticRoutesNextHops `tfsdk:"next_hops"`
+	Control     types.String                            `tfsdk:"control"`
+	Description types.String                            `tfsdk:"description"`
+	Preference  types.Int64                             `tfsdk:"preference"`
+	Tag         types.Int64                             `tfsdk:"tag"`
+	NextHops    map[string]IPv6VrfsStaticRoutesNextHops `tfsdk:"next_hops"`
 }
 
 type IPv6VrfsStaticRoutesNextHops struct {
-	InterfaceId          types.String `tfsdk:"interface_id"`
-	Address              types.String `tfsdk:"address"`
-	VrfName              types.String `tfsdk:"vrf_name"`
 	Description          types.String `tfsdk:"description"`
 	Object               types.Int64  `tfsdk:"object"`
 	Preference           types.Int64  `tfsdk:"preference"`
@@ -78,19 +73,17 @@ type IPv6VrfsStaticRoutesNextHops struct {
 }
 
 type IPv6VrfsInterfaces struct {
-	InterfaceId            types.String                  `tfsdk:"interface_id"`
-	AutoConfiguration      types.String                  `tfsdk:"auto_configuration"`
-	DefaultRoute           types.String                  `tfsdk:"default_route"`
-	Forward                types.String                  `tfsdk:"forward"`
-	LinkLocalAddressUseBia types.String                  `tfsdk:"link_local_address_use_bia"`
-	UseLinkLocalAddress    types.String                  `tfsdk:"use_link_local_address"`
-	Urpf                   types.String                  `tfsdk:"urpf"`
-	LinkLocalAddress       types.String                  `tfsdk:"link_local_address"`
-	Addresses              []IPv6VrfsInterfacesAddresses `tfsdk:"addresses"`
+	AutoConfiguration      types.String                           `tfsdk:"auto_configuration"`
+	DefaultRoute           types.String                           `tfsdk:"default_route"`
+	Forward                types.String                           `tfsdk:"forward"`
+	LinkLocalAddressUseBia types.String                           `tfsdk:"link_local_address_use_bia"`
+	UseLinkLocalAddress    types.String                           `tfsdk:"use_link_local_address"`
+	Urpf                   types.String                           `tfsdk:"urpf"`
+	LinkLocalAddress       types.String                           `tfsdk:"link_local_address"`
+	Addresses              map[string]IPv6VrfsInterfacesAddresses `tfsdk:"addresses"`
 }
 
 type IPv6VrfsInterfacesAddresses struct {
-	Address               types.String `tfsdk:"address"`
 	Type                  types.String `tfsdk:"type"`
 	Tag                   types.Int64  `tfsdk:"tag"`
 	AggregatePrefixLength types.Int64  `tfsdk:"aggregate_prefix_length"`
@@ -128,24 +121,25 @@ func (data IPv6) getDn() string {
 	return "sys/ipv6"
 }
 
-func (data IPv6Vrfs) getRn() string {
-	return fmt.Sprintf("dom-%s", data.Name.ValueString())
+func (data IPv6Vrfs) getRn(key string) string {
+	return fmt.Sprintf("dom-%s", key)
 }
 
-func (data IPv6VrfsStaticRoutes) getRn() string {
-	return fmt.Sprintf("rt-[%s]", data.Prefix.ValueString())
+func (data IPv6VrfsStaticRoutes) getRn(key string) string {
+	return fmt.Sprintf("rt-[%s]", key)
 }
 
-func (data IPv6VrfsStaticRoutesNextHops) getRn() string {
-	return fmt.Sprintf("nh-[%s]-addr-[%s]-vrf-[%s]", data.InterfaceId.ValueString(), data.Address.ValueString(), data.VrfName.ValueString())
+func (data IPv6VrfsStaticRoutesNextHops) getRn(key string) string {
+	keyParts := strings.SplitN(key, "|", 3)
+	return fmt.Sprintf("nh-[%s]-addr-[%s]-vrf-[%s]", keyParts[0], keyParts[1], keyParts[2])
 }
 
-func (data IPv6VrfsInterfaces) getRn() string {
-	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
+func (data IPv6VrfsInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
 }
 
-func (data IPv6VrfsInterfacesAddresses) getRn() string {
-	return fmt.Sprintf("addr-[%s]", data.Address.ValueString())
+func (data IPv6VrfsInterfacesAddresses) getRn(key string) string {
+	return fmt.Sprintf("addr-[%s]", key)
 }
 
 func (data IPv6) getClassName() string {
@@ -188,20 +182,16 @@ func (data IPv6) toBody() nxos.Body {
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
-		for _, child := range data.Vrfs {
+		for key, child := range data.Vrfs {
 			attrs = "{}"
-			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-			}
+			attrs, _ = sjson.Set(attrs, "name", key)
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv6Dom.attributes", attrs)
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv6Dom.children"
-				for _, child := range child.StaticRoutes {
+				for key, child := range child.StaticRoutes {
 					attrs = "{}"
-					if (!child.Prefix.IsUnknown() && !child.Prefix.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "prefix", child.Prefix.ValueString())
-					}
+					attrs, _ = sjson.Set(attrs, "prefix", key)
 					if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 					}
@@ -218,17 +208,12 @@ func (data IPv6) toBody() nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv6Route.children"
-						for _, child := range child.NextHops {
+						for key, child := range child.NextHops {
 							attrs = "{}"
-							if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
-								attrs, _ = sjson.Set(attrs, "nhIf", child.InterfaceId.ValueString())
-							}
-							if (!child.Address.IsUnknown() && !child.Address.IsNull()) || false {
-								attrs, _ = sjson.Set(attrs, "nhAddr", child.Address.ValueString())
-							}
-							if (!child.VrfName.IsUnknown() && !child.VrfName.IsNull()) || false {
-								attrs, _ = sjson.Set(attrs, "nhVrf", child.VrfName.ValueString())
-							}
+							keyParts := strings.SplitN(key, "|", 3)
+							attrs, _ = sjson.Set(attrs, "nhIf", keyParts[0])
+							attrs, _ = sjson.Set(attrs, "nhAddr", keyParts[1])
+							attrs, _ = sjson.Set(attrs, "nhVrf", keyParts[2])
 							if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 							}
@@ -251,11 +236,9 @@ func (data IPv6) toBody() nxos.Body {
 						}
 					}
 				}
-				for _, child := range child.Interfaces {
+				for key, child := range child.Interfaces {
 					attrs = "{}"
-					if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
-					}
+					attrs, _ = sjson.Set(attrs, "id", key)
 					if (!child.AutoConfiguration.IsUnknown() && !child.AutoConfiguration.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "autoconfig", child.AutoConfiguration.ValueString())
 					}
@@ -281,11 +264,9 @@ func (data IPv6) toBody() nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv6If.children"
-						for _, child := range child.Addresses {
+						for key, child := range child.Addresses {
 							attrs = "{}"
-							if (!child.Address.IsUnknown() && !child.Address.IsNull()) || false {
-								attrs, _ = sjson.Set(attrs, "addr", child.Address.ValueString())
-							}
+							attrs, _ = sjson.Set(attrs, "addr", key)
 							if (!child.Type.IsUnknown() && !child.Type.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "type", child.Type.ValueString())
 							}
@@ -327,8 +308,8 @@ func (data *IPv6) fromBody(res gjson.Result) {
 		var ripv6Inst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ipv6Inst.attributes.rn").String()
-				if key == "inst" {
+				rnValue := v.Get("ipv6Inst.attributes.rn").String()
+				if rnValue == "inst" {
 					ripv6Inst = v
 					return false
 				}
@@ -348,34 +329,35 @@ func (data *IPv6) fromBody(res gjson.Result) {
 					func(classname, value gjson.Result) bool {
 						if classname.String() == "ipv6Dom" {
 							var child IPv6Vrfs
-							child.Name = types.StringValue(value.Get("attributes.name").String())
+							mapKey := value.Get("attributes.name").String()
 							value.Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "ipv6Route" {
 												var nestedChildipv6Route IPv6VrfsStaticRoutes
-												nestedChildipv6Route.Prefix = types.StringValue(nestedValue.Get("attributes.prefix").String())
 												nestedChildipv6Route.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
 												nestedChildipv6Route.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
 												nestedChildipv6Route.Preference = types.Int64Value(nestedValue.Get("attributes.pref").Int())
 												nestedChildipv6Route.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
+												nestedMapKey := nestedValue.Get("attributes.prefix").String()
 												nestedValue.Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
 														nestedV.ForEach(
 															func(nestedClassname, nestedValue gjson.Result) bool {
 																if nestedClassname.String() == "ipv6Nexthop" {
 																	var nestedChildipv6Nexthop IPv6VrfsStaticRoutesNextHops
-																	nestedChildipv6Nexthop.InterfaceId = types.StringValue(nestedValue.Get("attributes.nhIf").String())
-																	nestedChildipv6Nexthop.Address = types.StringValue(nestedValue.Get("attributes.nhAddr").String())
-																	nestedChildipv6Nexthop.VrfName = types.StringValue(nestedValue.Get("attributes.nhVrf").String())
 																	nestedChildipv6Nexthop.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
 																	nestedChildipv6Nexthop.Object = types.Int64Value(nestedValue.Get("attributes.object").Int())
 																	nestedChildipv6Nexthop.Preference = types.Int64Value(nestedValue.Get("attributes.pref").Int())
 																	nestedChildipv6Nexthop.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
 																	nestedChildipv6Nexthop.Name = types.StringValue(nestedValue.Get("attributes.rtname").String())
 																	nestedChildipv6Nexthop.RewriteEncapsulation = types.StringValue(nestedValue.Get("attributes.rwEncap").String())
-																	nestedChildipv6Route.NextHops = append(nestedChildipv6Route.NextHops, nestedChildipv6Nexthop)
+																	nestedMapKey := nestedValue.Get("attributes.nhIf").String() + "|" + nestedValue.Get("attributes.nhAddr").String() + "|" + nestedValue.Get("attributes.nhVrf").String()
+																	if nestedChildipv6Route.NextHops == nil {
+																		nestedChildipv6Route.NextHops = make(map[string]IPv6VrfsStaticRoutesNextHops)
+																	}
+																	nestedChildipv6Route.NextHops[nestedMapKey] = nestedChildipv6Nexthop
 																}
 																return true
 															},
@@ -383,7 +365,10 @@ func (data *IPv6) fromBody(res gjson.Result) {
 														return true
 													},
 												)
-												child.StaticRoutes = append(child.StaticRoutes, nestedChildipv6Route)
+												if child.StaticRoutes == nil {
+													child.StaticRoutes = make(map[string]IPv6VrfsStaticRoutes)
+												}
+												child.StaticRoutes[nestedMapKey] = nestedChildipv6Route
 											}
 											return true
 										},
@@ -397,7 +382,6 @@ func (data *IPv6) fromBody(res gjson.Result) {
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "ipv6If" {
 												var nestedChildipv6If IPv6VrfsInterfaces
-												nestedChildipv6If.InterfaceId = types.StringValue(nestedValue.Get("attributes.id").String())
 												nestedChildipv6If.AutoConfiguration = types.StringValue(nestedValue.Get("attributes.autoconfig").String())
 												nestedChildipv6If.DefaultRoute = types.StringValue(nestedValue.Get("attributes.defaultRoute").String())
 												nestedChildipv6If.Forward = types.StringValue(nestedValue.Get("attributes.forward").String())
@@ -405,13 +389,13 @@ func (data *IPv6) fromBody(res gjson.Result) {
 												nestedChildipv6If.UseLinkLocalAddress = types.StringValue(nestedValue.Get("attributes.useLinkLocalAddr").String())
 												nestedChildipv6If.Urpf = types.StringValue(nestedValue.Get("attributes.urpf").String())
 												nestedChildipv6If.LinkLocalAddress = types.StringValue(nestedValue.Get("attributes.llAddr").String())
+												nestedMapKey := nestedValue.Get("attributes.id").String()
 												nestedValue.Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
 														nestedV.ForEach(
 															func(nestedClassname, nestedValue gjson.Result) bool {
 																if nestedClassname.String() == "ipv6Addr" {
 																	var nestedChildipv6Addr IPv6VrfsInterfacesAddresses
-																	nestedChildipv6Addr.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
 																	nestedChildipv6Addr.Type = types.StringValue(nestedValue.Get("attributes.type").String())
 																	nestedChildipv6Addr.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
 																	nestedChildipv6Addr.AggregatePrefixLength = types.Int64Value(nestedValue.Get("attributes.aggregatePrefixLength").Int())
@@ -419,7 +403,11 @@ func (data *IPv6) fromBody(res gjson.Result) {
 																	nestedChildipv6Addr.Preference = types.Int64Value(nestedValue.Get("attributes.pref").Int())
 																	nestedChildipv6Addr.UseBia = types.StringValue(nestedValue.Get("attributes.useBia").String())
 																	nestedChildipv6Addr.VpcPeer = types.StringValue(nestedValue.Get("attributes.vpcPeer").String())
-																	nestedChildipv6If.Addresses = append(nestedChildipv6If.Addresses, nestedChildipv6Addr)
+																	nestedMapKey := nestedValue.Get("attributes.addr").String()
+																	if nestedChildipv6If.Addresses == nil {
+																		nestedChildipv6If.Addresses = make(map[string]IPv6VrfsInterfacesAddresses)
+																	}
+																	nestedChildipv6If.Addresses[nestedMapKey] = nestedChildipv6Addr
 																}
 																return true
 															},
@@ -427,7 +415,10 @@ func (data *IPv6) fromBody(res gjson.Result) {
 														return true
 													},
 												)
-												child.Interfaces = append(child.Interfaces, nestedChildipv6If)
+												if child.Interfaces == nil {
+													child.Interfaces = make(map[string]IPv6VrfsInterfaces)
+												}
+												child.Interfaces[nestedMapKey] = nestedChildipv6If
 											}
 											return true
 										},
@@ -435,7 +426,10 @@ func (data *IPv6) fromBody(res gjson.Result) {
 									return true
 								},
 							)
-							data.Vrfs = append(data.Vrfs, child)
+							if data.Vrfs == nil {
+								data.Vrfs = make(map[string]IPv6Vrfs)
+							}
+							data.Vrfs[mapKey] = child
 						}
 						return true
 					},
@@ -454,8 +448,8 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 	var ripv6Inst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("ipv6Inst.attributes.rn").String()
-			if key == "inst" {
+			rnValue := v.Get("ipv6Inst.attributes.rn").String()
+			if rnValue == "inst" {
 				ripv6Inst = v
 				return false
 			}
@@ -497,11 +491,11 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 	} else {
 		data.SwitchPackets = types.StringNull()
 	}
-	for c := len(data.Vrfs) - 1; c >= 0; c-- {
+	for key, item := range data.Vrfs {
 		var ripv6Dom gjson.Result
 		ripv6Inst.Get("ipv6Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("ipv6Dom.attributes.name").String() == data.Vrfs[c].Name.ValueString() {
+				if v.Get("ipv6Dom.attributes.name").String() == key {
 					ripv6Dom = v
 					return false
 				}
@@ -509,19 +503,15 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !ripv6Dom.Exists() {
-			data.Vrfs = slices.Delete(data.Vrfs, c, c+1)
+			delete(data.Vrfs, key)
 			continue
 		}
-		if !data.Vrfs[c].Name.IsNull() {
-			data.Vrfs[c].Name = types.StringValue(ripv6Dom.Get("ipv6Dom.attributes.name").String())
-		} else {
-			data.Vrfs[c].Name = types.StringNull()
-		}
-		for nc := len(data.Vrfs[c].StaticRoutes) - 1; nc >= 0; nc-- {
+		for nc := range item.StaticRoutes {
+			ncItem := item.StaticRoutes[nc]
 			var ripv6Route gjson.Result
 			ripv6Dom.Get("ipv6Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					if v.Get("ipv6Route.attributes.prefix").String() == data.Vrfs[c].StaticRoutes[nc].Prefix.ValueString() {
+					if v.Get("ipv6Route.attributes.prefix").String() == nc {
 						ripv6Route = v
 						return false
 					}
@@ -529,41 +519,38 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 				},
 			)
 			if !ripv6Route.Exists() {
-				data.Vrfs[c].StaticRoutes = slices.Delete(data.Vrfs[c].StaticRoutes, nc, nc+1)
+				delete(item.StaticRoutes, nc)
 				continue
 			}
-			if !data.Vrfs[c].StaticRoutes[nc].Prefix.IsNull() {
-				data.Vrfs[c].StaticRoutes[nc].Prefix = types.StringValue(ripv6Route.Get("ipv6Route.attributes.prefix").String())
+			if !ncItem.Control.IsNull() {
+				ncItem.Control = types.StringValue(ripv6Route.Get("ipv6Route.attributes.ctrl").String())
 			} else {
-				data.Vrfs[c].StaticRoutes[nc].Prefix = types.StringNull()
+				ncItem.Control = types.StringNull()
 			}
-			if !data.Vrfs[c].StaticRoutes[nc].Control.IsNull() {
-				data.Vrfs[c].StaticRoutes[nc].Control = types.StringValue(ripv6Route.Get("ipv6Route.attributes.ctrl").String())
+			if !ncItem.Description.IsNull() {
+				ncItem.Description = types.StringValue(ripv6Route.Get("ipv6Route.attributes.descr").String())
 			} else {
-				data.Vrfs[c].StaticRoutes[nc].Control = types.StringNull()
+				ncItem.Description = types.StringNull()
 			}
-			if !data.Vrfs[c].StaticRoutes[nc].Description.IsNull() {
-				data.Vrfs[c].StaticRoutes[nc].Description = types.StringValue(ripv6Route.Get("ipv6Route.attributes.descr").String())
+			if !ncItem.Preference.IsNull() {
+				ncItem.Preference = types.Int64Value(ripv6Route.Get("ipv6Route.attributes.pref").Int())
 			} else {
-				data.Vrfs[c].StaticRoutes[nc].Description = types.StringNull()
+				ncItem.Preference = types.Int64Null()
 			}
-			if !data.Vrfs[c].StaticRoutes[nc].Preference.IsNull() {
-				data.Vrfs[c].StaticRoutes[nc].Preference = types.Int64Value(ripv6Route.Get("ipv6Route.attributes.pref").Int())
+			if !ncItem.Tag.IsNull() {
+				ncItem.Tag = types.Int64Value(ripv6Route.Get("ipv6Route.attributes.tag").Int())
 			} else {
-				data.Vrfs[c].StaticRoutes[nc].Preference = types.Int64Null()
+				ncItem.Tag = types.Int64Null()
 			}
-			if !data.Vrfs[c].StaticRoutes[nc].Tag.IsNull() {
-				data.Vrfs[c].StaticRoutes[nc].Tag = types.Int64Value(ripv6Route.Get("ipv6Route.attributes.tag").Int())
-			} else {
-				data.Vrfs[c].StaticRoutes[nc].Tag = types.Int64Null()
-			}
-			for nc_ := len(data.Vrfs[c].StaticRoutes[nc].NextHops) - 1; nc_ >= 0; nc_-- {
+			for nc_ := range ncItem.NextHops {
+				nc_Item := ncItem.NextHops[nc_]
+				keyParts := strings.SplitN(nc_, "|", 3)
 				var ripv6Nexthop gjson.Result
 				ripv6Route.Get("ipv6Route.children").ForEach(
 					func(_, v gjson.Result) bool {
-						if v.Get("ipv6Nexthop.attributes.nhIf").String() == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].InterfaceId.ValueString() &&
-							v.Get("ipv6Nexthop.attributes.nhAddr").String() == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Address.ValueString() &&
-							v.Get("ipv6Nexthop.attributes.nhVrf").String() == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].VrfName.ValueString() {
+						if v.Get("ipv6Nexthop.attributes.nhIf").String() == keyParts[0] &&
+							v.Get("ipv6Nexthop.attributes.nhAddr").String() == keyParts[1] &&
+							v.Get("ipv6Nexthop.attributes.nhVrf").String() == keyParts[2] {
 							ripv6Nexthop = v
 							return false
 						}
@@ -571,61 +558,49 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !ripv6Nexthop.Exists() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops = slices.Delete(data.Vrfs[c].StaticRoutes[nc].NextHops, nc_, nc_+1)
+					delete(ncItem.NextHops, nc_)
 					continue
 				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].InterfaceId.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].InterfaceId = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.nhIf").String())
+				if !nc_Item.Description.IsNull() {
+					nc_Item.Description = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.descr").String())
 				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].InterfaceId = types.StringNull()
+					nc_Item.Description = types.StringNull()
 				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Address.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Address = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.nhAddr").String())
+				if !nc_Item.Object.IsNull() {
+					nc_Item.Object = types.Int64Value(ripv6Nexthop.Get("ipv6Nexthop.attributes.object").Int())
 				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Address = types.StringNull()
+					nc_Item.Object = types.Int64Null()
 				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].VrfName.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].VrfName = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.nhVrf").String())
+				if !nc_Item.Preference.IsNull() {
+					nc_Item.Preference = types.Int64Value(ripv6Nexthop.Get("ipv6Nexthop.attributes.pref").Int())
 				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].VrfName = types.StringNull()
+					nc_Item.Preference = types.Int64Null()
 				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Description.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Description = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.descr").String())
+				if !nc_Item.Tag.IsNull() {
+					nc_Item.Tag = types.Int64Value(ripv6Nexthop.Get("ipv6Nexthop.attributes.tag").Int())
 				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Description = types.StringNull()
+					nc_Item.Tag = types.Int64Null()
 				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Object.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Object = types.Int64Value(ripv6Nexthop.Get("ipv6Nexthop.attributes.object").Int())
+				if !nc_Item.Name.IsNull() {
+					nc_Item.Name = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.rtname").String())
 				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Object = types.Int64Null()
+					nc_Item.Name = types.StringNull()
 				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Preference.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Preference = types.Int64Value(ripv6Nexthop.Get("ipv6Nexthop.attributes.pref").Int())
+				if !nc_Item.RewriteEncapsulation.IsNull() {
+					nc_Item.RewriteEncapsulation = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.rwEncap").String())
 				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Preference = types.Int64Null()
+					nc_Item.RewriteEncapsulation = types.StringNull()
 				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Tag.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Tag = types.Int64Value(ripv6Nexthop.Get("ipv6Nexthop.attributes.tag").Int())
-				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Tag = types.Int64Null()
-				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Name.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Name = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.rtname").String())
-				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Name = types.StringNull()
-				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].RewriteEncapsulation.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].RewriteEncapsulation = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.rwEncap").String())
-				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].RewriteEncapsulation = types.StringNull()
-				}
+				ncItem.NextHops[nc_] = nc_Item
 			}
+			item.StaticRoutes[nc] = ncItem
 		}
-		for nc := len(data.Vrfs[c].Interfaces) - 1; nc >= 0; nc-- {
+		for nc := range item.Interfaces {
+			ncItem := item.Interfaces[nc]
 			var ripv6If gjson.Result
 			ripv6Dom.Get("ipv6Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					if v.Get("ipv6If.attributes.id").String() == data.Vrfs[c].Interfaces[nc].InterfaceId.ValueString() {
+					if v.Get("ipv6If.attributes.id").String() == nc {
 						ripv6If = v
 						return false
 					}
@@ -633,54 +608,50 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 				},
 			)
 			if !ripv6If.Exists() {
-				data.Vrfs[c].Interfaces = slices.Delete(data.Vrfs[c].Interfaces, nc, nc+1)
+				delete(item.Interfaces, nc)
 				continue
 			}
-			if !data.Vrfs[c].Interfaces[nc].InterfaceId.IsNull() {
-				data.Vrfs[c].Interfaces[nc].InterfaceId = types.StringValue(ripv6If.Get("ipv6If.attributes.id").String())
+			if !ncItem.AutoConfiguration.IsNull() {
+				ncItem.AutoConfiguration = types.StringValue(ripv6If.Get("ipv6If.attributes.autoconfig").String())
 			} else {
-				data.Vrfs[c].Interfaces[nc].InterfaceId = types.StringNull()
+				ncItem.AutoConfiguration = types.StringNull()
 			}
-			if !data.Vrfs[c].Interfaces[nc].AutoConfiguration.IsNull() {
-				data.Vrfs[c].Interfaces[nc].AutoConfiguration = types.StringValue(ripv6If.Get("ipv6If.attributes.autoconfig").String())
+			if !ncItem.DefaultRoute.IsNull() {
+				ncItem.DefaultRoute = types.StringValue(ripv6If.Get("ipv6If.attributes.defaultRoute").String())
 			} else {
-				data.Vrfs[c].Interfaces[nc].AutoConfiguration = types.StringNull()
+				ncItem.DefaultRoute = types.StringNull()
 			}
-			if !data.Vrfs[c].Interfaces[nc].DefaultRoute.IsNull() {
-				data.Vrfs[c].Interfaces[nc].DefaultRoute = types.StringValue(ripv6If.Get("ipv6If.attributes.defaultRoute").String())
+			if !ncItem.Forward.IsNull() {
+				ncItem.Forward = types.StringValue(ripv6If.Get("ipv6If.attributes.forward").String())
 			} else {
-				data.Vrfs[c].Interfaces[nc].DefaultRoute = types.StringNull()
+				ncItem.Forward = types.StringNull()
 			}
-			if !data.Vrfs[c].Interfaces[nc].Forward.IsNull() {
-				data.Vrfs[c].Interfaces[nc].Forward = types.StringValue(ripv6If.Get("ipv6If.attributes.forward").String())
+			if !ncItem.LinkLocalAddressUseBia.IsNull() {
+				ncItem.LinkLocalAddressUseBia = types.StringValue(ripv6If.Get("ipv6If.attributes.llAddrUseBia").String())
 			} else {
-				data.Vrfs[c].Interfaces[nc].Forward = types.StringNull()
+				ncItem.LinkLocalAddressUseBia = types.StringNull()
 			}
-			if !data.Vrfs[c].Interfaces[nc].LinkLocalAddressUseBia.IsNull() {
-				data.Vrfs[c].Interfaces[nc].LinkLocalAddressUseBia = types.StringValue(ripv6If.Get("ipv6If.attributes.llAddrUseBia").String())
+			if !ncItem.UseLinkLocalAddress.IsNull() {
+				ncItem.UseLinkLocalAddress = types.StringValue(ripv6If.Get("ipv6If.attributes.useLinkLocalAddr").String())
 			} else {
-				data.Vrfs[c].Interfaces[nc].LinkLocalAddressUseBia = types.StringNull()
+				ncItem.UseLinkLocalAddress = types.StringNull()
 			}
-			if !data.Vrfs[c].Interfaces[nc].UseLinkLocalAddress.IsNull() {
-				data.Vrfs[c].Interfaces[nc].UseLinkLocalAddress = types.StringValue(ripv6If.Get("ipv6If.attributes.useLinkLocalAddr").String())
+			if !ncItem.Urpf.IsNull() {
+				ncItem.Urpf = types.StringValue(ripv6If.Get("ipv6If.attributes.urpf").String())
 			} else {
-				data.Vrfs[c].Interfaces[nc].UseLinkLocalAddress = types.StringNull()
+				ncItem.Urpf = types.StringNull()
 			}
-			if !data.Vrfs[c].Interfaces[nc].Urpf.IsNull() {
-				data.Vrfs[c].Interfaces[nc].Urpf = types.StringValue(ripv6If.Get("ipv6If.attributes.urpf").String())
+			if !ncItem.LinkLocalAddress.IsNull() {
+				ncItem.LinkLocalAddress = types.StringValue(ripv6If.Get("ipv6If.attributes.llAddr").String())
 			} else {
-				data.Vrfs[c].Interfaces[nc].Urpf = types.StringNull()
+				ncItem.LinkLocalAddress = types.StringNull()
 			}
-			if !data.Vrfs[c].Interfaces[nc].LinkLocalAddress.IsNull() {
-				data.Vrfs[c].Interfaces[nc].LinkLocalAddress = types.StringValue(ripv6If.Get("ipv6If.attributes.llAddr").String())
-			} else {
-				data.Vrfs[c].Interfaces[nc].LinkLocalAddress = types.StringNull()
-			}
-			for nc_ := len(data.Vrfs[c].Interfaces[nc].Addresses) - 1; nc_ >= 0; nc_-- {
+			for nc_ := range ncItem.Addresses {
+				nc_Item := ncItem.Addresses[nc_]
 				var ripv6Addr gjson.Result
 				ripv6If.Get("ipv6If.children").ForEach(
 					func(_, v gjson.Result) bool {
-						if v.Get("ipv6Addr.attributes.addr").String() == data.Vrfs[c].Interfaces[nc].Addresses[nc_].Address.ValueString() {
+						if v.Get("ipv6Addr.attributes.addr").String() == nc_ {
 							ripv6Addr = v
 							return false
 						}
@@ -688,51 +659,49 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !ripv6Addr.Exists() {
-					data.Vrfs[c].Interfaces[nc].Addresses = slices.Delete(data.Vrfs[c].Interfaces[nc].Addresses, nc_, nc_+1)
+					delete(ncItem.Addresses, nc_)
 					continue
 				}
-				if !data.Vrfs[c].Interfaces[nc].Addresses[nc_].Address.IsNull() {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Address = types.StringValue(ripv6Addr.Get("ipv6Addr.attributes.addr").String())
+				if !nc_Item.Type.IsNull() {
+					nc_Item.Type = types.StringValue(ripv6Addr.Get("ipv6Addr.attributes.type").String())
 				} else {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Address = types.StringNull()
+					nc_Item.Type = types.StringNull()
 				}
-				if !data.Vrfs[c].Interfaces[nc].Addresses[nc_].Type.IsNull() {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Type = types.StringValue(ripv6Addr.Get("ipv6Addr.attributes.type").String())
+				if !nc_Item.Tag.IsNull() {
+					nc_Item.Tag = types.Int64Value(ripv6Addr.Get("ipv6Addr.attributes.tag").Int())
 				} else {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Type = types.StringNull()
+					nc_Item.Tag = types.Int64Null()
 				}
-				if !data.Vrfs[c].Interfaces[nc].Addresses[nc_].Tag.IsNull() {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Tag = types.Int64Value(ripv6Addr.Get("ipv6Addr.attributes.tag").Int())
+				if !nc_Item.AggregatePrefixLength.IsNull() {
+					nc_Item.AggregatePrefixLength = types.Int64Value(ripv6Addr.Get("ipv6Addr.attributes.aggregatePrefixLength").Int())
 				} else {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Tag = types.Int64Null()
+					nc_Item.AggregatePrefixLength = types.Int64Null()
 				}
-				if !data.Vrfs[c].Interfaces[nc].Addresses[nc_].AggregatePrefixLength.IsNull() {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].AggregatePrefixLength = types.Int64Value(ripv6Addr.Get("ipv6Addr.attributes.aggregatePrefixLength").Int())
+				if !nc_Item.Control.IsNull() {
+					nc_Item.Control = types.StringValue(ripv6Addr.Get("ipv6Addr.attributes.ctrl").String())
 				} else {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].AggregatePrefixLength = types.Int64Null()
+					nc_Item.Control = types.StringNull()
 				}
-				if !data.Vrfs[c].Interfaces[nc].Addresses[nc_].Control.IsNull() {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Control = types.StringValue(ripv6Addr.Get("ipv6Addr.attributes.ctrl").String())
+				if !nc_Item.Preference.IsNull() {
+					nc_Item.Preference = types.Int64Value(ripv6Addr.Get("ipv6Addr.attributes.pref").Int())
 				} else {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Control = types.StringNull()
+					nc_Item.Preference = types.Int64Null()
 				}
-				if !data.Vrfs[c].Interfaces[nc].Addresses[nc_].Preference.IsNull() {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Preference = types.Int64Value(ripv6Addr.Get("ipv6Addr.attributes.pref").Int())
+				if !nc_Item.UseBia.IsNull() {
+					nc_Item.UseBia = types.StringValue(ripv6Addr.Get("ipv6Addr.attributes.useBia").String())
 				} else {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Preference = types.Int64Null()
+					nc_Item.UseBia = types.StringNull()
 				}
-				if !data.Vrfs[c].Interfaces[nc].Addresses[nc_].UseBia.IsNull() {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].UseBia = types.StringValue(ripv6Addr.Get("ipv6Addr.attributes.useBia").String())
+				if !nc_Item.VpcPeer.IsNull() {
+					nc_Item.VpcPeer = types.StringValue(ripv6Addr.Get("ipv6Addr.attributes.vpcPeer").String())
 				} else {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].UseBia = types.StringNull()
+					nc_Item.VpcPeer = types.StringNull()
 				}
-				if !data.Vrfs[c].Interfaces[nc].Addresses[nc_].VpcPeer.IsNull() {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].VpcPeer = types.StringValue(ripv6Addr.Get("ipv6Addr.attributes.vpcPeer").String())
-				} else {
-					data.Vrfs[c].Interfaces[nc].Addresses[nc_].VpcPeer = types.StringNull()
-				}
+				ncItem.Addresses[nc_] = nc_Item
 			}
+			item.Interfaces[nc] = ncItem
 		}
+		data.Vrfs[key] = item
 	}
 }
 
@@ -770,9 +739,9 @@ func (data IPv6) toDeleteBody() nxos.Body {
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
-		for _, child := range data.Vrfs {
+		for key, child := range data.Vrfs {
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.rn", child.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.rn", child.getRn(key))
 			deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.status", "deleted")
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
@@ -785,129 +754,99 @@ func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6) nxos.Body {
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.Vrfs {
-		found := false
-		for _, planChild := range data.Vrfs {
-			if stateChild.Name == planChild.Name {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.Vrfs {
+		if _, found := data.Vrfs[stateKey]; !found {
+			stateChild := state.Vrfs[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.ipv6Inst.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.Vrfs {
-		for pdi := range data.Vrfs {
-			if state.Vrfs[di].Name == data.Vrfs[pdi].Name {
-				matchBodyPathdi := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv6Inst.children").Array() {
-					if mv.Get("ipv6Dom.attributes.rn").String() == state.Vrfs[di].getRn() {
-						matchBodyPathdi = bodyPath + ".0.ipv6Inst.children" + "." + strconv.Itoa(mi) + ".ipv6Dom.children"
-						break
-					}
-				}
-				if matchBodyPathdi == "" {
+		if _, found := data.Vrfs[di]; !found {
+			continue
+		}
+		stateItemdi := state.Vrfs[di]
+		planItemdi := data.Vrfs[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv6Inst.children").Array() {
+			if mv.Get("ipv6Dom.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.ipv6Inst.children" + "." + strconv.Itoa(mi) + ".ipv6Dom.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.StaticRoutes {
+			if _, found := planItemdi.StaticRoutes[stateChildKey]; !found {
+				stateChild := stateItemdi.StaticRoutes[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ipv6Route.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "ipv6Route.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for di_ := range stateItemdi.StaticRoutes {
+			if _, found := planItemdi.StaticRoutes[di_]; !found {
+				continue
+			}
+			stateItemdi_ := stateItemdi.StaticRoutes[di_]
+			planItemdi_ := planItemdi.StaticRoutes[di_]
+			matchBodyPathdi_ := ""
+			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+				if mv.Get("ipv6Route.attributes.rn").String() == stateItemdi_.getRn(di_) {
+					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ipv6Route.children"
 					break
 				}
-				for _, stateChild := range state.Vrfs[di].StaticRoutes {
-					found := false
-					for _, planChild := range data.Vrfs[pdi].StaticRoutes {
-						if stateChild.Prefix == planChild.Prefix {
-							found = true
-							break
-						}
-					}
-					if !found {
-						deleteBody := ""
-						deleteBody, _ = sjson.Set(deleteBody, "ipv6Route.attributes.rn", stateChild.getRn())
-						deleteBody, _ = sjson.Set(deleteBody, "ipv6Route.attributes.status", "deleted")
-						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
-					}
+			}
+			if matchBodyPathdi_ == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi_.NextHops {
+				if _, found := planItemdi_.NextHops[stateChildKey]; !found {
+					stateChild := stateItemdi_.NextHops[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipv6Nexthop.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipv6Nexthop.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 				}
-				for di_ := range state.Vrfs[di].StaticRoutes {
-					for pdi_ := range data.Vrfs[pdi].StaticRoutes {
-						if state.Vrfs[di].StaticRoutes[di_].Prefix == data.Vrfs[pdi].StaticRoutes[pdi_].Prefix {
-							matchBodyPathdi_ := ""
-							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-								if mv.Get("ipv6Route.attributes.rn").String() == state.Vrfs[di].StaticRoutes[di_].getRn() {
-									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ipv6Route.children"
-									break
-								}
-							}
-							if matchBodyPathdi_ == "" {
-								break
-							}
-							for _, stateChild := range state.Vrfs[di].StaticRoutes[di_].NextHops {
-								found := false
-								for _, planChild := range data.Vrfs[pdi].StaticRoutes[pdi_].NextHops {
-									if stateChild.InterfaceId == planChild.InterfaceId && stateChild.Address == planChild.Address && stateChild.VrfName == planChild.VrfName {
-										found = true
-										break
-									}
-								}
-								if !found {
-									deleteBody := ""
-									deleteBody, _ = sjson.Set(deleteBody, "ipv6Nexthop.attributes.rn", stateChild.getRn())
-									deleteBody, _ = sjson.Set(deleteBody, "ipv6Nexthop.attributes.status", "deleted")
-									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
-								}
-							}
-							break
-						}
-					}
+			}
+		}
+		for stateChildKey := range stateItemdi.Interfaces {
+			if _, found := planItemdi.Interfaces[stateChildKey]; !found {
+				stateChild := stateItemdi.Interfaces[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ipv6If.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "ipv6If.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for di_ := range stateItemdi.Interfaces {
+			if _, found := planItemdi.Interfaces[di_]; !found {
+				continue
+			}
+			stateItemdi_ := stateItemdi.Interfaces[di_]
+			planItemdi_ := planItemdi.Interfaces[di_]
+			matchBodyPathdi_ := ""
+			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+				if mv.Get("ipv6If.attributes.rn").String() == stateItemdi_.getRn(di_) {
+					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ipv6If.children"
+					break
 				}
-				for _, stateChild := range state.Vrfs[di].Interfaces {
-					found := false
-					for _, planChild := range data.Vrfs[pdi].Interfaces {
-						if stateChild.InterfaceId == planChild.InterfaceId {
-							found = true
-							break
-						}
-					}
-					if !found {
-						deleteBody := ""
-						deleteBody, _ = sjson.Set(deleteBody, "ipv6If.attributes.rn", stateChild.getRn())
-						deleteBody, _ = sjson.Set(deleteBody, "ipv6If.attributes.status", "deleted")
-						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
-					}
+			}
+			if matchBodyPathdi_ == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi_.Addresses {
+				if _, found := planItemdi_.Addresses[stateChildKey]; !found {
+					stateChild := stateItemdi_.Addresses[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipv6Addr.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipv6Addr.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 				}
-				for di_ := range state.Vrfs[di].Interfaces {
-					for pdi_ := range data.Vrfs[pdi].Interfaces {
-						if state.Vrfs[di].Interfaces[di_].InterfaceId == data.Vrfs[pdi].Interfaces[pdi_].InterfaceId {
-							matchBodyPathdi_ := ""
-							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-								if mv.Get("ipv6If.attributes.rn").String() == state.Vrfs[di].Interfaces[di_].getRn() {
-									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ipv6If.children"
-									break
-								}
-							}
-							if matchBodyPathdi_ == "" {
-								break
-							}
-							for _, stateChild := range state.Vrfs[di].Interfaces[di_].Addresses {
-								found := false
-								for _, planChild := range data.Vrfs[pdi].Interfaces[pdi_].Addresses {
-									if stateChild.Address == planChild.Address {
-										found = true
-										break
-									}
-								}
-								if !found {
-									deleteBody := ""
-									deleteBody, _ = sjson.Set(deleteBody, "ipv6Addr.attributes.rn", stateChild.getRn())
-									deleteBody, _ = sjson.Set(deleteBody, "ipv6Addr.attributes.status", "deleted")
-									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
-								}
-							}
-							break
-						}
-					}
-				}
-				break
 			}
 		}
 	}

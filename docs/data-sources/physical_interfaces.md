@@ -37,7 +37,7 @@ data "nxos_physical_interfaces" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `physical_interfaces` (Attributes List) List of physical interfaces. (see [below for nested schema](#nestedatt--physical_interfaces))
+- `physical_interfaces` (Attributes Map) List of physical interfaces. (see [below for nested schema](#nestedatt--physical_interfaces))
 
 <a id="nestedatt--physical_interfaces"></a>
 ### Nested Schema for `physical_interfaces`
@@ -58,7 +58,6 @@ Read-Only:
 - `equalization_delay` (Number) Administrative port equalization delay time.
 - `fec_mode` (String) FEC Mode.
 - `inherit_bandwidth` (Number) Administrative port inherit bandwidth.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `itu_channel` (Number) ITU Channel to support DWDM XCVR.
 - `layer` (String) Administrative port layer.
 - `link_active_jitter_management` (String) Administrative port link active-jitter-management.

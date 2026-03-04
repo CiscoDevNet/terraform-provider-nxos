@@ -68,15 +68,11 @@ func (d *SubinterfacesDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"subinterfaces": schema.ListNestedAttribute{
+			"subinterfaces": schema.MapNestedAttribute{
 				MarkdownDescription: "List of subinterfaces.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1.10`.",
-							Computed:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: "Administrative state.",
 							Computed:            true,

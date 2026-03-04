@@ -28,58 +28,63 @@ This resource can manage the OSPFv3 configuration on NX-OS devices, including OS
 ```terraform
 resource "nxos_ospfv3" "example" {
   admin_state = "enabled"
-  instances = [{
-    name         = "OSPFv3"
-    admin_state  = "enabled"
-    flush_routes = false
-    isolate      = false
-    vrfs = [{
-      name                      = "VRF1"
-      admin_state               = "enabled"
-      bandwidth_reference       = 400000
-      bandwidth_reference_unit  = "mbps"
-      router_id                 = "34.56.78.90"
-      bfd_control               = false
-      log_adjacency_changes     = "brief"
-      discard_route_external    = false
-      discard_route_internal    = false
-      name_lookup               = true
-      passive_interface_default = false
-      areas = [{
-        area_id                  = "0.0.0.10"
-        redistribute             = false
-        nssa_translator_role     = "always"
-        summary                  = false
-        suppress_forward_address = false
-        type                     = "regular"
-      }]
-      address_families = [{
-        address_family_type           = "ipv6-ucast"
-        administrative_distance       = "10"
-        default_metric                = "1024"
-        default_route_nssa_pbit_clear = true
-        max_ecmp_cost                 = 16
-      }]
-    }]
-  }]
-  interfaces = [{
-    interface_id          = "eth1/4"
-    advertise_secondaries = false
-    area                  = "0.0.0.10"
-    bfd_control           = "disabled"
-    cost                  = 1000
-    dead_interval         = 60
-    hello_interval        = 15
-    network_type          = "p2p"
-    passive               = "enabled"
-    priority              = 10
-    admin_state           = "enabled"
-    instance_name         = "OSPFv3"
-    instance_id           = 1
-    mtu_ignore            = true
-    retransmit_interval   = 10
-    transmit_delay        = 5
-  }]
+  instances = {
+    "OSPFv3" = {
+      admin_state  = "enabled"
+      flush_routes = false
+      isolate      = false
+      vrfs = {
+        "VRF1" = {
+          admin_state               = "enabled"
+          bandwidth_reference       = 400000
+          bandwidth_reference_unit  = "mbps"
+          router_id                 = "34.56.78.90"
+          bfd_control               = false
+          log_adjacency_changes     = "brief"
+          discard_route_external    = false
+          discard_route_internal    = false
+          name_lookup               = true
+          passive_interface_default = false
+          areas = {
+            "0.0.0.10" = {
+              redistribute             = false
+              nssa_translator_role     = "always"
+              summary                  = false
+              suppress_forward_address = false
+              type                     = "regular"
+            }
+          }
+          address_families = {
+            "ipv6-ucast" = {
+              administrative_distance       = "10"
+              default_metric                = "1024"
+              default_route_nssa_pbit_clear = true
+              max_ecmp_cost                 = 16
+            }
+          }
+        }
+      }
+    }
+  }
+  interfaces = {
+    "eth1/4" = {
+      advertise_secondaries = false
+      area                  = "0.0.0.10"
+      bfd_control           = "disabled"
+      cost                  = 1000
+      dead_interval         = 60
+      hello_interval        = 15
+      network_type          = "p2p"
+      passive               = "enabled"
+      priority              = 10
+      admin_state           = "enabled"
+      instance_name         = "OSPFv3"
+      instance_id           = 1
+      mtu_ignore            = true
+      retransmit_interval   = 10
+      transmit_delay        = 5
+    }
+  }
 }
 ```
 
@@ -91,8 +96,8 @@ resource "nxos_ospfv3" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
-- `instances` (Attributes List) List of OSPFv3 instances. (see [below for nested schema](#nestedatt--instances))
-- `interfaces` (Attributes List) List of OSPFv3 interface configurations. (see [below for nested schema](#nestedatt--interfaces))
+- `instances` (Attributes Map) List of OSPFv3 instances. (see [below for nested schema](#nestedatt--instances))
+- `interfaces` (Attributes Map) List of OSPFv3 interface configurations. (see [below for nested schema](#nestedatt--interfaces))
 
 ### Read-Only
 
@@ -101,31 +106,23 @@ resource "nxos_ospfv3" "example" {
 <a id="nestedatt--instances"></a>
 ### Nested Schema for `instances`
 
-Required:
-
-- `name` (String) OSPFv3 instance name.
-
 Optional:
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `flush_routes` (Boolean) Flush routes on non-graceful controlled restart.
 - `isolate` (Boolean) Isolate this router from OSPFv3 perspective.
-- `vrfs` (Attributes List) List of OSPFv3 VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+- `vrfs` (Attributes Map) List of OSPFv3 VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
 ### Nested Schema for `instances.vrfs`
 
-Required:
-
-- `name` (String) VRF name.
-
 Optional:
 
-- `address_families` (Attributes List) List of OSPFv3 address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
+- `address_families` (Attributes Map) List of OSPFv3 address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
 - `admin_state` (String) OSPFv3 VRF administrative state.
   - Choices: `enabled`, `disabled`
-- `areas` (Attributes List) List of OSPFv3 areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
+- `areas` (Attributes Map) List of OSPFv3 areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
 - `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
   - Range: `0`-`4294967295`
 - `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
@@ -142,11 +139,6 @@ Optional:
 <a id="nestedatt--instances--vrfs--address_families"></a>
 ### Nested Schema for `instances.vrfs.address_families`
 
-Required:
-
-- `address_family_type` (String) IPv6 unicast address family type.
-  - Choices: `ipv6-ucast`
-
 Optional:
 
 - `administrative_distance` (String) Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified
@@ -158,10 +150,6 @@ Optional:
 
 <a id="nestedatt--instances--vrfs--areas"></a>
 ### Nested Schema for `instances.vrfs.areas`
-
-Required:
-
-- `area_id` (String) Area Id as an integer or ip address.
 
 Optional:
 
@@ -178,10 +166,6 @@ Optional:
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 Optional:
 

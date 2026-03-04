@@ -34,8 +34,7 @@ resource "nxos_evpn" "example" {
       route_target_directions = {
         "import" = {
           route_targets = {
-            "route-target:as2-nn2:2:2" = {
-            }
+            "route-target:as2-nn2:2:2" = {}
           }
         }
       }
@@ -86,9 +85,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_evpn.example
-  identity = {
-  }
+  to       = nxos_evpn.example
+  identity = {}
 }
 ```
 

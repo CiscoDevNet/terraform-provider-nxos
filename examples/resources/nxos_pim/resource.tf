@@ -67,8 +67,7 @@ resource "nxos_pim" "example" {
       anycast_rp_description      = "Anycast_RP"
       anycast_rp_name             = "anycast-rp"
       anycast_rp_peers = {
-        "10.1.1.1/32|20.1.1.1/32" = {
-        }
+        "10.1.1.1/32;20.1.1.1/32" = {}
       }
     }
   }

@@ -50,7 +50,7 @@ resource "nxos_ipv4" "example" {
           preference  = 2
           tag         = 10
           next_hops = {
-            "unspecified|1.2.3.4|default" = {
+            "unspecified;1.2.3.4;default" = {
               description           = "My Description"
               object                = 10
               preference            = 123
@@ -206,9 +206,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_ipv4.example
-  identity = {
-  }
+  to       = nxos_ipv4.example
+  identity = {}
 }
 ```
 

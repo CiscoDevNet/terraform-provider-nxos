@@ -1,5 +1,4 @@
 import {
-  to = nxos_ipv6.example
-  identity = {
-  }
+  to       = nxos_ipv6.example
+  identity = {}
 }

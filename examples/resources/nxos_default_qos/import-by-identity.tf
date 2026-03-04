@@ -1,5 +1,4 @@
 import {
-  to = nxos_default_qos.example
-  identity = {
-  }
+  to       = nxos_default_qos.example
+  identity = {}
 }

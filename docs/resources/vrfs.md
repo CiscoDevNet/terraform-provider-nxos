@@ -46,8 +46,7 @@ resource "nxos_vrfs" "example" {
               route_target_directions = {
                 "import" = {
                   route_targets = {
-                    "route-target:as2-nn2:2:2" = {
-                    }
+                    "route-target:as2-nn2:2:2" = {}
                   }
                 }
               }
@@ -122,9 +121,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_vrfs.example
-  identity = {
-  }
+  to       = nxos_vrfs.example
+  identity = {}
 }
 ```
 

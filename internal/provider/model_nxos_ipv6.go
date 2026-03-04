@@ -130,7 +130,7 @@ func (data IPv6VrfsStaticRoutes) getRn(key string) string {
 }
 
 func (data IPv6VrfsStaticRoutesNextHops) getRn(key string) string {
-	keyParts := strings.SplitN(key, "|", 3)
+	keyParts := strings.SplitN(key, ";", 3)
 	return fmt.Sprintf("nh-[%s]-addr-[%s]-vrf-[%s]", keyParts[0], keyParts[1], keyParts[2])
 }
 
@@ -210,7 +210,7 @@ func (data IPv6) toBody() nxos.Body {
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv6Route.children"
 						for key, child := range child.NextHops {
 							attrs = "{}"
-							keyParts := strings.SplitN(key, "|", 3)
+							keyParts := strings.SplitN(key, ";", 3)
 							attrs, _ = sjson.Set(attrs, "nhIf", keyParts[0])
 							attrs, _ = sjson.Set(attrs, "nhAddr", keyParts[1])
 							attrs, _ = sjson.Set(attrs, "nhVrf", keyParts[2])
@@ -353,7 +353,7 @@ func (data *IPv6) fromBody(res gjson.Result) {
 																	nestedChildipv6Nexthop.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
 																	nestedChildipv6Nexthop.Name = types.StringValue(nestedValue.Get("attributes.rtname").String())
 																	nestedChildipv6Nexthop.RewriteEncapsulation = types.StringValue(nestedValue.Get("attributes.rwEncap").String())
-																	nestedMapKey := nestedValue.Get("attributes.nhIf").String() + "|" + nestedValue.Get("attributes.nhAddr").String() + "|" + nestedValue.Get("attributes.nhVrf").String()
+																	nestedMapKey := nestedValue.Get("attributes.nhIf").String() + ";" + nestedValue.Get("attributes.nhAddr").String() + ";" + nestedValue.Get("attributes.nhVrf").String()
 																	if nestedChildipv6Route.NextHops == nil {
 																		nestedChildipv6Route.NextHops = make(map[string]IPv6VrfsStaticRoutesNextHops)
 																	}
@@ -544,7 +544,7 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 			}
 			for nc_ := range ncItem.NextHops {
 				nc_Item := ncItem.NextHops[nc_]
-				keyParts := strings.SplitN(nc_, "|", 3)
+				keyParts := strings.SplitN(nc_, ";", 3)
 				var ripv6Nexthop gjson.Result
 				ripv6Route.Get("ipv6Route.children").ForEach(
 					func(_, v gjson.Result) bool {

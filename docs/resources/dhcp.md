@@ -64,7 +64,7 @@ resource "nxos_dhcp" "example" {
       subnet_selection    = "10.0.0.0"
       v6_smart_relay      = false
       addresses = {
-        "VRF1|1.1.1.1" = {
+        "VRF1;1.1.1.1" = {
           counter = 1
         }
       }
@@ -148,9 +148,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_dhcp.example
-  identity = {
-  }
+  to       = nxos_dhcp.example
+  identity = {}
 }
 ```
 

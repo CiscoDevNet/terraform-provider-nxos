@@ -94,9 +94,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_bridge_domains.example
-  identity = {
-  }
+  to       = nxos_bridge_domains.example
+  identity = {}
 }
 ```
 

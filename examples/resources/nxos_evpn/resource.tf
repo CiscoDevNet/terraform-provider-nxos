@@ -8,8 +8,7 @@ resource "nxos_evpn" "example" {
       route_target_directions = {
         "import" = {
           route_targets = {
-            "route-target:as2-nn2:2:2" = {
-            }
+            "route-target:as2-nn2:2:2" = {}
           }
         }
       }

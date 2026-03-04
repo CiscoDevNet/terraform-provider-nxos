@@ -304,7 +304,7 @@ func (data BGPVrfsAddressFamiliesAdvertisedPrefixes) getRn(key string) string {
 }
 
 func (data BGPVrfsAddressFamiliesRedistributions) getRn(key string) string {
-	keyParts := strings.SplitN(key, "|", 2)
+	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("interleak-%s-interleak-%s", keyParts[0], keyParts[1])
 }
 
@@ -617,7 +617,7 @@ func (data BGP) toBody() nxos.Body {
 						}
 						for key, child := range child.Redistributions {
 							attrs = "{}"
-							keyParts := strings.SplitN(key, "|", 2)
+							keyParts := strings.SplitN(key, ";", 2)
 							attrs, _ = sjson.Set(attrs, "proto", keyParts[0])
 							attrs, _ = sjson.Set(attrs, "inst", keyParts[1])
 							if (!child.RouteMap.IsUnknown() && !child.RouteMap.IsNull()) || false {
@@ -1152,7 +1152,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 																	nestedChildbgpInterLeakP.Scope = types.StringValue(nestedValue.Get("attributes.scope").String())
 																	nestedChildbgpInterLeakP.Srv6PrefixType = types.StringValue(nestedValue.Get("attributes.srv6PrefixType").String())
 																	nestedChildbgpInterLeakP.Asn = types.StringValue(nestedValue.Get("attributes.asn").String())
-																	nestedMapKey := nestedValue.Get("attributes.proto").String() + "|" + nestedValue.Get("attributes.inst").String()
+																	nestedMapKey := nestedValue.Get("attributes.proto").String() + ";" + nestedValue.Get("attributes.inst").String()
 																	if nestedChildbgpDomAf.Redistributions == nil {
 																		nestedChildbgpDomAf.Redistributions = make(map[string]BGPVrfsAddressFamiliesRedistributions)
 																	}
@@ -1906,7 +1906,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			}
 			for nc_ := range ncItem.Redistributions {
 				nc_Item := ncItem.Redistributions[nc_]
-				keyParts := strings.SplitN(nc_, "|", 2)
+				keyParts := strings.SplitN(nc_, ";", 2)
 				var rbgpInterLeakP gjson.Result
 				rbgpDomAf.Get("bgpDomAf.children").ForEach(
 					func(_, v gjson.Result) bool {

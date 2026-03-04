@@ -1,5 +1,4 @@
 import {
-  to = nxos_vrfs.example
-  identity = {
-  }
+  to       = nxos_vrfs.example
+  identity = {}
 }

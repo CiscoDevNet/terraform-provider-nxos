@@ -38,7 +38,7 @@ resource "nxos_dhcp" "example" {
       subnet_selection    = "10.0.0.0"
       v6_smart_relay      = false
       addresses = {
-        "VRF1|1.1.1.1" = {
+        "VRF1;1.1.1.1" = {
           counter = 1
         }
       }

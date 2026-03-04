@@ -122,7 +122,7 @@ func (data HSRPInterfaces) getRn(key string) string {
 }
 
 func (data HSRPInterfacesGroups) getRn(key string) string {
-	keyParts := strings.SplitN(key, "|", 2)
+	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("grp-%v-%s", helpers.Must(strconv.ParseInt(keyParts[0], 10, 64)), keyParts[1])
 }
 
@@ -205,7 +205,7 @@ func (data HSRP) toBody() nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".hsrpIf.children"
 				for key, child := range child.Groups {
 					attrs = "{}"
-					keyParts := strings.SplitN(key, "|", 2)
+					keyParts := strings.SplitN(key, ";", 2)
 					attrs, _ = sjson.Set(attrs, "id", keyParts[0])
 					attrs, _ = sjson.Set(attrs, "af", keyParts[1])
 					if (!child.AuthenticationMd5CompatibilityMode.IsUnknown() && !child.AuthenticationMd5CompatibilityMode.IsNull()) || false {
@@ -347,7 +347,7 @@ func (data *HSRP) fromBody(res gjson.Result) {
 												nestedChildhsrpGroup.PreemptDelayReload = types.Int64Value(nestedValue.Get("attributes.preemptDelayReload").Int())
 												nestedChildhsrpGroup.PreemptDelaySync = types.Int64Value(nestedValue.Get("attributes.preemptDelaySync").Int())
 												nestedChildhsrpGroup.Priority = types.Int64Value(nestedValue.Get("attributes.prio").Int())
-												nestedMapKey := nestedValue.Get("attributes.id").String() + "|" + nestedValue.Get("attributes.af").String()
+												nestedMapKey := nestedValue.Get("attributes.id").String() + ";" + nestedValue.Get("attributes.af").String()
 												if child.Groups == nil {
 													child.Groups = make(map[string]HSRPInterfacesGroups)
 												}
@@ -491,7 +491,7 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 		}
 		for nc := range item.Groups {
 			ncItem := item.Groups[nc]
-			keyParts := strings.SplitN(nc, "|", 2)
+			keyParts := strings.SplitN(nc, ";", 2)
 			var rhsrpGroup gjson.Result
 			rhsrpIf.Get("hsrpIf.children").ForEach(
 				func(_, v gjson.Result) bool {

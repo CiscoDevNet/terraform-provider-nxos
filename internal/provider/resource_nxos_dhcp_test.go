@@ -70,7 +70,7 @@ func TestAccNxosDHCP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.subnet_broadcast", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.options", "relay-info"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.v6_smart_relay", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.addresses.VRF1|1.1.1.1.counter", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.addresses.VRF1;1.1.1.1.counter", "1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -185,7 +185,7 @@ func testAccNxosDHCPConfig_all() string {
 	config += `			options = "relay-info"` + "\n"
 	config += `			v6_smart_relay = false` + "\n"
 	config += `			addresses = {` + "\n"
-	config += `				"VRF1|1.1.1.1" = {` + "\n"
+	config += `				"VRF1;1.1.1.1" = {` + "\n"
 	config += `					counter = 1` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"

@@ -1,5 +1,4 @@
 import {
-  to = nxos_loopback_interfaces.example
-  identity = {
-  }
+  to       = nxos_loopback_interfaces.example
+  identity = {}
 }

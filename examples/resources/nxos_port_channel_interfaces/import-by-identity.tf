@@ -1,5 +1,4 @@
 import {
-  to = nxos_port_channel_interfaces.example
-  identity = {
-  }
+  to       = nxos_port_channel_interfaces.example
+  identity = {}
 }

@@ -21,7 +21,7 @@ resource "nxos_ipv4" "example" {
           preference  = 2
           tag         = 10
           next_hops = {
-            "unspecified|1.2.3.4|default" = {
+            "unspecified;1.2.3.4;default" = {
               description           = "My Description"
               object                = 10
               preference            = 123

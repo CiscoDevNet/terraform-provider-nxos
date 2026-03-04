@@ -161,7 +161,7 @@ func (data PIMVrfsStaticRpsGroupLists) getRn(key string) string {
 }
 
 func (data PIMVrfsAnycastRpPeers) getRn(key string) string {
-	keyParts := strings.SplitN(key, "|", 2)
+	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("peer-[%s]-peer-[%s]", keyParts[0], keyParts[1])
 }
 
@@ -395,7 +395,7 @@ func (data PIM) toBody() nxos.Body {
 					nestedChildrenPath := childBodyPath + ".children"
 					for key := range child.AnycastRpPeers {
 						attrs = "{}"
-						keyParts := strings.SplitN(key, "|", 2)
+						keyParts := strings.SplitN(key, ";", 2)
 						attrs, _ = sjson.Set(attrs, "addr", keyParts[0])
 						attrs, _ = sjson.Set(attrs, "rpSetAddr", keyParts[1])
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimAcastRPPeer.attributes", attrs)
@@ -596,7 +596,7 @@ func (data *PIM) fromBody(res gjson.Result) {
 											func(nestedClassname, nestedValue gjson.Result) bool {
 												if nestedClassname.String() == "pimAcastRPPeer" {
 													var nestedChildpimAcastRPPeer PIMVrfsAnycastRpPeers
-													nestedMapKey := nestedValue.Get("attributes.addr").String() + "|" + nestedValue.Get("attributes.rpSetAddr").String()
+													nestedMapKey := nestedValue.Get("attributes.addr").String() + ";" + nestedValue.Get("attributes.rpSetAddr").String()
 													if child.AnycastRpPeers == nil {
 														child.AnycastRpPeers = make(map[string]PIMVrfsAnycastRpPeers)
 													}
@@ -1026,7 +1026,7 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 			}
 			for nc := range item.AnycastRpPeers {
 				ncItem := item.AnycastRpPeers[nc]
-				keyParts := strings.SplitN(nc, "|", 2)
+				keyParts := strings.SplitN(nc, ";", 2)
 				var rpimAcastRPPeer gjson.Result
 				rpimAcastRPFuncP.Get("pimAcastRPFuncP.children").ForEach(
 					func(_, v gjson.Result) bool {

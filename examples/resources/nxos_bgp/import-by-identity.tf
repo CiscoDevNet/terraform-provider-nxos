@@ -1,5 +1,4 @@
 import {
-  to = nxos_bgp.example
-  identity = {
-  }
+  to       = nxos_bgp.example
+  identity = {}
 }

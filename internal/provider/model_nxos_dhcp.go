@@ -121,7 +121,7 @@ func (data DHCPRelayInterfaces) getRn(key string) string {
 }
 
 func (data DHCPRelayInterfacesAddresses) getRn(key string) string {
-	keyParts := strings.SplitN(key, "|", 2)
+	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("addr-[%s]-[%s]", keyParts[0], keyParts[1])
 }
 
@@ -261,7 +261,7 @@ func (data DHCP) toBody() nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".dhcpRelayIf.children"
 				for key, child := range child.Addresses {
 					attrs = "{}"
-					keyParts := strings.SplitN(key, "|", 2)
+					keyParts := strings.SplitN(key, ";", 2)
 					attrs, _ = sjson.Set(attrs, "vrf", keyParts[0])
 					attrs, _ = sjson.Set(attrs, "address", keyParts[1])
 					if (!child.Counter.IsUnknown() && !child.Counter.IsNull()) || false {
@@ -343,7 +343,7 @@ func (data *DHCP) fromBody(res gjson.Result) {
 											if nestedClassname.String() == "dhcpRelayAddr" {
 												var nestedChilddhcpRelayAddr DHCPRelayInterfacesAddresses
 												nestedChilddhcpRelayAddr.Counter = types.Int64Value(nestedValue.Get("attributes.counter").Int())
-												nestedMapKey := nestedValue.Get("attributes.vrf").String() + "|" + nestedValue.Get("attributes.address").String()
+												nestedMapKey := nestedValue.Get("attributes.vrf").String() + ";" + nestedValue.Get("attributes.address").String()
 												if child.Addresses == nil {
 													child.Addresses = make(map[string]DHCPRelayInterfacesAddresses)
 												}
@@ -582,7 +582,7 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 		}
 		for nc := range item.Addresses {
 			ncItem := item.Addresses[nc]
-			keyParts := strings.SplitN(nc, "|", 2)
+			keyParts := strings.SplitN(nc, ";", 2)
 			var rdhcpRelayAddr gjson.Result
 			rdhcpRelayIf.Get("dhcpRelayIf.children").ForEach(
 				func(_, v gjson.Result) bool {

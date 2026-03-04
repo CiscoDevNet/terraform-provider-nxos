@@ -95,9 +95,9 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.table_map_filter", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertised_prefixes.192.168.1.0/24.route_map", "rt-map"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertised_prefixes.192.168.1.0/24.evpn", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf|OSPF1.route_map", "route_map_ospf_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf|OSPF1.scope", "inter"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf|OSPF1.srv6_prefix_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.route_map", "route_map_ospf_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.scope", "inter"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.srv6_prefix_type", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.remote_asn", "65002"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.description", "My Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_type", "fabric-internal"))
@@ -289,7 +289,7 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `						}` + "\n"
 	config += `					}` + "\n"
 	config += `					redistributions = {` + "\n"
-	config += `						"ospf|OSPF1" = {` + "\n"
+	config += `						"ospf;OSPF1" = {` + "\n"
 	config += `							route_map = "route_map_ospf_1"` + "\n"
 	config += `							scope = "inter"` + "\n"
 	config += `							srv6_prefix_type = "unspecified"` + "\n"

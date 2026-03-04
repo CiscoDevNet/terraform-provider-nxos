@@ -68,8 +68,7 @@ resource "nxos_route_policy" "example" {
           verify_availability_v4  = "disabled"
           verify_availability_v6  = "disabled"
           match_route_prefix_lists = {
-            "sys/rpm/pfxlistv4-[PREFIX_LIST1]" = {
-            }
+            "sys/rpm/pfxlistv4-[PREFIX_LIST1]" = {}
           }
           set_regular_community_additive     = "disabled"
           set_regular_community_no_community = "disabled"
@@ -81,8 +80,7 @@ resource "nxos_route_policy" "example" {
             }
           }
           match_tags = {
-            "12345" = {
-            }
+            "12345" = {}
           }
         }
       }
@@ -209,9 +207,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_route_policy.example
-  identity = {
-  }
+  to       = nxos_route_policy.example
+  identity = {}
 }
 ```
 

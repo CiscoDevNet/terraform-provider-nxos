@@ -125,7 +125,7 @@ resource "nxos_bgp" "example" {
             }
           }
           redistributions = {
-            "ospf|OSPF1" = {
+            "ospf;OSPF1" = {
               route_map        = "route_map_ospf_1"
               scope            = "inter"
               srv6_prefix_type = "unspecified"
@@ -680,9 +680,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_bgp.example
-  identity = {
-  }
+  to       = nxos_bgp.example
+  identity = {}
 }
 ```
 

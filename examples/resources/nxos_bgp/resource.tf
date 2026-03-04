@@ -87,7 +87,7 @@ resource "nxos_bgp" "example" {
             }
           }
           redistributions = {
-            "ospf|OSPF1" = {
+            "ospf;OSPF1" = {
               route_map        = "route_map_ospf_1"
               scope            = "inter"
               srv6_prefix_type = "unspecified"

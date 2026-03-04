@@ -48,18 +48,18 @@ func TestAccDataSourceNxosHSRP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.name", "myHsrpIf"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.reload_delay", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.version", "v2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.authentication_type", "simple"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.control", "preempt"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.forwarding_lower_threshold", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.hello_interval", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.hold_interval", "3000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.ip_address", "10.0.0.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.ip_obtain_mode", "admin"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.name", "myHsrpGroup"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.preempt_delay_minimum", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.preempt_delay_reload", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.preempt_delay_sync", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1|ipv4.priority", "110"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.authentication_type", "simple"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.control", "preempt"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.forwarding_lower_threshold", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.hello_interval", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.hold_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.ip_address", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.ip_obtain_mode", "admin"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.name", "myHsrpGroup"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_minimum", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_reload", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_sync", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.priority", "110"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -140,7 +140,7 @@ func testAccDataSourceNxosHSRPConfig() string {
 	config += `			reload_delay = 5` + "\n"
 	config += `			version = "v2"` + "\n"
 	config += `			groups = {` + "\n"
-	config += `				"1|ipv4" = {` + "\n"
+	config += `				"1;ipv4" = {` + "\n"
 	config += `					authentication_type = "simple"` + "\n"
 	config += `					control = "preempt"` + "\n"
 	config += `					forwarding_lower_threshold = 1` + "\n"

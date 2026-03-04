@@ -1,5 +1,4 @@
 import {
-  to = nxos_evpn.example
-  identity = {
-  }
+  to       = nxos_evpn.example
+  identity = {}
 }

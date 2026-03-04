@@ -216,9 +216,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_physical_interfaces.example
-  identity = {
-  }
+  to       = nxos_physical_interfaces.example
+  identity = {}
 }
 ```
 

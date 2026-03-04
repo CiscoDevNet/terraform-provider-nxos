@@ -1,5 +1,4 @@
 import {
-  to = nxos_keychain.example
-  identity = {
-  }
+  to       = nxos_keychain.example
+  identity = {}
 }

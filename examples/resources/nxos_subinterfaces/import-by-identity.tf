@@ -1,5 +1,4 @@
 import {
-  to = nxos_subinterfaces.example
-  identity = {
-  }
+  to       = nxos_subinterfaces.example
+  identity = {}
 }

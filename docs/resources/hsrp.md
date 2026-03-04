@@ -45,7 +45,7 @@ resource "nxos_hsrp" "example" {
       reload_delay                       = 5
       version                            = "v2"
       groups = {
-        "1|ipv4" = {
+        "1;ipv4" = {
           authentication_md5_compatibility_mode = "disabled"
           authentication_md5_key_chain_name     = "myKeyChain"
           authentication_md5_key_name           = "myKey"
@@ -174,9 +174,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_hsrp.example
-  identity = {
-  }
+  to       = nxos_hsrp.example
+  identity = {}
 }
 ```
 

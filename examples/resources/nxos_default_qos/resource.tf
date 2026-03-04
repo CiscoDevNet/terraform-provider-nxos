@@ -3,8 +3,7 @@ resource "nxos_default_qos" "example" {
     "Voice" = {
       match_type = "match-any"
       dscp_values = {
-        "ef" = {
-        }
+        "ef" = {}
       }
     }
   }

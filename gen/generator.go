@@ -436,7 +436,7 @@ func MapKeyExpr(varName string, attrs []YamlConfigAttribute) string {
 	for _, a := range ids {
 		parts = append(parts, varName+`.Get("attributes.`+a.NxosName+`").String()`)
 	}
-	return strings.Join(parts, ` + "|" + `)
+	return strings.Join(parts, ` + ";" + `)
 }
 
 // MapKeyExample returns the map key computed from Example values of ID attributes.
@@ -452,7 +452,7 @@ func MapKeyExample(attrs []YamlConfigAttribute) string {
 	for _, a := range ids {
 		parts = append(parts, a.Example)
 	}
-	return strings.Join(parts, "|")
+	return strings.Join(parts, ";")
 }
 
 // MapKeyParse returns Go code to parse a map key back into individual ID values.
@@ -463,7 +463,7 @@ func MapKeyParse(keyVar string, attrs []YamlConfigAttribute) string {
 	if len(ids) <= 1 {
 		return ""
 	}
-	return "keyParts := strings.SplitN(" + keyVar + `, "|", ` + fmt.Sprintf("%d", len(ids)) + ")"
+	return "keyParts := strings.SplitN(" + keyVar + `, ";", ` + fmt.Sprintf("%d", len(ids)) + ")"
 }
 
 // MapKeySjsonSetStmts returns Go code with sjson.Set calls to write ID values from the parsed key.

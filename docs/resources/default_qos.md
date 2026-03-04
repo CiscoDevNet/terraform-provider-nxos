@@ -38,8 +38,7 @@ resource "nxos_default_qos" "example" {
     "Voice" = {
       match_type = "match-any"
       dscp_values = {
-        "ef" = {
-        }
+        "ef" = {}
       }
     }
   }
@@ -203,9 +202,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_default_qos.example
-  identity = {
-  }
+  to       = nxos_default_qos.example
+  identity = {}
 }
 ```
 

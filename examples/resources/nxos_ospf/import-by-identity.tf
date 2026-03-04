@@ -1,5 +1,4 @@
 import {
-  to = nxos_ospf.example
-  identity = {
-  }
+  to       = nxos_ospf.example
+  identity = {}
 }

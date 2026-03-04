@@ -46,12 +46,12 @@ func TestAccNxosIPv6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.description", "My Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.preference", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.tag", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified|a:b::c:d/128|default.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified|a:b::c:d/128|default.object", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified|a:b::c:d/128|default.preference", "123"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified|a:b::c:d/128|default.tag", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified|a:b::c:d/128|default.name", "nh-name"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified|a:b::c:d/128|default.rewrite_encapsulation", "vlan-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.object", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.preference", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.tag", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.name", "nh-name"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.rewrite_encapsulation", "vlan-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.auto_configuration", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.default_route", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.forward", "disabled"))
@@ -147,7 +147,7 @@ func testAccNxosIPv6Config_all() string {
 	config += `					preference = 10` + "\n"
 	config += `					tag = 100` + "\n"
 	config += `					next_hops = {` + "\n"
-	config += `						"unspecified|a:b::c:d/128|default" = {` + "\n"
+	config += `						"unspecified;a:b::c:d/128;default" = {` + "\n"
 	config += `							description = "My Description"` + "\n"
 	config += `							object = 10` + "\n"
 	config += `							preference = 123` + "\n"

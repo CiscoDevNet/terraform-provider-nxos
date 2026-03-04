@@ -219,7 +219,7 @@ func testAccNxosPIMConfig_all() string {
 	config += `			anycast_rp_description = "Anycast_RP"` + "\n"
 	config += `			anycast_rp_name = "anycast-rp"` + "\n"
 	config += `			anycast_rp_peers = {` + "\n"
-	config += `				"10.1.1.1/32|20.1.1.1/32" = {` + "\n"
+	config += `				"10.1.1.1/32;20.1.1.1/32" = {` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

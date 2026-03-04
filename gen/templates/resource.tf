@@ -12,6 +12,11 @@
 {{- end -}}
 {{- else if eq .Type "list"}}
 {{- $mapKey := mapKeyExample .Attributes}}
+{{- if and (not (hasNonIdAttrs .Attributes)) (not .TfChildClasses)}}
+{{$indent}}{{.TfName}} = {
+{{$indent}}  "{{$mapKey}}" = {}
+{{$indent}}}
+{{- else}}
 {{$indent}}{{.TfName}} = {
 {{$indent}}  "{{$mapKey}}" = {
 {{- range .Attributes}}
@@ -24,6 +29,7 @@
 {{- end}}
 {{$indent}}  }
 {{$indent}}}
+{{- end}}
 {{- end -}}
 {{- end -}}
 {{- end -}}

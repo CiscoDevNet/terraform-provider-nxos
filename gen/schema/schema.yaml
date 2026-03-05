@@ -6,7 +6,7 @@ no_delete: bool(required=False) # Set to true if the resource does not support d
 test_tags: list(str(), required=False) # List of test tags, tests are only executed if an environment variable with one of these tags is configured
 ds_description: str() # Description for the data source
 res_description: str() # Description for the resource
-doc_path: str() # NX-API documentation path
+doc_path: str(required=False) # NX-API documentation path
 doc_category: str() # Documentation category for the resource
 parents: list(str(), required=False) # List of parent resource names
 children: list(str(), required=False) # List of child resource names
@@ -43,7 +43,7 @@ child_classes:
   type: enum('single', 'list', required=False) # Cardinality of the child class
   tf_name: str(required=False) # Terraform attribute name for the child class
   description: str(required=False) # Description of the child class
-  doc_path: str() # NX-API documentation path of the child class
+  doc_path: str(required=False) # NX-API documentation path of the child class
   mandatory: bool(required=False) # Set to true if the child class(es) are mandatory
   no_delete: bool(required=False) # Set to true if the child class should not be deleted
   always_include: bool(required=False) # Always include child class in payload even when attributes are empty

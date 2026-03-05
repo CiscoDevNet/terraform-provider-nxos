@@ -354,6 +354,8 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `					ebgp_multihop_ttl = 5` + "\n"
 	config += `					peer_control = "bfd,dis-conn-check"` + "\n"
 	config += `					password = "secret_password"` + "\n"
+	config += `					password_wo = "secret_password"` + "\n"
+	config += `					password_wo_version = 1` + "\n"
 	config += `					admin_state = "enabled"` + "\n"
 	config += `					asn_type = "none"` + "\n"
 	config += `					bfd_type = "none"` + "\n"

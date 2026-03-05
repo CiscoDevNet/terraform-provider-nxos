@@ -106,7 +106,7 @@ func (data EVPN) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data EVPN) toBody() nxos.Body {
+func (data EVPN) toBody(config EVPN) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -306,8 +306,8 @@ func (data EVPN) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN) nxos.Body {
-	body := data.toBody()
+func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Vnis {

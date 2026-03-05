@@ -107,7 +107,7 @@ func (data SpanningTree) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data SpanningTree) toBody() nxos.Body {
+func (data SpanningTree) toBody(config SpanningTree) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -466,8 +466,8 @@ func (data SpanningTree) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data SpanningTree) toBodyWithDeletes(ctx context.Context, state SpanningTree) nxos.Body {
-	body := data.toBody()
+func (data SpanningTree) toBodyWithDeletes(ctx context.Context, state SpanningTree, config SpanningTree) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Interfaces {

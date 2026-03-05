@@ -130,6 +130,7 @@ type YamlConfigAttribute struct {
 	ReferenceOnly      bool     `yaml:"reference_only"`
 	Mandatory          bool     `yaml:"mandatory"`
 	WriteOnly          bool     `yaml:"write_only"`
+	Sensitive          bool     `yaml:"sensitive"`
 	Description        string   `yaml:"description"`
 	Example            string   `yaml:"example"`
 	EnumValues         []string `yaml:"enum_values"`
@@ -224,6 +225,27 @@ func HasId(attributes []YamlConfigAttribute) bool {
 func HasWriteOnly(attributes []YamlConfigAttribute) bool {
 	for _, attr := range attributes {
 		if attr.WriteOnly && !attr.ExcludeTest {
+			return true
+		}
+	}
+	return false
+}
+
+func HasSensitiveAttr(attributes []YamlConfigAttribute) bool {
+	for _, attr := range attributes {
+		if attr.Sensitive {
+			return true
+		}
+	}
+	return false
+}
+
+func HasSensitiveAttrRecursive(children []YamlConfigChildClass) bool {
+	for _, c := range children {
+		if HasSensitiveAttr(c.Attributes) {
+			return true
+		}
+		if HasSensitiveAttrRecursive(c.ChildClasses) {
 			return true
 		}
 	}
@@ -346,6 +368,8 @@ var functions = template.FuncMap{
 	"childDocClassNames":  ChildDocClassNames,
 	"childDocPaths":       ChildDocPaths,
 	"hasWriteOnly":        HasWriteOnly,
+	"hasSensitiveAttr":          HasSensitiveAttr,
+	"hasSensitiveAttrRecursive": HasSensitiveAttrRecursive,
 	"importAttributes":    ImportAttributes,
 	"hasListChildClasses": HasListChildClasses,
 	"hasTestAttrs":        HasTestAttrs,

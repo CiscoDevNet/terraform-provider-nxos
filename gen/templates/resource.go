@@ -115,6 +115,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				Computed:            true,
 				{{- end}}
 				{{- end}}
+				{{- if .Sensitive}}
+				Sensitive:           true,
+				{{- end}}
 				{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
 				{{- if eq .Type "Int64"}}
 				Default: int64default.StaticInt64({{.DefaultValue}}),
@@ -139,6 +142,17 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				},
 				{{- end}}
 			},
+			{{- if .Sensitive}}
+			"{{.TfName}}_wo": schema.StringAttribute{
+				MarkdownDescription: "The write-only value of the attribute.",
+				WriteOnly:           true,
+				Optional:            true,
+			},
+			"{{.TfName}}_wo_version": schema.Int64Attribute{
+				MarkdownDescription: "The write-only version of the attribute.",
+				Optional:            true,
+			},
+			{{- end}}
 			{{- end}}
 			{{- define "resAttrSchema" -}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
@@ -160,6 +174,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- if len .DefaultValue}}
 				Computed:            true,
 				{{- end}}
+				{{- end}}
+				{{- if .Sensitive}}
+				Sensitive:           true,
 				{{- end}}
 				{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
 				{{- if eq .Type "Int64"}}
@@ -185,6 +202,17 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				},
 				{{- end}}
 			},
+			{{- if .Sensitive}}
+			"{{.TfName}}_wo": schema.StringAttribute{
+				MarkdownDescription: "The write-only value of the attribute.",
+				WriteOnly:           true,
+				Optional:            true,
+			},
+			"{{.TfName}}_wo_version": schema.Int64Attribute{
+				MarkdownDescription: "The write-only version of the attribute.",
+				Optional:            true,
+			},
+			{{- end}}
 			{{- end}}
 			{{- define "resChildrenSchema" -}}
 			{{- range . -}}
@@ -259,6 +287,14 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 		return
 	}
 
+	// Read config
+	var config {{camelCase .Name}}
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
 	device, ok := r.data.Devices[plan.Device.ValueString()]
@@ -269,7 +305,7 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 
 	// Post object
 	if device.Managed {
-		body := plan.toBody()
+		body := plan.toBody(config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -376,6 +412,14 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		return
 	}
 
+	// Read config
+	var config {{camelCase .Name}}
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	{{- if hasListChildClasses .ChildClasses}}
 	var state {{camelCase .Name}}
 
@@ -397,9 +441,9 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 
 	if device.Managed {
 		{{- if hasListChildClasses .ChildClasses}}
-		body := plan.toBodyWithDeletes(ctx, state)
+		body := plan.toBodyWithDeletes(ctx, state, config)
 		{{- else}}
-		body := plan.toBody()
+		body := plan.toBody(config)
 		{{- end}}
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {

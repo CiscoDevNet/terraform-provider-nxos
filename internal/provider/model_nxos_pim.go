@@ -173,7 +173,7 @@ func (data PIM) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data PIM) toBody() nxos.Body {
+func (data PIM) toBody(config PIM) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -1100,8 +1100,8 @@ func (data PIM) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM) nxos.Body {
-	body := data.toBody()
+func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Vrfs {

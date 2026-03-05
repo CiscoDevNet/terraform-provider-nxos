@@ -103,7 +103,7 @@ func (data SVIInterfaces) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data SVIInterfaces) toBody() nxos.Body {
+func (data SVIInterfaces) toBody(config SVIInterfaces) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -373,8 +373,8 @@ func (data SVIInterfaces) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data SVIInterfaces) toBodyWithDeletes(ctx context.Context, state SVIInterfaces) nxos.Body {
-	body := data.toBody()
+func (data SVIInterfaces) toBodyWithDeletes(ctx context.Context, state SVIInterfaces, config SVIInterfaces) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.SviInterfaces {

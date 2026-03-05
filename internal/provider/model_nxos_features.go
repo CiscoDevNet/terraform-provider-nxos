@@ -104,7 +104,7 @@ func (data Features) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data Features) toBody() nxos.Body {
+func (data Features) toBody(config Features) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string

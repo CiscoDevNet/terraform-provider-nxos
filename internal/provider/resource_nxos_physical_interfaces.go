@@ -483,6 +483,14 @@ func (r *PhysicalInterfacesResource) Create(ctx context.Context, req resource.Cr
 		return
 	}
 
+	// Read config
+	var config PhysicalInterfaces
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
 	device, ok := r.data.Devices[plan.Device.ValueString()]
@@ -493,7 +501,7 @@ func (r *PhysicalInterfacesResource) Create(ctx context.Context, req resource.Cr
 
 	// Post object
 	if device.Managed {
-		body := plan.toBody()
+		body := plan.toBody(config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -595,6 +603,14 @@ func (r *PhysicalInterfacesResource) Update(ctx context.Context, req resource.Up
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read config
+	var config PhysicalInterfaces
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	var state PhysicalInterfaces
 
 	// Read state
@@ -613,7 +629,7 @@ func (r *PhysicalInterfacesResource) Update(ctx context.Context, req resource.Up
 	}
 
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state)
+		body := plan.toBodyWithDeletes(ctx, state, config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

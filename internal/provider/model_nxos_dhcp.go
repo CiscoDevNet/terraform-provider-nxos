@@ -133,7 +133,7 @@ func (data DHCP) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data DHCP) toBody() nxos.Body {
+func (data DHCP) toBody(config DHCP) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -720,8 +720,8 @@ func (data DHCP) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP) nxos.Body {
-	body := data.toBody()
+func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.RelayInterfaces {

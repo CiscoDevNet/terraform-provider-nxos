@@ -66,8 +66,10 @@ data "nxos_user_management" "example" {
 - `service_password_recovery` (String) Service Password Recovery.
 - `tacacs_deadtime` (Number) Duration for which non-reachable server is skipped.
 - `tacacs_description` (String) Description of the specified attribute.
-- `tacacs_key` (String) Global TACACS+ server shared secret.
+- `tacacs_key` (String, Sensitive) Global TACACS+ server shared secret.
 - `tacacs_key_encryption` (String) Default key encryption.
+- `tacacs_key_wo` (String) The write-only value of the attribute.
+- `tacacs_key_wo_version` (Number) The write-only version of the attribute.
 - `tacacs_logging_level` (Number) Tacacs Logging level.
 - `tacacs_name` (String) Object name.
 - `tacacs_owner_key` (String) The key for enabling clients to own their data for entity correlation.
@@ -102,11 +104,15 @@ Read-Only:
 
 - `authentication_protocol` (String) The TACACS+ authentication protocol.
 - `description` (String) Description of the specified attribute.
-- `key` (String) A password for the AAA provider database.
+- `key` (String, Sensitive) A password for the AAA provider database.
 - `key_encryption` (String) Default key encryption.
+- `key_wo` (String) The write-only value of the attribute.
+- `key_wo_version` (Number) The write-only version of the attribute.
 - `monitoring_idle_time` (Number) Idle timer to monitor tacacs server.
-- `monitoring_password` (String) Periodic Server Monitoring Password.
+- `monitoring_password` (String, Sensitive) Periodic Server Monitoring Password.
 - `monitoring_password_type` (String) Monitoring password type.
+- `monitoring_password_wo` (String) The write-only value of the attribute.
+- `monitoring_password_wo_version` (Number) The write-only version of the attribute.
 - `monitoring_user` (String) Periodic Server Monitoring Username.
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
@@ -131,9 +137,11 @@ Read-Only:
 - `first_name` (String) The first name of the locally-authenticated user.
 - `force` (String) Delete user entry forcibly.
 - `last_name` (String) The last name of the locally-authenticated user.
-- `password` (String) The system user password.
+- `password` (String, Sensitive) The system user password.
 - `password_encryption_type` (String) Password Encryption Type.
 - `password_hash` (String) Generate password hash for clear text password.
+- `password_wo` (String) The write-only value of the attribute.
+- `password_wo_version` (Number) The write-only version of the attribute.
 - `phone` (String) The phone number of the locally-authenticated user.
 - `roles` (Attributes Map) User roles.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--users--roles))

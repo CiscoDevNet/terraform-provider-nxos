@@ -154,7 +154,7 @@ func (data IPv4) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data IPv4) toBody() nxos.Body {
+func (data IPv4) toBody(config IPv4) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -802,8 +802,8 @@ func (data IPv4) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4) nxos.Body {
-	body := data.toBody()
+func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Vrfs {

@@ -99,7 +99,7 @@ func (data Subinterfaces) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data Subinterfaces) toBody() nxos.Body {
+func (data Subinterfaces) toBody(config Subinterfaces) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -333,8 +333,8 @@ func (data Subinterfaces) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data Subinterfaces) toBodyWithDeletes(ctx context.Context, state Subinterfaces) nxos.Body {
-	body := data.toBody()
+func (data Subinterfaces) toBodyWithDeletes(ctx context.Context, state Subinterfaces, config Subinterfaces) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Subinterfaces {

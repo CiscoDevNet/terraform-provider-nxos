@@ -173,6 +173,15 @@ func (d *HSRPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 									"authentication_secret": schema.StringAttribute{
 										MarkdownDescription: "Plain text authentication string for the group.",
 										Computed:            true,
+										Sensitive:           true,
+									},
+									"authentication_secret_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										Computed:            true,
+									},
+									"authentication_secret_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Computed:            true,
 									},
 									"authentication_type": schema.StringAttribute{
 										MarkdownDescription: "Authentication Type for the group.",

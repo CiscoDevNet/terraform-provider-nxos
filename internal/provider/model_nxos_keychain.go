@@ -52,6 +52,8 @@ type KeychainKeychainsKeys struct {
 	CryptographicAlgorithm types.String `tfsdk:"cryptographic_algorithm"`
 	EncryptionType         types.String `tfsdk:"encryption_type"`
 	KeyString              types.String `tfsdk:"key_string"`
+	KeyStringWo            types.String `tfsdk:"key_string_wo"`
+	KeyStringWoVersion     types.Int64  `tfsdk:"key_string_wo_version"`
 }
 
 type KeychainIdentity struct {
@@ -98,7 +100,7 @@ func (data Keychain) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data Keychain) toBody() nxos.Body {
+func (data Keychain) toBody(config Keychain) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -113,6 +115,9 @@ func (data Keychain) toBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Keychains {
+			configChild, configChildOk := config.Keychains[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "keychainName", key)
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.kcmgrClassicKeychain.attributes", attrs)
@@ -120,6 +125,9 @@ func (data Keychain) toBody() nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".kcmgrClassicKeychain.children"
 				for key, child := range child.Keys {
+					configChild, configChildOk := configChild.Keys[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "keyId", key)
 					if (!child.CryptographicAlgorithm.IsUnknown() && !child.CryptographicAlgorithm.IsNull()) || false {
@@ -128,7 +136,9 @@ func (data Keychain) toBody() nxos.Body {
 					if (!child.EncryptionType.IsUnknown() && !child.EncryptionType.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "encryptType", child.EncryptionType.ValueString())
 					}
-					if (!child.KeyString.IsUnknown() && !child.KeyString.IsNull()) || false {
+					if configChildOk && !configChild.KeyStringWo.IsNull() {
+						attrs, _ = sjson.Set(attrs, "keyString", configChild.KeyStringWo.ValueString())
+					} else if (!child.KeyString.IsUnknown() && !child.KeyString.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "keyString", child.KeyString.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.kcmgrKey.attributes", attrs)
@@ -278,8 +288,8 @@ func (data Keychain) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain) nxos.Body {
-	body := data.toBody()
+func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, config Keychain) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Keychains {

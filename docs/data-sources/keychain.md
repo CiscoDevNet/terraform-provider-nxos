@@ -56,4 +56,6 @@ Read-Only:
 
 - `cryptographic_algorithm` (String) Cryptographic Algorithm used in key.
 - `encryption_type` (String) Encryption type value based on user input.
-- `key_string` (String) keyString provided by user for the keychain.
+- `key_string` (String, Sensitive) keyString provided by user for the keychain.
+- `key_string_wo` (String) The write-only value of the attribute.
+- `key_string_wo_version` (Number) The write-only version of the attribute.

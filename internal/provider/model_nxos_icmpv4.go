@@ -97,7 +97,7 @@ func (data ICMPv4) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data ICMPv4) toBody() nxos.Body {
+func (data ICMPv4) toBody(config ICMPv4) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -283,8 +283,8 @@ func (data ICMPv4) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data ICMPv4) toBodyWithDeletes(ctx context.Context, state ICMPv4) nxos.Body {
-	body := data.toBody()
+func (data ICMPv4) toBodyWithDeletes(ctx context.Context, state ICMPv4, config ICMPv4) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Vrfs {

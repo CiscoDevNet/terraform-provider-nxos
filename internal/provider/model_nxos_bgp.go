@@ -165,6 +165,8 @@ type BGPVrfsPeerTemplates struct {
 	MaxPeerCount                types.Int64                                                `tfsdk:"max_peer_count"`
 	PasswordType                types.String                                               `tfsdk:"password_type"`
 	Password                    types.String                                               `tfsdk:"password"`
+	PasswordWo                  types.String                                               `tfsdk:"password_wo"`
+	PasswordWoVersion           types.Int64                                                `tfsdk:"password_wo_version"`
 	PrivateAsControl            types.String                                               `tfsdk:"private_as_control"`
 	SessionTemplate             types.String                                               `tfsdk:"session_template"`
 	EbgpMultihopTtl             types.Int64                                                `tfsdk:"ebgp_multihop_ttl"`
@@ -211,6 +213,8 @@ type BGPVrfsPeers struct {
 	PeerControl                types.String                               `tfsdk:"peer_control"`
 	PasswordType               types.String                               `tfsdk:"password_type"`
 	Password                   types.String                               `tfsdk:"password"`
+	PasswordWo                 types.String                               `tfsdk:"password_wo"`
+	PasswordWoVersion          types.Int64                                `tfsdk:"password_wo_version"`
 	AdminState                 types.String                               `tfsdk:"admin_state"`
 	AffinityGroup              types.Int64                                `tfsdk:"affinity_group"`
 	AsnType                    types.String                               `tfsdk:"asn_type"`
@@ -340,7 +344,7 @@ func (data BGP) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data BGP) toBody() nxos.Body {
+func (data BGP) toBody(config BGP) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -403,6 +407,9 @@ func (data BGP) toBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Vrfs {
+			configChild, configChildOk := config.Vrfs[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if (!child.RouterId.IsUnknown() && !child.RouterId.IsNull()) || false {
@@ -637,6 +644,9 @@ func (data BGP) toBody() nxos.Body {
 					}
 				}
 				for key, child := range child.PeerTemplates {
+					configChild, configChildOk := configChild.PeerTemplates[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "name", key)
 					if (!child.RemoteAsn.IsUnknown() && !child.RemoteAsn.IsNull()) || false {
@@ -696,7 +706,9 @@ func (data BGP) toBody() nxos.Body {
 					if (!child.PasswordType.IsUnknown() && !child.PasswordType.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "passwdType", child.PasswordType.ValueString())
 					}
-					if (!child.Password.IsUnknown() && !child.Password.IsNull()) || false {
+					if configChildOk && !configChild.PasswordWo.IsNull() {
+						attrs, _ = sjson.Set(attrs, "password", configChild.PasswordWo.ValueString())
+					} else if (!child.Password.IsUnknown() && !child.Password.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "password", child.Password.ValueString())
 					}
 					if (!child.PrivateAsControl.IsUnknown() && !child.PrivateAsControl.IsNull()) || false {
@@ -803,6 +815,9 @@ func (data BGP) toBody() nxos.Body {
 					}
 				}
 				for key, child := range child.Peers {
+					configChild, configChildOk := configChild.Peers[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "addr", key)
 					if (!child.RemoteAsn.IsUnknown() && !child.RemoteAsn.IsNull()) || false {
@@ -835,7 +850,9 @@ func (data BGP) toBody() nxos.Body {
 					if (!child.PasswordType.IsUnknown() && !child.PasswordType.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "passwdType", child.PasswordType.ValueString())
 					}
-					if (!child.Password.IsUnknown() && !child.Password.IsNull()) || false {
+					if configChildOk && !configChild.PasswordWo.IsNull() {
+						attrs, _ = sjson.Set(attrs, "password", configChild.PasswordWo.ValueString())
+					} else if (!child.Password.IsUnknown() && !child.Password.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "password", child.Password.ValueString())
 					}
 					if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
@@ -2570,8 +2587,8 @@ func (data BGP) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP) nxos.Body {
-	body := data.toBody()
+func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Vrfs {

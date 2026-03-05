@@ -71,7 +71,9 @@ Optional:
   - Choices: `NONE`, `MD5`, `HMAC-SHA-1`, `HMAC-SHA-256`, `HMAC-SHA-384`, `HMAC-SHA-512`, `3DES`, `AES`
 - `encryption_type` (String) Encryption type value based on user input.
   - Choices: `unencrypted`, `type7`, `type6`
-- `key_string` (String) keyString provided by user for the keychain.
+- `key_string` (String, Sensitive) keyString provided by user for the keychain.
+- `key_string_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `key_string_wo_version` (Number) The write-only version of the attribute.
 
 ## Import
 

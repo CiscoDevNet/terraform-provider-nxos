@@ -113,9 +113,27 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 									"authentication_key_l1": schema.StringAttribute{
 										MarkdownDescription: "Holds Authentication Key for ISIS DOM on Level-1.",
 										Computed:            true,
+										Sensitive:           true,
+									},
+									"authentication_key_l1_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										Computed:            true,
+									},
+									"authentication_key_l1_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Computed:            true,
 									},
 									"authentication_key_l2": schema.StringAttribute{
 										MarkdownDescription: "Holds Authentication Key for ISIS DOM on Level-2.",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"authentication_key_l2_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										Computed:            true,
+									},
+									"authentication_key_l2_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
 										Computed:            true,
 									},
 									"authentication_type_l1": schema.StringAttribute{
@@ -276,13 +294,40 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 						"authentication_key": schema.StringAttribute{
 							MarkdownDescription: "Holds Authentication Key for ISIS Interface.",
 							Computed:            true,
+							Sensitive:           true,
+						},
+						"authentication_key_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							Computed:            true,
+						},
+						"authentication_key_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
+							Computed:            true,
 						},
 						"authentication_key_l1": schema.StringAttribute{
 							MarkdownDescription: "Holds Authentication Key for ISIS Interface on Level-1.",
 							Computed:            true,
+							Sensitive:           true,
+						},
+						"authentication_key_l1_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							Computed:            true,
+						},
+						"authentication_key_l1_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
+							Computed:            true,
 						},
 						"authentication_key_l2": schema.StringAttribute{
 							MarkdownDescription: "Holds Authentication Key for ISIS Interface on Level-2.",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"authentication_key_l2_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							Computed:            true,
+						},
+						"authentication_key_l2_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
 							Computed:            true,
 						},
 						"authentication_type": schema.StringAttribute{

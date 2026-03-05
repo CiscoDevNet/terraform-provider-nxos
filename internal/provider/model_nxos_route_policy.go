@@ -163,7 +163,7 @@ func (data RoutePolicy) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RoutePolicy) toBody() nxos.Body {
+func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -821,8 +821,8 @@ func (data RoutePolicy) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy) nxos.Body {
-	body := data.toBody()
+func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy, config RoutePolicy) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Ipv4PrefixLists {

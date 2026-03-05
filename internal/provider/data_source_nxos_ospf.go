@@ -270,6 +270,15 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 												"authentication_key": schema.StringAttribute{
 													MarkdownDescription: "Key used for authenticatoin.",
 													Computed:            true,
+													Sensitive:           true,
+												},
+												"authentication_key_wo": schema.StringAttribute{
+													MarkdownDescription: "The write-only value of the attribute.",
+													Computed:            true,
+												},
+												"authentication_key_wo_version": schema.Int64Attribute{
+													MarkdownDescription: "The write-only version of the attribute.",
+													Computed:            true,
 												},
 												"authentication_key_id": schema.Int64Attribute{
 													MarkdownDescription: "Key id used for authentication.",
@@ -277,6 +286,15 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 												},
 												"authentication_key_new": schema.StringAttribute{
 													MarkdownDescription: "Key used for authenticatoin.",
+													Computed:            true,
+													Sensitive:           true,
+												},
+												"authentication_key_new_wo": schema.StringAttribute{
+													MarkdownDescription: "The write-only value of the attribute.",
+													Computed:            true,
+												},
+												"authentication_key_new_wo_version": schema.Int64Attribute{
+													MarkdownDescription: "The write-only version of the attribute.",
 													Computed:            true,
 												},
 												"authentication_key_secure_mode": schema.BoolAttribute{
@@ -290,9 +308,27 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 												"authentication_md5_key": schema.StringAttribute{
 													MarkdownDescription: "Authentication md5 key.",
 													Computed:            true,
+													Sensitive:           true,
+												},
+												"authentication_md5_key_wo": schema.StringAttribute{
+													MarkdownDescription: "The write-only value of the attribute.",
+													Computed:            true,
+												},
+												"authentication_md5_key_wo_version": schema.Int64Attribute{
+													MarkdownDescription: "The write-only version of the attribute.",
+													Computed:            true,
 												},
 												"authentication_md5_key_new": schema.StringAttribute{
 													MarkdownDescription: "Authentication md5 key.",
+													Computed:            true,
+													Sensitive:           true,
+												},
+												"authentication_md5_key_new_wo": schema.StringAttribute{
+													MarkdownDescription: "The write-only value of the attribute.",
+													Computed:            true,
+												},
+												"authentication_md5_key_new_wo_version": schema.Int64Attribute{
+													MarkdownDescription: "The write-only version of the attribute.",
 													Computed:            true,
 												},
 												"authentication_md5_key_secure_mode": schema.BoolAttribute{

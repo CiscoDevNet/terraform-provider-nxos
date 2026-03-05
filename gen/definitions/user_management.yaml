@@ -287,6 +287,7 @@ child_classes:
         description: "The system user password."
         example: "password123"
         write_only: true
+        sensitive: true
         exclude_test: true
       - nxos_name: pwdEncryptType
         tf_name: password_encryption_type
@@ -381,6 +382,7 @@ child_classes:
         type: String
         description: "Global TACACS+ server shared secret."
         write_only: true
+        sensitive: true
         exclude_test: true
         example: "secret123"
         delete_value: ''
@@ -480,6 +482,7 @@ child_classes:
             type: String
             description: "A password for the AAA provider database."
             write_only: true
+            sensitive: true
             exclude_test: true
             example: "secret123"
           - nxos_name: keyEnc
@@ -504,6 +507,7 @@ child_classes:
             type: String
             description: "Periodic Server Monitoring Password."
             write_only: true
+            sensitive: true
             exclude_test: true
             example: "monpass"
           - nxos_name: monitoringPasswordType

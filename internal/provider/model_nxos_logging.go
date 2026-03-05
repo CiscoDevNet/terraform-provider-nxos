@@ -88,7 +88,7 @@ func (data Logging) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data Logging) toBody() nxos.Body {
+func (data Logging) toBody(config Logging) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -230,8 +230,8 @@ func (data Logging) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging) nxos.Body {
-	body := data.toBody()
+func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging, config Logging) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Facilities {

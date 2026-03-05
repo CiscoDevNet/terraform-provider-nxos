@@ -54,29 +54,33 @@ type ISISInstances struct {
 }
 
 type ISISInstancesVrfs struct {
-	AdminState                types.String                                `tfsdk:"admin_state"`
-	AuthenticationCheckL1     types.Bool                                  `tfsdk:"authentication_check_l1"`
-	AuthenticationCheckL2     types.Bool                                  `tfsdk:"authentication_check_l2"`
-	AuthenticationKeyL1       types.String                                `tfsdk:"authentication_key_l1"`
-	AuthenticationKeyL2       types.String                                `tfsdk:"authentication_key_l2"`
-	AuthenticationTypeL1      types.String                                `tfsdk:"authentication_type_l1"`
-	AuthenticationTypeL2      types.String                                `tfsdk:"authentication_type_l2"`
-	BandwidthReference        types.Int64                                 `tfsdk:"bandwidth_reference"`
-	BandwidthReferenceUnit    types.String                                `tfsdk:"bandwidth_reference_unit"`
-	IsType                    types.String                                `tfsdk:"is_type"`
-	MetricType                types.String                                `tfsdk:"metric_type"`
-	Mtu                       types.Int64                                 `tfsdk:"mtu"`
-	Net                       types.String                                `tfsdk:"net"`
-	PassiveDefault            types.String                                `tfsdk:"passive_default"`
-	Control                   types.String                                `tfsdk:"control"`
-	LspLifetime               types.Int64                                 `tfsdk:"lsp_lifetime"`
-	QueueLimit                types.Int64                                 `tfsdk:"queue_limit"`
-	AddressFamilies           map[string]ISISInstancesVrfsAddressFamilies `tfsdk:"address_families"`
-	OverloadStartupTime       types.Int64                                 `tfsdk:"overload_startup_time"`
-	OverloadAdminState        types.String                                `tfsdk:"overload_admin_state"`
-	OverloadBgpAsNumber       types.Int64                                 `tfsdk:"overload_bgp_as_number"`
-	OverloadBgpAsNumberString types.String                                `tfsdk:"overload_bgp_as_number_string"`
-	OverloadSuppress          types.String                                `tfsdk:"overload_suppress"`
+	AdminState                   types.String                                `tfsdk:"admin_state"`
+	AuthenticationCheckL1        types.Bool                                  `tfsdk:"authentication_check_l1"`
+	AuthenticationCheckL2        types.Bool                                  `tfsdk:"authentication_check_l2"`
+	AuthenticationKeyL1          types.String                                `tfsdk:"authentication_key_l1"`
+	AuthenticationKeyL1Wo        types.String                                `tfsdk:"authentication_key_l1_wo"`
+	AuthenticationKeyL1WoVersion types.Int64                                 `tfsdk:"authentication_key_l1_wo_version"`
+	AuthenticationKeyL2          types.String                                `tfsdk:"authentication_key_l2"`
+	AuthenticationKeyL2Wo        types.String                                `tfsdk:"authentication_key_l2_wo"`
+	AuthenticationKeyL2WoVersion types.Int64                                 `tfsdk:"authentication_key_l2_wo_version"`
+	AuthenticationTypeL1         types.String                                `tfsdk:"authentication_type_l1"`
+	AuthenticationTypeL2         types.String                                `tfsdk:"authentication_type_l2"`
+	BandwidthReference           types.Int64                                 `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit       types.String                                `tfsdk:"bandwidth_reference_unit"`
+	IsType                       types.String                                `tfsdk:"is_type"`
+	MetricType                   types.String                                `tfsdk:"metric_type"`
+	Mtu                          types.Int64                                 `tfsdk:"mtu"`
+	Net                          types.String                                `tfsdk:"net"`
+	PassiveDefault               types.String                                `tfsdk:"passive_default"`
+	Control                      types.String                                `tfsdk:"control"`
+	LspLifetime                  types.Int64                                 `tfsdk:"lsp_lifetime"`
+	QueueLimit                   types.Int64                                 `tfsdk:"queue_limit"`
+	AddressFamilies              map[string]ISISInstancesVrfsAddressFamilies `tfsdk:"address_families"`
+	OverloadStartupTime          types.Int64                                 `tfsdk:"overload_startup_time"`
+	OverloadAdminState           types.String                                `tfsdk:"overload_admin_state"`
+	OverloadBgpAsNumber          types.Int64                                 `tfsdk:"overload_bgp_as_number"`
+	OverloadBgpAsNumberString    types.String                                `tfsdk:"overload_bgp_as_number_string"`
+	OverloadSuppress             types.String                                `tfsdk:"overload_suppress"`
 }
 
 type ISISInstancesVrfsAddressFamilies struct {
@@ -97,52 +101,58 @@ type ISISInstancesVrfsAddressFamilies struct {
 }
 
 type ISISInterfaces struct {
-	AuthenticationCheck        types.Bool   `tfsdk:"authentication_check"`
-	AuthenticationCheckL1      types.Bool   `tfsdk:"authentication_check_l1"`
-	AuthenticationCheckL2      types.Bool   `tfsdk:"authentication_check_l2"`
-	AuthenticationKey          types.String `tfsdk:"authentication_key"`
-	AuthenticationKeyL1        types.String `tfsdk:"authentication_key_l1"`
-	AuthenticationKeyL2        types.String `tfsdk:"authentication_key_l2"`
-	AuthenticationType         types.String `tfsdk:"authentication_type"`
-	AuthenticationTypeL1       types.String `tfsdk:"authentication_type_l1"`
-	AuthenticationTypeL2       types.String `tfsdk:"authentication_type_l2"`
-	CircuitType                types.String `tfsdk:"circuit_type"`
-	Vrf                        types.String `tfsdk:"vrf"`
-	HelloInterval              types.Int64  `tfsdk:"hello_interval"`
-	HelloIntervalL1            types.Int64  `tfsdk:"hello_interval_l1"`
-	HelloIntervalL2            types.Int64  `tfsdk:"hello_interval_l2"`
-	HelloMultiplier            types.Int64  `tfsdk:"hello_multiplier"`
-	HelloMultiplierL1          types.Int64  `tfsdk:"hello_multiplier_l1"`
-	HelloMultiplierL2          types.Int64  `tfsdk:"hello_multiplier_l2"`
-	HelloPadding               types.String `tfsdk:"hello_padding"`
-	InstanceName               types.String `tfsdk:"instance_name"`
-	MetricL1                   types.Int64  `tfsdk:"metric_l1"`
-	MetricL2                   types.Int64  `tfsdk:"metric_l2"`
-	MtuCheck                   types.Bool   `tfsdk:"mtu_check"`
-	MtuCheckL1                 types.Bool   `tfsdk:"mtu_check_l1"`
-	MtuCheckL2                 types.Bool   `tfsdk:"mtu_check_l2"`
-	NetworkTypeP2p             types.String `tfsdk:"network_type_p2p"`
-	Passive                    types.String `tfsdk:"passive"`
-	PriorityL1                 types.Int64  `tfsdk:"priority_l1"`
-	PriorityL2                 types.Int64  `tfsdk:"priority_l2"`
-	EnableIpv4                 types.Bool   `tfsdk:"enable_ipv4"`
-	AdminState                 types.String `tfsdk:"admin_state"`
-	CsnpIntervalL1             types.Int64  `tfsdk:"csnp_interval_l1"`
-	CsnpIntervalL2             types.Int64  `tfsdk:"csnp_interval_l2"`
-	Control                    types.String `tfsdk:"control"`
-	Description                types.String `tfsdk:"description"`
-	LspRefreshInterval         types.Int64  `tfsdk:"lsp_refresh_interval"`
-	MeshGroupBlocked           types.Bool   `tfsdk:"mesh_group_blocked"`
-	MeshGroupId                types.Int64  `tfsdk:"mesh_group_id"`
-	Ipv6MetricL1               types.Int64  `tfsdk:"ipv6_metric_l1"`
-	Ipv6MetricL2               types.Int64  `tfsdk:"ipv6_metric_l2"`
-	NFlagClear                 types.Bool   `tfsdk:"n_flag_clear"`
-	RetransmitInterval         types.Int64  `tfsdk:"retransmit_interval"`
-	RetransmitThrottleInterval types.Int64  `tfsdk:"retransmit_throttle_interval"`
-	SuppressedState            types.Bool   `tfsdk:"suppressed_state"`
-	Ipv4Bfd                    types.String `tfsdk:"ipv4_bfd"`
-	Ipv6Bfd                    types.String `tfsdk:"ipv6_bfd"`
-	Ipv6                       types.Bool   `tfsdk:"ipv6"`
+	AuthenticationCheck          types.Bool   `tfsdk:"authentication_check"`
+	AuthenticationCheckL1        types.Bool   `tfsdk:"authentication_check_l1"`
+	AuthenticationCheckL2        types.Bool   `tfsdk:"authentication_check_l2"`
+	AuthenticationKey            types.String `tfsdk:"authentication_key"`
+	AuthenticationKeyWo          types.String `tfsdk:"authentication_key_wo"`
+	AuthenticationKeyWoVersion   types.Int64  `tfsdk:"authentication_key_wo_version"`
+	AuthenticationKeyL1          types.String `tfsdk:"authentication_key_l1"`
+	AuthenticationKeyL1Wo        types.String `tfsdk:"authentication_key_l1_wo"`
+	AuthenticationKeyL1WoVersion types.Int64  `tfsdk:"authentication_key_l1_wo_version"`
+	AuthenticationKeyL2          types.String `tfsdk:"authentication_key_l2"`
+	AuthenticationKeyL2Wo        types.String `tfsdk:"authentication_key_l2_wo"`
+	AuthenticationKeyL2WoVersion types.Int64  `tfsdk:"authentication_key_l2_wo_version"`
+	AuthenticationType           types.String `tfsdk:"authentication_type"`
+	AuthenticationTypeL1         types.String `tfsdk:"authentication_type_l1"`
+	AuthenticationTypeL2         types.String `tfsdk:"authentication_type_l2"`
+	CircuitType                  types.String `tfsdk:"circuit_type"`
+	Vrf                          types.String `tfsdk:"vrf"`
+	HelloInterval                types.Int64  `tfsdk:"hello_interval"`
+	HelloIntervalL1              types.Int64  `tfsdk:"hello_interval_l1"`
+	HelloIntervalL2              types.Int64  `tfsdk:"hello_interval_l2"`
+	HelloMultiplier              types.Int64  `tfsdk:"hello_multiplier"`
+	HelloMultiplierL1            types.Int64  `tfsdk:"hello_multiplier_l1"`
+	HelloMultiplierL2            types.Int64  `tfsdk:"hello_multiplier_l2"`
+	HelloPadding                 types.String `tfsdk:"hello_padding"`
+	InstanceName                 types.String `tfsdk:"instance_name"`
+	MetricL1                     types.Int64  `tfsdk:"metric_l1"`
+	MetricL2                     types.Int64  `tfsdk:"metric_l2"`
+	MtuCheck                     types.Bool   `tfsdk:"mtu_check"`
+	MtuCheckL1                   types.Bool   `tfsdk:"mtu_check_l1"`
+	MtuCheckL2                   types.Bool   `tfsdk:"mtu_check_l2"`
+	NetworkTypeP2p               types.String `tfsdk:"network_type_p2p"`
+	Passive                      types.String `tfsdk:"passive"`
+	PriorityL1                   types.Int64  `tfsdk:"priority_l1"`
+	PriorityL2                   types.Int64  `tfsdk:"priority_l2"`
+	EnableIpv4                   types.Bool   `tfsdk:"enable_ipv4"`
+	AdminState                   types.String `tfsdk:"admin_state"`
+	CsnpIntervalL1               types.Int64  `tfsdk:"csnp_interval_l1"`
+	CsnpIntervalL2               types.Int64  `tfsdk:"csnp_interval_l2"`
+	Control                      types.String `tfsdk:"control"`
+	Description                  types.String `tfsdk:"description"`
+	LspRefreshInterval           types.Int64  `tfsdk:"lsp_refresh_interval"`
+	MeshGroupBlocked             types.Bool   `tfsdk:"mesh_group_blocked"`
+	MeshGroupId                  types.Int64  `tfsdk:"mesh_group_id"`
+	Ipv6MetricL1                 types.Int64  `tfsdk:"ipv6_metric_l1"`
+	Ipv6MetricL2                 types.Int64  `tfsdk:"ipv6_metric_l2"`
+	NFlagClear                   types.Bool   `tfsdk:"n_flag_clear"`
+	RetransmitInterval           types.Int64  `tfsdk:"retransmit_interval"`
+	RetransmitThrottleInterval   types.Int64  `tfsdk:"retransmit_throttle_interval"`
+	SuppressedState              types.Bool   `tfsdk:"suppressed_state"`
+	Ipv4Bfd                      types.String `tfsdk:"ipv4_bfd"`
+	Ipv6Bfd                      types.String `tfsdk:"ipv6_bfd"`
+	Ipv6                         types.Bool   `tfsdk:"ipv6"`
 }
 
 type ISISIdentity struct {
@@ -197,7 +207,7 @@ func (data ISIS) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data ISIS) toBody() nxos.Body {
+func (data ISIS) toBody(config ISIS) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -206,6 +216,9 @@ func (data ISIS) toBody() nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.Instances {
+		configChild, configChildOk := config.Instances[key]
+		_ = configChild
+		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
@@ -225,6 +238,9 @@ func (data ISIS) toBody() nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".isisInst.children"
 			for key, child := range child.Vrfs {
+				configChild, configChildOk := configChild.Vrfs[key]
+				_ = configChild
+				_ = configChildOk
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "name", key)
 				if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
@@ -236,10 +252,14 @@ func (data ISIS) toBody() nxos.Body {
 				if (!child.AuthenticationCheckL2.IsUnknown() && !child.AuthenticationCheckL2.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "authCheckLvl2", strconv.FormatBool(child.AuthenticationCheckL2.ValueBool()))
 				}
-				if (!child.AuthenticationKeyL1.IsUnknown() && !child.AuthenticationKeyL1.IsNull()) || false {
+				if configChildOk && !configChild.AuthenticationKeyL1Wo.IsNull() {
+					attrs, _ = sjson.Set(attrs, "authKeyLvl1", configChild.AuthenticationKeyL1Wo.ValueString())
+				} else if (!child.AuthenticationKeyL1.IsUnknown() && !child.AuthenticationKeyL1.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "authKeyLvl1", child.AuthenticationKeyL1.ValueString())
 				}
-				if (!child.AuthenticationKeyL2.IsUnknown() && !child.AuthenticationKeyL2.IsNull()) || false {
+				if configChildOk && !configChild.AuthenticationKeyL2Wo.IsNull() {
+					attrs, _ = sjson.Set(attrs, "authKeyLvl2", configChild.AuthenticationKeyL2Wo.ValueString())
+				} else if (!child.AuthenticationKeyL2.IsUnknown() && !child.AuthenticationKeyL2.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "authKeyLvl2", child.AuthenticationKeyL2.ValueString())
 				}
 				if (!child.AuthenticationTypeL1.IsUnknown() && !child.AuthenticationTypeL1.IsNull()) || false {
@@ -353,6 +373,9 @@ func (data ISIS) toBody() nxos.Body {
 		}
 	}
 	for key, child := range data.Interfaces {
+		configChild, configChildOk := config.Interfaces[key]
+		_ = configChild
+		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "id", key)
 		if (!child.AuthenticationCheck.IsUnknown() && !child.AuthenticationCheck.IsNull()) || false {
@@ -364,13 +387,19 @@ func (data ISIS) toBody() nxos.Body {
 		if (!child.AuthenticationCheckL2.IsUnknown() && !child.AuthenticationCheckL2.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "authCheckLvl2", strconv.FormatBool(child.AuthenticationCheckL2.ValueBool()))
 		}
-		if (!child.AuthenticationKey.IsUnknown() && !child.AuthenticationKey.IsNull()) || false {
+		if configChildOk && !configChild.AuthenticationKeyWo.IsNull() {
+			attrs, _ = sjson.Set(attrs, "authKey", configChild.AuthenticationKeyWo.ValueString())
+		} else if (!child.AuthenticationKey.IsUnknown() && !child.AuthenticationKey.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "authKey", child.AuthenticationKey.ValueString())
 		}
-		if (!child.AuthenticationKeyL1.IsUnknown() && !child.AuthenticationKeyL1.IsNull()) || false {
+		if configChildOk && !configChild.AuthenticationKeyL1Wo.IsNull() {
+			attrs, _ = sjson.Set(attrs, "authKeyLvl1", configChild.AuthenticationKeyL1Wo.ValueString())
+		} else if (!child.AuthenticationKeyL1.IsUnknown() && !child.AuthenticationKeyL1.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "authKeyLvl1", child.AuthenticationKeyL1.ValueString())
 		}
-		if (!child.AuthenticationKeyL2.IsUnknown() && !child.AuthenticationKeyL2.IsNull()) || false {
+		if configChildOk && !configChild.AuthenticationKeyL2Wo.IsNull() {
+			attrs, _ = sjson.Set(attrs, "authKeyLvl2", configChild.AuthenticationKeyL2Wo.ValueString())
+		} else if (!child.AuthenticationKeyL2.IsUnknown() && !child.AuthenticationKeyL2.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "authKeyLvl2", child.AuthenticationKeyL2.ValueString())
 		}
 		if (!child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull()) || false {
@@ -1184,8 +1213,8 @@ func (data ISIS) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data ISIS) toBodyWithDeletes(ctx context.Context, state ISIS) nxos.Body {
-	body := data.toBody()
+func (data ISIS) toBodyWithDeletes(ctx context.Context, state ISIS, config ISIS) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Instances {

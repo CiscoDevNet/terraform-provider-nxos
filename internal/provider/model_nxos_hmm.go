@@ -95,7 +95,7 @@ func (data HMM) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data HMM) toBody() nxos.Body {
+func (data HMM) toBody(config HMM) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -290,8 +290,8 @@ func (data HMM) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM) nxos.Body {
-	body := data.toBody()
+func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM, config HMM) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Interfaces {

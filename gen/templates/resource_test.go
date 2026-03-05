@@ -216,9 +216,17 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `{{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		{{- if .Sensitive}}
+		config += `{{$indent}}{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `{{$indent}}{{.TfName}}_wo_version = 1` + "\n"
+		{{- end}}
 	}
 {{- else}}
 	config += `{{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	{{- if .Sensitive}}
+	config += `{{$indent}}{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	config += `{{$indent}}{{.TfName}}_wo_version = 1` + "\n"
+	{{- end}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -235,9 +243,17 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		{{- if .Sensitive}}
+		config += `{{$indent}}		{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `{{$indent}}		{{.TfName}}_wo_version = 1` + "\n"
+		{{- end}}
 	}
 {{- else}}
 	config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	{{- if .Sensitive}}
+	config += `{{$indent}}		{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	config += `{{$indent}}		{{.TfName}}_wo_version = 1` + "\n"
+	{{- end}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -260,9 +276,17 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		{{- if .Sensitive}}
+		config += `	{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `	{{.TfName}}_wo_version = 1` + "\n"
+		{{- end}}
 	}
 	{{- else}}
 	config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	{{- if .Sensitive}}
+	config += `	{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	config += `	{{.TfName}}_wo_version = 1` + "\n"
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- end}}

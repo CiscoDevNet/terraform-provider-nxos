@@ -750,6 +750,16 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 									"password": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Configure a password for neighbor.").String,
 										Optional:            true,
+										Sensitive:           true,
+									},
+									"password_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										WriteOnly:           true,
+										Optional:            true,
+									},
+									"password_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Optional:            true,
 									},
 									"private_as_control": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Private AS Control.").AddStringEnumDescription("none", "remove-exclusive", "remove-all", "replace-as").String,
@@ -1002,6 +1012,16 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 									},
 									"password": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Password.").String,
+										Optional:            true,
+										Sensitive:           true,
+									},
+									"password_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										WriteOnly:           true,
+										Optional:            true,
+									},
+									"password_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
 										Optional:            true,
 									},
 									"admin_state": schema.StringAttribute{
@@ -1307,6 +1327,14 @@ func (r *BGPResource) Create(ctx context.Context, req resource.CreateRequest, re
 		return
 	}
 
+	// Read config
+	var config BGP
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
 	device, ok := r.data.Devices[plan.Device.ValueString()]
@@ -1317,7 +1345,7 @@ func (r *BGPResource) Create(ctx context.Context, req resource.CreateRequest, re
 
 	// Post object
 	if device.Managed {
-		body := plan.toBody()
+		body := plan.toBody(config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -1419,6 +1447,14 @@ func (r *BGPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read config
+	var config BGP
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	var state BGP
 
 	// Read state
@@ -1437,7 +1473,7 @@ func (r *BGPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	}
 
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state)
+		body := plan.toBodyWithDeletes(ctx, state, config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

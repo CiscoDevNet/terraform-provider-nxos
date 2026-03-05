@@ -174,8 +174,12 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `authentication_check_l1` (Boolean) Authentication Check for ISIS DOM on Level-1.
 - `authentication_check_l2` (Boolean) Authentication Check for ISIS DOM on Level-2.
-- `authentication_key_l1` (String) Holds Authentication Key for ISIS DOM on Level-1.
-- `authentication_key_l2` (String) Holds Authentication Key for ISIS DOM on Level-2.
+- `authentication_key_l1` (String, Sensitive) Holds Authentication Key for ISIS DOM on Level-1.
+- `authentication_key_l1_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `authentication_key_l1_wo_version` (Number) The write-only version of the attribute.
+- `authentication_key_l2` (String, Sensitive) Holds Authentication Key for ISIS DOM on Level-2.
+- `authentication_key_l2_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `authentication_key_l2_wo_version` (Number) The write-only version of the attribute.
 - `authentication_type_l1` (String) Holds ISIS DOM Authentication-Type for Level-1.
   - Choices: `clear`, `md5`, `unknown`
 - `authentication_type_l2` (String) Holds ISIS DOM Authentication-Type for Level-2.
@@ -248,9 +252,15 @@ Optional:
 - `authentication_check` (Boolean) Enabling Authentication check for ISIS interface without specific Level.
 - `authentication_check_l1` (Boolean) Enabling Authentication check for ISIS interface at Level1.
 - `authentication_check_l2` (Boolean) Enabling Authentication check for ISIS interface at Level2.
-- `authentication_key` (String) Holds Authentication Key for ISIS Interface.
-- `authentication_key_l1` (String) Holds Authentication Key for ISIS Interface on Level-1.
-- `authentication_key_l2` (String) Holds Authentication Key for ISIS Interface on Level-2.
+- `authentication_key` (String, Sensitive) Holds Authentication Key for ISIS Interface.
+- `authentication_key_l1` (String, Sensitive) Holds Authentication Key for ISIS Interface on Level-1.
+- `authentication_key_l1_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `authentication_key_l1_wo_version` (Number) The write-only version of the attribute.
+- `authentication_key_l2` (String, Sensitive) Holds Authentication Key for ISIS Interface on Level-2.
+- `authentication_key_l2_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `authentication_key_l2_wo_version` (Number) The write-only version of the attribute.
+- `authentication_key_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `authentication_key_wo_version` (Number) The write-only version of the attribute.
 - `authentication_type` (String) Holds Authentication Type value for ISIS Interface.
   - Choices: `clear`, `md5`, `unknown`
 - `authentication_type_l1` (String) Holds ISIS Level-1 Authentication Type value for Interface.

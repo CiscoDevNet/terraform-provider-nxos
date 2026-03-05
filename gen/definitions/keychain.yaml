@@ -80,3 +80,4 @@ child_classes:
                 type: String
                 example: secret_password
                 write_only: true
+                sensitive: true

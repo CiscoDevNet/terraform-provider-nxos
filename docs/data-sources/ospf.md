@@ -111,14 +111,22 @@ Read-Only:
 - `admin_state` (String) The administrative state of the object or policy.
 - `advertise_secondaries` (Boolean) Advertise secondary IP addresses.
 - `area` (String) Area to which this interface belongs to.
-- `authentication_key` (String) Key used for authenticatoin.
+- `authentication_key` (String, Sensitive) Key used for authenticatoin.
 - `authentication_key_id` (Number) Key id used for authentication.
-- `authentication_key_new` (String) Key used for authenticatoin.
+- `authentication_key_new` (String, Sensitive) Key used for authenticatoin.
+- `authentication_key_new_wo` (String) The write-only value of the attribute.
+- `authentication_key_new_wo_version` (Number) The write-only version of the attribute.
 - `authentication_key_secure_mode` (Boolean) Encrypted authentication key or plain text key.
+- `authentication_key_wo` (String) The write-only value of the attribute.
+- `authentication_key_wo_version` (Number) The write-only version of the attribute.
 - `authentication_keychain` (String) Authentication keychain.
-- `authentication_md5_key` (String) Authentication md5 key.
-- `authentication_md5_key_new` (String) Authentication md5 key.
+- `authentication_md5_key` (String, Sensitive) Authentication md5 key.
+- `authentication_md5_key_new` (String, Sensitive) Authentication md5 key.
+- `authentication_md5_key_new_wo` (String) The write-only value of the attribute.
+- `authentication_md5_key_new_wo_version` (Number) The write-only version of the attribute.
 - `authentication_md5_key_secure_mode` (Boolean) Encrypted authentication md5 key or plain text key.
+- `authentication_md5_key_wo` (String) The write-only value of the attribute.
+- `authentication_md5_key_wo_version` (Number) The write-only version of the attribute.
 - `authentication_type` (String) Authentication types can be simple, md5 or none.
 - `bfd` (String) Bidirectional Forwarding Detection (BFD) control.
 - `control` (String) Interface controls can be MTU ignore, Advertise subnet. Choices: `unspecified`, `mtu-ignore`, `advert-subnet`. Can be an empty string. Allowed formats:

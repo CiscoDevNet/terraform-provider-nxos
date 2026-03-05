@@ -102,7 +102,7 @@ func (data NTP) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data NTP) toBody() nxos.Body {
+func (data NTP) toBody(config NTP) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -359,8 +359,8 @@ func (data NTP) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP) nxos.Body {
-	body := data.toBody()
+func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP, config NTP) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Servers {

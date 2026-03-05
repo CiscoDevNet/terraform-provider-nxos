@@ -125,7 +125,7 @@ func (data NVO) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data NVO) toBody() nxos.Body {
+func (data NVO) toBody(config NVO) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.VxlanUdpPort.IsUnknown() && !data.VxlanUdpPort.IsNull()) || false {
@@ -605,8 +605,8 @@ func (data NVO) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO) nxos.Body {
-	body := data.toBody()
+func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.NveInterfaces {

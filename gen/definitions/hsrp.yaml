@@ -231,6 +231,7 @@ child_classes:
                 tf_name: authentication_secret
                 type: String
                 write_only: true
+                sensitive: true
                 description: 'Plain text authentication string for the group.'
                 example: cisco123
                 exclude_test: true

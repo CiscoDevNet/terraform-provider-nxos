@@ -156,7 +156,7 @@ func (data OSPFv3) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data OSPFv3) toBody() nxos.Body {
+func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -743,8 +743,8 @@ func (data OSPFv3) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3) nxos.Body {
-	body := data.toBody()
+func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config OSPFv3) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Instances {

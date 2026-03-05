@@ -53,6 +53,10 @@ import (
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
     {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+    {{- if .Sensitive}}
+    {{toGoName .TfName}}Wo types.String `tfsdk:"{{.TfName}}_wo"`
+    {{toGoName .TfName}}WoVersion types.Int64 `tfsdk:"{{.TfName}}_wo_version"`
+    {{- end}}
 {{- end}}
 {{- if .TfChildClasses}}
 {{- template "structFieldsTemplate" (makeMap "TypePrefix" $typePrefix "Children" .TfChildClasses)}}
@@ -77,6 +81,10 @@ type {{$typePrefix}}{{toGoName .TfName}} struct {
 {{- range .Attributes}}
 {{- if not .Id}}
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+	{{- if .Sensitive}}
+	{{toGoName .TfName}}Wo types.String `tfsdk:"{{.TfName}}_wo"`
+	{{toGoName .TfName}}WoVersion types.Int64 `tfsdk:"{{.TfName}}_wo_version"`
+	{{- end}}
 {{- end}}
 {{- end}}
 {{- if .TfChildClasses}}
@@ -102,6 +110,10 @@ type {{camelCase .Name}} struct {
 	Dn types.String `tfsdk:"id"`
 {{- range .Attributes}}
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+	{{- if .Sensitive}}
+	{{toGoName .TfName}}Wo types.String `tfsdk:"{{.TfName}}_wo"`
+	{{toGoName .TfName}}WoVersion types.Int64 `tfsdk:"{{.TfName}}_wo_version"`
+	{{- end}}
 {{- end}}
 {{- template "structFieldsTemplate" (makeMap "TypePrefix" $name "Children" .TfChildClasses)}}
 }
@@ -197,11 +209,13 @@ func (data {{camelCase .Name}}) getClassName() string {
        Context: map with:
          "Children" ([]YamlConfigChildClass)
          "DataVar" (string) - Go variable holding data (e.g. "data", "child")
+         "ConfigVar" (string) - Go variable holding config (e.g. "config", "configChild")
          "ChildrenPathVar" (string) - Go variable name holding the sjson path to the children array
          "RnArgs" (string) - pre-computed fmt.Sprintf args for dynamic RN segments
        ========================================================= */}}
 {{- define "toBodyChildrenTemplate"}}
 {{- $dataVar := .DataVar}}
+{{- $configVar := .ConfigVar}}
 {{- $childrenPathVar := .ChildrenPathVar}}
 {{- $rnArgs := .RnArgs}}
 {{- range .Children}}
@@ -221,6 +235,13 @@ func (data {{camelCase .Name}}) getClassName() string {
 	{{- if .Value}}
 	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
 	{{- else if not .ReferenceOnly}}
+	{{- if and .Sensitive (eq .Type "String")}}
+	if !{{$configVar}}.{{toGoName .TfName}}Wo.IsNull() {
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$configVar}}.{{toGoName .TfName}}Wo.ValueString())
+	} else if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$dataVar}}.{{toGoName .TfName}}.ValueString())
+	}
+	{{- else}}
 	if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt({{$dataVar}}.{{toGoName .TfName}}.ValueInt64(), 10))
@@ -232,9 +253,10 @@ func (data {{camelCase .Name}}) getClassName() string {
 	}
 	{{- end}}
 	{{- end}}
+	{{- end}}
 	body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 	nestedChildrenPath := childBodyPath + ".children"
-	{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" $dataVar "ChildrenPathVar" "nestedChildrenPath" "RnArgs" $rnArgs)}}
+	{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" $dataVar "ConfigVar" $configVar "ChildrenPathVar" "nestedChildrenPath" "RnArgs" $rnArgs)}}
 	}
 {{- else}}
 	attrs = "{}"
@@ -245,6 +267,13 @@ func (data {{camelCase .Name}}) getClassName() string {
 	{{- if .Value}}
 	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
 	{{- else if not .ReferenceOnly}}
+	{{- if and .Sensitive (eq .Type "String")}}
+	if !{{$configVar}}.{{toGoName .TfName}}Wo.IsNull() {
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$configVar}}.{{toGoName .TfName}}Wo.ValueString())
+	} else if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$dataVar}}.{{toGoName .TfName}}.ValueString())
+	}
+	{{- else}}
 	if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt({{$dataVar}}.{{toGoName .TfName}}.ValueInt64(), 10))
@@ -254,6 +283,7 @@ func (data {{camelCase .Name}}) getClassName() string {
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$dataVar}}.{{toGoName .TfName}}.ValueString())
 		{{- end}}
 	}
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	if attrs != "{}" || {{$childAlwaysInclude}} {
@@ -266,6 +296,11 @@ func (data {{camelCase .Name}}) getClassName() string {
 	{{- else}}
 	for key := range {{$dataVar}}.{{toGoName .TfName}} {
 	{{- end}}
+		{{- if or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .ChildClasses)}}
+		configChild, configChildOk := {{$configVar}}.{{toGoName .TfName}}[key]
+		_ = configChild
+		_ = configChildOk
+		{{- end}}
 		attrs = "{}"
 		{{- if gt (idCount .Attributes) 1}}
 		{{mapKeyParse "key" .Attributes}}
@@ -273,6 +308,13 @@ func (data {{camelCase .Name}}) getClassName() string {
 		{{mapKeySjsonSetStmts "key" .Attributes}}
 		{{- range .Attributes}}
 		{{- if not .Id}}
+		{{- if and .Sensitive (eq .Type "String")}}
+		if configChildOk && !configChild.{{toGoName .TfName}}Wo.IsNull() {
+			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", configChild.{{toGoName .TfName}}Wo.ValueString())
+		} else if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", child.{{toGoName .TfName}}.ValueString())
+		}
+		{{- else}}
 		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 			{{- if eq .Type "Int64"}}
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
@@ -284,12 +326,17 @@ func (data {{camelCase .Name}}) getClassName() string {
 		}
 		{{- end}}
 		{{- end}}
+		{{- end}}
 		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1.{{$childClassName}}.attributes", attrs)
 		{{- if .ChildClasses}}
 		{
 		nestedIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array()) - 1
 		nestedChildrenPath := {{$childrenPathVar}} + "." + strconv.Itoa(nestedIndex) + ".{{$childClassName}}.children"
-		{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "child" "ChildrenPathVar" "nestedChildrenPath" "RnArgs" (mapKeyRnFormatArgs "key" .Attributes))}}
+		{{- if or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .ChildClasses)}}
+		{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "child" "ConfigVar" "configChild" "ChildrenPathVar" "nestedChildrenPath" "RnArgs" (mapKeyRnFormatArgs "key" .Attributes))}}
+		{{- else}}
+		{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "child" "ConfigVar" $configVar "ChildrenPathVar" "nestedChildrenPath" "RnArgs" (mapKeyRnFormatArgs "key" .Attributes))}}
+		{{- end}}
 		}
 		{{- end}}
 	}
@@ -298,11 +345,18 @@ func (data {{camelCase .Name}}) getClassName() string {
 {{- end}}
 {{- /* ==================== end toBodyChildrenTemplate ==================== */}}
 
-func (data {{camelCase .Name}}) toBody() nxos.Body {
+func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	{{- range .Attributes}}
 	{{- if not .ReferenceOnly}}
+	{{- if and .Sensitive (eq .Type "String")}}
+	if !config.{{toGoName .TfName}}Wo.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", config.{{toGoName .TfName}}Wo.ValueString())
+	} else if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
+	}
+	{{- else}}
 	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 		{{- if eq .Type "Int64"}}
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
@@ -314,11 +368,12 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	}
 	{{- end}}
 	{{- end}}
+	{{- end}}
 
 	{{- if .ChildClasses}}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
-	{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "data" "ChildrenPathVar" "childrenPath" "RnArgs" (rnFormatArgs "data" .Attributes))}}
+	{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "data" "ConfigVar" "config" "ChildrenPathVar" "childrenPath" "RnArgs" (rnFormatArgs "data" .Attributes))}}
 	{{- end}}
 
 	return nxos.Body{body}
@@ -1128,8 +1183,8 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 
 {{- if hasListChildClasses .ChildClasses}}
 
-func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}) nxos.Body {
-	body := data.toBody()
+func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	{{- template "toBodyDeletedChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPath" "bodyPath")}}

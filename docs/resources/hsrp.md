@@ -142,7 +142,9 @@ Optional:
   - Range: `0`-`32767`
 - `authentication_md5_type` (String) Type of MD5 Authentication.
   - Choices: `key-chain`, `key-string`
-- `authentication_secret` (String) Plain text authentication string for the group.
+- `authentication_secret` (String, Sensitive) Plain text authentication string for the group.
+- `authentication_secret_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `authentication_secret_wo_version` (Number) The write-only version of the attribute.
 - `authentication_type` (String) Authentication Type for the group.
   - Choices: `simple`, `md5`
 - `control` (String) Group control bits.

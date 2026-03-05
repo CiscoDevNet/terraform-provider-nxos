@@ -204,15 +204,23 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `advertise_secondaries` (Boolean) Advertise secondary IP addresses.
 - `area` (String) Area to which this interface belongs to.
-- `authentication_key` (String) Key used for authenticatoin.
+- `authentication_key` (String, Sensitive) Key used for authenticatoin.
 - `authentication_key_id` (Number) Key id used for authentication.
   - Range: `0`-`255`
-- `authentication_key_new` (String) Key used for authenticatoin.
+- `authentication_key_new` (String, Sensitive) Key used for authenticatoin.
+- `authentication_key_new_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `authentication_key_new_wo_version` (Number) The write-only version of the attribute.
 - `authentication_key_secure_mode` (Boolean) Encrypted authentication key or plain text key.
+- `authentication_key_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `authentication_key_wo_version` (Number) The write-only version of the attribute.
 - `authentication_keychain` (String) Authentication keychain.
-- `authentication_md5_key` (String) Authentication md5 key.
-- `authentication_md5_key_new` (String) Authentication md5 key.
+- `authentication_md5_key` (String, Sensitive) Authentication md5 key.
+- `authentication_md5_key_new` (String, Sensitive) Authentication md5 key.
+- `authentication_md5_key_new_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `authentication_md5_key_new_wo_version` (Number) The write-only version of the attribute.
 - `authentication_md5_key_secure_mode` (Boolean) Encrypted authentication md5 key or plain text key.
+- `authentication_md5_key_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `authentication_md5_key_wo_version` (Number) The write-only version of the attribute.
 - `authentication_type` (String) Authentication types can be simple, md5 or none.
   - Choices: `none`, `simple`, `md5`, `unspecified`
 - `bfd` (String) Bidirectional Forwarding Detection (BFD) control.

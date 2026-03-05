@@ -127,7 +127,7 @@ func (data VRFs) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data VRFs) toBody() nxos.Body {
+func (data VRFs) toBody(config VRFs) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -505,8 +505,8 @@ func (data VRFs) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data VRFs) toBodyWithDeletes(ctx context.Context, state VRFs) nxos.Body {
-	body := data.toBody()
+func (data VRFs) toBodyWithDeletes(ctx context.Context, state VRFs, config VRFs) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Vrfs {

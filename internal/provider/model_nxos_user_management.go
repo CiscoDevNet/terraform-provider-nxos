@@ -66,6 +66,8 @@ type UserManagement struct {
 	TacacsDeadtime             types.Int64                                   `tfsdk:"tacacs_deadtime"`
 	TacacsDescription          types.String                                  `tfsdk:"tacacs_description"`
 	TacacsKey                  types.String                                  `tfsdk:"tacacs_key"`
+	TacacsKeyWo                types.String                                  `tfsdk:"tacacs_key_wo"`
+	TacacsKeyWoVersion         types.Int64                                   `tfsdk:"tacacs_key_wo_version"`
 	TacacsKeyEncryption        types.String                                  `tfsdk:"tacacs_key_encryption"`
 	TacacsLoggingLevel         types.Int64                                   `tfsdk:"tacacs_logging_level"`
 	TacacsName                 types.String                                  `tfsdk:"tacacs_name"`
@@ -92,6 +94,8 @@ type UserManagementUsers struct {
 	PasswordHash           types.String                        `tfsdk:"password_hash"`
 	Phone                  types.String                        `tfsdk:"phone"`
 	Password               types.String                        `tfsdk:"password"`
+	PasswordWo             types.String                        `tfsdk:"password_wo"`
+	PasswordWoVersion      types.Int64                         `tfsdk:"password_wo_version"`
 	PasswordEncryptionType types.String                        `tfsdk:"password_encryption_type"`
 	ShellType              types.String                        `tfsdk:"shell_type"`
 	UnixUserId             types.Int64                         `tfsdk:"unix_user_id"`
@@ -104,20 +108,24 @@ type UserManagementUsersRoles struct {
 }
 
 type UserManagementTacacsProviders struct {
-	AuthenticationProtocol types.String `tfsdk:"authentication_protocol"`
-	Description            types.String `tfsdk:"description"`
-	Key                    types.String `tfsdk:"key"`
-	KeyEncryption          types.String `tfsdk:"key_encryption"`
-	MonitoringIdleTime     types.Int64  `tfsdk:"monitoring_idle_time"`
-	MonitoringPassword     types.String `tfsdk:"monitoring_password"`
-	MonitoringPasswordType types.String `tfsdk:"monitoring_password_type"`
-	MonitoringUser         types.String `tfsdk:"monitoring_user"`
-	OwnerKey               types.String `tfsdk:"owner_key"`
-	OwnerTag               types.String `tfsdk:"owner_tag"`
-	Port                   types.Int64  `tfsdk:"port"`
-	Retries                types.Int64  `tfsdk:"retries"`
-	SingleConnection       types.String `tfsdk:"single_connection"`
-	Timeout                types.Int64  `tfsdk:"timeout"`
+	AuthenticationProtocol      types.String `tfsdk:"authentication_protocol"`
+	Description                 types.String `tfsdk:"description"`
+	Key                         types.String `tfsdk:"key"`
+	KeyWo                       types.String `tfsdk:"key_wo"`
+	KeyWoVersion                types.Int64  `tfsdk:"key_wo_version"`
+	KeyEncryption               types.String `tfsdk:"key_encryption"`
+	MonitoringIdleTime          types.Int64  `tfsdk:"monitoring_idle_time"`
+	MonitoringPassword          types.String `tfsdk:"monitoring_password"`
+	MonitoringPasswordWo        types.String `tfsdk:"monitoring_password_wo"`
+	MonitoringPasswordWoVersion types.Int64  `tfsdk:"monitoring_password_wo_version"`
+	MonitoringPasswordType      types.String `tfsdk:"monitoring_password_type"`
+	MonitoringUser              types.String `tfsdk:"monitoring_user"`
+	OwnerKey                    types.String `tfsdk:"owner_key"`
+	OwnerTag                    types.String `tfsdk:"owner_tag"`
+	Port                        types.Int64  `tfsdk:"port"`
+	Retries                     types.Int64  `tfsdk:"retries"`
+	SingleConnection            types.String `tfsdk:"single_connection"`
+	Timeout                     types.Int64  `tfsdk:"timeout"`
 }
 
 type UserManagementTacacsProviderGroups struct {
@@ -181,7 +189,7 @@ func (data UserManagement) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data UserManagement) toBody() nxos.Body {
+func (data UserManagement) toBody(config UserManagement) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AlphabetSequence.IsUnknown() && !data.AlphabetSequence.IsNull()) || false {
@@ -264,6 +272,9 @@ func (data UserManagement) toBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaPostLoginBanner.attributes", attrs)
 	}
 	for key, child := range data.Users {
+		configChild, configChildOk := config.Users[key]
+		_ = configChild
+		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if (!child.AccountStatus.IsUnknown() && !child.AccountStatus.IsNull()) || false {
@@ -302,7 +313,9 @@ func (data UserManagement) toBody() nxos.Body {
 		if (!child.Phone.IsUnknown() && !child.Phone.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "phone", child.Phone.ValueString())
 		}
-		if (!child.Password.IsUnknown() && !child.Password.IsNull()) || false {
+		if configChildOk && !configChild.PasswordWo.IsNull() {
+			attrs, _ = sjson.Set(attrs, "pwd", configChild.PasswordWo.ValueString())
+		} else if (!child.Password.IsUnknown() && !child.Password.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "pwd", child.Password.ValueString())
 		}
 		if (!child.PasswordEncryptionType.IsUnknown() && !child.PasswordEncryptionType.IsNull()) || false {
@@ -349,7 +362,9 @@ func (data UserManagement) toBody() nxos.Body {
 		if (!data.TacacsDescription.IsUnknown() && !data.TacacsDescription.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "descr", data.TacacsDescription.ValueString())
 		}
-		if (!data.TacacsKey.IsUnknown() && !data.TacacsKey.IsNull()) || false {
+		if !config.TacacsKeyWo.IsNull() {
+			attrs, _ = sjson.Set(attrs, "key", config.TacacsKeyWo.ValueString())
+		} else if (!data.TacacsKey.IsUnknown() && !data.TacacsKey.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "key", data.TacacsKey.ValueString())
 		}
 		if (!data.TacacsKeyEncryption.IsUnknown() && !data.TacacsKeyEncryption.IsNull()) || false {
@@ -379,6 +394,9 @@ func (data UserManagement) toBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.TacacsProviders {
+			configChild, configChildOk := config.TacacsProviders[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if (!child.AuthenticationProtocol.IsUnknown() && !child.AuthenticationProtocol.IsNull()) || false {
@@ -387,7 +405,9 @@ func (data UserManagement) toBody() nxos.Body {
 			if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
-			if (!child.Key.IsUnknown() && !child.Key.IsNull()) || false {
+			if configChildOk && !configChild.KeyWo.IsNull() {
+				attrs, _ = sjson.Set(attrs, "key", configChild.KeyWo.ValueString())
+			} else if (!child.Key.IsUnknown() && !child.Key.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "key", child.Key.ValueString())
 			}
 			if (!child.KeyEncryption.IsUnknown() && !child.KeyEncryption.IsNull()) || false {
@@ -396,7 +416,9 @@ func (data UserManagement) toBody() nxos.Body {
 			if (!child.MonitoringIdleTime.IsUnknown() && !child.MonitoringIdleTime.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "monitoringIdleTime", strconv.FormatInt(child.MonitoringIdleTime.ValueInt64(), 10))
 			}
-			if (!child.MonitoringPassword.IsUnknown() && !child.MonitoringPassword.IsNull()) || false {
+			if configChildOk && !configChild.MonitoringPasswordWo.IsNull() {
+				attrs, _ = sjson.Set(attrs, "monitoringPassword", configChild.MonitoringPasswordWo.ValueString())
+			} else if (!child.MonitoringPassword.IsUnknown() && !child.MonitoringPassword.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "monitoringPassword", child.MonitoringPassword.ValueString())
 			}
 			if (!child.MonitoringPasswordType.IsUnknown() && !child.MonitoringPasswordType.IsNull()) || false {
@@ -1214,8 +1236,8 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserManagement) nxos.Body {
-	body := data.toBody()
+func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserManagement, config UserManagement) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Users {

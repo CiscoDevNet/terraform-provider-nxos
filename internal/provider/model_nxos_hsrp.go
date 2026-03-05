@@ -73,6 +73,8 @@ type HSRPInterfacesGroups struct {
 	AuthenticationMd5Timeout           types.Int64  `tfsdk:"authentication_md5_timeout"`
 	AuthenticationMd5Type              types.String `tfsdk:"authentication_md5_type"`
 	AuthenticationSecret               types.String `tfsdk:"authentication_secret"`
+	AuthenticationSecretWo             types.String `tfsdk:"authentication_secret_wo"`
+	AuthenticationSecretWoVersion      types.Int64  `tfsdk:"authentication_secret_wo_version"`
 	AuthenticationType                 types.String `tfsdk:"authentication_type"`
 	Control                            types.String `tfsdk:"control"`
 	Follow                             types.String `tfsdk:"follow"`
@@ -134,7 +136,7 @@ func (data HSRP) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data HSRP) toBody() nxos.Body {
+func (data HSRP) toBody(config HSRP) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -164,6 +166,9 @@ func (data HSRP) toBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Interfaces {
+			configChild, configChildOk := config.Interfaces[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "id", key)
 			if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
@@ -204,6 +209,9 @@ func (data HSRP) toBody() nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".hsrpIf.children"
 				for key, child := range child.Groups {
+					configChild, configChildOk := configChild.Groups[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					keyParts := strings.SplitN(key, ";", 2)
 					attrs, _ = sjson.Set(attrs, "id", keyParts[0])
@@ -226,7 +234,9 @@ func (data HSRP) toBody() nxos.Body {
 					if (!child.AuthenticationMd5Type.IsUnknown() && !child.AuthenticationMd5Type.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "authMd5Type", child.AuthenticationMd5Type.ValueString())
 					}
-					if (!child.AuthenticationSecret.IsUnknown() && !child.AuthenticationSecret.IsNull()) || false {
+					if configChildOk && !configChild.AuthenticationSecretWo.IsNull() {
+						attrs, _ = sjson.Set(attrs, "authSecret", configChild.AuthenticationSecretWo.ValueString())
+					} else if (!child.AuthenticationSecret.IsUnknown() && !child.AuthenticationSecret.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "authSecret", child.AuthenticationSecret.ValueString())
 					}
 					if (!child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull()) || false {
@@ -624,8 +634,8 @@ func (data HSRP) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data HSRP) toBodyWithDeletes(ctx context.Context, state HSRP) nxos.Body {
-	body := data.toBody()
+func (data HSRP) toBodyWithDeletes(ctx context.Context, state HSRP, config HSRP) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Interfaces {

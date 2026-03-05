@@ -137,7 +137,7 @@ func (data PortChannelInterfaces) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data PortChannelInterfaces) toBody() nxos.Body {
+func (data PortChannelInterfaces) toBody(config PortChannelInterfaces) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -682,8 +682,8 @@ func (data PortChannelInterfaces) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data PortChannelInterfaces) toBodyWithDeletes(ctx context.Context, state PortChannelInterfaces) nxos.Body {
-	body := data.toBody()
+func (data PortChannelInterfaces) toBodyWithDeletes(ctx context.Context, state PortChannelInterfaces, config PortChannelInterfaces) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.PortChannelInterfaces {

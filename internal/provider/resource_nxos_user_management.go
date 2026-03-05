@@ -279,6 +279,16 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 						"password": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The system user password.").String,
 							Optional:            true,
+							Sensitive:           true,
+						},
+						"password_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							WriteOnly:           true,
+							Optional:            true,
+						},
+						"password_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
+							Optional:            true,
 						},
 						"password_encryption_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Password Encryption Type.").AddStringEnumDescription("clear", "Encrypt", "Pbkdf2", "scrypt", "unspecified").String,
@@ -333,6 +343,16 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"tacacs_key": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Global TACACS+ server shared secret.").String,
+				Optional:            true,
+				Sensitive:           true,
+			},
+			"tacacs_key_wo": schema.StringAttribute{
+				MarkdownDescription: "The write-only value of the attribute.",
+				WriteOnly:           true,
+				Optional:            true,
+			},
+			"tacacs_key_wo_version": schema.Int64Attribute{
+				MarkdownDescription: "The write-only version of the attribute.",
 				Optional:            true,
 			},
 			"tacacs_key_encryption": schema.StringAttribute{
@@ -398,6 +418,16 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 						"key": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("A password for the AAA provider database.").String,
 							Optional:            true,
+							Sensitive:           true,
+						},
+						"key_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							WriteOnly:           true,
+							Optional:            true,
+						},
+						"key_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
+							Optional:            true,
 						},
 						"key_encryption": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Default key encryption.").AddStringEnumDescription("0", "6", "7").String,
@@ -415,6 +445,16 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 						},
 						"monitoring_password": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Periodic Server Monitoring Password.").String,
+							Optional:            true,
+							Sensitive:           true,
+						},
+						"monitoring_password_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							WriteOnly:           true,
+							Optional:            true,
+						},
+						"monitoring_password_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
 							Optional:            true,
 						},
 						"monitoring_password_type": schema.StringAttribute{
@@ -539,6 +579,14 @@ func (r *UserManagementResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 
+	// Read config
+	var config UserManagement
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
 	device, ok := r.data.Devices[plan.Device.ValueString()]
@@ -549,7 +597,7 @@ func (r *UserManagementResource) Create(ctx context.Context, req resource.Create
 
 	// Post object
 	if device.Managed {
-		body := plan.toBody()
+		body := plan.toBody(config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -651,6 +699,14 @@ func (r *UserManagementResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read config
+	var config UserManagement
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	var state UserManagement
 
 	// Read state
@@ -669,7 +725,7 @@ func (r *UserManagementResource) Update(ctx context.Context, req resource.Update
 	}
 
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state)
+		body := plan.toBodyWithDeletes(ctx, state, config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

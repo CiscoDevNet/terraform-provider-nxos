@@ -150,7 +150,7 @@ func (data IPv6) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data IPv6) toBody() nxos.Body {
+func (data IPv6) toBody(config IPv6) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -750,8 +750,8 @@ func (data IPv6) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6) nxos.Body {
-	body := data.toBody()
+func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Vrfs {

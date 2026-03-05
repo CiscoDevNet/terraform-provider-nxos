@@ -194,8 +194,10 @@ Read-Only:
 - `log_neighbor_changes` (String) Log Neighbor Changes.
 - `low_memory_exempt` (String) Low Memory Exempt.
 - `max_peer_count` (Number) Maximum Peers for the prefix or interface.
-- `password` (String) Configure a password for neighbor.
+- `password` (String, Sensitive) Configure a password for neighbor.
 - `password_type` (String) Password EnCrypt Type.
+- `password_wo` (String) The write-only value of the attribute.
+- `password_wo_version` (Number) The write-only version of the attribute.
 - `peer_control` (String) Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
@@ -265,8 +267,10 @@ Read-Only:
 - `log_neighbor_changes` (String) Log messages for Neighbor up/down events.
 - `low_memory_exempt` (String) Low Memory Exempt.
 - `max_peer_count` (Number) Maximum Peers For Prefix.
-- `password` (String) Password.
+- `password` (String, Sensitive) Password.
 - `password_type` (String) Password EnCrypt Type.
+- `password_wo` (String) The write-only value of the attribute.
+- `password_wo_version` (Number) The write-only version of the attribute.
 - `peer_address_families` (Attributes Map) List of BGP peer address families.
   - Map key: `address_family` - Type.
   - Key choices: `ipv4-ucast`, `ipv4-mvpn`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate` (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families))

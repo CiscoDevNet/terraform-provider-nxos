@@ -140,7 +140,7 @@ func (data PhysicalInterfaces) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data PhysicalInterfaces) toBody() nxos.Body {
+func (data PhysicalInterfaces) toBody(config PhysicalInterfaces) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -804,8 +804,8 @@ func (data PhysicalInterfaces) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data PhysicalInterfaces) toBodyWithDeletes(ctx context.Context, state PhysicalInterfaces) nxos.Body {
-	body := data.toBody()
+func (data PhysicalInterfaces) toBodyWithDeletes(ctx context.Context, state PhysicalInterfaces, config PhysicalInterfaces) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.PhysicalInterfaces {

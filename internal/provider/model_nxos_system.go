@@ -171,7 +171,7 @@ func (data System) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data System) toBody() nxos.Body {
+func (data System) toBody(config System) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
@@ -1363,8 +1363,8 @@ func (data System) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data System) toBodyWithDeletes(ctx context.Context, state System) nxos.Body {
-	body := data.toBody()
+func (data System) toBodyWithDeletes(ctx context.Context, state System, config System) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.ArpVpcDomains {

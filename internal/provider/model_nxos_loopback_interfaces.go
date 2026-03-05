@@ -89,7 +89,7 @@ func (data LoopbackInterfaces) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data LoopbackInterfaces) toBody() nxos.Body {
+func (data LoopbackInterfaces) toBody(config LoopbackInterfaces) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -242,8 +242,8 @@ func (data LoopbackInterfaces) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data LoopbackInterfaces) toBodyWithDeletes(ctx context.Context, state LoopbackInterfaces) nxos.Body {
-	body := data.toBody()
+func (data LoopbackInterfaces) toBodyWithDeletes(ctx context.Context, state LoopbackInterfaces, config LoopbackInterfaces) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.LoopbackInterfaces {

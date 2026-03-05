@@ -369,6 +369,16 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 												"authentication_key": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Key used for authenticatoin.").String,
 													Optional:            true,
+													Sensitive:           true,
+												},
+												"authentication_key_wo": schema.StringAttribute{
+													MarkdownDescription: "The write-only value of the attribute.",
+													WriteOnly:           true,
+													Optional:            true,
+												},
+												"authentication_key_wo_version": schema.Int64Attribute{
+													MarkdownDescription: "The write-only version of the attribute.",
+													Optional:            true,
 												},
 												"authentication_key_id": schema.Int64Attribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Key id used for authentication.").AddIntegerRangeDescription(0, 255).String,
@@ -379,6 +389,16 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 												},
 												"authentication_key_new": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Key used for authenticatoin.").String,
+													Optional:            true,
+													Sensitive:           true,
+												},
+												"authentication_key_new_wo": schema.StringAttribute{
+													MarkdownDescription: "The write-only value of the attribute.",
+													WriteOnly:           true,
+													Optional:            true,
+												},
+												"authentication_key_new_wo_version": schema.Int64Attribute{
+													MarkdownDescription: "The write-only version of the attribute.",
 													Optional:            true,
 												},
 												"authentication_key_secure_mode": schema.BoolAttribute{
@@ -392,9 +412,29 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 												"authentication_md5_key": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Authentication md5 key.").String,
 													Optional:            true,
+													Sensitive:           true,
+												},
+												"authentication_md5_key_wo": schema.StringAttribute{
+													MarkdownDescription: "The write-only value of the attribute.",
+													WriteOnly:           true,
+													Optional:            true,
+												},
+												"authentication_md5_key_wo_version": schema.Int64Attribute{
+													MarkdownDescription: "The write-only version of the attribute.",
+													Optional:            true,
 												},
 												"authentication_md5_key_new": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Authentication md5 key.").String,
+													Optional:            true,
+													Sensitive:           true,
+												},
+												"authentication_md5_key_new_wo": schema.StringAttribute{
+													MarkdownDescription: "The write-only value of the attribute.",
+													WriteOnly:           true,
+													Optional:            true,
+												},
+												"authentication_md5_key_new_wo_version": schema.Int64Attribute{
+													MarkdownDescription: "The write-only version of the attribute.",
 													Optional:            true,
 												},
 												"authentication_md5_key_secure_mode": schema.BoolAttribute{
@@ -454,6 +494,14 @@ func (r *OSPFResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
+	// Read config
+	var config OSPF
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
 	device, ok := r.data.Devices[plan.Device.ValueString()]
@@ -464,7 +512,7 @@ func (r *OSPFResource) Create(ctx context.Context, req resource.CreateRequest, r
 
 	// Post object
 	if device.Managed {
-		body := plan.toBody()
+		body := plan.toBody(config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -566,6 +614,14 @@ func (r *OSPFResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read config
+	var config OSPF
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	var state OSPF
 
 	// Read state
@@ -584,7 +640,7 @@ func (r *OSPFResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	}
 
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state)
+		body := plan.toBodyWithDeletes(ctx, state, config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

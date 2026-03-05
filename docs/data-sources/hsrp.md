@@ -77,7 +77,9 @@ Read-Only:
 - `authentication_md5_key_string_type` (String) Authentication MD5 Key String Type.
 - `authentication_md5_timeout` (Number) timeout for when HSRP will only accept a new key.
 - `authentication_md5_type` (String) Type of MD5 Authentication.
-- `authentication_secret` (String) Plain text authentication string for the group.
+- `authentication_secret` (String, Sensitive) Plain text authentication string for the group.
+- `authentication_secret_wo` (String) The write-only value of the attribute.
+- `authentication_secret_wo_version` (Number) The write-only version of the attribute.
 - `authentication_type` (String) Authentication Type for the group.
 - `control` (String) Group control bits.
 - `follow` (String) Master name string to follow.

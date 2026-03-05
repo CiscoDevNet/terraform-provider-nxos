@@ -233,6 +233,16 @@ func (r *HSRPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 									"authentication_secret": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Plain text authentication string for the group.").String,
 										Optional:            true,
+										Sensitive:           true,
+									},
+									"authentication_secret_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										WriteOnly:           true,
+										Optional:            true,
+									},
+									"authentication_secret_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Optional:            true,
 									},
 									"authentication_type": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Authentication Type for the group.").AddStringEnumDescription("simple", "md5").String,
@@ -360,6 +370,14 @@ func (r *HSRPResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
+	// Read config
+	var config HSRP
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
 	device, ok := r.data.Devices[plan.Device.ValueString()]
@@ -370,7 +388,7 @@ func (r *HSRPResource) Create(ctx context.Context, req resource.CreateRequest, r
 
 	// Post object
 	if device.Managed {
-		body := plan.toBody()
+		body := plan.toBody(config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -472,6 +490,14 @@ func (r *HSRPResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read config
+	var config HSRP
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	var state HSRP
 
 	// Read state
@@ -490,7 +516,7 @@ func (r *HSRPResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	}
 
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state)
+		body := plan.toBodyWithDeletes(ctx, state, config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

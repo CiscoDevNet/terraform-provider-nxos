@@ -513,6 +513,15 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"password": schema.StringAttribute{
 										MarkdownDescription: "Configure a password for neighbor.",
 										Computed:            true,
+										Sensitive:           true,
+									},
+									"password_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										Computed:            true,
+									},
+									"password_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Computed:            true,
 									},
 									"private_as_control": schema.StringAttribute{
 										MarkdownDescription: "Private AS Control.",
@@ -684,6 +693,15 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									},
 									"password": schema.StringAttribute{
 										MarkdownDescription: "Password.",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"password_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										Computed:            true,
+									},
+									"password_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
 										Computed:            true,
 									},
 									"admin_state": schema.StringAttribute{

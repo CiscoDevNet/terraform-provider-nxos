@@ -894,6 +894,7 @@ child_classes:
                 type: String
                 example: secret_password
                 write_only: true
+                sensitive: true
                 exclude_test: true
               - nxos_name: privateASctrl
                 tf_name: private_as_control
@@ -1220,6 +1221,7 @@ child_classes:
                 type: String
                 example: secret_password
                 write_only: true
+                sensitive: true
               - nxos_name: adminSt
                 tf_name: admin_state
                 type: String

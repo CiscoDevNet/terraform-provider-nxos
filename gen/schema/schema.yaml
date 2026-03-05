@@ -23,6 +23,7 @@ attribute:
   reference_only: bool(required=False) # Set to true if the attribute is only used as a reference to a parent resource
   mandatory: bool(required=False) # Set to true if the attribute is mandatory
   write_only: bool(required=False) # Set to true if the attribute is write-only, meaning we cannot read the value
+  sensitive: bool(required=False) # Set to true if the attribute is sensitive, meaning it should not show up in clear-text in plan and logs
   description: str(required=False) # Attribute description
   example: any(str(), int(), bool(), required=False) # Example value for documentation, also used for acceptance test
   enum_values: list(str(), required=False) # List of enum values, only relevant if type is "String"

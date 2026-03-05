@@ -131,7 +131,7 @@ func (data VPC) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data VPC) toBody() nxos.Body {
+func (data VPC) toBody(config VPC) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -771,8 +771,8 @@ func (data VPC) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC) nxos.Body {
-	body := data.toBody()
+func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC, config VPC) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Interfaces {

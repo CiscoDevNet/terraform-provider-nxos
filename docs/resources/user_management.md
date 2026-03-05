@@ -124,6 +124,8 @@ resource "nxos_user_management" "example" {
 
 ### Optional
 
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
 - `alphabet_sequence` (Number) Disallow sequential alphabetical characters in password.
   - Range: `0`-`10`
 - `description` (String) Description of the specified attribute.
@@ -163,9 +165,11 @@ resource "nxos_user_management" "example" {
 - `tacacs_deadtime` (Number) Duration for which non-reachable server is skipped.
   - Range: `0`-`1440`
 - `tacacs_description` (String) Description of the specified attribute.
-- `tacacs_key` (String) Global TACACS+ server shared secret.
+- `tacacs_key` (String, Sensitive) Global TACACS+ server shared secret.
 - `tacacs_key_encryption` (String) Default key encryption.
   - Choices: `0`, `6`, `7`
+- `tacacs_key_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `tacacs_key_wo_version` (Number) The write-only version of the attribute.
 - `tacacs_logging_level` (Number) Tacacs Logging level.
   - Range: `0`-`7`
 - `tacacs_name` (String) Object name.
@@ -209,14 +213,18 @@ Optional:
 - `authentication_protocol` (String) The TACACS+ authentication protocol.
   - Choices: `pap`, `chap`, `mschap`, `mschapv2`, `ascii`
 - `description` (String) Description of the specified attribute.
-- `key` (String) A password for the AAA provider database.
+- `key` (String, Sensitive) A password for the AAA provider database.
 - `key_encryption` (String) Default key encryption.
   - Choices: `0`, `6`, `7`
+- `key_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `key_wo_version` (Number) The write-only version of the attribute.
 - `monitoring_idle_time` (Number) Idle timer to monitor tacacs server.
   - Range: `0`-`1440`
-- `monitoring_password` (String) Periodic Server Monitoring Password.
+- `monitoring_password` (String, Sensitive) Periodic Server Monitoring Password.
 - `monitoring_password_type` (String) Monitoring password type.
   - Choices: `0`, `7`
+- `monitoring_password_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `monitoring_password_wo_version` (Number) The write-only version of the attribute.
 - `monitoring_user` (String) Periodic Server Monitoring Username.
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
@@ -250,11 +258,13 @@ Optional:
 - `force` (String) Delete user entry forcibly.
   - Choices: `no`, `yes`
 - `last_name` (String) The last name of the locally-authenticated user.
-- `password` (String) The system user password.
+- `password` (String, Sensitive) The system user password.
 - `password_encryption_type` (String) Password Encryption Type.
   - Choices: `clear`, `Encrypt`, `Pbkdf2`, `scrypt`, `unspecified`
 - `password_hash` (String) Generate password hash for clear text password.
   - Choices: `unspecified`, `pbkdf2`, `scrypt`
+- `password_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `password_wo_version` (Number) The write-only version of the attribute.
 - `phone` (String) The phone number of the locally-authenticated user.
 - `roles` (Attributes Map) User roles.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--users--roles))

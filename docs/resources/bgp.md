@@ -491,9 +491,11 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `max_peer_count` (Number) Maximum Peers for the prefix or interface.
   - Range: `1`-`1000`
-- `password` (String) Configure a password for neighbor.
+- `password` (String, Sensitive) Configure a password for neighbor.
 - `password_type` (String) Password EnCrypt Type.
   - Choices: `0`, `3`, `LINE`, `6`, `7`
+- `password_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `password_wo_version` (Number) The write-only version of the attribute.
 - `peer_control` (String) Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
@@ -603,9 +605,11 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `max_peer_count` (Number) Maximum Peers For Prefix.
   - Range: `1`-`1000`
-- `password` (String) Password.
+- `password` (String, Sensitive) Password.
 - `password_type` (String) Password EnCrypt Type.
   - Choices: `0`, `3`, `LINE`, `6`, `7`
+- `password_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `password_wo_version` (Number) The write-only version of the attribute.
 - `peer_address_families` (Attributes Map) List of BGP peer address families.
   - Map key: `address_family` - Type.
   - Key choices: `ipv4-ucast`, `ipv4-mvpn`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate` (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families))

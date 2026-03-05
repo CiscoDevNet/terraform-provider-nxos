@@ -110,6 +110,16 @@ func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaReques
 									"key_string": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("keyString provided by user for the keychain.").String,
 										Optional:            true,
+										Sensitive:           true,
+									},
+									"key_string_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										WriteOnly:           true,
+										Optional:            true,
+									},
+									"key_string_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Optional:            true,
 									},
 								},
 							},
@@ -154,6 +164,14 @@ func (r *KeychainResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
+	// Read config
+	var config Keychain
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
 	device, ok := r.data.Devices[plan.Device.ValueString()]
@@ -164,7 +182,7 @@ func (r *KeychainResource) Create(ctx context.Context, req resource.CreateReques
 
 	// Post object
 	if device.Managed {
-		body := plan.toBody()
+		body := plan.toBody(config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -266,6 +284,14 @@ func (r *KeychainResource) Update(ctx context.Context, req resource.UpdateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read config
+	var config Keychain
+	diags = req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	var state Keychain
 
 	// Read state
@@ -284,7 +310,7 @@ func (r *KeychainResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state)
+		body := plan.toBodyWithDeletes(ctx, state, config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

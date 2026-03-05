@@ -101,7 +101,7 @@ func (data QueuingQoS) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data QueuingQoS) toBody() nxos.Body {
+func (data QueuingQoS) toBody(config QueuingQoS) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -541,8 +541,8 @@ func (data QueuingQoS) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS) nxos.Body {
-	body := data.toBody()
+func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS, config QueuingQoS) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.PolicyMaps {

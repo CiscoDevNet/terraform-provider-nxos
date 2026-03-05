@@ -216,6 +216,15 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 						"password": schema.StringAttribute{
 							MarkdownDescription: "The system user password.",
 							Computed:            true,
+							Sensitive:           true,
+						},
+						"password_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							Computed:            true,
+						},
+						"password_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
+							Computed:            true,
 						},
 						"password_encryption_type": schema.StringAttribute{
 							MarkdownDescription: "Password Encryption Type.",
@@ -258,6 +267,15 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"tacacs_key": schema.StringAttribute{
 				MarkdownDescription: "Global TACACS+ server shared secret.",
+				Computed:            true,
+				Sensitive:           true,
+			},
+			"tacacs_key_wo": schema.StringAttribute{
+				MarkdownDescription: "The write-only value of the attribute.",
+				Computed:            true,
+			},
+			"tacacs_key_wo_version": schema.Int64Attribute{
+				MarkdownDescription: "The write-only version of the attribute.",
 				Computed:            true,
 			},
 			"tacacs_key_encryption": schema.StringAttribute{
@@ -308,6 +326,15 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 						"key": schema.StringAttribute{
 							MarkdownDescription: "A password for the AAA provider database.",
 							Computed:            true,
+							Sensitive:           true,
+						},
+						"key_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							Computed:            true,
+						},
+						"key_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
+							Computed:            true,
 						},
 						"key_encryption": schema.StringAttribute{
 							MarkdownDescription: "Default key encryption.",
@@ -319,6 +346,15 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 						},
 						"monitoring_password": schema.StringAttribute{
 							MarkdownDescription: "Periodic Server Monitoring Password.",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"monitoring_password_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							Computed:            true,
+						},
+						"monitoring_password_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
 							Computed:            true,
 						},
 						"monitoring_password_type": schema.StringAttribute{

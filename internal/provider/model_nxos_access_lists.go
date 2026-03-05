@@ -173,7 +173,7 @@ func (data AccessLists) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data AccessLists) toBody() nxos.Body {
+func (data AccessLists) toBody(config AccessLists) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -1159,8 +1159,8 @@ func (data AccessLists) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data AccessLists) toBodyWithDeletes(ctx context.Context, state AccessLists) nxos.Body {
-	body := data.toBody()
+func (data AccessLists) toBodyWithDeletes(ctx context.Context, state AccessLists, config AccessLists) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.AccessLists {

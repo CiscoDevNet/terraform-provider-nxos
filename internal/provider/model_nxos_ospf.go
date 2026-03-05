@@ -86,29 +86,37 @@ type OSPFInstancesVrfsAreas struct {
 }
 
 type OSPFInstancesVrfsInterfaces struct {
-	AdminState                     types.String `tfsdk:"admin_state"`
-	AdvertiseSecondaries           types.Bool   `tfsdk:"advertise_secondaries"`
-	Area                           types.String `tfsdk:"area"`
-	Bfd                            types.String `tfsdk:"bfd"`
-	Cost                           types.Int64  `tfsdk:"cost"`
-	DeadInterval                   types.Int64  `tfsdk:"dead_interval"`
-	HelloInterval                  types.Int64  `tfsdk:"hello_interval"`
-	NetworkType                    types.String `tfsdk:"network_type"`
-	Passive                        types.String `tfsdk:"passive"`
-	Priority                       types.Int64  `tfsdk:"priority"`
-	Control                        types.String `tfsdk:"control"`
-	NodeFlag                       types.String `tfsdk:"node_flag"`
-	RetransmitInterval             types.Int64  `tfsdk:"retransmit_interval"`
-	TransmitDelay                  types.Int64  `tfsdk:"transmit_delay"`
-	AuthenticationKey              types.String `tfsdk:"authentication_key"`
-	AuthenticationKeyId            types.Int64  `tfsdk:"authentication_key_id"`
-	AuthenticationKeyNew           types.String `tfsdk:"authentication_key_new"`
-	AuthenticationKeySecureMode    types.Bool   `tfsdk:"authentication_key_secure_mode"`
-	AuthenticationKeychain         types.String `tfsdk:"authentication_keychain"`
-	AuthenticationMd5Key           types.String `tfsdk:"authentication_md5_key"`
-	AuthenticationMd5KeyNew        types.String `tfsdk:"authentication_md5_key_new"`
-	AuthenticationMd5KeySecureMode types.Bool   `tfsdk:"authentication_md5_key_secure_mode"`
-	AuthenticationType             types.String `tfsdk:"authentication_type"`
+	AdminState                       types.String `tfsdk:"admin_state"`
+	AdvertiseSecondaries             types.Bool   `tfsdk:"advertise_secondaries"`
+	Area                             types.String `tfsdk:"area"`
+	Bfd                              types.String `tfsdk:"bfd"`
+	Cost                             types.Int64  `tfsdk:"cost"`
+	DeadInterval                     types.Int64  `tfsdk:"dead_interval"`
+	HelloInterval                    types.Int64  `tfsdk:"hello_interval"`
+	NetworkType                      types.String `tfsdk:"network_type"`
+	Passive                          types.String `tfsdk:"passive"`
+	Priority                         types.Int64  `tfsdk:"priority"`
+	Control                          types.String `tfsdk:"control"`
+	NodeFlag                         types.String `tfsdk:"node_flag"`
+	RetransmitInterval               types.Int64  `tfsdk:"retransmit_interval"`
+	TransmitDelay                    types.Int64  `tfsdk:"transmit_delay"`
+	AuthenticationKey                types.String `tfsdk:"authentication_key"`
+	AuthenticationKeyWo              types.String `tfsdk:"authentication_key_wo"`
+	AuthenticationKeyWoVersion       types.Int64  `tfsdk:"authentication_key_wo_version"`
+	AuthenticationKeyId              types.Int64  `tfsdk:"authentication_key_id"`
+	AuthenticationKeyNew             types.String `tfsdk:"authentication_key_new"`
+	AuthenticationKeyNewWo           types.String `tfsdk:"authentication_key_new_wo"`
+	AuthenticationKeyNewWoVersion    types.Int64  `tfsdk:"authentication_key_new_wo_version"`
+	AuthenticationKeySecureMode      types.Bool   `tfsdk:"authentication_key_secure_mode"`
+	AuthenticationKeychain           types.String `tfsdk:"authentication_keychain"`
+	AuthenticationMd5Key             types.String `tfsdk:"authentication_md5_key"`
+	AuthenticationMd5KeyWo           types.String `tfsdk:"authentication_md5_key_wo"`
+	AuthenticationMd5KeyWoVersion    types.Int64  `tfsdk:"authentication_md5_key_wo_version"`
+	AuthenticationMd5KeyNew          types.String `tfsdk:"authentication_md5_key_new"`
+	AuthenticationMd5KeyNewWo        types.String `tfsdk:"authentication_md5_key_new_wo"`
+	AuthenticationMd5KeyNewWoVersion types.Int64  `tfsdk:"authentication_md5_key_new_wo_version"`
+	AuthenticationMd5KeySecureMode   types.Bool   `tfsdk:"authentication_md5_key_secure_mode"`
+	AuthenticationType               types.String `tfsdk:"authentication_type"`
 }
 
 type OSPFIdentity struct {
@@ -163,7 +171,7 @@ func (data OSPF) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data OSPF) toBody() nxos.Body {
+func (data OSPF) toBody(config OSPF) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
@@ -172,6 +180,9 @@ func (data OSPF) toBody() nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.Instances {
+		configChild, configChildOk := config.Instances[key]
+		_ = configChild
+		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
@@ -185,6 +196,9 @@ func (data OSPF) toBody() nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfInst.children"
 			for key, child := range child.Vrfs {
+				configChild, configChildOk := configChild.Vrfs[key]
+				_ = configChild
+				_ = configChildOk
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "name", key)
 				if (!child.LogAdjacencyChanges.IsUnknown() && !child.LogAdjacencyChanges.IsNull()) || false {
@@ -282,6 +296,9 @@ func (data OSPF) toBody() nxos.Body {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfMaxMetricLsaP.attributes", attrs)
 					}
 					for key, child := range child.Interfaces {
+						configChild, configChildOk := configChild.Interfaces[key]
+						_ = configChild
+						_ = configChildOk
 						attrs = "{}"
 						attrs, _ = sjson.Set(attrs, "id", key)
 						if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
@@ -331,13 +348,17 @@ func (data OSPF) toBody() nxos.Body {
 							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfIf.children"
 							attrs = "{}"
-							if (!child.AuthenticationKey.IsUnknown() && !child.AuthenticationKey.IsNull()) || false {
+							if !configChild.AuthenticationKeyWo.IsNull() {
+								attrs, _ = sjson.Set(attrs, "key", configChild.AuthenticationKeyWo.ValueString())
+							} else if (!child.AuthenticationKey.IsUnknown() && !child.AuthenticationKey.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "key", child.AuthenticationKey.ValueString())
 							}
 							if (!child.AuthenticationKeyId.IsUnknown() && !child.AuthenticationKeyId.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "keyId", strconv.FormatInt(child.AuthenticationKeyId.ValueInt64(), 10))
 							}
-							if (!child.AuthenticationKeyNew.IsUnknown() && !child.AuthenticationKeyNew.IsNull()) || false {
+							if !configChild.AuthenticationKeyNewWo.IsNull() {
+								attrs, _ = sjson.Set(attrs, "keyNew", configChild.AuthenticationKeyNewWo.ValueString())
+							} else if (!child.AuthenticationKeyNew.IsUnknown() && !child.AuthenticationKeyNew.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "keyNew", child.AuthenticationKeyNew.ValueString())
 							}
 							if (!child.AuthenticationKeySecureMode.IsUnknown() && !child.AuthenticationKeySecureMode.IsNull()) || false {
@@ -346,10 +367,14 @@ func (data OSPF) toBody() nxos.Body {
 							if (!child.AuthenticationKeychain.IsUnknown() && !child.AuthenticationKeychain.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "keychain", child.AuthenticationKeychain.ValueString())
 							}
-							if (!child.AuthenticationMd5Key.IsUnknown() && !child.AuthenticationMd5Key.IsNull()) || false {
+							if !configChild.AuthenticationMd5KeyWo.IsNull() {
+								attrs, _ = sjson.Set(attrs, "md5key", configChild.AuthenticationMd5KeyWo.ValueString())
+							} else if (!child.AuthenticationMd5Key.IsUnknown() && !child.AuthenticationMd5Key.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "md5key", child.AuthenticationMd5Key.ValueString())
 							}
-							if (!child.AuthenticationMd5KeyNew.IsUnknown() && !child.AuthenticationMd5KeyNew.IsNull()) || false {
+							if !configChild.AuthenticationMd5KeyNewWo.IsNull() {
+								attrs, _ = sjson.Set(attrs, "md5keyNew", configChild.AuthenticationMd5KeyNewWo.ValueString())
+							} else if (!child.AuthenticationMd5KeyNew.IsUnknown() && !child.AuthenticationMd5KeyNew.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "md5keyNew", child.AuthenticationMd5KeyNew.ValueString())
 							}
 							if (!child.AuthenticationMd5KeySecureMode.IsUnknown() && !child.AuthenticationMd5KeySecureMode.IsNull()) || false {
@@ -885,8 +910,8 @@ func (data OSPF) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF) nxos.Body {
-	body := data.toBody()
+func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.Instances {

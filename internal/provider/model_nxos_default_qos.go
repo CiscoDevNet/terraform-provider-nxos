@@ -148,7 +148,7 @@ func (data DefaultQoS) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data DefaultQoS) toBody() nxos.Body {
+func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -935,8 +935,8 @@ func (data DefaultQoS) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS) nxos.Body {
-	body := data.toBody()
+func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, config DefaultQoS) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.ClassMaps {

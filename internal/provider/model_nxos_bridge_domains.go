@@ -100,7 +100,7 @@ func (data BridgeDomains) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data BridgeDomains) toBody() nxos.Body {
+func (data BridgeDomains) toBody(config BridgeDomains) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.SviAutostate.IsUnknown() && !data.SviAutostate.IsNull()) || false {
@@ -312,8 +312,8 @@ func (data BridgeDomains) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data BridgeDomains) toBodyWithDeletes(ctx context.Context, state BridgeDomains) nxos.Body {
-	body := data.toBody()
+func (data BridgeDomains) toBodyWithDeletes(ctx context.Context, state BridgeDomains, config BridgeDomains) nxos.Body {
+	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	for stateKey := range state.BridgeDomains {

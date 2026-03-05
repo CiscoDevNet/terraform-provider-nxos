@@ -101,6 +101,8 @@ func testAccNxosKeychainConfig_all() string {
 	config += `				"1" = {` + "\n"
 	config += `					cryptographic_algorithm = "AES"` + "\n"
 	config += `					key_string = "secret_password"` + "\n"
+	config += `					key_string_wo = "secret_password"` + "\n"
+	config += `					key_string_wo_version = 1` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

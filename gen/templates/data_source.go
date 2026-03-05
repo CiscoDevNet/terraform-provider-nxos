@@ -77,13 +77,39 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				{{- else}}
 				Computed:            true,
 				{{- end}}
+				{{- if .Sensitive}}
+				Sensitive:           true,
+				{{- end}}
 			},
+			{{- if .Sensitive}}
+			"{{.TfName}}_wo": schema.StringAttribute{
+				MarkdownDescription: "The write-only value of the attribute.",
+				Computed:            true,
+			},
+			"{{.TfName}}_wo_version": schema.Int64Attribute{
+				MarkdownDescription: "The write-only version of the attribute.",
+				Computed:            true,
+			},
+			{{- end}}
 			{{- end}}
 			{{- define "dsAttrSchema" -}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: "{{.Description}}",
 				Computed:            true,
+				{{- if .Sensitive}}
+				Sensitive:           true,
+				{{- end}}
 			},
+			{{- if .Sensitive}}
+			"{{.TfName}}_wo": schema.StringAttribute{
+				MarkdownDescription: "The write-only value of the attribute.",
+				Computed:            true,
+			},
+			"{{.TfName}}_wo_version": schema.Int64Attribute{
+				MarkdownDescription: "The write-only version of the attribute.",
+				Computed:            true,
+			},
+			{{- end}}
 			{{- end}}
 			{{- define "dsChildrenSchema" -}}
 			{{- range . -}}

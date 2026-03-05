@@ -93,6 +93,15 @@ func (d *KeychainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 									"key_string": schema.StringAttribute{
 										MarkdownDescription: "keyString provided by user for the keychain.",
 										Computed:            true,
+										Sensitive:           true,
+									},
+									"key_string_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										Computed:            true,
+									},
+									"key_string_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Computed:            true,
 									},
 								},
 							},

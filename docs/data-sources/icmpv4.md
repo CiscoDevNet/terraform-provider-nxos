@@ -41,14 +41,16 @@ data "nxos_icmpv4" "example" {
 - `control` (String) The control state.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
-- `vrfs` (Attributes Map) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of ICMPv4 VRF configurations.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
 Read-Only:
 
-- `interfaces` (Attributes Map) List of ICMPv4 interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `interfaces` (Attributes Map) List of ICMPv4 interface configurations.
+  - Map key: `id` - Must match first field in the output of `show intf brief`. Example: `vlan100`. (see [below for nested schema](#nestedatt--vrfs--interfaces))
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`

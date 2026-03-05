@@ -113,7 +113,7 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"vrfs": schema.MapNestedAttribute{
-				MarkdownDescription: "List of IPv4 VRF configurations.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 VRF configurations.\n  - Map key: `name` - The name of the object.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -126,7 +126,7 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 						},
 						"static_routes": schema.MapNestedAttribute{
-							MarkdownDescription: "List of IPv4 static routes.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 static routes.\n  - Map key: `prefix` - Prefix.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -147,7 +147,7 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"next_hops": schema.MapNestedAttribute{
-										MarkdownDescription: "List of next hops.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of next hops.\n  - Map key format: `<interface_id>;<address>;<vrf_name>`\n  - Key component `interface_id`: Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.\n  - Key component `address`: Nexthop Address.\n  - Key component `vrf_name`: Nexthop VRF.").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -182,7 +182,7 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							},
 						},
 						"interfaces": schema.MapNestedAttribute{
-							MarkdownDescription: "List of IPv4 interfaces.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -211,7 +211,7 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"addresses": schema.MapNestedAttribute{
-										MarkdownDescription: "List of IPv4 interface addresses.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 interface addresses.\n  - Map key: `address` - Address.").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{

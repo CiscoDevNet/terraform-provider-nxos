@@ -39,7 +39,8 @@ data "nxos_evpn" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
-- `vnis` (Attributes Map) List of EVPN VNIs. (see [below for nested schema](#nestedatt--vnis))
+- `vnis` (Attributes Map) List of EVPN VNIs.
+  - Map key: `encap` - Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`. (see [below for nested schema](#nestedatt--vnis))
 
 <a id="nestedatt--vnis"></a>
 ### Nested Schema for `vnis`
@@ -47,7 +48,9 @@ data "nxos_evpn" "example" {
 Read-Only:
 
 - `route_distinguisher` (String) Route Distinguisher. value in NX-OS DME format.
-- `route_target_directions` (Attributes Map) List of EVPN VNI route target directions. (see [below for nested schema](#nestedatt--vnis--route_target_directions))
+- `route_target_directions` (Attributes Map) List of EVPN VNI route target directions.
+  - Map key: `type` - Type.
+  - Key choices: `import`, `export` (see [below for nested schema](#nestedatt--vnis--route_target_directions))
 - `table_map` (String) Route-map name for table-map command to filter routes.
 - `table_map_filter` (Boolean) Filter option used with table-map configuration for selective route download.
 
@@ -56,7 +59,8 @@ Read-Only:
 
 Read-Only:
 
-- `route_targets` (Attributes Map) List of EVPN VNI route target entries. (see [below for nested schema](#nestedatt--vnis--route_target_directions--route_targets))
+- `route_targets` (Attributes Map) List of EVPN VNI route target entries.
+  - Map key: `route_target` - Route Target. in NX-OS DME format. (see [below for nested schema](#nestedatt--vnis--route_target_directions--route_targets))
 
 <a id="nestedatt--vnis--route_target_directions--route_targets"></a>
 ### Nested Schema for `vnis.route_target_directions.route_targets`

@@ -73,7 +73,7 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:            true,
 			},
 			"instances": schema.MapNestedAttribute{
-				MarkdownDescription: "List of OSPFv3 instances.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 instances.\n  - Map key: `name` - OSPFv3 instance name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -90,7 +90,7 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							Computed:            true,
 						},
 						"vrfs": schema.MapNestedAttribute{
-							MarkdownDescription: "List of OSPFv3 VRFs.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 VRFs.\n  - Map key: `name` - VRF name.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -135,7 +135,7 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 										Computed:            true,
 									},
 									"areas": schema.MapNestedAttribute{
-										MarkdownDescription: "List of OSPFv3 areas.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 areas.\n  - Map key: `area_id` - Area Id as an integer or ip address.").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -163,7 +163,7 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 										},
 									},
 									"address_families": schema.MapNestedAttribute{
-										MarkdownDescription: "List of OSPFv3 address families.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 address families.\n  - Map key: `address_family_type` - IPv6 unicast address family type.\n  - Key choices: `ipv6-ucast`").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -193,7 +193,7 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				},
 			},
 			"interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of OSPFv3 interface configurations.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 interface configurations.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

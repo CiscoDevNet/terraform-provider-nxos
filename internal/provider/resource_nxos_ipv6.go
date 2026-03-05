@@ -124,12 +124,12 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 			},
 			"vrfs": schema.MapNestedAttribute{
-				MarkdownDescription: "List of IPv6 VRF configurations.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 VRF configurations.\n  - Map key: `name` - VRF name.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"static_routes": schema.MapNestedAttribute{
-							MarkdownDescription: "List of IPv6 static routes.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 static routes.\n  - Map key: `prefix` - Prefix.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -156,7 +156,7 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										},
 									},
 									"next_hops": schema.MapNestedAttribute{
-										MarkdownDescription: "List of next hops.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of next hops.\n  - Map key format: `<interface_id>;<address>;<vrf_name>`\n  - Key component `interface_id`: Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.\n  - Key component `address`: Nexthop Address.\n  - Key component `vrf_name`: Nexthop VRF.").String,
 										Required:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -200,7 +200,7 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							},
 						},
 						"interfaces": schema.MapNestedAttribute{
-							MarkdownDescription: "List of IPv6 interfaces.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -251,7 +251,7 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										Optional:            true,
 									},
 									"addresses": schema.MapNestedAttribute{
-										MarkdownDescription: "List of IPv6 interface addresses.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 interface addresses.\n  - Map key: `address` - Address.").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{

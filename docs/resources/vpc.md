@@ -121,7 +121,9 @@ resource "nxos_vpc" "example" {
   - Choices: `enabled`, `disabled`
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `interfaces` (Attributes Map) List of vPC interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `interfaces` (Attributes Map) List of vPC interfaces.
+  - Map key: `vpc_interface_id` - The vPC interface identifier.
+  - Key range: `1`-`16384` (see [below for nested schema](#nestedatt--interfaces))
 - `keepalive_flush_timeout` (Number) flush timeout.
   - Range: `3`-`10`
 - `keepalive_interval` (Number) interval.

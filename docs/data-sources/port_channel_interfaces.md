@@ -38,7 +38,8 @@ data "nxos_port_channel_interfaces" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `port_channel_interfaces` (Attributes Map) List of port-channel interfaces. (see [below for nested schema](#nestedatt--port_channel_interfaces))
+- `port_channel_interfaces` (Attributes Map) List of port-channel interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `po1`. (see [below for nested schema](#nestedatt--port_channel_interfaces))
 
 <a id="nestedatt--port_channel_interfaces"></a>
 ### Nested Schema for `port_channel_interfaces`
@@ -67,7 +68,8 @@ Read-Only:
 - `maximum_links` (Number) maximum links.
 - `mdix` (String) The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.
 - `medium` (String) The administrative port medium type.
-- `members` (Attributes Map) List of port-channel member interfaces. (see [below for nested schema](#nestedatt--port_channel_interfaces--members))
+- `members` (Attributes Map) List of port-channel member interfaces.
+  - Map key: `interface_dn` - DN of interface. For example: `sys/intf/phys-[eth1/1]`. (see [below for nested schema](#nestedatt--port_channel_interfaces--members))
 - `minimum_links` (Number) minimum links.
 - `mode` (String) Administrative port mode.
 - `mtu` (Number) Administrative port mtu.

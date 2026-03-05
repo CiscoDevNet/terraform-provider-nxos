@@ -207,7 +207,7 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 			},
 			"relay_interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of DHCP relay interfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of DHCP relay interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -239,7 +239,7 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Optional:            true,
 						},
 						"addresses": schema.MapNestedAttribute{
-							MarkdownDescription: "List of DHCP relay addresses.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of DHCP relay addresses.\n  - Map key format: `<vrf>;<address>`\n  - Key component `vrf`: vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.\n  - Key component `address`: IPv4 or IPv6 address.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{

@@ -52,7 +52,8 @@ resource "nxos_icmpv4" "example" {
 - `device` (String) A device name from the provider configuration.
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `vrfs` (Attributes Map) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of ICMPv4 VRF configurations.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -63,7 +64,8 @@ resource "nxos_icmpv4" "example" {
 
 Optional:
 
-- `interfaces` (Attributes Map) List of ICMPv4 interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `interfaces` (Attributes Map) List of ICMPv4 interface configurations.
+  - Map key: `id` - Must match first field in the output of `show intf brief`. Example: `vlan100`. (see [below for nested schema](#nestedatt--vrfs--interfaces))
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`

@@ -41,7 +41,8 @@ resource "nxos_loopback_interfaces" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `loopback_interfaces` (Attributes Map) List of loopback interfaces. (see [below for nested schema](#nestedatt--loopback_interfaces))
+- `loopback_interfaces` (Attributes Map) List of loopback interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `lo123`. (see [below for nested schema](#nestedatt--loopback_interfaces))
 
 ### Read-Only
 

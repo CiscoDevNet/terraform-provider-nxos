@@ -128,7 +128,8 @@ resource "nxos_pim" "example" {
 - `null_register_number_of_routes` (Number) Null Register Number of Routes.
   - Range: `1`-`32000`
 - `register_stop` (Boolean) Register until stops.
-- `vrfs` (Attributes Map) List of PIM VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of PIM VRF configurations.
+  - Map key: `name` - VRF name. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -144,14 +145,18 @@ Optional:
 - `anycast_rp_description` (String) Description of the specified attribute.
 - `anycast_rp_local_interface` (String) Local Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `anycast_rp_name` (String) Object name.
-- `anycast_rp_peers` (Attributes Map) List of PIM Anycast RP peer configurations. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
+- `anycast_rp_peers` (Attributes Map) List of PIM Anycast RP peer configurations.
+  - Map key format: `<address>;<rp_set_address>`
+  - Key component `address`: Address.
+  - Key component `rp_set_address`: IP Address of node performing the function. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
 - `anycast_rp_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `auto_enable` (Boolean) Auto Enable.
 - `bfd` (Boolean) BFD.
 - `control` (String) Domain Controls.
   - Choices: `flush-on-restart`
 - `flush_routes` (Boolean) Flush Routes.
-- `interfaces` (Attributes Map) List of PIM interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `interfaces` (Attributes Map) List of PIM interface configurations.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--vrfs--interfaces))
 - `join_prune_delay` (Number) Join-Prune message inter-packet delay.
   - Range: `1`-`4294967295`
 - `log_neighbor_changes` (Boolean) Log Neighbhor changes.
@@ -172,7 +177,8 @@ Optional:
 - `ssm_range_route_map` (String) Route Map.
 - `static_rp_policy_description` (String) Description of the specified attribute.
 - `static_rp_policy_name` (String) Policy name.
-- `static_rps` (Attributes Map) List of PIM Static RP configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps))
+- `static_rps` (Attributes Map) List of PIM Static RP configurations.
+  - Map key: `address` - Address. (see [below for nested schema](#nestedatt--vrfs--static_rps))
 
 <a id="nestedatt--vrfs--anycast_rp_peers"></a>
 ### Nested Schema for `vrfs.anycast_rp_peers`
@@ -212,7 +218,8 @@ Optional:
 
 Optional:
 
-- `group_lists` (Attributes Map) List of PIM Static RP group list configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps--group_lists))
+- `group_lists` (Attributes Map) List of PIM Static RP group list configurations.
+  - Map key: `address` - Group List address information. (see [below for nested schema](#nestedatt--vrfs--static_rps--group_lists))
 
 <a id="nestedatt--vrfs--static_rps--group_lists"></a>
 ### Nested Schema for `vrfs.static_rps.group_lists`

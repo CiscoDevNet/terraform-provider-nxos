@@ -39,7 +39,8 @@ data "nxos_nvo" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `nve_interfaces` (Attributes Map) NVE interface configuration. (see [below for nested schema](#nestedatt--nve_interfaces))
+- `nve_interfaces` (Attributes Map) NVE interface configuration.
+  - Map key: `id` - Network Virtualization Overlay Endpoint (NVE) ID. (see [below for nested schema](#nestedatt--nve_interfaces))
 - `vxlan_udp_port` (Number) VxLAN UDP Port. Allowed value range is 1024-65535.
 - `vxlan_udp_source_port_mode` (String) VxLAN UDP Source Port Mode.
 
@@ -69,7 +70,9 @@ Read-Only:
 - `suppress_mac_route` (Boolean) Suppress MAC Route.
 - `suppress_nd` (Boolean) Suppress ND enabled for those VNIs that have suppress ARP already enabled on them.
 - `virtual_mac` (String) Custom Virtual Router MAC address configuration for VPC VxLAN.
-- `vnis` (Attributes Map) List of VNIs. (see [below for nested schema](#nestedatt--nve_interfaces--vnis))
+- `vnis` (Attributes Map) List of VNIs.
+  - Map key: `vni` - Configure Virtual Network ID.
+  - Key range: `1`-`16777214` (see [below for nested schema](#nestedatt--nve_interfaces--vnis))
 
 <a id="nestedatt--nve_interfaces--vnis"></a>
 ### Nested Schema for `nve_interfaces.vnis`

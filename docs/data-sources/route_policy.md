@@ -45,8 +45,10 @@ data "nxos_route_policy" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
-- `ipv4_prefix_lists` (Attributes Map) List of IPv4 Prefix Lists. (see [below for nested schema](#nestedatt--ipv4_prefix_lists))
-- `route_maps` (Attributes Map) List of Route Maps. (see [below for nested schema](#nestedatt--route_maps))
+- `ipv4_prefix_lists` (Attributes Map) List of IPv4 Prefix Lists.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--ipv4_prefix_lists))
+- `route_maps` (Attributes Map) List of Route Maps.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--route_maps))
 
 <a id="nestedatt--ipv4_prefix_lists"></a>
 ### Nested Schema for `ipv4_prefix_lists`
@@ -54,7 +56,9 @@ data "nxos_route_policy" "example" {
 Read-Only:
 
 - `description` (String) Description.
-- `entries` (Attributes Map) IPv4 Prefix List entries. (see [below for nested schema](#nestedatt--ipv4_prefix_lists--entries))
+- `entries` (Attributes Map) IPv4 Prefix List entries.
+  - Map key: `order` - Order.
+  - Key range: `1`-`4294967294` (see [below for nested schema](#nestedatt--ipv4_prefix_lists--entries))
 - `mode` (String) Mode of ipv4 prefix-list.
 
 <a id="nestedatt--ipv4_prefix_lists--entries"></a>
@@ -76,7 +80,9 @@ Read-Only:
 
 Read-Only:
 
-- `entries` (Attributes Map) List of Route Map Entries. (see [below for nested schema](#nestedatt--route_maps--entries))
+- `entries` (Attributes Map) List of Route Map Entries.
+  - Map key: `order` - Order.
+  - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--route_maps--entries))
 - `pbr_statistics` (String) Route map pbr-statistics.
 
 <a id="nestedatt--route_maps--entries"></a>
@@ -92,13 +98,17 @@ Read-Only:
 - `force_order_v6` (String) Force Order V6.
 - `load_share_v4` (String) Load Sharing V4.
 - `load_share_v6` (String) Load Sharing V6.
-- `match_route_prefix_lists` (Attributes Map) List of Match Route Prefix Lists. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_prefix_lists))
-- `match_tags` (Attributes Map) List of Match Tags. (see [below for nested schema](#nestedatt--route_maps--entries--match_tags))
+- `match_route_prefix_lists` (Attributes Map) List of Match Route Prefix Lists.
+  - Map key: `prefix_list_dn` - DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]` (see [below for nested schema](#nestedatt--route_maps--entries--match_route_prefix_lists))
+- `match_tags` (Attributes Map) List of Match Tags.
+  - Map key: `tag` - The color of a policy label.
+  - Key range: `0`-`4294967295` (see [below for nested schema](#nestedatt--route_maps--entries--match_tags))
 - `set_default_next_hop_v4` (String) Default V4 Next-hop Address.
 - `set_default_next_hop_v6` (String) Default V6 Next-hop Address.
 - `set_regular_community_additive` (String) Add To Existing Community.
 - `set_regular_community_criteria` (String) Criteria.
-- `set_regular_community_items` (Attributes Map) List of Set Community Items. (see [below for nested schema](#nestedatt--route_maps--entries--set_regular_community_items))
+- `set_regular_community_items` (Attributes Map) List of Set Community Items.
+  - Map key: `community` - Community. (see [below for nested schema](#nestedatt--route_maps--entries--set_regular_community_items))
 - `set_regular_community_no_community` (String) No Community Attribute.
 - `set_vrf_v4` (String) Enable vrf based set ipv4 next-hop resolution.
 - `set_vrf_v6` (String) Enable vrf based set ipv6 next-hop resolution.

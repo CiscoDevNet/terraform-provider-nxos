@@ -84,7 +84,7 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 			},
 			"vnis": schema.MapNestedAttribute{
-				MarkdownDescription: "List of EVPN VNIs.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of EVPN VNIs.\n  - Map key: `encap` - Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -101,12 +101,12 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Optional:            true,
 						},
 						"route_target_directions": schema.MapNestedAttribute{
-							MarkdownDescription: "List of EVPN VNI route target directions.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of EVPN VNI route target directions.\n  - Map key: `type` - Type.\n  - Key choices: `import`, `export`").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"route_targets": schema.MapNestedAttribute{
-										MarkdownDescription: "List of EVPN VNI route target entries.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of EVPN VNI route target entries.\n  - Map key: `route_target` - Route Target. in NX-OS DME format.").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{},

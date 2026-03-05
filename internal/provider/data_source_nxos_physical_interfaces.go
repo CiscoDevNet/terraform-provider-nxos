@@ -69,7 +69,7 @@ func (d *PhysicalInterfacesDataSource) Schema(ctx context.Context, req datasourc
 				Computed:            true,
 			},
 			"physical_interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of physical interfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of physical interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

@@ -114,7 +114,8 @@ resource "nxos_ipv4" "example" {
   - Range: `30`-`1800`
 - `source_route` (String) Source-Route.
   - Choices: `enabled`, `disabled`
-- `vrfs` (Attributes Map) List of IPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of IPv4 VRF configurations.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -128,15 +129,18 @@ Optional:
 - `auto_discard` (String) Auto-Discard.
   - Choices: `enabled`, `disabled`
 - `icmp_errors_source_interface` (String) ICMP errors source-interface.
-- `interfaces` (Attributes Map) List of IPv4 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
-- `static_routes` (Attributes Map) List of IPv4 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
+- `interfaces` (Attributes Map) List of IPv4 interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `static_routes` (Attributes Map) List of IPv4 static routes.
+  - Map key: `prefix` - Prefix. (see [below for nested schema](#nestedatt--vrfs--static_routes))
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
 
 Optional:
 
-- `addresses` (Attributes Map) List of IPv4 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
+- `addresses` (Attributes Map) List of IPv4 interface addresses.
+  - Map key: `address` - Address. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
 - `directed_broadcast` (String) IP directed broadcast.
   - Choices: `enabled`, `disabled`
 - `directed_broadcast_acl` (String) IP directed broadcast ACL.
@@ -171,7 +175,11 @@ Optional:
 
 Required:
 
-- `next_hops` (Attributes Map) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
+- `next_hops` (Attributes Map) List of next hops.
+  - Map key format: `<interface_id>;<address>;<vrf_name>`
+  - Key component `interface_id`: Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
+  - Key component `address`: Nexthop Address.
+  - Key component `vrf_name`: Nexthop VRF. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
 
 Optional:
 

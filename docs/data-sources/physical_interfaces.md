@@ -37,7 +37,8 @@ data "nxos_physical_interfaces" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `physical_interfaces` (Attributes Map) List of physical interfaces. (see [below for nested schema](#nestedatt--physical_interfaces))
+- `physical_interfaces` (Attributes Map) List of physical interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--physical_interfaces))
 
 <a id="nestedatt--physical_interfaces"></a>
 ### Nested Schema for `physical_interfaces`

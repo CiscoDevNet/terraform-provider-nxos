@@ -72,7 +72,8 @@ resource "nxos_ntp" "example" {
   - Choices: `enabled`, `disabled`
 - `rate_limit` (Number) Rate-Limit NTP Control Mode Packets.
   - Range: `1`-`65535`
-- `servers` (Attributes Map) List of NTP servers or peers. (see [below for nested schema](#nestedatt--servers))
+- `servers` (Attributes Map) List of NTP servers or peers.
+  - Map key: `name` - NTP server or peer address. (see [below for nested schema](#nestedatt--servers))
 
 ### Read-Only
 

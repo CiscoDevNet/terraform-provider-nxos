@@ -78,7 +78,7 @@ func (r *PortChannelInterfacesResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"port_channel_interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of port-channel interfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of port-channel interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `po1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -353,7 +353,7 @@ func (r *PortChannelInterfacesResource) Schema(ctx context.Context, req resource
 							Optional:            true,
 						},
 						"members": schema.MapNestedAttribute{
-							MarkdownDescription: "List of port-channel member interfaces.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of port-channel member interfaces.\n  - Map key: `interface_dn` - DN of interface. For example: `sys/intf/phys-[eth1/1]`.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{

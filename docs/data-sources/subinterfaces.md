@@ -37,7 +37,8 @@ data "nxos_subinterfaces" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `subinterfaces` (Attributes Map) List of subinterfaces. (see [below for nested schema](#nestedatt--subinterfaces))
+- `subinterfaces` (Attributes Map) List of subinterfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1.10`. (see [below for nested schema](#nestedatt--subinterfaces))
 
 <a id="nestedatt--subinterfaces"></a>
 ### Nested Schema for `subinterfaces`

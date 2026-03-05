@@ -81,12 +81,12 @@ func (d *ICMPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:            true,
 			},
 			"vrfs": schema.MapNestedAttribute{
-				MarkdownDescription: "List of ICMPv4 VRF configurations.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of ICMPv4 VRF configurations.\n  - Map key: `name` - The name of the object.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"interfaces": schema.MapNestedAttribute{
-							MarkdownDescription: "List of ICMPv4 interface configurations.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of ICMPv4 interface configurations.\n  - Map key: `id` - Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{

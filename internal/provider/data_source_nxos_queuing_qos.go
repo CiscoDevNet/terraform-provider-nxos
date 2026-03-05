@@ -69,7 +69,7 @@ func (d *QueuingQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 			},
 			"policy_maps": schema.MapNestedAttribute{
-				MarkdownDescription: "List of policy maps.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of policy maps.\n  - Map key: `name` - Name of policy-map.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -78,7 +78,7 @@ func (d *QueuingQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 							Computed:            true,
 						},
 						"match_class_maps": schema.MapNestedAttribute{
-							MarkdownDescription: "List of match class maps.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of match class maps.\n  - Map key: `name` - Match using class-map.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{

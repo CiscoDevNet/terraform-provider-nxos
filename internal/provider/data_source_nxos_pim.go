@@ -105,7 +105,7 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"vrfs": schema.MapNestedAttribute{
-				MarkdownDescription: "List of PIM VRF configurations.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of PIM VRF configurations.\n  - Map key: `name` - VRF name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -154,7 +154,7 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"interfaces": schema.MapNestedAttribute{
-							MarkdownDescription: "List of PIM interface configurations.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of PIM interface configurations.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -270,12 +270,12 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"static_rps": schema.MapNestedAttribute{
-							MarkdownDescription: "List of PIM Static RP configurations.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of PIM Static RP configurations.\n  - Map key: `address` - Address.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"group_lists": schema.MapNestedAttribute{
-										MarkdownDescription: "List of PIM Static RP group list configurations.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of PIM Static RP group list configurations.\n  - Map key: `address` - Group List address information.").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -310,7 +310,7 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"anycast_rp_peers": schema.MapNestedAttribute{
-							MarkdownDescription: "List of PIM Anycast RP peer configurations.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of PIM Anycast RP peer configurations.\n  - Map key format: `<address>;<rp_set_address>`\n  - Key component `address`: Address.\n  - Key component `rp_set_address`: IP Address of node performing the function.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{},

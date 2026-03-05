@@ -61,7 +61,9 @@ data "nxos_system" "example" {
 - `arp_suppression_timeout` (Number) Suppression Timeout.
 - `arp_timeout` (Number) ARP Global Timeout.
 - `arp_unnumbered_svi_software_replication` (String) ARP Packets Replication In Software For Unnumbered SVI.
-- `arp_vpc_domains` (Attributes Map) ARP VPC Domain. (see [below for nested schema](#nestedatt--arp_vpc_domains))
+- `arp_vpc_domains` (Attributes Map) ARP VPC Domain.
+  - Map key: `domain_id` - VPC domain id.
+  - Key range: `1`-`1000` (see [below for nested schema](#nestedatt--arp_vpc_domains))
 - `ethernet_admin_link_down_syslog_level` (Number) Admin link-down syslog level.
 - `ethernet_admin_link_up_syslog_level` (Number) Admin link-up syslog level.
 - `ethernet_admin_state` (String) The administrative state of the object or policy.
@@ -95,7 +97,8 @@ data "nxos_system" "example" {
 - `nd_off_list_timeout` (Number) Off-list timeout.
 - `nd_probe_interval_for_solicit_neighbor` (Number) Probe interval.
 - `nd_solicit_neighbor_advertisement` (String) Solicit neighbor advertisement.
-- `nd_vrfs` (Attributes Map) Neighbor Discovery Domain. (see [below for nested schema](#nestedatt--nd_vrfs))
+- `nd_vrfs` (Attributes Map) Neighbor Discovery Domain.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--nd_vrfs))
 
 <a id="nestedatt--arp_vpc_domains"></a>
 ### Nested Schema for `arp_vpc_domains`
@@ -110,7 +113,8 @@ Read-Only:
 
 Read-Only:
 
-- `interfaces` (Attributes Map) Neighbor Discovery Interface. (see [below for nested schema](#nestedatt--nd_vrfs--interfaces))
+- `interfaces` (Attributes Map) Neighbor Discovery Interface.
+  - Map key: `interface_id` - An identifier. (see [below for nested schema](#nestedatt--nd_vrfs--interfaces))
 
 <a id="nestedatt--nd_vrfs--interfaces"></a>
 ### Nested Schema for `nd_vrfs.interfaces`

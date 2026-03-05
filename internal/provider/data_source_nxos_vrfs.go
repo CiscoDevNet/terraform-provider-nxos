@@ -69,7 +69,7 @@ func (d *VRFsDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"vrfs": schema.MapNestedAttribute{
-				MarkdownDescription: "List of VRFs.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of VRFs.\n  - Map key: `name` - VRF name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -110,22 +110,22 @@ func (d *VRFsDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 						},
 						"address_families": schema.MapNestedAttribute{
-							MarkdownDescription: "List of VRF address families.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of VRF address families.\n  - Map key: `address_family` - Type.\n  - Key choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"route_target_address_families": schema.MapNestedAttribute{
-										MarkdownDescription: "List of VRF route target address families.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of VRF route target address families.\n  - Map key: `route_target_address_family` - Type.\n  - Key choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"route_target_directions": schema.MapNestedAttribute{
-													MarkdownDescription: "List of VRF route target directions.",
+													MarkdownDescription: helpers.NewAttributeDescription("List of VRF route target directions.\n  - Map key: `direction` - Type.\n  - Key choices: `import`, `export`").String,
 													Computed:            true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
 															"route_targets": schema.MapNestedAttribute{
-																MarkdownDescription: "List of VRF route target entries.",
+																MarkdownDescription: helpers.NewAttributeDescription("List of VRF route target entries.\n  - Map key: `route_target` - Route Target. Value in NX-OS DME format.").String,
 																Computed:            true,
 																NestedObject: schema.NestedAttributeObject{
 																	Attributes: map[string]schema.Attribute{},

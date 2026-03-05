@@ -69,7 +69,7 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 				Computed:            true,
 			},
 			"access_lists": schema.MapNestedAttribute{
-				MarkdownDescription: "List of IPv4 Access Lists.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 Access Lists.\n  - Map key: `name` - Name of Access lists.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -90,7 +90,7 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 							Computed:            true,
 						},
 						"entries": schema.MapNestedAttribute{
-							MarkdownDescription: "Access list entries.",
+							MarkdownDescription: helpers.NewAttributeDescription("Access list entries.\n  - Map key: `sequence_number` - Sequence number.\n  - Key range: `0`-`4294967295`").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -329,7 +329,7 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 				},
 			},
 			"ingress_interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of interfaces with IPv4 ingress access list policy.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv4 ingress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -341,7 +341,7 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 				},
 			},
 			"egress_interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of interfaces with IPv4 egress access list policy.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv4 egress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

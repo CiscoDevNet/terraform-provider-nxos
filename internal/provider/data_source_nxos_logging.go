@@ -77,7 +77,7 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				Computed:            true,
 			},
 			"facilities": schema.MapNestedAttribute{
-				MarkdownDescription: "List of logging facilities.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of logging facilities.\n  - Map key: `name` - Facility Name of individual processes subscribed for logging level.\n  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

@@ -85,7 +85,8 @@ resource "nxos_port_channel_interfaces" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `port_channel_interfaces` (Attributes Map) List of port-channel interfaces. (see [below for nested schema](#nestedatt--port_channel_interfaces))
+- `port_channel_interfaces` (Attributes Map) List of port-channel interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `po1`. (see [below for nested schema](#nestedatt--port_channel_interfaces))
 
 ### Read-Only
 
@@ -138,7 +139,8 @@ Optional:
   - Choices: `auto`, `mdi`, `mdi-x`
 - `medium` (String) The administrative port medium type.
   - Choices: `broadcast`, `p2p`
-- `members` (Attributes Map) List of port-channel member interfaces. (see [below for nested schema](#nestedatt--port_channel_interfaces--members))
+- `members` (Attributes Map) List of port-channel member interfaces.
+  - Map key: `interface_dn` - DN of interface. For example: `sys/intf/phys-[eth1/1]`. (see [below for nested schema](#nestedatt--port_channel_interfaces--members))
 - `minimum_links` (Number) minimum links.
   - Range: `1`-`32`
 - `mode` (String) Administrative port mode.

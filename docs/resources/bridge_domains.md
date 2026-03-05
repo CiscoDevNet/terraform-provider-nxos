@@ -49,7 +49,8 @@ resource "nxos_bridge_domains" "example" {
 
 ### Optional
 
-- `bridge_domains` (Attributes Map) List of bridge domains. (see [below for nested schema](#nestedatt--bridge_domains))
+- `bridge_domains` (Attributes Map) List of bridge domains.
+  - Map key: `fabric_encap` - The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`. (see [below for nested schema](#nestedatt--bridge_domains))
 - `device` (String) A device name from the provider configuration.
 - `svi_autostate` (String) Disable/enable autoState for SVI interface.
   - Choices: `disable`, `enable`

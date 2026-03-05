@@ -77,7 +77,7 @@ func (r *LoopbackInterfacesResource) Schema(ctx context.Context, req resource.Sc
 				},
 			},
 			"loopback_interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of loopback interfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of loopback interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `lo123`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

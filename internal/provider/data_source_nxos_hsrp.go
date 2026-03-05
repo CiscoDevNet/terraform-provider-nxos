@@ -93,7 +93,7 @@ func (d *HSRPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of HSRP interfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of HSRP interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -142,7 +142,7 @@ func (d *HSRPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 						},
 						"groups": schema.MapNestedAttribute{
-							MarkdownDescription: "List of HSRP groups.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of HSRP groups.\n  - Map key format: `<group_id>;<address_family>`\n  - Key component `group_id`: Group Id. Range: `0`-`4095`.\n  - Key component `address_family`: Group Address Family. Choices: `ipv4`, `ipv6`.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{

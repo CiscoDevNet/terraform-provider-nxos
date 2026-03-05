@@ -37,7 +37,8 @@ data "nxos_svi_interfaces" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `svi_interfaces` (Attributes Map) List of SVI interfaces. (see [below for nested schema](#nestedatt--svi_interfaces))
+- `svi_interfaces` (Attributes Map) List of SVI interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `vlan100`. (see [below for nested schema](#nestedatt--svi_interfaces))
 
 <a id="nestedatt--svi_interfaces"></a>
 ### Nested Schema for `svi_interfaces`

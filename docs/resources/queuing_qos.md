@@ -60,7 +60,8 @@ resource "nxos_queuing_qos" "example" {
 
 - `device` (String) A device name from the provider configuration.
 - `policy_map_statistics` (Boolean) Turn on/off statistics.
-- `policy_maps` (Attributes Map) List of policy maps. (see [below for nested schema](#nestedatt--policy_maps))
+- `policy_maps` (Attributes Map) List of policy maps.
+  - Map key: `name` - Name of policy-map. (see [below for nested schema](#nestedatt--policy_maps))
 
 ### Read-Only
 
@@ -71,7 +72,8 @@ resource "nxos_queuing_qos" "example" {
 
 Optional:
 
-- `match_class_maps` (Attributes Map) List of match class maps. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
+- `match_class_maps` (Attributes Map) List of match class maps.
+  - Map key: `name` - Match using class-map. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
 - `match_type` (String) Match-any, match-all or match-first.
   - Choices: `match-any`, `match-all`, `match-first`
 

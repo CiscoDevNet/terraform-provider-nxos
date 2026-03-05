@@ -44,7 +44,8 @@ data "nxos_hsrp" "example" {
 - `extended_hold_interval_configuration` (String) Enables/Disables hsrp extended hold interval.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
-- `interfaces` (Attributes Map) List of HSRP interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `interfaces` (Attributes Map) List of HSRP interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--interfaces))
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
@@ -57,7 +58,10 @@ Read-Only:
 - `control` (String) Controls.
 - `delay_minimum` (Number) Delay in seconds, to start HSRP state machine after receiving interface moving to Up state.
 - `description` (String) Description.
-- `groups` (Attributes Map) List of HSRP groups. (see [below for nested schema](#nestedatt--interfaces--groups))
+- `groups` (Attributes Map) List of HSRP groups.
+  - Map key format: `<group_id>;<address_family>`
+  - Key component `group_id`: Group Id. Range: `0`-`4095`.
+  - Key component `address_family`: Group Address Family. Choices: `ipv4`, `ipv6`. (see [below for nested schema](#nestedatt--interfaces--groups))
 - `mac_refresh_interval` (Number) The MAC refresh interval in seconds, for the HSRP slave group on the interface.
 - `mac_refresh_interval_configuration` (String) Enables/Disables hsrp MAC refresh interval.
 - `name` (String) The name of the object.

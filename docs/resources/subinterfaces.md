@@ -50,7 +50,8 @@ resource "nxos_subinterfaces" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `subinterfaces` (Attributes Map) List of subinterfaces. (see [below for nested schema](#nestedatt--subinterfaces))
+- `subinterfaces` (Attributes Map) List of subinterfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1.10`. (see [below for nested schema](#nestedatt--subinterfaces))
 
 ### Read-Only
 

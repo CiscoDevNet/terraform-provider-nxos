@@ -44,17 +44,22 @@ data "nxos_access_lists" "example" {
 
 ### Read-Only
 
-- `access_lists` (Attributes Map) List of IPv4 Access Lists. (see [below for nested schema](#nestedatt--access_lists))
-- `egress_interfaces` (Attributes Map) List of interfaces with IPv4 egress access list policy. (see [below for nested schema](#nestedatt--egress_interfaces))
+- `access_lists` (Attributes Map) List of IPv4 Access Lists.
+  - Map key: `name` - Name of Access lists. (see [below for nested schema](#nestedatt--access_lists))
+- `egress_interfaces` (Attributes Map) List of interfaces with IPv4 egress access list policy.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--egress_interfaces))
 - `id` (String) The distinguished name of the object.
-- `ingress_interfaces` (Attributes Map) List of interfaces with IPv4 ingress access list policy. (see [below for nested schema](#nestedatt--ingress_interfaces))
+- `ingress_interfaces` (Attributes Map) List of interfaces with IPv4 ingress access list policy.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--ingress_interfaces))
 
 <a id="nestedatt--access_lists"></a>
 ### Nested Schema for `access_lists`
 
 Read-Only:
 
-- `entries` (Attributes Map) Access list entries. (see [below for nested schema](#nestedatt--access_lists--entries))
+- `entries` (Attributes Map) Access list entries.
+  - Map key: `sequence_number` - Sequence number.
+  - Key range: `0`-`4294967295` (see [below for nested schema](#nestedatt--access_lists--entries))
 - `fragments` (String) Fragments type for IPv4 and IPv6.
 - `ignore_routable` (Boolean) Ignore Multicast Routed ACLs.
 - `per_ace_statistics` (String) Per Access Control Entries statistics.

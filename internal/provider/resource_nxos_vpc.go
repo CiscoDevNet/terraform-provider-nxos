@@ -350,7 +350,7 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Optional:            true,
 			},
 			"interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of vPC interfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of vPC interfaces.\n  - Map key: `vpc_interface_id` - The vPC interface identifier.\n  - Key range: `1`-`16384`").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

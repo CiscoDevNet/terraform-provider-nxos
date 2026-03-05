@@ -141,8 +141,10 @@ resource "nxos_isis" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
-- `instances` (Attributes Map) List of IS-IS instances. (see [below for nested schema](#nestedatt--instances))
-- `interfaces` (Attributes Map) List of IS-IS interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `instances` (Attributes Map) List of IS-IS instances.
+  - Map key: `name` - IS-IS instance name. (see [below for nested schema](#nestedatt--instances))
+- `interfaces` (Attributes Map) List of IS-IS interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--interfaces))
 
 ### Read-Only
 
@@ -159,14 +161,17 @@ Optional:
   - Choices: `stateful-ha`
 - `flush_routes` (Boolean) Flush ISIS Routes on non graceful controlled restart.
 - `isolate` (Boolean) Isolate ISIS Instance from other process tags.
-- `vrfs` (Attributes Map) List of IS-IS VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+- `vrfs` (Attributes Map) List of IS-IS VRFs.
+  - Map key: `name` - VRF name. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
 ### Nested Schema for `instances.vrfs`
 
 Optional:
 
-- `address_families` (Attributes Map) List of IS-IS address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
+- `address_families` (Attributes Map) List of IS-IS address families.
+  - Map key: `address_family` - Type.
+  - Key choices: `v4`, `v6` (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
 - `admin_state` (String) Holds ISIS Domain Administative state.
   - Choices: `enabled`, `disabled`
 - `authentication_check_l1` (Boolean) Authentication Check for ISIS DOM on Level-1.

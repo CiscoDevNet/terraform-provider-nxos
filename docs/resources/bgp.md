@@ -294,7 +294,8 @@ resource "nxos_bgp" "example" {
   - Choices: `enabled`, `disabled`
 - `rd_dual_id` (Number) ID to generate Secondary RD with ID:VNI format.
   - Range: `1`-`65535`
-- `vrfs` (Attributes Map) List of BGP VRFs. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of BGP VRFs.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -305,7 +306,9 @@ resource "nxos_bgp" "example" {
 
 Optional:
 
-- `address_families` (Attributes Map) List of BGP address families. (see [below for nested schema](#nestedatt--vrfs--address_families))
+- `address_families` (Attributes Map) List of BGP address families.
+  - Map key: `address_family` - Type.
+  - Key choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt` (see [below for nested schema](#nestedatt--vrfs--address_families))
 - `alloc_index` (Number) Allocate index for vrf (Value in the range 1-8000).
   - Range: `1`-`8000`
 - `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
@@ -332,8 +335,10 @@ Optional:
   - Range: `1`-`512`
 - `mode` (String) The BGP Domain mode.
   - Choices: `fabric`, `external`, `proxy`
-- `peer_templates` (Attributes Map) List of BGP peer templates. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
-- `peers` (Attributes Map) List of BGP peers. (see [below for nested schema](#nestedatt--vrfs--peers))
+- `peer_templates` (Attributes Map) List of BGP peer templates.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
+- `peers` (Attributes Map) List of BGP peers.
+  - Map key: `address` - Peer address. (see [below for nested schema](#nestedatt--vrfs--peers))
 - `prefix_peer_timeout` (Number) Prefix Peer Timeout in secs.
   - Range: `0`-`1200`
 - `prefix_peer_wait_time` (Number) Prefix Peer Wait Time in secs.
@@ -365,7 +370,8 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `advertise_system_mac` (String) Advertise extra EVPN RT-2 with system MAC.
   - Choices: `enabled`, `disabled`
-- `advertised_prefixes` (Attributes Map) List of BGP advertised prefixes. (see [below for nested schema](#nestedatt--vrfs--address_families--advertised_prefixes))
+- `advertised_prefixes` (Attributes Map) List of BGP advertised prefixes.
+  - Map key: `prefix` - IP address of the network or prefix to advertise. (see [below for nested schema](#nestedatt--vrfs--address_families--advertised_prefixes))
 - `allocate_label_all` (String) Allocate labels for all routes.
   - Choices: `enabled`, `disabled`
 - `allocate_label_option_b` (String) Allow allocation of option B labels.
@@ -410,7 +416,10 @@ Optional:
 - `originate_map` (String) originate-map route map name.
 - `prefix_priority` (String) Enable prefix priority for AF
   - Choices: `none`, `high`
-- `redistributions` (Attributes Map) List of BGP route redistributions. (see [below for nested schema](#nestedatt--vrfs--address_families--redistributions))
+- `redistributions` (Attributes Map) List of BGP route redistributions.
+  - Map key format: `<protocol>;<protocol_instance>`
+  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.
+  - Key component `protocol_instance`: The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols). (see [below for nested schema](#nestedatt--vrfs--address_families--redistributions))
 - `retain_rt_all` (String) Retain Route Target All
   - Choices: `enabled`, `disabled`
 - `retain_rt_route_map` (String) Retain Route Target Route Map.
@@ -490,7 +499,9 @@ Optional:
 - `peer_control` (String) Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
-- `peer_template_address_families` (Attributes Map) List of BGP peer template address families. (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families))
+- `peer_template_address_families` (Attributes Map) List of BGP peer template address families.
+  - Map key: `address_family` - Type.
+  - Key choices: `ipv4-ucast`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate` (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families))
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`
 - `private_as_control` (String) Private AS Control.
@@ -597,7 +608,9 @@ Optional:
 - `password` (String) Password.
 - `password_type` (String) Password EnCrypt Type.
   - Choices: `0`, `3`, `LINE`, `6`, `7`
-- `peer_address_families` (Attributes Map) List of BGP peer address families. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families))
+- `peer_address_families` (Attributes Map) List of BGP peer address families.
+  - Map key: `address_family` - Type.
+  - Key choices: `ipv4-ucast`, `ipv4-mvpn`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate` (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families))
 - `peer_control` (String) Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
@@ -643,10 +656,14 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
   - Choices: `enabled`, `disabled`
-- `prefix_list_controls` (Attributes Map) List of BGP peer address family prefix list controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--prefix_list_controls))
+- `prefix_list_controls` (Attributes Map) List of BGP peer address family prefix list controls.
+  - Map key: `direction` - Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--prefix_list_controls))
 - `rewrite_rt_asn` (String) Auto generate RTs for EBGP neighbor.
   - Choices: `enabled`, `disabled`
-- `route_controls` (Attributes Map) List of BGP peer address family route controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--route_controls))
+- `route_controls` (Attributes Map) List of BGP peer address family route controls.
+  - Map key: `direction` - Direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--route_controls))
 - `send_community_extended` (String) Send-community extended.
   - Choices: `enabled`, `disabled`
 - `send_community_standard` (String) Send-community standard.

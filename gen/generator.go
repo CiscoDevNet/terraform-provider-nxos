@@ -364,6 +364,7 @@ var functions = template.FuncMap{
 	"mapKeySjsonSetStmts": MapKeySjsonSetStmts,
 	"mapKeyMatchExpr":     MapKeyMatchExpr,
 	"mapKeyRnFormatArgs":  MapKeyRnFormatArgs,
+	"mapKeyDescription":   MapKeyDescription,
 }
 
 // AllChildClassNames recursively collects all child class names.
@@ -521,6 +522,50 @@ func MapKeyRnFormatArgs(keyVar string, attrs []YamlConfigAttribute) string {
 		args = append(args, part)
 	}
 	return strings.Join(args, ", ")
+}
+
+// MapKeyDescription returns a MarkdownDescription suffix documenting the map key.
+// The output uses literal backslash-n sequences because it is embedded in a Go string literal.
+func MapKeyDescription(attrs []YamlConfigAttribute) string {
+	ids := idAttrs(attrs)
+	if len(ids) == 0 {
+		return ""
+	}
+	var sb strings.Builder
+	if len(ids) == 1 {
+		a := ids[0]
+		sb.WriteString(fmt.Sprintf("\\n  - Map key: `%s` - %s", a.TfName, a.Description))
+		if len(a.EnumValues) > 0 {
+			quoted := make([]string, len(a.EnumValues))
+			for i, v := range a.EnumValues {
+				quoted[i] = fmt.Sprintf("`%s`", v)
+			}
+			sb.WriteString(fmt.Sprintf("\\n  - Key choices: %s", strings.Join(quoted, ", ")))
+		}
+		if a.MinInt != 0 || a.MaxInt != 0 {
+			sb.WriteString(fmt.Sprintf("\\n  - Key range: `%v`-`%v`", a.MinInt, a.MaxInt))
+		}
+	} else {
+		tfNames := make([]string, len(ids))
+		for i, a := range ids {
+			tfNames[i] = a.TfName
+		}
+		sb.WriteString(fmt.Sprintf("\\n  - Map key format: `<%s>`", strings.Join(tfNames, ">;<")))
+		for _, a := range ids {
+			sb.WriteString(fmt.Sprintf("\\n  - Key component `%s`: %s", a.TfName, a.Description))
+			if len(a.EnumValues) > 0 {
+				quoted := make([]string, len(a.EnumValues))
+				for i, v := range a.EnumValues {
+					quoted[i] = fmt.Sprintf("`%s`", v)
+				}
+				sb.WriteString(fmt.Sprintf(" Choices: %s.", strings.Join(quoted, ", ")))
+			}
+			if a.MinInt != 0 || a.MaxInt != 0 {
+				sb.WriteString(fmt.Sprintf(" Range: `%v`-`%v`.", a.MinInt, a.MaxInt))
+			}
+		}
+	}
+	return sb.String()
 }
 
 // buildTfChildClasses builds the TfChildClasses list by promoting children

@@ -137,7 +137,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"vrfs": schema.MapNestedAttribute{
-				MarkdownDescription: "List of BGP VRFs.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of BGP VRFs.\n  - Map key: `name` - The name of the object.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -234,7 +234,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"address_families": schema.MapNestedAttribute{
-							MarkdownDescription: "List of BGP address families.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of BGP address families.\n  - Map key: `address_family` - Type.\n  - Key choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -387,7 +387,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"advertised_prefixes": schema.MapNestedAttribute{
-										MarkdownDescription: "List of BGP advertised prefixes.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of BGP advertised prefixes.\n  - Map key: `prefix` - IP address of the network or prefix to advertise.").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -403,7 +403,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										},
 									},
 									"redistributions": schema.MapNestedAttribute{
-										MarkdownDescription: "List of BGP route redistributions.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of BGP route redistributions.\n  - Map key format: `<protocol>;<protocol_instance>`\n  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.\n  - Key component `protocol_instance`: The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -430,7 +430,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							},
 						},
 						"peer_templates": schema.MapNestedAttribute{
-							MarkdownDescription: "List of BGP peer templates.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of BGP peer templates.\n  - Map key: `name` - The name of the object.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -531,7 +531,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"peer_template_address_families": schema.MapNestedAttribute{
-										MarkdownDescription: "List of BGP peer template address families.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of BGP peer template address families.\n  - Map key: `address_family` - Type.\n  - Key choices: `ipv4-ucast`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -638,7 +638,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							},
 						},
 						"peers": schema.MapNestedAttribute{
-							MarkdownDescription: "List of BGP peers.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of BGP peers.\n  - Map key: `address` - Peer address.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -751,7 +751,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"peer_address_families": schema.MapNestedAttribute{
-										MarkdownDescription: "List of BGP peer address families.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of BGP peer address families.\n  - Map key: `address_family` - Type.\n  - Key choices: `ipv4-ucast`, `ipv4-mvpn`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -836,7 +836,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 													Computed:            true,
 												},
 												"route_controls": schema.MapNestedAttribute{
-													MarkdownDescription: "List of BGP peer address family route controls.",
+													MarkdownDescription: helpers.NewAttributeDescription("List of BGP peer address family route controls.\n  - Map key: `direction` - Direction.\n  - Key choices: `in`, `out`").String,
 													Computed:            true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
@@ -848,7 +848,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 													},
 												},
 												"prefix_list_controls": schema.MapNestedAttribute{
-													MarkdownDescription: "List of BGP peer address family prefix list controls.",
+													MarkdownDescription: helpers.NewAttributeDescription("List of BGP peer address family prefix list controls.\n  - Map key: `direction` - Direction: Specifies whether to apply this policy in the incoming or outgoing direction.\n  - Key choices: `in`, `out`").String,
 													Computed:            true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{

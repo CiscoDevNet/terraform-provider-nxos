@@ -45,7 +45,8 @@ data "nxos_queuing_qos" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `policy_map_statistics` (Boolean) Turn on/off statistics.
-- `policy_maps` (Attributes Map) List of policy maps. (see [below for nested schema](#nestedatt--policy_maps))
+- `policy_maps` (Attributes Map) List of policy maps.
+  - Map key: `name` - Name of policy-map. (see [below for nested schema](#nestedatt--policy_maps))
 - `system_out_policy_map_name` (String) Policy-map Name.
 
 <a id="nestedatt--policy_maps"></a>
@@ -53,7 +54,8 @@ data "nxos_queuing_qos" "example" {
 
 Read-Only:
 
-- `match_class_maps` (Attributes Map) List of match class maps. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
+- `match_class_maps` (Attributes Map) List of match class maps.
+  - Map key: `name` - Match using class-map. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
 - `match_type` (String) Match-any, match-all or match-first.
 
 <a id="nestedatt--policy_maps--match_class_maps"></a>

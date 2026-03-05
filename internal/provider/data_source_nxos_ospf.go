@@ -73,7 +73,7 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"instances": schema.MapNestedAttribute{
-				MarkdownDescription: "List of OSPF instances.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of OSPF instances.\n  - Map key: `name` - OSPF instance name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -86,7 +86,7 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 						},
 						"vrfs": schema.MapNestedAttribute{
-							MarkdownDescription: "List of OSPF VRFs.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of OSPF VRFs.\n  - Map key: `name` - VRF name.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -155,7 +155,7 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"areas": schema.MapNestedAttribute{
-										MarkdownDescription: "List of OSPF areas.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of OSPF areas.\n  - Map key: `area_id` - Area identifier to which a network or interface belongs in IPv4 address format.").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -207,7 +207,7 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"interfaces": schema.MapNestedAttribute{
-										MarkdownDescription: "List of OSPF interfaces.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of OSPF interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{

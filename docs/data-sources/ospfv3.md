@@ -41,8 +41,10 @@ data "nxos_ospfv3" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
-- `instances` (Attributes Map) List of OSPFv3 instances. (see [below for nested schema](#nestedatt--instances))
-- `interfaces` (Attributes Map) List of OSPFv3 interface configurations. (see [below for nested schema](#nestedatt--interfaces))
+- `instances` (Attributes Map) List of OSPFv3 instances.
+  - Map key: `name` - OSPFv3 instance name. (see [below for nested schema](#nestedatt--instances))
+- `interfaces` (Attributes Map) List of OSPFv3 interface configurations.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--interfaces))
 
 <a id="nestedatt--instances"></a>
 ### Nested Schema for `instances`
@@ -52,16 +54,20 @@ Read-Only:
 - `admin_state` (String) The administrative state of the object or policy.
 - `flush_routes` (Boolean) Flush routes on non-graceful controlled restart.
 - `isolate` (Boolean) Isolate this router from OSPFv3 perspective.
-- `vrfs` (Attributes Map) List of OSPFv3 VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+- `vrfs` (Attributes Map) List of OSPFv3 VRFs.
+  - Map key: `name` - VRF name. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
 ### Nested Schema for `instances.vrfs`
 
 Read-Only:
 
-- `address_families` (Attributes Map) List of OSPFv3 address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
+- `address_families` (Attributes Map) List of OSPFv3 address families.
+  - Map key: `address_family_type` - IPv6 unicast address family type.
+  - Key choices: `ipv6-ucast` (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
 - `admin_state` (String) OSPFv3 VRF administrative state.
-- `areas` (Attributes Map) List of OSPFv3 areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
+- `areas` (Attributes Map) List of OSPFv3 areas.
+  - Map key: `area_id` - Area Id as an integer or ip address. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
 - `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
 - `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
 - `bfd_control` (Boolean) Holds the controls for bfd.

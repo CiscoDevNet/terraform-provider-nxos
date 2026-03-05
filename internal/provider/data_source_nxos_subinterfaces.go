@@ -69,7 +69,7 @@ func (d *SubinterfacesDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed:            true,
 			},
 			"subinterfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of subinterfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of subinterfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1.10`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

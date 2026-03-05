@@ -161,7 +161,7 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:            true,
 			},
 			"users": schema.MapNestedAttribute{
-				MarkdownDescription: "List of users.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of users.\n  - Map key: `name` - Object name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -230,7 +230,7 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"roles": schema.MapNestedAttribute{
-							MarkdownDescription: "User roles.",
+							MarkdownDescription: helpers.NewAttributeDescription("User roles.\n  - Map key: `name` - Object name.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -293,7 +293,7 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:            true,
 			},
 			"tacacs_providers": schema.MapNestedAttribute{
-				MarkdownDescription: "TACACS+ providers.",
+				MarkdownDescription: helpers.NewAttributeDescription("TACACS+ providers.\n  - Map key: `name` - Object name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -357,7 +357,7 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 				},
 			},
 			"tacacs_provider_groups": schema.MapNestedAttribute{
-				MarkdownDescription: "TACACS+ provider groups.",
+				MarkdownDescription: helpers.NewAttributeDescription("TACACS+ provider groups.\n  - Map key: `name` - Object name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

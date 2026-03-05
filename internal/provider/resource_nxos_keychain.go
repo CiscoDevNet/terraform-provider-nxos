@@ -84,12 +84,12 @@ func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"keychains": schema.MapNestedAttribute{
-				MarkdownDescription: "List of keychains.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of keychains.\n  - Map key: `name` - Keychain name.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"keys": schema.MapNestedAttribute{
-							MarkdownDescription: "List of keys.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of keys.\n  - Map key: `key_id` - keyId of classic key chain.\n  - Key range: `0`-`65535`").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{

@@ -78,7 +78,7 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"class_maps": schema.MapNestedAttribute{
-				MarkdownDescription: "List of class maps.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of class maps.\n  - Map key: `name` - Name of class-map.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -90,7 +90,7 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 							},
 						},
 						"dscp_values": schema.MapNestedAttribute{
-							MarkdownDescription: "List of DSCP values to match.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of DSCP values to match.\n  - Map key: `value` - Dscp value.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{},
@@ -100,7 +100,7 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"policy_maps": schema.MapNestedAttribute{
-				MarkdownDescription: "List of policy maps.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of policy maps.\n  - Map key: `name` - Name of policy-map.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -112,7 +112,7 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 							},
 						},
 						"match_class_maps": schema.MapNestedAttribute{
-							MarkdownDescription: "List of match class maps.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of match class maps.\n  - Map key: `name` - Match using class-map.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -299,7 +299,7 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"policy_interface_in": schema.MapNestedAttribute{
-				MarkdownDescription: "List of interfaces with ingress QoS policy assignments.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with ingress QoS policy assignments.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

@@ -48,22 +48,26 @@ data "nxos_ipv6" "example" {
 - `queue_packets` (String) Queue-packets.
 - `static_neighbor_outside_subnet` (String) Static Neighbor Outside Subnet.
 - `switch_packets` (String) Switch-packets.
-- `vrfs` (Attributes Map) List of IPv6 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of IPv6 VRF configurations.
+  - Map key: `name` - VRF name. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
 Read-Only:
 
-- `interfaces` (Attributes Map) List of IPv6 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
-- `static_routes` (Attributes Map) List of IPv6 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
+- `interfaces` (Attributes Map) List of IPv6 interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `static_routes` (Attributes Map) List of IPv6 static routes.
+  - Map key: `prefix` - Prefix. (see [below for nested schema](#nestedatt--vrfs--static_routes))
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
 
 Read-Only:
 
-- `addresses` (Attributes Map) List of IPv6 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
+- `addresses` (Attributes Map) List of IPv6 interface addresses.
+  - Map key: `address` - Address. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
 - `auto_configuration` (String) IPv6 Stateless address autoconfig.
 - `default_route` (String) Default Route Addition with Nexthop as RA Source Address.
 - `forward` (String) IPv6 forward.
@@ -94,7 +98,11 @@ Read-Only:
 
 - `control` (String) Controls.
 - `description` (String) Description of the specified attribute.
-- `next_hops` (Attributes Map) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
+- `next_hops` (Attributes Map) List of next hops.
+  - Map key format: `<interface_id>;<address>;<vrf_name>`
+  - Key component `interface_id`: Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
+  - Key component `address`: Nexthop Address.
+  - Key component `vrf_name`: Nexthop VRF. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
 - `preference` (Number) Preference.
 - `tag` (Number) Tag.
 

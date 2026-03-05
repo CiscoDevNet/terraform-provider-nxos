@@ -42,7 +42,8 @@ data "nxos_ospf" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
-- `instances` (Attributes Map) List of OSPF instances. (see [below for nested schema](#nestedatt--instances))
+- `instances` (Attributes Map) List of OSPF instances.
+  - Map key: `name` - OSPF instance name. (see [below for nested schema](#nestedatt--instances))
 
 <a id="nestedatt--instances"></a>
 ### Nested Schema for `instances`
@@ -51,7 +52,8 @@ Read-Only:
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `control` (String) The control state.
-- `vrfs` (Attributes Map) List of OSPF VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+- `vrfs` (Attributes Map) List of OSPF VRFs.
+  - Map key: `name` - VRF name. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
 ### Nested Schema for `instances.vrfs`
@@ -59,7 +61,8 @@ Read-Only:
 Read-Only:
 
 - `admin_state` (String) Holds the administrative state of domain.
-- `areas` (Attributes Map) List of OSPF areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
+- `areas` (Attributes Map) List of OSPF areas.
+  - Map key: `area_id` - Area identifier to which a network or interface belongs in IPv4 address format. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
 - `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
 - `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
 - `capability_vrf_lite` (String) Capability vrf-lite for L3VPN or Ethernet VPN.
@@ -71,7 +74,8 @@ Read-Only:
 - `discard_route` (String) Control bits for discard-route external and internal.
 - `distance` (Number) Administrative distance preference.
 - `down_bit_ignore` (Boolean) Holds the status of Down-bit ignore.
-- `interfaces` (Attributes Map) List of OSPF interfaces. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
+- `interfaces` (Attributes Map) List of OSPF interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
 - `log_adjacency_changes` (String) Adjacency change logging level.
 - `max_ecmp` (Number) Maximum Equal Cost Multi Path(ECMP).
 - `max_metric_await_convergence_bgp_asn` (String) At startup, advertise max metric until convergence of BGP ASN.

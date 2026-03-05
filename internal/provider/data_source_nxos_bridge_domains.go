@@ -73,7 +73,7 @@ func (d *BridgeDomainsDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed:            true,
 			},
 			"bridge_domains": schema.MapNestedAttribute{
-				MarkdownDescription: "List of bridge domains.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of bridge domains.\n  - Map key: `fabric_encap` - The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

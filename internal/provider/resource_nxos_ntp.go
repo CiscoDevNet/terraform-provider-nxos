@@ -148,7 +148,7 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				},
 			},
 			"servers": schema.MapNestedAttribute{
-				MarkdownDescription: "List of NTP servers or peers.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of NTP servers or peers.\n  - Map key: `name` - NTP server or peer address.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

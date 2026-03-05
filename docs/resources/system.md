@@ -155,7 +155,9 @@ resource "nxos_system" "example" {
   - Range: `0`-`28800`
 - `arp_unnumbered_svi_software_replication` (String) ARP Packets Replication In Software For Unnumbered SVI.
   - Choices: `enabled`, `disabled`
-- `arp_vpc_domains` (Attributes Map) ARP VPC Domain. (see [below for nested schema](#nestedatt--arp_vpc_domains))
+- `arp_vpc_domains` (Attributes Map) ARP VPC Domain.
+  - Map key: `domain_id` - VPC domain id.
+  - Key range: `1`-`1000` (see [below for nested schema](#nestedatt--arp_vpc_domains))
 - `device` (String) A device name from the provider configuration.
 - `ethernet_admin_link_down_syslog_level` (Number) Admin link-down syslog level.
   - Range: `0`-`7`
@@ -214,7 +216,8 @@ resource "nxos_system" "example" {
   - Range: `0`-`20`
 - `nd_solicit_neighbor_advertisement` (String) Solicit neighbor advertisement.
   - Choices: `enabled`, `disabled`
-- `nd_vrfs` (Attributes Map) Neighbor Discovery Domain. (see [below for nested schema](#nestedatt--nd_vrfs))
+- `nd_vrfs` (Attributes Map) Neighbor Discovery Domain.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--nd_vrfs))
 
 ### Read-Only
 
@@ -234,7 +237,8 @@ Optional:
 
 Optional:
 
-- `interfaces` (Attributes Map) Neighbor Discovery Interface. (see [below for nested schema](#nestedatt--nd_vrfs--interfaces))
+- `interfaces` (Attributes Map) Neighbor Discovery Interface.
+  - Map key: `interface_id` - An identifier. (see [below for nested schema](#nestedatt--nd_vrfs--interfaces))
 
 <a id="nestedatt--nd_vrfs--interfaces"></a>
 ### Nested Schema for `nd_vrfs.interfaces`

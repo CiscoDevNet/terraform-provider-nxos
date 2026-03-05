@@ -73,7 +73,7 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 				Computed:            true,
 			},
 			"ipv4_prefix_lists": schema.MapNestedAttribute{
-				MarkdownDescription: "List of IPv4 Prefix Lists.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 Prefix Lists.\n  - Map key: `name` - Object name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -86,7 +86,7 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 							Computed:            true,
 						},
 						"entries": schema.MapNestedAttribute{
-							MarkdownDescription: "IPv4 Prefix List entries.",
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List entries.\n  - Map key: `order` - Order.\n  - Key range: `1`-`4294967294`").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -121,7 +121,7 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 				},
 			},
 			"route_maps": schema.MapNestedAttribute{
-				MarkdownDescription: "List of Route Maps.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of Route Maps.\n  - Map key: `name` - Object name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -130,7 +130,7 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 							Computed:            true,
 						},
 						"entries": schema.MapNestedAttribute{
-							MarkdownDescription: "List of Route Map Entries.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of Route Map Entries.\n  - Map key: `order` - Order.\n  - Key range: `0`-`65535`").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -191,7 +191,7 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"match_route_prefix_lists": schema.MapNestedAttribute{
-										MarkdownDescription: "List of Match Route Prefix Lists.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of Match Route Prefix Lists.\n  - Map key: `prefix_list_dn` - DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]`").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{},
@@ -210,7 +210,7 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"set_regular_community_items": schema.MapNestedAttribute{
-										MarkdownDescription: "List of Set Community Items.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of Set Community Items.\n  - Map key: `community` - Community.").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -226,7 +226,7 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 										},
 									},
 									"match_tags": schema.MapNestedAttribute{
-										MarkdownDescription: "List of Match Tags.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of Match Tags.\n  - Map key: `tag` - The color of a policy label.\n  - Key range: `0`-`4294967295`").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{},

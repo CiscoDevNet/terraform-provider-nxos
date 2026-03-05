@@ -78,7 +78,7 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"policy_maps": schema.MapNestedAttribute{
-				MarkdownDescription: "List of policy maps.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of policy maps.\n  - Map key: `name` - Name of policy-map.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -90,7 +90,7 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 							},
 						},
 						"match_class_maps": schema.MapNestedAttribute{
-							MarkdownDescription: "List of match class maps.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of match class maps.\n  - Map key: `name` - Match using class-map.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{

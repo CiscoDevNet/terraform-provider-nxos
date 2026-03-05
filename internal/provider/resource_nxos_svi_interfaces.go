@@ -78,7 +78,7 @@ func (r *SVIInterfacesResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"svi_interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of SVI interfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of SVI interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

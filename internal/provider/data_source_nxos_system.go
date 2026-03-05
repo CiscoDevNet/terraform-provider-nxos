@@ -221,7 +221,7 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:            true,
 			},
 			"arp_vpc_domains": schema.MapNestedAttribute{
-				MarkdownDescription: "ARP VPC Domain.",
+				MarkdownDescription: helpers.NewAttributeDescription("ARP VPC Domain.\n  - Map key: `domain_id` - VPC domain id.\n  - Key range: `1`-`1000`").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -277,12 +277,12 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:            true,
 			},
 			"nd_vrfs": schema.MapNestedAttribute{
-				MarkdownDescription: "Neighbor Discovery Domain.",
+				MarkdownDescription: helpers.NewAttributeDescription("Neighbor Discovery Domain.\n  - Map key: `name` - The name of the object.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"interfaces": schema.MapNestedAttribute{
-							MarkdownDescription: "Neighbor Discovery Interface.",
+							MarkdownDescription: helpers.NewAttributeDescription("Neighbor Discovery Interface.\n  - Map key: `interface_id` - An identifier.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{

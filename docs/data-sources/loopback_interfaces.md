@@ -37,7 +37,8 @@ data "nxos_loopback_interfaces" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `loopback_interfaces` (Attributes Map) List of loopback interfaces. (see [below for nested schema](#nestedatt--loopback_interfaces))
+- `loopback_interfaces` (Attributes Map) List of loopback interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `lo123`. (see [below for nested schema](#nestedatt--loopback_interfaces))
 
 <a id="nestedatt--loopback_interfaces"></a>
 ### Nested Schema for `loopback_interfaces`

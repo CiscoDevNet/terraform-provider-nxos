@@ -173,14 +173,17 @@ resource "nxos_user_management" "example" {
 - `tacacs_name` (String) Object name.
 - `tacacs_owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `tacacs_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
-- `tacacs_provider_groups` (Attributes Map) TACACS+ provider groups. (see [below for nested schema](#nestedatt--tacacs_provider_groups))
-- `tacacs_providers` (Attributes Map) TACACS+ providers. (see [below for nested schema](#nestedatt--tacacs_providers))
+- `tacacs_provider_groups` (Attributes Map) TACACS+ provider groups.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--tacacs_provider_groups))
+- `tacacs_providers` (Attributes Map) TACACS+ providers.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--tacacs_providers))
 - `tacacs_retries` (Number) The number of attempts that the authentication method is tried.
   - Range: `0`-`5`
 - `tacacs_source_interface` (String) Source Interface.
 - `tacacs_timeout` (Number) The amount of time between authentication attempts.
   - Range: `1`-`60`
-- `users` (Attributes Map) List of users. (see [below for nested schema](#nestedatt--users))
+- `users` (Attributes Map) List of users.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--users))
 
 ### Read-Only
 
@@ -255,7 +258,8 @@ Optional:
 - `password_hash` (String) Generate password hash for clear text password.
   - Choices: `unspecified`, `pbkdf2`, `scrypt`
 - `phone` (String) The phone number of the locally-authenticated user.
-- `roles` (Attributes Map) User roles. (see [below for nested schema](#nestedatt--users--roles))
+- `roles` (Attributes Map) User roles.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--users--roles))
 - `shell_type` (String) User Shelltype Access.
   - Choices: `shellvsh`, `shellbash`
 - `unix_user_id` (Number) The UNIX identifier of the locally-authenticated user.

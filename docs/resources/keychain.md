@@ -48,7 +48,8 @@ resource "nxos_keychain" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
-- `keychains` (Attributes Map) List of keychains. (see [below for nested schema](#nestedatt--keychains))
+- `keychains` (Attributes Map) List of keychains.
+  - Map key: `name` - Keychain name. (see [below for nested schema](#nestedatt--keychains))
 
 ### Read-Only
 
@@ -59,7 +60,9 @@ resource "nxos_keychain" "example" {
 
 Optional:
 
-- `keys` (Attributes Map) List of keys. (see [below for nested schema](#nestedatt--keychains--keys))
+- `keys` (Attributes Map) List of keys.
+  - Map key: `key_id` - keyId of classic key chain.
+  - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--keychains--keys))
 
 <a id="nestedatt--keychains--keys"></a>
 ### Nested Schema for `keychains.keys`

@@ -54,7 +54,8 @@ resource "nxos_svi_interfaces" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `svi_interfaces` (Attributes Map) List of SVI interfaces. (see [below for nested schema](#nestedatt--svi_interfaces))
+- `svi_interfaces` (Attributes Map) List of SVI interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `vlan100`. (see [below for nested schema](#nestedatt--svi_interfaces))
 
 ### Read-Only
 

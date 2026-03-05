@@ -73,7 +73,7 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"instances": schema.MapNestedAttribute{
-				MarkdownDescription: "List of IS-IS instances.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS instances.\n  - Map key: `name` - IS-IS instance name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -94,7 +94,7 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 						},
 						"vrfs": schema.MapNestedAttribute{
-							MarkdownDescription: "List of IS-IS VRFs.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS VRFs.\n  - Map key: `name` - VRF name.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -167,7 +167,7 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"address_families": schema.MapNestedAttribute{
-										MarkdownDescription: "List of IS-IS address families.",
+										MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS address families.\n  - Map key: `address_family` - Type.\n  - Key choices: `v4`, `v6`").String,
 										Computed:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -257,7 +257,7 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				},
 			},
 			"interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of IS-IS interfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

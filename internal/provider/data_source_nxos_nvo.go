@@ -77,7 +77,7 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"nve_interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "NVE interface configuration.",
+				MarkdownDescription: helpers.NewAttributeDescription("NVE interface configuration.\n  - Map key: `id` - Network Virtualization Overlay Endpoint (NVE) ID.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -166,7 +166,7 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"vnis": schema.MapNestedAttribute{
-							MarkdownDescription: "List of VNIs.",
+							MarkdownDescription: helpers.NewAttributeDescription("List of VNIs.\n  - Map key: `vni` - Configure Virtual Network ID.\n  - Key range: `1`-`16777214`").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{

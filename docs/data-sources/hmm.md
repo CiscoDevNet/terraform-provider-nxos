@@ -42,7 +42,8 @@ data "nxos_hmm" "example" {
 - `control` (String) The control state.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
-- `interfaces` (Attributes Map) List of HMM Fabric Forwarding interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `interfaces` (Attributes Map) List of HMM Fabric Forwarding interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `vlan10`. (see [below for nested schema](#nestedatt--interfaces))
 - `limit_vlan_mac` (Number) This is to limit the number of hosts learnt by HMM in the same subnet with same MAC information.
 - `selective_host_probe` (String) When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id.
 

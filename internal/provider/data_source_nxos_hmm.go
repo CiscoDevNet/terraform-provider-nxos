@@ -97,7 +97,7 @@ func (d *HMMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of HMM Fabric Forwarding interfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of HMM Fabric Forwarding interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `vlan10`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

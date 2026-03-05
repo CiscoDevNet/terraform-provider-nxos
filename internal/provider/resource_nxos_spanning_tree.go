@@ -145,7 +145,7 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: "List of Spanning Tree interfaces.",
+				MarkdownDescription: helpers.NewAttributeDescription("List of Spanning Tree interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

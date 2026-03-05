@@ -180,6 +180,7 @@ func TestAccNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.route_controls.in.route_map_name", "ROUTE_MAP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.prefix_list_controls.in.list", "PREFIX_LIST1"))
 	var tfVersion *goversion.Version
+	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -188,7 +189,7 @@ func TestAccNxosBGP(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosBGPPrerequisitesConfig + testAccNxosBGPConfig_all(),
+				Config: testAccNxosBGPPrerequisitesConfig + testAccNxosBGPConfig_all(includeWriteOnly),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -255,7 +256,7 @@ func testAccNxosBGPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosBGPConfig_all() string {
+func testAccNxosBGPConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_bgp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
@@ -394,9 +395,13 @@ func testAccNxosBGPConfig_all() string {
 	config += `					keepalive_interval = 15` + "\n"
 	config += `					ebgp_multihop_ttl = 5` + "\n"
 	config += `					peer_control = "bfd,dis-conn-check"` + "\n"
-	config += `					password = "secret_password"` + "\n"
-	config += `					password_wo = "secret_password"` + "\n"
-	config += `					password_wo_version = 1` + "\n"
+	if includeWriteOnly {
+		config += `					password = "secret_password"` + "\n"
+		config += `					password_wo = "secret_password"` + "\n"
+		config += `					password_wo_version = 1` + "\n"
+	} else {
+		config += `					password = "secret_password"` + "\n"
+	}
 	config += `					admin_state = "enabled"` + "\n"
 	config += `					asn_type = "none"` + "\n"
 	config += `					bfd_type = "none"` + "\n"

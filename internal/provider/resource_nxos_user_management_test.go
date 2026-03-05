@@ -93,6 +93,7 @@ func TestAccNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.source_interface", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.vrf", "default"))
 	var tfVersion *goversion.Version
+	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -101,7 +102,7 @@ func TestAccNxosUserManagement(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosUserManagementPrerequisitesConfig + testAccNxosUserManagementConfig_all(),
+				Config: testAccNxosUserManagementPrerequisitesConfig + testAccNxosUserManagementConfig_all(includeWriteOnly),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -158,7 +159,7 @@ func testAccNxosUserManagementConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosUserManagementConfig_all() string {
+func testAccNxosUserManagementConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_user_management" "test" {` + "\n"
 	config += `	alphabet_sequence = 3` + "\n"
 	config += `	description = "User management policy"` + "\n"

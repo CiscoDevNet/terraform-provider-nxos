@@ -20,6 +20,8 @@ package provider
 import (
 	"context"
 	"os"
+	"os/exec"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/go-version"
@@ -72,4 +74,34 @@ func skipBelowTerraformVersion(tfVersion **version.Version, min *version.Version
 		}
 		return (*tfVersion).LessThan(min), nil
 	}
+}
+
+// terraformVersionMinimum returns true if the terraform binary on PATH is at
+// least the given minimum version. It is safe to call before resource.Test,
+// allowing callers to build a config string that depends on the TF version.
+func terraformVersionMinimum(min *version.Version) bool {
+	out, err := exec.Command("terraform", "version", "-json").Output()
+	if err != nil {
+		return false
+	}
+	// Parse the version from the first line of non-JSON output as fallback,
+	// but terraform -json outputs {"terraform_version":"x.y.z",...}.
+	// Simple approach: find the version string in the output.
+	s := string(out)
+	// terraform version -json returns JSON like {"terraform_version":"1.11.0",...}
+	const key = `"terraform_version":"`
+	idx := strings.Index(s, key)
+	if idx < 0 {
+		return false
+	}
+	s = s[idx+len(key):]
+	end := strings.Index(s, `"`)
+	if end < 0 {
+		return false
+	}
+	v, err := version.NewVersion(s[:end])
+	if err != nil {
+		return false
+	}
+	return v.GreaterThanOrEqual(min)
 }

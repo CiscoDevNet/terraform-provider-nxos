@@ -103,6 +103,9 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- template "resourceTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "Prefix" "")}}
 	var tfVersion *goversion.Version
+	{{- if or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .TfChildClasses)}}
+	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	{{- end}}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -111,7 +114,11 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
+				{{- if or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .TfChildClasses)}}
+				Config: {{if .TestPrerequisites}}testAccNxos{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccNxos{{camelCase .Name}}Config_all(includeWriteOnly),
+				{{- else}}
 				Config: {{if .TestPrerequisites}}testAccNxos{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccNxos{{camelCase .Name}}Config_all(),
+				{{- end}}
 				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -217,15 +224,23 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `{{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 		{{- if .Sensitive}}
-		config += `{{$indent}}{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
-		config += `{{$indent}}{{.TfName}}_wo_version = 1` + "\n"
+		if includeWriteOnly {
+			config += `{{$indent}}{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+			config += `{{$indent}}{{.TfName}}_wo_version = 1` + "\n"
+		}
 		{{- end}}
 	}
 {{- else}}
-	config += `{{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	{{- if .Sensitive}}
-	config += `{{$indent}}{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
-	config += `{{$indent}}{{.TfName}}_wo_version = 1` + "\n"
+	if includeWriteOnly {
+		config += `{{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `{{$indent}}{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `{{$indent}}{{.TfName}}_wo_version = 1` + "\n"
+	} else {
+		config += `{{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `{{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	{{- end}}
 {{- end}}
 {{- end}}
@@ -244,15 +259,23 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 		{{- if .Sensitive}}
-		config += `{{$indent}}		{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
-		config += `{{$indent}}		{{.TfName}}_wo_version = 1` + "\n"
+		if includeWriteOnly {
+			config += `{{$indent}}		{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+			config += `{{$indent}}		{{.TfName}}_wo_version = 1` + "\n"
+		}
 		{{- end}}
 	}
 {{- else}}
-	config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	{{- if .Sensitive}}
-	config += `{{$indent}}		{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
-	config += `{{$indent}}		{{.TfName}}_wo_version = 1` + "\n"
+	if includeWriteOnly {
+		config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `{{$indent}}		{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `{{$indent}}		{{.TfName}}_wo_version = 1` + "\n"
+	} else {
+		config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	{{- end}}
 {{- end}}
 {{- end}}
@@ -269,7 +292,11 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- /* ==================== end testConfigChildrenTemplate ==================== */}}
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
+{{- if or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .TfChildClasses)}}
+func testAccNxos{{camelCase .Name}}Config_all(includeWriteOnly bool) string {
+{{- else}}
 func testAccNxos{{camelCase .Name}}Config_all() string {
+{{- end}}
 	config := `resource "nxos_{{snakeCase $name}}" "test" {` + "\n"
 	{{- range  .Attributes}}
 	{{- if not .ExcludeTest}}
@@ -277,15 +304,23 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 		{{- if .Sensitive}}
-		config += `	{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
-		config += `	{{.TfName}}_wo_version = 1` + "\n"
+		if includeWriteOnly {
+			config += `	{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+			config += `	{{.TfName}}_wo_version = 1` + "\n"
+		}
 		{{- end}}
 	}
 	{{- else}}
-	config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	{{- if .Sensitive}}
-	config += `	{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
-	config += `	{{.TfName}}_wo_version = 1` + "\n"
+	if includeWriteOnly {
+		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `	{{.TfName}}_wo = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `	{{.TfName}}_wo_version = 1` + "\n"
+	} else {
+		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	{{- end}}
 	{{- end}}
 	{{- end}}

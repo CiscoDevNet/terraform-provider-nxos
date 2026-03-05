@@ -121,6 +121,7 @@ func TestAccNxosISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.ipv6_bfd", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.ipv6", "true"))
 	var tfVersion *goversion.Version
+	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -129,7 +130,7 @@ func TestAccNxosISIS(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosISISPrerequisitesConfig + testAccNxosISISConfig_all(),
+				Config: testAccNxosISISPrerequisitesConfig + testAccNxosISISConfig_all(includeWriteOnly),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -194,7 +195,7 @@ func testAccNxosISISConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosISISConfig_all() string {
+func testAccNxosISISConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_isis" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instances = {` + "\n"
@@ -208,12 +209,20 @@ func testAccNxosISISConfig_all() string {
 	config += `					admin_state = "enabled"` + "\n"
 	config += `					authentication_check_l1 = false` + "\n"
 	config += `					authentication_check_l2 = false` + "\n"
-	config += `					authentication_key_l1 = ""` + "\n"
-	config += `					authentication_key_l1_wo = ""` + "\n"
-	config += `					authentication_key_l1_wo_version = 1` + "\n"
-	config += `					authentication_key_l2 = ""` + "\n"
-	config += `					authentication_key_l2_wo = ""` + "\n"
-	config += `					authentication_key_l2_wo_version = 1` + "\n"
+	if includeWriteOnly {
+		config += `					authentication_key_l1 = ""` + "\n"
+		config += `					authentication_key_l1_wo = ""` + "\n"
+		config += `					authentication_key_l1_wo_version = 1` + "\n"
+	} else {
+		config += `					authentication_key_l1 = ""` + "\n"
+	}
+	if includeWriteOnly {
+		config += `					authentication_key_l2 = ""` + "\n"
+		config += `					authentication_key_l2_wo = ""` + "\n"
+		config += `					authentication_key_l2_wo_version = 1` + "\n"
+	} else {
+		config += `					authentication_key_l2 = ""` + "\n"
+	}
 	config += `					authentication_type_l1 = "unknown"` + "\n"
 	config += `					authentication_type_l2 = "unknown"` + "\n"
 	config += `					bandwidth_reference = 400000` + "\n"
@@ -257,15 +266,27 @@ func testAccNxosISISConfig_all() string {
 	config += `			authentication_check = false` + "\n"
 	config += `			authentication_check_l1 = false` + "\n"
 	config += `			authentication_check_l2 = false` + "\n"
-	config += `			authentication_key = ""` + "\n"
-	config += `			authentication_key_wo = ""` + "\n"
-	config += `			authentication_key_wo_version = 1` + "\n"
-	config += `			authentication_key_l1 = ""` + "\n"
-	config += `			authentication_key_l1_wo = ""` + "\n"
-	config += `			authentication_key_l1_wo_version = 1` + "\n"
-	config += `			authentication_key_l2 = ""` + "\n"
-	config += `			authentication_key_l2_wo = ""` + "\n"
-	config += `			authentication_key_l2_wo_version = 1` + "\n"
+	if includeWriteOnly {
+		config += `			authentication_key = ""` + "\n"
+		config += `			authentication_key_wo = ""` + "\n"
+		config += `			authentication_key_wo_version = 1` + "\n"
+	} else {
+		config += `			authentication_key = ""` + "\n"
+	}
+	if includeWriteOnly {
+		config += `			authentication_key_l1 = ""` + "\n"
+		config += `			authentication_key_l1_wo = ""` + "\n"
+		config += `			authentication_key_l1_wo_version = 1` + "\n"
+	} else {
+		config += `			authentication_key_l1 = ""` + "\n"
+	}
+	if includeWriteOnly {
+		config += `			authentication_key_l2 = ""` + "\n"
+		config += `			authentication_key_l2_wo = ""` + "\n"
+		config += `			authentication_key_l2_wo_version = 1` + "\n"
+	} else {
+		config += `			authentication_key_l2 = ""` + "\n"
+	}
 	config += `			authentication_type = "unknown"` + "\n"
 	config += `			authentication_type_l1 = "unknown"` + "\n"
 	config += `			authentication_type_l2 = "unknown"` + "\n"

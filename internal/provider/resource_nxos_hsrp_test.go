@@ -65,6 +65,7 @@ func TestAccNxosHSRP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_sync", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.priority", "110"))
 	var tfVersion *goversion.Version
+	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -73,7 +74,7 @@ func TestAccNxosHSRP(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosHSRPPrerequisitesConfig + testAccNxosHSRPConfig_all(),
+				Config: testAccNxosHSRPPrerequisitesConfig + testAccNxosHSRPConfig_all(includeWriteOnly),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -158,7 +159,7 @@ func testAccNxosHSRPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosHSRPConfig_all() string {
+func testAccNxosHSRPConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_hsrp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"

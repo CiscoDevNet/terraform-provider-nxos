@@ -39,6 +39,7 @@ func TestAccNxosKeychain(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.cryptographic_algorithm", "AES"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.key_string", "secret_password"))
 	var tfVersion *goversion.Version
+	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -47,7 +48,7 @@ func TestAccNxosKeychain(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosKeychainConfig_all(),
+				Config: testAccNxosKeychainConfig_all(includeWriteOnly),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -92,7 +93,7 @@ func testAccNxosKeychainConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosKeychainConfig_all() string {
+func testAccNxosKeychainConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_keychain" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	keychains = {` + "\n"
@@ -100,9 +101,13 @@ func testAccNxosKeychainConfig_all() string {
 	config += `			keys = {` + "\n"
 	config += `				"1" = {` + "\n"
 	config += `					cryptographic_algorithm = "AES"` + "\n"
-	config += `					key_string = "secret_password"` + "\n"
-	config += `					key_string_wo = "secret_password"` + "\n"
-	config += `					key_string_wo_version = 1` + "\n"
+	if includeWriteOnly {
+		config += `					key_string = "secret_password"` + "\n"
+		config += `					key_string_wo = "secret_password"` + "\n"
+		config += `					key_string_wo_version = 1` + "\n"
+	} else {
+		config += `					key_string = "secret_password"` + "\n"
+	}
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

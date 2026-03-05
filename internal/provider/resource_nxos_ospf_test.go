@@ -89,6 +89,7 @@ func TestAccNxosOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_md5_key_secure_mode", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_type", "none"))
 	var tfVersion *goversion.Version
+	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -97,7 +98,7 @@ func TestAccNxosOSPF(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosOSPFPrerequisitesConfig + testAccNxosOSPFConfig_all(),
+				Config: testAccNxosOSPFPrerequisitesConfig + testAccNxosOSPFConfig_all(includeWriteOnly),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -182,7 +183,7 @@ func testAccNxosOSPFConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosOSPFConfig_all() string {
+func testAccNxosOSPFConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_ospf" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instances = {` + "\n"
@@ -238,21 +239,37 @@ func testAccNxosOSPFConfig_all() string {
 	config += `							node_flag = "clear"` + "\n"
 	config += `							retransmit_interval = 10` + "\n"
 	config += `							transmit_delay = 2` + "\n"
-	config += `							authentication_key = "0 mykey"` + "\n"
-	config += `							authentication_key_wo = "0 mykey"` + "\n"
-	config += `							authentication_key_wo_version = 1` + "\n"
+	if includeWriteOnly {
+		config += `							authentication_key = "0 mykey"` + "\n"
+		config += `							authentication_key_wo = "0 mykey"` + "\n"
+		config += `							authentication_key_wo_version = 1` + "\n"
+	} else {
+		config += `							authentication_key = "0 mykey"` + "\n"
+	}
 	config += `							authentication_key_id = 1` + "\n"
-	config += `							authentication_key_new = "0 mykey"` + "\n"
-	config += `							authentication_key_new_wo = "0 mykey"` + "\n"
-	config += `							authentication_key_new_wo_version = 1` + "\n"
+	if includeWriteOnly {
+		config += `							authentication_key_new = "0 mykey"` + "\n"
+		config += `							authentication_key_new_wo = "0 mykey"` + "\n"
+		config += `							authentication_key_new_wo_version = 1` + "\n"
+	} else {
+		config += `							authentication_key_new = "0 mykey"` + "\n"
+	}
 	config += `							authentication_key_secure_mode = false` + "\n"
 	config += `							authentication_keychain = "mykeychain"` + "\n"
-	config += `							authentication_md5_key = "0 mymd5key"` + "\n"
-	config += `							authentication_md5_key_wo = "0 mymd5key"` + "\n"
-	config += `							authentication_md5_key_wo_version = 1` + "\n"
-	config += `							authentication_md5_key_new = "0 mymd5key"` + "\n"
-	config += `							authentication_md5_key_new_wo = "0 mymd5key"` + "\n"
-	config += `							authentication_md5_key_new_wo_version = 1` + "\n"
+	if includeWriteOnly {
+		config += `							authentication_md5_key = "0 mymd5key"` + "\n"
+		config += `							authentication_md5_key_wo = "0 mymd5key"` + "\n"
+		config += `							authentication_md5_key_wo_version = 1` + "\n"
+	} else {
+		config += `							authentication_md5_key = "0 mymd5key"` + "\n"
+	}
+	if includeWriteOnly {
+		config += `							authentication_md5_key_new = "0 mymd5key"` + "\n"
+		config += `							authentication_md5_key_new_wo = "0 mymd5key"` + "\n"
+		config += `							authentication_md5_key_new_wo_version = 1` + "\n"
+	} else {
+		config += `							authentication_md5_key_new = "0 mymd5key"` + "\n"
+	}
 	config += `							authentication_md5_key_secure_mode = false` + "\n"
 	config += `							authentication_type = "none"` + "\n"
 	config += `						}` + "\n"

@@ -5,7 +5,6 @@ dn: sys/intf
 no_delete: true
 ds_description: This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
 res_description: This resource can manage port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
-doc_path: Interfaces/interface:Entity/
 doc_category: Interface
 child_classes:
   - class_name: pcAggrIf

@@ -4,8 +4,7 @@ page_title: "nxos_physical_interfaces Resource - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
-  API Documentation: interfaceEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/interface:Entity/
-  Additional API Documentation
+  API Documentation
   l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
@@ -13,9 +12,7 @@ description: |-
 
 This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
 
-- API Documentation: [interfaceEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/interface:Entity/)
-
-### Additional API Documentation
+### API Documentation
 
 - [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)

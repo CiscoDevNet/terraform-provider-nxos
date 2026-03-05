@@ -4,19 +4,17 @@ page_title: "nxos_hmm Resource - terraform-provider-nxos"
 subcategory: "Overlay"
 description: |-
   This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
-  API Documentation: hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:Entity/
-  Additional API Documentation
-  hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdInst/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdIf/
+  API Documentation
+  hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:Entity/hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdInst/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdIf/
 ---
 
 # nxos_hmm (Resource)
 
 This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
 
-- API Documentation: [hmmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:Entity/)
+### API Documentation
 
-### Additional API Documentation
-
+- [hmmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:Entity/)
 - [hmmFwdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdInst/)
 - [hmmFwdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdIf/)
 

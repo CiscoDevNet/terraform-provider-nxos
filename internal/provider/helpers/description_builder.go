@@ -53,8 +53,8 @@ type ResourceDescription struct {
 	String string
 }
 
-func NewResourceDescription(description, className, docPath string) *ResourceDescription {
-	d := fmt.Sprintf("%s\n\n- API Documentation: [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/%s)\n", description, className, docPath)
+func NewResourceDescription(description string) *ResourceDescription {
+	d := description + "\n"
 	return &ResourceDescription{d}
 }
 
@@ -82,11 +82,20 @@ func (d *ResourceDescription) AddReferences(values ...string) *ResourceDescripti
 	return d
 }
 
-func (d *ResourceDescription) AddAdditionalDocs(classNames []string, docPaths []string) *ResourceDescription {
-	if len(classNames) == len(docPaths) && len(classNames) > 0 {
-		d.String += "\n### Additional API Documentation\n\n"
-		for i, className := range classNames {
-			d.String += fmt.Sprintf("- [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/%s)\n", className, docPaths[i])
+func (d *ResourceDescription) AddApiDocumentation(rootClassName, rootDocPath string, childClassNames, childDocPaths []string) *ResourceDescription {
+	var entries []string
+	if rootDocPath != "" {
+		entries = append(entries, fmt.Sprintf("- [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/%s)\n", rootClassName, rootDocPath))
+	}
+	for i, className := range childClassNames {
+		if i < len(childDocPaths) && childDocPaths[i] != "" {
+			entries = append(entries, fmt.Sprintf("- [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/%s)\n", className, childDocPaths[i]))
+		}
+	}
+	if len(entries) > 0 {
+		d.String += "\n### API Documentation\n\n"
+		for _, entry := range entries {
+			d.String += entry
 		}
 	}
 	return d

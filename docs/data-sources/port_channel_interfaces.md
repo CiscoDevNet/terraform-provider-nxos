@@ -4,8 +4,7 @@ page_title: "nxos_port_channel_interfaces Data Source - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
-  API Documentation: interfaceEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/interface:Entity/
-  Additional API Documentation
+  API Documentation
   pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
@@ -13,9 +12,7 @@ description: |-
 
 This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
 
-- API Documentation: [interfaceEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/interface:Entity/)
-
-### Additional API Documentation
+### API Documentation
 
 - [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)

@@ -4,19 +4,17 @@ page_title: "nxos_logging Data Source - terraform-provider-nxos"
 subcategory: "System"
 description: |-
   This data source can read the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.
-  API Documentation: loggingLogging https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/
-  Additional API Documentation
-  loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:LogLevel/loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Facility/
+  API Documentation
+  loggingLogging https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:LogLevel/loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Facility/
 ---
 
 # nxos_logging (Data Source)
 
 This data source can read the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.
 
-- API Documentation: [loggingLogging](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/)
+### API Documentation
 
-### Additional API Documentation
-
+- [loggingLogging](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/)
 - [loggingLogLevel](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:LogLevel/)
 - [loggingFacility](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Facility/)
 

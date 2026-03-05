@@ -57,7 +57,7 @@ func (d *HSRPDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *HSRPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.", "hsrpEntity", "System/hsrp:Entity/").AddAdditionalDocs([]string{"hsrpInst", "hsrpIf", "hsrpGroup"}, []string{"System/hsrp:Inst/", "System/hsrp:If/", "System/hsrp:Group/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.").AddApiDocumentation("hsrpEntity", "System/hsrp:Entity/", []string{"hsrpInst", "hsrpIf", "hsrpGroup"}, []string{"System/hsrp:Inst/", "System/hsrp:If/", "System/hsrp:Group/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

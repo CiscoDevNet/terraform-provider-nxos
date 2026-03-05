@@ -4,8 +4,7 @@ page_title: "nxos_loopback_interfaces Resource - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This resource can manage loopback interface configurations on NX-OS devices, including administrative state, description, and VRF membership.
-  API Documentation: interfaceEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/interface:Entity/
-  Additional API Documentation
+  API Documentation
   l3LbRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:LbRtdIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
@@ -13,9 +12,7 @@ description: |-
 
 This resource can manage loopback interface configurations on NX-OS devices, including administrative state, description, and VRF membership.
 
-- API Documentation: [interfaceEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/interface:Entity/)
-
-### Additional API Documentation
+### API Documentation
 
 - [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:LbRtdIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)

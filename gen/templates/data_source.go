@@ -58,12 +58,7 @@ func (d *{{camelCase .Name}}DataSource) Metadata(_ context.Context, req datasour
 func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("{{.DsDescription}}", "{{.ClassName}}", "{{.DocPath}}")
-			{{- $classNames := childDocClassNames .ChildClasses -}}
-			{{- if $classNames -}}
-			.AddAdditionalDocs([]string{ {{- range $i, $v := $classNames}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }, []string{ {{- range $i, $v := childDocPaths .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} })
-			{{- end -}}
-			.String,
+		MarkdownDescription: helpers.NewResourceDescription("{{.DsDescription}}").AddApiDocumentation("{{.ClassName}}", "{{.DocPath}}", []string{ {{- range $i, $v := childDocClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }, []string{ {{- range $i, $v := childDocPaths .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

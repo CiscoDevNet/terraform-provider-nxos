@@ -62,7 +62,7 @@ func (r *BridgeDomainsResource) Metadata(ctx context.Context, req resource.Metad
 func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.", "bdEntity", "Bridge%20Domain/bd:Entity/").AddAdditionalDocs([]string{"l2BD"}, []string{"Layer%202/l2:BD/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.").AddApiDocumentation("bdEntity", "Bridge%20Domain/bd:Entity/", []string{"l2BD"}, []string{"Layer%202/l2:BD/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

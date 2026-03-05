@@ -70,7 +70,7 @@ func (r *{{camelCase .Name}}Resource) Metadata(ctx context.Context, req resource
 func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("{{.ResDescription}}", "{{.ClassName}}", "{{.DocPath}}")
+		MarkdownDescription: helpers.NewResourceDescription("{{.ResDescription}}")
 			{{- if len .Parents -}}
 			.AddParents({{range .Parents}}"{{snakeCase .}}", {{end}})
 			{{- end -}}
@@ -80,11 +80,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			{{- if len .References -}}
 			.AddReferences({{range .References}}"{{snakeCase .}}", {{end}})
 			{{- end -}}
-			{{- $classNames := childDocClassNames .ChildClasses -}}
-			{{- if $classNames -}}
-			.AddAdditionalDocs([]string{ {{- range $i, $v := $classNames}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }, []string{ {{- range $i, $v := childDocPaths .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} })
-			{{- end -}}
-			.String,
+			.AddApiDocumentation("{{.ClassName}}", "{{.DocPath}}", []string{ {{- range $i, $v := childDocClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }, []string{ {{- range $i, $v := childDocPaths .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

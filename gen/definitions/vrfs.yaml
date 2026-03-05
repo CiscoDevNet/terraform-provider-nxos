@@ -5,7 +5,6 @@ dn: sys
 no_delete: true
 ds_description: This data source can read VRF configurations on NX-OS devices, including route distinguisher, address families, and route target configurations.
 res_description: This resource can manage VRF configurations on NX-OS devices, including route distinguisher, address families, and route target configurations.
-doc_path: Top%20Level/top:System/
 doc_category: Routing
 child_classes:
   - class_name: l3Inst

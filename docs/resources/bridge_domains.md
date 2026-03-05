@@ -4,19 +4,17 @@ page_title: "nxos_bridge_domains Resource - terraform-provider-nxos"
 subcategory: "Switching"
 description: |-
   This resource can manage the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
-  API Documentation: bdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Bridge%20Domain/bd:Entity/
-  Additional API Documentation
-  l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/
+  API Documentation
+  bdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Bridge%20Domain/bd:Entity/l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/
 ---
 
 # nxos_bridge_domains (Resource)
 
 This resource can manage the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
 
-- API Documentation: [bdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Bridge%20Domain/bd:Entity/)
+### API Documentation
 
-### Additional API Documentation
-
+- [bdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Bridge%20Domain/bd:Entity/)
 - [l2BD](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/)
 
 ## Example Usage

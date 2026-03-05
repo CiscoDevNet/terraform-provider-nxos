@@ -4,19 +4,17 @@ page_title: "nxos_dhcp Resource - terraform-provider-nxos"
 subcategory: "System"
 description: |-
   This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.
-  API Documentation: dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Entity/
-  Additional API Documentation
-  dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Inst/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayAddr/
+  API Documentation
+  dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Entity/dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Inst/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayAddr/
 ---
 
 # nxos_dhcp (Resource)
 
 This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.
 
-- API Documentation: [dhcpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Entity/)
+### API Documentation
 
-### Additional API Documentation
-
+- [dhcpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Entity/)
 - [dhcpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Inst/)
 - [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayIf/)
 - [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayAddr/)

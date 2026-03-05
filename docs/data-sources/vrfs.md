@@ -4,8 +4,7 @@ page_title: "nxos_vrfs Data Source - terraform-provider-nxos"
 subcategory: "Routing"
 description: |-
   This data source can read VRF configurations on NX-OS devices, including route distinguisher, address families, and route target configurations.
-  API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Top%20Level/top:System/
-  Additional API Documentation
+  API Documentation
   l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:Inst/rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:Dom/rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:DomAf/rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
 ---
 
@@ -13,9 +12,7 @@ description: |-
 
 This data source can read VRF configurations on NX-OS devices, including route distinguisher, address families, and route target configurations.
 
-- API Documentation: [topSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Top%20Level/top:System/)
-
-### Additional API Documentation
+### API Documentation
 
 - [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:Inst/)
 - [rtctrlDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:Dom/)

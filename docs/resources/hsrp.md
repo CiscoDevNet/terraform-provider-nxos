@@ -4,19 +4,17 @@ page_title: "nxos_hsrp Resource - terraform-provider-nxos"
 subcategory: "Routing"
 description: |-
   This resource can manage the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.
-  API Documentation: hsrpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Entity/
-  Additional API Documentation
-  hsrpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Inst/hsrpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:If/hsrpGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Group/
+  API Documentation
+  hsrpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Entity/hsrpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Inst/hsrpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:If/hsrpGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Group/
 ---
 
 # nxos_hsrp (Resource)
 
 This resource can manage the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.
 
-- API Documentation: [hsrpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Entity/)
+### API Documentation
 
-### Additional API Documentation
-
+- [hsrpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Entity/)
 - [hsrpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Inst/)
 - [hsrpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:If/)
 - [hsrpGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Group/)

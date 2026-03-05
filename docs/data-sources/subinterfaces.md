@@ -4,8 +4,7 @@ page_title: "nxos_subinterfaces Data Source - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This data source can read subinterface configurations on NX-OS devices, including VLAN encapsulation, bandwidth, MTU, and administrative state settings.
-  API Documentation: interfaceEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/interface:Entity/
-  Additional API Documentation
+  API Documentation
   l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:EncRtdIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
@@ -13,9 +12,7 @@ description: |-
 
 This data source can read subinterface configurations on NX-OS devices, including VLAN encapsulation, bandwidth, MTU, and administrative state settings.
 
-- API Documentation: [interfaceEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/interface:Entity/)
-
-### Additional API Documentation
+### API Documentation
 
 - [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:EncRtdIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)

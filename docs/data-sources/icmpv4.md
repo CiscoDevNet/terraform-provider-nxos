@@ -4,19 +4,17 @@ page_title: "nxos_icmpv4 Data Source - terraform-provider-nxos"
 subcategory: "System"
 description: |-
   This data source can read the ICMPv4 configuration on NX-OS devices, including per-VRF and per-interface ICMP control settings such as redirects and unreachables.
-  API Documentation: icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Entity/
-  Additional API Documentation
-  icmpv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Inst/icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Dom/icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:If/
+  API Documentation
+  icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Entity/icmpv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Inst/icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Dom/icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:If/
 ---
 
 # nxos_icmpv4 (Data Source)
 
 This data source can read the ICMPv4 configuration on NX-OS devices, including per-VRF and per-interface ICMP control settings such as redirects and unreachables.
 
-- API Documentation: [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Entity/)
+### API Documentation
 
-### Additional API Documentation
-
+- [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Entity/)
 - [icmpv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Inst/)
 - [icmpv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Dom/)
 - [icmpv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:If/)

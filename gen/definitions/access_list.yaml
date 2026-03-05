@@ -1,0 +1,907 @@
+---
+name: Access List
+class_name: aclEntity
+dn: sys/acl
+no_delete: true
+ds_description: This data source can read IPv4 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.
+res_description: This resource can manage IPv4 access control lists (ACLs) on NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports applying ACLs to interfaces in ingress or egress direction.
+doc_path: Security%20and%20Policing/acl:Entity/
+doc_category: Security
+child_classes:
+  - class_name: ipv4aclAF
+    doc_path: Security%20and%20Policing/ipv4acl:AF/
+    rn: ipv4
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ipv4aclACL
+        doc_path: Security%20and%20Policing/ipv4acl:ACL/
+        rn: name-[%s]
+        type: list
+        tf_name: access_lists
+        description: 'List of IPv4 Access Lists.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of Access lists.'
+            example: ACL1
+          - nxos_name: fragments
+            tf_name: fragments
+            type: String
+            description: "Fragments type for IPv4 and IPv6."
+            enum_values:
+              - disabled
+              - deny-all
+              - permit-all
+            example: permit-all
+          - nxos_name: ignRoutable
+            tf_name: ignore_routable
+            type: Bool
+            description: "Ignore Multicast Routed ACLs."
+            example: false
+          - nxos_name: perACEStatistics
+            tf_name: per_ace_statistics
+            type: String
+            description: "Per Access Control Entries statistics."
+            enum_values:
+              - "off"
+              - "on"
+            example: "off"
+          - nxos_name: udfPresent
+            tf_name: udf_present
+            type: Bool
+            description: "Flag to denote UDF is present."
+            example: false
+        child_classes:
+          - class_name: ipv4aclACE
+            doc_path: Security%20and%20Policing/ipv4acl:ACE/
+            rn: seq-%v
+            type: list
+            tf_name: entries
+            description: 'Access list entries.'
+            attributes:
+              - nxos_name: seqNum
+                tf_name: sequence_number
+                type: Int64
+                id: true
+                min_int: 0
+                max_int: 4294967295
+                description: "Sequence number."
+                example: 10
+              - nxos_name: ack
+                tf_name: ack
+                type: Bool
+                description: "TCP ACK flag."
+                example: false
+              - nxos_name: action
+                tf_name: action
+                type: String
+                description: "Specify packets to forward or reject."
+                enum_values:
+                  - invalid
+                  - permit
+                  - deny
+                example: permit
+              - nxos_name: dscp
+                tf_name: dscp
+                type: Int64
+                min_int: 0
+                max_int: 63
+                description: "Match DSCP."
+                example: 0
+              - nxos_name: dstAddrGroup
+                tf_name: destination_address_group
+                type: String
+                description: "Destination address group."
+                exclude_test: true
+                example: AG1
+              - nxos_name: dstPort1
+                tf_name: destination_port_1
+                type: String
+                enum_values:
+                  - echo
+                  - discard
+                  - daytime
+                  - chargen
+                  - ftp-data
+                  - ftp
+                  - telnet
+                  - smtp
+                  - time
+                  - nameserver
+                  - whois
+                  - tacacs
+                  - domain
+                  - bootps
+                  - bootpc
+                  - tftp
+                  - gopher
+                  - finger
+                  - www
+                  - hostname
+                  - pop2
+                  - pop3
+                  - sunrpc
+                  - ident
+                  - nntp
+                  - ntp
+                  - netbios-ns
+                  - netbios-dgm
+                  - netbios-ss
+                  - snmp
+                  - snmptrap
+                  - xdmcp
+                  - bgp
+                  - irc
+                  - dnsix
+                  - mobile-ip
+                  - pim-auto-rp
+                  - isakmp
+                  - biff
+                  - exec
+                  - who
+                  - login
+                  - syslog
+                  - cmd
+                  - lpd
+                  - talk
+                  - rip
+                  - uucp
+                  - klogin
+                  - kshell
+                  - drip
+                  - non500-isakmp
+                allow_non_enum_values: true
+                description: "First destination port number."
+                example: 443
+              - nxos_name: dstPort2
+                tf_name: destination_port_2
+                type: String
+                enum_values:
+                  - echo
+                  - discard
+                  - daytime
+                  - chargen
+                  - ftp-data
+                  - ftp
+                  - telnet
+                  - smtp
+                  - time
+                  - nameserver
+                  - whois
+                  - tacacs
+                  - domain
+                  - bootps
+                  - bootpc
+                  - tftp
+                  - gopher
+                  - finger
+                  - www
+                  - hostname
+                  - pop2
+                  - pop3
+                  - sunrpc
+                  - ident
+                  - nntp
+                  - ntp
+                  - netbios-ns
+                  - netbios-dgm
+                  - netbios-ss
+                  - snmp
+                  - snmptrap
+                  - xdmcp
+                  - bgp
+                  - irc
+                  - dnsix
+                  - mobile-ip
+                  - pim-auto-rp
+                  - isakmp
+                  - biff
+                  - exec
+                  - who
+                  - login
+                  - syslog
+                  - cmd
+                  - lpd
+                  - talk
+                  - rip
+                  - uucp
+                  - klogin
+                  - kshell
+                  - drip
+                  - non500-isakmp
+                allow_non_enum_values: true
+                description: "Second destination port number."
+                example: 0
+              - nxos_name: dstPortGroup
+                tf_name: destination_port_group
+                type: String
+                description: "Destination port group."
+                exclude_test: true
+                example: PG1
+              - nxos_name: dstPortMask
+                tf_name: destination_port_mask
+                type: String
+                enum_values:
+                  - echo
+                  - discard
+                  - daytime
+                  - chargen
+                  - ftp-data
+                  - ftp
+                  - telnet
+                  - smtp
+                  - time
+                  - nameserver
+                  - whois
+                  - tacacs
+                  - domain
+                  - bootps
+                  - bootpc
+                  - tftp
+                  - gopher
+                  - finger
+                  - www
+                  - hostname
+                  - pop2
+                  - pop3
+                  - sunrpc
+                  - ident
+                  - nntp
+                  - ntp
+                  - netbios-ns
+                  - netbios-dgm
+                  - netbios-ss
+                  - snmp
+                  - snmptrap
+                  - xdmcp
+                  - bgp
+                  - irc
+                  - dnsix
+                  - mobile-ip
+                  - pim-auto-rp
+                  - isakmp
+                  - biff
+                  - exec
+                  - who
+                  - login
+                  - syslog
+                  - cmd
+                  - lpd
+                  - talk
+                  - rip
+                  - uucp
+                  - klogin
+                  - kshell
+                  - drip
+                  - non500-isakmp
+                allow_non_enum_values: true
+                description: "Destination Port Mask."
+                exclude_test: true
+                example: 0
+              - nxos_name: dstPortOp
+                tf_name: destination_port_operator
+                type: String
+                description: "Destination port operator."
+                enum_values:
+                  - none
+                  - lt
+                  - gt
+                  - eq
+                  - neq
+                  - range
+                example: eq
+              - nxos_name: dstPrefix
+                tf_name: destination_prefix
+                type: String
+                description: "Destination IPv4 prefix."
+                example: 10.1.1.0
+              - nxos_name: dstPrefixLength
+                tf_name: destination_prefix_length
+                type: String
+                description: "Destination IPv4 prefix length."
+                example: 24
+              - nxos_name: dstPrefixMask
+                tf_name: destination_prefix_mask
+                type: String
+                description: "Destination IPv4 prefix mask."
+                exclude_test: true
+                example: 255.255.255.0
+              - nxos_name: est
+                tf_name: established
+                type: Bool
+                description: "TCP EST flag."
+                example: false
+              - nxos_name: fin
+                tf_name: fin
+                type: Bool
+                description: "TCP FIN flag."
+                example: false
+              - nxos_name: fragment
+                tf_name: fragment
+                type: Bool
+                description: "Non-initial fragment."
+                example: false
+              - nxos_name: httpOption
+                tf_name: http_option_type
+                type: String
+                description: "HTTP option method."
+                enum_values:
+                  - invalid
+                  - get
+                  - put
+                  - head
+                  - post
+                  - delete
+                  - trace
+                  - connect
+                example: invalid
+              - nxos_name: icmpCode
+                tf_name: icmp_code
+                type: Int64
+                min_int: 0
+                max_int: 256
+                description: "ICMP code."
+                example: 0
+              - nxos_name: icmpType
+                tf_name: icmp_type
+                type: Int64
+                min_int: 0
+                max_int: 256
+                description: "ICMP type."
+                example: 0
+              - nxos_name: logging
+                tf_name: log
+                type: Bool
+                description: "Log matches against ACL entry."
+                example: false
+              - nxos_name: pktLen1
+                tf_name: packet_length_1
+                type: String
+                description: "First packet length. Either `invalid` or a number between 19 and 9210."
+                exclude_test: true
+                example: 19
+              - nxos_name: pktLen2
+                tf_name: packet_length_2
+                type: String
+                description: "Second packet length. Either `invalid` or a number between 19 and 9210."
+                exclude_test: true
+                example: 9210
+              - nxos_name: pktLenOp
+                tf_name: packet_length_operator
+                type: String
+                description: "Packet length operator."
+                enum_values:
+                  - none
+                  - lt
+                  - gt
+                  - eq
+                  - neq
+                  - range
+                exclude_test: true
+                example: range
+              - nxos_name: precedence
+                tf_name: precedence
+                type: String
+                description: "IPv4 precedence. Either `unspecified` or a number between 0 and 7."
+                exclude_test: true
+                example: "0"
+              - nxos_name: protocol
+                tf_name: protocol
+                type: String
+                enum_values:
+                  - ip
+                  - icmp
+                  - igmp
+                  - tcp
+                  - udp
+                  - gre
+                  - esp
+                  - ahp
+                  - eigrp
+                  - ospf
+                  - nos
+                  - pim
+                  - pcp
+                  - ethertype
+                  - udf
+                allow_non_enum_values: true
+                description: "Protocol for access-list entry."
+                example: tcp
+              - nxos_name: protocolMask
+                tf_name: protocol_mask
+                type: String
+                enum_values:
+                  - ip
+                  - icmp
+                  - igmp
+                  - tcp
+                  - udp
+                  - gre
+                  - esp
+                  - ahp
+                  - eigrp
+                  - ospf
+                  - nos
+                  - pim
+                  - pcp
+                  - ethertype
+                  - udf
+                allow_non_enum_values: true
+                description: "Defines the Protocol Mask."
+                exclude_test: true
+                example: tcp
+              - nxos_name: psh
+                tf_name: psh
+                type: Bool
+                description: "TCP PSH flag."
+                example: false
+              - nxos_name: redirect
+                tf_name: redirect
+                type: String
+                description: "Redirect action."
+                exclude_test: true
+                example: RD
+              - nxos_name: remark
+                tf_name: remark
+                type: String
+                description: "Access-list entry comment."
+                exclude_test: true
+                example: Line1
+              - nxos_name: rev
+                tf_name: rev
+                type: Bool
+                description: "TCP reversed flag."
+                example: false
+              - nxos_name: rst
+                tf_name: rst
+                type: Bool
+                description: "TCP RST flag."
+                example: false
+              - nxos_name: srcAddrGroup
+                tf_name: source_address_group
+                type: String
+                description: "Source address group."
+                exclude_test: true
+                example: AG2
+              - nxos_name: srcPort1
+                tf_name: source_port_1
+                type: String
+                enum_values:
+                  - echo
+                  - discard
+                  - daytime
+                  - chargen
+                  - ftp-data
+                  - ftp
+                  - telnet
+                  - smtp
+                  - time
+                  - nameserver
+                  - whois
+                  - tacacs
+                  - domain
+                  - bootps
+                  - bootpc
+                  - tftp
+                  - gopher
+                  - finger
+                  - www
+                  - hostname
+                  - pop2
+                  - pop3
+                  - sunrpc
+                  - ident
+                  - nntp
+                  - ntp
+                  - netbios-ns
+                  - netbios-dgm
+                  - netbios-ss
+                  - snmp
+                  - snmptrap
+                  - xdmcp
+                  - bgp
+                  - irc
+                  - dnsix
+                  - mobile-ip
+                  - pim-auto-rp
+                  - isakmp
+                  - biff
+                  - exec
+                  - who
+                  - login
+                  - syslog
+                  - cmd
+                  - lpd
+                  - talk
+                  - rip
+                  - uucp
+                  - klogin
+                  - kshell
+                  - drip
+                  - non500-isakmp
+                allow_non_enum_values: true
+                description: "First source port."
+                example: 443
+              - nxos_name: srcPort2
+                tf_name: source_port_2
+                type: String
+                enum_values:
+                  - echo
+                  - discard
+                  - daytime
+                  - chargen
+                  - ftp-data
+                  - ftp
+                  - telnet
+                  - smtp
+                  - time
+                  - nameserver
+                  - whois
+                  - tacacs
+                  - domain
+                  - bootps
+                  - bootpc
+                  - tftp
+                  - gopher
+                  - finger
+                  - www
+                  - hostname
+                  - pop2
+                  - pop3
+                  - sunrpc
+                  - ident
+                  - nntp
+                  - ntp
+                  - netbios-ns
+                  - netbios-dgm
+                  - netbios-ss
+                  - snmp
+                  - snmptrap
+                  - xdmcp
+                  - bgp
+                  - irc
+                  - dnsix
+                  - mobile-ip
+                  - pim-auto-rp
+                  - isakmp
+                  - biff
+                  - exec
+                  - who
+                  - login
+                  - syslog
+                  - cmd
+                  - lpd
+                  - talk
+                  - rip
+                  - uucp
+                  - klogin
+                  - kshell
+                  - drip
+                  - non500-isakmp
+                allow_non_enum_values: true
+                description: "Second source port."
+                example: 0
+              - nxos_name: srcPortGroup
+                tf_name: source_port_group
+                type: String
+                description: "Source port group."
+                exclude_test: true
+                example: PG2
+              - nxos_name: srcPortMask
+                tf_name: source_port_mask
+                type: String
+                enum_values:
+                  - echo
+                  - discard
+                  - daytime
+                  - chargen
+                  - ftp-data
+                  - ftp
+                  - telnet
+                  - smtp
+                  - time
+                  - nameserver
+                  - whois
+                  - tacacs
+                  - domain
+                  - bootps
+                  - bootpc
+                  - tftp
+                  - gopher
+                  - finger
+                  - www
+                  - hostname
+                  - pop2
+                  - pop3
+                  - sunrpc
+                  - ident
+                  - nntp
+                  - ntp
+                  - netbios-ns
+                  - netbios-dgm
+                  - netbios-ss
+                  - snmp
+                  - snmptrap
+                  - xdmcp
+                  - bgp
+                  - irc
+                  - dnsix
+                  - mobile-ip
+                  - pim-auto-rp
+                  - isakmp
+                  - biff
+                  - exec
+                  - who
+                  - login
+                  - syslog
+                  - cmd
+                  - lpd
+                  - talk
+                  - rip
+                  - uucp
+                  - klogin
+                  - kshell
+                  - drip
+                  - non500-isakmp
+                allow_non_enum_values: true
+                description: "Defines the Source Port Mask."
+                exclude_test: true
+                example: 0
+              - nxos_name: srcPortOp
+                tf_name: source_port_operator
+                type: String
+                description: "Source port operator."
+                enum_values:
+                  - none
+                  - lt
+                  - gt
+                  - eq
+                  - neq
+                  - range
+                example: eq
+              - nxos_name: srcPrefix
+                tf_name: source_prefix
+                type: String
+                description: "Source IPv4 prefix."
+                example: 20.1.0.0
+              - nxos_name: srcPrefixLength
+                tf_name: source_prefix_length
+                type: String
+                description: "Source IPv4 prefix length."
+                example: 16
+              - nxos_name: srcPrefixMask
+                tf_name: source_prefix_mask
+                type: String
+                description: "Source IPv4 prefix mask."
+                exclude_test: true
+                example: 255.255.0.0
+              - nxos_name: syn
+                tf_name: syn
+                type: Bool
+                description: "TCP SYN flag."
+                example: false
+              - nxos_name: timeRange
+                tf_name: time_range
+                type: String
+                description: "Time range name."
+                exclude_test: true
+                example: TR1
+              - nxos_name: ttl
+                tf_name: ttl
+                type: Int64
+                min_int: 0
+                max_int: 255
+                description: "TTL Operator."
+                exclude_test: true
+                example: 0
+              - nxos_name: urg
+                tf_name: urg
+                type: Bool
+                description: "TCP URG flag."
+                example: false
+              - nxos_name: vlan
+                tf_name: vlan
+                type: Int64
+                min_int: 0
+                max_int: 4095
+                description: "VLAN ID."
+                exclude_test: true
+                example: 4095
+              - nxos_name: vni
+                tf_name: vni
+                type: String
+                description: "NVE VNI ID. Either `invalid` or a number between 0 and 16777216."
+                exclude_test: true
+                example: invalid
+              - nxos_name: captureSession
+                tf_name: capture_session
+                type: Int64
+                min_int: 0
+                max_int: 48
+                description: "Capture session."
+                example: 1
+              - nxos_name: dscpMask
+                tf_name: dscp_mask
+                type: Int64
+                min_int: 0
+                max_int: 63
+                description: "Match DSCP mask."
+                example: 0
+              - nxos_name: icmpStr
+                tf_name: icmp_string
+                type: String
+                description: "ICMP type."
+                enum_values:
+                  - echo-reply
+                  - unreachable
+                  - net-unreachable
+                  - host-unreachable
+                  - dod-host-prohibited
+                  - net-tos-unreachable
+                  - host-tos-unreachable
+                  - administratively-prohibited
+                  - host-precedence-unreachable
+                  - precedence-unreachable
+                  - protocol-unreachable
+                  - port-unreachable
+                  - packet-too-big
+                  - source-route-failed
+                  - network-unknown
+                  - host-unknown
+                  - host-isolated
+                  - dod-net-prohibited
+                  - source-quench
+                  - redirect
+                  - net-redirect
+                  - host-redirect
+                  - net-tos-redirect
+                  - host-tos-redirect
+                  - alternate-address
+                  - echo
+                  - router-advertisement
+                  - router-solicitation
+                  - time-exceeded
+                  - ttl-exceeded
+                  - reassembly-timeout
+                  - parameter-problem
+                  - general-parameter-problem
+                  - option-missing
+                  - no-room-for-option
+                  - timestamp-request
+                  - timestamp-reply
+                  - information-request
+                  - information-reply
+                  - mask-request
+                  - mask-reply
+                  - traceroute
+                  - conversion-error
+                  - mobile-redirect
+                allow_non_enum_values: true
+                exclude_test: true
+                example: echo
+              - nxos_name: igmpType
+                tf_name: igmp_type
+                type: Int64
+                min_int: 0
+                max_int: 16
+                description: "IGMP type."
+                example: 0
+              - nxos_name: loadShare
+                tf_name: load_share
+                type: Bool
+                description: "Load share across redirect ports."
+                example: false
+              - nxos_name: priorityAll
+                tf_name: priority_all
+                type: Bool
+                description: "Increases priority of IPv4/v6 ACE action."
+                example: false
+              - nxos_name: redirect_all
+                tf_name: redirect_all
+                type: String
+                description: "IPV4/V6 Redirect all action."
+                exclude_test: true
+                example: "eth1/1"
+              - nxos_name: tcpFlagsMask
+                tf_name: tcp_flags_mask
+                type: Int64
+                min_int: 0
+                max_int: 64
+                description: "TCP flags mask."
+                example: 0
+              - nxos_name: tcpOptionLength
+                tf_name: tcp_option_length
+                type: Int64
+                min_int: 0
+                max_int: 41
+                description: "TCP options length."
+                example: 0
+              - nxos_name: telemetryPath
+                tf_name: telemetry_path
+                type: Bool
+                description: "Telemetry path action."
+                example: false
+              - nxos_name: telemetryQueue
+                tf_name: telemetry_queue
+                type: Bool
+                description: "Telemetry queue action."
+                example: false
+              - nxos_name: tos
+                tf_name: type_of_service
+                type: Int64
+                min_int: 0
+                max_int: 15
+                description: "Type of service."
+                example: 0
+      - class_name: aclPolicy
+        doc_path: Security%20and%20Policing/acl:Policy/
+        rn: policy
+        type: single
+        child_classes:
+          - class_name: aclIngress
+            doc_path: Security%20and%20Policing/acl:Ingress/
+            rn: ingress
+            type: single
+            child_classes:
+              - class_name: aclIf
+                doc_path: Security%20and%20Policing/acl:If/
+                rn: intf-[%s]
+                type: list
+                tf_name: ingress_interfaces
+                description: 'List of interfaces with IPv4 ingress access list policy.'
+                attributes:
+                  - nxos_name: name
+                    tf_name: interface_id
+                    type: String
+                    id: true
+                    description: "Must match first field in the output of `show intf brief`. Example: `eth1/1`."
+                    example: eth1/10
+                child_classes:
+                  - class_name: aclInst
+                    doc_path: Security%20and%20Policing/acl:Inst/
+                    rn: acl
+                    type: single
+                    attributes:
+                      - nxos_name: name
+                        tf_name: access_list_name
+                        type: String
+                        description: "Access Control List name."
+                        example: ACL1
+          - class_name: aclEgress
+            doc_path: Security%20and%20Policing/acl:Egress/
+            rn: egress
+            type: single
+            child_classes:
+              - class_name: aclIf
+                doc_path: Security%20and%20Policing/acl:If/
+                rn: intf-[%s]
+                type: list
+                tf_name: egress_interfaces
+                description: 'List of interfaces with IPv4 egress access list policy.'
+                attributes:
+                  - nxos_name: name
+                    tf_name: interface_id
+                    type: String
+                    id: true
+                    description: "Must match first field in the output of `show intf brief`. Example: `eth1/1`."
+                    example: eth1/10
+                child_classes:
+                  - class_name: aclInst
+                    doc_path: Security%20and%20Policing/acl:Inst/
+                    rn: acl
+                    type: single
+                    attributes:
+                      - nxos_name: name
+                        tf_name: access_list_name
+                        type: String
+                        description: "Access Control List name."
+                        example: ACL1
+test_prerequisites:
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3

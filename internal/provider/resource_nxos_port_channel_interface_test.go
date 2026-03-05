@@ -22,6 +22,7 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -34,6 +35,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPortChannelInterface(t *testing.T) {
+	if os.Getenv("PORT_CHANNEL_INTERFACE") == "" {
+		t.Skip("skipping test, set environment variable PORT_CHANNEL_INTERFACE")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.port_channel_mode", "active"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.minimum_links", "2"))

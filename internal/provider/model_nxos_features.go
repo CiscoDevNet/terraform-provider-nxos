@@ -318,8 +318,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmBashShell gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmBashShell.attributes.rn").String()
-				if key == "bashshell" {
+				rnValue := v.Get("fmBashShell.attributes.rn").String()
+				if rnValue == "bashshell" {
 					rfmBashShell = v
 					return false
 				}
@@ -332,8 +332,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmBfd gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmBfd.attributes.rn").String()
-				if key == "bfd" {
+				rnValue := v.Get("fmBfd.attributes.rn").String()
+				if rnValue == "bfd" {
 					rfmBfd = v
 					return false
 				}
@@ -346,8 +346,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmBgp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmBgp.attributes.rn").String()
-				if key == "bgp" {
+				rnValue := v.Get("fmBgp.attributes.rn").String()
+				if rnValue == "bgp" {
 					rfmBgp = v
 					return false
 				}
@@ -360,8 +360,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmDhcp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmDhcp.attributes.rn").String()
-				if key == "dhcp" {
+				rnValue := v.Get("fmDhcp.attributes.rn").String()
+				if rnValue == "dhcp" {
 					rfmDhcp = v
 					return false
 				}
@@ -374,8 +374,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmEvpn gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmEvpn.attributes.rn").String()
-				if key == "evpn" {
+				rnValue := v.Get("fmEvpn.attributes.rn").String()
+				if rnValue == "evpn" {
 					rfmEvpn = v
 					return false
 				}
@@ -388,8 +388,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmHmm gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmHmm.attributes.rn").String()
-				if key == "hmm" {
+				rnValue := v.Get("fmHmm.attributes.rn").String()
+				if rnValue == "hmm" {
 					rfmHmm = v
 					return false
 				}
@@ -402,8 +402,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmHsrp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmHsrp.attributes.rn").String()
-				if key == "hsrp" {
+				rnValue := v.Get("fmHsrp.attributes.rn").String()
+				if rnValue == "hsrp" {
 					rfmHsrp = v
 					return false
 				}
@@ -416,8 +416,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmInterfaceVlan gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmInterfaceVlan.attributes.rn").String()
-				if key == "ifvlan" {
+				rnValue := v.Get("fmInterfaceVlan.attributes.rn").String()
+				if rnValue == "ifvlan" {
 					rfmInterfaceVlan = v
 					return false
 				}
@@ -430,8 +430,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmIsis gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmIsis.attributes.rn").String()
-				if key == "isis" {
+				rnValue := v.Get("fmIsis.attributes.rn").String()
+				if rnValue == "isis" {
 					rfmIsis = v
 					return false
 				}
@@ -444,8 +444,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmLacp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmLacp.attributes.rn").String()
-				if key == "lacp" {
+				rnValue := v.Get("fmLacp.attributes.rn").String()
+				if rnValue == "lacp" {
 					rfmLacp = v
 					return false
 				}
@@ -458,8 +458,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmLldp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmLldp.attributes.rn").String()
-				if key == "lldp" {
+				rnValue := v.Get("fmLldp.attributes.rn").String()
+				if rnValue == "lldp" {
 					rfmLldp = v
 					return false
 				}
@@ -472,8 +472,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmMacsec gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmMacsec.attributes.rn").String()
-				if key == "macsec" {
+				rnValue := v.Get("fmMacsec.attributes.rn").String()
+				if rnValue == "macsec" {
 					rfmMacsec = v
 					return false
 				}
@@ -486,8 +486,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmNetflow gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmNetflow.attributes.rn").String()
-				if key == "netflow" {
+				rnValue := v.Get("fmNetflow.attributes.rn").String()
+				if rnValue == "netflow" {
 					rfmNetflow = v
 					return false
 				}
@@ -500,8 +500,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmNgmvpn gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmNgmvpn.attributes.rn").String()
-				if key == "ngmvpn" {
+				rnValue := v.Get("fmNgmvpn.attributes.rn").String()
+				if rnValue == "ngmvpn" {
 					rfmNgmvpn = v
 					return false
 				}
@@ -514,8 +514,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmNgoam gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmNgoam.attributes.rn").String()
-				if key == "ngoam" {
+				rnValue := v.Get("fmNgoam.attributes.rn").String()
+				if rnValue == "ngoam" {
 					rfmNgoam = v
 					return false
 				}
@@ -528,8 +528,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmNvo gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmNvo.attributes.rn").String()
-				if key == "nvo" {
+				rnValue := v.Get("fmNvo.attributes.rn").String()
+				if rnValue == "nvo" {
 					rfmNvo = v
 					return false
 				}
@@ -542,8 +542,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmOspf gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmOspf.attributes.rn").String()
-				if key == "ospf" {
+				rnValue := v.Get("fmOspf.attributes.rn").String()
+				if rnValue == "ospf" {
 					rfmOspf = v
 					return false
 				}
@@ -556,8 +556,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmOspfv3 gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmOspfv3.attributes.rn").String()
-				if key == "ospfv3" {
+				rnValue := v.Get("fmOspfv3.attributes.rn").String()
+				if rnValue == "ospfv3" {
 					rfmOspfv3 = v
 					return false
 				}
@@ -570,8 +570,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmPim gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmPim.attributes.rn").String()
-				if key == "pim" {
+				rnValue := v.Get("fmPim.attributes.rn").String()
+				if rnValue == "pim" {
 					rfmPim = v
 					return false
 				}
@@ -584,8 +584,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmPtp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmPtp.attributes.rn").String()
-				if key == "ptp" {
+				rnValue := v.Get("fmPtp.attributes.rn").String()
+				if rnValue == "ptp" {
 					rfmPtp = v
 					return false
 				}
@@ -598,8 +598,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmPvlan gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmPvlan.attributes.rn").String()
-				if key == "pvlan" {
+				rnValue := v.Get("fmPvlan.attributes.rn").String()
+				if rnValue == "pvlan" {
 					rfmPvlan = v
 					return false
 				}
@@ -612,8 +612,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmSflow gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmSflow.attributes.rn").String()
-				if key == "sflow" {
+				rnValue := v.Get("fmSflow.attributes.rn").String()
+				if rnValue == "sflow" {
 					rfmSflow = v
 					return false
 				}
@@ -626,8 +626,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmSsh gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmSsh.attributes.rn").String()
-				if key == "ssh" {
+				rnValue := v.Get("fmSsh.attributes.rn").String()
+				if rnValue == "ssh" {
 					rfmSsh = v
 					return false
 				}
@@ -640,8 +640,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmTacacsplus gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmTacacsplus.attributes.rn").String()
-				if key == "tacacsplus" {
+				rnValue := v.Get("fmTacacsplus.attributes.rn").String()
+				if rnValue == "tacacsplus" {
 					rfmTacacsplus = v
 					return false
 				}
@@ -654,8 +654,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmTelnet gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmTelnet.attributes.rn").String()
-				if key == "telnet" {
+				rnValue := v.Get("fmTelnet.attributes.rn").String()
+				if rnValue == "telnet" {
 					rfmTelnet = v
 					return false
 				}
@@ -668,8 +668,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmUdld gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmUdld.attributes.rn").String()
-				if key == "udld" {
+				rnValue := v.Get("fmUdld.attributes.rn").String()
+				if rnValue == "udld" {
 					rfmUdld = v
 					return false
 				}
@@ -682,8 +682,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmVnSegment gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmVnSegment.attributes.rn").String()
-				if key == "vnsegment" {
+				rnValue := v.Get("fmVnSegment.attributes.rn").String()
+				if rnValue == "vnsegment" {
 					rfmVnSegment = v
 					return false
 				}
@@ -696,8 +696,8 @@ func (data *Features) fromBody(res gjson.Result) {
 		var rfmVpc gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("fmVpc.attributes.rn").String()
-				if key == "vpc" {
+				rnValue := v.Get("fmVpc.attributes.rn").String()
+				if rnValue == "vpc" {
 					rfmVpc = v
 					return false
 				}
@@ -716,8 +716,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmBashShell gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmBashShell.attributes.rn").String()
-			if key == "bashshell" {
+			rnValue := v.Get("fmBashShell.attributes.rn").String()
+			if rnValue == "bashshell" {
 				rfmBashShell = v
 				return false
 			}
@@ -732,8 +732,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmBfd gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmBfd.attributes.rn").String()
-			if key == "bfd" {
+			rnValue := v.Get("fmBfd.attributes.rn").String()
+			if rnValue == "bfd" {
 				rfmBfd = v
 				return false
 			}
@@ -748,8 +748,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmBgp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmBgp.attributes.rn").String()
-			if key == "bgp" {
+			rnValue := v.Get("fmBgp.attributes.rn").String()
+			if rnValue == "bgp" {
 				rfmBgp = v
 				return false
 			}
@@ -764,8 +764,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmDhcp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmDhcp.attributes.rn").String()
-			if key == "dhcp" {
+			rnValue := v.Get("fmDhcp.attributes.rn").String()
+			if rnValue == "dhcp" {
 				rfmDhcp = v
 				return false
 			}
@@ -780,8 +780,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmEvpn gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmEvpn.attributes.rn").String()
-			if key == "evpn" {
+			rnValue := v.Get("fmEvpn.attributes.rn").String()
+			if rnValue == "evpn" {
 				rfmEvpn = v
 				return false
 			}
@@ -796,8 +796,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmHmm gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmHmm.attributes.rn").String()
-			if key == "hmm" {
+			rnValue := v.Get("fmHmm.attributes.rn").String()
+			if rnValue == "hmm" {
 				rfmHmm = v
 				return false
 			}
@@ -812,8 +812,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmHsrp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmHsrp.attributes.rn").String()
-			if key == "hsrp" {
+			rnValue := v.Get("fmHsrp.attributes.rn").String()
+			if rnValue == "hsrp" {
 				rfmHsrp = v
 				return false
 			}
@@ -828,8 +828,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmInterfaceVlan gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmInterfaceVlan.attributes.rn").String()
-			if key == "ifvlan" {
+			rnValue := v.Get("fmInterfaceVlan.attributes.rn").String()
+			if rnValue == "ifvlan" {
 				rfmInterfaceVlan = v
 				return false
 			}
@@ -844,8 +844,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmIsis gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmIsis.attributes.rn").String()
-			if key == "isis" {
+			rnValue := v.Get("fmIsis.attributes.rn").String()
+			if rnValue == "isis" {
 				rfmIsis = v
 				return false
 			}
@@ -860,8 +860,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmLacp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmLacp.attributes.rn").String()
-			if key == "lacp" {
+			rnValue := v.Get("fmLacp.attributes.rn").String()
+			if rnValue == "lacp" {
 				rfmLacp = v
 				return false
 			}
@@ -876,8 +876,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmLldp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmLldp.attributes.rn").String()
-			if key == "lldp" {
+			rnValue := v.Get("fmLldp.attributes.rn").String()
+			if rnValue == "lldp" {
 				rfmLldp = v
 				return false
 			}
@@ -892,8 +892,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmMacsec gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmMacsec.attributes.rn").String()
-			if key == "macsec" {
+			rnValue := v.Get("fmMacsec.attributes.rn").String()
+			if rnValue == "macsec" {
 				rfmMacsec = v
 				return false
 			}
@@ -908,8 +908,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmNetflow gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmNetflow.attributes.rn").String()
-			if key == "netflow" {
+			rnValue := v.Get("fmNetflow.attributes.rn").String()
+			if rnValue == "netflow" {
 				rfmNetflow = v
 				return false
 			}
@@ -924,8 +924,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmNgmvpn gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmNgmvpn.attributes.rn").String()
-			if key == "ngmvpn" {
+			rnValue := v.Get("fmNgmvpn.attributes.rn").String()
+			if rnValue == "ngmvpn" {
 				rfmNgmvpn = v
 				return false
 			}
@@ -940,8 +940,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmNgoam gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmNgoam.attributes.rn").String()
-			if key == "ngoam" {
+			rnValue := v.Get("fmNgoam.attributes.rn").String()
+			if rnValue == "ngoam" {
 				rfmNgoam = v
 				return false
 			}
@@ -956,8 +956,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmNvo gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmNvo.attributes.rn").String()
-			if key == "nvo" {
+			rnValue := v.Get("fmNvo.attributes.rn").String()
+			if rnValue == "nvo" {
 				rfmNvo = v
 				return false
 			}
@@ -972,8 +972,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmOspf gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmOspf.attributes.rn").String()
-			if key == "ospf" {
+			rnValue := v.Get("fmOspf.attributes.rn").String()
+			if rnValue == "ospf" {
 				rfmOspf = v
 				return false
 			}
@@ -988,8 +988,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmOspfv3 gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmOspfv3.attributes.rn").String()
-			if key == "ospfv3" {
+			rnValue := v.Get("fmOspfv3.attributes.rn").String()
+			if rnValue == "ospfv3" {
 				rfmOspfv3 = v
 				return false
 			}
@@ -1004,8 +1004,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmPim gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmPim.attributes.rn").String()
-			if key == "pim" {
+			rnValue := v.Get("fmPim.attributes.rn").String()
+			if rnValue == "pim" {
 				rfmPim = v
 				return false
 			}
@@ -1020,8 +1020,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmPtp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmPtp.attributes.rn").String()
-			if key == "ptp" {
+			rnValue := v.Get("fmPtp.attributes.rn").String()
+			if rnValue == "ptp" {
 				rfmPtp = v
 				return false
 			}
@@ -1036,8 +1036,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmPvlan gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmPvlan.attributes.rn").String()
-			if key == "pvlan" {
+			rnValue := v.Get("fmPvlan.attributes.rn").String()
+			if rnValue == "pvlan" {
 				rfmPvlan = v
 				return false
 			}
@@ -1052,8 +1052,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmSflow gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmSflow.attributes.rn").String()
-			if key == "sflow" {
+			rnValue := v.Get("fmSflow.attributes.rn").String()
+			if rnValue == "sflow" {
 				rfmSflow = v
 				return false
 			}
@@ -1068,8 +1068,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmSsh gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmSsh.attributes.rn").String()
-			if key == "ssh" {
+			rnValue := v.Get("fmSsh.attributes.rn").String()
+			if rnValue == "ssh" {
 				rfmSsh = v
 				return false
 			}
@@ -1084,8 +1084,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmTacacsplus gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmTacacsplus.attributes.rn").String()
-			if key == "tacacsplus" {
+			rnValue := v.Get("fmTacacsplus.attributes.rn").String()
+			if rnValue == "tacacsplus" {
 				rfmTacacsplus = v
 				return false
 			}
@@ -1100,8 +1100,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmTelnet gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmTelnet.attributes.rn").String()
-			if key == "telnet" {
+			rnValue := v.Get("fmTelnet.attributes.rn").String()
+			if rnValue == "telnet" {
 				rfmTelnet = v
 				return false
 			}
@@ -1116,8 +1116,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmUdld gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmUdld.attributes.rn").String()
-			if key == "udld" {
+			rnValue := v.Get("fmUdld.attributes.rn").String()
+			if rnValue == "udld" {
 				rfmUdld = v
 				return false
 			}
@@ -1132,8 +1132,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmVnSegment gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmVnSegment.attributes.rn").String()
-			if key == "vnsegment" {
+			rnValue := v.Get("fmVnSegment.attributes.rn").String()
+			if rnValue == "vnsegment" {
 				rfmVnSegment = v
 				return false
 			}
@@ -1148,8 +1148,8 @@ func (data *Features) updateFromBody(res gjson.Result) {
 	var rfmVpc gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("fmVpc.attributes.rn").String()
-			if key == "vpc" {
+			rnValue := v.Get("fmVpc.attributes.rn").String()
+			if rnValue == "vpc" {
 				rfmVpc = v
 				return false
 			}

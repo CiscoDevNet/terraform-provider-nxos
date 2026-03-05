@@ -67,14 +67,17 @@ data "nxos_bgp" "example" {
 - `nexthop_suppress_default_resolution` (String) Suppress use of default route for nexthop address resolution.
 - `rd_dual` (String) Generate Secondary Route Distinguisher for vxlan multisite border gateway.
 - `rd_dual_id` (Number) ID to generate Secondary RD with ID:VNI format.
-- `vrfs` (Attributes List) List of BGP VRFs. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of BGP VRFs.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
 Read-Only:
 
-- `address_families` (Attributes List) List of BGP address families. (see [below for nested schema](#nestedatt--vrfs--address_families))
+- `address_families` (Attributes Map) List of BGP address families.
+  - Map key: `address_family` - Type.
+  - Key choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt` (see [below for nested schema](#nestedatt--vrfs--address_families))
 - `alloc_index` (Number) Allocate index for vrf (Value in the range 1-8000).
 - `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
 - `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
@@ -89,9 +92,10 @@ Read-Only:
 - `local_asn` (String) Local Asn for the EBGP neighbor.
 - `max_as_limit` (Number) Max AS-Path limit from EBGP neighbor.
 - `mode` (String) The BGP Domain mode.
-- `name` (String) The name of the object.
-- `peer_templates` (Attributes List) List of BGP peer templates. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
-- `peers` (Attributes List) List of BGP peers. (see [below for nested schema](#nestedatt--vrfs--peers))
+- `peer_templates` (Attributes Map) List of BGP peer templates.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
+- `peers` (Attributes Map) List of BGP peers.
+  - Map key: `address` - Peer address. (see [below for nested schema](#nestedatt--vrfs--peers))
 - `prefix_peer_timeout` (Number) Prefix Peer Timeout in secs.
 - `prefix_peer_wait_time` (Number) Prefix Peer Wait Time in secs.
 - `reconnect_interval` (Number) Connection reconnect interval in secs.
@@ -107,12 +111,12 @@ Read-Only:
 
 Read-Only:
 
-- `address_family` (String) Type.
 - `advertise_l2vpn_evpn` (String) Advertise L2vpn Evpn.
 - `advertise_only_active_routes` (String) Advertise only active routes to peers
 - `advertise_physical_ip_for_type5_routes` (String) Advertise physical IP for type-5 routes
 - `advertise_system_mac` (String) Advertise extra EVPN RT-2 with system MAC.
-- `advertised_prefixes` (Attributes List) List of BGP advertised prefixes. (see [below for nested schema](#nestedatt--vrfs--address_families--advertised_prefixes))
+- `advertised_prefixes` (Attributes Map) List of BGP advertised prefixes.
+  - Map key: `prefix` - IP address of the network or prefix to advertise. (see [below for nested schema](#nestedatt--vrfs--address_families--advertised_prefixes))
 - `allocate_label_all` (String) Allocate labels for all routes.
 - `allocate_label_option_b` (String) Allow allocation of option B labels.
 - `allocate_label_route_map` (String) Allocate labels for selective routes.
@@ -138,7 +142,10 @@ Read-Only:
 - `origin_as_validate_signal_ibgp` (String) Send Origin Validation State Extended Community to ibgp neighbors.
 - `originate_map` (String) originate-map route map name.
 - `prefix_priority` (String) Enable prefix priority for AF
-- `redistributions` (Attributes List) List of BGP route redistributions. (see [below for nested schema](#nestedatt--vrfs--address_families--redistributions))
+- `redistributions` (Attributes Map) List of BGP route redistributions.
+  - Map key format: `<protocol>;<protocol_instance>`
+  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.
+  - Key component `protocol_instance`: The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols). (see [below for nested schema](#nestedatt--vrfs--address_families--redistributions))
 - `retain_rt_all` (String) Retain Route Target All
 - `retain_rt_route_map` (String) Retain Route Target Route Map.
 - `table_map_filter` (String) Selective route download.
@@ -154,7 +161,6 @@ Read-Only:
 Read-Only:
 
 - `evpn` (String) Evpn to advertise route towards evpn side.
-- `prefix` (String) IP address of the network or prefix to advertise.
 - `route_map` (String) Route map to modify attributes.
 
 
@@ -164,8 +170,6 @@ Read-Only:
 Read-Only:
 
 - `asn` (String) The autonomous system number.
-- `protocol` (String) The list of protocols to match.
-- `protocol_instance` (String) The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).
 - `route_map` (String) The name of the default route leak policy route map. This route map name is used to control distribution.
 - `scope` (String) The domain applicable to the capability.
 - `srv6_prefix_type` (String) SRv6 Prefix Type; Valid only when proto is srv6.
@@ -192,13 +196,14 @@ Read-Only:
 - `log_neighbor_changes` (String) Log Neighbor Changes.
 - `low_memory_exempt` (String) Low Memory Exempt.
 - `max_peer_count` (Number) Maximum Peers for the prefix or interface.
-- `name` (String) The name of the object.
 - `password` (String) Configure a password for neighbor.
 - `password_type` (String) Password EnCrypt Type.
 - `peer_control` (String) Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
-- `peer_template_address_families` (Attributes List) List of BGP peer template address families. (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families))
+- `peer_template_address_families` (Attributes Map) List of BGP peer template address families.
+  - Map key: `address_family` - Type.
+  - Key choices: `ipv4-ucast`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate` (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families))
 - `peer_type` (String) Neighbor Fabric Type.
 - `private_as_control` (String) Private AS Control.
 - `remote_asn` (String) Autonomous System Number.
@@ -211,7 +216,6 @@ Read-Only:
 
 Read-Only:
 
-- `address_family` (String) Type.
 - `advertise_gateway_ip` (String) Advertise Gateway IP in Type-5 routes to neighbor.
 - `advertise_local_labeled_route` (String) Advertise a route with local label to peer.
 - `advertisement_interval` (Number) Neighbor advertisement interval.
@@ -246,7 +250,6 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) Peer address.
 - `admin_state` (String) Administrative State.
 - `affinity_group` (Number) Affinity group for the neighbor.
 - `asn_type` (String) Specify peer ASN type as External or Internal.
@@ -266,7 +269,9 @@ Read-Only:
 - `max_peer_count` (Number) Maximum Peers For Prefix.
 - `password` (String) Password.
 - `password_type` (String) Password EnCrypt Type.
-- `peer_address_families` (Attributes List) List of BGP peer address families. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families))
+- `peer_address_families` (Attributes Map) List of BGP peer address families.
+  - Map key: `address_family` - Type.
+  - Key choices: `ipv4-ucast`, `ipv4-mvpn`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate` (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families))
 - `peer_control` (String) Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
@@ -283,7 +288,6 @@ Read-Only:
 
 Read-Only:
 
-- `address_family` (String) Type.
 - `advertise_gateway_ip` (String) Advertise Gateway IP in Type-5 routes to neighbor.
 - `advertise_local_labeled_route` (String) Advertise a route with local label to peer.
 - `advertisement_interval` (Number) Neighbor advertisement interval.
@@ -299,9 +303,13 @@ Read-Only:
 - `encapsulation_mpls` (String) Configure encapsulation type for EVPN routes.
 - `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
 - `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
-- `prefix_list_controls` (Attributes List) List of BGP peer address family prefix list controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--prefix_list_controls))
+- `prefix_list_controls` (Attributes Map) List of BGP peer address family prefix list controls.
+  - Map key: `direction` - Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--prefix_list_controls))
 - `rewrite_rt_asn` (String) Auto generate RTs for EBGP neighbor.
-- `route_controls` (Attributes List) List of BGP peer address family route controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--route_controls))
+- `route_controls` (Attributes Map) List of BGP peer address family route controls.
+  - Map key: `direction` - Direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--route_controls))
 - `send_community_extended` (String) Send-community extended.
 - `send_community_standard` (String) Send-community standard.
 - `site_of_origin` (String) Site-of-origin extcommunity.
@@ -314,7 +322,6 @@ Read-Only:
 
 Read-Only:
 
-- `direction` (String) Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
 - `list` (String) Name of list to control the route distribution.
 
 
@@ -323,5 +330,4 @@ Read-Only:
 
 Read-Only:
 
-- `direction` (String) Direction.
 - `route_map_name` (String) Route Map.

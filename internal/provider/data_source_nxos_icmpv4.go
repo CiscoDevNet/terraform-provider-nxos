@@ -80,24 +80,16 @@ func (d *ICMPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "The control state.",
 				Computed:            true,
 			},
-			"vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: "List of ICMPv4 VRF configurations.",
+			"vrfs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of ICMPv4 VRF configurations.\n  - Map key: `name` - The name of the object.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "The name of the object.",
-							Computed:            true,
-						},
-						"interfaces": schema.ListNestedAttribute{
-							MarkdownDescription: "List of ICMPv4 interface configurations.",
+						"interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of ICMPv4 interface configurations.\n  - Map key: `id` - Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"id": schema.StringAttribute{
-										MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `vlan100`.",
-										Computed:            true,
-									},
 									"control": schema.StringAttribute{
 										MarkdownDescription: "The control state. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.",
 										Computed:            true,

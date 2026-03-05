@@ -1,5 +1,4 @@
 import {
-  to = nxos_physical_interfaces.example
-  identity = {
-  }
+  to       = nxos_physical_interfaces.example
+  identity = {}
 }

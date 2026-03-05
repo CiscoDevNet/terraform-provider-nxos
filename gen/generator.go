@@ -22,6 +22,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -354,6 +355,16 @@ var functions = template.FuncMap{
 	"childRn":             ChildRn,
 	"allChildClassNames":  AllChildClassNames,
 	"join":                strings.Join,
+	"hasNonIdAttrs":       HasNonIdAttrs,
+"needsPlanItem":       NeedsPlanItem,
+	"idCount":             IdCount,
+	"mapKeyExpr":          MapKeyExpr,
+	"mapKeyExample":       MapKeyExample,
+	"mapKeyParse":         MapKeyParse,
+	"mapKeySjsonSetStmts": MapKeySjsonSetStmts,
+	"mapKeyMatchExpr":     MapKeyMatchExpr,
+	"mapKeyRnFormatArgs":  MapKeyRnFormatArgs,
+	"mapKeyDescription":   MapKeyDescription,
 }
 
 // AllChildClassNames recursively collects all child class names.
@@ -364,6 +375,197 @@ func AllChildClassNames(children []YamlConfigChildClass) []string {
 		names = append(names, AllChildClassNames(c.ChildClasses)...)
 	}
 	return names
+}
+
+// HasNonIdAttrs returns true if there is at least one non-id attribute (excluding reference_only and value-only).
+func HasNonIdAttrs(attrs []YamlConfigAttribute) bool {
+	for _, a := range attrs {
+		if !a.Id && !a.ReferenceOnly && a.Value == "" {
+			return true
+		}
+	}
+	return false
+}
+
+// NeedsPlanItem returns true if any child in the list needs a planItem variable
+// for delete detection (list children always need it; single children need it only if they have child_classes).
+func NeedsPlanItem(children []YamlConfigChildClass) bool {
+	for _, c := range children {
+		if c.Type == "list" {
+			return true
+		}
+		if c.Type == "single" && len(c.ChildClasses) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+// IdCount returns the number of id: true attributes.
+func IdCount(attrs []YamlConfigAttribute) int {
+	n := 0
+	for _, a := range attrs {
+		if a.Id {
+			n++
+		}
+	}
+	return n
+}
+
+// idAttrs returns only the id: true attributes in order.
+func idAttrs(attrs []YamlConfigAttribute) []YamlConfigAttribute {
+	var result []YamlConfigAttribute
+	for _, a := range attrs {
+		if a.Id {
+			result = append(result, a)
+		}
+	}
+	return result
+}
+
+// MapKeyExpr returns a Go expression to compute a map key from ID attributes
+// read from a gjson result variable (e.g., "value").
+func MapKeyExpr(varName string, attrs []YamlConfigAttribute) string {
+	ids := idAttrs(attrs)
+	if len(ids) == 0 {
+		return `""`
+	}
+	if len(ids) == 1 {
+		return varName + `.Get("attributes.` + ids[0].NxosName + `").String()`
+	}
+	var parts []string
+	for _, a := range ids {
+		parts = append(parts, varName+`.Get("attributes.`+a.NxosName+`").String()`)
+	}
+	return strings.Join(parts, ` + ";" + `)
+}
+
+// MapKeyExample returns the map key computed from Example values of ID attributes.
+func MapKeyExample(attrs []YamlConfigAttribute) string {
+	ids := idAttrs(attrs)
+	if len(ids) == 0 {
+		return ""
+	}
+	if len(ids) == 1 {
+		return ids[0].Example
+	}
+	var parts []string
+	for _, a := range ids {
+		parts = append(parts, a.Example)
+	}
+	return strings.Join(parts, ";")
+}
+
+// MapKeyParse returns Go code to parse a map key back into individual ID values.
+// For single ID: no code needed (the key IS the value).
+// For composite: declares keyParts via strings.SplitN.
+func MapKeyParse(keyVar string, attrs []YamlConfigAttribute) string {
+	ids := idAttrs(attrs)
+	if len(ids) <= 1 {
+		return ""
+	}
+	return "keyParts := strings.SplitN(" + keyVar + `, ";", ` + fmt.Sprintf("%d", len(ids)) + ")"
+}
+
+// MapKeySjsonSetStmts returns Go code with sjson.Set calls to write ID values from the parsed key.
+func MapKeySjsonSetStmts(keyVar string, attrs []YamlConfigAttribute) string {
+	ids := idAttrs(attrs)
+	if len(ids) == 0 {
+		return ""
+	}
+	var lines []string
+	if len(ids) == 1 {
+		lines = append(lines, `attrs, _ = sjson.Set(attrs, "`+ids[0].NxosName+`", `+keyVar+`)`)
+	} else {
+		for i, a := range ids {
+			lines = append(lines, fmt.Sprintf(`attrs, _ = sjson.Set(attrs, "%s", keyParts[%d])`, a.NxosName, i))
+		}
+	}
+	return strings.Join(lines, "\n\t\t")
+}
+
+// MapKeyMatchExpr returns a Go boolean expression to check if a gjson result's
+// ID attributes match the map key.
+func MapKeyMatchExpr(keyVar string, className string, attrs []YamlConfigAttribute) string {
+	ids := idAttrs(attrs)
+	if len(ids) == 0 {
+		return "true"
+	}
+	if len(ids) == 1 {
+		return `v.Get("` + className + `.attributes.` + ids[0].NxosName + `").String() == ` + keyVar
+	}
+	var parts []string
+	for i, a := range ids {
+		parts = append(parts, fmt.Sprintf(`v.Get("%s.attributes.%s").String() == keyParts[%d]`, className, a.NxosName, i))
+	}
+	return strings.Join(parts, " &&\n\t\t\t\t\t")
+}
+
+// MapKeyRnFormatArgs returns Go expression arguments for fmt.Sprintf to build the RN from the parsed key.
+func MapKeyRnFormatArgs(keyVar string, attrs []YamlConfigAttribute) string {
+	ids := idAttrs(attrs)
+	if len(ids) == 0 {
+		return ""
+	}
+	if len(ids) == 1 {
+		if ids[0].Type == "Int64" {
+			return "helpers.Must(strconv.ParseInt(" + keyVar + ", 10, 64))"
+		}
+		return keyVar
+	}
+	var args []string
+	for i, a := range ids {
+		part := fmt.Sprintf("keyParts[%d]", i)
+		if a.Type == "Int64" {
+			part = fmt.Sprintf("helpers.Must(strconv.ParseInt(keyParts[%d], 10, 64))", i)
+		}
+		args = append(args, part)
+	}
+	return strings.Join(args, ", ")
+}
+
+// MapKeyDescription returns a MarkdownDescription suffix documenting the map key.
+// The output uses literal backslash-n sequences because it is embedded in a Go string literal.
+func MapKeyDescription(attrs []YamlConfigAttribute) string {
+	ids := idAttrs(attrs)
+	if len(ids) == 0 {
+		return ""
+	}
+	var sb strings.Builder
+	if len(ids) == 1 {
+		a := ids[0]
+		sb.WriteString(fmt.Sprintf("\\n  - Map key: `%s` - %s", a.TfName, a.Description))
+		if len(a.EnumValues) > 0 {
+			quoted := make([]string, len(a.EnumValues))
+			for i, v := range a.EnumValues {
+				quoted[i] = fmt.Sprintf("`%s`", v)
+			}
+			sb.WriteString(fmt.Sprintf("\\n  - Key choices: %s", strings.Join(quoted, ", ")))
+		}
+		if a.MinInt != 0 || a.MaxInt != 0 {
+			sb.WriteString(fmt.Sprintf("\\n  - Key range: `%v`-`%v`", a.MinInt, a.MaxInt))
+		}
+	} else {
+		tfNames := make([]string, len(ids))
+		for i, a := range ids {
+			tfNames[i] = a.TfName
+		}
+		sb.WriteString(fmt.Sprintf("\\n  - Map key format: `<%s>`", strings.Join(tfNames, ">;<")))
+		for _, a := range ids {
+			sb.WriteString(fmt.Sprintf("\\n  - Key component `%s`: %s", a.TfName, a.Description))
+			if len(a.EnumValues) > 0 {
+				quoted := make([]string, len(a.EnumValues))
+				for i, v := range a.EnumValues {
+					quoted[i] = fmt.Sprintf("`%s`", v)
+				}
+				sb.WriteString(fmt.Sprintf(" Choices: %s.", strings.Join(quoted, ", ")))
+			}
+			if a.MinInt != 0 || a.MaxInt != 0 {
+				sb.WriteString(fmt.Sprintf(" Range: `%v`-`%v`.", a.MinInt, a.MaxInt))
+			}
+		}
+	}
+	return sb.String()
 }
 
 // buildTfChildClasses builds the TfChildClasses list by promoting children

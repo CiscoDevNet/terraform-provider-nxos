@@ -41,20 +41,22 @@ data "nxos_vrfs" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `vrfs` (Attributes List) List of VRFs. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of VRFs.
+  - Map key: `name` - VRF name. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
 Read-Only:
 
-- `address_families` (Attributes List) List of VRF address families. (see [below for nested schema](#nestedatt--vrfs--address_families))
+- `address_families` (Attributes Map) List of VRF address families.
+  - Map key: `address_family` - Type.
+  - Key choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt` (see [below for nested schema](#nestedatt--vrfs--address_families))
 - `admin_state` (String) VRF Admin State.
 - `controller_id` (Number) Controller ID.
 - `description` (String) Description.
 - `encap` (String) Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
 - `l3vni` (Boolean) L3 VNI Interface Enable.
-- `name` (String) VRF name.
 - `oui` (String) VRF OUI.
 - `route_distinguisher` (String) Route Distinguisher. Value in NX-OS DME format.
 - `routing_encap` (String) Encapsulation of MPLS.
@@ -65,28 +67,26 @@ Read-Only:
 
 Read-Only:
 
-- `address_family` (String) Type.
-- `route_target_address_families` (Attributes List) List of VRF route target address families. (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families))
+- `route_target_address_families` (Attributes Map) List of VRF route target address families.
+  - Map key: `route_target_address_family` - Type.
+  - Key choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt` (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families))
 
 <a id="nestedatt--vrfs--address_families--route_target_address_families"></a>
 ### Nested Schema for `vrfs.address_families.route_target_address_families`
 
 Read-Only:
 
-- `route_target_address_family` (String) Type.
-- `route_target_directions` (Attributes List) List of VRF route target directions. (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families--route_target_directions))
+- `route_target_directions` (Attributes Map) List of VRF route target directions.
+  - Map key: `direction` - Type.
+  - Key choices: `import`, `export` (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families--route_target_directions))
 
 <a id="nestedatt--vrfs--address_families--route_target_address_families--route_target_directions"></a>
 ### Nested Schema for `vrfs.address_families.route_target_address_families.route_target_directions`
 
 Read-Only:
 
-- `direction` (String) Type.
-- `route_targets` (Attributes List) List of VRF route target entries. (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families--route_target_directions--route_targets))
+- `route_targets` (Attributes Map) List of VRF route target entries.
+  - Map key: `route_target` - Route Target. Value in NX-OS DME format. (see [below for nested schema](#nestedatt--vrfs--address_families--route_target_address_families--route_target_directions--route_targets))
 
 <a id="nestedatt--vrfs--address_families--route_target_address_families--route_target_directions--route_targets"></a>
 ### Nested Schema for `vrfs.address_families.route_target_address_families.route_target_directions.route_targets`
-
-Read-Only:
-
-- `route_target` (String) Route Target. Value in NX-OS DME format.

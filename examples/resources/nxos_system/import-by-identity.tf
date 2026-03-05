@@ -1,5 +1,4 @@
 import {
-  to = nxos_system.example
-  identity = {
-  }
+  to       = nxos_system.example
+  identity = {}
 }

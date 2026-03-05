@@ -36,10 +36,8 @@ import (
 func TestAccNxosKeychain(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.name", "KEYCHAIN1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.keys.0.key_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.keys.0.cryptographic_algorithm", "AES"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.keys.0.key_string", "secret_password"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.cryptographic_algorithm", "AES"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.key_string", "secret_password"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -97,14 +95,16 @@ func testAccNxosKeychainConfig_minimum() string {
 func testAccNxosKeychainConfig_all() string {
 	config := `resource "nxos_keychain" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	keychains = [{` + "\n"
-	config += `		name = "KEYCHAIN1"` + "\n"
-	config += `		keys = [{` + "\n"
-	config += `			key_id = 1` + "\n"
-	config += `			cryptographic_algorithm = "AES"` + "\n"
-	config += `			key_string = "secret_password"` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	keychains = {` + "\n"
+	config += `		"KEYCHAIN1" = {` + "\n"
+	config += `			keys = {` + "\n"
+	config += `				"1" = {` + "\n"
+	config += `					cryptographic_algorithm = "AES"` + "\n"
+	config += `					key_string = "secret_password"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
 }

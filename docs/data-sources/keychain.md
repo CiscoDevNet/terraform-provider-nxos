@@ -39,15 +39,17 @@ data "nxos_keychain" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
-- `keychains` (Attributes List) List of keychains. (see [below for nested schema](#nestedatt--keychains))
+- `keychains` (Attributes Map) List of keychains.
+  - Map key: `name` - Keychain name. (see [below for nested schema](#nestedatt--keychains))
 
 <a id="nestedatt--keychains"></a>
 ### Nested Schema for `keychains`
 
 Read-Only:
 
-- `keys` (Attributes List) List of keys. (see [below for nested schema](#nestedatt--keychains--keys))
-- `name` (String) Keychain name.
+- `keys` (Attributes Map) List of keys.
+  - Map key: `key_id` - keyId of classic key chain.
+  - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--keychains--keys))
 
 <a id="nestedatt--keychains--keys"></a>
 ### Nested Schema for `keychains.keys`
@@ -56,5 +58,4 @@ Read-Only:
 
 - `cryptographic_algorithm` (String) Cryptographic Algorithm used in key.
 - `encryption_type` (String) Encryption type value based on user input.
-- `key_id` (Number) keyId of classic key chain.
 - `key_string` (String) keyString provided by user for the keychain.

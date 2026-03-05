@@ -68,15 +68,11 @@ func (d *LoopbackInterfacesDataSource) Schema(ctx context.Context, req datasourc
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"loopback_interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of loopback interfaces.",
+			"loopback_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of loopback interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `lo123`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `lo123`.",
-							Computed:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: "Administrative state.",
 							Computed:            true,

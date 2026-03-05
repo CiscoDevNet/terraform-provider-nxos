@@ -44,175 +44,136 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "isolate", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "nexthop_suppress_default_resolution", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "rd_dual", "enabled"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*", map[string]string{
-		"name":                     "default",
-		"router_id":                "1.1.1.1",
-		"bestpath_first_always":    "disabled",
-		"bestpath_interval":        "300",
-		"bandwidth_reference":      "40000",
-		"bandwidth_reference_unit": "mbps",
-		"cluster_id":               "1.2.3.4",
-		"hold_time":                "180",
-		"keepalive_interval":       "60",
-		"mode":                     "fabric",
-		"prefix_peer_timeout":      "90",
-		"prefix_peer_wait_time":    "90",
-		"reconnect_interval":       "60",
-		"router_id_auto":           "disabled",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*", map[string]string{
-		"route_control_enforce_first_as":     "disabled",
-		"route_control_fib_accelerate":       "enabled",
-		"route_control_log_neighbor_changes": "enabled",
-		"route_control_suppress_routes":      "disabled",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*", map[string]string{
-		"graceful_restart_control":        "complete",
-		"graceful_restart_interval":       "240",
-		"graceful_restart_stale_interval": "1800",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.address_families.*", map[string]string{
-		"address_family":                         "ipv4-ucast",
-		"critical_nexthop_timeout":               "2500",
-		"non_critical_nexthop_timeout":           "8000",
-		"advertise_l2vpn_evpn":                   "disabled",
-		"advertise_physical_ip_for_type5_routes": "disabled",
-		"max_ecmp_paths":                         "2",
-		"max_external_ecmp_paths":                "1",
-		"max_external_internal_ecmp_paths":       "1",
-		"max_local_ecmp_paths":                   "1",
-		"max_mixed_ecmp_paths":                   "1",
-		"default_information_originate":          "disabled",
-		"next_hop_route_map_name":                "ROUTEMAP1",
-		"prefix_priority":                        "none",
-		"retain_rt_all":                          "disabled",
-		"advertise_only_active_routes":           "disabled",
-		"table_map_route_map_name":               "ROUTE_MAP1",
-		"vni_ethernet_tag":                       "disabled",
-		"wait_igp_converged":                     "disabled",
-		"advertise_system_mac":                   "disabled",
-		"bestpath_origin_as_allow_invalid":       "disabled",
-		"bestpath_origin_as_use_validity":        "disabled",
-		"client_to_client_reflection":            "enabled",
-		"default_metric":                         "100",
-		"export_gateway_ip":                      "disabled",
-		"igp_metric":                             "600",
-		"max_path_unequal_cost":                  "disabled",
-		"nexthop_load_balance_egress_multisite":  "disabled",
-		"origin_as_validate":                     "disabled",
-		"origin_as_validate_signal_ibgp":         "disabled",
-		"table_map_filter":                       "disabled",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.address_families.*.advertised_prefixes.*", map[string]string{
-		"prefix":    "192.168.1.0/24",
-		"route_map": "rt-map",
-		"evpn":      "enabled",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.address_families.*.redistributions.*", map[string]string{
-		"protocol":          "ospf",
-		"protocol_instance": "OSPF1",
-		"route_map":         "route_map_ospf_1",
-		"scope":             "inter",
-		"srv6_prefix_type":  "unspecified",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peer_templates.*", map[string]string{
-		"name":                           "SPINE-PEERS",
-		"remote_asn":                     "65002",
-		"description":                    "My Description",
-		"peer_type":                      "fabric-internal",
-		"source_interface":               "lo0",
-		"admin_state":                    "enabled",
-		"asn_type":                       "none",
-		"bfd_type":                       "none",
-		"bmp_server_1":                   "disabled",
-		"bmp_server_2":                   "disabled",
-		"capability_suppress_4_byte_asn": "disabled",
-		"connection_mode":                "passive",
-		"peer_control":                   "bfd",
-		"hold_time":                      "180",
-		"keepalive_interval":             "60",
-		"log_neighbor_changes":           "none",
-		"low_memory_exempt":              "disabled",
-		"private_as_control":             "none",
-		"session_template":               "SESS_TEMPLATE",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peer_templates.*.peer_template_address_families.*", map[string]string{
-		"address_family":              "ipv4-ucast",
-		"control":                     "nh-self,rr-client",
-		"send_community_extended":     "enabled",
-		"send_community_standard":     "enabled",
-		"aigp":                        "disabled",
-		"allowed_self_as_count":       "0",
-		"as_override":                 "disabled",
-		"default_originate":           "disabled",
-		"default_originate_route_map": "DEF_ORIG_MAP",
-		"dmz_link_bandwidth":          "disabled",
-		"link_bandwidth_cumulative":   "disabled",
-		"nexthop_thirdparty":          "enabled",
-		"rewrite_rt_asn":              "disabled",
-		"soft_reconfiguration_backup": "none",
-		"unsuppress_map":              "UNSUPP_MAP",
-		"weight":                      "100",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peer_templates.*.peer_template_address_families.*", map[string]string{
-		"max_prefix_action":       "restart",
-		"max_prefix_number":       "10000",
-		"max_prefix_restart_time": "1",
-		"max_prefix_threshold":    "30",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*", map[string]string{
-		"address":                        "192.168.0.1",
-		"remote_asn":                     "65002",
-		"description":                    "My description",
-		"peer_template":                  "SPINE-PEERS",
-		"peer_type":                      "fabric-internal",
-		"source_interface":               "lo0",
-		"hold_time":                      "45",
-		"keepalive_interval":             "15",
-		"ebgp_multihop_ttl":              "5",
-		"peer_control":                   "bfd,dis-conn-check",
-		"admin_state":                    "enabled",
-		"asn_type":                       "none",
-		"bfd_type":                       "none",
-		"bmp_server_1":                   "disabled",
-		"bmp_server_2":                   "disabled",
-		"capability_suppress_4_byte_asn": "disabled",
-		"connection_mode":                "passive",
-		"log_neighbor_changes":           "none",
-		"low_memory_exempt":              "disabled",
-		"private_as_control":             "none",
-		"session_template":               "SESS_TEMPLATE",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*", map[string]string{
-		"local_asn_propagation": "no-prepend",
-		"local_asn":             "65001",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*.peer_address_families.*", map[string]string{
-		"address_family":              "ipv4-ucast",
-		"control":                     "nh-self",
-		"send_community_extended":     "enabled",
-		"send_community_standard":     "enabled",
-		"aigp":                        "disabled",
-		"allowed_self_as_count":       "0",
-		"as_override":                 "disabled",
-		"default_originate":           "disabled",
-		"default_originate_route_map": "DEF_ORIG_MAP",
-		"dmz_link_bandwidth":          "disabled",
-		"link_bandwidth_cumulative":   "disabled",
-		"nexthop_thirdparty":          "enabled",
-		"rewrite_rt_asn":              "disabled",
-		"soft_reconfiguration_backup": "none",
-		"unsuppress_map":              "UNSUPP_MAP",
-		"weight":                      "100",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*.peer_address_families.*.route_controls.*", map[string]string{
-		"direction":      "in",
-		"route_map_name": "ROUTE_MAP1",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*.peer_address_families.*.prefix_list_controls.*", map[string]string{
-		"direction": "in",
-		"list":      "PREFIX_LIST1",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.router_id", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.bestpath_first_always", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.bestpath_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.bandwidth_reference", "40000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.cluster_id", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.hold_time", "180"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.keepalive_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.mode", "fabric"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.prefix_peer_timeout", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.prefix_peer_wait_time", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.reconnect_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.router_id_auto", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.route_control_enforce_first_as", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.route_control_fib_accelerate", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.route_control_log_neighbor_changes", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.route_control_suppress_routes", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.graceful_restart_control", "complete"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.graceful_restart_interval", "240"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.graceful_restart_stale_interval", "1800"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.critical_nexthop_timeout", "2500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.non_critical_nexthop_timeout", "8000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertise_l2vpn_evpn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertise_physical_ip_for_type5_routes", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_ecmp_paths", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_external_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_external_internal_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_local_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_mixed_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.default_information_originate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.next_hop_route_map_name", "ROUTEMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.prefix_priority", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.retain_rt_all", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertise_only_active_routes", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.table_map_route_map_name", "ROUTE_MAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.vni_ethernet_tag", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.wait_igp_converged", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertise_system_mac", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.bestpath_origin_as_allow_invalid", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.bestpath_origin_as_use_validity", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.client_to_client_reflection", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.default_metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.export_gateway_ip", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.igp_metric", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_path_unequal_cost", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.nexthop_load_balance_egress_multisite", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.origin_as_validate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.origin_as_validate_signal_ibgp", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.table_map_filter", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertised_prefixes.192.168.1.0/24.route_map", "rt-map"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertised_prefixes.192.168.1.0/24.evpn", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.route_map", "route_map_ospf_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.scope", "inter"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.srv6_prefix_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.remote_asn", "65002"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_type", "fabric-internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.asn_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.bfd_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.bmp_server_1", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.bmp_server_2", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.capability_suppress_4_byte_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.connection_mode", "passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_control", "bfd"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.hold_time", "180"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.keepalive_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.log_neighbor_changes", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.low_memory_exempt", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.private_as_control", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.session_template", "SESS_TEMPLATE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.control", "nh-self,rr-client"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.send_community_extended", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.send_community_standard", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.aigp", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.allowed_self_as_count", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.as_override", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.default_originate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.default_originate_route_map", "DEF_ORIG_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.dmz_link_bandwidth", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.link_bandwidth_cumulative", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.nexthop_thirdparty", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.rewrite_rt_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.soft_reconfiguration_backup", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.unsuppress_map", "UNSUPP_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.weight", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.max_prefix_action", "restart"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.max_prefix_number", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.max_prefix_restart_time", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.max_prefix_threshold", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.remote_asn", "65002"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.description", "My description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_template", "SPINE-PEERS"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_type", "fabric-internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.hold_time", "45"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.keepalive_interval", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.ebgp_multihop_ttl", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_control", "bfd,dis-conn-check"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.asn_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.bfd_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.bmp_server_1", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.bmp_server_2", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.capability_suppress_4_byte_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.connection_mode", "passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.log_neighbor_changes", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.low_memory_exempt", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.private_as_control", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.session_template", "SESS_TEMPLATE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.local_asn_propagation", "no-prepend"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.local_asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.control", "nh-self"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.send_community_extended", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.send_community_standard", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.aigp", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.allowed_self_as_count", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.as_override", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.default_originate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.default_originate_route_map", "DEF_ORIG_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.dmz_link_bandwidth", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.link_bandwidth_cumulative", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.nexthop_thirdparty", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.rewrite_rt_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.soft_reconfiguration_backup", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.unsuppress_map", "UNSUPP_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.weight", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.route_controls.in.route_map_name", "ROUTE_MAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.prefix_list_controls.in.list", "PREFIX_LIST1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -268,168 +229,177 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `	isolate = "disabled"` + "\n"
 	config += `	nexthop_suppress_default_resolution = "disabled"` + "\n"
 	config += `	rd_dual = "enabled"` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		name = "default"` + "\n"
-	config += `		router_id = "1.1.1.1"` + "\n"
-	config += `		bestpath_first_always = "disabled"` + "\n"
-	config += `		bestpath_interval = 300` + "\n"
-	config += `		bandwidth_reference = 40000` + "\n"
-	config += `		bandwidth_reference_unit = "mbps"` + "\n"
-	config += `		cluster_id = "1.2.3.4"` + "\n"
-	config += `		hold_time = 180` + "\n"
-	config += `		keepalive_interval = 60` + "\n"
-	config += `		mode = "fabric"` + "\n"
-	config += `		prefix_peer_timeout = 90` + "\n"
-	config += `		prefix_peer_wait_time = 90` + "\n"
-	config += `		reconnect_interval = 60` + "\n"
-	config += `		router_id_auto = "disabled"` + "\n"
-	config += `		route_control_enforce_first_as = "disabled"` + "\n"
-	config += `		route_control_fib_accelerate = "enabled"` + "\n"
-	config += `		route_control_log_neighbor_changes = "enabled"` + "\n"
-	config += `		route_control_suppress_routes = "disabled"` + "\n"
-	config += `		graceful_restart_control = "complete"` + "\n"
-	config += `		graceful_restart_interval = 240` + "\n"
-	config += `		graceful_restart_stale_interval = 1800` + "\n"
-	config += `		address_families = [{` + "\n"
-	config += `			address_family = "ipv4-ucast"` + "\n"
-	config += `			critical_nexthop_timeout = "2500"` + "\n"
-	config += `			non_critical_nexthop_timeout = "8000"` + "\n"
-	config += `			advertise_l2vpn_evpn = "disabled"` + "\n"
-	config += `			advertise_physical_ip_for_type5_routes = "disabled"` + "\n"
-	config += `			max_ecmp_paths = 2` + "\n"
-	config += `			max_external_ecmp_paths = 1` + "\n"
-	config += `			max_external_internal_ecmp_paths = 1` + "\n"
-	config += `			max_local_ecmp_paths = 1` + "\n"
-	config += `			max_mixed_ecmp_paths = 1` + "\n"
-	config += `			default_information_originate = "disabled"` + "\n"
-	config += `			next_hop_route_map_name = "ROUTEMAP1"` + "\n"
-	config += `			prefix_priority = "none"` + "\n"
-	config += `			retain_rt_all = "disabled"` + "\n"
-	config += `			advertise_only_active_routes = "disabled"` + "\n"
-	config += `			table_map_route_map_name = "ROUTE_MAP1"` + "\n"
-	config += `			vni_ethernet_tag = "disabled"` + "\n"
-	config += `			wait_igp_converged = "disabled"` + "\n"
-	config += `			advertise_system_mac = "disabled"` + "\n"
-	config += `			bestpath_origin_as_allow_invalid = "disabled"` + "\n"
-	config += `			bestpath_origin_as_use_validity = "disabled"` + "\n"
-	config += `			client_to_client_reflection = "enabled"` + "\n"
-	config += `			default_metric = "100"` + "\n"
-	config += `			export_gateway_ip = "disabled"` + "\n"
-	config += `			igp_metric = 600` + "\n"
-	config += `			max_path_unequal_cost = "disabled"` + "\n"
-	config += `			nexthop_load_balance_egress_multisite = "disabled"` + "\n"
-	config += `			origin_as_validate = "disabled"` + "\n"
-	config += `			origin_as_validate_signal_ibgp = "disabled"` + "\n"
-	config += `			table_map_filter = "disabled"` + "\n"
-	config += `			advertised_prefixes = [{` + "\n"
-	config += `				prefix = "192.168.1.0/24"` + "\n"
-	config += `				route_map = "rt-map"` + "\n"
-	config += `				evpn = "enabled"` + "\n"
-	config += `			}]` + "\n"
-	config += `			redistributions = [{` + "\n"
-	config += `				protocol = "ospf"` + "\n"
-	config += `				protocol_instance = "OSPF1"` + "\n"
-	config += `				route_map = "route_map_ospf_1"` + "\n"
-	config += `				scope = "inter"` + "\n"
-	config += `				srv6_prefix_type = "unspecified"` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `		peer_templates = [{` + "\n"
-	config += `			name = "SPINE-PEERS"` + "\n"
-	config += `			remote_asn = "65002"` + "\n"
-	config += `			description = "My Description"` + "\n"
-	config += `			peer_type = "fabric-internal"` + "\n"
-	config += `			source_interface = "lo0"` + "\n"
-	config += `			admin_state = "enabled"` + "\n"
-	config += `			asn_type = "none"` + "\n"
-	config += `			bfd_type = "none"` + "\n"
-	config += `			bmp_server_1 = "disabled"` + "\n"
-	config += `			bmp_server_2 = "disabled"` + "\n"
-	config += `			capability_suppress_4_byte_asn = "disabled"` + "\n"
-	config += `			connection_mode = "passive"` + "\n"
-	config += `			peer_control = "bfd"` + "\n"
+	config += `	vrfs = {` + "\n"
+	config += `		"default" = {` + "\n"
+	config += `			router_id = "1.1.1.1"` + "\n"
+	config += `			bestpath_first_always = "disabled"` + "\n"
+	config += `			bestpath_interval = 300` + "\n"
+	config += `			bandwidth_reference = 40000` + "\n"
+	config += `			bandwidth_reference_unit = "mbps"` + "\n"
+	config += `			cluster_id = "1.2.3.4"` + "\n"
 	config += `			hold_time = 180` + "\n"
 	config += `			keepalive_interval = 60` + "\n"
-	config += `			log_neighbor_changes = "none"` + "\n"
-	config += `			low_memory_exempt = "disabled"` + "\n"
-	config += `			private_as_control = "none"` + "\n"
-	config += `			session_template = "SESS_TEMPLATE"` + "\n"
-	config += `			peer_template_address_families = [{` + "\n"
-	config += `				address_family = "ipv4-ucast"` + "\n"
-	config += `				control = "nh-self,rr-client"` + "\n"
-	config += `				send_community_extended = "enabled"` + "\n"
-	config += `				send_community_standard = "enabled"` + "\n"
-	config += `				aigp = "disabled"` + "\n"
-	config += `				allowed_self_as_count = 0` + "\n"
-	config += `				as_override = "disabled"` + "\n"
-	config += `				default_originate = "disabled"` + "\n"
-	config += `				default_originate_route_map = "DEF_ORIG_MAP"` + "\n"
-	config += `				dmz_link_bandwidth = "disabled"` + "\n"
-	config += `				link_bandwidth_cumulative = "disabled"` + "\n"
-	config += `				nexthop_thirdparty = "enabled"` + "\n"
-	config += `				rewrite_rt_asn = "disabled"` + "\n"
-	config += `				soft_reconfiguration_backup = "none"` + "\n"
-	config += `				unsuppress_map = "UNSUPP_MAP"` + "\n"
-	config += `				weight = "100"` + "\n"
-	config += `				max_prefix_action = "restart"` + "\n"
-	config += `				max_prefix_number = 10000` + "\n"
-	config += `				max_prefix_restart_time = 1` + "\n"
-	config += `				max_prefix_threshold = 30` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `		peers = [{` + "\n"
-	config += `			address = "192.168.0.1"` + "\n"
-	config += `			remote_asn = "65002"` + "\n"
-	config += `			description = "My description"` + "\n"
-	config += `			peer_template = "SPINE-PEERS"` + "\n"
-	config += `			peer_type = "fabric-internal"` + "\n"
-	config += `			source_interface = "lo0"` + "\n"
-	config += `			hold_time = 45` + "\n"
-	config += `			keepalive_interval = 15` + "\n"
-	config += `			ebgp_multihop_ttl = 5` + "\n"
-	config += `			peer_control = "bfd,dis-conn-check"` + "\n"
-	config += `			password = "secret_password"` + "\n"
-	config += `			admin_state = "enabled"` + "\n"
-	config += `			asn_type = "none"` + "\n"
-	config += `			bfd_type = "none"` + "\n"
-	config += `			bmp_server_1 = "disabled"` + "\n"
-	config += `			bmp_server_2 = "disabled"` + "\n"
-	config += `			capability_suppress_4_byte_asn = "disabled"` + "\n"
-	config += `			connection_mode = "passive"` + "\n"
-	config += `			log_neighbor_changes = "none"` + "\n"
-	config += `			low_memory_exempt = "disabled"` + "\n"
-	config += `			private_as_control = "none"` + "\n"
-	config += `			session_template = "SESS_TEMPLATE"` + "\n"
-	config += `			local_asn_propagation = "no-prepend"` + "\n"
-	config += `			local_asn = "65001"` + "\n"
-	config += `			peer_address_families = [{` + "\n"
-	config += `				address_family = "ipv4-ucast"` + "\n"
-	config += `				control = "nh-self"` + "\n"
-	config += `				send_community_extended = "enabled"` + "\n"
-	config += `				send_community_standard = "enabled"` + "\n"
-	config += `				aigp = "disabled"` + "\n"
-	config += `				allowed_self_as_count = 0` + "\n"
-	config += `				as_override = "disabled"` + "\n"
-	config += `				default_originate = "disabled"` + "\n"
-	config += `				default_originate_route_map = "DEF_ORIG_MAP"` + "\n"
-	config += `				dmz_link_bandwidth = "disabled"` + "\n"
-	config += `				link_bandwidth_cumulative = "disabled"` + "\n"
-	config += `				nexthop_thirdparty = "enabled"` + "\n"
-	config += `				rewrite_rt_asn = "disabled"` + "\n"
-	config += `				soft_reconfiguration_backup = "none"` + "\n"
-	config += `				unsuppress_map = "UNSUPP_MAP"` + "\n"
-	config += `				weight = "100"` + "\n"
-	config += `				route_controls = [{` + "\n"
-	config += `					direction = "in"` + "\n"
-	config += `					route_map_name = "ROUTE_MAP1"` + "\n"
-	config += `				}]` + "\n"
-	config += `				prefix_list_controls = [{` + "\n"
-	config += `					direction = "in"` + "\n"
-	config += `					list = "PREFIX_LIST1"` + "\n"
-	config += `				}]` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `			mode = "fabric"` + "\n"
+	config += `			prefix_peer_timeout = 90` + "\n"
+	config += `			prefix_peer_wait_time = 90` + "\n"
+	config += `			reconnect_interval = 60` + "\n"
+	config += `			router_id_auto = "disabled"` + "\n"
+	config += `			route_control_enforce_first_as = "disabled"` + "\n"
+	config += `			route_control_fib_accelerate = "enabled"` + "\n"
+	config += `			route_control_log_neighbor_changes = "enabled"` + "\n"
+	config += `			route_control_suppress_routes = "disabled"` + "\n"
+	config += `			graceful_restart_control = "complete"` + "\n"
+	config += `			graceful_restart_interval = 240` + "\n"
+	config += `			graceful_restart_stale_interval = 1800` + "\n"
+	config += `			address_families = {` + "\n"
+	config += `				"ipv4-ucast" = {` + "\n"
+	config += `					critical_nexthop_timeout = "2500"` + "\n"
+	config += `					non_critical_nexthop_timeout = "8000"` + "\n"
+	config += `					advertise_l2vpn_evpn = "disabled"` + "\n"
+	config += `					advertise_physical_ip_for_type5_routes = "disabled"` + "\n"
+	config += `					max_ecmp_paths = 2` + "\n"
+	config += `					max_external_ecmp_paths = 1` + "\n"
+	config += `					max_external_internal_ecmp_paths = 1` + "\n"
+	config += `					max_local_ecmp_paths = 1` + "\n"
+	config += `					max_mixed_ecmp_paths = 1` + "\n"
+	config += `					default_information_originate = "disabled"` + "\n"
+	config += `					next_hop_route_map_name = "ROUTEMAP1"` + "\n"
+	config += `					prefix_priority = "none"` + "\n"
+	config += `					retain_rt_all = "disabled"` + "\n"
+	config += `					advertise_only_active_routes = "disabled"` + "\n"
+	config += `					table_map_route_map_name = "ROUTE_MAP1"` + "\n"
+	config += `					vni_ethernet_tag = "disabled"` + "\n"
+	config += `					wait_igp_converged = "disabled"` + "\n"
+	config += `					advertise_system_mac = "disabled"` + "\n"
+	config += `					bestpath_origin_as_allow_invalid = "disabled"` + "\n"
+	config += `					bestpath_origin_as_use_validity = "disabled"` + "\n"
+	config += `					client_to_client_reflection = "enabled"` + "\n"
+	config += `					default_metric = "100"` + "\n"
+	config += `					export_gateway_ip = "disabled"` + "\n"
+	config += `					igp_metric = 600` + "\n"
+	config += `					max_path_unequal_cost = "disabled"` + "\n"
+	config += `					nexthop_load_balance_egress_multisite = "disabled"` + "\n"
+	config += `					origin_as_validate = "disabled"` + "\n"
+	config += `					origin_as_validate_signal_ibgp = "disabled"` + "\n"
+	config += `					table_map_filter = "disabled"` + "\n"
+	config += `					advertised_prefixes = {` + "\n"
+	config += `						"192.168.1.0/24" = {` + "\n"
+	config += `							route_map = "rt-map"` + "\n"
+	config += `							evpn = "enabled"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					redistributions = {` + "\n"
+	config += `						"ospf;OSPF1" = {` + "\n"
+	config += `							route_map = "route_map_ospf_1"` + "\n"
+	config += `							scope = "inter"` + "\n"
+	config += `							srv6_prefix_type = "unspecified"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			peer_templates = {` + "\n"
+	config += `				"SPINE-PEERS" = {` + "\n"
+	config += `					remote_asn = "65002"` + "\n"
+	config += `					description = "My Description"` + "\n"
+	config += `					peer_type = "fabric-internal"` + "\n"
+	config += `					source_interface = "lo0"` + "\n"
+	config += `					admin_state = "enabled"` + "\n"
+	config += `					asn_type = "none"` + "\n"
+	config += `					bfd_type = "none"` + "\n"
+	config += `					bmp_server_1 = "disabled"` + "\n"
+	config += `					bmp_server_2 = "disabled"` + "\n"
+	config += `					capability_suppress_4_byte_asn = "disabled"` + "\n"
+	config += `					connection_mode = "passive"` + "\n"
+	config += `					peer_control = "bfd"` + "\n"
+	config += `					hold_time = 180` + "\n"
+	config += `					keepalive_interval = 60` + "\n"
+	config += `					log_neighbor_changes = "none"` + "\n"
+	config += `					low_memory_exempt = "disabled"` + "\n"
+	config += `					private_as_control = "none"` + "\n"
+	config += `					session_template = "SESS_TEMPLATE"` + "\n"
+	config += `					peer_template_address_families = {` + "\n"
+	config += `						"ipv4-ucast" = {` + "\n"
+	config += `							control = "nh-self,rr-client"` + "\n"
+	config += `							send_community_extended = "enabled"` + "\n"
+	config += `							send_community_standard = "enabled"` + "\n"
+	config += `							aigp = "disabled"` + "\n"
+	config += `							allowed_self_as_count = 0` + "\n"
+	config += `							as_override = "disabled"` + "\n"
+	config += `							default_originate = "disabled"` + "\n"
+	config += `							default_originate_route_map = "DEF_ORIG_MAP"` + "\n"
+	config += `							dmz_link_bandwidth = "disabled"` + "\n"
+	config += `							link_bandwidth_cumulative = "disabled"` + "\n"
+	config += `							nexthop_thirdparty = "enabled"` + "\n"
+	config += `							rewrite_rt_asn = "disabled"` + "\n"
+	config += `							soft_reconfiguration_backup = "none"` + "\n"
+	config += `							unsuppress_map = "UNSUPP_MAP"` + "\n"
+	config += `							weight = "100"` + "\n"
+	config += `							max_prefix_action = "restart"` + "\n"
+	config += `							max_prefix_number = 10000` + "\n"
+	config += `							max_prefix_restart_time = 1` + "\n"
+	config += `							max_prefix_threshold = 30` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			peers = {` + "\n"
+	config += `				"192.168.0.1" = {` + "\n"
+	config += `					remote_asn = "65002"` + "\n"
+	config += `					description = "My description"` + "\n"
+	config += `					peer_template = "SPINE-PEERS"` + "\n"
+	config += `					peer_type = "fabric-internal"` + "\n"
+	config += `					source_interface = "lo0"` + "\n"
+	config += `					hold_time = 45` + "\n"
+	config += `					keepalive_interval = 15` + "\n"
+	config += `					ebgp_multihop_ttl = 5` + "\n"
+	config += `					peer_control = "bfd,dis-conn-check"` + "\n"
+	config += `					password = "secret_password"` + "\n"
+	config += `					admin_state = "enabled"` + "\n"
+	config += `					asn_type = "none"` + "\n"
+	config += `					bfd_type = "none"` + "\n"
+	config += `					bmp_server_1 = "disabled"` + "\n"
+	config += `					bmp_server_2 = "disabled"` + "\n"
+	config += `					capability_suppress_4_byte_asn = "disabled"` + "\n"
+	config += `					connection_mode = "passive"` + "\n"
+	config += `					log_neighbor_changes = "none"` + "\n"
+	config += `					low_memory_exempt = "disabled"` + "\n"
+	config += `					private_as_control = "none"` + "\n"
+	config += `					session_template = "SESS_TEMPLATE"` + "\n"
+	config += `					local_asn_propagation = "no-prepend"` + "\n"
+	config += `					local_asn = "65001"` + "\n"
+	config += `					peer_address_families = {` + "\n"
+	config += `						"ipv4-ucast" = {` + "\n"
+	config += `							control = "nh-self"` + "\n"
+	config += `							send_community_extended = "enabled"` + "\n"
+	config += `							send_community_standard = "enabled"` + "\n"
+	config += `							aigp = "disabled"` + "\n"
+	config += `							allowed_self_as_count = 0` + "\n"
+	config += `							as_override = "disabled"` + "\n"
+	config += `							default_originate = "disabled"` + "\n"
+	config += `							default_originate_route_map = "DEF_ORIG_MAP"` + "\n"
+	config += `							dmz_link_bandwidth = "disabled"` + "\n"
+	config += `							link_bandwidth_cumulative = "disabled"` + "\n"
+	config += `							nexthop_thirdparty = "enabled"` + "\n"
+	config += `							rewrite_rt_asn = "disabled"` + "\n"
+	config += `							soft_reconfiguration_backup = "none"` + "\n"
+	config += `							unsuppress_map = "UNSUPP_MAP"` + "\n"
+	config += `							weight = "100"` + "\n"
+	config += `							route_controls = {` + "\n"
+	config += `								"in" = {` + "\n"
+	config += `									route_map_name = "ROUTE_MAP1"` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
+	config += `							prefix_list_controls = {` + "\n"
+	config += `								"in" = {` + "\n"
+	config += `									list = "PREFIX_LIST1"` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

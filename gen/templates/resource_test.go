@@ -38,7 +38,7 @@ import (
        Recursively emits TestCheckResourceAttr calls for TfChildClasses.
        Context: map with "Name" (string), "Children" ([]TfChildClass), "Prefix" (string)
        - single: emit checks with no path prefix change, recurse
-       - list: emit checks with <Prefix><listName>.0. path, recurse with updated prefix
+       - list: emit checks with <Prefix><listName>.<mapKey>. path, recurse with updated prefix
        ========================================================= */}}
 {{- define "resourceTestChecksTemplate"}}
 {{- $name := .Name}}
@@ -61,19 +61,20 @@ import (
 {{- template "resourceTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "Prefix" $prefix)}}
 {{- end}}
 {{- else if eq .Type "list"}}
+{{- $mapKey := mapKeyExample .Attributes}}
 {{- range .Attributes}}
-{{- if not .ExcludeTest}}
+{{- if and (not .ExcludeTest) (not .Id)}}
 {{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
-		checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$prefix}}{{$list}}.0.{{.TfName}}", "{{.Example}}"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$prefix}}{{$list}}.{{$mapKey}}.{{.TfName}}", "{{.Example}}"))
 	}
 {{- else}}
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$prefix}}{{$list}}.0.{{.TfName}}", "{{.Example}}"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$prefix}}{{$list}}.{{$mapKey}}.{{.TfName}}", "{{.Example}}"))
 {{- end}}
 {{- end}}
 {{- end}}
 {{- if .TfChildClasses}}
-{{- template "resourceTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "Prefix" (printf "%s%s.0." $prefix $list))}}
+{{- template "resourceTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "Prefix" (printf "%s%s.%s." $prefix $list $mapKey))}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -204,7 +205,7 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
        Recursively emits HCL config lines for TfChildClasses.
        Context: map with "Children" ([]TfChildClass), "Indent" (string)
        - single: emit attrs at current indent, recurse
-       - list: emit <name> = [{ ... }] block with deeper indent, recurse
+       - list: emit <name> = { "<mapKey>" = { ... } } block with deeper indent, recurse
        ========================================================= */}}
 {{- define "testConfigChildrenTemplate"}}
 {{- $indent := .Indent}}
@@ -226,22 +227,25 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- end}}
 {{- else if eq .Type "list"}}
 {{- if hasTestAttrs .Attributes}}
-	config += `{{$indent}}{{.TfName}} = [{` + "\n"
+{{- $mapKey := mapKeyExample .Attributes}}
+	config += `{{$indent}}{{.TfName}} = {` + "\n"
+	config += `{{$indent}}	"{{$mapKey}}" = {` + "\n"
 {{- range .Attributes}}
-{{- if not .ExcludeTest}}
+{{- if and (not .ExcludeTest) (not .Id)}}
 {{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
-		config += `{{$indent}}	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+		config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	}
 {{- else}}
-	config += `{{$indent}}	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 {{- end}}
 {{- end}}
 {{- end}}
 {{- if .TfChildClasses}}
-{{- template "testConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" (printf "%s\t" $indent))}}
+{{- template "testConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" (printf "%s\t\t" $indent))}}
 {{- end}}
-	config += `{{$indent}}}]` + "\n"
+	config += `{{$indent}}	}` + "\n"
+	config += `{{$indent}}}` + "\n"
 {{- end}}
 {{- end}}
 {{- end}}

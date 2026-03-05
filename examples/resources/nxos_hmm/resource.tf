@@ -6,10 +6,11 @@ resource "nxos_hmm" "example" {
   control                 = "stateful-ha"
   limit_vlan_mac          = 100
   selective_host_probe    = "yes"
-  interfaces = [{
-    interface_id = "vlan10"
-    admin_state  = "enabled"
-    mode         = "anycastGW"
-    description  = "My Description"
-  }]
+  interfaces = {
+    "vlan10" = {
+      admin_state = "enabled"
+      mode        = "anycastGW"
+      description = "My Description"
+    }
+  }
 }

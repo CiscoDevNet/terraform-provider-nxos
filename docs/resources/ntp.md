@@ -33,15 +33,16 @@ resource "nxos_ntp" "example" {
   master_stratum       = 4
   passive              = "enabled"
   rate_limit           = 5
-  servers = [{
-    name      = "1.2.3.4"
-    vrf       = "management"
-    type      = "server"
-    key_id    = 10
-    min_poll  = 4
-    max_poll  = 6
-    preferred = true
-  }]
+  servers = {
+    "1.2.3.4" = {
+      vrf       = "management"
+      type      = "server"
+      key_id    = 10
+      min_poll  = 4
+      max_poll  = 6
+      preferred = true
+    }
+  }
 }
 ```
 
@@ -71,7 +72,8 @@ resource "nxos_ntp" "example" {
   - Choices: `enabled`, `disabled`
 - `rate_limit` (Number) Rate-Limit NTP Control Mode Packets.
   - Range: `1`-`65535`
-- `servers` (Attributes List) List of NTP servers or peers. (see [below for nested schema](#nestedatt--servers))
+- `servers` (Attributes Map) List of NTP servers or peers.
+  - Map key: `name` - NTP server or peer address. (see [below for nested schema](#nestedatt--servers))
 
 ### Read-Only
 
@@ -79,10 +81,6 @@ resource "nxos_ntp" "example" {
 
 <a id="nestedatt--servers"></a>
 ### Nested Schema for `servers`
-
-Required:
-
-- `name` (String) NTP server or peer address.
 
 Optional:
 
@@ -105,9 +103,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_ntp.example
-  identity = {
-  }
+  to       = nxos_ntp.example
+  identity = {}
 }
 ```
 

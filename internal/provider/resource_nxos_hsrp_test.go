@@ -41,32 +41,29 @@ func TestAccNxosHSRP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "extended_hold_interval", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "extended_hold_interval_configuration", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.interface_id", "vlan10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.bfd", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.bia_scope", "local"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.control", "bia"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.delay_minimum", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.description", "My HSRP interface"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.mac_refresh_interval", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.mac_refresh_interval_configuration", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.name", "myHsrpIf"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.reload_delay", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.version", "v2"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.group_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.address_family", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.authentication_type", "simple"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.control", "preempt"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.forwarding_lower_threshold", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.hello_interval", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.hold_interval", "3000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.ip_address", "10.0.0.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.ip_obtain_mode", "admin"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.name", "myHsrpGroup"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.preempt_delay_minimum", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.preempt_delay_reload", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.preempt_delay_sync", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.0.groups.0.priority", "110"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.bfd", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.bia_scope", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.control", "bia"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.delay_minimum", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.description", "My HSRP interface"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.mac_refresh_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.mac_refresh_interval_configuration", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.name", "myHsrpIf"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.reload_delay", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.version", "v2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.authentication_type", "simple"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.control", "preempt"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.forwarding_lower_threshold", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.hello_interval", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.hold_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.ip_address", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.ip_obtain_mode", "admin"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.name", "myHsrpGroup"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_minimum", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_reload", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_sync", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.priority", "110"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -169,36 +166,37 @@ func testAccNxosHSRPConfig_all() string {
 	config += `	control = "stateful-ha"` + "\n"
 	config += `	extended_hold_interval = 30` + "\n"
 	config += `	extended_hold_interval_configuration = "disabled"` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		interface_id = "vlan10"` + "\n"
-	config += `		admin_state = "enabled"` + "\n"
-	config += `		bfd = "disabled"` + "\n"
-	config += `		bia_scope = "local"` + "\n"
-	config += `		control = "bia"` + "\n"
-	config += `		delay_minimum = 5` + "\n"
-	config += `		description = "My HSRP interface"` + "\n"
-	config += `		mac_refresh_interval = 30` + "\n"
-	config += `		mac_refresh_interval_configuration = "disabled"` + "\n"
-	config += `		name = "myHsrpIf"` + "\n"
-	config += `		reload_delay = 5` + "\n"
-	config += `		version = "v2"` + "\n"
-	config += `		groups = [{` + "\n"
-	config += `			group_id = 1` + "\n"
-	config += `			address_family = "ipv4"` + "\n"
-	config += `			authentication_type = "simple"` + "\n"
-	config += `			control = "preempt"` + "\n"
-	config += `			forwarding_lower_threshold = 1` + "\n"
-	config += `			hello_interval = 1000` + "\n"
-	config += `			hold_interval = 3000` + "\n"
-	config += `			ip_address = "10.0.0.1"` + "\n"
-	config += `			ip_obtain_mode = "admin"` + "\n"
-	config += `			name = "myHsrpGroup"` + "\n"
-	config += `			preempt_delay_minimum = 10` + "\n"
-	config += `			preempt_delay_reload = 10` + "\n"
-	config += `			preempt_delay_sync = 10` + "\n"
-	config += `			priority = 110` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	interfaces = {` + "\n"
+	config += `		"vlan10" = {` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			bfd = "disabled"` + "\n"
+	config += `			bia_scope = "local"` + "\n"
+	config += `			control = "bia"` + "\n"
+	config += `			delay_minimum = 5` + "\n"
+	config += `			description = "My HSRP interface"` + "\n"
+	config += `			mac_refresh_interval = 30` + "\n"
+	config += `			mac_refresh_interval_configuration = "disabled"` + "\n"
+	config += `			name = "myHsrpIf"` + "\n"
+	config += `			reload_delay = 5` + "\n"
+	config += `			version = "v2"` + "\n"
+	config += `			groups = {` + "\n"
+	config += `				"1;ipv4" = {` + "\n"
+	config += `					authentication_type = "simple"` + "\n"
+	config += `					control = "preempt"` + "\n"
+	config += `					forwarding_lower_threshold = 1` + "\n"
+	config += `					hello_interval = 1000` + "\n"
+	config += `					hold_interval = 3000` + "\n"
+	config += `					ip_address = "10.0.0.1"` + "\n"
+	config += `					ip_obtain_mode = "admin"` + "\n"
+	config += `					name = "myHsrpGroup"` + "\n"
+	config += `					preempt_delay_minimum = 10` + "\n"
+	config += `					preempt_delay_reload = 10` + "\n"
+	config += `					preempt_delay_sync = 10` + "\n"
+	config += `					priority = 110` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config

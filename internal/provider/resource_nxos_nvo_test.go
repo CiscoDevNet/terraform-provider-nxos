@@ -37,34 +37,32 @@ func TestAccNxosNVO(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "vxlan_udp_port", "4789"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "vxlan_udp_source_port_mode", "high"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.advertise_virtual_mac", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.hold_down_time", "60"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.host_reachability_protocol", "bgp"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.ingress_replication_protocol_bgp", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.multicast_group_l2", "0.0.0.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.multicast_group_l3", "0.0.0.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.multisite_source_interface", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.source_interface", "lo0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.suppress_arp", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.suppress_mac_route", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.anycast_source_interface", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.description", "My NVE interface"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.fabric_ready_time", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.multicast_routing_source_interface", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.multisite_virtual_mac", "00:00:00:00:00:00"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.suppress_nd", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.virtual_mac", "00:00:00:00:00:00"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.vni", "103100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.associate_vrf", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.multicast_group", "0.0.0.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.multisite_ingress_replication", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.suppress_arp", "off"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.legacy_mode", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.multisite_multicast_group", "0.0.0.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.spine_anycast_gateway", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.ingress_replication_protocol", "bgp"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.advertise_virtual_mac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.hold_down_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.host_reachability_protocol", "bgp"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.ingress_replication_protocol_bgp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.multicast_group_l2", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.multicast_group_l3", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.multisite_source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.suppress_arp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.suppress_mac_route", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.anycast_source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.description", "My NVE interface"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.fabric_ready_time", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.multicast_routing_source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.multisite_virtual_mac", "00:00:00:00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.suppress_nd", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.virtual_mac", "00:00:00:00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.associate_vrf", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.multicast_group", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.multisite_ingress_replication", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.suppress_arp", "off"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.legacy_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.multisite_multicast_group", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.spine_anycast_gateway", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.ingress_replication_protocol", "bgp"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -145,38 +143,40 @@ func testAccNxosNVOConfig_all() string {
 	config := `resource "nxos_nvo" "test" {` + "\n"
 	config += `	vxlan_udp_port = 4789` + "\n"
 	config += `	vxlan_udp_source_port_mode = "high"` + "\n"
-	config += `	nve_interfaces = [{` + "\n"
-	config += `		id = 1` + "\n"
-	config += `		admin_state = "enabled"` + "\n"
-	config += `		advertise_virtual_mac = true` + "\n"
-	config += `		hold_down_time = 60` + "\n"
-	config += `		host_reachability_protocol = "bgp"` + "\n"
-	config += `		ingress_replication_protocol_bgp = true` + "\n"
-	config += `		multicast_group_l2 = "0.0.0.0"` + "\n"
-	config += `		multicast_group_l3 = "0.0.0.0"` + "\n"
-	config += `		multisite_source_interface = "unspecified"` + "\n"
-	config += `		source_interface = "lo0"` + "\n"
-	config += `		suppress_arp = true` + "\n"
-	config += `		suppress_mac_route = false` + "\n"
-	config += `		anycast_source_interface = "unspecified"` + "\n"
-	config += `		description = "My NVE interface"` + "\n"
-	config += `		fabric_ready_time = 30` + "\n"
-	config += `		multicast_routing_source_interface = "unspecified"` + "\n"
-	config += `		multisite_virtual_mac = "00:00:00:00:00:00"` + "\n"
-	config += `		suppress_nd = false` + "\n"
-	config += `		virtual_mac = "00:00:00:00:00:00"` + "\n"
-	config += `		vnis = [{` + "\n"
-	config += `			vni = 103100` + "\n"
-	config += `			associate_vrf = false` + "\n"
-	config += `			multicast_group = "0.0.0.0"` + "\n"
-	config += `			multisite_ingress_replication = "disable"` + "\n"
-	config += `			suppress_arp = "off"` + "\n"
-	config += `			legacy_mode = false` + "\n"
-	config += `			multisite_multicast_group = "0.0.0.0"` + "\n"
-	config += `			spine_anycast_gateway = false` + "\n"
-	config += `			ingress_replication_protocol = "bgp"` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	nve_interfaces = {` + "\n"
+	config += `		"1" = {` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			advertise_virtual_mac = true` + "\n"
+	config += `			hold_down_time = 60` + "\n"
+	config += `			host_reachability_protocol = "bgp"` + "\n"
+	config += `			ingress_replication_protocol_bgp = true` + "\n"
+	config += `			multicast_group_l2 = "0.0.0.0"` + "\n"
+	config += `			multicast_group_l3 = "0.0.0.0"` + "\n"
+	config += `			multisite_source_interface = "unspecified"` + "\n"
+	config += `			source_interface = "lo0"` + "\n"
+	config += `			suppress_arp = true` + "\n"
+	config += `			suppress_mac_route = false` + "\n"
+	config += `			anycast_source_interface = "unspecified"` + "\n"
+	config += `			description = "My NVE interface"` + "\n"
+	config += `			fabric_ready_time = 30` + "\n"
+	config += `			multicast_routing_source_interface = "unspecified"` + "\n"
+	config += `			multisite_virtual_mac = "00:00:00:00:00:00"` + "\n"
+	config += `			suppress_nd = false` + "\n"
+	config += `			virtual_mac = "00:00:00:00:00:00"` + "\n"
+	config += `			vnis = {` + "\n"
+	config += `				"103100" = {` + "\n"
+	config += `					associate_vrf = false` + "\n"
+	config += `					multicast_group = "0.0.0.0"` + "\n"
+	config += `					multisite_ingress_replication = "disable"` + "\n"
+	config += `					suppress_arp = "off"` + "\n"
+	config += `					legacy_mode = false` + "\n"
+	config += `					multisite_multicast_group = "0.0.0.0"` + "\n"
+	config += `					spine_anycast_gateway = false` + "\n"
+	config += `					ingress_replication_protocol = "bgp"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

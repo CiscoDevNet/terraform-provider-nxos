@@ -32,81 +32,85 @@ This resource can manage IPv4 access control lists (ACLs) on NX-OS devices, incl
 
 ```terraform
 resource "nxos_access_lists" "example" {
-  access_lists = [{
-    name               = "ACL1"
-    fragments          = "permit-all"
-    ignore_routable    = false
-    per_ace_statistics = "off"
-    udf_present        = false
-    entries = [{
-      sequence_number           = 10
-      ack                       = false
-      action                    = "permit"
-      dscp                      = 0
-      destination_address_group = "AG1"
-      destination_port_1        = "443"
-      destination_port_2        = "0"
-      destination_port_group    = "PG1"
-      destination_port_mask     = "0"
-      destination_port_operator = "eq"
-      destination_prefix        = "10.1.1.0"
-      destination_prefix_length = "24"
-      destination_prefix_mask   = "255.255.255.0"
-      established               = false
-      fin                       = false
-      fragment                  = false
-      http_option_type          = "invalid"
-      icmp_code                 = 0
-      icmp_type                 = 0
-      log                       = false
-      packet_length_1           = "19"
-      packet_length_2           = "9210"
-      packet_length_operator    = "range"
-      precedence                = "0"
-      protocol                  = "tcp"
-      protocol_mask             = "tcp"
-      psh                       = false
-      redirect                  = "RD"
-      remark                    = "Line1"
-      rev                       = false
-      rst                       = false
-      source_address_group      = "AG2"
-      source_port_1             = "443"
-      source_port_2             = "0"
-      source_port_group         = "PG2"
-      source_port_mask          = "0"
-      source_port_operator      = "eq"
-      source_prefix             = "20.1.0.0"
-      source_prefix_length      = "16"
-      source_prefix_mask        = "255.255.0.0"
-      syn                       = false
-      time_range                = "TR1"
-      ttl                       = 0
-      urg                       = false
-      vlan                      = 4095
-      vni                       = "invalid"
-      capture_session           = 1
-      dscp_mask                 = 0
-      icmp_string               = "echo"
-      igmp_type                 = 0
-      load_share                = false
-      priority_all              = false
-      redirect_all              = "eth1/1"
-      tcp_flags_mask            = 0
-      tcp_option_length         = 0
-      telemetry_path            = false
-      telemetry_queue           = false
-      type_of_service           = 0
-    }]
-  }]
-  ingress_interfaces = [{
-    interface_id     = "eth1/10"
-    access_list_name = "ACL1"
-  }]
-  egress_interfaces = [{
-    interface_id     = "eth1/10"
-    access_list_name = "ACL1"
-  }]
+  access_lists = {
+    "ACL1" = {
+      fragments          = "permit-all"
+      ignore_routable    = false
+      per_ace_statistics = "off"
+      udf_present        = false
+      entries = {
+        "10" = {
+          ack                       = false
+          action                    = "permit"
+          dscp                      = 0
+          destination_address_group = "AG1"
+          destination_port_1        = "443"
+          destination_port_2        = "0"
+          destination_port_group    = "PG1"
+          destination_port_mask     = "0"
+          destination_port_operator = "eq"
+          destination_prefix        = "10.1.1.0"
+          destination_prefix_length = "24"
+          destination_prefix_mask   = "255.255.255.0"
+          established               = false
+          fin                       = false
+          fragment                  = false
+          http_option_type          = "invalid"
+          icmp_code                 = 0
+          icmp_type                 = 0
+          log                       = false
+          packet_length_1           = "19"
+          packet_length_2           = "9210"
+          packet_length_operator    = "range"
+          precedence                = "0"
+          protocol                  = "tcp"
+          protocol_mask             = "tcp"
+          psh                       = false
+          redirect                  = "RD"
+          remark                    = "Line1"
+          rev                       = false
+          rst                       = false
+          source_address_group      = "AG2"
+          source_port_1             = "443"
+          source_port_2             = "0"
+          source_port_group         = "PG2"
+          source_port_mask          = "0"
+          source_port_operator      = "eq"
+          source_prefix             = "20.1.0.0"
+          source_prefix_length      = "16"
+          source_prefix_mask        = "255.255.0.0"
+          syn                       = false
+          time_range                = "TR1"
+          ttl                       = 0
+          urg                       = false
+          vlan                      = 4095
+          vni                       = "invalid"
+          capture_session           = 1
+          dscp_mask                 = 0
+          icmp_string               = "echo"
+          igmp_type                 = 0
+          load_share                = false
+          priority_all              = false
+          redirect_all              = "eth1/1"
+          tcp_flags_mask            = 0
+          tcp_option_length         = 0
+          telemetry_path            = false
+          telemetry_queue           = false
+          type_of_service           = 0
+        }
+      }
+    }
+  }
+  ingress_interfaces = {
+    "eth1/10" = {
+      access_list_name = "ACL1"
+    }
+  }
+  egress_interfaces = {
+    "eth1/10" = {
+      access_list_name = "ACL1"
+    }
+  }
 }
 ```
 
@@ -115,10 +119,13 @@ resource "nxos_access_lists" "example" {
 
 ### Optional
 
-- `access_lists` (Attributes List) List of IPv4 Access Lists. (see [below for nested schema](#nestedatt--access_lists))
+- `access_lists` (Attributes Map) List of IPv4 Access Lists.
+  - Map key: `name` - Name of Access lists. (see [below for nested schema](#nestedatt--access_lists))
 - `device` (String) A device name from the provider configuration.
-- `egress_interfaces` (Attributes List) List of interfaces with IPv4 egress access list policy. (see [below for nested schema](#nestedatt--egress_interfaces))
-- `ingress_interfaces` (Attributes List) List of interfaces with IPv4 ingress access list policy. (see [below for nested schema](#nestedatt--ingress_interfaces))
+- `egress_interfaces` (Attributes Map) List of interfaces with IPv4 egress access list policy.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--egress_interfaces))
+- `ingress_interfaces` (Attributes Map) List of interfaces with IPv4 ingress access list policy.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--ingress_interfaces))
 
 ### Read-Only
 
@@ -127,13 +134,11 @@ resource "nxos_access_lists" "example" {
 <a id="nestedatt--access_lists"></a>
 ### Nested Schema for `access_lists`
 
-Required:
-
-- `name` (String) Name of Access lists.
-
 Optional:
 
-- `entries` (Attributes List) Access list entries. (see [below for nested schema](#nestedatt--access_lists--entries))
+- `entries` (Attributes Map) Access list entries.
+  - Map key: `sequence_number` - Sequence number.
+  - Key range: `0`-`4294967295` (see [below for nested schema](#nestedatt--access_lists--entries))
 - `fragments` (String) Fragments type for IPv4 and IPv6.
   - Choices: `disabled`, `deny-all`, `permit-all`
 - `ignore_routable` (Boolean) Ignore Multicast Routed ACLs.
@@ -143,11 +148,6 @@ Optional:
 
 <a id="nestedatt--access_lists--entries"></a>
 ### Nested Schema for `access_lists.entries`
-
-Required:
-
-- `sequence_number` (Number) Sequence number.
-  - Range: `0`-`4294967295`
 
 Optional:
 
@@ -239,10 +239,6 @@ Optional:
 <a id="nestedatt--egress_interfaces"></a>
 ### Nested Schema for `egress_interfaces`
 
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-
 Optional:
 
 - `access_list_name` (String) Access Control List name.
@@ -250,10 +246,6 @@ Optional:
 
 <a id="nestedatt--ingress_interfaces"></a>
 ### Nested Schema for `ingress_interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 Optional:
 
@@ -267,9 +259,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_access_lists.example
-  identity = {
-  }
+  to       = nxos_access_lists.example
+  identity = {}
 }
 ```
 

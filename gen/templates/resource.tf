@@ -11,14 +11,25 @@
 {{- template "renderChildren" (makeMap "Children" .TfChildClasses "Indent" $indent) -}}
 {{- end -}}
 {{- else if eq .Type "list"}}
-{{$indent}}{{.TfName}} = [{
+{{- $mapKey := mapKeyExample .Attributes}}
+{{- if and (not (hasNonIdAttrs .Attributes)) (not .TfChildClasses)}}
+{{$indent}}{{.TfName}} = {
+{{$indent}}  "{{$mapKey}}" = {}
+{{$indent}}}
+{{- else}}
+{{$indent}}{{.TfName}} = {
+{{$indent}}  "{{$mapKey}}" = {
 {{- range .Attributes}}
-{{$indent}}  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- if not .Id}}
+{{$indent}}    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
 {{- end -}}
 {{- if .TfChildClasses -}}
-{{- template "renderChildren" (makeMap "Children" .TfChildClasses "Indent" (printf "%s  " $indent)) -}}
+{{- template "renderChildren" (makeMap "Children" .TfChildClasses "Indent" (printf "%s    " $indent)) -}}
 {{- end}}
-{{$indent}}}]
+{{$indent}}  }
+{{$indent}}}
+{{- end}}
 {{- end -}}
 {{- end -}}
 {{- end -}}

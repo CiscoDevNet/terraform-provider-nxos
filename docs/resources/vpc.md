@@ -72,10 +72,11 @@ resource "nxos_vpc" "example" {
   peerlink_interface_id                        = "eth1/9"
   peerlink_admin_state                         = "enabled"
   peerlink_description                         = "My description"
-  interfaces = [{
-    vpc_interface_id          = 1
-    port_channel_interface_dn = "sys/intf/aggr-[po1]"
-  }]
+  interfaces = {
+    "1" = {
+      port_channel_interface_dn = "sys/intf/aggr-[po1]"
+    }
+  }
 }
 ```
 
@@ -120,7 +121,9 @@ resource "nxos_vpc" "example" {
   - Choices: `enabled`, `disabled`
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `interfaces` (Attributes List) List of vPC interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `interfaces` (Attributes Map) List of vPC interfaces.
+  - Map key: `vpc_interface_id` - The vPC interface identifier.
+  - Key range: `1`-`16384` (see [below for nested schema](#nestedatt--interfaces))
 - `keepalive_flush_timeout` (Number) flush timeout.
   - Range: `3`-`10`
 - `keepalive_interval` (Number) interval.
@@ -174,11 +177,6 @@ resource "nxos_vpc" "example" {
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
 
-Required:
-
-- `vpc_interface_id` (Number) The vPC interface identifier.
-  - Range: `1`-`16384`
-
 Optional:
 
 - `port_channel_interface_dn` (String) Port-channel interface DN.
@@ -191,9 +189,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_vpc.example
-  identity = {
-  }
+  to       = nxos_vpc.example
+  identity = {}
 }
 ```
 

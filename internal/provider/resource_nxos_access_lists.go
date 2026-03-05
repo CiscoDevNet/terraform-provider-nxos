@@ -77,15 +77,11 @@ func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaReq
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"access_lists": schema.ListNestedAttribute{
-				MarkdownDescription: "List of IPv4 Access Lists.",
+			"access_lists": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 Access Lists.\n  - Map key: `name` - Name of Access lists.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Name of Access lists.").String,
-							Required:            true,
-						},
 						"fragments": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Fragments type for IPv4 and IPv6.").AddStringEnumDescription("disabled", "deny-all", "permit-all").String,
 							Optional:            true,
@@ -108,18 +104,11 @@ func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaReq
 							MarkdownDescription: helpers.NewAttributeDescription("Flag to denote UDF is present.").String,
 							Optional:            true,
 						},
-						"entries": schema.ListNestedAttribute{
-							MarkdownDescription: "Access list entries.",
+						"entries": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access list entries.\n  - Map key: `sequence_number` - Sequence number.\n  - Key range: `0`-`4294967295`").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"sequence_number": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Sequence number.").AddIntegerRangeDescription(0, 4294967295).String,
-										Required:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 4294967295),
-										},
-									},
 									"ack": schema.BoolAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("TCP ACK flag.").String,
 										Optional:            true,
@@ -402,15 +391,11 @@ func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 				},
 			},
-			"ingress_interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of interfaces with IPv4 ingress access list policy.",
+			"ingress_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv4 ingress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-							Required:            true,
-						},
 						"access_list_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Access Control List name.").String,
 							Optional:            true,
@@ -418,15 +403,11 @@ func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 				},
 			},
-			"egress_interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of interfaces with IPv4 egress access list policy.",
+			"egress_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv4 egress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-							Required:            true,
-						},
 						"access_list_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Access Control List name.").String,
 							Optional:            true,

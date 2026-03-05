@@ -322,18 +322,11 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					int64validator.Between(0, 28800),
 				},
 			},
-			"arp_vpc_domains": schema.ListNestedAttribute{
-				MarkdownDescription: "ARP VPC Domain.",
+			"arp_vpc_domains": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ARP VPC Domain.\n  - Map key: `domain_id` - VPC domain id.\n  - Key range: `1`-`1000`").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"domain_id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("VPC domain id.").AddIntegerRangeDescription(1, 1000).String,
-							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 1000),
-							},
-						},
 						"arp_sync": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ARP Sync.").AddStringEnumDescription("disabled", "enabled").String,
 							Optional:            true,
@@ -421,24 +414,16 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"nd_vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: "Neighbor Discovery Domain.",
+			"nd_vrfs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Neighbor Discovery Domain.\n  - Map key: `name` - The name of the object.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
-							Required:            true,
-						},
-						"interfaces": schema.ListNestedAttribute{
-							MarkdownDescription: "Neighbor Discovery Interface.",
+						"interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Neighbor Discovery Interface.\n  - Map key: `interface_id` - An identifier.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"interface_id": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("An identifier.").String,
-										Required:            true,
-									},
 									"boot_file_url": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("The URL for a boot file in string.").String,
 										Optional:            true,

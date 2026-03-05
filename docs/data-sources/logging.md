@@ -37,7 +37,9 @@ data "nxos_logging" "example" {
 ### Read-Only
 
 - `all` (String) Logging level all state disabled/enabled.
-- `facilities` (Attributes List) List of logging facilities. (see [below for nested schema](#nestedatt--facilities))
+- `facilities` (Attributes Map) List of logging facilities.
+  - Map key: `name` - Facility Name of individual processes subscribed for logging level.
+  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp` (see [below for nested schema](#nestedatt--facilities))
 - `id` (String) The distinguished name of the object.
 - `level` (String) Logging severity level for all the facilites.
 
@@ -47,4 +49,3 @@ data "nxos_logging" "example" {
 Read-Only:
 
 - `level` (String) Logging severity level for individual facility name.
-- `name` (String) Facility Name of individual processes subscribed for logging level.

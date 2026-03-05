@@ -72,24 +72,16 @@ func (d *KeychainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"keychains": schema.ListNestedAttribute{
-				MarkdownDescription: "List of keychains.",
+			"keychains": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of keychains.\n  - Map key: `name` - Keychain name.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Keychain name.",
-							Computed:            true,
-						},
-						"keys": schema.ListNestedAttribute{
-							MarkdownDescription: "List of keys.",
+						"keys": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of keys.\n  - Map key: `key_id` - keyId of classic key chain.\n  - Key range: `0`-`65535`").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"key_id": schema.Int64Attribute{
-										MarkdownDescription: "keyId of classic key chain.",
-										Computed:            true,
-									},
 									"cryptographic_algorithm": schema.StringAttribute{
 										MarkdownDescription: "Cryptographic Algorithm used in key.",
 										Computed:            true,

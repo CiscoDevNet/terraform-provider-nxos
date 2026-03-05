@@ -116,15 +116,11 @@ func (r *HSRPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("disabled", "enabled"),
 				},
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of HSRP interfaces.",
+			"interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of HSRP interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-							Required:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 							Optional:            true,
@@ -193,25 +189,11 @@ func (r *HSRPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								stringvalidator.OneOf("v1", "v2"),
 							},
 						},
-						"groups": schema.ListNestedAttribute{
-							MarkdownDescription: "List of HSRP groups.",
+						"groups": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of HSRP groups.\n  - Map key format: `<group_id>;<address_family>`\n  - Key component `group_id`: Group Id. Range: `0`-`4095`.\n  - Key component `address_family`: Group Address Family. Choices: `ipv4`, `ipv6`.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"group_id": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Group Id.").AddIntegerRangeDescription(0, 4095).String,
-										Required:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 4095),
-										},
-									},
-									"address_family": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Group Address Family.").AddStringEnumDescription("ipv4", "ipv6").String,
-										Required:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6"),
-										},
-									},
 									"authentication_md5_compatibility_mode": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Enables compatibility mode for MD5 type-7 authentication.").AddStringEnumDescription("disabled", "enabled").String,
 										Optional:            true,

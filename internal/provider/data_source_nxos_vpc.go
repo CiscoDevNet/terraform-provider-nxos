@@ -244,15 +244,11 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Description.",
 				Computed:            true,
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of vPC interfaces.",
+			"interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of vPC interfaces.\n  - Map key: `vpc_interface_id` - The vPC interface identifier.\n  - Key range: `1`-`16384`").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"vpc_interface_id": schema.Int64Attribute{
-							MarkdownDescription: "The vPC interface identifier.",
-							Computed:            true,
-						},
 						"port_channel_interface_dn": schema.StringAttribute{
 							MarkdownDescription: "Port-channel interface DN.",
 							Computed:            true,

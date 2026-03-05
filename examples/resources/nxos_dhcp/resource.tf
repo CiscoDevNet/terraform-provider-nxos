@@ -29,18 +29,19 @@ resource "nxos_dhcp" "example" {
   v4_relay                                    = true
   v6_relay                                    = true
   v6_smart_relay_global                       = true
-  relay_interfaces = [{
-    interface_id        = "eth1/10"
-    information_trusted = true
-    smart_relay         = true
-    subnet_broadcast    = true
-    options             = "relay-info"
-    subnet_selection    = "10.0.0.0"
-    v6_smart_relay      = false
-    addresses = [{
-      vrf     = "VRF1"
-      address = "1.1.1.1"
-      counter = 1
-    }]
-  }]
+  relay_interfaces = {
+    "eth1/10" = {
+      information_trusted = true
+      smart_relay         = true
+      subnet_broadcast    = true
+      options             = "relay-info"
+      subnet_selection    = "10.0.0.0"
+      v6_smart_relay      = false
+      addresses = {
+        "VRF1;1.1.1.1" = {
+          counter = 1
+        }
+      }
+    }
+  }
 }

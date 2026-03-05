@@ -53,30 +53,32 @@ resource "nxos_user_management" "example" {
   post_login_banner_owner_key   = "owner1"
   post_login_banner_message     = "Welcome to the system."
   post_login_banner_owner_tag   = "tag1"
-  users = [{
-    name                     = "user1"
-    account_status           = "active"
-    allow_expired            = "yes"
-    clear_password_history   = "no"
-    description              = "Test user account"
-    email                    = "user1@example.com"
-    expiration               = "2030-01-01T00:00:00.000+00:00"
-    expires                  = "no"
-    first_name               = "John"
-    force                    = "no"
-    last_name                = "Doe"
-    password_hash            = "unspecified"
-    phone                    = "1234567890"
-    password                 = "password123"
-    password_encryption_type = "clear"
-    shell_type               = "shellvsh"
-    unix_user_id             = 100
-    roles = [{
-      name           = "network-operator"
-      description    = "Operator role"
-      privilege_type = "readPriv"
-    }]
-  }]
+  users = {
+    "user1" = {
+      account_status           = "active"
+      allow_expired            = "yes"
+      clear_password_history   = "no"
+      description              = "Test user account"
+      email                    = "user1@example.com"
+      expiration               = "2030-01-01T00:00:00.000+00:00"
+      expires                  = "no"
+      first_name               = "John"
+      force                    = "no"
+      last_name                = "Doe"
+      password_hash            = "unspecified"
+      phone                    = "1234567890"
+      password                 = "password123"
+      password_encryption_type = "clear"
+      shell_type               = "shellvsh"
+      unix_user_id             = 100
+      roles = {
+        "network-operator" = {
+          description    = "Operator role"
+          privilege_type = "readPriv"
+        }
+      }
+    }
+  }
   tacacs_deadtime         = 5
   tacacs_description      = "TACACS+ settings"
   tacacs_key              = "secret123"
@@ -88,32 +90,34 @@ resource "nxos_user_management" "example" {
   tacacs_retries          = 3
   tacacs_source_interface = "unspecified"
   tacacs_timeout          = 10
-  tacacs_providers = [{
-    name                     = "10.1.1.1"
-    authentication_protocol  = "chap"
-    description              = "TACACS+ provider"
-    key                      = "secret123"
-    key_encryption           = "0"
-    monitoring_idle_time     = 10
-    monitoring_password      = "monpass"
-    monitoring_password_type = "0"
-    monitoring_user          = "monuser"
-    owner_key                = "owner1"
-    owner_tag                = "tag1"
-    port                     = 149
-    retries                  = 3
-    single_connection        = "yes"
-    timeout                  = 10
-  }]
-  tacacs_provider_groups = [{
-    name             = "TACACS_GROUP1"
-    deadtime         = 5
-    description      = "TACACS+ provider group"
-    owner_key        = "owner1"
-    owner_tag        = "tag1"
-    source_interface = "unspecified"
-    vrf              = "default"
-  }]
+  tacacs_providers = {
+    "10.1.1.1" = {
+      authentication_protocol  = "chap"
+      description              = "TACACS+ provider"
+      key                      = "secret123"
+      key_encryption           = "0"
+      monitoring_idle_time     = 10
+      monitoring_password      = "monpass"
+      monitoring_password_type = "0"
+      monitoring_user          = "monuser"
+      owner_key                = "owner1"
+      owner_tag                = "tag1"
+      port                     = 149
+      retries                  = 3
+      single_connection        = "yes"
+      timeout                  = 10
+    }
+  }
+  tacacs_provider_groups = {
+    "TACACS_GROUP1" = {
+      deadtime         = 5
+      description      = "TACACS+ provider group"
+      owner_key        = "owner1"
+      owner_tag        = "tag1"
+      source_interface = "unspecified"
+      vrf              = "default"
+    }
+  }
 }
 ```
 
@@ -169,14 +173,17 @@ resource "nxos_user_management" "example" {
 - `tacacs_name` (String) Object name.
 - `tacacs_owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `tacacs_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
-- `tacacs_provider_groups` (Attributes List) TACACS+ provider groups. (see [below for nested schema](#nestedatt--tacacs_provider_groups))
-- `tacacs_providers` (Attributes List) TACACS+ providers. (see [below for nested schema](#nestedatt--tacacs_providers))
+- `tacacs_provider_groups` (Attributes Map) TACACS+ provider groups.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--tacacs_provider_groups))
+- `tacacs_providers` (Attributes Map) TACACS+ providers.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--tacacs_providers))
 - `tacacs_retries` (Number) The number of attempts that the authentication method is tried.
   - Range: `0`-`5`
 - `tacacs_source_interface` (String) Source Interface.
 - `tacacs_timeout` (Number) The amount of time between authentication attempts.
   - Range: `1`-`60`
-- `users` (Attributes List) List of users. (see [below for nested schema](#nestedatt--users))
+- `users` (Attributes Map) List of users.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--users))
 
 ### Read-Only
 
@@ -184,10 +191,6 @@ resource "nxos_user_management" "example" {
 
 <a id="nestedatt--tacacs_provider_groups"></a>
 ### Nested Schema for `tacacs_provider_groups`
-
-Required:
-
-- `name` (String) Object name.
 
 Optional:
 
@@ -202,10 +205,6 @@ Optional:
 
 <a id="nestedatt--tacacs_providers"></a>
 ### Nested Schema for `tacacs_providers`
-
-Required:
-
-- `name` (String) Object name.
 
 Optional:
 
@@ -236,10 +235,6 @@ Optional:
 <a id="nestedatt--users"></a>
 ### Nested Schema for `users`
 
-Required:
-
-- `name` (String) Object name.
-
 Optional:
 
 - `account_status` (String) The status of the locally-authenticated user account.
@@ -263,7 +258,8 @@ Optional:
 - `password_hash` (String) Generate password hash for clear text password.
   - Choices: `unspecified`, `pbkdf2`, `scrypt`
 - `phone` (String) The phone number of the locally-authenticated user.
-- `roles` (Attributes List) User roles. (see [below for nested schema](#nestedatt--users--roles))
+- `roles` (Attributes Map) User roles.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--users--roles))
 - `shell_type` (String) User Shelltype Access.
   - Choices: `shellvsh`, `shellbash`
 - `unix_user_id` (Number) The UNIX identifier of the locally-authenticated user.
@@ -271,10 +267,6 @@ Optional:
 
 <a id="nestedatt--users--roles"></a>
 ### Nested Schema for `users.roles`
-
-Required:
-
-- `name` (String) Object name.
 
 Optional:
 
@@ -290,9 +282,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_user_management.example
-  identity = {
-  }
+  to       = nxos_user_management.example
+  identity = {}
 }
 ```
 

@@ -68,28 +68,20 @@ func (d *QueuingQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"policy_maps": schema.ListNestedAttribute{
-				MarkdownDescription: "List of policy maps.",
+			"policy_maps": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of policy maps.\n  - Map key: `name` - Name of policy-map.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Name of policy-map.",
-							Computed:            true,
-						},
 						"match_type": schema.StringAttribute{
 							MarkdownDescription: "Match-any, match-all or match-first.",
 							Computed:            true,
 						},
-						"match_class_maps": schema.ListNestedAttribute{
-							MarkdownDescription: "List of match class maps.",
+						"match_class_maps": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of match class maps.\n  - Map key: `name` - Match using class-map.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: "Match using class-map.",
-										Computed:            true,
-									},
 									"next_class_map": schema.StringAttribute{
 										MarkdownDescription: "Insert before the given class-map.",
 										Computed:            true,

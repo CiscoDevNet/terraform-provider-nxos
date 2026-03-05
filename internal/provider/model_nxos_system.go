@@ -24,7 +24,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -39,73 +38,70 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type System struct {
-	Device                                        types.String          `tfsdk:"device"`
-	Dn                                            types.String          `tfsdk:"id"`
-	Name                                          types.String          `tfsdk:"name"`
-	EthernetMtu                                   types.Int64           `tfsdk:"ethernet_mtu"`
-	EthernetDefaultAdminState                     types.String          `tfsdk:"ethernet_default_admin_state"`
-	EthernetAdminLinkDownSyslogLevel              types.Int64           `tfsdk:"ethernet_admin_link_down_syslog_level"`
-	EthernetAdminLinkUpSyslogLevel                types.Int64           `tfsdk:"ethernet_admin_link_up_syslog_level"`
-	EthernetAdminState                            types.String          `tfsdk:"ethernet_admin_state"`
-	EthernetAllowUnsupportedSfp                   types.Bool            `tfsdk:"ethernet_allow_unsupported_sfp"`
-	EthernetChassisInfrastructureAdaptorVlan      types.Int64           `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
-	EthernetChassisInfrastructureEpdsPortNumber   types.Int64           `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
-	EthernetChassisInfrastructureIpv6Address      types.String          `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
-	EthernetChassisInfrastructureVlan             types.Int64           `tfsdk:"ethernet_chassis_infrastructure_vlan"`
-	EthernetChassisManagementInstance             types.String          `tfsdk:"ethernet_chassis_management_instance"`
-	EthernetChassisManagementInstanceFabricNumber types.String          `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
-	EthernetControl                               types.String          `tfsdk:"ethernet_control"`
-	EthernetInterfaceSyslogInfo                   types.String          `tfsdk:"ethernet_interface_syslog_info"`
-	EthernetLogEvent                              types.String          `tfsdk:"ethernet_log_event"`
-	EthernetDefaultLayer                          types.String          `tfsdk:"ethernet_default_layer"`
-	EthernetSystemInterfaceAdminState             types.String          `tfsdk:"ethernet_system_interface_admin_state"`
-	EthernetSystemLinkFailureLaserOn              types.Bool            `tfsdk:"ethernet_system_link_failure_laser_on"`
-	EthernetSystemStormControlMultiThreshold      types.Bool            `tfsdk:"ethernet_system_storm_control_multi_threshold"`
-	EthernetVlanTagNative                         types.Bool            `tfsdk:"ethernet_vlan_tag_native"`
-	ArpAdminState                                 types.String          `tfsdk:"arp_admin_state"`
-	ArpInstanceAdminState                         types.String          `tfsdk:"arp_instance_admin_state"`
-	ArpAllowStaticArpOutsideSubnet                types.String          `tfsdk:"arp_allow_static_arp_outside_subnet"`
-	ArpUnnumberedSviSoftwareReplication           types.String          `tfsdk:"arp_unnumbered_svi_software_replication"`
-	ArpCacheLimit                                 types.Int64           `tfsdk:"arp_cache_limit"`
-	ArpCacheSyslogRate                            types.Int64           `tfsdk:"arp_cache_syslog_rate"`
-	ArpControl                                    types.String          `tfsdk:"arp_control"`
-	ArpEvpnTimeout                                types.Int64           `tfsdk:"arp_evpn_timeout"`
-	ArpInterfaceCacheLimit                        types.Int64           `tfsdk:"arp_interface_cache_limit"`
-	ArpIpAdjacencyRouteDistance                   types.Int64           `tfsdk:"arp_ip_adjacency_route_distance"`
-	ArpIpArpCos                                   types.Int64           `tfsdk:"arp_ip_arp_cos"`
-	ArpOffListTimeout                             types.Int64           `tfsdk:"arp_off_list_timeout"`
-	ArpRarpFabricForwarding                       types.String          `tfsdk:"arp_rarp_fabric_forwarding"`
-	ArpRarpFabricForwardingRate                   types.Int64           `tfsdk:"arp_rarp_fabric_forwarding_rate"`
-	ArpResolveOutsideSubnet                       types.String          `tfsdk:"arp_resolve_outside_subnet"`
-	ArpSuppressionTimeout                         types.Int64           `tfsdk:"arp_suppression_timeout"`
-	ArpTimeout                                    types.Int64           `tfsdk:"arp_timeout"`
-	ArpVpcDomains                                 []SystemArpVpcDomains `tfsdk:"arp_vpc_domains"`
-	NdAdminState                                  types.String          `tfsdk:"nd_admin_state"`
-	NdAcceptSolicitNeighborEntry                  types.String          `tfsdk:"nd_accept_solicit_neighbor_entry"`
-	NdInstanceAdminState                          types.String          `tfsdk:"nd_instance_admin_state"`
-	NdAgingInterval                               types.Int64           `tfsdk:"nd_aging_interval"`
-	NdCacheLimit                                  types.Int64           `tfsdk:"nd_cache_limit"`
-	NdCacheSyslogRate                             types.Int64           `tfsdk:"nd_cache_syslog_rate"`
-	NdControl                                     types.String          `tfsdk:"nd_control"`
-	NdIpv6AdjacencyRouteDistance                  types.Int64           `tfsdk:"nd_ipv6_adjacency_route_distance"`
-	NdOffListTimeout                              types.Int64           `tfsdk:"nd_off_list_timeout"`
-	NdProbeIntervalForSolicitNeighbor             types.Int64           `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
-	NdSolicitNeighborAdvertisement                types.String          `tfsdk:"nd_solicit_neighbor_advertisement"`
-	NdVrfs                                        []SystemNdVrfs        `tfsdk:"nd_vrfs"`
+	Device                                        types.String                   `tfsdk:"device"`
+	Dn                                            types.String                   `tfsdk:"id"`
+	Name                                          types.String                   `tfsdk:"name"`
+	EthernetMtu                                   types.Int64                    `tfsdk:"ethernet_mtu"`
+	EthernetDefaultAdminState                     types.String                   `tfsdk:"ethernet_default_admin_state"`
+	EthernetAdminLinkDownSyslogLevel              types.Int64                    `tfsdk:"ethernet_admin_link_down_syslog_level"`
+	EthernetAdminLinkUpSyslogLevel                types.Int64                    `tfsdk:"ethernet_admin_link_up_syslog_level"`
+	EthernetAdminState                            types.String                   `tfsdk:"ethernet_admin_state"`
+	EthernetAllowUnsupportedSfp                   types.Bool                     `tfsdk:"ethernet_allow_unsupported_sfp"`
+	EthernetChassisInfrastructureAdaptorVlan      types.Int64                    `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
+	EthernetChassisInfrastructureEpdsPortNumber   types.Int64                    `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
+	EthernetChassisInfrastructureIpv6Address      types.String                   `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
+	EthernetChassisInfrastructureVlan             types.Int64                    `tfsdk:"ethernet_chassis_infrastructure_vlan"`
+	EthernetChassisManagementInstance             types.String                   `tfsdk:"ethernet_chassis_management_instance"`
+	EthernetChassisManagementInstanceFabricNumber types.String                   `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
+	EthernetControl                               types.String                   `tfsdk:"ethernet_control"`
+	EthernetInterfaceSyslogInfo                   types.String                   `tfsdk:"ethernet_interface_syslog_info"`
+	EthernetLogEvent                              types.String                   `tfsdk:"ethernet_log_event"`
+	EthernetDefaultLayer                          types.String                   `tfsdk:"ethernet_default_layer"`
+	EthernetSystemInterfaceAdminState             types.String                   `tfsdk:"ethernet_system_interface_admin_state"`
+	EthernetSystemLinkFailureLaserOn              types.Bool                     `tfsdk:"ethernet_system_link_failure_laser_on"`
+	EthernetSystemStormControlMultiThreshold      types.Bool                     `tfsdk:"ethernet_system_storm_control_multi_threshold"`
+	EthernetVlanTagNative                         types.Bool                     `tfsdk:"ethernet_vlan_tag_native"`
+	ArpAdminState                                 types.String                   `tfsdk:"arp_admin_state"`
+	ArpInstanceAdminState                         types.String                   `tfsdk:"arp_instance_admin_state"`
+	ArpAllowStaticArpOutsideSubnet                types.String                   `tfsdk:"arp_allow_static_arp_outside_subnet"`
+	ArpUnnumberedSviSoftwareReplication           types.String                   `tfsdk:"arp_unnumbered_svi_software_replication"`
+	ArpCacheLimit                                 types.Int64                    `tfsdk:"arp_cache_limit"`
+	ArpCacheSyslogRate                            types.Int64                    `tfsdk:"arp_cache_syslog_rate"`
+	ArpControl                                    types.String                   `tfsdk:"arp_control"`
+	ArpEvpnTimeout                                types.Int64                    `tfsdk:"arp_evpn_timeout"`
+	ArpInterfaceCacheLimit                        types.Int64                    `tfsdk:"arp_interface_cache_limit"`
+	ArpIpAdjacencyRouteDistance                   types.Int64                    `tfsdk:"arp_ip_adjacency_route_distance"`
+	ArpIpArpCos                                   types.Int64                    `tfsdk:"arp_ip_arp_cos"`
+	ArpOffListTimeout                             types.Int64                    `tfsdk:"arp_off_list_timeout"`
+	ArpRarpFabricForwarding                       types.String                   `tfsdk:"arp_rarp_fabric_forwarding"`
+	ArpRarpFabricForwardingRate                   types.Int64                    `tfsdk:"arp_rarp_fabric_forwarding_rate"`
+	ArpResolveOutsideSubnet                       types.String                   `tfsdk:"arp_resolve_outside_subnet"`
+	ArpSuppressionTimeout                         types.Int64                    `tfsdk:"arp_suppression_timeout"`
+	ArpTimeout                                    types.Int64                    `tfsdk:"arp_timeout"`
+	ArpVpcDomains                                 map[string]SystemArpVpcDomains `tfsdk:"arp_vpc_domains"`
+	NdAdminState                                  types.String                   `tfsdk:"nd_admin_state"`
+	NdAcceptSolicitNeighborEntry                  types.String                   `tfsdk:"nd_accept_solicit_neighbor_entry"`
+	NdInstanceAdminState                          types.String                   `tfsdk:"nd_instance_admin_state"`
+	NdAgingInterval                               types.Int64                    `tfsdk:"nd_aging_interval"`
+	NdCacheLimit                                  types.Int64                    `tfsdk:"nd_cache_limit"`
+	NdCacheSyslogRate                             types.Int64                    `tfsdk:"nd_cache_syslog_rate"`
+	NdControl                                     types.String                   `tfsdk:"nd_control"`
+	NdIpv6AdjacencyRouteDistance                  types.Int64                    `tfsdk:"nd_ipv6_adjacency_route_distance"`
+	NdOffListTimeout                              types.Int64                    `tfsdk:"nd_off_list_timeout"`
+	NdProbeIntervalForSolicitNeighbor             types.Int64                    `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
+	NdSolicitNeighborAdvertisement                types.String                   `tfsdk:"nd_solicit_neighbor_advertisement"`
+	NdVrfs                                        map[string]SystemNdVrfs        `tfsdk:"nd_vrfs"`
 }
 
 type SystemArpVpcDomains struct {
-	DomainId types.Int64  `tfsdk:"domain_id"`
-	ArpSync  types.String `tfsdk:"arp_sync"`
+	ArpSync types.String `tfsdk:"arp_sync"`
 }
 
 type SystemNdVrfs struct {
-	Name       types.String             `tfsdk:"name"`
-	Interfaces []SystemNdVrfsInterfaces `tfsdk:"interfaces"`
+	Interfaces map[string]SystemNdVrfsInterfaces `tfsdk:"interfaces"`
 }
 
 type SystemNdVrfsInterfaces struct {
-	InterfaceId                types.String `tfsdk:"interface_id"`
 	BootFileUrl                types.String `tfsdk:"boot_file_url"`
 	Control                    types.String `tfsdk:"control"`
 	DadAttempts                types.Int64  `tfsdk:"dad_attempts"`
@@ -155,16 +151,16 @@ func (data System) getDn() string {
 	return "sys"
 }
 
-func (data SystemArpVpcDomains) getRn() string {
-	return fmt.Sprintf("dom-[%v]", data.DomainId.ValueInt64())
+func (data SystemArpVpcDomains) getRn(key string) string {
+	return fmt.Sprintf("dom-[%v]", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
-func (data SystemNdVrfs) getRn() string {
-	return fmt.Sprintf("dom-[%s]", data.Name.ValueString())
+func (data SystemNdVrfs) getRn(key string) string {
+	return fmt.Sprintf("dom-[%s]", key)
 }
 
-func (data SystemNdVrfsInterfaces) getRn() string {
-	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
+func (data SystemNdVrfsInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
 }
 
 func (data System) getClassName() string {
@@ -323,11 +319,9 @@ func (data System) toBody() nxos.Body {
 				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
-				for _, child := range data.ArpVpcDomains {
+				for key, child := range data.ArpVpcDomains {
 					attrs = "{}"
-					if (!child.DomainId.IsUnknown() && !child.DomainId.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "domainId", strconv.FormatInt(child.DomainId.ValueInt64(), 10))
-					}
+					attrs, _ = sjson.Set(attrs, "domainId", key)
 					if (!child.ArpSync.IsUnknown() && !child.ArpSync.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "arpSync", child.ArpSync.ValueString())
 					}
@@ -381,20 +375,16 @@ func (data System) toBody() nxos.Body {
 			}
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
-			for _, child := range data.NdVrfs {
+			for key, child := range data.NdVrfs {
 				attrs = "{}"
-				if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-				}
+				attrs, _ = sjson.Set(attrs, "name", key)
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ndDom.attributes", attrs)
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ndDom.children"
-					for _, child := range child.Interfaces {
+					for key, child := range child.Interfaces {
 						attrs = "{}"
-						if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
-						}
+						attrs, _ = sjson.Set(attrs, "id", key)
 						if (!child.BootFileUrl.IsUnknown() && !child.BootFileUrl.IsNull()) || false {
 							attrs, _ = sjson.Set(attrs, "bootFileUrl", child.BootFileUrl.ValueString())
 						}
@@ -472,8 +462,8 @@ func (data *System) fromBody(res gjson.Result) {
 		var rethpmEntity gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ethpmEntity.attributes.rn").String()
-				if key == "ethpm" {
+				rnValue := v.Get("ethpmEntity.attributes.rn").String()
+				if rnValue == "ethpm" {
 					rethpmEntity = v
 					return false
 				}
@@ -484,8 +474,8 @@ func (data *System) fromBody(res gjson.Result) {
 			var rethpmInst gjson.Result
 			rethpmEntity.Get("ethpmEntity.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ethpmInst.attributes.rn").String()
-					if key == "inst" {
+					rnValue := v.Get("ethpmInst.attributes.rn").String()
+					if rnValue == "inst" {
 						rethpmInst = v
 						return false
 					}
@@ -518,8 +508,8 @@ func (data *System) fromBody(res gjson.Result) {
 		var rarpEntity gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("arpEntity.attributes.rn").String()
-				if key == "arp" {
+				rnValue := v.Get("arpEntity.attributes.rn").String()
+				if rnValue == "arp" {
 					rarpEntity = v
 					return false
 				}
@@ -531,8 +521,8 @@ func (data *System) fromBody(res gjson.Result) {
 			var rarpInst gjson.Result
 			rarpEntity.Get("arpEntity.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("arpInst.attributes.rn").String()
-					if key == "inst" {
+					rnValue := v.Get("arpInst.attributes.rn").String()
+					if rnValue == "inst" {
 						rarpInst = v
 						return false
 					}
@@ -559,8 +549,8 @@ func (data *System) fromBody(res gjson.Result) {
 				var rarpVpc gjson.Result
 				rarpInst.Get("arpInst.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("arpVpc.attributes.rn").String()
-						if key == "vpc" {
+						rnValue := v.Get("arpVpc.attributes.rn").String()
+						if rnValue == "vpc" {
 							rarpVpc = v
 							return false
 						}
@@ -573,9 +563,12 @@ func (data *System) fromBody(res gjson.Result) {
 							func(classname, value gjson.Result) bool {
 								if classname.String() == "arpVpcDom" {
 									var child SystemArpVpcDomains
-									child.DomainId = types.Int64Value(value.Get("attributes.domainId").Int())
 									child.ArpSync = types.StringValue(value.Get("attributes.arpSync").String())
-									data.ArpVpcDomains = append(data.ArpVpcDomains, child)
+									mapKey := value.Get("attributes.domainId").String()
+									if data.ArpVpcDomains == nil {
+										data.ArpVpcDomains = make(map[string]SystemArpVpcDomains)
+									}
+									data.ArpVpcDomains[mapKey] = child
 								}
 								return true
 							},
@@ -590,8 +583,8 @@ func (data *System) fromBody(res gjson.Result) {
 		var rndEntity gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ndEntity.attributes.rn").String()
-				if key == "nd" {
+				rnValue := v.Get("ndEntity.attributes.rn").String()
+				if rnValue == "nd" {
 					rndEntity = v
 					return false
 				}
@@ -603,8 +596,8 @@ func (data *System) fromBody(res gjson.Result) {
 			var rndInst gjson.Result
 			rndEntity.Get("ndEntity.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ndInst.attributes.rn").String()
-					if key == "inst" {
+					rnValue := v.Get("ndInst.attributes.rn").String()
+					if rnValue == "inst" {
 						rndInst = v
 						return false
 					}
@@ -627,14 +620,13 @@ func (data *System) fromBody(res gjson.Result) {
 						func(classname, value gjson.Result) bool {
 							if classname.String() == "ndDom" {
 								var child SystemNdVrfs
-								child.Name = types.StringValue(value.Get("attributes.name").String())
+								mapKey := value.Get("attributes.name").String()
 								value.Get("children").ForEach(
 									func(_, nestedV gjson.Result) bool {
 										nestedV.ForEach(
 											func(nestedClassname, nestedValue gjson.Result) bool {
 												if nestedClassname.String() == "ndIf" {
 													var nestedChildndIf SystemNdVrfsInterfaces
-													nestedChildndIf.InterfaceId = types.StringValue(nestedValue.Get("attributes.id").String())
 													nestedChildndIf.BootFileUrl = types.StringValue(nestedValue.Get("attributes.bootFileUrl").String())
 													nestedChildndIf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
 													nestedChildndIf.DadAttempts = types.Int64Value(nestedValue.Get("attributes.dadAttempts").Int())
@@ -654,7 +646,11 @@ func (data *System) fromBody(res gjson.Result) {
 													nestedChildndIf.RetransmitTimer = types.Int64Value(nestedValue.Get("attributes.retransTimer").Int())
 													nestedChildndIf.RouteSuppress = types.StringValue(nestedValue.Get("attributes.routeSuppress").String())
 													nestedChildndIf.RouterPreference = types.StringValue(nestedValue.Get("attributes.routerPreference").String())
-													child.Interfaces = append(child.Interfaces, nestedChildndIf)
+													nestedMapKey := nestedValue.Get("attributes.id").String()
+													if child.Interfaces == nil {
+														child.Interfaces = make(map[string]SystemNdVrfsInterfaces)
+													}
+													child.Interfaces[nestedMapKey] = nestedChildndIf
 												}
 												return true
 											},
@@ -662,7 +658,10 @@ func (data *System) fromBody(res gjson.Result) {
 										return true
 									},
 								)
-								data.NdVrfs = append(data.NdVrfs, child)
+								if data.NdVrfs == nil {
+									data.NdVrfs = make(map[string]SystemNdVrfs)
+								}
+								data.NdVrfs[mapKey] = child
 							}
 							return true
 						},
@@ -687,8 +686,8 @@ func (data *System) updateFromBody(res gjson.Result) {
 	var rethpmEntity gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("ethpmEntity.attributes.rn").String()
-			if key == "ethpm" {
+			rnValue := v.Get("ethpmEntity.attributes.rn").String()
+			if rnValue == "ethpm" {
 				rethpmEntity = v
 				return false
 			}
@@ -699,8 +698,8 @@ func (data *System) updateFromBody(res gjson.Result) {
 		var rethpmInst gjson.Result
 		rethpmEntity.Get("ethpmEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ethpmInst.attributes.rn").String()
-				if key == "inst" {
+				rnValue := v.Get("ethpmInst.attributes.rn").String()
+				if rnValue == "inst" {
 					rethpmInst = v
 					return false
 				}
@@ -811,8 +810,8 @@ func (data *System) updateFromBody(res gjson.Result) {
 	var rarpEntity gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("arpEntity.attributes.rn").String()
-			if key == "arp" {
+			rnValue := v.Get("arpEntity.attributes.rn").String()
+			if rnValue == "arp" {
 				rarpEntity = v
 				return false
 			}
@@ -828,8 +827,8 @@ func (data *System) updateFromBody(res gjson.Result) {
 		var rarpInst gjson.Result
 		rarpEntity.Get("arpEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("arpInst.attributes.rn").String()
-				if key == "inst" {
+				rnValue := v.Get("arpInst.attributes.rn").String()
+				if rnValue == "inst" {
 					rarpInst = v
 					return false
 				}
@@ -920,19 +919,19 @@ func (data *System) updateFromBody(res gjson.Result) {
 			var rarpVpc gjson.Result
 			rarpInst.Get("arpInst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("arpVpc.attributes.rn").String()
-					if key == "vpc" {
+					rnValue := v.Get("arpVpc.attributes.rn").String()
+					if rnValue == "vpc" {
 						rarpVpc = v
 						return false
 					}
 					return true
 				},
 			)
-			for c := len(data.ArpVpcDomains) - 1; c >= 0; c-- {
+			for key, item := range data.ArpVpcDomains {
 				var rarpVpcDom gjson.Result
 				rarpVpc.Get("arpVpc.children").ForEach(
 					func(_, v gjson.Result) bool {
-						if v.Get("arpVpcDom.attributes.domainId").String() == strconv.FormatInt(data.ArpVpcDomains[c].DomainId.ValueInt64(), 10) {
+						if v.Get("arpVpcDom.attributes.domainId").String() == key {
 							rarpVpcDom = v
 							return false
 						}
@@ -940,27 +939,23 @@ func (data *System) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !rarpVpcDom.Exists() {
-					data.ArpVpcDomains = slices.Delete(data.ArpVpcDomains, c, c+1)
+					delete(data.ArpVpcDomains, key)
 					continue
 				}
-				if !data.ArpVpcDomains[c].DomainId.IsNull() {
-					data.ArpVpcDomains[c].DomainId = types.Int64Value(rarpVpcDom.Get("arpVpcDom.attributes.domainId").Int())
+				if !item.ArpSync.IsNull() {
+					item.ArpSync = types.StringValue(rarpVpcDom.Get("arpVpcDom.attributes.arpSync").String())
 				} else {
-					data.ArpVpcDomains[c].DomainId = types.Int64Null()
+					item.ArpSync = types.StringNull()
 				}
-				if !data.ArpVpcDomains[c].ArpSync.IsNull() {
-					data.ArpVpcDomains[c].ArpSync = types.StringValue(rarpVpcDom.Get("arpVpcDom.attributes.arpSync").String())
-				} else {
-					data.ArpVpcDomains[c].ArpSync = types.StringNull()
-				}
+				data.ArpVpcDomains[key] = item
 			}
 		}
 	}
 	var rndEntity gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("ndEntity.attributes.rn").String()
-			if key == "nd" {
+			rnValue := v.Get("ndEntity.attributes.rn").String()
+			if rnValue == "nd" {
 				rndEntity = v
 				return false
 			}
@@ -976,8 +971,8 @@ func (data *System) updateFromBody(res gjson.Result) {
 		var rndInst gjson.Result
 		rndEntity.Get("ndEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ndInst.attributes.rn").String()
-				if key == "inst" {
+				rnValue := v.Get("ndInst.attributes.rn").String()
+				if rnValue == "inst" {
 					rndInst = v
 					return false
 				}
@@ -1034,11 +1029,11 @@ func (data *System) updateFromBody(res gjson.Result) {
 		} else {
 			data.NdSolicitNeighborAdvertisement = types.StringNull()
 		}
-		for c := len(data.NdVrfs) - 1; c >= 0; c-- {
+		for key, item := range data.NdVrfs {
 			var rndDom gjson.Result
 			rndInst.Get("ndInst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					if v.Get("ndDom.attributes.name").String() == data.NdVrfs[c].Name.ValueString() {
+					if v.Get("ndDom.attributes.name").String() == key {
 						rndDom = v
 						return false
 					}
@@ -1046,19 +1041,15 @@ func (data *System) updateFromBody(res gjson.Result) {
 				},
 			)
 			if !rndDom.Exists() {
-				data.NdVrfs = slices.Delete(data.NdVrfs, c, c+1)
+				delete(data.NdVrfs, key)
 				continue
 			}
-			if !data.NdVrfs[c].Name.IsNull() {
-				data.NdVrfs[c].Name = types.StringValue(rndDom.Get("ndDom.attributes.name").String())
-			} else {
-				data.NdVrfs[c].Name = types.StringNull()
-			}
-			for nc := len(data.NdVrfs[c].Interfaces) - 1; nc >= 0; nc-- {
+			for nc := range item.Interfaces {
+				ncItem := item.Interfaces[nc]
 				var rndIf gjson.Result
 				rndDom.Get("ndDom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						if v.Get("ndIf.attributes.id").String() == data.NdVrfs[c].Interfaces[nc].InterfaceId.ValueString() {
+						if v.Get("ndIf.attributes.id").String() == nc {
 							rndIf = v
 							return false
 						}
@@ -1066,110 +1057,107 @@ func (data *System) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !rndIf.Exists() {
-					data.NdVrfs[c].Interfaces = slices.Delete(data.NdVrfs[c].Interfaces, nc, nc+1)
+					delete(item.Interfaces, nc)
 					continue
 				}
-				if !data.NdVrfs[c].Interfaces[nc].InterfaceId.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].InterfaceId = types.StringValue(rndIf.Get("ndIf.attributes.id").String())
+				if !ncItem.BootFileUrl.IsNull() {
+					ncItem.BootFileUrl = types.StringValue(rndIf.Get("ndIf.attributes.bootFileUrl").String())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].InterfaceId = types.StringNull()
+					ncItem.BootFileUrl = types.StringNull()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].BootFileUrl.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].BootFileUrl = types.StringValue(rndIf.Get("ndIf.attributes.bootFileUrl").String())
+				if !ncItem.Control.IsNull() {
+					ncItem.Control = types.StringValue(rndIf.Get("ndIf.attributes.ctrl").String())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].BootFileUrl = types.StringNull()
+					ncItem.Control = types.StringNull()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].Control.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].Control = types.StringValue(rndIf.Get("ndIf.attributes.ctrl").String())
+				if !ncItem.DadAttempts.IsNull() {
+					ncItem.DadAttempts = types.Int64Value(rndIf.Get("ndIf.attributes.dadAttempts").Int())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].Control = types.StringNull()
+					ncItem.DadAttempts = types.Int64Null()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].DadAttempts.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].DadAttempts = types.Int64Value(rndIf.Get("ndIf.attributes.dadAttempts").Int())
+				if !ncItem.DadnsInterval.IsNull() {
+					ncItem.DadnsInterval = types.Int64Value(rndIf.Get("ndIf.attributes.dadnsInterval").Int())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].DadAttempts = types.Int64Null()
+					ncItem.DadnsInterval = types.Int64Null()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].DadnsInterval.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].DadnsInterval = types.Int64Value(rndIf.Get("ndIf.attributes.dadnsInterval").Int())
+				if !ncItem.DefaultRaLifetime.IsNull() {
+					ncItem.DefaultRaLifetime = types.StringValue(rndIf.Get("ndIf.attributes.defaultRaLifetime").String())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].DadnsInterval = types.Int64Null()
+					ncItem.DefaultRaLifetime = types.StringNull()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].DefaultRaLifetime.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].DefaultRaLifetime = types.StringValue(rndIf.Get("ndIf.attributes.defaultRaLifetime").String())
+				if !ncItem.DeleteAdjacencyOnMacDelete.IsNull() {
+					ncItem.DeleteAdjacencyOnMacDelete = types.StringValue(rndIf.Get("ndIf.attributes.delAdjOnMacDel").String())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].DefaultRaLifetime = types.StringNull()
+					ncItem.DeleteAdjacencyOnMacDelete = types.StringNull()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].DeleteAdjacencyOnMacDelete.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].DeleteAdjacencyOnMacDelete = types.StringValue(rndIf.Get("ndIf.attributes.delAdjOnMacDel").String())
+				if !ncItem.DnsSearchListSuppress.IsNull() {
+					ncItem.DnsSearchListSuppress = types.StringValue(rndIf.Get("ndIf.attributes.dnsSearchListSuppress").String())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].DeleteAdjacencyOnMacDelete = types.StringNull()
+					ncItem.DnsSearchListSuppress = types.StringNull()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].DnsSearchListSuppress.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].DnsSearchListSuppress = types.StringValue(rndIf.Get("ndIf.attributes.dnsSearchListSuppress").String())
+				if !ncItem.DnsSuppress.IsNull() {
+					ncItem.DnsSuppress = types.StringValue(rndIf.Get("ndIf.attributes.dnsSuppress").String())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].DnsSearchListSuppress = types.StringNull()
+					ncItem.DnsSuppress = types.StringNull()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].DnsSuppress.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].DnsSuppress = types.StringValue(rndIf.Get("ndIf.attributes.dnsSuppress").String())
+				if !ncItem.HopLimit.IsNull() {
+					ncItem.HopLimit = types.Int64Value(rndIf.Get("ndIf.attributes.hopLimit").Int())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].DnsSuppress = types.StringNull()
+					ncItem.HopLimit = types.Int64Null()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].HopLimit.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].HopLimit = types.Int64Value(rndIf.Get("ndIf.attributes.hopLimit").Int())
+				if !ncItem.MacExtract.IsNull() {
+					ncItem.MacExtract = types.StringValue(rndIf.Get("ndIf.attributes.macExtract").String())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].HopLimit = types.Int64Null()
+					ncItem.MacExtract = types.StringNull()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].MacExtract.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].MacExtract = types.StringValue(rndIf.Get("ndIf.attributes.macExtract").String())
+				if !ncItem.Mtu.IsNull() {
+					ncItem.Mtu = types.Int64Value(rndIf.Get("ndIf.attributes.mtu").Int())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].MacExtract = types.StringNull()
+					ncItem.Mtu = types.Int64Null()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].Mtu.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].Mtu = types.Int64Value(rndIf.Get("ndIf.attributes.mtu").Int())
+				if !ncItem.NeighborSolicitInterval.IsNull() {
+					ncItem.NeighborSolicitInterval = types.Int64Value(rndIf.Get("ndIf.attributes.nsIntvl").Int())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].Mtu = types.Int64Null()
+					ncItem.NeighborSolicitInterval = types.Int64Null()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].NeighborSolicitInterval.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].NeighborSolicitInterval = types.Int64Value(rndIf.Get("ndIf.attributes.nsIntvl").Int())
+				if !ncItem.RaInterval.IsNull() {
+					ncItem.RaInterval = types.Int64Value(rndIf.Get("ndIf.attributes.raIntvl").Int())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].NeighborSolicitInterval = types.Int64Null()
+					ncItem.RaInterval = types.Int64Null()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].RaInterval.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].RaInterval = types.Int64Value(rndIf.Get("ndIf.attributes.raIntvl").Int())
+				if !ncItem.RaIntervalMin.IsNull() {
+					ncItem.RaIntervalMin = types.Int64Value(rndIf.Get("ndIf.attributes.raIntvlMin").Int())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].RaInterval = types.Int64Null()
+					ncItem.RaIntervalMin = types.Int64Null()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].RaIntervalMin.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].RaIntervalMin = types.Int64Value(rndIf.Get("ndIf.attributes.raIntvlMin").Int())
+				if !ncItem.RaLifetime.IsNull() {
+					ncItem.RaLifetime = types.Int64Value(rndIf.Get("ndIf.attributes.raLifetime").Int())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].RaIntervalMin = types.Int64Null()
+					ncItem.RaLifetime = types.Int64Null()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].RaLifetime.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].RaLifetime = types.Int64Value(rndIf.Get("ndIf.attributes.raLifetime").Int())
+				if !ncItem.ReachableTime.IsNull() {
+					ncItem.ReachableTime = types.Int64Value(rndIf.Get("ndIf.attributes.reachableTime").Int())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].RaLifetime = types.Int64Null()
+					ncItem.ReachableTime = types.Int64Null()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].ReachableTime.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].ReachableTime = types.Int64Value(rndIf.Get("ndIf.attributes.reachableTime").Int())
+				if !ncItem.RetransmitTimer.IsNull() {
+					ncItem.RetransmitTimer = types.Int64Value(rndIf.Get("ndIf.attributes.retransTimer").Int())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].ReachableTime = types.Int64Null()
+					ncItem.RetransmitTimer = types.Int64Null()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].RetransmitTimer.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].RetransmitTimer = types.Int64Value(rndIf.Get("ndIf.attributes.retransTimer").Int())
+				if !ncItem.RouteSuppress.IsNull() {
+					ncItem.RouteSuppress = types.StringValue(rndIf.Get("ndIf.attributes.routeSuppress").String())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].RetransmitTimer = types.Int64Null()
+					ncItem.RouteSuppress = types.StringNull()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].RouteSuppress.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].RouteSuppress = types.StringValue(rndIf.Get("ndIf.attributes.routeSuppress").String())
+				if !ncItem.RouterPreference.IsNull() {
+					ncItem.RouterPreference = types.StringValue(rndIf.Get("ndIf.attributes.routerPreference").String())
 				} else {
-					data.NdVrfs[c].Interfaces[nc].RouteSuppress = types.StringNull()
+					ncItem.RouterPreference = types.StringNull()
 				}
-				if !data.NdVrfs[c].Interfaces[nc].RouterPreference.IsNull() {
-					data.NdVrfs[c].Interfaces[nc].RouterPreference = types.StringValue(rndIf.Get("ndIf.attributes.routerPreference").String())
-				} else {
-					data.NdVrfs[c].Interfaces[nc].RouterPreference = types.StringNull()
-				}
+				item.Interfaces[nc] = ncItem
 			}
+			data.NdVrfs[key] = item
 		}
 	}
 }
@@ -1363,9 +1351,9 @@ func (data System) toDeleteBody() nxos.Body {
 			}
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			for _, child := range data.NdVrfs {
+			for key, child := range data.NdVrfs {
 				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "ndDom.attributes.rn", child.getRn())
+				deleteBody, _ = sjson.Set(deleteBody, "ndDom.attributes.rn", child.getRn(key))
 				deleteBody, _ = sjson.Set(deleteBody, "ndDom.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
@@ -1379,65 +1367,47 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System) nxos.Bod
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.ArpVpcDomains {
-		found := false
-		for _, planChild := range data.ArpVpcDomains {
-			if stateChild.DomainId == planChild.DomainId {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.ArpVpcDomains {
+		if _, found := data.ArpVpcDomains[stateKey]; !found {
+			stateChild := state.ArpVpcDomains[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "arpVpcDom.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "arpVpcDom.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "arpVpcDom.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.arpEntity.children"+".0.arpInst.children"+".0.arpVpc.children"+".-1", deleteBody)
 		}
 	}
-	for _, stateChild := range state.NdVrfs {
-		found := false
-		for _, planChild := range data.NdVrfs {
-			if stateChild.Name == planChild.Name {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.NdVrfs {
+		if _, found := data.NdVrfs[stateKey]; !found {
+			stateChild := state.NdVrfs[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "ndDom.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ndDom.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "ndDom.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.ndEntity.children"+".0.ndInst.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.NdVrfs {
-		for pdi := range data.NdVrfs {
-			if state.NdVrfs[di].Name == data.NdVrfs[pdi].Name {
-				matchBodyPathdi := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ndEntity.children"+".0.ndInst.children").Array() {
-					if mv.Get("ndDom.attributes.rn").String() == state.NdVrfs[di].getRn() {
-						matchBodyPathdi = bodyPath + ".0.ndEntity.children" + ".0.ndInst.children" + "." + strconv.Itoa(mi) + ".ndDom.children"
-						break
-					}
-				}
-				if matchBodyPathdi == "" {
-					break
-				}
-				for _, stateChild := range state.NdVrfs[di].Interfaces {
-					found := false
-					for _, planChild := range data.NdVrfs[pdi].Interfaces {
-						if stateChild.InterfaceId == planChild.InterfaceId {
-							found = true
-							break
-						}
-					}
-					if !found {
-						deleteBody := ""
-						deleteBody, _ = sjson.Set(deleteBody, "ndIf.attributes.rn", stateChild.getRn())
-						deleteBody, _ = sjson.Set(deleteBody, "ndIf.attributes.status", "deleted")
-						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
-					}
-				}
+		if _, found := data.NdVrfs[di]; !found {
+			continue
+		}
+		stateItemdi := state.NdVrfs[di]
+		planItemdi := data.NdVrfs[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ndEntity.children"+".0.ndInst.children").Array() {
+			if mv.Get("ndDom.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.ndEntity.children" + ".0.ndInst.children" + "." + strconv.Itoa(mi) + ".ndDom.children"
 				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.Interfaces {
+			if _, found := planItemdi.Interfaces[stateChildKey]; !found {
+				stateChild := stateItemdi.Interfaces[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ndIf.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "ndIf.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 			}
 		}
 	}

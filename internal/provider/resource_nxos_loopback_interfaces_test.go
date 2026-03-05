@@ -35,11 +35,10 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosLoopbackInterfaces(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.0.interface_id", "lo123"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.0.admin_state", "down"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.0.link_logging", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.0.vrf_dn", "sys/inst-default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.lo123.admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.lo123.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.lo123.link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.lo123.vrf_dn", "sys/inst-default"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -96,13 +95,14 @@ func testAccNxosLoopbackInterfacesConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosLoopbackInterfacesConfig_all() string {
 	config := `resource "nxos_loopback_interfaces" "test" {` + "\n"
-	config += `	loopback_interfaces = [{` + "\n"
-	config += `		interface_id = "lo123"` + "\n"
-	config += `		admin_state = "down"` + "\n"
-	config += `		description = "My Description"` + "\n"
-	config += `		link_logging = "enable"` + "\n"
-	config += `		vrf_dn = "sys/inst-default"` + "\n"
-	config += `	}]` + "\n"
+	config += `	loopback_interfaces = {` + "\n"
+	config += `		"lo123" = {` + "\n"
+	config += `			admin_state = "down"` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `			link_logging = "enable"` + "\n"
+	config += `			vrf_dn = "sys/inst-default"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
 }

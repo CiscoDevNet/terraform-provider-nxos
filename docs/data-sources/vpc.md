@@ -56,7 +56,9 @@ data "nxos_vpc" "example" {
 - `graceful_consistency_check` (String) Graceful Type-1 Consistency Check.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
-- `interfaces` (Attributes List) List of vPC interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `interfaces` (Attributes Map) List of vPC interfaces.
+  - Map key: `vpc_interface_id` - The vPC interface identifier.
+  - Key range: `1`-`16384` (see [below for nested schema](#nestedatt--interfaces))
 - `keepalive_destination_ip` (String) destination address.
 - `keepalive_flush_timeout` (Number) flush timeout.
 - `keepalive_interval` (Number) interval.
@@ -93,4 +95,3 @@ data "nxos_vpc" "example" {
 Read-Only:
 
 - `port_channel_interface_dn` (String) Port-channel interface DN.
-- `vpc_interface_id` (Number) The vPC interface identifier.

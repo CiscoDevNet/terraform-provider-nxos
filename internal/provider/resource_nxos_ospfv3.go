@@ -84,15 +84,11 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instances": schema.ListNestedAttribute{
-				MarkdownDescription: "List of OSPFv3 instances.",
+			"instances": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 instances.\n  - Map key: `name` - OSPFv3 instance name.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("OSPFv3 instance name.").String,
-							Required:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 							Optional:            true,
@@ -108,15 +104,11 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 							MarkdownDescription: helpers.NewAttributeDescription("Isolate this router from OSPFv3 perspective.").String,
 							Optional:            true,
 						},
-						"vrfs": schema.ListNestedAttribute{
-							MarkdownDescription: "List of OSPFv3 VRFs.",
+						"vrfs": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 VRFs.\n  - Map key: `name` - VRF name.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-										Required:            true,
-									},
 									"admin_state": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("OSPFv3 VRF administrative state.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
@@ -169,15 +161,11 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 										MarkdownDescription: helpers.NewAttributeDescription("Suppress routing updates on the interface.").String,
 										Optional:            true,
 									},
-									"areas": schema.ListNestedAttribute{
-										MarkdownDescription: "List of OSPFv3 areas.",
+									"areas": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 areas.\n  - Map key: `area_id` - Area Id as an integer or ip address.").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"area_id": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Area Id as an integer or ip address.").String,
-													Required:            true,
-												},
 												"redistribute": schema.BoolAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Send redistributed LSAs into NSSA area.").String,
 													Optional:            true,
@@ -207,18 +195,11 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 										},
 									},
-									"address_families": schema.ListNestedAttribute{
-										MarkdownDescription: "List of OSPFv3 address families.",
+									"address_families": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 address families.\n  - Map key: `address_family_type` - IPv6 unicast address family type.\n  - Key choices: `ipv6-ucast`").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address_family_type": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("IPv6 unicast address family type.").AddStringEnumDescription("ipv6-ucast").String,
-													Required:            true,
-													Validators: []validator.String{
-														stringvalidator.OneOf("ipv6-ucast"),
-													},
-												},
 												"administrative_distance": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified").String,
 													Optional:            true,
@@ -247,15 +228,11 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of OSPFv3 interface configurations.",
+			"interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 interface configurations.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-							Required:            true,
-						},
 						"advertise_secondaries": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Advertise secondary IPv6 addresses.").String,
 							Optional:            true,

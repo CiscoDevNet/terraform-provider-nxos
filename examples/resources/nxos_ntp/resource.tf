@@ -9,13 +9,14 @@ resource "nxos_ntp" "example" {
   master_stratum       = 4
   passive              = "enabled"
   rate_limit           = 5
-  servers = [{
-    name      = "1.2.3.4"
-    vrf       = "management"
-    type      = "server"
-    key_id    = 10
-    min_poll  = 4
-    max_poll  = 6
-    preferred = true
-  }]
+  servers = {
+    "1.2.3.4" = {
+      vrf       = "management"
+      type      = "server"
+      key_id    = 10
+      min_poll  = 4
+      max_poll  = 6
+      preferred = true
+    }
+  }
 }

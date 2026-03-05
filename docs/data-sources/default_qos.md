@@ -46,26 +46,25 @@ data "nxos_default_qos" "example" {
 
 ### Read-Only
 
-- `class_maps` (Attributes List) List of class maps. (see [below for nested schema](#nestedatt--class_maps))
+- `class_maps` (Attributes Map) List of class maps.
+  - Map key: `name` - Name of class-map. (see [below for nested schema](#nestedatt--class_maps))
 - `id` (String) The distinguished name of the object.
-- `policy_interface_in` (Attributes List) List of interfaces with ingress QoS policy assignments. (see [below for nested schema](#nestedatt--policy_interface_in))
-- `policy_maps` (Attributes List) List of policy maps. (see [below for nested schema](#nestedatt--policy_maps))
+- `policy_interface_in` (Attributes Map) List of interfaces with ingress QoS policy assignments.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--policy_interface_in))
+- `policy_maps` (Attributes Map) List of policy maps.
+  - Map key: `name` - Name of policy-map. (see [below for nested schema](#nestedatt--policy_maps))
 
 <a id="nestedatt--class_maps"></a>
 ### Nested Schema for `class_maps`
 
 Read-Only:
 
-- `dscp_values` (Attributes List) List of DSCP values to match. (see [below for nested schema](#nestedatt--class_maps--dscp_values))
+- `dscp_values` (Attributes Map) List of DSCP values to match.
+  - Map key: `value` - Dscp value. (see [below for nested schema](#nestedatt--class_maps--dscp_values))
 - `match_type` (String) Match-any, match-all or match-first.
-- `name` (String) Name of class-map.
 
 <a id="nestedatt--class_maps--dscp_values"></a>
 ### Nested Schema for `class_maps.dscp_values`
-
-Read-Only:
-
-- `value` (String) Dscp value.
 
 
 
@@ -74,7 +73,6 @@ Read-Only:
 
 Read-Only:
 
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `policy_map_name` (String) Policy-map Name.
 - `policy_map_statistics` (Boolean) Turn on/off statistics.
 
@@ -84,16 +82,15 @@ Read-Only:
 
 Read-Only:
 
-- `match_class_maps` (Attributes List) List of match class maps. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
+- `match_class_maps` (Attributes Map) List of match class maps.
+  - Map key: `name` - Match using class-map. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
 - `match_type` (String) Match-any, match-all or match-first.
-- `name` (String) Name of policy-map.
 
 <a id="nestedatt--policy_maps--match_class_maps"></a>
 ### Nested Schema for `policy_maps.match_class_maps`
 
 Read-Only:
 
-- `name` (String) Match using class-map.
 - `next_class_map` (String) Insert before the given class-map.
 - `police_bc_rate` (Number) CIR burst.
 - `police_bc_unit` (String) CIR burst unit.

@@ -92,15 +92,11 @@ func (d *HSRPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Enables/Disables hsrp extended hold interval.",
 				Computed:            true,
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of HSRP interfaces.",
+			"interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of HSRP interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-							Computed:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
@@ -145,19 +141,11 @@ func (d *HSRPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "Hsrp version.",
 							Computed:            true,
 						},
-						"groups": schema.ListNestedAttribute{
-							MarkdownDescription: "List of HSRP groups.",
+						"groups": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of HSRP groups.\n  - Map key format: `<group_id>;<address_family>`\n  - Key component `group_id`: Group Id. Range: `0`-`4095`.\n  - Key component `address_family`: Group Address Family. Choices: `ipv4`, `ipv6`.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"group_id": schema.Int64Attribute{
-										MarkdownDescription: "Group Id.",
-										Computed:            true,
-									},
-									"address_family": schema.StringAttribute{
-										MarkdownDescription: "Group Address Family.",
-										Computed:            true,
-									},
 									"authentication_md5_compatibility_mode": schema.StringAttribute{
 										MarkdownDescription: "Enables compatibility mode for MD5 type-7 authentication.",
 										Computed:            true,

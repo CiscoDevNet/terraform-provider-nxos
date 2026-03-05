@@ -37,7 +37,8 @@ data "nxos_subinterfaces" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `subinterfaces` (Attributes List) List of subinterfaces. (see [below for nested schema](#nestedatt--subinterfaces))
+- `subinterfaces` (Attributes Map) List of subinterfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1.10`. (see [below for nested schema](#nestedatt--subinterfaces))
 
 <a id="nestedatt--subinterfaces"></a>
 ### Nested Schema for `subinterfaces`
@@ -49,7 +50,6 @@ Read-Only:
 - `delay` (Number) The encapsulation routed interface delay.
 - `description` (String) Description.
 - `encap` (String) The routed interface encapsulation VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1.10`.
 - `link_logging` (String) Interface Link Logging Enable.
 - `medium` (String) Interface Medium Type.
 - `mtu` (Number) The encapsulation routed interface MTU.

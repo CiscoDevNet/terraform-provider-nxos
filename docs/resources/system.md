@@ -70,10 +70,11 @@ resource "nxos_system" "example" {
   arp_resolve_outside_subnet                         = "enabled"
   arp_suppression_timeout                            = 300
   arp_timeout                                        = 1800
-  arp_vpc_domains = [{
-    domain_id = 100
-    arp_sync  = "enabled"
-  }]
+  arp_vpc_domains = {
+    "100" = {
+      arp_sync = "enabled"
+    }
+  }
   nd_admin_state                         = "enabled"
   nd_accept_solicit_neighbor_entry       = "accept"
   nd_instance_admin_state                = "enabled"
@@ -85,31 +86,33 @@ resource "nxos_system" "example" {
   nd_off_list_timeout                    = 300
   nd_probe_interval_for_solicit_neighbor = 10
   nd_solicit_neighbor_advertisement      = "enabled"
-  nd_vrfs = [{
-    name = "default"
-    interfaces = [{
-      interface_id                   = "vlan100"
-      boot_file_url                  = "tftp://192.168.1.1/boot"
-      control                        = "redirects"
-      dad_attempts                   = 3
-      dadns_interval                 = 3000
-      default_ra_lifetime            = "disabled"
-      delete_adjacency_on_mac_delete = "enabled"
-      dns_search_list_suppress       = "enabled"
-      dns_suppress                   = "enabled"
-      hop_limit                      = 128
-      mac_extract                    = "nud-phase"
-      mtu                            = 9000
-      neighbor_solicit_interval      = 2000
-      ra_interval                    = 300
-      ra_interval_min                = 100
-      ra_lifetime                    = 900
-      reachable_time                 = 30000
-      retransmit_timer               = 5000
-      route_suppress                 = "enabled"
-      router_preference              = "high"
-    }]
-  }]
+  nd_vrfs = {
+    "default" = {
+      interfaces = {
+        "vlan100" = {
+          boot_file_url                  = "tftp://192.168.1.1/boot"
+          control                        = "redirects"
+          dad_attempts                   = 3
+          dadns_interval                 = 3000
+          default_ra_lifetime            = "disabled"
+          delete_adjacency_on_mac_delete = "enabled"
+          dns_search_list_suppress       = "enabled"
+          dns_suppress                   = "enabled"
+          hop_limit                      = 128
+          mac_extract                    = "nud-phase"
+          mtu                            = 9000
+          neighbor_solicit_interval      = 2000
+          ra_interval                    = 300
+          ra_interval_min                = 100
+          ra_lifetime                    = 900
+          reachable_time                 = 30000
+          retransmit_timer               = 5000
+          route_suppress                 = "enabled"
+          router_preference              = "high"
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -152,7 +155,9 @@ resource "nxos_system" "example" {
   - Range: `0`-`28800`
 - `arp_unnumbered_svi_software_replication` (String) ARP Packets Replication In Software For Unnumbered SVI.
   - Choices: `enabled`, `disabled`
-- `arp_vpc_domains` (Attributes List) ARP VPC Domain. (see [below for nested schema](#nestedatt--arp_vpc_domains))
+- `arp_vpc_domains` (Attributes Map) ARP VPC Domain.
+  - Map key: `domain_id` - VPC domain id.
+  - Key range: `1`-`1000` (see [below for nested schema](#nestedatt--arp_vpc_domains))
 - `device` (String) A device name from the provider configuration.
 - `ethernet_admin_link_down_syslog_level` (Number) Admin link-down syslog level.
   - Range: `0`-`7`
@@ -211,7 +216,8 @@ resource "nxos_system" "example" {
   - Range: `0`-`20`
 - `nd_solicit_neighbor_advertisement` (String) Solicit neighbor advertisement.
   - Choices: `enabled`, `disabled`
-- `nd_vrfs` (Attributes List) Neighbor Discovery Domain. (see [below for nested schema](#nestedatt--nd_vrfs))
+- `nd_vrfs` (Attributes Map) Neighbor Discovery Domain.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--nd_vrfs))
 
 ### Read-Only
 
@@ -219,11 +225,6 @@ resource "nxos_system" "example" {
 
 <a id="nestedatt--arp_vpc_domains"></a>
 ### Nested Schema for `arp_vpc_domains`
-
-Required:
-
-- `domain_id` (Number) VPC domain id.
-  - Range: `1`-`1000`
 
 Optional:
 
@@ -234,20 +235,13 @@ Optional:
 <a id="nestedatt--nd_vrfs"></a>
 ### Nested Schema for `nd_vrfs`
 
-Required:
-
-- `name` (String) The name of the object.
-
 Optional:
 
-- `interfaces` (Attributes List) Neighbor Discovery Interface. (see [below for nested schema](#nestedatt--nd_vrfs--interfaces))
+- `interfaces` (Attributes Map) Neighbor Discovery Interface.
+  - Map key: `interface_id` - An identifier. (see [below for nested schema](#nestedatt--nd_vrfs--interfaces))
 
 <a id="nestedatt--nd_vrfs--interfaces"></a>
 ### Nested Schema for `nd_vrfs.interfaces`
-
-Required:
-
-- `interface_id` (String) An identifier.
 
 Optional:
 
@@ -297,9 +291,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_system.example
-  identity = {
-  }
+  to       = nxos_system.example
+  identity = {}
 }
 ```
 

@@ -24,7 +24,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -38,20 +37,19 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type HMM struct {
-	Device                 types.String    `tfsdk:"device"`
-	Dn                     types.String    `tfsdk:"id"`
-	AdminState             types.String    `tfsdk:"admin_state"`
-	InstanceAdminState     types.String    `tfsdk:"instance_admin_state"`
-	AnycastMac             types.String    `tfsdk:"anycast_mac"`
-	AdministrativeDistance types.Int64     `tfsdk:"administrative_distance"`
-	Control                types.String    `tfsdk:"control"`
-	LimitVlanMac           types.Int64     `tfsdk:"limit_vlan_mac"`
-	SelectiveHostProbe     types.String    `tfsdk:"selective_host_probe"`
-	Interfaces             []HMMInterfaces `tfsdk:"interfaces"`
+	Device                 types.String             `tfsdk:"device"`
+	Dn                     types.String             `tfsdk:"id"`
+	AdminState             types.String             `tfsdk:"admin_state"`
+	InstanceAdminState     types.String             `tfsdk:"instance_admin_state"`
+	AnycastMac             types.String             `tfsdk:"anycast_mac"`
+	AdministrativeDistance types.Int64              `tfsdk:"administrative_distance"`
+	Control                types.String             `tfsdk:"control"`
+	LimitVlanMac           types.Int64              `tfsdk:"limit_vlan_mac"`
+	SelectiveHostProbe     types.String             `tfsdk:"selective_host_probe"`
+	Interfaces             map[string]HMMInterfaces `tfsdk:"interfaces"`
 }
 
 type HMMInterfaces struct {
-	InterfaceId types.String `tfsdk:"interface_id"`
 	AdminState  types.String `tfsdk:"admin_state"`
 	Mode        types.String `tfsdk:"mode"`
 	Description types.String `tfsdk:"description"`
@@ -85,8 +83,8 @@ func (data HMM) getDn() string {
 	return "sys/hmm"
 }
 
-func (data HMMInterfaces) getRn() string {
-	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
+func (data HMMInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
 }
 
 func (data HMM) getClassName() string {
@@ -129,11 +127,9 @@ func (data HMM) toBody() nxos.Body {
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
-		for _, child := range data.Interfaces {
+		for key, child := range data.Interfaces {
 			attrs = "{}"
-			if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
-				attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
-			}
+			attrs, _ = sjson.Set(attrs, "id", key)
 			if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 			}
@@ -160,8 +156,8 @@ func (data *HMM) fromBody(res gjson.Result) {
 		var rhmmFwdInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("hmmFwdInst.attributes.rn").String()
-				if key == "fwdinst" {
+				rnValue := v.Get("hmmFwdInst.attributes.rn").String()
+				if rnValue == "fwdinst" {
 					rhmmFwdInst = v
 					return false
 				}
@@ -180,11 +176,14 @@ func (data *HMM) fromBody(res gjson.Result) {
 					func(classname, value gjson.Result) bool {
 						if classname.String() == "hmmFwdIf" {
 							var child HMMInterfaces
-							child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
 							child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
 							child.Mode = types.StringValue(value.Get("attributes.mode").String())
 							child.Description = types.StringValue(value.Get("attributes.descr").String())
-							data.Interfaces = append(data.Interfaces, child)
+							mapKey := value.Get("attributes.id").String()
+							if data.Interfaces == nil {
+								data.Interfaces = make(map[string]HMMInterfaces)
+							}
+							data.Interfaces[mapKey] = child
 						}
 						return true
 					},
@@ -208,8 +207,8 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 	var rhmmFwdInst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("hmmFwdInst.attributes.rn").String()
-			if key == "fwdinst" {
+			rnValue := v.Get("hmmFwdInst.attributes.rn").String()
+			if rnValue == "fwdinst" {
 				rhmmFwdInst = v
 				return false
 			}
@@ -246,11 +245,11 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 	} else {
 		data.SelectiveHostProbe = types.StringNull()
 	}
-	for c := len(data.Interfaces) - 1; c >= 0; c-- {
+	for key, item := range data.Interfaces {
 		var rhmmFwdIf gjson.Result
 		rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("hmmFwdIf.attributes.id").String() == data.Interfaces[c].InterfaceId.ValueString() {
+				if v.Get("hmmFwdIf.attributes.id").String() == key {
 					rhmmFwdIf = v
 					return false
 				}
@@ -258,29 +257,25 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !rhmmFwdIf.Exists() {
-			data.Interfaces = slices.Delete(data.Interfaces, c, c+1)
+			delete(data.Interfaces, key)
 			continue
 		}
-		if !data.Interfaces[c].InterfaceId.IsNull() {
-			data.Interfaces[c].InterfaceId = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.id").String())
+		if !item.AdminState.IsNull() {
+			item.AdminState = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.adminSt").String())
 		} else {
-			data.Interfaces[c].InterfaceId = types.StringNull()
+			item.AdminState = types.StringNull()
 		}
-		if !data.Interfaces[c].AdminState.IsNull() {
-			data.Interfaces[c].AdminState = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.adminSt").String())
+		if !item.Mode.IsNull() {
+			item.Mode = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.mode").String())
 		} else {
-			data.Interfaces[c].AdminState = types.StringNull()
+			item.Mode = types.StringNull()
 		}
-		if !data.Interfaces[c].Mode.IsNull() {
-			data.Interfaces[c].Mode = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.mode").String())
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.descr").String())
 		} else {
-			data.Interfaces[c].Mode = types.StringNull()
+			item.Description = types.StringNull()
 		}
-		if !data.Interfaces[c].Description.IsNull() {
-			data.Interfaces[c].Description = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.descr").String())
-		} else {
-			data.Interfaces[c].Description = types.StringNull()
-		}
+		data.Interfaces[key] = item
 	}
 }
 
@@ -299,17 +294,11 @@ func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM) nxos.Body {
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.Interfaces {
-		found := false
-		for _, planChild := range data.Interfaces {
-			if stateChild.InterfaceId == planChild.InterfaceId {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.Interfaces {
+		if _, found := data.Interfaces[stateKey]; !found {
+			stateChild := state.Interfaces[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "hmmFwdIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "hmmFwdIf.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "hmmFwdIf.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.hmmFwdInst.children"+".-1", deleteBody)
 		}

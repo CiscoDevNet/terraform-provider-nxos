@@ -46,7 +46,8 @@ data "nxos_ntp" "example" {
 - `master_stratum` (Number) NTP Master Stratum Level.
 - `passive` (String) Enable/Disable Passive NTP Associations.
 - `rate_limit` (Number) Rate-Limit NTP Control Mode Packets.
-- `servers` (Attributes List) List of NTP servers or peers. (see [below for nested schema](#nestedatt--servers))
+- `servers` (Attributes Map) List of NTP servers or peers.
+  - Map key: `name` - NTP server or peer address. (see [below for nested schema](#nestedatt--servers))
 
 <a id="nestedatt--servers"></a>
 ### Nested Schema for `servers`
@@ -56,7 +57,6 @@ Read-Only:
 - `key_id` (Number) NTP provider key ID. Possible range is from `1` to `65535`.
 - `max_poll` (Number) NTP maximum interval default in seconds. Possible range is from `4` to `16`.
 - `min_poll` (Number) NTP minimum interval default in seconds. Possible range is from `4` to `16`.
-- `name` (String) NTP server or peer address.
 - `preferred` (Boolean) A property that indicates if the NTP server is preferred. Only one preferred server is allowed.
 - `type` (String) NTP provider type. Possible values are `server` or `peer`.
 - `vrf` (String) Identifies the VRF for the NTP providers.

@@ -24,7 +24,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -39,23 +38,22 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type NTP struct {
-	Device              types.String `tfsdk:"device"`
-	Dn                  types.String `tfsdk:"id"`
-	AdminState          types.String `tfsdk:"admin_state"`
-	AllowControl        types.String `tfsdk:"allow_control"`
-	AllowPrivate        types.String `tfsdk:"allow_private"`
-	AuthenticationState types.String `tfsdk:"authentication_state"`
-	Logging             types.String `tfsdk:"logging"`
-	LoggingLevel        types.String `tfsdk:"logging_level"`
-	Master              types.String `tfsdk:"master"`
-	MasterStratum       types.Int64  `tfsdk:"master_stratum"`
-	Passive             types.String `tfsdk:"passive"`
-	RateLimit           types.Int64  `tfsdk:"rate_limit"`
-	Servers             []NTPServers `tfsdk:"servers"`
+	Device              types.String          `tfsdk:"device"`
+	Dn                  types.String          `tfsdk:"id"`
+	AdminState          types.String          `tfsdk:"admin_state"`
+	AllowControl        types.String          `tfsdk:"allow_control"`
+	AllowPrivate        types.String          `tfsdk:"allow_private"`
+	AuthenticationState types.String          `tfsdk:"authentication_state"`
+	Logging             types.String          `tfsdk:"logging"`
+	LoggingLevel        types.String          `tfsdk:"logging_level"`
+	Master              types.String          `tfsdk:"master"`
+	MasterStratum       types.Int64           `tfsdk:"master_stratum"`
+	Passive             types.String          `tfsdk:"passive"`
+	RateLimit           types.Int64           `tfsdk:"rate_limit"`
+	Servers             map[string]NTPServers `tfsdk:"servers"`
 }
 
 type NTPServers struct {
-	Name      types.String `tfsdk:"name"`
 	Vrf       types.String `tfsdk:"vrf"`
 	Type      types.String `tfsdk:"type"`
 	KeyId     types.Int64  `tfsdk:"key_id"`
@@ -92,8 +90,8 @@ func (data NTP) getDn() string {
 	return "sys/time"
 }
 
-func (data NTPServers) getRn() string {
-	return fmt.Sprintf("prov-[%s]", data.Name.ValueString())
+func (data NTPServers) getRn(key string) string {
+	return fmt.Sprintf("prov-[%s]", key)
 }
 
 func (data NTP) getClassName() string {
@@ -139,11 +137,9 @@ func (data NTP) toBody() nxos.Body {
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
-	for _, child := range data.Servers {
+	for key, child := range data.Servers {
 		attrs = "{}"
-		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-		}
+		attrs, _ = sjson.Set(attrs, "name", key)
 		if (!child.Vrf.IsUnknown() && !child.Vrf.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "vrf", child.Vrf.ValueString())
 		}
@@ -189,14 +185,17 @@ func (data *NTP) fromBody(res gjson.Result) {
 				func(classname, value gjson.Result) bool {
 					if classname.String() == "datetimeNtpProvider" {
 						var child NTPServers
-						child.Name = types.StringValue(value.Get("attributes.name").String())
 						child.Vrf = types.StringValue(value.Get("attributes.vrf").String())
 						child.Type = types.StringValue(value.Get("attributes.provT").String())
 						child.KeyId = types.Int64Value(value.Get("attributes.keyId").Int())
 						child.MinPoll = types.Int64Value(value.Get("attributes.minPoll").Int())
 						child.MaxPoll = types.Int64Value(value.Get("attributes.maxPoll").Int())
 						child.Preferred = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.preferred").String()))
-						data.Servers = append(data.Servers, child)
+						mapKey := value.Get("attributes.name").String()
+						if data.Servers == nil {
+							data.Servers = make(map[string]NTPServers)
+						}
+						data.Servers[mapKey] = child
 					}
 					return true
 				},
@@ -261,11 +260,11 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 	} else {
 		data.RateLimit = types.Int64Null()
 	}
-	for c := len(data.Servers) - 1; c >= 0; c-- {
+	for key, item := range data.Servers {
 		var rdatetimeNtpProvider gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("datetimeNtpProvider.attributes.name").String() == data.Servers[c].Name.ValueString() {
+				if v.Get("datetimeNtpProvider.attributes.name").String() == key {
 					rdatetimeNtpProvider = v
 					return false
 				}
@@ -273,44 +272,40 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !rdatetimeNtpProvider.Exists() {
-			data.Servers = slices.Delete(data.Servers, c, c+1)
+			delete(data.Servers, key)
 			continue
 		}
-		if !data.Servers[c].Name.IsNull() {
-			data.Servers[c].Name = types.StringValue(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.name").String())
+		if !item.Vrf.IsNull() {
+			item.Vrf = types.StringValue(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.vrf").String())
 		} else {
-			data.Servers[c].Name = types.StringNull()
+			item.Vrf = types.StringNull()
 		}
-		if !data.Servers[c].Vrf.IsNull() {
-			data.Servers[c].Vrf = types.StringValue(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.vrf").String())
+		if !item.Type.IsNull() {
+			item.Type = types.StringValue(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.provT").String())
 		} else {
-			data.Servers[c].Vrf = types.StringNull()
+			item.Type = types.StringNull()
 		}
-		if !data.Servers[c].Type.IsNull() {
-			data.Servers[c].Type = types.StringValue(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.provT").String())
+		if !item.KeyId.IsNull() {
+			item.KeyId = types.Int64Value(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.keyId").Int())
 		} else {
-			data.Servers[c].Type = types.StringNull()
+			item.KeyId = types.Int64Null()
 		}
-		if !data.Servers[c].KeyId.IsNull() {
-			data.Servers[c].KeyId = types.Int64Value(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.keyId").Int())
+		if !item.MinPoll.IsNull() {
+			item.MinPoll = types.Int64Value(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.minPoll").Int())
 		} else {
-			data.Servers[c].KeyId = types.Int64Null()
+			item.MinPoll = types.Int64Null()
 		}
-		if !data.Servers[c].MinPoll.IsNull() {
-			data.Servers[c].MinPoll = types.Int64Value(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.minPoll").Int())
+		if !item.MaxPoll.IsNull() {
+			item.MaxPoll = types.Int64Value(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.maxPoll").Int())
 		} else {
-			data.Servers[c].MinPoll = types.Int64Null()
+			item.MaxPoll = types.Int64Null()
 		}
-		if !data.Servers[c].MaxPoll.IsNull() {
-			data.Servers[c].MaxPoll = types.Int64Value(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.maxPoll").Int())
+		if !item.Preferred.IsNull() {
+			item.Preferred = types.BoolValue(helpers.ParseNxosBoolean(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.preferred").String()))
 		} else {
-			data.Servers[c].MaxPoll = types.Int64Null()
+			item.Preferred = types.BoolNull()
 		}
-		if !data.Servers[c].Preferred.IsNull() {
-			data.Servers[c].Preferred = types.BoolValue(helpers.ParseNxosBoolean(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.preferred").String()))
-		} else {
-			data.Servers[c].Preferred = types.BoolNull()
-		}
+		data.Servers[key] = item
 	}
 }
 
@@ -354,9 +349,9 @@ func (data NTP) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
 	childrenPath := data.getClassName() + ".children"
-	for _, child := range data.Servers {
+	for key, child := range data.Servers {
 		deleteBody := ""
-		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.rn", child.getRn(key))
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
@@ -368,17 +363,11 @@ func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP) nxos.Body {
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.Servers {
-		found := false
-		for _, planChild := range data.Servers {
-			if stateChild.Name == planChild.Name {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.Servers {
+		if _, found := data.Servers[stateKey]; !found {
+			stateChild := state.Servers[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}

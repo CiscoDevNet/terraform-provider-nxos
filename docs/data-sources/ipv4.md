@@ -52,7 +52,8 @@ data "nxos_ipv4" "example" {
 - `redirect_syslog` (String) ipv4 redirect syslog.
 - `redirect_syslog_interval` (Number) redirect syslog interval.
 - `source_route` (String) Source-Route.
-- `vrfs` (Attributes List) List of IPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+- `vrfs` (Attributes Map) List of IPv4 VRF configurations.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
@@ -61,21 +62,22 @@ Read-Only:
 
 - `auto_discard` (String) Auto-Discard.
 - `icmp_errors_source_interface` (String) ICMP errors source-interface.
-- `interfaces` (Attributes List) List of IPv4 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
-- `name` (String) The name of the object.
-- `static_routes` (Attributes List) List of IPv4 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
+- `interfaces` (Attributes Map) List of IPv4 interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `static_routes` (Attributes Map) List of IPv4 static routes.
+  - Map key: `prefix` - Prefix. (see [below for nested schema](#nestedatt--vrfs--static_routes))
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
 
 Read-Only:
 
-- `addresses` (Attributes List) List of IPv4 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
+- `addresses` (Attributes Map) List of IPv4 interface addresses.
+  - Map key: `address` - Address. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
 - `directed_broadcast` (String) IP directed broadcast.
 - `directed_broadcast_acl` (String) IP directed broadcast ACL.
 - `drop_glean` (String) ip drop-glean enabled/disabled.
 - `forward` (String) IP forward.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `unnumbered` (String) IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `urpf` (String) URPF Info.
 
@@ -84,7 +86,6 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) Address.
 - `control` (String) The control state.
 - `preference` (Number) Preference.
 - `tag` (Number) Route Tag.
@@ -101,9 +102,12 @@ Read-Only:
 
 - `control` (String) Controls.
 - `description` (String) Description of the specified attribute.
-- `next_hops` (Attributes List) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
+- `next_hops` (Attributes Map) List of next hops.
+  - Map key format: `<interface_id>;<address>;<vrf_name>`
+  - Key component `interface_id`: Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
+  - Key component `address`: Nexthop Address.
+  - Key component `vrf_name`: Nexthop VRF. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
 - `preference` (Number) Preference.
-- `prefix` (String) Prefix.
 - `tag` (Number) Tag.
 
 <a id="nestedatt--vrfs--static_routes--next_hops"></a>
@@ -111,12 +115,9 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) Nexthop Address.
 - `description` (String) Description of the specified attribute.
-- `interface_id` (String) Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
 - `name` (String) Next hop name.
 - `object` (Number) Object to be tracked.
 - `preference` (Number) Route preference.
 - `rewrite_encapsulation` (String) Rewrite Encapsulation.
 - `tag` (Number) Tag value.
-- `vrf_name` (String) Nexthop VRF.

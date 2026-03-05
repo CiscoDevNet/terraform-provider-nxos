@@ -24,22 +24,23 @@ This resource can manage the bridge domain configuration on NX-OS devices, inclu
 ```terraform
 resource "nxos_bridge_domains" "example" {
   svi_autostate = "disable"
-  bridge_domains = [{
-    fabric_encap        = "vlan-10"
-    access_encap        = "unknown"
-    name                = "VLAN10"
-    bridge_domain_state = "suspend"
-    admin_state         = "active"
-    bridge_mode         = "mac"
-    control             = "untagged"
-    forwarding_control  = "mdst-flood"
-    forwarding_mode     = "bridge"
-    long_name           = false
-    mac_packet_classify = "enable"
-    mode                = "CE"
-    vrf_name            = "default"
-    cross_connect       = "disable"
-  }]
+  bridge_domains = {
+    "vlan-10" = {
+      access_encap        = "unknown"
+      name                = "VLAN10"
+      bridge_domain_state = "suspend"
+      admin_state         = "active"
+      bridge_mode         = "mac"
+      control             = "untagged"
+      forwarding_control  = "mdst-flood"
+      forwarding_mode     = "bridge"
+      long_name           = false
+      mac_packet_classify = "enable"
+      mode                = "CE"
+      vrf_name            = "default"
+      cross_connect       = "disable"
+    }
+  }
 }
 ```
 
@@ -48,7 +49,8 @@ resource "nxos_bridge_domains" "example" {
 
 ### Optional
 
-- `bridge_domains` (Attributes List) List of bridge domains. (see [below for nested schema](#nestedatt--bridge_domains))
+- `bridge_domains` (Attributes Map) List of bridge domains.
+  - Map key: `fabric_encap` - The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`. (see [below for nested schema](#nestedatt--bridge_domains))
 - `device` (String) A device name from the provider configuration.
 - `svi_autostate` (String) Disable/enable autoState for SVI interface.
   - Choices: `disable`, `enable`
@@ -59,10 +61,6 @@ resource "nxos_bridge_domains" "example" {
 
 <a id="nestedatt--bridge_domains"></a>
 ### Nested Schema for `bridge_domains`
-
-Required:
-
-- `fabric_encap` (String) The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 
 Optional:
 
@@ -97,9 +95,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_bridge_domains.example
-  identity = {
-  }
+  to       = nxos_bridge_domains.example
+  identity = {}
 }
 ```
 

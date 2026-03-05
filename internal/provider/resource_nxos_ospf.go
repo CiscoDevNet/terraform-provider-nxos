@@ -84,15 +84,11 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instances": schema.ListNestedAttribute{
-				MarkdownDescription: "List of OSPF instances.",
+			"instances": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of OSPF instances.\n  - Map key: `name` - OSPF instance name.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("OSPF instance name.").String,
-							Required:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 							Optional:            true,
@@ -107,15 +103,11 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								stringvalidator.OneOf("unspecified", "stateful-ha"),
 							},
 						},
-						"vrfs": schema.ListNestedAttribute{
-							MarkdownDescription: "List of OSPF VRFs.",
+						"vrfs": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of OSPF VRFs.\n  - Map key: `name` - VRF name.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-										Required:            true,
-									},
 									"log_adjacency_changes": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Adjacency change logging level.").AddStringEnumDescription("none", "brief", "detail").String,
 										Optional:            true,
@@ -204,15 +196,11 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										MarkdownDescription: helpers.NewAttributeDescription("RFC 1583 compatibility to IOS for external path preferences.").String,
 										Optional:            true,
 									},
-									"areas": schema.ListNestedAttribute{
-										MarkdownDescription: "List of OSPF areas.",
+									"areas": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of OSPF areas.\n  - Map key: `area_id` - Area identifier to which a network or interface belongs in IPv4 address format.").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"area_id": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Area identifier to which a network or interface belongs in IPv4 address format.").String,
-													Required:            true,
-												},
 												"authentication_type": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Authentication type can be simple, none or md5.").AddStringEnumDescription("none", "simple", "md5", "unspecified").String,
 													Optional:            true,
@@ -284,15 +272,11 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											int64validator.Between(0, 4294967295),
 										},
 									},
-									"interfaces": schema.ListNestedAttribute{
-										MarkdownDescription: "List of OSPF interfaces.",
+									"interfaces": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of OSPF interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"interface_id": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-													Required:            true,
-												},
 												"admin_state": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 													Optional:            true,

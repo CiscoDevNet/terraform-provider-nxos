@@ -24,22 +24,23 @@ This resource can manage subinterface configurations on NX-OS devices, including
 
 ```terraform
 resource "nxos_subinterfaces" "example" {
-  subinterfaces = [{
-    interface_id            = "eth1/10.124"
-    admin_state             = "down"
-    bandwidth               = 1000
-    delay                   = 10
-    description             = "My Description"
-    encap                   = "vlan-124"
-    link_logging            = "enable"
-    medium                  = "broadcast"
-    mtu                     = 1500
-    mtu_inherit             = false
-    router_mac              = "AA:BB:CC:DD:EE:FF"
-    router_mac_ipv6_extract = "disable"
-    snmp_trap               = "disable"
-    vrf_dn                  = "sys/inst-VRF123"
-  }]
+  subinterfaces = {
+    "eth1/10.124" = {
+      admin_state             = "down"
+      bandwidth               = 1000
+      delay                   = 10
+      description             = "My Description"
+      encap                   = "vlan-124"
+      link_logging            = "enable"
+      medium                  = "broadcast"
+      mtu                     = 1500
+      mtu_inherit             = false
+      router_mac              = "AA:BB:CC:DD:EE:FF"
+      router_mac_ipv6_extract = "disable"
+      snmp_trap               = "disable"
+      vrf_dn                  = "sys/inst-VRF123"
+    }
+  }
 }
 ```
 
@@ -49,7 +50,8 @@ resource "nxos_subinterfaces" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `subinterfaces` (Attributes List) List of subinterfaces. (see [below for nested schema](#nestedatt--subinterfaces))
+- `subinterfaces` (Attributes Map) List of subinterfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1.10`. (see [below for nested schema](#nestedatt--subinterfaces))
 
 ### Read-Only
 
@@ -57,10 +59,6 @@ resource "nxos_subinterfaces" "example" {
 
 <a id="nestedatt--subinterfaces"></a>
 ### Nested Schema for `subinterfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1.10`.
 
 Optional:
 
@@ -94,9 +92,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_subinterfaces.example
-  identity = {
-  }
+  to       = nxos_subinterfaces.example
+  identity = {}
 }
 ```
 

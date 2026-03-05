@@ -31,24 +31,19 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosSubinterfaces(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_subinterfaces.test", "subinterfaces.*", map[string]string{
-		"interface_id":            "eth1/10.124",
-		"admin_state":             "down",
-		"bandwidth":               "1000",
-		"delay":                   "10",
-		"description":             "My Description",
-		"encap":                   "vlan-124",
-		"link_logging":            "enable",
-		"medium":                  "broadcast",
-		"mtu":                     "1500",
-		"mtu_inherit":             "false",
-		"router_mac":              "AA:BB:CC:DD:EE:FF",
-		"router_mac_ipv6_extract": "disable",
-		"snmp_trap":               "disable",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_subinterfaces.test", "subinterfaces.*", map[string]string{
-		"vrf_dn": "sys/inst-VRF123",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.encap", "vlan-124"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.medium", "broadcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.mtu_inherit", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.router_mac", "AA:BB:CC:DD:EE:FF"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.router_mac_ipv6_extract", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.snmp_trap", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterfaces.test", "subinterfaces.eth1/10.124.vrf_dn", "sys/inst-VRF123"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -81,22 +76,23 @@ resource "nxos_dme" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosSubinterfacesConfig() string {
 	config := `resource "nxos_subinterfaces" "test" {` + "\n"
-	config += `	subinterfaces = [{` + "\n"
-	config += `		interface_id = "eth1/10.124"` + "\n"
-	config += `		admin_state = "down"` + "\n"
-	config += `		bandwidth = 1000` + "\n"
-	config += `		delay = 10` + "\n"
-	config += `		description = "My Description"` + "\n"
-	config += `		encap = "vlan-124"` + "\n"
-	config += `		link_logging = "enable"` + "\n"
-	config += `		medium = "broadcast"` + "\n"
-	config += `		mtu = 1500` + "\n"
-	config += `		mtu_inherit = false` + "\n"
-	config += `		router_mac = "AA:BB:CC:DD:EE:FF"` + "\n"
-	config += `		router_mac_ipv6_extract = "disable"` + "\n"
-	config += `		snmp_trap = "disable"` + "\n"
-	config += `		vrf_dn = "sys/inst-VRF123"` + "\n"
-	config += `	}]` + "\n"
+	config += `	subinterfaces = {` + "\n"
+	config += `		"eth1/10.124" = {` + "\n"
+	config += `			admin_state = "down"` + "\n"
+	config += `			bandwidth = 1000` + "\n"
+	config += `			delay = 10` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `			encap = "vlan-124"` + "\n"
+	config += `			link_logging = "enable"` + "\n"
+	config += `			medium = "broadcast"` + "\n"
+	config += `			mtu = 1500` + "\n"
+	config += `			mtu_inherit = false` + "\n"
+	config += `			router_mac = "AA:BB:CC:DD:EE:FF"` + "\n"
+	config += `			router_mac_ipv6_extract = "disable"` + "\n"
+	config += `			snmp_trap = "disable"` + "\n"
+	config += `			vrf_dn = "sys/inst-VRF123"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

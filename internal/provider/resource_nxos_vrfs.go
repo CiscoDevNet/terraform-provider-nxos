@@ -77,15 +77,11 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: "List of VRFs.",
+			"vrfs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of VRFs.\n  - Map key: `name` - VRF name.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-							Required:            true,
-						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
 							Optional:            true,
@@ -128,52 +124,26 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher. Value in NX-OS DME format.").String,
 							Optional:            true,
 						},
-						"address_families": schema.ListNestedAttribute{
-							MarkdownDescription: "List of VRF address families.",
+						"address_families": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of VRF address families.\n  - Map key: `address_family` - Type.\n  - Key choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"address_family": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt").String,
-										Required:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
-										},
-									},
-									"route_target_address_families": schema.ListNestedAttribute{
-										MarkdownDescription: "List of VRF route target address families.",
+									"route_target_address_families": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of VRF route target address families.\n  - Map key: `route_target_address_family` - Type.\n  - Key choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"route_target_address_family": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt").String,
-													Required:            true,
-													Validators: []validator.String{
-														stringvalidator.OneOf("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
-													},
-												},
-												"route_target_directions": schema.ListNestedAttribute{
-													MarkdownDescription: "List of VRF route target directions.",
+												"route_target_directions": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of VRF route target directions.\n  - Map key: `direction` - Type.\n  - Key choices: `import`, `export`").String,
 													Optional:            true,
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
-															"direction": schema.StringAttribute{
-																MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("import", "export").String,
-																Required:            true,
-																Validators: []validator.String{
-																	stringvalidator.OneOf("import", "export"),
-																},
-															},
-															"route_targets": schema.ListNestedAttribute{
-																MarkdownDescription: "List of VRF route target entries.",
+															"route_targets": schema.MapNestedAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("List of VRF route target entries.\n  - Map key: `route_target` - Route Target. Value in NX-OS DME format.").String,
 																Optional:            true,
 																NestedObject: schema.NestedAttributeObject{
-																	Attributes: map[string]schema.Attribute{
-																		"route_target": schema.StringAttribute{
-																			MarkdownDescription: helpers.NewAttributeDescription("Route Target. Value in NX-OS DME format.").String,
-																			Required:            true,
-																		},
-																	},
+																	Attributes: map[string]schema.Attribute{},
 																},
 															},
 														},

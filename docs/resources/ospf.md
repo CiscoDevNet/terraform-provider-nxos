@@ -29,70 +29,74 @@ This resource can manage the OSPF configuration on NX-OS devices, including OSPF
 ```terraform
 resource "nxos_ospf" "example" {
   admin_state = "enabled"
-  instances = [{
-    name        = "OSPF1"
-    admin_state = "enabled"
-    control     = "stateful-ha"
-    vrfs = [{
-      name                          = "VRF1"
-      log_adjacency_changes         = "brief"
-      admin_state                   = "enabled"
-      bandwidth_reference           = 400000
-      bandwidth_reference_unit      = "mbps"
-      distance                      = 110
-      router_id                     = "34.56.78.90"
-      capability_vrf_lite           = "l3vpn"
-      control                       = "bfd,default-passive"
-      default_metric                = 1000
-      default_route_nssa_pbit_clear = true
-      discard_route                 = "ext,int"
-      down_bit_ignore               = true
-      max_ecmp                      = 16
-      name_lookup_vrf               = "default"
-      rfc1583_compatible            = true
-      rfc1583_compatible_ios        = true
-      areas = [{
-        area_id              = "0.0.0.10"
-        authentication_type  = "unspecified"
-        cost                 = 10
-        control              = "summary"
-        nssa_translator_role = "always"
-        segment_routing_mpls = "mpls"
-        type                 = "stub"
-      }]
-      max_metric_await_convergence_bgp_asn = "65535"
-      max_metric_control                   = "external-lsa,startup,stub,summary-lsa"
-      max_metric_external_lsa              = 600
-      max_metric_summary_lsa               = 600
-      max_metric_startup_interval          = 300
-      interfaces = [{
-        interface_id                       = "eth1/10"
-        admin_state                        = "enabled"
-        advertise_secondaries              = false
-        area                               = "0.0.0.10"
-        bfd                                = "disabled"
-        cost                               = 1000
-        dead_interval                      = 60
-        hello_interval                     = 15
-        network_type                       = "p2p"
-        passive                            = "enabled"
-        priority                           = 10
-        control                            = "mtu-ignore"
-        node_flag                          = "clear"
-        retransmit_interval                = 10
-        transmit_delay                     = 2
-        authentication_key                 = "0 mykey"
-        authentication_key_id              = 1
-        authentication_key_new             = "0 mykey"
-        authentication_key_secure_mode     = false
-        authentication_keychain            = "mykeychain"
-        authentication_md5_key             = "0 mymd5key"
-        authentication_md5_key_new         = "0 mymd5key"
-        authentication_md5_key_secure_mode = false
-        authentication_type                = "none"
-      }]
-    }]
-  }]
+  instances = {
+    "OSPF1" = {
+      admin_state = "enabled"
+      control     = "stateful-ha"
+      vrfs = {
+        "VRF1" = {
+          log_adjacency_changes         = "brief"
+          admin_state                   = "enabled"
+          bandwidth_reference           = 400000
+          bandwidth_reference_unit      = "mbps"
+          distance                      = 110
+          router_id                     = "34.56.78.90"
+          capability_vrf_lite           = "l3vpn"
+          control                       = "bfd,default-passive"
+          default_metric                = 1000
+          default_route_nssa_pbit_clear = true
+          discard_route                 = "ext,int"
+          down_bit_ignore               = true
+          max_ecmp                      = 16
+          name_lookup_vrf               = "default"
+          rfc1583_compatible            = true
+          rfc1583_compatible_ios        = true
+          areas = {
+            "0.0.0.10" = {
+              authentication_type  = "unspecified"
+              cost                 = 10
+              control              = "summary"
+              nssa_translator_role = "always"
+              segment_routing_mpls = "mpls"
+              type                 = "stub"
+            }
+          }
+          max_metric_await_convergence_bgp_asn = "65535"
+          max_metric_control                   = "external-lsa,startup,stub,summary-lsa"
+          max_metric_external_lsa              = 600
+          max_metric_summary_lsa               = 600
+          max_metric_startup_interval          = 300
+          interfaces = {
+            "eth1/10" = {
+              admin_state                        = "enabled"
+              advertise_secondaries              = false
+              area                               = "0.0.0.10"
+              bfd                                = "disabled"
+              cost                               = 1000
+              dead_interval                      = 60
+              hello_interval                     = 15
+              network_type                       = "p2p"
+              passive                            = "enabled"
+              priority                           = 10
+              control                            = "mtu-ignore"
+              node_flag                          = "clear"
+              retransmit_interval                = 10
+              transmit_delay                     = 2
+              authentication_key                 = "0 mykey"
+              authentication_key_id              = 1
+              authentication_key_new             = "0 mykey"
+              authentication_key_secure_mode     = false
+              authentication_keychain            = "mykeychain"
+              authentication_md5_key             = "0 mymd5key"
+              authentication_md5_key_new         = "0 mymd5key"
+              authentication_md5_key_secure_mode = false
+              authentication_type                = "none"
+            }
+          }
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -104,7 +108,8 @@ resource "nxos_ospf" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
-- `instances` (Attributes List) List of OSPF instances. (see [below for nested schema](#nestedatt--instances))
+- `instances` (Attributes Map) List of OSPF instances.
+  - Map key: `name` - OSPF instance name. (see [below for nested schema](#nestedatt--instances))
 
 ### Read-Only
 
@@ -113,30 +118,24 @@ resource "nxos_ospf" "example" {
 <a id="nestedatt--instances"></a>
 ### Nested Schema for `instances`
 
-Required:
-
-- `name` (String) OSPF instance name.
-
 Optional:
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `control` (String) The control state.
   - Choices: `unspecified`, `stateful-ha`
-- `vrfs` (Attributes List) List of OSPF VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+- `vrfs` (Attributes Map) List of OSPF VRFs.
+  - Map key: `name` - VRF name. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
 ### Nested Schema for `instances.vrfs`
-
-Required:
-
-- `name` (String) VRF name.
 
 Optional:
 
 - `admin_state` (String) Holds the administrative state of domain.
   - Choices: `enabled`, `disabled`
-- `areas` (Attributes List) List of OSPF areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
+- `areas` (Attributes Map) List of OSPF areas.
+  - Map key: `area_id` - Area identifier to which a network or interface belongs in IPv4 address format. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
 - `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
   - Range: `0`-`4294967295`
 - `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
@@ -155,7 +154,8 @@ Optional:
 - `distance` (Number) Administrative distance preference.
   - Range: `1`-`255`
 - `down_bit_ignore` (Boolean) Holds the status of Down-bit ignore.
-- `interfaces` (Attributes List) List of OSPF interfaces. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
+- `interfaces` (Attributes Map) List of OSPF interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
 - `log_adjacency_changes` (String) Adjacency change logging level.
   - Choices: `none`, `brief`, `detail`
 - `max_ecmp` (Number) Maximum Equal Cost Multi Path(ECMP).
@@ -179,10 +179,6 @@ Optional:
 <a id="nestedatt--instances--vrfs--areas"></a>
 ### Nested Schema for `instances.vrfs.areas`
 
-Required:
-
-- `area_id` (String) Area identifier to which a network or interface belongs in IPv4 address format.
-
 Optional:
 
 - `authentication_type` (String) Authentication type can be simple, none or md5.
@@ -203,10 +199,6 @@ Optional:
 
 <a id="nestedatt--instances--vrfs--interfaces"></a>
 ### Nested Schema for `instances.vrfs.interfaces`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 Optional:
 
@@ -258,9 +250,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_ospf.example
-  identity = {
-  }
+  to       = nxos_ospf.example
+  identity = {}
 }
 ```
 

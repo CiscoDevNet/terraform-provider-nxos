@@ -41,8 +41,10 @@ data "nxos_ospfv3" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
-- `instances` (Attributes List) List of OSPFv3 instances. (see [below for nested schema](#nestedatt--instances))
-- `interfaces` (Attributes List) List of OSPFv3 interface configurations. (see [below for nested schema](#nestedatt--interfaces))
+- `instances` (Attributes Map) List of OSPFv3 instances.
+  - Map key: `name` - OSPFv3 instance name. (see [below for nested schema](#nestedatt--instances))
+- `interfaces` (Attributes Map) List of OSPFv3 interface configurations.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--interfaces))
 
 <a id="nestedatt--instances"></a>
 ### Nested Schema for `instances`
@@ -52,24 +54,26 @@ Read-Only:
 - `admin_state` (String) The administrative state of the object or policy.
 - `flush_routes` (Boolean) Flush routes on non-graceful controlled restart.
 - `isolate` (Boolean) Isolate this router from OSPFv3 perspective.
-- `name` (String) OSPFv3 instance name.
-- `vrfs` (Attributes List) List of OSPFv3 VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+- `vrfs` (Attributes Map) List of OSPFv3 VRFs.
+  - Map key: `name` - VRF name. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
 ### Nested Schema for `instances.vrfs`
 
 Read-Only:
 
-- `address_families` (Attributes List) List of OSPFv3 address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
+- `address_families` (Attributes Map) List of OSPFv3 address families.
+  - Map key: `address_family_type` - IPv6 unicast address family type.
+  - Key choices: `ipv6-ucast` (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
 - `admin_state` (String) OSPFv3 VRF administrative state.
-- `areas` (Attributes List) List of OSPFv3 areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
+- `areas` (Attributes Map) List of OSPFv3 areas.
+  - Map key: `area_id` - Area Id as an integer or ip address. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
 - `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
 - `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
 - `bfd_control` (Boolean) Holds the controls for bfd.
 - `discard_route_external` (Boolean) Holds the controls for discard-route external.
 - `discard_route_internal` (Boolean) Holds the controls for discard-route internal.
 - `log_adjacency_changes` (String) Adjacency change logging level.
-- `name` (String) VRF name.
 - `name_lookup` (Boolean) Enable Name Lookup for OSPFv3 Neighbors.
 - `passive_interface_default` (Boolean) Suppress routing updates on the interface.
 - `router_id` (String) Router identifier for this VRF.
@@ -79,7 +83,6 @@ Read-Only:
 
 Read-Only:
 
-- `address_family_type` (String) IPv6 unicast address family type.
 - `administrative_distance` (String) Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified
 - `default_metric` (String) Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified
 - `default_route_nssa_pbit_clear` (Boolean) Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.
@@ -91,7 +94,6 @@ Read-Only:
 
 Read-Only:
 
-- `area_id` (String) Area Id as an integer or ip address.
 - `nssa_translator_role` (String) Not-so-stubby area(NSSA) translator role.
 - `redistribute` (Boolean) Send redistributed LSAs into NSSA area.
 - `summary` (Boolean) Originate summary LSA into other areas.
@@ -115,7 +117,6 @@ Read-Only:
 - `hello_interval` (Number) Interval between hello packets that OSPFv3 sends on the interface.
 - `instance_id` (Number) OSPFv3 instance identifier under interface.
 - `instance_name` (String) OSPFv3 instance name used with area command.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `mtu_ignore` (Boolean) Disable OSPF MTU mismatch detection.
 - `network_type` (String) Network Type, can be Point-to-point or Broadcast.
 - `passive` (String) Suppress routing updates on the interface.

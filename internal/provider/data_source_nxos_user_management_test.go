@@ -52,26 +52,20 @@ func TestAccDataSourceNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_owner_key", "owner1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_message", "Welcome to the system."))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_owner_tag", "tag1"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_user_management.test", "users.*", map[string]string{
-		"name":                   "user1",
-		"account_status":         "active",
-		"allow_expired":          "yes",
-		"clear_password_history": "no",
-		"description":            "Test user account",
-		"email":                  "user1@example.com",
-		"expiration":             "2030-01-01T00:00:00.000+00:00",
-		"expires":                "no",
-		"first_name":             "John",
-		"force":                  "no",
-		"last_name":              "Doe",
-		"phone":                  "1234567890",
-		"shell_type":             "shellvsh",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_user_management.test", "users.*.roles.*", map[string]string{
-		"name":           "network-operator",
-		"description":    "Operator role",
-		"privilege_type": "readPriv",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.account_status", "active"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.allow_expired", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.clear_password_history", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.description", "Test user account"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.email", "user1@example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.expiration", "2030-01-01T00:00:00.000+00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.expires", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.first_name", "John"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.force", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.last_name", "Doe"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.phone", "1234567890"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.shell_type", "shellvsh"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.roles.network-operator.description", "Operator role"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.roles.network-operator.privilege_type", "readPriv"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_deadtime", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_description", "TACACS+ settings"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_owner_key", "owner1"))
@@ -79,27 +73,21 @@ func TestAccDataSourceNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_retries", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_source_interface", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_timeout", "10"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_user_management.test", "tacacs_providers.*", map[string]string{
-		"name":                    "10.1.1.1",
-		"authentication_protocol": "chap",
-		"description":             "TACACS+ provider",
-		"monitoring_idle_time":    "10",
-		"owner_key":               "owner1",
-		"owner_tag":               "tag1",
-		"port":                    "149",
-		"retries":                 "3",
-		"single_connection":       "yes",
-		"timeout":                 "10",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_user_management.test", "tacacs_provider_groups.*", map[string]string{
-		"name":             "TACACS_GROUP1",
-		"deadtime":         "5",
-		"description":      "TACACS+ provider group",
-		"owner_key":        "owner1",
-		"owner_tag":        "tag1",
-		"source_interface": "unspecified",
-		"vrf":              "default",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.authentication_protocol", "chap"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.description", "TACACS+ provider"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.monitoring_idle_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.port", "149"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.retries", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.single_connection", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.deadtime", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.description", "TACACS+ provider group"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.vrf", "default"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -153,26 +141,28 @@ func testAccDataSourceNxosUserManagementConfig() string {
 	config += `	post_login_banner_owner_key = "owner1"` + "\n"
 	config += `	post_login_banner_message = "Welcome to the system."` + "\n"
 	config += `	post_login_banner_owner_tag = "tag1"` + "\n"
-	config += `	users = [{` + "\n"
-	config += `		name = "user1"` + "\n"
-	config += `		account_status = "active"` + "\n"
-	config += `		allow_expired = "yes"` + "\n"
-	config += `		clear_password_history = "no"` + "\n"
-	config += `		description = "Test user account"` + "\n"
-	config += `		email = "user1@example.com"` + "\n"
-	config += `		expiration = "2030-01-01T00:00:00.000+00:00"` + "\n"
-	config += `		expires = "no"` + "\n"
-	config += `		first_name = "John"` + "\n"
-	config += `		force = "no"` + "\n"
-	config += `		last_name = "Doe"` + "\n"
-	config += `		phone = "1234567890"` + "\n"
-	config += `		shell_type = "shellvsh"` + "\n"
-	config += `		roles = [{` + "\n"
-	config += `			name = "network-operator"` + "\n"
-	config += `			description = "Operator role"` + "\n"
-	config += `			privilege_type = "readPriv"` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	users = {` + "\n"
+	config += `		"user1" = {` + "\n"
+	config += `			account_status = "active"` + "\n"
+	config += `			allow_expired = "yes"` + "\n"
+	config += `			clear_password_history = "no"` + "\n"
+	config += `			description = "Test user account"` + "\n"
+	config += `			email = "user1@example.com"` + "\n"
+	config += `			expiration = "2030-01-01T00:00:00.000+00:00"` + "\n"
+	config += `			expires = "no"` + "\n"
+	config += `			first_name = "John"` + "\n"
+	config += `			force = "no"` + "\n"
+	config += `			last_name = "Doe"` + "\n"
+	config += `			phone = "1234567890"` + "\n"
+	config += `			shell_type = "shellvsh"` + "\n"
+	config += `			roles = {` + "\n"
+	config += `				"network-operator" = {` + "\n"
+	config += `					description = "Operator role"` + "\n"
+	config += `					privilege_type = "readPriv"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	tacacs_deadtime = 5` + "\n"
 	config += `	tacacs_description = "TACACS+ settings"` + "\n"
 	config += `	tacacs_owner_key = "owner1"` + "\n"
@@ -180,27 +170,29 @@ func testAccDataSourceNxosUserManagementConfig() string {
 	config += `	tacacs_retries = 3` + "\n"
 	config += `	tacacs_source_interface = "unspecified"` + "\n"
 	config += `	tacacs_timeout = 10` + "\n"
-	config += `	tacacs_providers = [{` + "\n"
-	config += `		name = "10.1.1.1"` + "\n"
-	config += `		authentication_protocol = "chap"` + "\n"
-	config += `		description = "TACACS+ provider"` + "\n"
-	config += `		monitoring_idle_time = 10` + "\n"
-	config += `		owner_key = "owner1"` + "\n"
-	config += `		owner_tag = "tag1"` + "\n"
-	config += `		port = 149` + "\n"
-	config += `		retries = 3` + "\n"
-	config += `		single_connection = "yes"` + "\n"
-	config += `		timeout = 10` + "\n"
-	config += `	}]` + "\n"
-	config += `	tacacs_provider_groups = [{` + "\n"
-	config += `		name = "TACACS_GROUP1"` + "\n"
-	config += `		deadtime = 5` + "\n"
-	config += `		description = "TACACS+ provider group"` + "\n"
-	config += `		owner_key = "owner1"` + "\n"
-	config += `		owner_tag = "tag1"` + "\n"
-	config += `		source_interface = "unspecified"` + "\n"
-	config += `		vrf = "default"` + "\n"
-	config += `	}]` + "\n"
+	config += `	tacacs_providers = {` + "\n"
+	config += `		"10.1.1.1" = {` + "\n"
+	config += `			authentication_protocol = "chap"` + "\n"
+	config += `			description = "TACACS+ provider"` + "\n"
+	config += `			monitoring_idle_time = 10` + "\n"
+	config += `			owner_key = "owner1"` + "\n"
+	config += `			owner_tag = "tag1"` + "\n"
+	config += `			port = 149` + "\n"
+	config += `			retries = 3` + "\n"
+	config += `			single_connection = "yes"` + "\n"
+	config += `			timeout = 10` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	tacacs_provider_groups = {` + "\n"
+	config += `		"TACACS_GROUP1" = {` + "\n"
+	config += `			deadtime = 5` + "\n"
+	config += `			description = "TACACS+ provider group"` + "\n"
+	config += `			owner_key = "owner1"` + "\n"
+	config += `			owner_tag = "tag1"` + "\n"
+	config += `			source_interface = "unspecified"` + "\n"
+	config += `			vrf = "default"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

@@ -35,52 +35,48 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosAccessLists(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.name", "ACL1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.fragments", "permit-all"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.ignore_routable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.per_ace_statistics", "off"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.udf_present", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.sequence_number", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.ack", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.action", "permit"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.dscp", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.destination_port_1", "443"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.destination_port_2", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.destination_port_operator", "eq"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.destination_prefix", "10.1.1.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.destination_prefix_length", "24"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.established", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.fin", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.fragment", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.http_option_type", "invalid"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.icmp_code", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.icmp_type", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.log", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.protocol", "tcp"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.psh", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.rev", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.rst", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.source_port_1", "443"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.source_port_2", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.source_port_operator", "eq"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.source_prefix", "20.1.0.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.source_prefix_length", "16"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.syn", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.urg", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.capture_session", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.dscp_mask", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.igmp_type", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.load_share", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.priority_all", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.tcp_flags_mask", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.tcp_option_length", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.telemetry_path", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.telemetry_queue", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.type_of_service", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "ingress_interfaces.0.interface_id", "eth1/10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "ingress_interfaces.0.access_list_name", "ACL1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "egress_interfaces.0.interface_id", "eth1/10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "egress_interfaces.0.access_list_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.fragments", "permit-all"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.ignore_routable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.per_ace_statistics", "off"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.udf_present", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.ack", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.destination_port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.destination_port_2", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.destination_port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.destination_prefix", "10.1.1.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.destination_prefix_length", "24"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.established", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.fin", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.fragment", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.http_option_type", "invalid"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.icmp_code", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.icmp_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.log", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.protocol", "tcp"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.psh", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.rev", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.rst", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.source_port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.source_port_2", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.source_port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.source_prefix", "20.1.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.source_prefix_length", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.syn", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.urg", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.capture_session", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.dscp_mask", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.igmp_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.load_share", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.priority_all", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.tcp_flags_mask", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.tcp_option_length", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.telemetry_path", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.telemetry_queue", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.ACL1.entries.10.type_of_service", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "ingress_interfaces.eth1/10.access_list_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "egress_interfaces.eth1/10.access_list_name", "ACL1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -148,60 +144,64 @@ func testAccNxosAccessListsConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosAccessListsConfig_all() string {
 	config := `resource "nxos_access_lists" "test" {` + "\n"
-	config += `	access_lists = [{` + "\n"
-	config += `		name = "ACL1"` + "\n"
-	config += `		fragments = "permit-all"` + "\n"
-	config += `		ignore_routable = false` + "\n"
-	config += `		per_ace_statistics = "off"` + "\n"
-	config += `		udf_present = false` + "\n"
-	config += `		entries = [{` + "\n"
-	config += `			sequence_number = 10` + "\n"
-	config += `			ack = false` + "\n"
-	config += `			action = "permit"` + "\n"
-	config += `			dscp = 0` + "\n"
-	config += `			destination_port_1 = "443"` + "\n"
-	config += `			destination_port_2 = "0"` + "\n"
-	config += `			destination_port_operator = "eq"` + "\n"
-	config += `			destination_prefix = "10.1.1.0"` + "\n"
-	config += `			destination_prefix_length = "24"` + "\n"
-	config += `			established = false` + "\n"
-	config += `			fin = false` + "\n"
-	config += `			fragment = false` + "\n"
-	config += `			http_option_type = "invalid"` + "\n"
-	config += `			icmp_code = 0` + "\n"
-	config += `			icmp_type = 0` + "\n"
-	config += `			log = false` + "\n"
-	config += `			protocol = "tcp"` + "\n"
-	config += `			psh = false` + "\n"
-	config += `			rev = false` + "\n"
-	config += `			rst = false` + "\n"
-	config += `			source_port_1 = "443"` + "\n"
-	config += `			source_port_2 = "0"` + "\n"
-	config += `			source_port_operator = "eq"` + "\n"
-	config += `			source_prefix = "20.1.0.0"` + "\n"
-	config += `			source_prefix_length = "16"` + "\n"
-	config += `			syn = false` + "\n"
-	config += `			urg = false` + "\n"
-	config += `			capture_session = 1` + "\n"
-	config += `			dscp_mask = 0` + "\n"
-	config += `			igmp_type = 0` + "\n"
-	config += `			load_share = false` + "\n"
-	config += `			priority_all = false` + "\n"
-	config += `			tcp_flags_mask = 0` + "\n"
-	config += `			tcp_option_length = 0` + "\n"
-	config += `			telemetry_path = false` + "\n"
-	config += `			telemetry_queue = false` + "\n"
-	config += `			type_of_service = 0` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
-	config += `	ingress_interfaces = [{` + "\n"
-	config += `		interface_id = "eth1/10"` + "\n"
-	config += `		access_list_name = "ACL1"` + "\n"
-	config += `	}]` + "\n"
-	config += `	egress_interfaces = [{` + "\n"
-	config += `		interface_id = "eth1/10"` + "\n"
-	config += `		access_list_name = "ACL1"` + "\n"
-	config += `	}]` + "\n"
+	config += `	access_lists = {` + "\n"
+	config += `		"ACL1" = {` + "\n"
+	config += `			fragments = "permit-all"` + "\n"
+	config += `			ignore_routable = false` + "\n"
+	config += `			per_ace_statistics = "off"` + "\n"
+	config += `			udf_present = false` + "\n"
+	config += `			entries = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					ack = false` + "\n"
+	config += `					action = "permit"` + "\n"
+	config += `					dscp = 0` + "\n"
+	config += `					destination_port_1 = "443"` + "\n"
+	config += `					destination_port_2 = "0"` + "\n"
+	config += `					destination_port_operator = "eq"` + "\n"
+	config += `					destination_prefix = "10.1.1.0"` + "\n"
+	config += `					destination_prefix_length = "24"` + "\n"
+	config += `					established = false` + "\n"
+	config += `					fin = false` + "\n"
+	config += `					fragment = false` + "\n"
+	config += `					http_option_type = "invalid"` + "\n"
+	config += `					icmp_code = 0` + "\n"
+	config += `					icmp_type = 0` + "\n"
+	config += `					log = false` + "\n"
+	config += `					protocol = "tcp"` + "\n"
+	config += `					psh = false` + "\n"
+	config += `					rev = false` + "\n"
+	config += `					rst = false` + "\n"
+	config += `					source_port_1 = "443"` + "\n"
+	config += `					source_port_2 = "0"` + "\n"
+	config += `					source_port_operator = "eq"` + "\n"
+	config += `					source_prefix = "20.1.0.0"` + "\n"
+	config += `					source_prefix_length = "16"` + "\n"
+	config += `					syn = false` + "\n"
+	config += `					urg = false` + "\n"
+	config += `					capture_session = 1` + "\n"
+	config += `					dscp_mask = 0` + "\n"
+	config += `					igmp_type = 0` + "\n"
+	config += `					load_share = false` + "\n"
+	config += `					priority_all = false` + "\n"
+	config += `					tcp_flags_mask = 0` + "\n"
+	config += `					tcp_option_length = 0` + "\n"
+	config += `					telemetry_path = false` + "\n"
+	config += `					telemetry_queue = false` + "\n"
+	config += `					type_of_service = 0` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ingress_interfaces = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `			access_list_name = "ACL1"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	egress_interfaces = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `			access_list_name = "ACL1"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

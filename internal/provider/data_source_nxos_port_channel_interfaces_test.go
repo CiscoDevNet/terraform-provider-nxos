@@ -31,46 +31,40 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPortChannelInterfaces(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.*", map[string]string{
-		"interface_id":           "po123",
-		"port_channel_mode":      "active",
-		"minimum_links":          "2",
-		"maximum_links":          "10",
-		"suspend_individual":     "disable",
-		"access_vlan":            "vlan-1",
-		"admin_state":            "up",
-		"auto_negotiation":       "on",
-		"bandwidth":              "0",
-		"delay":                  "1",
-		"duplex":                 "auto",
-		"layer":                  "Layer2",
-		"link_logging":           "enable",
-		"medium":                 "broadcast",
-		"mode":                   "access",
-		"mtu":                    "1500",
-		"native_vlan":            "unknown",
-		"speed":                  "auto",
-		"trunk_vlans":            "1-4094",
-		"equalization_delay":     "5",
-		"graceful_convergence":   "disable",
-		"hash_distribution":      "adaptive",
-		"itu_channel":            "50",
-		"lacp_delay_mode":        "enable",
-		"lacp_vpc_convergence":   "enable",
-		"load_defer":             "enable",
-		"mdix":                   "auto",
-		"optics_loopback":        "internal",
-		"pxe_transition_timeout": "5",
-		"span_mode":              "not-a-span-dest",
-		"squelch":                "disable",
-		"transmission_mode":      "not-a-trans-port",
-		"usage":                  "discovery",
-		"user_configured_flags":  "admin_layer,admin_state",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.*.members.*", map[string]string{
-		"interface_dn": "sys/intf/phys-[eth1/11]",
-		"force":        "true",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.port_channel_mode", "active"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.minimum_links", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.maximum_links", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.suspend_individual", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.access_vlan", "vlan-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.auto_negotiation", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.bandwidth", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.delay", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.duplex", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.layer", "Layer2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.medium", "broadcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.mode", "access"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.native_vlan", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.speed", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.trunk_vlans", "1-4094"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.equalization_delay", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.graceful_convergence", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.hash_distribution", "adaptive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.itu_channel", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.lacp_delay_mode", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.lacp_vpc_convergence", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.load_defer", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.mdix", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.optics_loopback", "internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.pxe_transition_timeout", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.span_mode", "not-a-span-dest"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.squelch", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.transmission_mode", "not-a-trans-port"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.usage", "discovery"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.user_configured_flags", "admin_layer,admin_state"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interfaces.test", "port_channel_interfaces.po123.members.sys/intf/phys-[eth1/11].force", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -103,46 +97,48 @@ resource "nxos_dme" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosPortChannelInterfacesConfig() string {
 	config := `resource "nxos_port_channel_interfaces" "test" {` + "\n"
-	config += `	port_channel_interfaces = [{` + "\n"
-	config += `		interface_id = "po123"` + "\n"
-	config += `		port_channel_mode = "active"` + "\n"
-	config += `		minimum_links = 2` + "\n"
-	config += `		maximum_links = 10` + "\n"
-	config += `		suspend_individual = "disable"` + "\n"
-	config += `		access_vlan = "vlan-1"` + "\n"
-	config += `		admin_state = "up"` + "\n"
-	config += `		auto_negotiation = "on"` + "\n"
-	config += `		bandwidth = 0` + "\n"
-	config += `		delay = 1` + "\n"
-	config += `		duplex = "auto"` + "\n"
-	config += `		layer = "Layer2"` + "\n"
-	config += `		link_logging = "enable"` + "\n"
-	config += `		medium = "broadcast"` + "\n"
-	config += `		mode = "access"` + "\n"
-	config += `		mtu = 1500` + "\n"
-	config += `		native_vlan = "unknown"` + "\n"
-	config += `		speed = "auto"` + "\n"
-	config += `		trunk_vlans = "1-4094"` + "\n"
-	config += `		equalization_delay = 5` + "\n"
-	config += `		graceful_convergence = "disable"` + "\n"
-	config += `		hash_distribution = "adaptive"` + "\n"
-	config += `		itu_channel = 50` + "\n"
-	config += `		lacp_delay_mode = "enable"` + "\n"
-	config += `		lacp_vpc_convergence = "enable"` + "\n"
-	config += `		load_defer = "enable"` + "\n"
-	config += `		mdix = "auto"` + "\n"
-	config += `		optics_loopback = "internal"` + "\n"
-	config += `		pxe_transition_timeout = 5` + "\n"
-	config += `		span_mode = "not-a-span-dest"` + "\n"
-	config += `		squelch = "disable"` + "\n"
-	config += `		transmission_mode = "not-a-trans-port"` + "\n"
-	config += `		usage = "discovery"` + "\n"
-	config += `		user_configured_flags = "admin_layer,admin_state"` + "\n"
-	config += `		members = [{` + "\n"
-	config += `			interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"
-	config += `			force = true` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	port_channel_interfaces = {` + "\n"
+	config += `		"po123" = {` + "\n"
+	config += `			port_channel_mode = "active"` + "\n"
+	config += `			minimum_links = 2` + "\n"
+	config += `			maximum_links = 10` + "\n"
+	config += `			suspend_individual = "disable"` + "\n"
+	config += `			access_vlan = "vlan-1"` + "\n"
+	config += `			admin_state = "up"` + "\n"
+	config += `			auto_negotiation = "on"` + "\n"
+	config += `			bandwidth = 0` + "\n"
+	config += `			delay = 1` + "\n"
+	config += `			duplex = "auto"` + "\n"
+	config += `			layer = "Layer2"` + "\n"
+	config += `			link_logging = "enable"` + "\n"
+	config += `			medium = "broadcast"` + "\n"
+	config += `			mode = "access"` + "\n"
+	config += `			mtu = 1500` + "\n"
+	config += `			native_vlan = "unknown"` + "\n"
+	config += `			speed = "auto"` + "\n"
+	config += `			trunk_vlans = "1-4094"` + "\n"
+	config += `			equalization_delay = 5` + "\n"
+	config += `			graceful_convergence = "disable"` + "\n"
+	config += `			hash_distribution = "adaptive"` + "\n"
+	config += `			itu_channel = 50` + "\n"
+	config += `			lacp_delay_mode = "enable"` + "\n"
+	config += `			lacp_vpc_convergence = "enable"` + "\n"
+	config += `			load_defer = "enable"` + "\n"
+	config += `			mdix = "auto"` + "\n"
+	config += `			optics_loopback = "internal"` + "\n"
+	config += `			pxe_transition_timeout = 5` + "\n"
+	config += `			span_mode = "not-a-span-dest"` + "\n"
+	config += `			squelch = "disable"` + "\n"
+	config += `			transmission_mode = "not-a-trans-port"` + "\n"
+	config += `			usage = "discovery"` + "\n"
+	config += `			user_configured_flags = "admin_layer,admin_state"` + "\n"
+	config += `			members = {` + "\n"
+	config += `				"sys/intf/phys-[eth1/11]" = {` + "\n"
+	config += `					force = true` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

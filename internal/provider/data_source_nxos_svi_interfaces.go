@@ -68,15 +68,11 @@ func (d *SVIInterfacesDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"svi_interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of SVI interfaces.",
+			"svi_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of SVI interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `vlan100`.",
-							Computed:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: "Administrative state.",
 							Computed:            true,

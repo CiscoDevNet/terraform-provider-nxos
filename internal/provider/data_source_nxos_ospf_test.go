@@ -32,70 +32,54 @@ import (
 func TestAccDataSourceNxosOSPF(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*", map[string]string{
-		"name":        "OSPF1",
-		"admin_state": "enabled",
-		"control":     "stateful-ha",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*", map[string]string{
-		"name":                          "VRF1",
-		"log_adjacency_changes":         "brief",
-		"admin_state":                   "enabled",
-		"bandwidth_reference":           "400000",
-		"bandwidth_reference_unit":      "mbps",
-		"distance":                      "110",
-		"router_id":                     "34.56.78.90",
-		"capability_vrf_lite":           "l3vpn",
-		"control":                       "bfd,default-passive",
-		"default_metric":                "1000",
-		"default_route_nssa_pbit_clear": "true",
-		"discard_route":                 "ext,int",
-		"down_bit_ignore":               "true",
-		"max_ecmp":                      "16",
-		"name_lookup_vrf":               "default",
-		"rfc1583_compatible":            "true",
-		"rfc1583_compatible_ios":        "true",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*.areas.*", map[string]string{
-		"area_id":              "0.0.0.10",
-		"authentication_type":  "unspecified",
-		"cost":                 "10",
-		"control":              "summary",
-		"nssa_translator_role": "always",
-		"segment_routing_mpls": "mpls",
-		"type":                 "stub",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*", map[string]string{
-		"max_metric_await_convergence_bgp_asn": "65535",
-		"max_metric_control":                   "external-lsa,startup,stub,summary-lsa",
-		"max_metric_external_lsa":              "600",
-		"max_metric_summary_lsa":               "600",
-		"max_metric_startup_interval":          "300",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*.interfaces.*", map[string]string{
-		"interface_id":          "eth1/10",
-		"admin_state":           "enabled",
-		"advertise_secondaries": "false",
-		"area":                  "0.0.0.10",
-		"bfd":                   "disabled",
-		"cost":                  "1000",
-		"dead_interval":         "60",
-		"hello_interval":        "15",
-		"network_type":          "p2p",
-		"passive":               "enabled",
-		"priority":              "10",
-		"control":               "mtu-ignore",
-		"node_flag":             "clear",
-		"retransmit_interval":   "10",
-		"transmit_delay":        "2",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*.interfaces.*", map[string]string{
-		"authentication_key_id":              "1",
-		"authentication_key_secure_mode":     "false",
-		"authentication_keychain":            "mykeychain",
-		"authentication_md5_key_secure_mode": "false",
-		"authentication_type":                "none",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.log_adjacency_changes", "brief"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.distance", "110"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.router_id", "34.56.78.90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.capability_vrf_lite", "l3vpn"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.control", "bfd,default-passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.default_metric", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.default_route_nssa_pbit_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.discard_route", "ext,int"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.down_bit_ignore", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_ecmp", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.name_lookup_vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.rfc1583_compatible", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.rfc1583_compatible_ios", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.authentication_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.cost", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.control", "summary"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.nssa_translator_role", "always"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.segment_routing_mpls", "mpls"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.type", "stub"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_await_convergence_bgp_asn", "65535"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_control", "external-lsa,startup,stub,summary-lsa"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_external_lsa", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_summary_lsa", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_startup_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.advertise_secondaries", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.area", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.bfd", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.cost", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.dead_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.hello_interval", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.network_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.passive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.control", "mtu-ignore"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.node_flag", "clear"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.retransmit_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.transmit_delay", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_key_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_key_secure_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_keychain", "mykeychain"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_md5_key_secure_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_type", "none"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -157,70 +141,74 @@ resource "nxos_dme" "PreReq3" {
 func testAccDataSourceNxosOSPFConfig() string {
 	config := `resource "nxos_ospf" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	instances = [{` + "\n"
-	config += `		name = "OSPF1"` + "\n"
-	config += `		admin_state = "enabled"` + "\n"
-	config += `		control = "stateful-ha"` + "\n"
-	config += `		vrfs = [{` + "\n"
-	config += `			name = "VRF1"` + "\n"
-	config += `			log_adjacency_changes = "brief"` + "\n"
+	config += `	instances = {` + "\n"
+	config += `		"OSPF1" = {` + "\n"
 	config += `			admin_state = "enabled"` + "\n"
-	config += `			bandwidth_reference = 400000` + "\n"
-	config += `			bandwidth_reference_unit = "mbps"` + "\n"
-	config += `			distance = 110` + "\n"
-	config += `			router_id = "34.56.78.90"` + "\n"
-	config += `			capability_vrf_lite = "l3vpn"` + "\n"
-	config += `			control = "bfd,default-passive"` + "\n"
-	config += `			default_metric = 1000` + "\n"
-	config += `			default_route_nssa_pbit_clear = true` + "\n"
-	config += `			discard_route = "ext,int"` + "\n"
-	config += `			down_bit_ignore = true` + "\n"
-	config += `			max_ecmp = 16` + "\n"
-	config += `			name_lookup_vrf = "default"` + "\n"
-	config += `			rfc1583_compatible = true` + "\n"
-	config += `			rfc1583_compatible_ios = true` + "\n"
-	config += `			areas = [{` + "\n"
-	config += `				area_id = "0.0.0.10"` + "\n"
-	config += `				authentication_type = "unspecified"` + "\n"
-	config += `				cost = 10` + "\n"
-	config += `				control = "summary"` + "\n"
-	config += `				nssa_translator_role = "always"` + "\n"
-	config += `				segment_routing_mpls = "mpls"` + "\n"
-	config += `				type = "stub"` + "\n"
-	config += `			}]` + "\n"
-	config += `			max_metric_await_convergence_bgp_asn = "65535"` + "\n"
-	config += `			max_metric_control = "external-lsa,startup,stub,summary-lsa"` + "\n"
-	config += `			max_metric_external_lsa = 600` + "\n"
-	config += `			max_metric_summary_lsa = 600` + "\n"
-	config += `			max_metric_startup_interval = 300` + "\n"
-	config += `			interfaces = [{` + "\n"
-	config += `				interface_id = "eth1/10"` + "\n"
-	config += `				admin_state = "enabled"` + "\n"
-	config += `				advertise_secondaries = false` + "\n"
-	config += `				area = "0.0.0.10"` + "\n"
-	config += `				bfd = "disabled"` + "\n"
-	config += `				cost = 1000` + "\n"
-	config += `				dead_interval = 60` + "\n"
-	config += `				hello_interval = 15` + "\n"
-	config += `				network_type = "p2p"` + "\n"
-	config += `				passive = "enabled"` + "\n"
-	config += `				priority = 10` + "\n"
-	config += `				control = "mtu-ignore"` + "\n"
-	config += `				node_flag = "clear"` + "\n"
-	config += `				retransmit_interval = 10` + "\n"
-	config += `				transmit_delay = 2` + "\n"
-	config += `				authentication_key = "0 mykey"` + "\n"
-	config += `				authentication_key_id = 1` + "\n"
-	config += `				authentication_key_new = "0 mykey"` + "\n"
-	config += `				authentication_key_secure_mode = false` + "\n"
-	config += `				authentication_keychain = "mykeychain"` + "\n"
-	config += `				authentication_md5_key = "0 mymd5key"` + "\n"
-	config += `				authentication_md5_key_new = "0 mymd5key"` + "\n"
-	config += `				authentication_md5_key_secure_mode = false` + "\n"
-	config += `				authentication_type = "none"` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `			control = "stateful-ha"` + "\n"
+	config += `			vrfs = {` + "\n"
+	config += `				"VRF1" = {` + "\n"
+	config += `					log_adjacency_changes = "brief"` + "\n"
+	config += `					admin_state = "enabled"` + "\n"
+	config += `					bandwidth_reference = 400000` + "\n"
+	config += `					bandwidth_reference_unit = "mbps"` + "\n"
+	config += `					distance = 110` + "\n"
+	config += `					router_id = "34.56.78.90"` + "\n"
+	config += `					capability_vrf_lite = "l3vpn"` + "\n"
+	config += `					control = "bfd,default-passive"` + "\n"
+	config += `					default_metric = 1000` + "\n"
+	config += `					default_route_nssa_pbit_clear = true` + "\n"
+	config += `					discard_route = "ext,int"` + "\n"
+	config += `					down_bit_ignore = true` + "\n"
+	config += `					max_ecmp = 16` + "\n"
+	config += `					name_lookup_vrf = "default"` + "\n"
+	config += `					rfc1583_compatible = true` + "\n"
+	config += `					rfc1583_compatible_ios = true` + "\n"
+	config += `					areas = {` + "\n"
+	config += `						"0.0.0.10" = {` + "\n"
+	config += `							authentication_type = "unspecified"` + "\n"
+	config += `							cost = 10` + "\n"
+	config += `							control = "summary"` + "\n"
+	config += `							nssa_translator_role = "always"` + "\n"
+	config += `							segment_routing_mpls = "mpls"` + "\n"
+	config += `							type = "stub"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					max_metric_await_convergence_bgp_asn = "65535"` + "\n"
+	config += `					max_metric_control = "external-lsa,startup,stub,summary-lsa"` + "\n"
+	config += `					max_metric_external_lsa = 600` + "\n"
+	config += `					max_metric_summary_lsa = 600` + "\n"
+	config += `					max_metric_startup_interval = 300` + "\n"
+	config += `					interfaces = {` + "\n"
+	config += `						"eth1/10" = {` + "\n"
+	config += `							admin_state = "enabled"` + "\n"
+	config += `							advertise_secondaries = false` + "\n"
+	config += `							area = "0.0.0.10"` + "\n"
+	config += `							bfd = "disabled"` + "\n"
+	config += `							cost = 1000` + "\n"
+	config += `							dead_interval = 60` + "\n"
+	config += `							hello_interval = 15` + "\n"
+	config += `							network_type = "p2p"` + "\n"
+	config += `							passive = "enabled"` + "\n"
+	config += `							priority = 10` + "\n"
+	config += `							control = "mtu-ignore"` + "\n"
+	config += `							node_flag = "clear"` + "\n"
+	config += `							retransmit_interval = 10` + "\n"
+	config += `							transmit_delay = 2` + "\n"
+	config += `							authentication_key = "0 mykey"` + "\n"
+	config += `							authentication_key_id = 1` + "\n"
+	config += `							authentication_key_new = "0 mykey"` + "\n"
+	config += `							authentication_key_secure_mode = false` + "\n"
+	config += `							authentication_keychain = "mykeychain"` + "\n"
+	config += `							authentication_md5_key = "0 mymd5key"` + "\n"
+	config += `							authentication_md5_key_new = "0 mymd5key"` + "\n"
+	config += `							authentication_md5_key_secure_mode = false` + "\n"
+	config += `							authentication_type = "none"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 

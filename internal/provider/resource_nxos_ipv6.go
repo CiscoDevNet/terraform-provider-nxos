@@ -123,24 +123,16 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("disabled", "all", "lla"),
 				},
 			},
-			"vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: "List of IPv6 VRF configurations.",
+			"vrfs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 VRF configurations.\n  - Map key: `name` - VRF name.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-							Required:            true,
-						},
-						"static_routes": schema.ListNestedAttribute{
-							MarkdownDescription: "List of IPv6 static routes.",
+						"static_routes": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 static routes.\n  - Map key: `prefix` - Prefix.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"prefix": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Prefix.").String,
-										Required:            true,
-									},
 									"control": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("pervasive", "bfd").String,
 										Optional:            true,
@@ -163,23 +155,11 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											int64validator.Between(0, 4294967295),
 										},
 									},
-									"next_hops": schema.ListNestedAttribute{
-										MarkdownDescription: "List of next hops.",
+									"next_hops": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of next hops.\n  - Map key format: `<interface_id>;<address>;<vrf_name>`\n  - Key component `interface_id`: Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.\n  - Key component `address`: Nexthop Address.\n  - Key component `vrf_name`: Nexthop VRF.").String,
 										Required:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"interface_id": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.").String,
-													Required:            true,
-												},
-												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Nexthop Address.").String,
-													Required:            true,
-												},
-												"vrf_name": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Nexthop VRF.").String,
-													Required:            true,
-												},
 												"description": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
 													Optional:            true,
@@ -219,15 +199,11 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								},
 							},
 						},
-						"interfaces": schema.ListNestedAttribute{
-							MarkdownDescription: "List of IPv6 interfaces.",
+						"interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"interface_id": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-										Required:            true,
-									},
 									"auto_configuration": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Stateless address autoconfig.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
@@ -274,15 +250,11 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Link Local Address.").String,
 										Optional:            true,
 									},
-									"addresses": schema.ListNestedAttribute{
-										MarkdownDescription: "List of IPv6 interface addresses.",
+									"addresses": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 interface addresses.\n  - Map key: `address` - Address.").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
-													Required:            true,
-												},
 												"type": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("primary", "secondary").String,
 													Optional:            true,

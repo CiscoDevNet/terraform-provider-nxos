@@ -24,7 +24,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -39,48 +38,45 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type OSPF struct {
-	Device     types.String    `tfsdk:"device"`
-	Dn         types.String    `tfsdk:"id"`
-	AdminState types.String    `tfsdk:"admin_state"`
-	Instances  []OSPFInstances `tfsdk:"instances"`
+	Device     types.String             `tfsdk:"device"`
+	Dn         types.String             `tfsdk:"id"`
+	AdminState types.String             `tfsdk:"admin_state"`
+	Instances  map[string]OSPFInstances `tfsdk:"instances"`
 }
 
 type OSPFInstances struct {
-	Name       types.String        `tfsdk:"name"`
-	AdminState types.String        `tfsdk:"admin_state"`
-	Control    types.String        `tfsdk:"control"`
-	Vrfs       []OSPFInstancesVrfs `tfsdk:"vrfs"`
+	AdminState types.String                 `tfsdk:"admin_state"`
+	Control    types.String                 `tfsdk:"control"`
+	Vrfs       map[string]OSPFInstancesVrfs `tfsdk:"vrfs"`
 }
 
 type OSPFInstancesVrfs struct {
-	Name                            types.String                  `tfsdk:"name"`
-	LogAdjacencyChanges             types.String                  `tfsdk:"log_adjacency_changes"`
-	AdminState                      types.String                  `tfsdk:"admin_state"`
-	BandwidthReference              types.Int64                   `tfsdk:"bandwidth_reference"`
-	BandwidthReferenceUnit          types.String                  `tfsdk:"bandwidth_reference_unit"`
-	Distance                        types.Int64                   `tfsdk:"distance"`
-	RouterId                        types.String                  `tfsdk:"router_id"`
-	CapabilityVrfLite               types.String                  `tfsdk:"capability_vrf_lite"`
-	Control                         types.String                  `tfsdk:"control"`
-	DefaultMetric                   types.Int64                   `tfsdk:"default_metric"`
-	DefaultRouteNssaPbitClear       types.Bool                    `tfsdk:"default_route_nssa_pbit_clear"`
-	DiscardRoute                    types.String                  `tfsdk:"discard_route"`
-	DownBitIgnore                   types.Bool                    `tfsdk:"down_bit_ignore"`
-	MaxEcmp                         types.Int64                   `tfsdk:"max_ecmp"`
-	NameLookupVrf                   types.String                  `tfsdk:"name_lookup_vrf"`
-	Rfc1583Compatible               types.Bool                    `tfsdk:"rfc1583_compatible"`
-	Rfc1583CompatibleIos            types.Bool                    `tfsdk:"rfc1583_compatible_ios"`
-	Areas                           []OSPFInstancesVrfsAreas      `tfsdk:"areas"`
-	MaxMetricAwaitConvergenceBgpAsn types.String                  `tfsdk:"max_metric_await_convergence_bgp_asn"`
-	MaxMetricControl                types.String                  `tfsdk:"max_metric_control"`
-	MaxMetricExternalLsa            types.Int64                   `tfsdk:"max_metric_external_lsa"`
-	MaxMetricSummaryLsa             types.Int64                   `tfsdk:"max_metric_summary_lsa"`
-	MaxMetricStartupInterval        types.Int64                   `tfsdk:"max_metric_startup_interval"`
-	Interfaces                      []OSPFInstancesVrfsInterfaces `tfsdk:"interfaces"`
+	LogAdjacencyChanges             types.String                           `tfsdk:"log_adjacency_changes"`
+	AdminState                      types.String                           `tfsdk:"admin_state"`
+	BandwidthReference              types.Int64                            `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit          types.String                           `tfsdk:"bandwidth_reference_unit"`
+	Distance                        types.Int64                            `tfsdk:"distance"`
+	RouterId                        types.String                           `tfsdk:"router_id"`
+	CapabilityVrfLite               types.String                           `tfsdk:"capability_vrf_lite"`
+	Control                         types.String                           `tfsdk:"control"`
+	DefaultMetric                   types.Int64                            `tfsdk:"default_metric"`
+	DefaultRouteNssaPbitClear       types.Bool                             `tfsdk:"default_route_nssa_pbit_clear"`
+	DiscardRoute                    types.String                           `tfsdk:"discard_route"`
+	DownBitIgnore                   types.Bool                             `tfsdk:"down_bit_ignore"`
+	MaxEcmp                         types.Int64                            `tfsdk:"max_ecmp"`
+	NameLookupVrf                   types.String                           `tfsdk:"name_lookup_vrf"`
+	Rfc1583Compatible               types.Bool                             `tfsdk:"rfc1583_compatible"`
+	Rfc1583CompatibleIos            types.Bool                             `tfsdk:"rfc1583_compatible_ios"`
+	Areas                           map[string]OSPFInstancesVrfsAreas      `tfsdk:"areas"`
+	MaxMetricAwaitConvergenceBgpAsn types.String                           `tfsdk:"max_metric_await_convergence_bgp_asn"`
+	MaxMetricControl                types.String                           `tfsdk:"max_metric_control"`
+	MaxMetricExternalLsa            types.Int64                            `tfsdk:"max_metric_external_lsa"`
+	MaxMetricSummaryLsa             types.Int64                            `tfsdk:"max_metric_summary_lsa"`
+	MaxMetricStartupInterval        types.Int64                            `tfsdk:"max_metric_startup_interval"`
+	Interfaces                      map[string]OSPFInstancesVrfsInterfaces `tfsdk:"interfaces"`
 }
 
 type OSPFInstancesVrfsAreas struct {
-	AreaId             types.String `tfsdk:"area_id"`
 	AuthenticationType types.String `tfsdk:"authentication_type"`
 	Cost               types.Int64  `tfsdk:"cost"`
 	Control            types.String `tfsdk:"control"`
@@ -90,7 +86,6 @@ type OSPFInstancesVrfsAreas struct {
 }
 
 type OSPFInstancesVrfsInterfaces struct {
-	InterfaceId                    types.String `tfsdk:"interface_id"`
 	AdminState                     types.String `tfsdk:"admin_state"`
 	AdvertiseSecondaries           types.Bool   `tfsdk:"advertise_secondaries"`
 	Area                           types.String `tfsdk:"area"`
@@ -144,20 +139,20 @@ func (data OSPF) getDn() string {
 	return "sys/ospf"
 }
 
-func (data OSPFInstances) getRn() string {
-	return fmt.Sprintf("inst-%s", data.Name.ValueString())
+func (data OSPFInstances) getRn(key string) string {
+	return fmt.Sprintf("inst-%s", key)
 }
 
-func (data OSPFInstancesVrfs) getRn() string {
-	return fmt.Sprintf("dom-%s", data.Name.ValueString())
+func (data OSPFInstancesVrfs) getRn(key string) string {
+	return fmt.Sprintf("dom-%s", key)
 }
 
-func (data OSPFInstancesVrfsAreas) getRn() string {
-	return fmt.Sprintf("area-%s", data.AreaId.ValueString())
+func (data OSPFInstancesVrfsAreas) getRn(key string) string {
+	return fmt.Sprintf("area-%s", key)
 }
 
-func (data OSPFInstancesVrfsInterfaces) getRn() string {
-	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
+func (data OSPFInstancesVrfsInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
 }
 
 func (data OSPF) getClassName() string {
@@ -176,11 +171,9 @@ func (data OSPF) toBody() nxos.Body {
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
-	for _, child := range data.Instances {
+	for key, child := range data.Instances {
 		attrs = "{}"
-		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-		}
+		attrs, _ = sjson.Set(attrs, "name", key)
 		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
@@ -191,11 +184,9 @@ func (data OSPF) toBody() nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfInst.children"
-			for _, child := range child.Vrfs {
+			for key, child := range child.Vrfs {
 				attrs = "{}"
-				if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-				}
+				attrs, _ = sjson.Set(attrs, "name", key)
 				if (!child.LogAdjacencyChanges.IsUnknown() && !child.LogAdjacencyChanges.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "adjChangeLogLevel", child.LogAdjacencyChanges.ValueString())
 				}
@@ -248,11 +239,9 @@ func (data OSPF) toBody() nxos.Body {
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfDom.children"
-					for _, child := range child.Areas {
+					for key, child := range child.Areas {
 						attrs = "{}"
-						if (!child.AreaId.IsUnknown() && !child.AreaId.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "id", child.AreaId.ValueString())
-						}
+						attrs, _ = sjson.Set(attrs, "id", key)
 						if (!child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull()) || false {
 							attrs, _ = sjson.Set(attrs, "authType", child.AuthenticationType.ValueString())
 						}
@@ -292,11 +281,9 @@ func (data OSPF) toBody() nxos.Body {
 					if attrs != "{}" || false {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfMaxMetricLsaP.attributes", attrs)
 					}
-					for _, child := range child.Interfaces {
+					for key, child := range child.Interfaces {
 						attrs = "{}"
-						if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
-						}
+						attrs, _ = sjson.Set(attrs, "id", key)
 						if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
 							attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 						}
@@ -396,16 +383,15 @@ func (data *OSPF) fromBody(res gjson.Result) {
 				func(classname, value gjson.Result) bool {
 					if classname.String() == "ospfInst" {
 						var child OSPFInstances
-						child.Name = types.StringValue(value.Get("attributes.name").String())
 						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
 						child.Control = types.StringValue(value.Get("attributes.ctrl").String())
+						mapKey := value.Get("attributes.name").String()
 						value.Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "ospfDom" {
 											var nestedChildospfDom OSPFInstancesVrfs
-											nestedChildospfDom.Name = types.StringValue(nestedValue.Get("attributes.name").String())
 											nestedChildospfDom.LogAdjacencyChanges = types.StringValue(nestedValue.Get("attributes.adjChangeLogLevel").String())
 											nestedChildospfDom.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
 											nestedChildospfDom.BandwidthReference = types.Int64Value(nestedValue.Get("attributes.bwRef").Int())
@@ -422,20 +408,24 @@ func (data *OSPF) fromBody(res gjson.Result) {
 											nestedChildospfDom.NameLookupVrf = types.StringValue(nestedValue.Get("attributes.nameLookupVrf").String())
 											nestedChildospfDom.Rfc1583Compatible = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.rfc1583Compat").String()))
 											nestedChildospfDom.Rfc1583CompatibleIos = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.rfc1583CompatIos").String()))
+											nestedMapKey := nestedValue.Get("attributes.name").String()
 											nestedValue.Get("children").ForEach(
 												func(_, nestedV gjson.Result) bool {
 													nestedV.ForEach(
 														func(nestedClassname, nestedValue gjson.Result) bool {
 															if nestedClassname.String() == "ospfArea" {
 																var nestedChildospfArea OSPFInstancesVrfsAreas
-																nestedChildospfArea.AreaId = types.StringValue(nestedValue.Get("attributes.id").String())
 																nestedChildospfArea.AuthenticationType = types.StringValue(nestedValue.Get("attributes.authType").String())
 																nestedChildospfArea.Cost = types.Int64Value(nestedValue.Get("attributes.cost").Int())
 																nestedChildospfArea.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
 																nestedChildospfArea.NssaTranslatorRole = types.StringValue(nestedValue.Get("attributes.nssaTransRole").String())
 																nestedChildospfArea.SegmentRoutingMpls = types.StringValue(nestedValue.Get("attributes.sgmntRtgMpls").String())
 																nestedChildospfArea.Type = types.StringValue(nestedValue.Get("attributes.type").String())
-																nestedChildospfDom.Areas = append(nestedChildospfDom.Areas, nestedChildospfArea)
+																nestedMapKey := nestedValue.Get("attributes.id").String()
+																if nestedChildospfDom.Areas == nil {
+																	nestedChildospfDom.Areas = make(map[string]OSPFInstancesVrfsAreas)
+																}
+																nestedChildospfDom.Areas[nestedMapKey] = nestedChildospfArea
 															}
 															return true
 														},
@@ -447,8 +437,8 @@ func (data *OSPF) fromBody(res gjson.Result) {
 												var rospfMaxMetricLsaP gjson.Result
 												nestedValue.Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
-														key := nestedV.Get("ospfMaxMetricLsaP.attributes.rn").String()
-														if key == "maxmetriclsap" {
+														rnValue := nestedV.Get("ospfMaxMetricLsaP.attributes.rn").String()
+														if rnValue == "maxmetriclsap" {
 															rospfMaxMetricLsaP = nestedV
 															return false
 														}
@@ -467,7 +457,6 @@ func (data *OSPF) fromBody(res gjson.Result) {
 														func(nestedClassname, nestedValue gjson.Result) bool {
 															if nestedClassname.String() == "ospfIf" {
 																var nestedChildospfIf OSPFInstancesVrfsInterfaces
-																nestedChildospfIf.InterfaceId = types.StringValue(nestedValue.Get("attributes.id").String())
 																nestedChildospfIf.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
 																nestedChildospfIf.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.advertiseSecondaries").String()))
 																nestedChildospfIf.Area = types.StringValue(nestedValue.Get("attributes.area").String())
@@ -482,12 +471,13 @@ func (data *OSPF) fromBody(res gjson.Result) {
 																nestedChildospfIf.NodeFlag = types.StringValue(nestedValue.Get("attributes.nodeFlag").String())
 																nestedChildospfIf.RetransmitInterval = types.Int64Value(nestedValue.Get("attributes.rexmitIntvl").Int())
 																nestedChildospfIf.TransmitDelay = types.Int64Value(nestedValue.Get("attributes.xmitDelay").Int())
+																nestedMapKey := nestedValue.Get("attributes.id").String()
 																{
 																	var rospfAuthNewP gjson.Result
 																	nestedValue.Get("children").ForEach(
 																		func(_, nestedV gjson.Result) bool {
-																			key := nestedV.Get("ospfAuthNewP.attributes.rn").String()
-																			if key == "authnew" {
+																			rnValue := nestedV.Get("ospfAuthNewP.attributes.rn").String()
+																			if rnValue == "authnew" {
 																				rospfAuthNewP = nestedV
 																				return false
 																			}
@@ -500,7 +490,10 @@ func (data *OSPF) fromBody(res gjson.Result) {
 																	nestedChildospfIf.AuthenticationMd5KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(rospfAuthNewP.Get("ospfAuthNewP.attributes.md5keySecureMode").String()))
 																	nestedChildospfIf.AuthenticationType = types.StringValue(rospfAuthNewP.Get("ospfAuthNewP.attributes.type").String())
 																}
-																nestedChildospfDom.Interfaces = append(nestedChildospfDom.Interfaces, nestedChildospfIf)
+																if nestedChildospfDom.Interfaces == nil {
+																	nestedChildospfDom.Interfaces = make(map[string]OSPFInstancesVrfsInterfaces)
+																}
+																nestedChildospfDom.Interfaces[nestedMapKey] = nestedChildospfIf
 															}
 															return true
 														},
@@ -508,7 +501,10 @@ func (data *OSPF) fromBody(res gjson.Result) {
 													return true
 												},
 											)
-											child.Vrfs = append(child.Vrfs, nestedChildospfDom)
+											if child.Vrfs == nil {
+												child.Vrfs = make(map[string]OSPFInstancesVrfs)
+											}
+											child.Vrfs[nestedMapKey] = nestedChildospfDom
 										}
 										return true
 									},
@@ -516,7 +512,10 @@ func (data *OSPF) fromBody(res gjson.Result) {
 								return true
 							},
 						)
-						data.Instances = append(data.Instances, child)
+						if data.Instances == nil {
+							data.Instances = make(map[string]OSPFInstances)
+						}
+						data.Instances[mapKey] = child
 					}
 					return true
 				},
@@ -536,11 +535,11 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	for c := len(data.Instances) - 1; c >= 0; c-- {
+	for key, item := range data.Instances {
 		var rospfInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("ospfInst.attributes.name").String() == data.Instances[c].Name.ValueString() {
+				if v.Get("ospfInst.attributes.name").String() == key {
 					rospfInst = v
 					return false
 				}
@@ -548,29 +547,25 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !rospfInst.Exists() {
-			data.Instances = slices.Delete(data.Instances, c, c+1)
+			delete(data.Instances, key)
 			continue
 		}
-		if !data.Instances[c].Name.IsNull() {
-			data.Instances[c].Name = types.StringValue(rospfInst.Get("ospfInst.attributes.name").String())
+		if !item.AdminState.IsNull() {
+			item.AdminState = types.StringValue(rospfInst.Get("ospfInst.attributes.adminSt").String())
 		} else {
-			data.Instances[c].Name = types.StringNull()
+			item.AdminState = types.StringNull()
 		}
-		if !data.Instances[c].AdminState.IsNull() {
-			data.Instances[c].AdminState = types.StringValue(rospfInst.Get("ospfInst.attributes.adminSt").String())
+		if !item.Control.IsNull() {
+			item.Control = types.StringValue(rospfInst.Get("ospfInst.attributes.ctrl").String())
 		} else {
-			data.Instances[c].AdminState = types.StringNull()
+			item.Control = types.StringNull()
 		}
-		if !data.Instances[c].Control.IsNull() {
-			data.Instances[c].Control = types.StringValue(rospfInst.Get("ospfInst.attributes.ctrl").String())
-		} else {
-			data.Instances[c].Control = types.StringNull()
-		}
-		for nc := len(data.Instances[c].Vrfs) - 1; nc >= 0; nc-- {
+		for nc := range item.Vrfs {
+			ncItem := item.Vrfs[nc]
 			var rospfDom gjson.Result
 			rospfInst.Get("ospfInst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					if v.Get("ospfDom.attributes.name").String() == data.Instances[c].Vrfs[nc].Name.ValueString() {
+					if v.Get("ospfDom.attributes.name").String() == nc {
 						rospfDom = v
 						return false
 					}
@@ -578,99 +573,95 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 				},
 			)
 			if !rospfDom.Exists() {
-				data.Instances[c].Vrfs = slices.Delete(data.Instances[c].Vrfs, nc, nc+1)
+				delete(item.Vrfs, nc)
 				continue
 			}
-			if !data.Instances[c].Vrfs[nc].Name.IsNull() {
-				data.Instances[c].Vrfs[nc].Name = types.StringValue(rospfDom.Get("ospfDom.attributes.name").String())
+			if !ncItem.LogAdjacencyChanges.IsNull() {
+				ncItem.LogAdjacencyChanges = types.StringValue(rospfDom.Get("ospfDom.attributes.adjChangeLogLevel").String())
 			} else {
-				data.Instances[c].Vrfs[nc].Name = types.StringNull()
+				ncItem.LogAdjacencyChanges = types.StringNull()
 			}
-			if !data.Instances[c].Vrfs[nc].LogAdjacencyChanges.IsNull() {
-				data.Instances[c].Vrfs[nc].LogAdjacencyChanges = types.StringValue(rospfDom.Get("ospfDom.attributes.adjChangeLogLevel").String())
+			if !ncItem.AdminState.IsNull() {
+				ncItem.AdminState = types.StringValue(rospfDom.Get("ospfDom.attributes.adminSt").String())
 			} else {
-				data.Instances[c].Vrfs[nc].LogAdjacencyChanges = types.StringNull()
+				ncItem.AdminState = types.StringNull()
 			}
-			if !data.Instances[c].Vrfs[nc].AdminState.IsNull() {
-				data.Instances[c].Vrfs[nc].AdminState = types.StringValue(rospfDom.Get("ospfDom.attributes.adminSt").String())
+			if !ncItem.BandwidthReference.IsNull() {
+				ncItem.BandwidthReference = types.Int64Value(rospfDom.Get("ospfDom.attributes.bwRef").Int())
 			} else {
-				data.Instances[c].Vrfs[nc].AdminState = types.StringNull()
+				ncItem.BandwidthReference = types.Int64Null()
 			}
-			if !data.Instances[c].Vrfs[nc].BandwidthReference.IsNull() {
-				data.Instances[c].Vrfs[nc].BandwidthReference = types.Int64Value(rospfDom.Get("ospfDom.attributes.bwRef").Int())
+			if !ncItem.BandwidthReferenceUnit.IsNull() {
+				ncItem.BandwidthReferenceUnit = types.StringValue(rospfDom.Get("ospfDom.attributes.bwRefUnit").String())
 			} else {
-				data.Instances[c].Vrfs[nc].BandwidthReference = types.Int64Null()
+				ncItem.BandwidthReferenceUnit = types.StringNull()
 			}
-			if !data.Instances[c].Vrfs[nc].BandwidthReferenceUnit.IsNull() {
-				data.Instances[c].Vrfs[nc].BandwidthReferenceUnit = types.StringValue(rospfDom.Get("ospfDom.attributes.bwRefUnit").String())
+			if !ncItem.Distance.IsNull() {
+				ncItem.Distance = types.Int64Value(rospfDom.Get("ospfDom.attributes.dist").Int())
 			} else {
-				data.Instances[c].Vrfs[nc].BandwidthReferenceUnit = types.StringNull()
+				ncItem.Distance = types.Int64Null()
 			}
-			if !data.Instances[c].Vrfs[nc].Distance.IsNull() {
-				data.Instances[c].Vrfs[nc].Distance = types.Int64Value(rospfDom.Get("ospfDom.attributes.dist").Int())
+			if !ncItem.RouterId.IsNull() {
+				ncItem.RouterId = types.StringValue(rospfDom.Get("ospfDom.attributes.rtrId").String())
 			} else {
-				data.Instances[c].Vrfs[nc].Distance = types.Int64Null()
+				ncItem.RouterId = types.StringNull()
 			}
-			if !data.Instances[c].Vrfs[nc].RouterId.IsNull() {
-				data.Instances[c].Vrfs[nc].RouterId = types.StringValue(rospfDom.Get("ospfDom.attributes.rtrId").String())
+			if !ncItem.CapabilityVrfLite.IsNull() {
+				ncItem.CapabilityVrfLite = types.StringValue(rospfDom.Get("ospfDom.attributes.capVrfLite").String())
 			} else {
-				data.Instances[c].Vrfs[nc].RouterId = types.StringNull()
+				ncItem.CapabilityVrfLite = types.StringNull()
 			}
-			if !data.Instances[c].Vrfs[nc].CapabilityVrfLite.IsNull() {
-				data.Instances[c].Vrfs[nc].CapabilityVrfLite = types.StringValue(rospfDom.Get("ospfDom.attributes.capVrfLite").String())
+			if !ncItem.Control.IsNull() {
+				ncItem.Control = types.StringValue(rospfDom.Get("ospfDom.attributes.ctrl").String())
 			} else {
-				data.Instances[c].Vrfs[nc].CapabilityVrfLite = types.StringNull()
+				ncItem.Control = types.StringNull()
 			}
-			if !data.Instances[c].Vrfs[nc].Control.IsNull() {
-				data.Instances[c].Vrfs[nc].Control = types.StringValue(rospfDom.Get("ospfDom.attributes.ctrl").String())
+			if !ncItem.DefaultMetric.IsNull() {
+				ncItem.DefaultMetric = types.Int64Value(rospfDom.Get("ospfDom.attributes.defMetric").Int())
 			} else {
-				data.Instances[c].Vrfs[nc].Control = types.StringNull()
+				ncItem.DefaultMetric = types.Int64Null()
 			}
-			if !data.Instances[c].Vrfs[nc].DefaultMetric.IsNull() {
-				data.Instances[c].Vrfs[nc].DefaultMetric = types.Int64Value(rospfDom.Get("ospfDom.attributes.defMetric").Int())
+			if !ncItem.DefaultRouteNssaPbitClear.IsNull() {
+				ncItem.DefaultRouteNssaPbitClear = types.BoolValue(helpers.ParseNxosBoolean(rospfDom.Get("ospfDom.attributes.defRtNssaPbitClear").String()))
 			} else {
-				data.Instances[c].Vrfs[nc].DefaultMetric = types.Int64Null()
+				ncItem.DefaultRouteNssaPbitClear = types.BoolNull()
 			}
-			if !data.Instances[c].Vrfs[nc].DefaultRouteNssaPbitClear.IsNull() {
-				data.Instances[c].Vrfs[nc].DefaultRouteNssaPbitClear = types.BoolValue(helpers.ParseNxosBoolean(rospfDom.Get("ospfDom.attributes.defRtNssaPbitClear").String()))
+			if !ncItem.DiscardRoute.IsNull() {
+				ncItem.DiscardRoute = types.StringValue(rospfDom.Get("ospfDom.attributes.discardRoute").String())
 			} else {
-				data.Instances[c].Vrfs[nc].DefaultRouteNssaPbitClear = types.BoolNull()
+				ncItem.DiscardRoute = types.StringNull()
 			}
-			if !data.Instances[c].Vrfs[nc].DiscardRoute.IsNull() {
-				data.Instances[c].Vrfs[nc].DiscardRoute = types.StringValue(rospfDom.Get("ospfDom.attributes.discardRoute").String())
+			if !ncItem.DownBitIgnore.IsNull() {
+				ncItem.DownBitIgnore = types.BoolValue(helpers.ParseNxosBoolean(rospfDom.Get("ospfDom.attributes.downbitIgnore").String()))
 			} else {
-				data.Instances[c].Vrfs[nc].DiscardRoute = types.StringNull()
+				ncItem.DownBitIgnore = types.BoolNull()
 			}
-			if !data.Instances[c].Vrfs[nc].DownBitIgnore.IsNull() {
-				data.Instances[c].Vrfs[nc].DownBitIgnore = types.BoolValue(helpers.ParseNxosBoolean(rospfDom.Get("ospfDom.attributes.downbitIgnore").String()))
+			if !ncItem.MaxEcmp.IsNull() {
+				ncItem.MaxEcmp = types.Int64Value(rospfDom.Get("ospfDom.attributes.maxEcmp").Int())
 			} else {
-				data.Instances[c].Vrfs[nc].DownBitIgnore = types.BoolNull()
+				ncItem.MaxEcmp = types.Int64Null()
 			}
-			if !data.Instances[c].Vrfs[nc].MaxEcmp.IsNull() {
-				data.Instances[c].Vrfs[nc].MaxEcmp = types.Int64Value(rospfDom.Get("ospfDom.attributes.maxEcmp").Int())
+			if !ncItem.NameLookupVrf.IsNull() {
+				ncItem.NameLookupVrf = types.StringValue(rospfDom.Get("ospfDom.attributes.nameLookupVrf").String())
 			} else {
-				data.Instances[c].Vrfs[nc].MaxEcmp = types.Int64Null()
+				ncItem.NameLookupVrf = types.StringNull()
 			}
-			if !data.Instances[c].Vrfs[nc].NameLookupVrf.IsNull() {
-				data.Instances[c].Vrfs[nc].NameLookupVrf = types.StringValue(rospfDom.Get("ospfDom.attributes.nameLookupVrf").String())
+			if !ncItem.Rfc1583Compatible.IsNull() {
+				ncItem.Rfc1583Compatible = types.BoolValue(helpers.ParseNxosBoolean(rospfDom.Get("ospfDom.attributes.rfc1583Compat").String()))
 			} else {
-				data.Instances[c].Vrfs[nc].NameLookupVrf = types.StringNull()
+				ncItem.Rfc1583Compatible = types.BoolNull()
 			}
-			if !data.Instances[c].Vrfs[nc].Rfc1583Compatible.IsNull() {
-				data.Instances[c].Vrfs[nc].Rfc1583Compatible = types.BoolValue(helpers.ParseNxosBoolean(rospfDom.Get("ospfDom.attributes.rfc1583Compat").String()))
+			if !ncItem.Rfc1583CompatibleIos.IsNull() {
+				ncItem.Rfc1583CompatibleIos = types.BoolValue(helpers.ParseNxosBoolean(rospfDom.Get("ospfDom.attributes.rfc1583CompatIos").String()))
 			} else {
-				data.Instances[c].Vrfs[nc].Rfc1583Compatible = types.BoolNull()
+				ncItem.Rfc1583CompatibleIos = types.BoolNull()
 			}
-			if !data.Instances[c].Vrfs[nc].Rfc1583CompatibleIos.IsNull() {
-				data.Instances[c].Vrfs[nc].Rfc1583CompatibleIos = types.BoolValue(helpers.ParseNxosBoolean(rospfDom.Get("ospfDom.attributes.rfc1583CompatIos").String()))
-			} else {
-				data.Instances[c].Vrfs[nc].Rfc1583CompatibleIos = types.BoolNull()
-			}
-			for nc_ := len(data.Instances[c].Vrfs[nc].Areas) - 1; nc_ >= 0; nc_-- {
+			for nc_ := range ncItem.Areas {
+				nc_Item := ncItem.Areas[nc_]
 				var rospfArea gjson.Result
 				rospfDom.Get("ospfDom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						if v.Get("ospfArea.attributes.id").String() == data.Instances[c].Vrfs[nc].Areas[nc_].AreaId.ValueString() {
+						if v.Get("ospfArea.attributes.id").String() == nc_ {
 							rospfArea = v
 							return false
 						}
@@ -678,88 +669,85 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !rospfArea.Exists() {
-					data.Instances[c].Vrfs[nc].Areas = slices.Delete(data.Instances[c].Vrfs[nc].Areas, nc_, nc_+1)
+					delete(ncItem.Areas, nc_)
 					continue
 				}
-				if !data.Instances[c].Vrfs[nc].Areas[nc_].AreaId.IsNull() {
-					data.Instances[c].Vrfs[nc].Areas[nc_].AreaId = types.StringValue(rospfArea.Get("ospfArea.attributes.id").String())
+				if !nc_Item.AuthenticationType.IsNull() {
+					nc_Item.AuthenticationType = types.StringValue(rospfArea.Get("ospfArea.attributes.authType").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Areas[nc_].AreaId = types.StringNull()
+					nc_Item.AuthenticationType = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Areas[nc_].AuthenticationType.IsNull() {
-					data.Instances[c].Vrfs[nc].Areas[nc_].AuthenticationType = types.StringValue(rospfArea.Get("ospfArea.attributes.authType").String())
+				if !nc_Item.Cost.IsNull() {
+					nc_Item.Cost = types.Int64Value(rospfArea.Get("ospfArea.attributes.cost").Int())
 				} else {
-					data.Instances[c].Vrfs[nc].Areas[nc_].AuthenticationType = types.StringNull()
+					nc_Item.Cost = types.Int64Null()
 				}
-				if !data.Instances[c].Vrfs[nc].Areas[nc_].Cost.IsNull() {
-					data.Instances[c].Vrfs[nc].Areas[nc_].Cost = types.Int64Value(rospfArea.Get("ospfArea.attributes.cost").Int())
+				if !nc_Item.Control.IsNull() {
+					nc_Item.Control = types.StringValue(rospfArea.Get("ospfArea.attributes.ctrl").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Areas[nc_].Cost = types.Int64Null()
+					nc_Item.Control = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Areas[nc_].Control.IsNull() {
-					data.Instances[c].Vrfs[nc].Areas[nc_].Control = types.StringValue(rospfArea.Get("ospfArea.attributes.ctrl").String())
+				if !nc_Item.NssaTranslatorRole.IsNull() {
+					nc_Item.NssaTranslatorRole = types.StringValue(rospfArea.Get("ospfArea.attributes.nssaTransRole").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Areas[nc_].Control = types.StringNull()
+					nc_Item.NssaTranslatorRole = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Areas[nc_].NssaTranslatorRole.IsNull() {
-					data.Instances[c].Vrfs[nc].Areas[nc_].NssaTranslatorRole = types.StringValue(rospfArea.Get("ospfArea.attributes.nssaTransRole").String())
+				if !nc_Item.SegmentRoutingMpls.IsNull() {
+					nc_Item.SegmentRoutingMpls = types.StringValue(rospfArea.Get("ospfArea.attributes.sgmntRtgMpls").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Areas[nc_].NssaTranslatorRole = types.StringNull()
+					nc_Item.SegmentRoutingMpls = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Areas[nc_].SegmentRoutingMpls.IsNull() {
-					data.Instances[c].Vrfs[nc].Areas[nc_].SegmentRoutingMpls = types.StringValue(rospfArea.Get("ospfArea.attributes.sgmntRtgMpls").String())
+				if !nc_Item.Type.IsNull() {
+					nc_Item.Type = types.StringValue(rospfArea.Get("ospfArea.attributes.type").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Areas[nc_].SegmentRoutingMpls = types.StringNull()
+					nc_Item.Type = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Areas[nc_].Type.IsNull() {
-					data.Instances[c].Vrfs[nc].Areas[nc_].Type = types.StringValue(rospfArea.Get("ospfArea.attributes.type").String())
-				} else {
-					data.Instances[c].Vrfs[nc].Areas[nc_].Type = types.StringNull()
-				}
+				ncItem.Areas[nc_] = nc_Item
 			}
 			{
 				var rospfMaxMetricLsaP gjson.Result
 				rospfDom.Get("ospfDom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("ospfMaxMetricLsaP.attributes.rn").String()
-						if key == "maxmetriclsap" {
+						rnValue := v.Get("ospfMaxMetricLsaP.attributes.rn").String()
+						if rnValue == "maxmetriclsap" {
 							rospfMaxMetricLsaP = v
 							return false
 						}
 						return true
 					},
 				)
-				if !data.Instances[c].Vrfs[nc].MaxMetricAwaitConvergenceBgpAsn.IsNull() {
-					data.Instances[c].Vrfs[nc].MaxMetricAwaitConvergenceBgpAsn = types.StringValue(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.awaitConvBgpAsn").String())
+				if !ncItem.MaxMetricAwaitConvergenceBgpAsn.IsNull() {
+					ncItem.MaxMetricAwaitConvergenceBgpAsn = types.StringValue(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.awaitConvBgpAsn").String())
 				} else {
-					data.Instances[c].Vrfs[nc].MaxMetricAwaitConvergenceBgpAsn = types.StringNull()
+					ncItem.MaxMetricAwaitConvergenceBgpAsn = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].MaxMetricControl.IsNull() {
-					data.Instances[c].Vrfs[nc].MaxMetricControl = types.StringValue(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.ctrl").String())
+				if !ncItem.MaxMetricControl.IsNull() {
+					ncItem.MaxMetricControl = types.StringValue(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.ctrl").String())
 				} else {
-					data.Instances[c].Vrfs[nc].MaxMetricControl = types.StringNull()
+					ncItem.MaxMetricControl = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].MaxMetricExternalLsa.IsNull() {
-					data.Instances[c].Vrfs[nc].MaxMetricExternalLsa = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.maxMetricExtLsa").Int())
+				if !ncItem.MaxMetricExternalLsa.IsNull() {
+					ncItem.MaxMetricExternalLsa = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.maxMetricExtLsa").Int())
 				} else {
-					data.Instances[c].Vrfs[nc].MaxMetricExternalLsa = types.Int64Null()
+					ncItem.MaxMetricExternalLsa = types.Int64Null()
 				}
-				if !data.Instances[c].Vrfs[nc].MaxMetricSummaryLsa.IsNull() {
-					data.Instances[c].Vrfs[nc].MaxMetricSummaryLsa = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.maxMetricSummLsa").Int())
+				if !ncItem.MaxMetricSummaryLsa.IsNull() {
+					ncItem.MaxMetricSummaryLsa = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.maxMetricSummLsa").Int())
 				} else {
-					data.Instances[c].Vrfs[nc].MaxMetricSummaryLsa = types.Int64Null()
+					ncItem.MaxMetricSummaryLsa = types.Int64Null()
 				}
-				if !data.Instances[c].Vrfs[nc].MaxMetricStartupInterval.IsNull() {
-					data.Instances[c].Vrfs[nc].MaxMetricStartupInterval = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.startupIntvl").Int())
+				if !ncItem.MaxMetricStartupInterval.IsNull() {
+					ncItem.MaxMetricStartupInterval = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.startupIntvl").Int())
 				} else {
-					data.Instances[c].Vrfs[nc].MaxMetricStartupInterval = types.Int64Null()
+					ncItem.MaxMetricStartupInterval = types.Int64Null()
 				}
 			}
-			for nc_ := len(data.Instances[c].Vrfs[nc].Interfaces) - 1; nc_ >= 0; nc_-- {
+			for nc_ := range ncItem.Interfaces {
+				nc_Item := ncItem.Interfaces[nc_]
 				var rospfIf gjson.Result
 				rospfDom.Get("ospfDom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						if v.Get("ospfIf.attributes.id").String() == data.Instances[c].Vrfs[nc].Interfaces[nc_].InterfaceId.ValueString() {
+						if v.Get("ospfIf.attributes.id").String() == nc_ {
 							rospfIf = v
 							return false
 						}
@@ -767,124 +755,122 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !rospfIf.Exists() {
-					data.Instances[c].Vrfs[nc].Interfaces = slices.Delete(data.Instances[c].Vrfs[nc].Interfaces, nc_, nc_+1)
+					delete(ncItem.Interfaces, nc_)
 					continue
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].InterfaceId.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].InterfaceId = types.StringValue(rospfIf.Get("ospfIf.attributes.id").String())
+				if !nc_Item.AdminState.IsNull() {
+					nc_Item.AdminState = types.StringValue(rospfIf.Get("ospfIf.attributes.adminSt").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].InterfaceId = types.StringNull()
+					nc_Item.AdminState = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AdminState.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].AdminState = types.StringValue(rospfIf.Get("ospfIf.attributes.adminSt").String())
+				if !nc_Item.AdvertiseSecondaries.IsNull() {
+					nc_Item.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(rospfIf.Get("ospfIf.attributes.advertiseSecondaries").String()))
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].AdminState = types.StringNull()
+					nc_Item.AdvertiseSecondaries = types.BoolNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AdvertiseSecondaries.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(rospfIf.Get("ospfIf.attributes.advertiseSecondaries").String()))
+				if !nc_Item.Area.IsNull() {
+					nc_Item.Area = types.StringValue(rospfIf.Get("ospfIf.attributes.area").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].AdvertiseSecondaries = types.BoolNull()
+					nc_Item.Area = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Area.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Area = types.StringValue(rospfIf.Get("ospfIf.attributes.area").String())
+				if !nc_Item.Bfd.IsNull() {
+					nc_Item.Bfd = types.StringValue(rospfIf.Get("ospfIf.attributes.bfdCtrl").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Area = types.StringNull()
+					nc_Item.Bfd = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Bfd.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Bfd = types.StringValue(rospfIf.Get("ospfIf.attributes.bfdCtrl").String())
+				if !nc_Item.Cost.IsNull() {
+					nc_Item.Cost = types.Int64Value(rospfIf.Get("ospfIf.attributes.cost").Int())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Bfd = types.StringNull()
+					nc_Item.Cost = types.Int64Null()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Cost.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Cost = types.Int64Value(rospfIf.Get("ospfIf.attributes.cost").Int())
+				if !nc_Item.DeadInterval.IsNull() {
+					nc_Item.DeadInterval = types.Int64Value(rospfIf.Get("ospfIf.attributes.deadIntvl").Int())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Cost = types.Int64Null()
+					nc_Item.DeadInterval = types.Int64Null()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].DeadInterval.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].DeadInterval = types.Int64Value(rospfIf.Get("ospfIf.attributes.deadIntvl").Int())
+				if !nc_Item.HelloInterval.IsNull() {
+					nc_Item.HelloInterval = types.Int64Value(rospfIf.Get("ospfIf.attributes.helloIntvl").Int())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].DeadInterval = types.Int64Null()
+					nc_Item.HelloInterval = types.Int64Null()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].HelloInterval.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].HelloInterval = types.Int64Value(rospfIf.Get("ospfIf.attributes.helloIntvl").Int())
+				if !nc_Item.NetworkType.IsNull() {
+					nc_Item.NetworkType = types.StringValue(rospfIf.Get("ospfIf.attributes.nwT").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].HelloInterval = types.Int64Null()
+					nc_Item.NetworkType = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].NetworkType.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].NetworkType = types.StringValue(rospfIf.Get("ospfIf.attributes.nwT").String())
+				if !nc_Item.Passive.IsNull() {
+					nc_Item.Passive = types.StringValue(rospfIf.Get("ospfIf.attributes.passiveCtrl").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].NetworkType = types.StringNull()
+					nc_Item.Passive = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Passive.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Passive = types.StringValue(rospfIf.Get("ospfIf.attributes.passiveCtrl").String())
+				if !nc_Item.Priority.IsNull() {
+					nc_Item.Priority = types.Int64Value(rospfIf.Get("ospfIf.attributes.prio").Int())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Passive = types.StringNull()
+					nc_Item.Priority = types.Int64Null()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Priority.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Priority = types.Int64Value(rospfIf.Get("ospfIf.attributes.prio").Int())
+				if !nc_Item.Control.IsNull() {
+					nc_Item.Control = types.StringValue(rospfIf.Get("ospfIf.attributes.ctrl").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Priority = types.Int64Null()
+					nc_Item.Control = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Control.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Control = types.StringValue(rospfIf.Get("ospfIf.attributes.ctrl").String())
+				if !nc_Item.NodeFlag.IsNull() {
+					nc_Item.NodeFlag = types.StringValue(rospfIf.Get("ospfIf.attributes.nodeFlag").String())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].Control = types.StringNull()
+					nc_Item.NodeFlag = types.StringNull()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].NodeFlag.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].NodeFlag = types.StringValue(rospfIf.Get("ospfIf.attributes.nodeFlag").String())
+				if !nc_Item.RetransmitInterval.IsNull() {
+					nc_Item.RetransmitInterval = types.Int64Value(rospfIf.Get("ospfIf.attributes.rexmitIntvl").Int())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].NodeFlag = types.StringNull()
+					nc_Item.RetransmitInterval = types.Int64Null()
 				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].RetransmitInterval.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].RetransmitInterval = types.Int64Value(rospfIf.Get("ospfIf.attributes.rexmitIntvl").Int())
+				if !nc_Item.TransmitDelay.IsNull() {
+					nc_Item.TransmitDelay = types.Int64Value(rospfIf.Get("ospfIf.attributes.xmitDelay").Int())
 				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].RetransmitInterval = types.Int64Null()
-				}
-				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].TransmitDelay.IsNull() {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].TransmitDelay = types.Int64Value(rospfIf.Get("ospfIf.attributes.xmitDelay").Int())
-				} else {
-					data.Instances[c].Vrfs[nc].Interfaces[nc_].TransmitDelay = types.Int64Null()
+					nc_Item.TransmitDelay = types.Int64Null()
 				}
 				{
 					var rospfAuthNewP gjson.Result
 					rospfIf.Get("ospfIf.children").ForEach(
 						func(_, v gjson.Result) bool {
-							key := v.Get("ospfAuthNewP.attributes.rn").String()
-							if key == "authnew" {
+							rnValue := v.Get("ospfAuthNewP.attributes.rn").String()
+							if rnValue == "authnew" {
 								rospfAuthNewP = v
 								return false
 							}
 							return true
 						},
 					)
-					if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeyId.IsNull() {
-						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeyId = types.Int64Value(rospfAuthNewP.Get("ospfAuthNewP.attributes.keyId").Int())
+					if !nc_Item.AuthenticationKeyId.IsNull() {
+						nc_Item.AuthenticationKeyId = types.Int64Value(rospfAuthNewP.Get("ospfAuthNewP.attributes.keyId").Int())
 					} else {
-						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeyId = types.Int64Null()
+						nc_Item.AuthenticationKeyId = types.Int64Null()
 					}
-					if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeySecureMode.IsNull() {
-						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(rospfAuthNewP.Get("ospfAuthNewP.attributes.keySecureMode").String()))
+					if !nc_Item.AuthenticationKeySecureMode.IsNull() {
+						nc_Item.AuthenticationKeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(rospfAuthNewP.Get("ospfAuthNewP.attributes.keySecureMode").String()))
 					} else {
-						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeySecureMode = types.BoolNull()
+						nc_Item.AuthenticationKeySecureMode = types.BoolNull()
 					}
-					if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeychain.IsNull() {
-						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeychain = types.StringValue(rospfAuthNewP.Get("ospfAuthNewP.attributes.keychain").String())
+					if !nc_Item.AuthenticationKeychain.IsNull() {
+						nc_Item.AuthenticationKeychain = types.StringValue(rospfAuthNewP.Get("ospfAuthNewP.attributes.keychain").String())
 					} else {
-						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeychain = types.StringNull()
+						nc_Item.AuthenticationKeychain = types.StringNull()
 					}
-					if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationMd5KeySecureMode.IsNull() {
-						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationMd5KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(rospfAuthNewP.Get("ospfAuthNewP.attributes.md5keySecureMode").String()))
+					if !nc_Item.AuthenticationMd5KeySecureMode.IsNull() {
+						nc_Item.AuthenticationMd5KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(rospfAuthNewP.Get("ospfAuthNewP.attributes.md5keySecureMode").String()))
 					} else {
-						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationMd5KeySecureMode = types.BoolNull()
+						nc_Item.AuthenticationMd5KeySecureMode = types.BoolNull()
 					}
-					if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationType.IsNull() {
-						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationType = types.StringValue(rospfAuthNewP.Get("ospfAuthNewP.attributes.type").String())
+					if !nc_Item.AuthenticationType.IsNull() {
+						nc_Item.AuthenticationType = types.StringValue(rospfAuthNewP.Get("ospfAuthNewP.attributes.type").String())
 					} else {
-						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationType = types.StringNull()
+						nc_Item.AuthenticationType = types.StringNull()
 					}
 				}
+				ncItem.Interfaces[nc_] = nc_Item
 			}
+			item.Vrfs[nc] = ncItem
 		}
+		data.Instances[key] = item
 	}
 }
 
@@ -903,114 +889,89 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF) nxos.Body {
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.Instances {
-		found := false
-		for _, planChild := range data.Instances {
-			if stateChild.Name == planChild.Name {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.Instances {
+		if _, found := data.Instances[stateKey]; !found {
+			stateChild := state.Instances[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "ospfInst.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ospfInst.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "ospfInst.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	for di := range state.Instances {
-		for pdi := range data.Instances {
-			if state.Instances[di].Name == data.Instances[pdi].Name {
-				matchBodyPathdi := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-					if mv.Get("ospfInst.attributes.rn").String() == state.Instances[di].getRn() {
-						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".ospfInst.children"
+		if _, found := data.Instances[di]; !found {
+			continue
+		}
+		stateItemdi := state.Instances[di]
+		planItemdi := data.Instances[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+			if mv.Get("ospfInst.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".ospfInst.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.Vrfs {
+			if _, found := planItemdi.Vrfs[stateChildKey]; !found {
+				stateChild := stateItemdi.Vrfs[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ospfDom.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "ospfDom.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for di_ := range stateItemdi.Vrfs {
+			if _, found := planItemdi.Vrfs[di_]; !found {
+				continue
+			}
+			stateItemdi_ := stateItemdi.Vrfs[di_]
+			planItemdi_ := planItemdi.Vrfs[di_]
+			matchBodyPathdi_ := ""
+			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+				if mv.Get("ospfDom.attributes.rn").String() == stateItemdi_.getRn(di_) {
+					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ospfDom.children"
+					break
+				}
+			}
+			if matchBodyPathdi_ == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi_.Areas {
+				if _, found := planItemdi_.Areas[stateChildKey]; !found {
+					stateChild := stateItemdi_.Areas[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ospfArea.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ospfArea.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi_.Interfaces {
+				if _, found := planItemdi_.Interfaces[stateChildKey]; !found {
+					stateChild := stateItemdi_.Interfaces[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ospfIf.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ospfIf.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+				}
+			}
+			for di__ := range stateItemdi_.Interfaces {
+				if _, found := planItemdi_.Interfaces[di__]; !found {
+					continue
+				}
+				stateItemdi__ := stateItemdi_.Interfaces[di__]
+				matchBodyPathdi__ := ""
+				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+					if mv.Get("ospfIf.attributes.rn").String() == stateItemdi__.getRn(di__) {
+						matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".ospfIf.children"
 						break
 					}
 				}
-				if matchBodyPathdi == "" {
-					break
+				if matchBodyPathdi__ == "" {
+					continue
 				}
-				for _, stateChild := range state.Instances[di].Vrfs {
-					found := false
-					for _, planChild := range data.Instances[pdi].Vrfs {
-						if stateChild.Name == planChild.Name {
-							found = true
-							break
-						}
-					}
-					if !found {
-						deleteBody := ""
-						deleteBody, _ = sjson.Set(deleteBody, "ospfDom.attributes.rn", stateChild.getRn())
-						deleteBody, _ = sjson.Set(deleteBody, "ospfDom.attributes.status", "deleted")
-						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
-					}
-				}
-				for di_ := range state.Instances[di].Vrfs {
-					for pdi_ := range data.Instances[pdi].Vrfs {
-						if state.Instances[di].Vrfs[di_].Name == data.Instances[pdi].Vrfs[pdi_].Name {
-							matchBodyPathdi_ := ""
-							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-								if mv.Get("ospfDom.attributes.rn").String() == state.Instances[di].Vrfs[di_].getRn() {
-									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ospfDom.children"
-									break
-								}
-							}
-							if matchBodyPathdi_ == "" {
-								break
-							}
-							for _, stateChild := range state.Instances[di].Vrfs[di_].Areas {
-								found := false
-								for _, planChild := range data.Instances[pdi].Vrfs[pdi_].Areas {
-									if stateChild.AreaId == planChild.AreaId {
-										found = true
-										break
-									}
-								}
-								if !found {
-									deleteBody := ""
-									deleteBody, _ = sjson.Set(deleteBody, "ospfArea.attributes.rn", stateChild.getRn())
-									deleteBody, _ = sjson.Set(deleteBody, "ospfArea.attributes.status", "deleted")
-									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
-								}
-							}
-							for _, stateChild := range state.Instances[di].Vrfs[di_].Interfaces {
-								found := false
-								for _, planChild := range data.Instances[pdi].Vrfs[pdi_].Interfaces {
-									if stateChild.InterfaceId == planChild.InterfaceId {
-										found = true
-										break
-									}
-								}
-								if !found {
-									deleteBody := ""
-									deleteBody, _ = sjson.Set(deleteBody, "ospfIf.attributes.rn", stateChild.getRn())
-									deleteBody, _ = sjson.Set(deleteBody, "ospfIf.attributes.status", "deleted")
-									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
-								}
-							}
-							for di__ := range state.Instances[di].Vrfs[di_].Interfaces {
-								for pdi__ := range data.Instances[pdi].Vrfs[pdi_].Interfaces {
-									if state.Instances[di].Vrfs[di_].Interfaces[di__].InterfaceId == data.Instances[pdi].Vrfs[pdi_].Interfaces[pdi__].InterfaceId {
-										matchBodyPathdi__ := ""
-										for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
-											if mv.Get("ospfIf.attributes.rn").String() == state.Instances[di].Vrfs[di_].Interfaces[di__].getRn() {
-												matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".ospfIf.children"
-												break
-											}
-										}
-										if matchBodyPathdi__ == "" {
-											break
-										}
-										break
-									}
-								}
-							}
-							break
-						}
-					}
-				}
-				break
 			}
 		}
 	}

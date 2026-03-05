@@ -68,15 +68,11 @@ func (d *PortChannelInterfacesDataSource) Schema(ctx context.Context, req dataso
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"port_channel_interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of port-channel interfaces.",
+			"port_channel_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of port-channel interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `po1`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `po1`.",
-							Computed:            true,
-						},
 						"port_channel_mode": schema.StringAttribute{
 							MarkdownDescription: "The aggregated interface protocol channel mode.",
 							Computed:            true,
@@ -245,15 +241,11 @@ func (d *PortChannelInterfacesDataSource) Schema(ctx context.Context, req dataso
 							MarkdownDescription: "DN of VRF. For example: `sys/inst-VRF1`.",
 							Computed:            true,
 						},
-						"members": schema.ListNestedAttribute{
-							MarkdownDescription: "List of port-channel member interfaces.",
+						"members": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of port-channel member interfaces.\n  - Map key: `interface_dn` - DN of interface. For example: `sys/intf/phys-[eth1/1]`.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"interface_dn": schema.StringAttribute{
-										MarkdownDescription: "DN of interface. For example: `sys/intf/phys-[eth1/1]`.",
-										Computed:            true,
-									},
 									"force": schema.BoolAttribute{
 										MarkdownDescription: "Channel group force.",
 										Computed:            true,

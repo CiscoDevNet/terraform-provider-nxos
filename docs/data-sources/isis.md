@@ -41,8 +41,10 @@ data "nxos_isis" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
-- `instances` (Attributes List) List of IS-IS instances. (see [below for nested schema](#nestedatt--instances))
-- `interfaces` (Attributes List) List of IS-IS interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `instances` (Attributes Map) List of IS-IS instances.
+  - Map key: `name` - IS-IS instance name. (see [below for nested schema](#nestedatt--instances))
+- `interfaces` (Attributes Map) List of IS-IS interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--interfaces))
 
 <a id="nestedatt--instances"></a>
 ### Nested Schema for `instances`
@@ -53,15 +55,17 @@ Read-Only:
 - `control` (String) The control state.
 - `flush_routes` (Boolean) Flush ISIS Routes on non graceful controlled restart.
 - `isolate` (Boolean) Isolate ISIS Instance from other process tags.
-- `name` (String) IS-IS instance name.
-- `vrfs` (Attributes List) List of IS-IS VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+- `vrfs` (Attributes Map) List of IS-IS VRFs.
+  - Map key: `name` - VRF name. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
 ### Nested Schema for `instances.vrfs`
 
 Read-Only:
 
-- `address_families` (Attributes List) List of IS-IS address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
+- `address_families` (Attributes Map) List of IS-IS address families.
+  - Map key: `address_family` - Type.
+  - Key choices: `v4`, `v6` (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
 - `admin_state` (String) Holds ISIS Domain Administative state.
 - `authentication_check_l1` (Boolean) Authentication Check for ISIS DOM on Level-1.
 - `authentication_check_l2` (Boolean) Authentication Check for ISIS DOM on Level-2.
@@ -76,7 +80,6 @@ Read-Only:
 - `lsp_lifetime` (Number) Holds ISIS Domain LSP Lifetime.
 - `metric_type` (String) Holds ISIS Domain Metric Style.
 - `mtu` (Number) The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.
-- `name` (String) VRF name.
 - `net` (String) Holds ISIS Domain Net value.
 - `overload_admin_state` (String) Admin State.
 - `overload_bgp_as_number` (Number) The BGP autonomous system number. This sets overload until BGP converges on this autonomous system number. This is not currently supported.
@@ -91,7 +94,6 @@ Read-Only:
 
 Read-Only:
 
-- `address_family` (String) Type.
 - `control` (String) The address family controls. This determines the address family to run. Note that IPv4 and IPv6 are both supported.
 - `default_information_originate` (String) Holds ISIS Domain address family default-information originate state for Route.
 - `default_information_originate_route_map` (String) Holds Route-map name for ISIS Domain address family default-information originate.
@@ -139,7 +141,6 @@ Read-Only:
 - `hello_multiplier_l2` (Number) Holds ISIS interface Hello Multiplier Level-2 value.
 - `hello_padding` (String) Holds ISIS Interface Hello Padding Info.
 - `instance_name` (String) Instance to which the interface belongs to.
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `ipv4_bfd` (String) Holds ISIS Interface BFD Configruation.
 - `ipv6` (Boolean) Enabling ISIS router tag on Interface's IPV6 family.
 - `ipv6_bfd` (String) Holds Interface BFD Configruation for IPV6 family.

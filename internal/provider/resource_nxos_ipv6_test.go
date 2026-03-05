@@ -42,35 +42,28 @@ func TestAccNxosIPv6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "queue_packets", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "static_neighbor_outside_subnet", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "switch_packets", "all"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.name", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.prefix", "2001:db8:3333:4444:5555:6666:102:304/128"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.control", "bfd"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.preference", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.tag", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.interface_id", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.address", "a:b::c:d/128"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.vrf_name", "default"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.object", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.preference", "123"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.tag", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.name", "nh-name"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.rewrite_encapsulation", "vlan-1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.interface_id", "eth1/10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.auto_configuration", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.default_route", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.forward", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.link_local_address_use_bia", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.use_link_local_address", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.urpf", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.link_local_address", "2001:db8:3333:4444:5555:6666:7777:8888"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.addresses.0.address", "2001:db8:3333:4444:5555:6666:7777:8888"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.addresses.0.type", "primary"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.addresses.0.tag", "1234"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.addresses.0.control", "anycast"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.addresses.0.preference", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.addresses.0.vpc_peer", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.control", "bfd"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.preference", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.tag", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.object", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.preference", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.tag", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.name", "nh-name"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.rewrite_encapsulation", "vlan-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.auto_configuration", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.default_route", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.link_local_address_use_bia", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.use_link_local_address", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.urpf", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.link_local_address", "2001:db8:3333:4444:5555:6666:7777:8888"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.tag", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.control", "anycast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.preference", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.vpc_peer", "2001:db8::1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -145,45 +138,48 @@ func testAccNxosIPv6Config_all() string {
 	config += `	queue_packets = "enabled"` + "\n"
 	config += `	static_neighbor_outside_subnet = "enabled"` + "\n"
 	config += `	switch_packets = "all"` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		name = "VRF1"` + "\n"
-	config += `		static_routes = [{` + "\n"
-	config += `			prefix = "2001:db8:3333:4444:5555:6666:102:304/128"` + "\n"
-	config += `			control = "bfd"` + "\n"
-	config += `			description = "My Description"` + "\n"
-	config += `			preference = 10` + "\n"
-	config += `			tag = 100` + "\n"
-	config += `			next_hops = [{` + "\n"
-	config += `				interface_id = "unspecified"` + "\n"
-	config += `				address = "a:b::c:d/128"` + "\n"
-	config += `				vrf_name = "default"` + "\n"
-	config += `				description = "My Description"` + "\n"
-	config += `				object = 10` + "\n"
-	config += `				preference = 123` + "\n"
-	config += `				tag = 10` + "\n"
-	config += `				name = "nh-name"` + "\n"
-	config += `				rewrite_encapsulation = "vlan-1"` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `		interfaces = [{` + "\n"
-	config += `			interface_id = "eth1/10"` + "\n"
-	config += `			auto_configuration = "disabled"` + "\n"
-	config += `			default_route = "disabled"` + "\n"
-	config += `			forward = "disabled"` + "\n"
-	config += `			link_local_address_use_bia = "disabled"` + "\n"
-	config += `			use_link_local_address = "disabled"` + "\n"
-	config += `			urpf = "disabled"` + "\n"
-	config += `			link_local_address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
-	config += `			addresses = [{` + "\n"
-	config += `				address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
-	config += `				type = "primary"` + "\n"
-	config += `				tag = 1234` + "\n"
-	config += `				control = "anycast"` + "\n"
-	config += `				preference = 10` + "\n"
-	config += `				vpc_peer = "2001:db8::1"` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	vrfs = {` + "\n"
+	config += `		"VRF1" = {` + "\n"
+	config += `			static_routes = {` + "\n"
+	config += `				"2001:db8:3333:4444:5555:6666:102:304/128" = {` + "\n"
+	config += `					control = "bfd"` + "\n"
+	config += `					description = "My Description"` + "\n"
+	config += `					preference = 10` + "\n"
+	config += `					tag = 100` + "\n"
+	config += `					next_hops = {` + "\n"
+	config += `						"unspecified;a:b::c:d/128;default" = {` + "\n"
+	config += `							description = "My Description"` + "\n"
+	config += `							object = 10` + "\n"
+	config += `							preference = 123` + "\n"
+	config += `							tag = 10` + "\n"
+	config += `							name = "nh-name"` + "\n"
+	config += `							rewrite_encapsulation = "vlan-1"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			interfaces = {` + "\n"
+	config += `				"eth1/10" = {` + "\n"
+	config += `					auto_configuration = "disabled"` + "\n"
+	config += `					default_route = "disabled"` + "\n"
+	config += `					forward = "disabled"` + "\n"
+	config += `					link_local_address_use_bia = "disabled"` + "\n"
+	config += `					use_link_local_address = "disabled"` + "\n"
+	config += `					urpf = "disabled"` + "\n"
+	config += `					link_local_address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
+	config += `					addresses = {` + "\n"
+	config += `						"2001:db8:3333:4444:5555:6666:7777:8888" = {` + "\n"
+	config += `							type = "primary"` + "\n"
+	config += `							tag = 1234` + "\n"
+	config += `							control = "anycast"` + "\n"
+	config += `							preference = 10` + "\n"
+	config += `							vpc_peer = "2001:db8::1"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

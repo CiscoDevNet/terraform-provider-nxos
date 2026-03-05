@@ -151,15 +151,11 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: "List of IPv4 VRF configurations.",
+			"vrfs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 VRF configurations.\n  - Map key: `name` - The name of the object.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
-							Required:            true,
-						},
 						"auto_discard": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Auto-Discard.").AddStringEnumDescription("enabled", "disabled").String,
 							Optional:            true,
@@ -171,15 +167,11 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							MarkdownDescription: helpers.NewAttributeDescription("ICMP errors source-interface.").String,
 							Optional:            true,
 						},
-						"static_routes": schema.ListNestedAttribute{
-							MarkdownDescription: "List of IPv4 static routes.",
+						"static_routes": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 static routes.\n  - Map key: `prefix` - Prefix.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"prefix": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Prefix.").String,
-										Required:            true,
-									},
 									"control": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("pervasive", "bfd").String,
 										Optional:            true,
@@ -202,23 +194,11 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											int64validator.Between(0, 4294967295),
 										},
 									},
-									"next_hops": schema.ListNestedAttribute{
-										MarkdownDescription: "List of next hops.",
+									"next_hops": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of next hops.\n  - Map key format: `<interface_id>;<address>;<vrf_name>`\n  - Key component `interface_id`: Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.\n  - Key component `address`: Nexthop Address.\n  - Key component `vrf_name`: Nexthop VRF.").String,
 										Required:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"interface_id": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.").String,
-													Required:            true,
-												},
-												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Nexthop Address.").String,
-													Required:            true,
-												},
-												"vrf_name": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Nexthop VRF.").String,
-													Required:            true,
-												},
 												"description": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
 													Optional:            true,
@@ -258,15 +238,11 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								},
 							},
 						},
-						"interfaces": schema.ListNestedAttribute{
-							MarkdownDescription: "List of IPv4 interfaces.",
+						"interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"interface_id": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-										Required:            true,
-									},
 									"drop_glean": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("ip drop-glean enabled/disabled.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
@@ -303,15 +279,11 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
-									"addresses": schema.ListNestedAttribute{
-										MarkdownDescription: "List of IPv4 interface addresses.",
+									"addresses": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 interface addresses.\n  - Map key: `address` - Address.").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
-													Required:            true,
-												},
 												"type": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("primary", "secondary").String,
 													Optional:            true,

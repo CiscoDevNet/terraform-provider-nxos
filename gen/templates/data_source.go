@@ -98,13 +98,15 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			{{- end}}
 			{{- template "dsChildrenSchema" .TfChildClasses}}
 			{{- else if eq .Type "list"}}
-			"{{.TfName}}": schema.ListNestedAttribute{
-				MarkdownDescription: "{{.Description}}",
+			"{{.TfName}}": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}{{mapKeyDescription .Attributes}}").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						{{- range .Attributes}}
+						{{- if not .Id}}
 						{{template "dsAttrSchema" .}}
+						{{- end}}
 						{{- end}}
 						{{- template "dsChildrenSchema" .TfChildClasses}}
 					},

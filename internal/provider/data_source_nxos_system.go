@@ -220,15 +220,11 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "ARP Global Timeout.",
 				Computed:            true,
 			},
-			"arp_vpc_domains": schema.ListNestedAttribute{
-				MarkdownDescription: "ARP VPC Domain.",
+			"arp_vpc_domains": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ARP VPC Domain.\n  - Map key: `domain_id` - VPC domain id.\n  - Key range: `1`-`1000`").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"domain_id": schema.Int64Attribute{
-							MarkdownDescription: "VPC domain id.",
-							Computed:            true,
-						},
 						"arp_sync": schema.StringAttribute{
 							MarkdownDescription: "ARP Sync.",
 							Computed:            true,
@@ -280,24 +276,16 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "Solicit neighbor advertisement.",
 				Computed:            true,
 			},
-			"nd_vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: "Neighbor Discovery Domain.",
+			"nd_vrfs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Neighbor Discovery Domain.\n  - Map key: `name` - The name of the object.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "The name of the object.",
-							Computed:            true,
-						},
-						"interfaces": schema.ListNestedAttribute{
-							MarkdownDescription: "Neighbor Discovery Interface.",
+						"interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Neighbor Discovery Interface.\n  - Map key: `interface_id` - An identifier.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"interface_id": schema.StringAttribute{
-										MarkdownDescription: "An identifier.",
-										Computed:            true,
-									},
 									"boot_file_url": schema.StringAttribute{
 										MarkdownDescription: "The URL for a boot file in string.",
 										Computed:            true,

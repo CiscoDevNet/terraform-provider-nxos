@@ -26,15 +26,17 @@ This resource can manage the keychain configuration on NX-OS devices, including 
 ```terraform
 resource "nxos_keychain" "example" {
   admin_state = "enabled"
-  keychains = [{
-    name = "KEYCHAIN1"
-    keys = [{
-      key_id                  = 1
-      cryptographic_algorithm = "AES"
-      encryption_type         = "type7"
-      key_string              = "secret_password"
-    }]
-  }]
+  keychains = {
+    "KEYCHAIN1" = {
+      keys = {
+        "1" = {
+          cryptographic_algorithm = "AES"
+          encryption_type         = "type7"
+          key_string              = "secret_password"
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -46,7 +48,8 @@ resource "nxos_keychain" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
-- `keychains` (Attributes List) List of keychains. (see [below for nested schema](#nestedatt--keychains))
+- `keychains` (Attributes Map) List of keychains.
+  - Map key: `name` - Keychain name. (see [below for nested schema](#nestedatt--keychains))
 
 ### Read-Only
 
@@ -55,21 +58,14 @@ resource "nxos_keychain" "example" {
 <a id="nestedatt--keychains"></a>
 ### Nested Schema for `keychains`
 
-Required:
-
-- `name` (String) Keychain name.
-
 Optional:
 
-- `keys` (Attributes List) List of keys. (see [below for nested schema](#nestedatt--keychains--keys))
+- `keys` (Attributes Map) List of keys.
+  - Map key: `key_id` - keyId of classic key chain.
+  - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--keychains--keys))
 
 <a id="nestedatt--keychains--keys"></a>
 ### Nested Schema for `keychains.keys`
-
-Required:
-
-- `key_id` (Number) keyId of classic key chain.
-  - Range: `0`-`65535`
 
 Optional:
 
@@ -87,9 +83,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_keychain.example
-  identity = {
-  }
+  to       = nxos_keychain.example
+  identity = {}
 }
 ```
 

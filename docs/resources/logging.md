@@ -26,10 +26,11 @@ This resource can manage the logging configuration on NX-OS devices, including g
 resource "nxos_logging" "example" {
   all   = "unspecified"
   level = "information"
-  facilities = [{
-    name  = "spanning-tree"
-    level = "information"
-  }]
+  facilities = {
+    "spanning-tree" = {
+      level = "information"
+    }
+  }
 }
 ```
 
@@ -41,7 +42,9 @@ resource "nxos_logging" "example" {
 - `all` (String) Logging level all state disabled/enabled.
   - Choices: `unspecified`, `enableall`, `disableall`
 - `device` (String) A device name from the provider configuration.
-- `facilities` (Attributes List) List of logging facilities. (see [below for nested schema](#nestedatt--facilities))
+- `facilities` (Attributes Map) List of logging facilities.
+  - Map key: `name` - Facility Name of individual processes subscribed for logging level.
+  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp` (see [below for nested schema](#nestedatt--facilities))
 - `level` (String) Logging severity level for all the facilites.
   - Choices: `emergencies`, `alerts`, `critical`, `errors`, `warnings`, `notifications`, `information`, `debugging`
 
@@ -51,11 +54,6 @@ resource "nxos_logging" "example" {
 
 <a id="nestedatt--facilities"></a>
 ### Nested Schema for `facilities`
-
-Required:
-
-- `name` (String) Facility Name of individual processes subscribed for logging level.
-  - Choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`
 
 Optional:
 
@@ -70,9 +68,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = nxos_logging.example
-  identity = {
-  }
+  to       = nxos_logging.example
+  identity = {}
 }
 ```
 

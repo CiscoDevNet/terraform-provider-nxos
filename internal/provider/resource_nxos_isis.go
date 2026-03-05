@@ -84,15 +84,11 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instances": schema.ListNestedAttribute{
-				MarkdownDescription: "List of IS-IS instances.",
+			"instances": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS instances.\n  - Map key: `name` - IS-IS instance name.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IS-IS instance name.").String,
-							Required:            true,
-						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 							Optional:            true,
@@ -115,15 +111,11 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							MarkdownDescription: helpers.NewAttributeDescription("Isolate ISIS Instance from other process tags.").String,
 							Optional:            true,
 						},
-						"vrfs": schema.ListNestedAttribute{
-							MarkdownDescription: "List of IS-IS VRFs.",
+						"vrfs": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS VRFs.\n  - Map key: `name` - VRF name.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-										Required:            true,
-									},
 									"admin_state": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Domain Administative state.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
@@ -228,18 +220,11 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											int64validator.Between(200, 65535),
 										},
 									},
-									"address_families": schema.ListNestedAttribute{
-										MarkdownDescription: "List of IS-IS address families.",
+									"address_families": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS address families.\n  - Map key: `address_family` - Type.\n  - Key choices: `v4`, `v6`").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address_family": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("v4", "v6").String,
-													Required:            true,
-													Validators: []validator.String{
-														stringvalidator.OneOf("v4", "v6"),
-													},
-												},
 												"segment_routing_mpls": schema.BoolAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Segment routing for MPLS.").String,
 													Optional:            true,
@@ -355,15 +340,11 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					},
 				},
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of IS-IS interfaces.",
+			"interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-							Required:            true,
-						},
 						"authentication_check": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enabling Authentication check for ISIS interface without specific Level.").String,
 							Optional:            true,

@@ -72,15 +72,11 @@ func (d *BridgeDomainsDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "Disable/enable autoState for SVI interface.",
 				Computed:            true,
 			},
-			"bridge_domains": schema.ListNestedAttribute{
-				MarkdownDescription: "List of bridge domains.",
+			"bridge_domains": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of bridge domains.\n  - Map key: `fabric_encap` - The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"fabric_encap": schema.StringAttribute{
-							MarkdownDescription: "The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
-							Computed:            true,
-						},
 						"access_encap": schema.StringAttribute{
 							MarkdownDescription: "The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
 							Computed:            true,

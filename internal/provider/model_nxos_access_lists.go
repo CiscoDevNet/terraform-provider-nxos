@@ -24,7 +24,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -39,24 +38,22 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type AccessLists struct {
-	Device            types.String                   `tfsdk:"device"`
-	Dn                types.String                   `tfsdk:"id"`
-	AccessLists       []AccessListsAccessLists       `tfsdk:"access_lists"`
-	IngressInterfaces []AccessListsIngressInterfaces `tfsdk:"ingress_interfaces"`
-	EgressInterfaces  []AccessListsEgressInterfaces  `tfsdk:"egress_interfaces"`
+	Device            types.String                            `tfsdk:"device"`
+	Dn                types.String                            `tfsdk:"id"`
+	AccessLists       map[string]AccessListsAccessLists       `tfsdk:"access_lists"`
+	IngressInterfaces map[string]AccessListsIngressInterfaces `tfsdk:"ingress_interfaces"`
+	EgressInterfaces  map[string]AccessListsEgressInterfaces  `tfsdk:"egress_interfaces"`
 }
 
 type AccessListsAccessLists struct {
-	Name             types.String                    `tfsdk:"name"`
-	Fragments        types.String                    `tfsdk:"fragments"`
-	IgnoreRoutable   types.Bool                      `tfsdk:"ignore_routable"`
-	PerAceStatistics types.String                    `tfsdk:"per_ace_statistics"`
-	UdfPresent       types.Bool                      `tfsdk:"udf_present"`
-	Entries          []AccessListsAccessListsEntries `tfsdk:"entries"`
+	Fragments        types.String                             `tfsdk:"fragments"`
+	IgnoreRoutable   types.Bool                               `tfsdk:"ignore_routable"`
+	PerAceStatistics types.String                             `tfsdk:"per_ace_statistics"`
+	UdfPresent       types.Bool                               `tfsdk:"udf_present"`
+	Entries          map[string]AccessListsAccessListsEntries `tfsdk:"entries"`
 }
 
 type AccessListsAccessListsEntries struct {
-	SequenceNumber          types.Int64  `tfsdk:"sequence_number"`
 	Ack                     types.Bool   `tfsdk:"ack"`
 	Action                  types.String `tfsdk:"action"`
 	Dscp                    types.Int64  `tfsdk:"dscp"`
@@ -117,12 +114,10 @@ type AccessListsAccessListsEntries struct {
 }
 
 type AccessListsIngressInterfaces struct {
-	InterfaceId    types.String `tfsdk:"interface_id"`
 	AccessListName types.String `tfsdk:"access_list_name"`
 }
 
 type AccessListsEgressInterfaces struct {
-	InterfaceId    types.String `tfsdk:"interface_id"`
 	AccessListName types.String `tfsdk:"access_list_name"`
 }
 
@@ -154,20 +149,20 @@ func (data AccessLists) getDn() string {
 	return "sys/acl"
 }
 
-func (data AccessListsAccessLists) getRn() string {
-	return fmt.Sprintf("name-[%s]", data.Name.ValueString())
+func (data AccessListsAccessLists) getRn(key string) string {
+	return fmt.Sprintf("name-[%s]", key)
 }
 
-func (data AccessListsAccessListsEntries) getRn() string {
-	return fmt.Sprintf("seq-%v", data.SequenceNumber.ValueInt64())
+func (data AccessListsAccessListsEntries) getRn(key string) string {
+	return fmt.Sprintf("seq-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
-func (data AccessListsIngressInterfaces) getRn() string {
-	return fmt.Sprintf("intf-[%s]", data.InterfaceId.ValueString())
+func (data AccessListsIngressInterfaces) getRn(key string) string {
+	return fmt.Sprintf("intf-[%s]", key)
 }
 
-func (data AccessListsEgressInterfaces) getRn() string {
-	return fmt.Sprintf("intf-[%s]", data.InterfaceId.ValueString())
+func (data AccessListsEgressInterfaces) getRn(key string) string {
+	return fmt.Sprintf("intf-[%s]", key)
 }
 
 func (data AccessLists) getClassName() string {
@@ -189,11 +184,9 @@ func (data AccessLists) toBody() nxos.Body {
 		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
-		for _, child := range data.AccessLists {
+		for key, child := range data.AccessLists {
 			attrs = "{}"
-			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-			}
+			attrs, _ = sjson.Set(attrs, "name", key)
 			if (!child.Fragments.IsUnknown() && !child.Fragments.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "fragments", child.Fragments.ValueString())
 			}
@@ -210,11 +203,9 @@ func (data AccessLists) toBody() nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv4aclACL.children"
-				for _, child := range child.Entries {
+				for key, child := range child.Entries {
 					attrs = "{}"
-					if (!child.SequenceNumber.IsUnknown() && !child.SequenceNumber.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "seqNum", strconv.FormatInt(child.SequenceNumber.ValueInt64(), 10))
-					}
+					attrs, _ = sjson.Set(attrs, "seqNum", key)
 					if (!child.Ack.IsUnknown() && !child.Ack.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "ack", strconv.FormatBool(child.Ack.ValueBool()))
 					}
@@ -402,11 +393,9 @@ func (data AccessLists) toBody() nxos.Body {
 				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
-				for _, child := range data.IngressInterfaces {
+				for key, child := range data.IngressInterfaces {
 					attrs = "{}"
-					if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "name", child.InterfaceId.ValueString())
-					}
+					attrs, _ = sjson.Set(attrs, "name", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aclIf.attributes", attrs)
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
@@ -427,11 +416,9 @@ func (data AccessLists) toBody() nxos.Body {
 				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
-				for _, child := range data.EgressInterfaces {
+				for key, child := range data.EgressInterfaces {
 					attrs = "{}"
-					if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "name", child.InterfaceId.ValueString())
-					}
+					attrs, _ = sjson.Set(attrs, "name", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aclIf.attributes", attrs)
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
@@ -461,8 +448,8 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 		var ripv4aclAF gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ipv4aclAF.attributes.rn").String()
-				if key == "ipv4" {
+				rnValue := v.Get("ipv4aclAF.attributes.rn").String()
+				if rnValue == "ipv4" {
 					ripv4aclAF = v
 					return false
 				}
@@ -475,18 +462,17 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 					func(classname, value gjson.Result) bool {
 						if classname.String() == "ipv4aclACL" {
 							var child AccessListsAccessLists
-							child.Name = types.StringValue(value.Get("attributes.name").String())
 							child.Fragments = types.StringValue(value.Get("attributes.fragments").String())
 							child.IgnoreRoutable = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.ignRoutable").String()))
 							child.PerAceStatistics = types.StringValue(value.Get("attributes.perACEStatistics").String())
 							child.UdfPresent = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.udfPresent").String()))
+							mapKey := value.Get("attributes.name").String()
 							value.Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "ipv4aclACE" {
 												var nestedChildipv4aclACE AccessListsAccessListsEntries
-												nestedChildipv4aclACE.SequenceNumber = types.Int64Value(nestedValue.Get("attributes.seqNum").Int())
 												nestedChildipv4aclACE.Ack = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.ack").String()))
 												nestedChildipv4aclACE.Action = types.StringValue(nestedValue.Get("attributes.action").String())
 												nestedChildipv4aclACE.Dscp = types.Int64Value(nestedValue.Get("attributes.dscp").Int())
@@ -544,7 +530,11 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 												nestedChildipv4aclACE.TelemetryPath = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.telemetryPath").String()))
 												nestedChildipv4aclACE.TelemetryQueue = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.telemetryQueue").String()))
 												nestedChildipv4aclACE.TypeOfService = types.Int64Value(nestedValue.Get("attributes.tos").Int())
-												child.Entries = append(child.Entries, nestedChildipv4aclACE)
+												nestedMapKey := nestedValue.Get("attributes.seqNum").String()
+												if child.Entries == nil {
+													child.Entries = make(map[string]AccessListsAccessListsEntries)
+												}
+												child.Entries[nestedMapKey] = nestedChildipv4aclACE
 											}
 											return true
 										},
@@ -552,7 +542,10 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 									return true
 								},
 							)
-							data.AccessLists = append(data.AccessLists, child)
+							if data.AccessLists == nil {
+								data.AccessLists = make(map[string]AccessListsAccessLists)
+							}
+							data.AccessLists[mapKey] = child
 						}
 						return true
 					},
@@ -564,8 +557,8 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 			var raclPolicy gjson.Result
 			ripv4aclAF.Get("ipv4aclAF.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("aclPolicy.attributes.rn").String()
-					if key == "policy" {
+					rnValue := v.Get("aclPolicy.attributes.rn").String()
+					if rnValue == "policy" {
 						raclPolicy = v
 						return false
 					}
@@ -576,8 +569,8 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 				var raclIngress gjson.Result
 				raclPolicy.Get("aclPolicy.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("aclIngress.attributes.rn").String()
-						if key == "ingress" {
+						rnValue := v.Get("aclIngress.attributes.rn").String()
+						if rnValue == "ingress" {
 							raclIngress = v
 							return false
 						}
@@ -590,13 +583,13 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 							func(classname, value gjson.Result) bool {
 								if classname.String() == "aclIf" {
 									var child AccessListsIngressInterfaces
-									child.InterfaceId = types.StringValue(value.Get("attributes.name").String())
+									mapKey := value.Get("attributes.name").String()
 									{
 										var raclInst gjson.Result
 										value.Get("children").ForEach(
 											func(_, nestedV gjson.Result) bool {
-												key := nestedV.Get("aclInst.attributes.rn").String()
-												if key == "acl" {
+												rnValue := nestedV.Get("aclInst.attributes.rn").String()
+												if rnValue == "acl" {
 													raclInst = nestedV
 													return false
 												}
@@ -605,7 +598,10 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 										)
 										child.AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
 									}
-									data.IngressInterfaces = append(data.IngressInterfaces, child)
+									if data.IngressInterfaces == nil {
+										data.IngressInterfaces = make(map[string]AccessListsIngressInterfaces)
+									}
+									data.IngressInterfaces[mapKey] = child
 								}
 								return true
 							},
@@ -618,8 +614,8 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 				var raclEgress gjson.Result
 				raclPolicy.Get("aclPolicy.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("aclEgress.attributes.rn").String()
-						if key == "egress" {
+						rnValue := v.Get("aclEgress.attributes.rn").String()
+						if rnValue == "egress" {
 							raclEgress = v
 							return false
 						}
@@ -632,13 +628,13 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 							func(classname, value gjson.Result) bool {
 								if classname.String() == "aclIf" {
 									var child AccessListsEgressInterfaces
-									child.InterfaceId = types.StringValue(value.Get("attributes.name").String())
+									mapKey := value.Get("attributes.name").String()
 									{
 										var raclInst gjson.Result
 										value.Get("children").ForEach(
 											func(_, nestedV gjson.Result) bool {
-												key := nestedV.Get("aclInst.attributes.rn").String()
-												if key == "acl" {
+												rnValue := nestedV.Get("aclInst.attributes.rn").String()
+												if rnValue == "acl" {
 													raclInst = nestedV
 													return false
 												}
@@ -647,7 +643,10 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 										)
 										child.AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
 									}
-									data.EgressInterfaces = append(data.EgressInterfaces, child)
+									if data.EgressInterfaces == nil {
+										data.EgressInterfaces = make(map[string]AccessListsEgressInterfaces)
+									}
+									data.EgressInterfaces[mapKey] = child
 								}
 								return true
 							},
@@ -668,19 +667,19 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 	var ripv4aclAF gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			key := v.Get("ipv4aclAF.attributes.rn").String()
-			if key == "ipv4" {
+			rnValue := v.Get("ipv4aclAF.attributes.rn").String()
+			if rnValue == "ipv4" {
 				ripv4aclAF = v
 				return false
 			}
 			return true
 		},
 	)
-	for c := len(data.AccessLists) - 1; c >= 0; c-- {
+	for key, item := range data.AccessLists {
 		var ripv4aclACL gjson.Result
 		ripv4aclAF.Get("ipv4aclAF.children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("ipv4aclACL.attributes.name").String() == data.AccessLists[c].Name.ValueString() {
+				if v.Get("ipv4aclACL.attributes.name").String() == key {
 					ripv4aclACL = v
 					return false
 				}
@@ -688,39 +687,35 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 			},
 		)
 		if !ripv4aclACL.Exists() {
-			data.AccessLists = slices.Delete(data.AccessLists, c, c+1)
+			delete(data.AccessLists, key)
 			continue
 		}
-		if !data.AccessLists[c].Name.IsNull() {
-			data.AccessLists[c].Name = types.StringValue(ripv4aclACL.Get("ipv4aclACL.attributes.name").String())
+		if !item.Fragments.IsNull() {
+			item.Fragments = types.StringValue(ripv4aclACL.Get("ipv4aclACL.attributes.fragments").String())
 		} else {
-			data.AccessLists[c].Name = types.StringNull()
+			item.Fragments = types.StringNull()
 		}
-		if !data.AccessLists[c].Fragments.IsNull() {
-			data.AccessLists[c].Fragments = types.StringValue(ripv4aclACL.Get("ipv4aclACL.attributes.fragments").String())
+		if !item.IgnoreRoutable.IsNull() {
+			item.IgnoreRoutable = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACL.Get("ipv4aclACL.attributes.ignRoutable").String()))
 		} else {
-			data.AccessLists[c].Fragments = types.StringNull()
+			item.IgnoreRoutable = types.BoolNull()
 		}
-		if !data.AccessLists[c].IgnoreRoutable.IsNull() {
-			data.AccessLists[c].IgnoreRoutable = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACL.Get("ipv4aclACL.attributes.ignRoutable").String()))
+		if !item.PerAceStatistics.IsNull() {
+			item.PerAceStatistics = types.StringValue(ripv4aclACL.Get("ipv4aclACL.attributes.perACEStatistics").String())
 		} else {
-			data.AccessLists[c].IgnoreRoutable = types.BoolNull()
+			item.PerAceStatistics = types.StringNull()
 		}
-		if !data.AccessLists[c].PerAceStatistics.IsNull() {
-			data.AccessLists[c].PerAceStatistics = types.StringValue(ripv4aclACL.Get("ipv4aclACL.attributes.perACEStatistics").String())
+		if !item.UdfPresent.IsNull() {
+			item.UdfPresent = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACL.Get("ipv4aclACL.attributes.udfPresent").String()))
 		} else {
-			data.AccessLists[c].PerAceStatistics = types.StringNull()
+			item.UdfPresent = types.BoolNull()
 		}
-		if !data.AccessLists[c].UdfPresent.IsNull() {
-			data.AccessLists[c].UdfPresent = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACL.Get("ipv4aclACL.attributes.udfPresent").String()))
-		} else {
-			data.AccessLists[c].UdfPresent = types.BoolNull()
-		}
-		for nc := len(data.AccessLists[c].Entries) - 1; nc >= 0; nc-- {
+		for nc := range item.Entries {
+			ncItem := item.Entries[nc]
 			var ripv4aclACE gjson.Result
 			ripv4aclACL.Get("ipv4aclACL.children").ForEach(
 				func(_, v gjson.Result) bool {
-					if v.Get("ipv4aclACE.attributes.seqNum").String() == strconv.FormatInt(data.AccessLists[c].Entries[nc].SequenceNumber.ValueInt64(), 10) {
+					if v.Get("ipv4aclACE.attributes.seqNum").String() == nc {
 						ripv4aclACE = v
 						return false
 					}
@@ -728,307 +723,304 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 				},
 			)
 			if !ripv4aclACE.Exists() {
-				data.AccessLists[c].Entries = slices.Delete(data.AccessLists[c].Entries, nc, nc+1)
+				delete(item.Entries, nc)
 				continue
 			}
-			if !data.AccessLists[c].Entries[nc].SequenceNumber.IsNull() {
-				data.AccessLists[c].Entries[nc].SequenceNumber = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.seqNum").Int())
+			if !ncItem.Ack.IsNull() {
+				ncItem.Ack = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.ack").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].SequenceNumber = types.Int64Null()
+				ncItem.Ack = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Ack.IsNull() {
-				data.AccessLists[c].Entries[nc].Ack = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.ack").String()))
+			if !ncItem.Action.IsNull() {
+				ncItem.Action = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.action").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Ack = types.BoolNull()
+				ncItem.Action = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Action.IsNull() {
-				data.AccessLists[c].Entries[nc].Action = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.action").String())
+			if !ncItem.Dscp.IsNull() {
+				ncItem.Dscp = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.dscp").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].Action = types.StringNull()
+				ncItem.Dscp = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].Dscp.IsNull() {
-				data.AccessLists[c].Entries[nc].Dscp = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.dscp").Int())
+			if !ncItem.DestinationAddressGroup.IsNull() {
+				ncItem.DestinationAddressGroup = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstAddrGroup").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Dscp = types.Int64Null()
+				ncItem.DestinationAddressGroup = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].DestinationAddressGroup.IsNull() {
-				data.AccessLists[c].Entries[nc].DestinationAddressGroup = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstAddrGroup").String())
+			if !ncItem.DestinationPort1.IsNull() {
+				ncItem.DestinationPort1 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPort1").String())
 			} else {
-				data.AccessLists[c].Entries[nc].DestinationAddressGroup = types.StringNull()
+				ncItem.DestinationPort1 = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].DestinationPort1.IsNull() {
-				data.AccessLists[c].Entries[nc].DestinationPort1 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPort1").String())
+			if !ncItem.DestinationPort2.IsNull() {
+				ncItem.DestinationPort2 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPort2").String())
 			} else {
-				data.AccessLists[c].Entries[nc].DestinationPort1 = types.StringNull()
+				ncItem.DestinationPort2 = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].DestinationPort2.IsNull() {
-				data.AccessLists[c].Entries[nc].DestinationPort2 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPort2").String())
+			if !ncItem.DestinationPortGroup.IsNull() {
+				ncItem.DestinationPortGroup = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPortGroup").String())
 			} else {
-				data.AccessLists[c].Entries[nc].DestinationPort2 = types.StringNull()
+				ncItem.DestinationPortGroup = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].DestinationPortGroup.IsNull() {
-				data.AccessLists[c].Entries[nc].DestinationPortGroup = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPortGroup").String())
+			if !ncItem.DestinationPortMask.IsNull() {
+				ncItem.DestinationPortMask = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPortMask").String())
 			} else {
-				data.AccessLists[c].Entries[nc].DestinationPortGroup = types.StringNull()
+				ncItem.DestinationPortMask = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].DestinationPortMask.IsNull() {
-				data.AccessLists[c].Entries[nc].DestinationPortMask = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPortMask").String())
+			if !ncItem.DestinationPortOperator.IsNull() {
+				ncItem.DestinationPortOperator = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPortOp").String())
 			} else {
-				data.AccessLists[c].Entries[nc].DestinationPortMask = types.StringNull()
+				ncItem.DestinationPortOperator = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].DestinationPortOperator.IsNull() {
-				data.AccessLists[c].Entries[nc].DestinationPortOperator = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPortOp").String())
+			if !ncItem.DestinationPrefix.IsNull() {
+				ncItem.DestinationPrefix = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPrefix").String())
 			} else {
-				data.AccessLists[c].Entries[nc].DestinationPortOperator = types.StringNull()
+				ncItem.DestinationPrefix = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].DestinationPrefix.IsNull() {
-				data.AccessLists[c].Entries[nc].DestinationPrefix = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPrefix").String())
+			if !ncItem.DestinationPrefixLength.IsNull() {
+				ncItem.DestinationPrefixLength = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPrefixLength").String())
 			} else {
-				data.AccessLists[c].Entries[nc].DestinationPrefix = types.StringNull()
+				ncItem.DestinationPrefixLength = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].DestinationPrefixLength.IsNull() {
-				data.AccessLists[c].Entries[nc].DestinationPrefixLength = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPrefixLength").String())
+			if !ncItem.DestinationPrefixMask.IsNull() {
+				ncItem.DestinationPrefixMask = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPrefixMask").String())
 			} else {
-				data.AccessLists[c].Entries[nc].DestinationPrefixLength = types.StringNull()
+				ncItem.DestinationPrefixMask = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].DestinationPrefixMask.IsNull() {
-				data.AccessLists[c].Entries[nc].DestinationPrefixMask = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.dstPrefixMask").String())
+			if !ncItem.Established.IsNull() {
+				ncItem.Established = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.est").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].DestinationPrefixMask = types.StringNull()
+				ncItem.Established = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Established.IsNull() {
-				data.AccessLists[c].Entries[nc].Established = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.est").String()))
+			if !ncItem.Fin.IsNull() {
+				ncItem.Fin = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.fin").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].Established = types.BoolNull()
+				ncItem.Fin = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Fin.IsNull() {
-				data.AccessLists[c].Entries[nc].Fin = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.fin").String()))
+			if !ncItem.Fragment.IsNull() {
+				ncItem.Fragment = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.fragment").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].Fin = types.BoolNull()
+				ncItem.Fragment = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Fragment.IsNull() {
-				data.AccessLists[c].Entries[nc].Fragment = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.fragment").String()))
+			if !ncItem.HttpOptionType.IsNull() {
+				ncItem.HttpOptionType = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.httpOption").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Fragment = types.BoolNull()
+				ncItem.HttpOptionType = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].HttpOptionType.IsNull() {
-				data.AccessLists[c].Entries[nc].HttpOptionType = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.httpOption").String())
+			if !ncItem.IcmpCode.IsNull() {
+				ncItem.IcmpCode = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.icmpCode").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].HttpOptionType = types.StringNull()
+				ncItem.IcmpCode = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].IcmpCode.IsNull() {
-				data.AccessLists[c].Entries[nc].IcmpCode = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.icmpCode").Int())
+			if !ncItem.IcmpType.IsNull() {
+				ncItem.IcmpType = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.icmpType").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].IcmpCode = types.Int64Null()
+				ncItem.IcmpType = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].IcmpType.IsNull() {
-				data.AccessLists[c].Entries[nc].IcmpType = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.icmpType").Int())
+			if !ncItem.Log.IsNull() {
+				ncItem.Log = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.logging").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].IcmpType = types.Int64Null()
+				ncItem.Log = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Log.IsNull() {
-				data.AccessLists[c].Entries[nc].Log = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.logging").String()))
+			if !ncItem.PacketLength1.IsNull() {
+				ncItem.PacketLength1 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.pktLen1").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Log = types.BoolNull()
+				ncItem.PacketLength1 = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].PacketLength1.IsNull() {
-				data.AccessLists[c].Entries[nc].PacketLength1 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.pktLen1").String())
+			if !ncItem.PacketLength2.IsNull() {
+				ncItem.PacketLength2 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.pktLen2").String())
 			} else {
-				data.AccessLists[c].Entries[nc].PacketLength1 = types.StringNull()
+				ncItem.PacketLength2 = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].PacketLength2.IsNull() {
-				data.AccessLists[c].Entries[nc].PacketLength2 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.pktLen2").String())
+			if !ncItem.PacketLengthOperator.IsNull() {
+				ncItem.PacketLengthOperator = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.pktLenOp").String())
 			} else {
-				data.AccessLists[c].Entries[nc].PacketLength2 = types.StringNull()
+				ncItem.PacketLengthOperator = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].PacketLengthOperator.IsNull() {
-				data.AccessLists[c].Entries[nc].PacketLengthOperator = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.pktLenOp").String())
+			if !ncItem.Precedence.IsNull() {
+				ncItem.Precedence = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.precedence").String())
 			} else {
-				data.AccessLists[c].Entries[nc].PacketLengthOperator = types.StringNull()
+				ncItem.Precedence = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Precedence.IsNull() {
-				data.AccessLists[c].Entries[nc].Precedence = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.precedence").String())
+			if !ncItem.Protocol.IsNull() {
+				ncItem.Protocol = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.protocol").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Precedence = types.StringNull()
+				ncItem.Protocol = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Protocol.IsNull() {
-				data.AccessLists[c].Entries[nc].Protocol = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.protocol").String())
+			if !ncItem.ProtocolMask.IsNull() {
+				ncItem.ProtocolMask = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.protocolMask").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Protocol = types.StringNull()
+				ncItem.ProtocolMask = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].ProtocolMask.IsNull() {
-				data.AccessLists[c].Entries[nc].ProtocolMask = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.protocolMask").String())
+			if !ncItem.Psh.IsNull() {
+				ncItem.Psh = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.psh").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].ProtocolMask = types.StringNull()
+				ncItem.Psh = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Psh.IsNull() {
-				data.AccessLists[c].Entries[nc].Psh = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.psh").String()))
+			if !ncItem.Redirect.IsNull() {
+				ncItem.Redirect = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.redirect").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Psh = types.BoolNull()
+				ncItem.Redirect = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Redirect.IsNull() {
-				data.AccessLists[c].Entries[nc].Redirect = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.redirect").String())
+			if !ncItem.Remark.IsNull() {
+				ncItem.Remark = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.remark").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Redirect = types.StringNull()
+				ncItem.Remark = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Remark.IsNull() {
-				data.AccessLists[c].Entries[nc].Remark = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.remark").String())
+			if !ncItem.Rev.IsNull() {
+				ncItem.Rev = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.rev").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].Remark = types.StringNull()
+				ncItem.Rev = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Rev.IsNull() {
-				data.AccessLists[c].Entries[nc].Rev = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.rev").String()))
+			if !ncItem.Rst.IsNull() {
+				ncItem.Rst = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.rst").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].Rev = types.BoolNull()
+				ncItem.Rst = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Rst.IsNull() {
-				data.AccessLists[c].Entries[nc].Rst = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.rst").String()))
+			if !ncItem.SourceAddressGroup.IsNull() {
+				ncItem.SourceAddressGroup = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcAddrGroup").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Rst = types.BoolNull()
+				ncItem.SourceAddressGroup = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].SourceAddressGroup.IsNull() {
-				data.AccessLists[c].Entries[nc].SourceAddressGroup = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcAddrGroup").String())
+			if !ncItem.SourcePort1.IsNull() {
+				ncItem.SourcePort1 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPort1").String())
 			} else {
-				data.AccessLists[c].Entries[nc].SourceAddressGroup = types.StringNull()
+				ncItem.SourcePort1 = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].SourcePort1.IsNull() {
-				data.AccessLists[c].Entries[nc].SourcePort1 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPort1").String())
+			if !ncItem.SourcePort2.IsNull() {
+				ncItem.SourcePort2 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPort2").String())
 			} else {
-				data.AccessLists[c].Entries[nc].SourcePort1 = types.StringNull()
+				ncItem.SourcePort2 = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].SourcePort2.IsNull() {
-				data.AccessLists[c].Entries[nc].SourcePort2 = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPort2").String())
+			if !ncItem.SourcePortGroup.IsNull() {
+				ncItem.SourcePortGroup = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPortGroup").String())
 			} else {
-				data.AccessLists[c].Entries[nc].SourcePort2 = types.StringNull()
+				ncItem.SourcePortGroup = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].SourcePortGroup.IsNull() {
-				data.AccessLists[c].Entries[nc].SourcePortGroup = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPortGroup").String())
+			if !ncItem.SourcePortMask.IsNull() {
+				ncItem.SourcePortMask = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPortMask").String())
 			} else {
-				data.AccessLists[c].Entries[nc].SourcePortGroup = types.StringNull()
+				ncItem.SourcePortMask = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].SourcePortMask.IsNull() {
-				data.AccessLists[c].Entries[nc].SourcePortMask = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPortMask").String())
+			if !ncItem.SourcePortOperator.IsNull() {
+				ncItem.SourcePortOperator = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPortOp").String())
 			} else {
-				data.AccessLists[c].Entries[nc].SourcePortMask = types.StringNull()
+				ncItem.SourcePortOperator = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].SourcePortOperator.IsNull() {
-				data.AccessLists[c].Entries[nc].SourcePortOperator = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPortOp").String())
+			if !ncItem.SourcePrefix.IsNull() {
+				ncItem.SourcePrefix = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPrefix").String())
 			} else {
-				data.AccessLists[c].Entries[nc].SourcePortOperator = types.StringNull()
+				ncItem.SourcePrefix = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].SourcePrefix.IsNull() {
-				data.AccessLists[c].Entries[nc].SourcePrefix = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPrefix").String())
+			if !ncItem.SourcePrefixLength.IsNull() {
+				ncItem.SourcePrefixLength = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPrefixLength").String())
 			} else {
-				data.AccessLists[c].Entries[nc].SourcePrefix = types.StringNull()
+				ncItem.SourcePrefixLength = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].SourcePrefixLength.IsNull() {
-				data.AccessLists[c].Entries[nc].SourcePrefixLength = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPrefixLength").String())
+			if !ncItem.SourcePrefixMask.IsNull() {
+				ncItem.SourcePrefixMask = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPrefixMask").String())
 			} else {
-				data.AccessLists[c].Entries[nc].SourcePrefixLength = types.StringNull()
+				ncItem.SourcePrefixMask = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].SourcePrefixMask.IsNull() {
-				data.AccessLists[c].Entries[nc].SourcePrefixMask = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.srcPrefixMask").String())
+			if !ncItem.Syn.IsNull() {
+				ncItem.Syn = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.syn").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].SourcePrefixMask = types.StringNull()
+				ncItem.Syn = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Syn.IsNull() {
-				data.AccessLists[c].Entries[nc].Syn = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.syn").String()))
+			if !ncItem.TimeRange.IsNull() {
+				ncItem.TimeRange = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.timeRange").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Syn = types.BoolNull()
+				ncItem.TimeRange = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].TimeRange.IsNull() {
-				data.AccessLists[c].Entries[nc].TimeRange = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.timeRange").String())
+			if !ncItem.Ttl.IsNull() {
+				ncItem.Ttl = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.ttl").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].TimeRange = types.StringNull()
+				ncItem.Ttl = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].Ttl.IsNull() {
-				data.AccessLists[c].Entries[nc].Ttl = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.ttl").Int())
+			if !ncItem.Urg.IsNull() {
+				ncItem.Urg = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.urg").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].Ttl = types.Int64Null()
+				ncItem.Urg = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Urg.IsNull() {
-				data.AccessLists[c].Entries[nc].Urg = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.urg").String()))
+			if !ncItem.Vlan.IsNull() {
+				ncItem.Vlan = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.vlan").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].Urg = types.BoolNull()
+				ncItem.Vlan = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].Vlan.IsNull() {
-				data.AccessLists[c].Entries[nc].Vlan = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.vlan").Int())
+			if !ncItem.Vni.IsNull() {
+				ncItem.Vni = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.vni").String())
 			} else {
-				data.AccessLists[c].Entries[nc].Vlan = types.Int64Null()
+				ncItem.Vni = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].Vni.IsNull() {
-				data.AccessLists[c].Entries[nc].Vni = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.vni").String())
+			if !ncItem.CaptureSession.IsNull() {
+				ncItem.CaptureSession = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.captureSession").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].Vni = types.StringNull()
+				ncItem.CaptureSession = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].CaptureSession.IsNull() {
-				data.AccessLists[c].Entries[nc].CaptureSession = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.captureSession").Int())
+			if !ncItem.DscpMask.IsNull() {
+				ncItem.DscpMask = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.dscpMask").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].CaptureSession = types.Int64Null()
+				ncItem.DscpMask = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].DscpMask.IsNull() {
-				data.AccessLists[c].Entries[nc].DscpMask = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.dscpMask").Int())
+			if !ncItem.IcmpString.IsNull() {
+				ncItem.IcmpString = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.icmpStr").String())
 			} else {
-				data.AccessLists[c].Entries[nc].DscpMask = types.Int64Null()
+				ncItem.IcmpString = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].IcmpString.IsNull() {
-				data.AccessLists[c].Entries[nc].IcmpString = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.icmpStr").String())
+			if !ncItem.IgmpType.IsNull() {
+				ncItem.IgmpType = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.igmpType").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].IcmpString = types.StringNull()
+				ncItem.IgmpType = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].IgmpType.IsNull() {
-				data.AccessLists[c].Entries[nc].IgmpType = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.igmpType").Int())
+			if !ncItem.LoadShare.IsNull() {
+				ncItem.LoadShare = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.loadShare").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].IgmpType = types.Int64Null()
+				ncItem.LoadShare = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].LoadShare.IsNull() {
-				data.AccessLists[c].Entries[nc].LoadShare = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.loadShare").String()))
+			if !ncItem.PriorityAll.IsNull() {
+				ncItem.PriorityAll = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.priorityAll").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].LoadShare = types.BoolNull()
+				ncItem.PriorityAll = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].PriorityAll.IsNull() {
-				data.AccessLists[c].Entries[nc].PriorityAll = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.priorityAll").String()))
+			if !ncItem.RedirectAll.IsNull() {
+				ncItem.RedirectAll = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.redirect_all").String())
 			} else {
-				data.AccessLists[c].Entries[nc].PriorityAll = types.BoolNull()
+				ncItem.RedirectAll = types.StringNull()
 			}
-			if !data.AccessLists[c].Entries[nc].RedirectAll.IsNull() {
-				data.AccessLists[c].Entries[nc].RedirectAll = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.redirect_all").String())
+			if !ncItem.TcpFlagsMask.IsNull() {
+				ncItem.TcpFlagsMask = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.tcpFlagsMask").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].RedirectAll = types.StringNull()
+				ncItem.TcpFlagsMask = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].TcpFlagsMask.IsNull() {
-				data.AccessLists[c].Entries[nc].TcpFlagsMask = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.tcpFlagsMask").Int())
+			if !ncItem.TcpOptionLength.IsNull() {
+				ncItem.TcpOptionLength = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.tcpOptionLength").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].TcpFlagsMask = types.Int64Null()
+				ncItem.TcpOptionLength = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].TcpOptionLength.IsNull() {
-				data.AccessLists[c].Entries[nc].TcpOptionLength = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.tcpOptionLength").Int())
+			if !ncItem.TelemetryPath.IsNull() {
+				ncItem.TelemetryPath = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.telemetryPath").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].TcpOptionLength = types.Int64Null()
+				ncItem.TelemetryPath = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].TelemetryPath.IsNull() {
-				data.AccessLists[c].Entries[nc].TelemetryPath = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.telemetryPath").String()))
+			if !ncItem.TelemetryQueue.IsNull() {
+				ncItem.TelemetryQueue = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.telemetryQueue").String()))
 			} else {
-				data.AccessLists[c].Entries[nc].TelemetryPath = types.BoolNull()
+				ncItem.TelemetryQueue = types.BoolNull()
 			}
-			if !data.AccessLists[c].Entries[nc].TelemetryQueue.IsNull() {
-				data.AccessLists[c].Entries[nc].TelemetryQueue = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.telemetryQueue").String()))
+			if !ncItem.TypeOfService.IsNull() {
+				ncItem.TypeOfService = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.tos").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].TelemetryQueue = types.BoolNull()
+				ncItem.TypeOfService = types.Int64Null()
 			}
-			if !data.AccessLists[c].Entries[nc].TypeOfService.IsNull() {
-				data.AccessLists[c].Entries[nc].TypeOfService = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.tos").Int())
-			} else {
-				data.AccessLists[c].Entries[nc].TypeOfService = types.Int64Null()
-			}
+			item.Entries[nc] = ncItem
 		}
+		data.AccessLists[key] = item
 	}
 	{
 		var raclPolicy gjson.Result
 		ripv4aclAF.Get("ipv4aclAF.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("aclPolicy.attributes.rn").String()
-				if key == "policy" {
+				rnValue := v.Get("aclPolicy.attributes.rn").String()
+				if rnValue == "policy" {
 					raclPolicy = v
 					return false
 				}
@@ -1039,19 +1031,19 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 			var raclIngress gjson.Result
 			raclPolicy.Get("aclPolicy.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("aclIngress.attributes.rn").String()
-					if key == "ingress" {
+					rnValue := v.Get("aclIngress.attributes.rn").String()
+					if rnValue == "ingress" {
 						raclIngress = v
 						return false
 					}
 					return true
 				},
 			)
-			for c := len(data.IngressInterfaces) - 1; c >= 0; c-- {
+			for key, item := range data.IngressInterfaces {
 				var raclIf gjson.Result
 				raclIngress.Get("aclIngress.children").ForEach(
 					func(_, v gjson.Result) bool {
-						if v.Get("aclIf.attributes.name").String() == data.IngressInterfaces[c].InterfaceId.ValueString() {
+						if v.Get("aclIf.attributes.name").String() == key {
 							raclIf = v
 							return false
 						}
@@ -1059,51 +1051,47 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !raclIf.Exists() {
-					data.IngressInterfaces = slices.Delete(data.IngressInterfaces, c, c+1)
+					delete(data.IngressInterfaces, key)
 					continue
-				}
-				if !data.IngressInterfaces[c].InterfaceId.IsNull() {
-					data.IngressInterfaces[c].InterfaceId = types.StringValue(raclIf.Get("aclIf.attributes.name").String())
-				} else {
-					data.IngressInterfaces[c].InterfaceId = types.StringNull()
 				}
 				{
 					var raclInst gjson.Result
 					raclIf.Get("aclIf.children").ForEach(
 						func(_, v gjson.Result) bool {
-							key := v.Get("aclInst.attributes.rn").String()
-							if key == "acl" {
+							rnValue := v.Get("aclInst.attributes.rn").String()
+							if rnValue == "acl" {
 								raclInst = v
 								return false
 							}
 							return true
 						},
 					)
-					if !data.IngressInterfaces[c].AccessListName.IsNull() {
-						data.IngressInterfaces[c].AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
+					if !item.AccessListName.IsNull() {
+						item.AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
 					} else {
-						data.IngressInterfaces[c].AccessListName = types.StringNull()
+						item.AccessListName = types.StringNull()
 					}
 				}
+				data.IngressInterfaces[key] = item
 			}
 		}
 		{
 			var raclEgress gjson.Result
 			raclPolicy.Get("aclPolicy.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("aclEgress.attributes.rn").String()
-					if key == "egress" {
+					rnValue := v.Get("aclEgress.attributes.rn").String()
+					if rnValue == "egress" {
 						raclEgress = v
 						return false
 					}
 					return true
 				},
 			)
-			for c := len(data.EgressInterfaces) - 1; c >= 0; c-- {
+			for key, item := range data.EgressInterfaces {
 				var raclIf gjson.Result
 				raclEgress.Get("aclEgress.children").ForEach(
 					func(_, v gjson.Result) bool {
-						if v.Get("aclIf.attributes.name").String() == data.EgressInterfaces[c].InterfaceId.ValueString() {
+						if v.Get("aclIf.attributes.name").String() == key {
 							raclIf = v
 							return false
 						}
@@ -1111,32 +1099,28 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !raclIf.Exists() {
-					data.EgressInterfaces = slices.Delete(data.EgressInterfaces, c, c+1)
+					delete(data.EgressInterfaces, key)
 					continue
-				}
-				if !data.EgressInterfaces[c].InterfaceId.IsNull() {
-					data.EgressInterfaces[c].InterfaceId = types.StringValue(raclIf.Get("aclIf.attributes.name").String())
-				} else {
-					data.EgressInterfaces[c].InterfaceId = types.StringNull()
 				}
 				{
 					var raclInst gjson.Result
 					raclIf.Get("aclIf.children").ForEach(
 						func(_, v gjson.Result) bool {
-							key := v.Get("aclInst.attributes.rn").String()
-							if key == "acl" {
+							rnValue := v.Get("aclInst.attributes.rn").String()
+							if rnValue == "acl" {
 								raclInst = v
 								return false
 							}
 							return true
 						},
 					)
-					if !data.EgressInterfaces[c].AccessListName.IsNull() {
-						data.EgressInterfaces[c].AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
+					if !item.AccessListName.IsNull() {
+						item.AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
 					} else {
-						data.EgressInterfaces[c].AccessListName = types.StringNull()
+						item.AccessListName = types.StringNull()
 					}
 				}
+				data.EgressInterfaces[key] = item
 			}
 		}
 	}
@@ -1158,9 +1142,9 @@ func (data AccessLists) toDeleteBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
-		for _, child := range data.AccessLists {
+		for key, child := range data.AccessLists {
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.rn", child.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.rn", child.getRn(key))
 			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.status", "deleted")
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
@@ -1179,115 +1163,89 @@ func (data AccessLists) toBodyWithDeletes(ctx context.Context, state AccessLists
 	body := data.toBody()
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for _, stateChild := range state.AccessLists {
-		found := false
-		for _, planChild := range data.AccessLists {
-			if stateChild.Name == planChild.Name {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.AccessLists {
+		if _, found := data.AccessLists[stateKey]; !found {
+			stateChild := state.AccessLists[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.ipv4aclAF.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.AccessLists {
-		for pdi := range data.AccessLists {
-			if state.AccessLists[di].Name == data.AccessLists[pdi].Name {
-				matchBodyPathdi := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv4aclAF.children").Array() {
-					if mv.Get("ipv4aclACL.attributes.rn").String() == state.AccessLists[di].getRn() {
-						matchBodyPathdi = bodyPath + ".0.ipv4aclAF.children" + "." + strconv.Itoa(mi) + ".ipv4aclACL.children"
-						break
-					}
-				}
-				if matchBodyPathdi == "" {
-					break
-				}
-				for _, stateChild := range state.AccessLists[di].Entries {
-					found := false
-					for _, planChild := range data.AccessLists[pdi].Entries {
-						if stateChild.SequenceNumber == planChild.SequenceNumber {
-							found = true
-							break
-						}
-					}
-					if !found {
-						deleteBody := ""
-						deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACE.attributes.rn", stateChild.getRn())
-						deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACE.attributes.status", "deleted")
-						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
-					}
-				}
+		if _, found := data.AccessLists[di]; !found {
+			continue
+		}
+		stateItemdi := state.AccessLists[di]
+		planItemdi := data.AccessLists[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv4aclAF.children").Array() {
+			if mv.Get("ipv4aclACL.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.ipv4aclAF.children" + "." + strconv.Itoa(mi) + ".ipv4aclACL.children"
 				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.Entries {
+			if _, found := planItemdi.Entries[stateChildKey]; !found {
+				stateChild := stateItemdi.Entries[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACE.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACE.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 			}
 		}
 	}
-	for _, stateChild := range state.IngressInterfaces {
-		found := false
-		for _, planChild := range data.IngressInterfaces {
-			if stateChild.InterfaceId == planChild.InterfaceId {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.IngressInterfaces {
+		if _, found := data.IngressInterfaces[stateKey]; !found {
+			stateChild := state.IngressInterfaces[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "aclIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "aclIf.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "aclIf.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.ipv4aclAF.children"+".0.aclPolicy.children"+".0.aclIngress.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.IngressInterfaces {
-		for pdi := range data.IngressInterfaces {
-			if state.IngressInterfaces[di].InterfaceId == data.IngressInterfaces[pdi].InterfaceId {
-				matchBodyPathdi := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv4aclAF.children"+".0.aclPolicy.children"+".0.aclIngress.children").Array() {
-					if mv.Get("aclIf.attributes.rn").String() == state.IngressInterfaces[di].getRn() {
-						matchBodyPathdi = bodyPath + ".0.ipv4aclAF.children" + ".0.aclPolicy.children" + ".0.aclIngress.children" + "." + strconv.Itoa(mi) + ".aclIf.children"
-						break
-					}
-				}
-				if matchBodyPathdi == "" {
-					break
-				}
+		if _, found := data.IngressInterfaces[di]; !found {
+			continue
+		}
+		stateItemdi := state.IngressInterfaces[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv4aclAF.children"+".0.aclPolicy.children"+".0.aclIngress.children").Array() {
+			if mv.Get("aclIf.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.ipv4aclAF.children" + ".0.aclPolicy.children" + ".0.aclIngress.children" + "." + strconv.Itoa(mi) + ".aclIf.children"
 				break
 			}
+		}
+		if matchBodyPathdi == "" {
+			continue
 		}
 	}
-	for _, stateChild := range state.EgressInterfaces {
-		found := false
-		for _, planChild := range data.EgressInterfaces {
-			if stateChild.InterfaceId == planChild.InterfaceId {
-				found = true
-				break
-			}
-		}
-		if !found {
+	for stateKey := range state.EgressInterfaces {
+		if _, found := data.EgressInterfaces[stateKey]; !found {
+			stateChild := state.EgressInterfaces[stateKey]
 			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "aclIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "aclIf.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "aclIf.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.ipv4aclAF.children"+".0.aclPolicy.children"+".0.aclEgress.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.EgressInterfaces {
-		for pdi := range data.EgressInterfaces {
-			if state.EgressInterfaces[di].InterfaceId == data.EgressInterfaces[pdi].InterfaceId {
-				matchBodyPathdi := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv4aclAF.children"+".0.aclPolicy.children"+".0.aclEgress.children").Array() {
-					if mv.Get("aclIf.attributes.rn").String() == state.EgressInterfaces[di].getRn() {
-						matchBodyPathdi = bodyPath + ".0.ipv4aclAF.children" + ".0.aclPolicy.children" + ".0.aclEgress.children" + "." + strconv.Itoa(mi) + ".aclIf.children"
-						break
-					}
-				}
-				if matchBodyPathdi == "" {
-					break
-				}
+		if _, found := data.EgressInterfaces[di]; !found {
+			continue
+		}
+		stateItemdi := state.EgressInterfaces[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv4aclAF.children"+".0.aclPolicy.children"+".0.aclEgress.children").Array() {
+			if mv.Get("aclIf.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.ipv4aclAF.children" + ".0.aclPolicy.children" + ".0.aclEgress.children" + "." + strconv.Itoa(mi) + ".aclIf.children"
 				break
 			}
+		}
+		if matchBodyPathdi == "" {
+			continue
 		}
 	}
 	return body

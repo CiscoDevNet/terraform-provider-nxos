@@ -36,12 +36,9 @@ import (
 func TestAccNxosEVPN(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.0.encap", "vxlan-123456"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.0.route_distinguisher", "rd:unknown:0:0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.0.table_map", "ROUTE_MAP1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.0.table_map_filter", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.0.route_target_directions.0.type", "import"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.0.route_target_directions.0.route_targets.0.route_target", "route-target:as2-nn2:2:2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.vxlan-123456.route_distinguisher", "rd:unknown:0:0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.vxlan-123456.table_map", "ROUTE_MAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.vxlan-123456.table_map_filter", "false"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -121,18 +118,21 @@ func testAccNxosEVPNConfig_minimum() string {
 func testAccNxosEVPNConfig_all() string {
 	config := `resource "nxos_evpn" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	vnis = [{` + "\n"
-	config += `		encap = "vxlan-123456"` + "\n"
-	config += `		route_distinguisher = "rd:unknown:0:0"` + "\n"
-	config += `		table_map = "ROUTE_MAP1"` + "\n"
-	config += `		table_map_filter = false` + "\n"
-	config += `		route_target_directions = [{` + "\n"
-	config += `			type = "import"` + "\n"
-	config += `			route_targets = [{` + "\n"
-	config += `				route_target = "route-target:as2-nn2:2:2"` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	vnis = {` + "\n"
+	config += `		"vxlan-123456" = {` + "\n"
+	config += `			route_distinguisher = "rd:unknown:0:0"` + "\n"
+	config += `			table_map = "ROUTE_MAP1"` + "\n"
+	config += `			table_map_filter = false` + "\n"
+	config += `			route_target_directions = {` + "\n"
+	config += `				"import" = {` + "\n"
+	config += `					route_targets = {` + "\n"
+	config += `						"route-target:as2-nn2:2:2" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -35,10 +35,8 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosQueuingQoS(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.0.name", "PM1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.0.match_type", "match-any"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.0.match_class_maps.0.name", "c-out-q1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.0.match_class_maps.0.priority", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.priority", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "system_out_policy_map_name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_map_statistics", "false"))
 	var tfVersion *goversion.Version
@@ -184,14 +182,16 @@ func testAccNxosQueuingQoSConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosQueuingQoSConfig_all() string {
 	config := `resource "nxos_queuing_qos" "test" {` + "\n"
-	config += `	policy_maps = [{` + "\n"
-	config += `		name = "PM1"` + "\n"
-	config += `		match_type = "match-any"` + "\n"
-	config += `		match_class_maps = [{` + "\n"
-	config += `			name = "c-out-q1"` + "\n"
-	config += `			priority = 1` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	policy_maps = {` + "\n"
+	config += `		"PM1" = {` + "\n"
+	config += `			match_type = "match-any"` + "\n"
+	config += `			match_class_maps = {` + "\n"
+	config += `				"c-out-q1" = {` + "\n"
+	config += `					priority = 1` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	system_out_policy_map_name = "PM1"` + "\n"
 	config += `	policy_map_statistics = false` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, ]` + "\n"

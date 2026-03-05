@@ -61,19 +61,12 @@ func TestAccDataSourceNxosDHCP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "v4_relay", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "v6_relay", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "v6_smart_relay_global", "true"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_dhcp.test", "relay_interfaces.*", map[string]string{
-		"interface_id":        "eth1/10",
-		"information_trusted": "true",
-		"smart_relay":         "true",
-		"subnet_broadcast":    "true",
-		"options":             "relay-info",
-		"v6_smart_relay":      "false",
-	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_dhcp.test", "relay_interfaces.*.addresses.*", map[string]string{
-		"vrf":     "VRF1",
-		"address": "1.1.1.1",
-		"counter": "1",
-	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.information_trusted", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.smart_relay", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.subnet_broadcast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.options", "relay-info"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.v6_smart_relay", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.addresses.VRF1;1.1.1.1.counter", "1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -144,19 +137,20 @@ func testAccDataSourceNxosDHCPConfig() string {
 	config += `	v4_relay = true` + "\n"
 	config += `	v6_relay = true` + "\n"
 	config += `	v6_smart_relay_global = true` + "\n"
-	config += `	relay_interfaces = [{` + "\n"
-	config += `		interface_id = "eth1/10"` + "\n"
-	config += `		information_trusted = true` + "\n"
-	config += `		smart_relay = true` + "\n"
-	config += `		subnet_broadcast = true` + "\n"
-	config += `		options = "relay-info"` + "\n"
-	config += `		v6_smart_relay = false` + "\n"
-	config += `		addresses = [{` + "\n"
-	config += `			vrf = "VRF1"` + "\n"
-	config += `			address = "1.1.1.1"` + "\n"
-	config += `			counter = 1` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `	relay_interfaces = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `			information_trusted = true` + "\n"
+	config += `			smart_relay = true` + "\n"
+	config += `			subnet_broadcast = true` + "\n"
+	config += `			options = "relay-info"` + "\n"
+	config += `			v6_smart_relay = false` + "\n"
+	config += `			addresses = {` + "\n"
+	config += `				"VRF1;1.1.1.1" = {` + "\n"
+	config += `					counter = 1` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

@@ -1,5 +1,4 @@
 import {
-  to = nxos_pim.example
-  identity = {
-  }
+  to       = nxos_pim.example
+  identity = {}
 }

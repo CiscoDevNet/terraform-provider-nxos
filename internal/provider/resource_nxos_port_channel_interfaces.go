@@ -77,15 +77,11 @@ func (r *PortChannelInterfacesResource) Schema(ctx context.Context, req resource
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"port_channel_interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of port-channel interfaces.",
+			"port_channel_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of port-channel interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `po1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `po1`.").String,
-							Required:            true,
-						},
 						"port_channel_mode": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The aggregated interface protocol channel mode.").AddStringEnumDescription("on", "static", "active", "passive", "mac-pin").String,
 							Optional:            true,
@@ -356,15 +352,11 @@ func (r *PortChannelInterfacesResource) Schema(ctx context.Context, req resource
 							MarkdownDescription: helpers.NewAttributeDescription("DN of VRF. For example: `sys/inst-VRF1`.").String,
 							Optional:            true,
 						},
-						"members": schema.ListNestedAttribute{
-							MarkdownDescription: "List of port-channel member interfaces.",
+						"members": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of port-channel member interfaces.\n  - Map key: `interface_dn` - DN of interface. For example: `sys/intf/phys-[eth1/1]`.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"interface_dn": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("DN of interface. For example: `sys/intf/phys-[eth1/1]`.").String,
-										Required:            true,
-									},
 									"force": schema.BoolAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Channel group force.").String,
 										Optional:            true,

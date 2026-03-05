@@ -144,15 +144,11 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringvalidator.OneOf("auto", "short", "long"),
 				},
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of Spanning Tree interfaces.",
+			"interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of Spanning Tree interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-							Required:            true,
-						},
 						"bpdu_filter": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bpdufilter mode.").AddStringEnumDescription("default", "enable", "disable").String,
 							Optional:            true,

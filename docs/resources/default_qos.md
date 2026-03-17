@@ -56,19 +56,19 @@ resource "nxos_default_qos" "example" {
           police_cir_unit               = "mbps"
           police_conform_action         = "transmit"
           police_conform_set_cos        = 0
-          police_conform_set_dscp       = 0
+          police_conform_set_dscp       = "af22"
           police_conform_set_precedence = "routine"
           police_conform_set_qos_group  = 0
           police_exceed_action          = "transmit"
           police_exceed_set_cos         = 0
-          police_exceed_set_dscp        = 0
+          police_exceed_set_dscp        = "af31"
           police_exceed_set_precedence  = "routine"
           police_exceed_set_qos_group   = 0
           police_pir_rate               = 10000
           police_pir_unit               = "mbps"
           police_violate_action         = "drop"
           police_violate_set_cos        = 0
-          police_violate_set_dscp       = 0
+          police_violate_set_dscp       = "cs1"
           police_violate_set_precedence = "routine"
           police_violate_set_qos_group  = 0
         }
@@ -163,8 +163,7 @@ Optional:
   - Choices: `unspecified`, `transmit`, `drop`, `set-cos-transmit`, `set-dscp-transmit`, `set-prec-transmit`, `set-qos-transmit`
 - `police_conform_set_cos` (Number) set cos for conforming traffic.
   - Range: `0`-`7`
-- `police_conform_set_dscp` (Number) set dscp for conforming traffic.
-  - Range: `0`-`63`
+- `police_conform_set_dscp` (String) set dscp for conforming traffic.
 - `police_conform_set_precedence` (String) set precedence for conforming traffic.
   - Choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network`
 - `police_conform_set_qos_group` (Number) set qos-group for conforming traffic.
@@ -173,8 +172,7 @@ Optional:
   - Choices: `unspecified`, `transmit`, `drop`, `set-cos-transmit`, `set-dscp-transmit`, `set-prec-transmit`, `set-qos-transmit`
 - `police_exceed_set_cos` (Number) set cos for exceeding traffic.
   - Range: `0`-`7`
-- `police_exceed_set_dscp` (Number) set dscp for exceeding traffic.
-  - Range: `0`-`63`
+- `police_exceed_set_dscp` (String) set dscp for exceeding traffic.
 - `police_exceed_set_precedence` (String) set precedence for exceeding traffic.
   - Choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network`
 - `police_exceed_set_qos_group` (Number) set qos-group for exceeding traffic.
@@ -187,8 +185,7 @@ Optional:
   - Choices: `unspecified`, `transmit`, `drop`, `set-cos-transmit`, `set-dscp-transmit`, `set-prec-transmit`, `set-qos-transmit`
 - `police_violate_set_cos` (Number) set cos for violating traffic.
   - Range: `0`-`7`
-- `police_violate_set_dscp` (Number) set dscp for violating traffic.
-  - Range: `0`-`63`
+- `police_violate_set_dscp` (String) set dscp for violating traffic.
 - `police_violate_set_precedence` (String) set precedence for violating traffic.
   - Choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network`
 - `police_violate_set_qos_group` (Number) set qos-group for violating traffic.

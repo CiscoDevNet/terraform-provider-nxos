@@ -90,7 +90,7 @@ child_classes:
                 min_int: 0
                 max_int: 63
                 description: "Match DSCP."
-                example: 0
+                example: 46
               - nxos_name: dstAddrGroup
                 tf_name: destination_address_group
                 type: String
@@ -729,7 +729,7 @@ child_classes:
                 min_int: 0
                 max_int: 63
                 description: "Match DSCP mask."
-                example: 0
+                example: 16
               - nxos_name: icmpStr
                 tf_name: icmp_string
                 type: String

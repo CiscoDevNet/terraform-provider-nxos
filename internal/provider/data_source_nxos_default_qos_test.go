@@ -42,19 +42,19 @@ func TestAccDataSourceNxosDefaultQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_cir_unit", "mbps"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_action", "transmit"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_cos", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_dscp", "af22"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_precedence", "routine"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_qos_group", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_action", "transmit"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_cos", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_dscp", "af31"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_precedence", "routine"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_qos_group", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_pir_rate", "10000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_pir_unit", "mbps"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_action", "drop"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_cos", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_dscp", "cs1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_precedence", "routine"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_qos_group", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_interface_in.eth1/10.policy_map_name", "PM1"))
@@ -121,19 +121,19 @@ func testAccDataSourceNxosDefaultQoSConfig() string {
 	config += `					police_cir_unit = "mbps"` + "\n"
 	config += `					police_conform_action = "transmit"` + "\n"
 	config += `					police_conform_set_cos = 0` + "\n"
-	config += `					police_conform_set_dscp = 0` + "\n"
+	config += `					police_conform_set_dscp = "af22"` + "\n"
 	config += `					police_conform_set_precedence = "routine"` + "\n"
 	config += `					police_conform_set_qos_group = 0` + "\n"
 	config += `					police_exceed_action = "transmit"` + "\n"
 	config += `					police_exceed_set_cos = 0` + "\n"
-	config += `					police_exceed_set_dscp = 0` + "\n"
+	config += `					police_exceed_set_dscp = "af31"` + "\n"
 	config += `					police_exceed_set_precedence = "routine"` + "\n"
 	config += `					police_exceed_set_qos_group = 0` + "\n"
 	config += `					police_pir_rate = 10000` + "\n"
 	config += `					police_pir_unit = "mbps"` + "\n"
 	config += `					police_violate_action = "drop"` + "\n"
 	config += `					police_violate_set_cos = 0` + "\n"
-	config += `					police_violate_set_dscp = 0` + "\n"
+	config += `					police_violate_set_dscp = "cs1"` + "\n"
 	config += `					police_violate_set_precedence = "routine"` + "\n"
 	config += `					police_violate_set_qos_group = 0` + "\n"
 	config += `				}` + "\n"

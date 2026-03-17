@@ -70,19 +70,19 @@ type DefaultQoSPolicyMapsMatchClassMaps struct {
 	PoliceCirUnit              types.String `tfsdk:"police_cir_unit"`
 	PoliceConformAction        types.String `tfsdk:"police_conform_action"`
 	PoliceConformSetCos        types.Int64  `tfsdk:"police_conform_set_cos"`
-	PoliceConformSetDscp       types.Int64  `tfsdk:"police_conform_set_dscp"`
+	PoliceConformSetDscp       types.String `tfsdk:"police_conform_set_dscp"`
 	PoliceConformSetPrecedence types.String `tfsdk:"police_conform_set_precedence"`
 	PoliceConformSetQosGroup   types.Int64  `tfsdk:"police_conform_set_qos_group"`
 	PoliceExceedAction         types.String `tfsdk:"police_exceed_action"`
 	PoliceExceedSetCos         types.Int64  `tfsdk:"police_exceed_set_cos"`
-	PoliceExceedSetDscp        types.Int64  `tfsdk:"police_exceed_set_dscp"`
+	PoliceExceedSetDscp        types.String `tfsdk:"police_exceed_set_dscp"`
 	PoliceExceedSetPrecedence  types.String `tfsdk:"police_exceed_set_precedence"`
 	PoliceExceedSetQosGroup    types.Int64  `tfsdk:"police_exceed_set_qos_group"`
 	PolicePirRate              types.Int64  `tfsdk:"police_pir_rate"`
 	PolicePirUnit              types.String `tfsdk:"police_pir_unit"`
 	PoliceViolateAction        types.String `tfsdk:"police_violate_action"`
 	PoliceViolateSetCos        types.Int64  `tfsdk:"police_violate_set_cos"`
-	PoliceViolateSetDscp       types.Int64  `tfsdk:"police_violate_set_dscp"`
+	PoliceViolateSetDscp       types.String `tfsdk:"police_violate_set_dscp"`
 	PoliceViolateSetPrecedence types.String `tfsdk:"police_violate_set_precedence"`
 	PoliceViolateSetQosGroup   types.Int64  `tfsdk:"police_violate_set_qos_group"`
 }
@@ -239,7 +239,7 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 							attrs, _ = sjson.Set(attrs, "conformSetCosTransmit", strconv.FormatInt(child.PoliceConformSetCos.ValueInt64(), 10))
 						}
 						if (!child.PoliceConformSetDscp.IsUnknown() && !child.PoliceConformSetDscp.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "conformSetDscpTransmit", strconv.FormatInt(child.PoliceConformSetDscp.ValueInt64(), 10))
+							attrs, _ = sjson.Set(attrs, "conformSetDscpTransmit", child.PoliceConformSetDscp.ValueString())
 						}
 						if (!child.PoliceConformSetPrecedence.IsUnknown() && !child.PoliceConformSetPrecedence.IsNull()) || false {
 							attrs, _ = sjson.Set(attrs, "conformSetPrecTransmit", child.PoliceConformSetPrecedence.ValueString())
@@ -254,7 +254,7 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 							attrs, _ = sjson.Set(attrs, "exceedSetCosTransmit", strconv.FormatInt(child.PoliceExceedSetCos.ValueInt64(), 10))
 						}
 						if (!child.PoliceExceedSetDscp.IsUnknown() && !child.PoliceExceedSetDscp.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "exceedSetDscpTransmit", strconv.FormatInt(child.PoliceExceedSetDscp.ValueInt64(), 10))
+							attrs, _ = sjson.Set(attrs, "exceedSetDscpTransmit", child.PoliceExceedSetDscp.ValueString())
 						}
 						if (!child.PoliceExceedSetPrecedence.IsUnknown() && !child.PoliceExceedSetPrecedence.IsNull()) || false {
 							attrs, _ = sjson.Set(attrs, "exceedSetPrecTransmit", child.PoliceExceedSetPrecedence.ValueString())
@@ -275,7 +275,7 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 							attrs, _ = sjson.Set(attrs, "violateSetCosTransmit", strconv.FormatInt(child.PoliceViolateSetCos.ValueInt64(), 10))
 						}
 						if (!child.PoliceViolateSetDscp.IsUnknown() && !child.PoliceViolateSetDscp.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "violateSetDscpTransmit", strconv.FormatInt(child.PoliceViolateSetDscp.ValueInt64(), 10))
+							attrs, _ = sjson.Set(attrs, "violateSetDscpTransmit", child.PoliceViolateSetDscp.ValueString())
 						}
 						if (!child.PoliceViolateSetPrecedence.IsUnknown() && !child.PoliceViolateSetPrecedence.IsNull()) || false {
 							attrs, _ = sjson.Set(attrs, "violateSetPrecTransmit", child.PoliceViolateSetPrecedence.ValueString())
@@ -446,19 +446,19 @@ func (data *DefaultQoS) fromBody(res gjson.Result) {
 													nestedChildipqosMatchCMap.PoliceCirUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.cirUnit").String())
 													nestedChildipqosMatchCMap.PoliceConformAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformAction").String())
 													nestedChildipqosMatchCMap.PoliceConformSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetCosTransmit").Int())
-													nestedChildipqosMatchCMap.PoliceConformSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetDscpTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceConformSetDscp = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformSetDscpTransmit").String())
 													nestedChildipqosMatchCMap.PoliceConformSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformSetPrecTransmit").String())
 													nestedChildipqosMatchCMap.PoliceConformSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetQosGrpTransmit").Int())
 													nestedChildipqosMatchCMap.PoliceExceedAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedAction").String())
 													nestedChildipqosMatchCMap.PoliceExceedSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetCosTransmit").Int())
-													nestedChildipqosMatchCMap.PoliceExceedSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetDscpTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceExceedSetDscp = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedSetDscpTransmit").String())
 													nestedChildipqosMatchCMap.PoliceExceedSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedSetPrecTransmit").String())
 													nestedChildipqosMatchCMap.PoliceExceedSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetQosGrpTransmit").Int())
 													nestedChildipqosMatchCMap.PolicePirRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.pirRate").Int())
 													nestedChildipqosMatchCMap.PolicePirUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.pirUnit").String())
 													nestedChildipqosMatchCMap.PoliceViolateAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateAction").String())
 													nestedChildipqosMatchCMap.PoliceViolateSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetCosTransmit").Int())
-													nestedChildipqosMatchCMap.PoliceViolateSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetDscpTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceViolateSetDscp = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateSetDscpTransmit").String())
 													nestedChildipqosMatchCMap.PoliceViolateSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateSetPrecTransmit").String())
 													nestedChildipqosMatchCMap.PoliceViolateSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetQosGrpTransmit").Int())
 												}
@@ -730,9 +730,9 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 					ncItem.PoliceConformSetCos = types.Int64Null()
 				}
 				if !ncItem.PoliceConformSetDscp.IsNull() {
-					ncItem.PoliceConformSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetDscpTransmit").Int())
+					ncItem.PoliceConformSetDscp = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformSetDscpTransmit").String())
 				} else {
-					ncItem.PoliceConformSetDscp = types.Int64Null()
+					ncItem.PoliceConformSetDscp = types.StringNull()
 				}
 				if !ncItem.PoliceConformSetPrecedence.IsNull() {
 					ncItem.PoliceConformSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformSetPrecTransmit").String())
@@ -755,9 +755,9 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 					ncItem.PoliceExceedSetCos = types.Int64Null()
 				}
 				if !ncItem.PoliceExceedSetDscp.IsNull() {
-					ncItem.PoliceExceedSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetDscpTransmit").Int())
+					ncItem.PoliceExceedSetDscp = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedSetDscpTransmit").String())
 				} else {
-					ncItem.PoliceExceedSetDscp = types.Int64Null()
+					ncItem.PoliceExceedSetDscp = types.StringNull()
 				}
 				if !ncItem.PoliceExceedSetPrecedence.IsNull() {
 					ncItem.PoliceExceedSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedSetPrecTransmit").String())
@@ -790,9 +790,9 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 					ncItem.PoliceViolateSetCos = types.Int64Null()
 				}
 				if !ncItem.PoliceViolateSetDscp.IsNull() {
-					ncItem.PoliceViolateSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetDscpTransmit").Int())
+					ncItem.PoliceViolateSetDscp = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateSetDscpTransmit").String())
 				} else {
-					ncItem.PoliceViolateSetDscp = types.Int64Null()
+					ncItem.PoliceViolateSetDscp = types.StringNull()
 				}
 				if !ncItem.PoliceViolateSetPrecedence.IsNull() {
 					ncItem.PoliceViolateSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateSetPrecTransmit").String())

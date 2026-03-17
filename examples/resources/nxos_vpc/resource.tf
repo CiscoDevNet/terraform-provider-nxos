@@ -9,7 +9,7 @@ resource "nxos_vpc" "example" {
   delay_restore_orphan_port                    = 10
   delay_restore_svi                            = 20
   delay_restore_vpc                            = 60
-  dscp                                         = 0
+  dscp                                         = 46
   fast_convergence                             = "enabled"
   graceful_consistency_check                   = "disabled"
   l3_peer_router                               = "enabled"

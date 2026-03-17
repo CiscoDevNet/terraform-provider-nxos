@@ -9,7 +9,7 @@ resource "nxos_access_list" "example" {
         "10" = {
           ack                       = false
           action                    = "permit"
-          dscp                      = 0
+          dscp                      = 46
           destination_address_group = "AG1"
           destination_port_1        = "443"
           destination_port_2        = "0"
@@ -53,7 +53,7 @@ resource "nxos_access_list" "example" {
           vlan                      = 4095
           vni                       = "invalid"
           capture_session           = 1
-          dscp_mask                 = 0
+          dscp_mask                 = 16
           icmp_string               = "echo"
           igmp_type                 = 0
           load_share                = false

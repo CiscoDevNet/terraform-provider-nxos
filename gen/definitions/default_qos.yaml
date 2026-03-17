@@ -209,11 +209,9 @@ child_classes:
                     example: 0
                   - nxos_name: conformSetDscpTransmit
                     tf_name: police_conform_set_dscp
-                    type: Int64
+                    type: String
                     description: 'set dscp for conforming traffic.'
-                    min_int: 0
-                    max_int: 63
-                    example: 0
+                    example: af22
                   - nxos_name: conformSetPrecTransmit
                     tf_name: police_conform_set_precedence
                     type: String
@@ -257,11 +255,9 @@ child_classes:
                     example: 0
                   - nxos_name: exceedSetDscpTransmit
                     tf_name: police_exceed_set_dscp
-                    type: Int64
+                    type: String
                     description: 'set dscp for exceeding traffic.'
-                    min_int: 0
-                    max_int: 63
-                    example: 0
+                    example: af31
                   - nxos_name: exceedSetPrecTransmit
                     tf_name: police_exceed_set_precedence
                     type: String
@@ -325,11 +321,9 @@ child_classes:
                     example: 0
                   - nxos_name: violateSetDscpTransmit
                     tf_name: police_violate_set_dscp
-                    type: Int64
+                    type: String
                     description: 'set dscp for violating traffic.'
-                    min_int: 0
-                    max_int: 63
-                    example: 0
+                    example: cs1
                   - nxos_name: violateSetPrecTransmit
                     tf_name: police_violate_set_precedence
                     type: String

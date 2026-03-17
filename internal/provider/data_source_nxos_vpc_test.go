@@ -41,7 +41,7 @@ func TestAccDataSourceNxosVPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "delay_restore_orphan_port", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "delay_restore_svi", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "delay_restore_vpc", "60"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "dscp", "46"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "fast_convergence", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "graceful_consistency_check", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "l3_peer_router", "enabled"))
@@ -145,7 +145,7 @@ func testAccDataSourceNxosVPCConfig() string {
 	config += `	delay_restore_orphan_port = 10` + "\n"
 	config += `	delay_restore_svi = 20` + "\n"
 	config += `	delay_restore_vpc = 60` + "\n"
-	config += `	dscp = 0` + "\n"
+	config += `	dscp = 46` + "\n"
 	config += `	fast_convergence = "enabled"` + "\n"
 	config += `	graceful_consistency_check = "disabled"` + "\n"
 	config += `	l3_peer_router = "enabled"` + "\n"

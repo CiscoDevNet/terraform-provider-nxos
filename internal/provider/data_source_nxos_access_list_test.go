@@ -37,7 +37,7 @@ func TestAccDataSourceNxosAccessList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.udf_present", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.ack", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.action", "permit"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.dscp", "46"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.destination_port_1", "443"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.destination_port_2", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.destination_port_operator", "eq"))
@@ -62,7 +62,7 @@ func TestAccDataSourceNxosAccessList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.syn", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.urg", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.capture_session", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.dscp_mask", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.dscp_mask", "16"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.igmp_type", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.load_share", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.priority_all", "false"))
@@ -114,7 +114,7 @@ func testAccDataSourceNxosAccessListConfig() string {
 	config += `				"10" = {` + "\n"
 	config += `					ack = false` + "\n"
 	config += `					action = "permit"` + "\n"
-	config += `					dscp = 0` + "\n"
+	config += `					dscp = 46` + "\n"
 	config += `					destination_port_1 = "443"` + "\n"
 	config += `					destination_port_2 = "0"` + "\n"
 	config += `					destination_port_operator = "eq"` + "\n"
@@ -139,7 +139,7 @@ func testAccDataSourceNxosAccessListConfig() string {
 	config += `					syn = false` + "\n"
 	config += `					urg = false` + "\n"
 	config += `					capture_session = 1` + "\n"
-	config += `					dscp_mask = 0` + "\n"
+	config += `					dscp_mask = 16` + "\n"
 	config += `					igmp_type = 0` + "\n"
 	config += `					load_share = false` + "\n"
 	config += `					priority_all = false` + "\n"

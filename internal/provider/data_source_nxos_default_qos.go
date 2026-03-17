@@ -145,7 +145,7 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 										MarkdownDescription: "set cos for conforming traffic.",
 										Computed:            true,
 									},
-									"police_conform_set_dscp": schema.Int64Attribute{
+									"police_conform_set_dscp": schema.StringAttribute{
 										MarkdownDescription: "set dscp for conforming traffic.",
 										Computed:            true,
 									},
@@ -165,7 +165,7 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 										MarkdownDescription: "set cos for exceeding traffic.",
 										Computed:            true,
 									},
-									"police_exceed_set_dscp": schema.Int64Attribute{
+									"police_exceed_set_dscp": schema.StringAttribute{
 										MarkdownDescription: "set dscp for exceeding traffic.",
 										Computed:            true,
 									},
@@ -193,7 +193,7 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 										MarkdownDescription: "set cos for violating traffic.",
 										Computed:            true,
 									},
-									"police_violate_set_dscp": schema.Int64Attribute{
+									"police_violate_set_dscp": schema.StringAttribute{
 										MarkdownDescription: "set dscp for violating traffic.",
 										Computed:            true,
 									},

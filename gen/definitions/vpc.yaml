@@ -101,7 +101,7 @@ child_classes:
             description: "DSCP."
             min_int: 0
             max_int: 63
-            example: 0
+            example: 46
           - nxos_name: fastConvergence
             tf_name: fast_convergence
             type: String

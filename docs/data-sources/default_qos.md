@@ -98,19 +98,19 @@ Read-Only:
 - `police_cir_unit` (String) CIR unit.
 - `police_conform_action` (String) Conform action.
 - `police_conform_set_cos` (Number) set cos for conforming traffic.
-- `police_conform_set_dscp` (Number) set dscp for conforming traffic.
+- `police_conform_set_dscp` (String) set dscp for conforming traffic.
 - `police_conform_set_precedence` (String) set precedence for conforming traffic.
 - `police_conform_set_qos_group` (Number) set qos-group for conforming traffic.
 - `police_exceed_action` (String) Exceed action.
 - `police_exceed_set_cos` (Number) set cos for exceeding traffic.
-- `police_exceed_set_dscp` (Number) set dscp for exceeding traffic.
+- `police_exceed_set_dscp` (String) set dscp for exceeding traffic.
 - `police_exceed_set_precedence` (String) set precedence for exceeding traffic.
 - `police_exceed_set_qos_group` (Number) set qos-group for exceeding traffic.
 - `police_pir_rate` (Number) PIR.
 - `police_pir_unit` (String) PIR unit.
 - `police_violate_action` (String) Violate action.
 - `police_violate_set_cos` (Number) set cos for violating traffic.
-- `police_violate_set_dscp` (Number) set dscp for violating traffic.
+- `police_violate_set_dscp` (String) set dscp for violating traffic.
 - `police_violate_set_precedence` (String) set precedence for violating traffic.
 - `police_violate_set_qos_group` (Number) set qos-group for violating traffic.
 - `previous_class_map` (String) Insert after the given class-map.

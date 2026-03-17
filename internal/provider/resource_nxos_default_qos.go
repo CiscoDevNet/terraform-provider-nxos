@@ -187,12 +187,9 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 											int64validator.Between(0, 7),
 										},
 									},
-									"police_conform_set_dscp": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("set dscp for conforming traffic.").AddIntegerRangeDescription(0, 63).String,
+									"police_conform_set_dscp": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("set dscp for conforming traffic.").String,
 										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 63),
-										},
 									},
 									"police_conform_set_precedence": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("set precedence for conforming traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").String,
@@ -222,12 +219,9 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 											int64validator.Between(0, 7),
 										},
 									},
-									"police_exceed_set_dscp": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("set dscp for exceeding traffic.").AddIntegerRangeDescription(0, 63).String,
+									"police_exceed_set_dscp": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("set dscp for exceeding traffic.").String,
 										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 63),
-										},
 									},
 									"police_exceed_set_precedence": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("set precedence for exceeding traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").String,
@@ -271,12 +265,9 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 											int64validator.Between(0, 7),
 										},
 									},
-									"police_violate_set_dscp": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("set dscp for violating traffic.").AddIntegerRangeDescription(0, 63).String,
+									"police_violate_set_dscp": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("set dscp for violating traffic.").String,
 										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 63),
-										},
 									},
 									"police_violate_set_precedence": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("set precedence for violating traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").String,

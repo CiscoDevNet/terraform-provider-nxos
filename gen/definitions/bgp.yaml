@@ -1531,6 +1531,43 @@ child_classes:
                     description: 'Weight for the neighbor.'
                     example: '100'
                 child_classes:
+                  - class_name: bgpMaxPfxP
+                    doc_path: Routing%20and%20Forwarding/bgp:MaxPfxP/
+                    rn: maxpfxp
+                    type: single
+                    tf_name: max_prefix
+                    description: 'BGP peer address family Maximum Prefix Policy configuration.'
+                    attributes:
+                      - nxos_name: action
+                        tf_name: max_prefix_action
+                        type: String
+                        description: 'Action to do when limit is exceeded.'
+                        enum_values:
+                          - log
+                          - shut
+                          - restart
+                        example: restart
+                      - nxos_name: maxPfx
+                        tf_name: max_prefix_number
+                        type: Int64
+                        description: 'Maximum number of prefixes allowed from the peer.'
+                        min_int: 0
+                        max_int: 4294967295
+                        example: 10000
+                      - nxos_name: restartTime
+                        tf_name: max_prefix_restart_time
+                        type: Int64
+                        min_int: 1
+                        max_int: 65535
+                        description: 'The period of time in minutes before restarting the peer when the prefix limit is reached.'
+                        example: 1
+                      - nxos_name: thresh
+                        tf_name: max_prefix_threshold
+                        type: Int64
+                        description: 'The threshold percentage of the maximum number of prefixes before a warning is issued.'
+                        min_int: 1
+                        max_int: 100
+                        example: 30
                   - class_name: bgpRtCtrlP
                     doc_path: Routing%20and%20Forwarding/bgp:RtCtrlP/
                     rn: rtctrl-%s

@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.
   API Documentation
-  bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/
+  bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/
 ---
 
 # nxos_bgp (Resource)
@@ -28,6 +28,7 @@ This resource can manage the BGP configuration on NX-OS devices, including the B
 - [bgpPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/)
 - [bgpLocalAsn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/)
 - [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
+- [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
 - [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
 - [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
 
@@ -239,6 +240,10 @@ resource "nxos_bgp" "example" {
               site_of_origin                = "extended:as2-nn4:65001:200"
               unsuppress_map                = "UNSUPP_MAP"
               weight                        = "100"
+              max_prefix_action             = "restart"
+              max_prefix_number             = 10000
+              max_prefix_restart_time       = 1
+              max_prefix_threshold          = 30
               route_controls = {
                 "in" = {
                   route_map_name = "ROUTE_MAP1"
@@ -656,6 +661,14 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
   - Choices: `enabled`, `disabled`
+- `max_prefix_action` (String) Action to do when limit is exceeded.
+  - Choices: `log`, `shut`, `restart`
+- `max_prefix_number` (Number) Maximum number of prefixes allowed from the peer.
+  - Range: `0`-`4294967295`
+- `max_prefix_restart_time` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
+  - Range: `1`-`65535`
+- `max_prefix_threshold` (Number) The threshold percentage of the maximum number of prefixes before a warning is issued.
+  - Range: `1`-`100`
 - `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
   - Choices: `enabled`, `disabled`
 - `prefix_list_controls` (Attributes Map) List of BGP peer address family prefix list controls.

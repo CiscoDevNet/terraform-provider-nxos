@@ -177,6 +177,10 @@ func TestAccNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.soft_reconfiguration_backup", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.unsuppress_map", "UNSUPP_MAP"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.weight", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.max_prefix_action", "restart"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.max_prefix_number", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.max_prefix_restart_time", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.max_prefix_threshold", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.route_controls.in.route_map_name", "ROUTE_MAP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.prefix_list_controls.in.list", "PREFIX_LIST1"))
 	var tfVersion *goversion.Version
@@ -432,6 +436,10 @@ func testAccNxosBGPConfig_all(includeWriteOnly bool) string {
 	config += `							soft_reconfiguration_backup = "none"` + "\n"
 	config += `							unsuppress_map = "UNSUPP_MAP"` + "\n"
 	config += `							weight = "100"` + "\n"
+	config += `							max_prefix_action = "restart"` + "\n"
+	config += `							max_prefix_number = 10000` + "\n"
+	config += `							max_prefix_restart_time = 1` + "\n"
+	config += `							max_prefix_threshold = 30` + "\n"
 	config += `							route_controls = {` + "\n"
 	config += `								"in" = {` + "\n"
 	config += `									route_map_name = "ROUTE_MAP1"` + "\n"

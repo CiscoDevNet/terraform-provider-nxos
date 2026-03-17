@@ -203,6 +203,10 @@ resource "nxos_bgp" "example" {
               site_of_origin                = "extended:as2-nn4:65001:200"
               unsuppress_map                = "UNSUPP_MAP"
               weight                        = "100"
+              max_prefix_action             = "restart"
+              max_prefix_number             = 10000
+              max_prefix_restart_time       = 1
+              max_prefix_threshold          = 30
               route_controls = {
                 "in" = {
                   route_map_name = "ROUTE_MAP1"

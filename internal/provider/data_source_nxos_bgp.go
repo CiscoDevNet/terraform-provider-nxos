@@ -57,7 +57,7 @@ func (d *BGPDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.").AddApiDocumentation("bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/", []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpRtCtrlP", "bgpPfxCtrlP"}, []string{"Routing%20and%20Forwarding/bgp:Inst/", "Routing%20and%20Forwarding/bgp:Dom/", "Routing%20and%20Forwarding/bgp:RtCtrl/", "Routing%20and%20Forwarding/bgp:Gr/", "Routing%20and%20Forwarding/bgp:DomAf/", "Routing%20and%20Forwarding/bgp:AdvPrefix/", "Routing%20and%20Forwarding/bgp:InterLeakP/", "Routing%20and%20Forwarding/bgp:PeerCont/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:Peer/", "Routing%20and%20Forwarding/bgp:LocalAsn/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:RtCtrlP/", "Routing%20and%20Forwarding/bgp:PfxCtrlP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.").AddApiDocumentation("bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/", []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP"}, []string{"Routing%20and%20Forwarding/bgp:Inst/", "Routing%20and%20Forwarding/bgp:Dom/", "Routing%20and%20Forwarding/bgp:RtCtrl/", "Routing%20and%20Forwarding/bgp:Gr/", "Routing%20and%20Forwarding/bgp:DomAf/", "Routing%20and%20Forwarding/bgp:AdvPrefix/", "Routing%20and%20Forwarding/bgp:InterLeakP/", "Routing%20and%20Forwarding/bgp:PeerCont/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:Peer/", "Routing%20and%20Forwarding/bgp:LocalAsn/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:RtCtrlP/", "Routing%20and%20Forwarding/bgp:PfxCtrlP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -853,6 +853,22 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 													MarkdownDescription: "Weight for the neighbor.",
 													Computed:            true,
 												},
+												"max_prefix_action": schema.StringAttribute{
+													MarkdownDescription: "Action to do when limit is exceeded.",
+													Computed:            true,
+												},
+												"max_prefix_number": schema.Int64Attribute{
+													MarkdownDescription: "Maximum number of prefixes allowed from the peer.",
+													Computed:            true,
+												},
+												"max_prefix_restart_time": schema.Int64Attribute{
+													MarkdownDescription: "The period of time in minutes before restarting the peer when the prefix limit is reached.",
+													Computed:            true,
+												},
+												"max_prefix_threshold": schema.Int64Attribute{
+													MarkdownDescription: "The threshold percentage of the maximum number of prefixes before a warning is issued.",
+													Computed:            true,
+												},
 												"route_controls": schema.MapNestedAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("List of BGP peer address family route controls.\n  - Map key: `direction` - Direction.\n  - Key choices: `in`, `out`").String,
 													Computed:            true,
@@ -918,7 +934,7 @@ func (d *BGPDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "bgpInst,bgpDom,bgpRtCtrl,bgpGr,bgpDomAf,bgpAdvPrefix,bgpInterLeakP,bgpPeerCont,bgpPeerAf,bgpMaxPfxP,bgpPeer,bgpLocalAsn,bgpPeerAf,bgpRtCtrlP,bgpPfxCtrlP")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "bgpInst,bgpDom,bgpRtCtrl,bgpGr,bgpDomAf,bgpAdvPrefix,bgpInterLeakP,bgpPeerCont,bgpPeerAf,bgpMaxPfxP,bgpPeer,bgpLocalAsn,bgpPeerAf,bgpMaxPfxP,bgpRtCtrlP,bgpPfxCtrlP")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

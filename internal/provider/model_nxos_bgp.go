@@ -255,6 +255,10 @@ type BGPVrfsPeersPeerAddressFamilies struct {
 	SiteOfOrigin               types.String                                                 `tfsdk:"site_of_origin"`
 	UnsuppressMap              types.String                                                 `tfsdk:"unsuppress_map"`
 	Weight                     types.String                                                 `tfsdk:"weight"`
+	MaxPrefixAction            types.String                                                 `tfsdk:"max_prefix_action"`
+	MaxPrefixNumber            types.Int64                                                  `tfsdk:"max_prefix_number"`
+	MaxPrefixRestartTime       types.Int64                                                  `tfsdk:"max_prefix_restart_time"`
+	MaxPrefixThreshold         types.Int64                                                  `tfsdk:"max_prefix_threshold"`
 	RouteControls              map[string]BGPVrfsPeersPeerAddressFamiliesRouteControls      `tfsdk:"route_controls"`
 	PrefixListControls         map[string]BGPVrfsPeersPeerAddressFamiliesPrefixListControls `tfsdk:"prefix_list_controls"`
 }
@@ -978,6 +982,22 @@ func (data BGP) toBody(config BGP) nxos.Body {
 							{
 								nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 								nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bgpPeerAf.children"
+								attrs = "{}"
+								if (!child.MaxPrefixAction.IsUnknown() && !child.MaxPrefixAction.IsNull()) || false {
+									attrs, _ = sjson.Set(attrs, "action", child.MaxPrefixAction.ValueString())
+								}
+								if (!child.MaxPrefixNumber.IsUnknown() && !child.MaxPrefixNumber.IsNull()) || false {
+									attrs, _ = sjson.Set(attrs, "maxPfx", strconv.FormatInt(child.MaxPrefixNumber.ValueInt64(), 10))
+								}
+								if (!child.MaxPrefixRestartTime.IsUnknown() && !child.MaxPrefixRestartTime.IsNull()) || false {
+									attrs, _ = sjson.Set(attrs, "restartTime", strconv.FormatInt(child.MaxPrefixRestartTime.ValueInt64(), 10))
+								}
+								if (!child.MaxPrefixThreshold.IsUnknown() && !child.MaxPrefixThreshold.IsNull()) || false {
+									attrs, _ = sjson.Set(attrs, "thresh", strconv.FormatInt(child.MaxPrefixThreshold.ValueInt64(), 10))
+								}
+								if attrs != "{}" || false {
+									body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpMaxPfxP.attributes", attrs)
+								}
 								for key, child := range child.RouteControls {
 									attrs = "{}"
 									attrs, _ = sjson.Set(attrs, "direction", key)
@@ -1361,6 +1381,23 @@ func (data *BGP) fromBody(res gjson.Result) {
 																	nestedChildbgpPeerAf.UnsuppressMap = types.StringValue(nestedValue.Get("attributes.unSupprMap").String())
 																	nestedChildbgpPeerAf.Weight = types.StringValue(nestedValue.Get("attributes.wght").String())
 																	nestedMapKey := nestedValue.Get("attributes.type").String()
+																	{
+																		var rbgpMaxPfxP gjson.Result
+																		nestedValue.Get("children").ForEach(
+																			func(_, nestedV gjson.Result) bool {
+																				rnValue := nestedV.Get("bgpMaxPfxP.attributes.rn").String()
+																				if rnValue == "maxpfxp" {
+																					rbgpMaxPfxP = nestedV
+																					return false
+																				}
+																				return true
+																			},
+																		)
+																		nestedChildbgpPeerAf.MaxPrefixAction = types.StringValue(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.action").String())
+																		nestedChildbgpPeerAf.MaxPrefixNumber = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.maxPfx").Int())
+																		nestedChildbgpPeerAf.MaxPrefixRestartTime = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.restartTime").Int())
+																		nestedChildbgpPeerAf.MaxPrefixThreshold = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.thresh").Int())
+																	}
 																	nestedValue.Get("children").ForEach(
 																		func(_, nestedV gjson.Result) bool {
 																			nestedV.ForEach(
@@ -2521,6 +2558,39 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					nc_Item.Weight = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.wght").String())
 				} else {
 					nc_Item.Weight = types.StringNull()
+				}
+				{
+					var rbgpMaxPfxP gjson.Result
+					rbgpPeerAf.Get("bgpPeerAf.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("bgpMaxPfxP.attributes.rn").String()
+							if rnValue == "maxpfxp" {
+								rbgpMaxPfxP = v
+								return false
+							}
+							return true
+						},
+					)
+					if !nc_Item.MaxPrefixAction.IsNull() {
+						nc_Item.MaxPrefixAction = types.StringValue(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.action").String())
+					} else {
+						nc_Item.MaxPrefixAction = types.StringNull()
+					}
+					if !nc_Item.MaxPrefixNumber.IsNull() {
+						nc_Item.MaxPrefixNumber = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.maxPfx").Int())
+					} else {
+						nc_Item.MaxPrefixNumber = types.Int64Null()
+					}
+					if !nc_Item.MaxPrefixRestartTime.IsNull() {
+						nc_Item.MaxPrefixRestartTime = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.restartTime").Int())
+					} else {
+						nc_Item.MaxPrefixRestartTime = types.Int64Null()
+					}
+					if !nc_Item.MaxPrefixThreshold.IsNull() {
+						nc_Item.MaxPrefixThreshold = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.thresh").Int())
+					} else {
+						nc_Item.MaxPrefixThreshold = types.Int64Null()
+					}
 				}
 				for nc__ := range nc_Item.RouteControls {
 					nc__Item := nc_Item.RouteControls[nc__]

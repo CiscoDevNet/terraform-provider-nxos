@@ -316,34 +316,34 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 func (data NTP) toDeleteBody() nxos.Body {
 	body := ""
 	if !data.AdminState.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "enabled")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.AllowControl.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowControl", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowControl", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.AllowPrivate.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowPrivate", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowPrivate", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.AuthenticationState.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authSt", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.Logging.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"logging", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"logging", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.LoggingLevel.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"loggingLevel", "critical")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.Master.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"master", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"master", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.MasterStratum.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"masterStratum", strconv.FormatInt(8, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"masterStratum", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.Passive.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passive", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passive", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.RateLimit.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rateLimit", strconv.FormatInt(3, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rateLimit", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})

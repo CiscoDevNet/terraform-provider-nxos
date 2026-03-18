@@ -616,7 +616,7 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 func (data DHCP) toDeleteBody() nxos.Body {
 	body := ""
 	if !data.AdminState.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "enabled")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -627,85 +627,91 @@ func (data DHCP) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".dhcpInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		if !data.Ipv6RelayInformationOptionVpn.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"Ipv6RelayInformationOptionVpnEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"Ipv6RelayInformationOptionVpnEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Ipv6RelayOptionTypeCisco.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"Ipv6RelayOptionTypeCiscoEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"Ipv6RelayOptionTypeCiscoEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelayInformationOption.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelayInformationOptionEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelayInformationOptionEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelayInformationOptionTrust.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelayInformationOptionTrustEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelayInformationOptionTrustEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelayInformationOptionVpn.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelayInformationOptionVpnEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelayInformationOptionVpnEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelayInformationTrustAll.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelayInformationTrustAllEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelayInformationTrustAllEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelaySubOptionCircuitIdCustomized.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelaySubOptionCircuitIdCustomizedEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelaySubOptionCircuitIdCustomizedEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RelaySubOptionCircuitIdFormatString.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelaySubOptionCircuitIdFormatString", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelaySubOptionTypeCisco.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelaySubOptionTypeCiscoEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"RelaySubOptionTypeCiscoEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.SmartRelayGlobal.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"SmartRelayGlobalEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Snooping.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"SnoopingEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"SnoopingEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.SnoopingInformationOption.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"SnoopingInformationOptionEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"SnoopingInformationOptionEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.SnoopingVerifyMacAddress.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"SnoopingVerifyMacAddressEnabled", strconv.FormatBool(true))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"SnoopingVerifyMacAddressEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.DaiLogBufferEntries.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"daiLogBufEntries", strconv.FormatInt(32, 10))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"daiLogBufEntries", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.DaiValidateDestination.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"daiValidateDst", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"daiValidateDst", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.DaiValidateIp.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"daiValidateIp", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"daiValidateIp", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.DaiValidateSource.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"daiValidateSrc", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"daiValidateSrc", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Ipv6RelayOption79.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6RelayOption79Enabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6RelayOption79Enabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PacketStrictValidation.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pktStrictVal", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pktStrictVal", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelayDai.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"relayDAIEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"relayDAIEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelayInformationOptionServerIdOverride.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"relayInformationOptionServerIdOverrideDisableEnabled", strconv.FormatInt(0, 10))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"relayInformationOptionServerIdOverrideDisableEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelaySubOptionFormatNonTlv.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"relaySubOptionFormatNonTLVEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"relaySubOptionFormatNonTLVEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelayV4OverV6.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"relayV4overV6Enabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"relayV4overV6Enabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RelayV6IapdRouteAdd.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"relayV6IAPDRouteAddEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"relayV6IAPDRouteAddEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.SnoopSubOptionCircuitIdFormatString.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"snoopSubOptionCircuitIdFormatString", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.SnoopingSubOptionFormatNonTlv.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"snoopingSubOptionFormatNonTLVEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"snoopingSubOptionFormatNonTLVEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.V4Relay.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"v4RelayEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"v4RelayEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.V6Relay.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"v6RelayEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"v6RelayEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.V6SmartRelayGlobal.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"v6SmartRelayGlobalEnabled", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"v6SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath

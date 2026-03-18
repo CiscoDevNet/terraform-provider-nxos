@@ -1137,40 +1137,43 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 func (data UserManagement) toDeleteBody() nxos.Body {
 	body := ""
 	if !data.AlphabetSequence.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"alphabetSequence", strconv.FormatInt(0, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"alphabetSequence", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Description.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.KeyboardSequence.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyBoardSequence", strconv.FormatInt(0, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyBoardSequence", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.MaxLogins.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxLogins", strconv.FormatInt(0, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxLogins", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.MinUnique.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"minUnique", strconv.FormatInt(0, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"minUnique", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.PasswordGraceTime.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdGraceTime", strconv.FormatInt(3, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdGraceTime", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.PasswordLifeTime.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdLifeTime", strconv.FormatInt(99999, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdLifeTime", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.PasswordMaxLength.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdMaxLength", strconv.FormatInt(127, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdMaxLength", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.PasswordMinLength.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdMinLength", strconv.FormatInt(8, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdMinLength", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.PasswordSecureMode.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdSecureMode", "yes")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdSecureMode", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.PasswordStrengthCheck.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdStrengthCheck", "yes")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdStrengthCheck", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.PasswordWarningTime.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdWarningTime", strconv.FormatInt(14, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdWarningTime", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.ServicePasswordRecovery.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"svcPwdRecovery", "yes")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"svcPwdRecovery", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -1178,6 +1181,21 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	{
 		childBody := ""
+		if !data.PreLoginBannerDescription.IsNull() {
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PreLoginBannerName.IsNull() {
+			childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PreLoginBannerOwnerKey.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PreLoginBannerMessage.IsNull() {
+			childBody, _ = sjson.Set(childBody, "message", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PreLoginBannerOwnerTag.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaPreLoginBanner"
@@ -1186,6 +1204,21 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 	}
 	{
 		childBody := ""
+		if !data.PostLoginBannerDescription.IsNull() {
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PostLoginBannerName.IsNull() {
+			childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PostLoginBannerOwnerKey.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PostLoginBannerMessage.IsNull() {
+			childBody, _ = sjson.Set(childBody, "message", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PostLoginBannerOwnerTag.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaPostLoginBanner"
@@ -1203,19 +1236,37 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaTacacsPlusEp"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		if !data.TacacsDeadtime.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"deadtime", strconv.FormatInt(0, 10))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"deadtime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.TacacsDescription.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.TacacsKey.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"key", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsKeyEncryption.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"keyEnc", "0")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"keyEnc", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsLoggingLevel.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loggingLevel", strconv.FormatInt(3, 10))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.TacacsName.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.TacacsOwnerKey.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.TacacsOwnerTag.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsRetries.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"retries", strconv.FormatInt(1, 10))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"retries", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.TacacsSourceInterface.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsTimeout.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"timeout", strconv.FormatInt(5, 10))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath

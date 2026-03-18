@@ -15,13 +15,11 @@ attributes:
     max_int: 10
     description: "Disallow sequential alphabetical characters in password."
     example: 3
-    delete_value: 0
   - nxos_name: descr
     tf_name: description
     type: String
     description: "Description of the specified attribute."
     example: "User management policy"
-    delete_value: ''
   - nxos_name: keyBoardSequence
     tf_name: keyboard_sequence
     type: Int64
@@ -29,7 +27,6 @@ attributes:
     max_int: 10
     description: "Disallow sequential keyboard characters in password."
     example: 3
-    delete_value: 0
   - nxos_name: maxLogins
     tf_name: max_logins
     type: Int64
@@ -37,7 +34,6 @@ attributes:
     max_int: 7
     description: "Maximum Simultaneous Logins."
     example: 4
-    delete_value: 0
   - nxos_name: minUnique
     tf_name: min_unique
     type: Int64
@@ -45,7 +41,6 @@ attributes:
     max_int: 10
     description: "Count for number of old password history accepted."
     example: 3
-    delete_value: 0
   - nxos_name: pwdGraceTime
     tf_name: password_grace_time
     type: Int64
@@ -53,7 +48,6 @@ attributes:
     max_int: 99999
     description: "Grace time of user passphrase (in days)."
     example: 5
-    delete_value: 3
   - nxos_name: pwdLifeTime
     tf_name: password_life_time
     type: Int64
@@ -61,7 +55,6 @@ attributes:
     max_int: 99999
     description: "Lifetime of user passphrase (in days)."
     example: 90
-    delete_value: 99999
   - nxos_name: pwdMaxLength
     tf_name: password_max_length
     type: Int64
@@ -69,7 +62,6 @@ attributes:
     max_int: 65535
     description: "Password max length."
     example: 127
-    delete_value: 127
   - nxos_name: pwdMinLength
     tf_name: password_min_length
     type: Int64
@@ -77,7 +69,6 @@ attributes:
     max_int: 65535
     description: "Password min length."
     example: 10
-    delete_value: 8
   - nxos_name: pwdSecureMode
     tf_name: password_secure_mode
     type: String
@@ -86,7 +77,6 @@ attributes:
       - "yes"
     description: "Password secure-mode."
     example: "no"
-    delete_value: "yes"
   - nxos_name: pwdStrengthCheck
     tf_name: password_strength_check
     type: String
@@ -95,7 +85,6 @@ attributes:
       - "yes"
     description: "The password strength check, which specifies if the system enforces the strength of the user password."
     example: "no"
-    delete_value: "yes"
   - nxos_name: pwdWarningTime
     tf_name: password_warning_time
     type: Int64
@@ -103,7 +92,6 @@ attributes:
     max_int: 99999
     description: "Warning time of user passphrase (in days)."
     example: 10
-    delete_value: 14
   - nxos_name: svcPwdRecovery
     tf_name: service_password_recovery
     type: String
@@ -112,7 +100,6 @@ attributes:
       - "yes"
     description: "Service Password Recovery."
     example: "no"
-    delete_value: "yes"
 child_classes:
   - class_name: aaaPreLoginBanner
     doc_path: Security%20and%20Policing/aaa:PreLoginBanner
@@ -125,32 +112,27 @@ child_classes:
         type: String
         description: "Description of the specified attribute."
         example: "Pre-login banner"
-        delete_value: ''
       - nxos_name: name
         tf_name: pre_login_banner_name
         type: String
         description: "Object name."
         example: "prelogin"
         exclude_test: true
-        delete_value: ''
       - nxos_name: ownerKey
         tf_name: pre_login_banner_owner_key
         type: String
         description: "The key for enabling clients to own their data for entity correlation."
         example: "owner1"
-        delete_value: ''
       - nxos_name: message
         tf_name: pre_login_banner_message
         type: String
         description: "A message displayed in the banner."
         example: "Authorized users only."
-        delete_value: ''
       - nxos_name: ownerTag
         tf_name: pre_login_banner_owner_tag
         type: String
         description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
         example: "tag1"
-        delete_value: ''
   - class_name: aaaPostLoginBanner
     doc_path: Security%20and%20Policing/aaa:PostLoginBanner
     rn: postloginbanner
@@ -162,32 +144,27 @@ child_classes:
         type: String
         description: "Description of the specified attribute."
         example: "Post-login banner"
-        delete_value: ''
       - nxos_name: name
         tf_name: post_login_banner_name
         type: String
         description: "Object name."
         example: "postlogin"
         exclude_test: true
-        delete_value: ''
       - nxos_name: ownerKey
         tf_name: post_login_banner_owner_key
         type: String
         description: "The key for enabling clients to own their data for entity correlation."
         example: "owner1"
-        delete_value: ''
       - nxos_name: message
         tf_name: post_login_banner_message
         type: String
         description: "A message displayed in the banner."
         example: "Welcome to the system."
-        delete_value: ''
       - nxos_name: ownerTag
         tf_name: post_login_banner_owner_tag
         type: String
         description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
         example: "tag1"
-        delete_value: ''
   - class_name: aaaUser
     doc_path: Security%20and%20Policing/aaa:User/
     rn: user-[%s]
@@ -370,13 +347,11 @@ child_classes:
         max_int: 1440
         description: "Duration for which non-reachable server is skipped."
         example: 5
-        delete_value: 0
       - nxos_name: descr
         tf_name: tacacs_description
         type: String
         description: "Description of the specified attribute."
         example: "TACACS+ settings"
-        delete_value: ''
       - nxos_name: key
         tf_name: tacacs_key
         type: String
@@ -385,7 +360,6 @@ child_classes:
         sensitive: true
         exclude_test: true
         example: "secret123"
-        delete_value: ''
       - nxos_name: keyEnc
         tf_name: tacacs_key_encryption
         type: String
@@ -396,7 +370,6 @@ child_classes:
         description: "Default key encryption."
         example: "0"
         exclude_test: true
-        delete_value: '0'
       - nxos_name: loggingLevel
         tf_name: tacacs_logging_level
         type: Int64
@@ -405,26 +378,22 @@ child_classes:
         description: "Tacacs Logging level."
         example: 4
         exclude_test: true
-        delete_value: 3
       - nxos_name: name
         tf_name: tacacs_name
         type: String
         description: "Object name."
         example: "tacacsplus"
         exclude_test: true
-        delete_value: ''
       - nxos_name: ownerKey
         tf_name: tacacs_owner_key
         type: String
         description: "The key for enabling clients to own their data for entity correlation."
         example: "owner1"
-        delete_value: ''
       - nxos_name: ownerTag
         tf_name: tacacs_owner_tag
         type: String
         description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
         example: "tag1"
-        delete_value: ''
       - nxos_name: retries
         tf_name: tacacs_retries
         type: Int64
@@ -432,13 +401,11 @@ child_classes:
         max_int: 5
         description: "The number of attempts that the authentication method is tried."
         example: 3
-        delete_value: 1
       - nxos_name: srcIf
         tf_name: tacacs_source_interface
         type: String
         description: "Source Interface."
         example: "unspecified"
-        delete_value: ''
       - nxos_name: timeout
         tf_name: tacacs_timeout
         type: Int64
@@ -446,7 +413,6 @@ child_classes:
         max_int: 60
         description: "The amount of time between authentication attempts."
         example: 10
-        delete_value: 5
     child_classes:
       - class_name: aaaTacacsPlusProvider
         doc_path: Security%20and%20Policing/aaa:TacacsPlusProvider/

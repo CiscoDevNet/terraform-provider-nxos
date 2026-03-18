@@ -296,7 +296,7 @@ func (data *BridgeDomain) updateFromBody(res gjson.Result) {
 func (data BridgeDomain) toDeleteBody() nxos.Body {
 	body := ""
 	if !data.SviAutostate.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sysDefaultSVIAutostate", "enable")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sysDefaultSVIAutostate", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})

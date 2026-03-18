@@ -1056,7 +1056,7 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 func (data PIM) toDeleteBody() nxos.Body {
 	body := ""
 	if !data.AdminState.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "enabled")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -1067,25 +1067,28 @@ func (data PIM) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		if !data.InstanceAdminState.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "enabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.Control.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.EvpnBorderLeaf.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"evpnBorderLeaf", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"evpnBorderLeaf", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.ExtraNet.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"extraNet", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"extraNet", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.JoinPruneDelay.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"jpDelay", strconv.FormatInt(100, 10))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"jpDelay", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.NullRegisterDelay.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"nrDelay", strconv.FormatInt(3, 10))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"nrDelay", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.NullRegisterNumberOfRoutes.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"nrNumRt", strconv.FormatInt(1, 10))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"nrNumRt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RegisterStop.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"regStop", strconv.FormatBool(false))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"regStop", "DME_UNSET_PROPERTY_MARKER")
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath

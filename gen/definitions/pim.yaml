@@ -16,7 +16,6 @@ attributes:
       - enabled
       - disabled
     example: enabled
-    delete_value: enabled
 child_classes:
   - class_name: pimInst
     doc_path: Layer%203/pim:Inst/
@@ -32,7 +31,6 @@ child_classes:
           - enabled
           - disabled
         example: enabled
-        delete_value: enabled
       - nxos_name: ctrl
         tf_name: control
         type: String
@@ -40,19 +38,16 @@ child_classes:
         enum_values:
           - stateful-ha
         example: stateful-ha
-        delete_value: ''
       - nxos_name: evpnBorderLeaf
         tf_name: evpn_border_leaf
         type: Bool
         description: 'EVPN Border Leaf flag.'
         example: false
-        delete_value: false
       - nxos_name: extraNet
         tf_name: extra_net
         type: Bool
         description: 'Extranet RPF Lookup.'
         example: false
-        delete_value: false
       - nxos_name: jpDelay
         tf_name: join_prune_delay
         type: Int64
@@ -60,7 +55,6 @@ child_classes:
         max_int: 1000
         description: 'Inter Packet Delay.'
         example: 200
-        delete_value: 100
       - nxos_name: nrDelay
         tf_name: null_register_delay
         type: Int64
@@ -69,7 +63,6 @@ child_classes:
         description: 'Null Register Inter Batch Delay.'
         example: 1000
         exclude_test: true
-        delete_value: 3
       - nxos_name: nrNumRt
         tf_name: null_register_number_of_routes
         type: Int64
@@ -78,13 +71,11 @@ child_classes:
         description: 'Null Register Number of Routes.'
         example: 500
         exclude_test: true
-        delete_value: 1
       - nxos_name: regStop
         tf_name: register_stop
         type: Bool
         description: 'Register until stops.'
         example: false
-        delete_value: false
     child_classes:
       - class_name: pimDom
         doc_path: Layer%203/pim:Dom/

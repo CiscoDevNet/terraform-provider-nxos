@@ -1176,7 +1176,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.BashShell.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1187,7 +1187,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Bfd.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1198,7 +1198,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Bgp.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1209,7 +1209,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Dhcp.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1220,7 +1220,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Evpn.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1231,7 +1231,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Hmm.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1242,7 +1242,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Hsrp.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1253,7 +1253,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.InterfaceVlan.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1264,7 +1264,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Isis.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1275,7 +1275,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Lacp.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1286,7 +1286,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Lldp.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1297,7 +1297,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Macsec.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1308,7 +1308,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Netflow.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1319,7 +1319,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Ngmvpn.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1330,7 +1330,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Ngoam.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1341,7 +1341,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.NvOverlay.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1352,7 +1352,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Ospf.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1363,7 +1363,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Ospfv3.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1374,7 +1374,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Pim.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1385,7 +1385,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Ptp.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1396,7 +1396,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Pvlan.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1407,7 +1407,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Sflow.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1418,7 +1418,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Ssh.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "enabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1429,7 +1429,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Tacacs.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1440,7 +1440,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Telnet.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1451,7 +1451,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Udld.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1462,7 +1462,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.VnSegment.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -1473,7 +1473,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		if !data.Vpc.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "disabled")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())

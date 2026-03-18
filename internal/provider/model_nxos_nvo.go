@@ -586,10 +586,10 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 func (data NVO) toDeleteBody() nxos.Body {
 	body := ""
 	if !data.VxlanUdpPort.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vxlanUDPPort", strconv.FormatInt(4789, 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vxlanUDPPort", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.VxlanUdpSourcePortMode.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vxlanUDPSrcPortMode", "low")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vxlanUDPSrcPortMode", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})

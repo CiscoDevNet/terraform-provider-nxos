@@ -406,7 +406,7 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 func (data SpanningTree) toDeleteBody() nxos.Body {
 	body := ""
 	if !data.AdminState.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "enabled")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -417,48 +417,49 @@ func (data SpanningTree) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".stpInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		if !data.InstanceAdminState.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "enabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.BridgeAssurance.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"bridge", "enabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"bridge", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Control.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ctrl", "normal")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Fcoe.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"fcoe", "disabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"fcoe", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.L2GatewayStpDomainId.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"l2GStpDomId", strconv.FormatInt(1024, 10))
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"l2GStpDomId", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.LinecardIssu.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"lcIssu", "default")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"lcIssu", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Loopguard.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loopguard", "disabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loopguard", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Mode.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mode", "pvrst")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PathcostOption.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pathcostOp", "short")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pathcostOp", "DME_UNSET_PROPERTY_MARKER")
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 		for key, child := range data.Interfaces {
 			childBody := ""
 			childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
-			childBody, _ = sjson.Set(childBody, "bpdufilter", "default")
-			childBody, _ = sjson.Set(childBody, "bpduguard", "default")
-			childBody, _ = sjson.Set(childBody, "cost", strconv.FormatInt(0, 10))
-			childBody, _ = sjson.Set(childBody, "guard", "default")
-			childBody, _ = sjson.Set(childBody, "linkType", "auto")
-			childBody, _ = sjson.Set(childBody, "mode", "default")
-			childBody, _ = sjson.Set(childBody, "priority", strconv.FormatInt(128, 10))
-			childBody, _ = sjson.Set(childBody, "ctrl", "unspecified")
-			childBody, _ = sjson.Set(childBody, "lcIssu", "default")
-			childBody, _ = sjson.Set(childBody, "prestdCfg", "disabled")
-			childBody, _ = sjson.Set(childBody, "simulatePvst", "default")
+			childBody, _ = sjson.Set(childBody, "bpdufilter", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "bpduguard", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "cost", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "guard", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "linkType", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "priority", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ctrl", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "lcIssu", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "prestdCfg", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "simulatePvst", "DME_UNSET_PROPERTY_MARKER")
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.stpIf.attributes", childBody)
 		}
 	}
@@ -475,17 +476,18 @@ func (data SpanningTree) toBodyWithDeletes(ctx context.Context, state SpanningTr
 			stateChild := state.Interfaces[stateKey]
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.bpdufilter", "default")
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.bpduguard", "default")
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.cost", strconv.FormatInt(0, 10))
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.guard", "default")
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.linkType", "auto")
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.mode", "default")
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.priority", strconv.FormatInt(128, 10))
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.ctrl", "unspecified")
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.lcIssu", "default")
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.prestdCfg", "disabled")
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.simulatePvst", "default")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.bpdufilter", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.bpduguard", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.cost", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.guard", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.linkType", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.priority", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.lcIssu", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.prestdCfg", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.simulatePvst", "DME_UNSET_PROPERTY_MARKER")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.stpInst.children"+".-1", deleteBody)
 		}
 	}

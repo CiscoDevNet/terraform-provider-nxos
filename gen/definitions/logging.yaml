@@ -24,7 +24,6 @@ child_classes:
           - "disableall"
         example: "unspecified"
         write_only: true
-        delete_value: unspecified
       - nxos_name: severityLevel
         tf_name: level
         type: String
@@ -40,7 +39,6 @@ child_classes:
           - "debugging"
         example: "information"
         write_only: true
-        delete_value: notifications
     child_classes:
       - class_name: loggingFacility
         doc_path: System/logging:Facility/
@@ -89,4 +87,3 @@ child_classes:
               - "information"
               - "debugging"
             example: "information"
-            delete_value: notifications

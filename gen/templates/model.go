@@ -906,8 +906,8 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
        Uses dynamic index calculation (matching toBody's approach) to ensure each
        top-level child class gets its own children array index.
        For each child:
-         - NoDelete children with sub-children: create entry, set delete_value attrs, recurse
-         - NoDelete leaf children: create entry, set delete_value attrs
+         - NoDelete children with sub-children: create entry, set DME_UNSET_PROPERTY_MARKER for attrs, recurse
+         - NoDelete leaf children: create entry, set DME_UNSET_PROPERTY_MARKER for attrs
          - Deletable single children: append delete entry
          - Deletable list children: append delete entries per item
        Context: map with:
@@ -926,15 +926,9 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	childBodyPath := {{$childrenPathVar}} + "." + strconv.Itoa(childIndex) + ".{{$childClassName}}"
 	body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 {{- range .Attributes}}
-{{- if and (not .ReferenceOnly) (.DeleteValue)}}
+{{- if and (not .ReferenceOnly) (not .Id) (eq .Value "")}}
 	if !data.{{toGoName .TfName}}.IsNull() {
-		{{- if eq .Type "Int64"}}
-		body, _ = sjson.Set(body, childBodyPath+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-		{{- else if eq .Type "Bool"}}
-		body, _ = sjson.Set(body, childBodyPath+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-		{{- else if eq .Type "String"}}
-		body, _ = sjson.Set(body, childBodyPath+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
-		{{- end}}
+		body, _ = sjson.Set(body, childBodyPath+".attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 	}
 {{- end}}
 {{- end}}
@@ -946,15 +940,9 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{
 	childBody := ""
 {{- range .Attributes}}
-{{- if and (not .ReferenceOnly) (.DeleteValue)}}
+{{- if and (not .ReferenceOnly) (not .Id) (eq .Value "")}}
 	if !data.{{toGoName .TfName}}.IsNull() {
-		{{- if eq .Type "Int64"}}
-		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-		{{- else if eq .Type "Bool"}}
-		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-		{{- else if eq .Type "String"}}
-		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "{{ .DeleteValue}}")
-		{{- end}}
+		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 	}
 {{- end}}
 {{- end}}
@@ -970,14 +958,8 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		childBody := ""
 		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
 {{- range .Attributes}}
-{{- if and (not .ReferenceOnly) (not .Id) (.DeleteValue)}}
-		{{- if eq .Type "Int64"}}
-		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-		{{- else if eq .Type "Bool"}}
-		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-		{{- else if eq .Type "String"}}
-		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "{{ .DeleteValue}}")
-		{{- end}}
+{{- if and (not .ReferenceOnly) (not .Id) (eq .Value "")}}
+		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 {{- end}}
 {{- end}}
 		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1.{{$childClassName}}.attributes", childBody)
@@ -1011,15 +993,9 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 	{{- else}}
 	{{- range .Attributes}}
-	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
+	{{- if and (not .ReferenceOnly) (not .Id) (eq .Value "")}}
 	if !data.{{toGoName .TfName}}.IsNull() {
-		{{- if eq .Type "Int64"}}
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-		{{- else if eq .Type "Bool"}}
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-		{{- else if eq .Type "String"}}
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
-		{{- end}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 	}
 	{{- end}}
 	{{- end}}
@@ -1152,14 +1128,8 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- if .NoDelete}}
 			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.rn", stateChild.getRn(stateKey))
 {{- range .Attributes}}
-{{- if and (not .ReferenceOnly) (not .Id) (.DeleteValue)}}
-			{{- if eq .Type "Int64"}}
-			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-			{{- else if eq .Type "Bool"}}
-			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-			{{- else if eq .Type "String"}}
-			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.{{.NxosName}}", "{{ .DeleteValue}}")
-			{{- end}}
+{{- if and (not .ReferenceOnly) (not .Id) (eq .Value "")}}
+			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 {{- end}}
 {{- end}}
 {{- else}}

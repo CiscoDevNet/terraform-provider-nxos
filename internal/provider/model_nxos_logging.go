@@ -212,17 +212,17 @@ func (data Logging) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		if !data.All.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"all", "unspecified")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"all", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Level.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"severityLevel", "notifications")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"severityLevel", "DME_UNSET_PROPERTY_MARKER")
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 		for key, child := range data.Facilities {
 			childBody := ""
 			childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
-			childBody, _ = sjson.Set(childBody, "severityLevel", "notifications")
+			childBody, _ = sjson.Set(childBody, "severityLevel", "DME_UNSET_PROPERTY_MARKER")
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", childBody)
 		}
 	}
@@ -239,7 +239,7 @@ func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging, config
 			stateChild := state.Facilities[stateKey]
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.severityLevel", "notifications")
+			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.severityLevel", "DME_UNSET_PROPERTY_MARKER")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.loggingLogLevel.children"+".-1", deleteBody)
 		}
 	}

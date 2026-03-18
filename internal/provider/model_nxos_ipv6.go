@@ -720,22 +720,25 @@ func (data IPv6) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6Inst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		if !data.AccessListMatchLocal.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"accessListMatchLocal", "disabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"accessListMatchLocal", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.AdminState.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "enabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.Control.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.DropNdFragments.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"dropNdFragments", "disabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"dropNdFragments", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.QueuePackets.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"queuePackets", "disabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"queuePackets", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.StaticNeighborOutsideSubnet.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"staticNeighborOutsideSubnet", "disabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"staticNeighborOutsideSubnet", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.SwitchPackets.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"switchPackets", "disabled")
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"switchPackets", "DME_UNSET_PROPERTY_MARKER")
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath

@@ -140,7 +140,6 @@ type YamlConfigAttribute struct {
 	MaxInt             int      `yaml:"max_int"`
 	DefaultValue       string   `yaml:"default_value"`
 	Value              string   `yaml:"value"`
-	DeleteValue        string   `yaml:"delete_value"`
 	ExcludeTest        bool     `yaml:"exclude_test"`
 	RequiresReplace    bool     `yaml:"requires_replace"`
 	TestTags           []string `yaml:"test_tags"`
@@ -360,35 +359,35 @@ func MakeMap(pairs ...interface{}) map[string]interface{} {
 
 // Map of templating functions
 var functions = template.FuncMap{
-	"toGoName":            ToGoName,
-	"camelCase":           CamelCase,
-	"snakeCase":           SnakeCase,
-	"hasId":               HasId,
-	"add":                 Add,
-	"childDocClassNames":  ChildDocClassNames,
-	"childDocPaths":       ChildDocPaths,
-	"hasWriteOnly":        HasWriteOnly,
+	"toGoName":                  ToGoName,
+	"camelCase":                 CamelCase,
+	"snakeCase":                 SnakeCase,
+	"hasId":                     HasId,
+	"add":                       Add,
+	"childDocClassNames":        ChildDocClassNames,
+	"childDocPaths":             ChildDocPaths,
+	"hasWriteOnly":              HasWriteOnly,
 	"hasSensitiveAttr":          HasSensitiveAttr,
 	"hasSensitiveAttrRecursive": HasSensitiveAttrRecursive,
-	"importAttributes":    ImportAttributes,
-	"hasListChildClasses": HasListChildClasses,
-	"hasTestAttrs":        HasTestAttrs,
-	"makeMap":             MakeMap,
-	"rnHasDynamicSegment": RnHasDynamicSegment,
-	"rnFormatArgs":        RnFormatArgs,
-	"childRn":             ChildRn,
-	"allChildClassNames":  AllChildClassNames,
-	"join":                strings.Join,
-	"hasNonIdAttrs":       HasNonIdAttrs,
-"needsPlanItem":       NeedsPlanItem,
-	"idCount":             IdCount,
-	"mapKeyExpr":          MapKeyExpr,
-	"mapKeyExample":       MapKeyExample,
-	"mapKeyParse":         MapKeyParse,
-	"mapKeySjsonSetStmts": MapKeySjsonSetStmts,
-	"mapKeyMatchExpr":     MapKeyMatchExpr,
-	"mapKeyRnFormatArgs":  MapKeyRnFormatArgs,
-	"mapKeyDescription":   MapKeyDescription,
+	"importAttributes":          ImportAttributes,
+	"hasListChildClasses":       HasListChildClasses,
+	"hasTestAttrs":              HasTestAttrs,
+	"makeMap":                   MakeMap,
+	"rnHasDynamicSegment":       RnHasDynamicSegment,
+	"rnFormatArgs":              RnFormatArgs,
+	"childRn":                   ChildRn,
+	"allChildClassNames":        AllChildClassNames,
+	"join":                      strings.Join,
+	"hasNonIdAttrs":             HasNonIdAttrs,
+	"needsPlanItem":             NeedsPlanItem,
+	"idCount":                   IdCount,
+	"mapKeyExpr":                MapKeyExpr,
+	"mapKeyExample":             MapKeyExample,
+	"mapKeyParse":               MapKeyParse,
+	"mapKeySjsonSetStmts":       MapKeySjsonSetStmts,
+	"mapKeyMatchExpr":           MapKeyMatchExpr,
+	"mapKeyRnFormatArgs":        MapKeyRnFormatArgs,
+	"mapKeyDescription":         MapKeyDescription,
 }
 
 // AllChildClassNames recursively collects all child class names.

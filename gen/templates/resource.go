@@ -70,17 +70,7 @@ func (r *{{camelCase .Name}}Resource) Metadata(ctx context.Context, req resource
 func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("{{.ResDescription}}")
-			{{- if len .Parents -}}
-			.AddParents({{range .Parents}}"{{snakeCase .}}", {{end}})
-			{{- end -}}
-			{{- if len .Children -}}
-			.AddChildren({{range .Children}}"{{snakeCase .}}", {{end}})
-			{{- end -}}
-			{{- if len .References -}}
-			.AddReferences({{range .References}}"{{snakeCase .}}", {{end}})
-			{{- end -}}
-			.AddApiDocumentation("{{.ClassName}}", "{{.DocPath}}", []string{ {{- range $i, $v := childDocClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }, []string{ {{- range $i, $v := childDocPaths .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }).String,
+		MarkdownDescription: helpers.NewResourceDescription("{{.ResDescription}}").AddApiDocumentation("{{.ClassName}}", "{{.DocPath}}", []string{ {{- range $i, $v := childDocClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }, []string{ {{- range $i, $v := childDocPaths .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -103,29 +93,14 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
 					.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
 					{{- end -}}
-					{{- if len .DefaultValue -}}
-					.AddDefaultValueDescription("{{.DefaultValue}}")
-					{{- end -}}
 					.String,
-				{{- if or .Id .ReferenceOnly .Mandatory}}
+				{{- if or .Id .Mandatory}}
 				Required:            true,
 				{{- else}}
 				Optional:            true,
-				{{- if len .DefaultValue}}
-				Computed:            true,
-				{{- end}}
 				{{- end}}
 				{{- if .Sensitive}}
 				Sensitive:           true,
-				{{- end}}
-				{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
-				{{- if eq .Type "Int64"}}
-				Default: int64default.StaticInt64({{.DefaultValue}}),
-				{{- else if eq .Type "Bool"}}
-				Default: booldefault.StaticBool({{.DefaultValue}}),
-				{{- else if eq .Type "String"}}
-				Default: stringdefault.StaticString("{{.DefaultValue}}"),
-				{{- end}}
 				{{- end}}
 				{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
 				Validators: []validator.String{
@@ -136,7 +111,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 				},
 				{{- end}}
-				{{- if or .Id .ReferenceOnly .RequiresReplace}}
+				{{- if or .Id .RequiresReplace}}
 				PlanModifiers: []planmodifier.{{.Type}}{
 					{{snakeCase .Type}}planmodifier.RequiresReplace(),
 				},
@@ -163,29 +138,14 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
 					.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
 					{{- end -}}
-					{{- if len .DefaultValue -}}
-					.AddDefaultValueDescription("{{.DefaultValue}}")
-					{{- end -}}
 					.String,
 				{{- if or .Id .Mandatory}}
 				Required:            true,
 				{{- else}}
 				Optional:            true,
-				{{- if len .DefaultValue}}
-				Computed:            true,
-				{{- end}}
 				{{- end}}
 				{{- if .Sensitive}}
 				Sensitive:           true,
-				{{- end}}
-				{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
-				{{- if eq .Type "Int64"}}
-				Default: int64default.StaticInt64({{.DefaultValue}}),
-				{{- else if eq .Type "Bool"}}
-				Default: booldefault.StaticBool({{.DefaultValue}}),
-				{{- else if eq .Type "String"}}
-				Default: stringdefault.StaticString("{{.DefaultValue}}"),
-				{{- end}}
 				{{- end}}
 				{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
 				Validators: []validator.String{

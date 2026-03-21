@@ -110,199 +110,199 @@ func (data Feature) toBody(config Feature) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	attrs = "{}"
-	if (!data.BashShell.IsUnknown() && !data.BashShell.IsNull()) || false {
+	if !data.BashShell.IsUnknown() && !data.BashShell.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.BashShell.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmBashShell.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Bfd.IsUnknown() && !data.Bfd.IsNull()) || false {
+	if !data.Bfd.IsUnknown() && !data.Bfd.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Bfd.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmBfd.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Bgp.IsUnknown() && !data.Bgp.IsNull()) || false {
+	if !data.Bgp.IsUnknown() && !data.Bgp.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Bgp.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmBgp.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Dhcp.IsUnknown() && !data.Dhcp.IsNull()) || false {
+	if !data.Dhcp.IsUnknown() && !data.Dhcp.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Dhcp.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmDhcp.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Evpn.IsUnknown() && !data.Evpn.IsNull()) || false {
+	if !data.Evpn.IsUnknown() && !data.Evpn.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Evpn.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmEvpn.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Hmm.IsUnknown() && !data.Hmm.IsNull()) || false {
+	if !data.Hmm.IsUnknown() && !data.Hmm.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Hmm.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmHmm.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Hsrp.IsUnknown() && !data.Hsrp.IsNull()) || false {
+	if !data.Hsrp.IsUnknown() && !data.Hsrp.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Hsrp.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmHsrp.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.InterfaceVlan.IsUnknown() && !data.InterfaceVlan.IsNull()) || false {
+	if !data.InterfaceVlan.IsUnknown() && !data.InterfaceVlan.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.InterfaceVlan.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmInterfaceVlan.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Isis.IsUnknown() && !data.Isis.IsNull()) || false {
+	if !data.Isis.IsUnknown() && !data.Isis.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Isis.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmIsis.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Lacp.IsUnknown() && !data.Lacp.IsNull()) || false {
+	if !data.Lacp.IsUnknown() && !data.Lacp.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Lacp.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmLacp.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Lldp.IsUnknown() && !data.Lldp.IsNull()) || false {
+	if !data.Lldp.IsUnknown() && !data.Lldp.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Lldp.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmLldp.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Macsec.IsUnknown() && !data.Macsec.IsNull()) || false {
+	if !data.Macsec.IsUnknown() && !data.Macsec.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Macsec.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmMacsec.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Netflow.IsUnknown() && !data.Netflow.IsNull()) || false {
+	if !data.Netflow.IsUnknown() && !data.Netflow.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Netflow.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmNetflow.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Ngmvpn.IsUnknown() && !data.Ngmvpn.IsNull()) || false {
+	if !data.Ngmvpn.IsUnknown() && !data.Ngmvpn.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Ngmvpn.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmNgmvpn.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Ngoam.IsUnknown() && !data.Ngoam.IsNull()) || false {
+	if !data.Ngoam.IsUnknown() && !data.Ngoam.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Ngoam.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmNgoam.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.NvOverlay.IsUnknown() && !data.NvOverlay.IsNull()) || false {
+	if !data.NvOverlay.IsUnknown() && !data.NvOverlay.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.NvOverlay.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmNvo.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Ospf.IsUnknown() && !data.Ospf.IsNull()) || false {
+	if !data.Ospf.IsUnknown() && !data.Ospf.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Ospf.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmOspf.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Ospfv3.IsUnknown() && !data.Ospfv3.IsNull()) || false {
+	if !data.Ospfv3.IsUnknown() && !data.Ospfv3.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Ospfv3.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmOspfv3.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Pim.IsUnknown() && !data.Pim.IsNull()) || false {
+	if !data.Pim.IsUnknown() && !data.Pim.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Pim.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmPim.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Ptp.IsUnknown() && !data.Ptp.IsNull()) || false {
+	if !data.Ptp.IsUnknown() && !data.Ptp.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Ptp.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmPtp.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Pvlan.IsUnknown() && !data.Pvlan.IsNull()) || false {
+	if !data.Pvlan.IsUnknown() && !data.Pvlan.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Pvlan.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmPvlan.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Sflow.IsUnknown() && !data.Sflow.IsNull()) || false {
+	if !data.Sflow.IsUnknown() && !data.Sflow.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Sflow.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmSflow.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Ssh.IsUnknown() && !data.Ssh.IsNull()) || false {
+	if !data.Ssh.IsUnknown() && !data.Ssh.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Ssh.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmSsh.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Tacacs.IsUnknown() && !data.Tacacs.IsNull()) || false {
+	if !data.Tacacs.IsUnknown() && !data.Tacacs.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Tacacs.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmTacacsplus.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Telnet.IsUnknown() && !data.Telnet.IsNull()) || false {
+	if !data.Telnet.IsUnknown() && !data.Telnet.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Telnet.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmTelnet.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Udld.IsUnknown() && !data.Udld.IsNull()) || false {
+	if !data.Udld.IsUnknown() && !data.Udld.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Udld.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmUdld.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.VnSegment.IsUnknown() && !data.VnSegment.IsNull()) || false {
+	if !data.VnSegment.IsUnknown() && !data.VnSegment.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.VnSegment.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmVnSegment.attributes", attrs)
 	}
 	attrs = "{}"
-	if (!data.Vpc.IsUnknown() && !data.Vpc.IsNull()) || false {
+	if !data.Vpc.IsUnknown() && !data.Vpc.IsNull() {
 		attrs, _ = sjson.Set(attrs, "adminSt", data.Vpc.ValueString())
 	}
-	if attrs != "{}" || false {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmVpc.attributes", attrs)
 	}
 

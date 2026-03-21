@@ -105,34 +105,34 @@ func (data NTP) getClassName() string {
 func (data NTP) toBody(config NTP) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.AllowControl.IsUnknown() && !data.AllowControl.IsNull()) || false {
+	if !data.AllowControl.IsUnknown() && !data.AllowControl.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowControl", data.AllowControl.ValueString())
 	}
-	if (!data.AllowPrivate.IsUnknown() && !data.AllowPrivate.IsNull()) || false {
+	if !data.AllowPrivate.IsUnknown() && !data.AllowPrivate.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowPrivate", data.AllowPrivate.ValueString())
 	}
-	if (!data.AuthenticationState.IsUnknown() && !data.AuthenticationState.IsNull()) || false {
+	if !data.AuthenticationState.IsUnknown() && !data.AuthenticationState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authSt", data.AuthenticationState.ValueString())
 	}
-	if (!data.Logging.IsUnknown() && !data.Logging.IsNull()) || false {
+	if !data.Logging.IsUnknown() && !data.Logging.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"logging", data.Logging.ValueString())
 	}
-	if (!data.LoggingLevel.IsUnknown() && !data.LoggingLevel.IsNull()) || false {
+	if !data.LoggingLevel.IsUnknown() && !data.LoggingLevel.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"loggingLevel", data.LoggingLevel.ValueString())
 	}
-	if (!data.Master.IsUnknown() && !data.Master.IsNull()) || false {
+	if !data.Master.IsUnknown() && !data.Master.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"master", data.Master.ValueString())
 	}
-	if (!data.MasterStratum.IsUnknown() && !data.MasterStratum.IsNull()) || false {
+	if !data.MasterStratum.IsUnknown() && !data.MasterStratum.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"masterStratum", strconv.FormatInt(data.MasterStratum.ValueInt64(), 10))
 	}
-	if (!data.Passive.IsUnknown() && !data.Passive.IsNull()) || false {
+	if !data.Passive.IsUnknown() && !data.Passive.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passive", data.Passive.ValueString())
 	}
-	if (!data.RateLimit.IsUnknown() && !data.RateLimit.IsNull()) || false {
+	if !data.RateLimit.IsUnknown() && !data.RateLimit.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rateLimit", strconv.FormatInt(data.RateLimit.ValueInt64(), 10))
 	}
 	var attrs string
@@ -140,22 +140,22 @@ func (data NTP) toBody(config NTP) nxos.Body {
 	for key, child := range data.Servers {
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "name", key)
-		if (!child.Vrf.IsUnknown() && !child.Vrf.IsNull()) || false {
+		if !child.Vrf.IsUnknown() && !child.Vrf.IsNull() {
 			attrs, _ = sjson.Set(attrs, "vrf", child.Vrf.ValueString())
 		}
-		if (!child.Type.IsUnknown() && !child.Type.IsNull()) || false {
+		if !child.Type.IsUnknown() && !child.Type.IsNull() {
 			attrs, _ = sjson.Set(attrs, "provT", child.Type.ValueString())
 		}
-		if (!child.KeyId.IsUnknown() && !child.KeyId.IsNull()) || false {
+		if !child.KeyId.IsUnknown() && !child.KeyId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "keyId", strconv.FormatInt(child.KeyId.ValueInt64(), 10))
 		}
-		if (!child.MinPoll.IsUnknown() && !child.MinPoll.IsNull()) || false {
+		if !child.MinPoll.IsUnknown() && !child.MinPoll.IsNull() {
 			attrs, _ = sjson.Set(attrs, "minPoll", strconv.FormatInt(child.MinPoll.ValueInt64(), 10))
 		}
-		if (!child.MaxPoll.IsUnknown() && !child.MaxPoll.IsNull()) || false {
+		if !child.MaxPoll.IsUnknown() && !child.MaxPoll.IsNull() {
 			attrs, _ = sjson.Set(attrs, "maxPoll", strconv.FormatInt(child.MaxPoll.ValueInt64(), 10))
 		}
-		if (!child.Preferred.IsUnknown() && !child.Preferred.IsNull()) || false {
+		if !child.Preferred.IsUnknown() && !child.Preferred.IsNull() {
 			attrs, _ = sjson.Set(attrs, "preferred", strconv.FormatBool(child.Preferred.ValueBool()))
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.datetimeNtpProvider.attributes", attrs)

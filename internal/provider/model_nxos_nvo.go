@@ -128,10 +128,10 @@ func (data NVO) getClassName() string {
 func (data NVO) toBody(config NVO) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.VxlanUdpPort.IsUnknown() && !data.VxlanUdpPort.IsNull()) || false {
+	if !data.VxlanUdpPort.IsUnknown() && !data.VxlanUdpPort.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vxlanUDPPort", strconv.FormatInt(data.VxlanUdpPort.ValueInt64(), 10))
 	}
-	if (!data.VxlanUdpSourcePortMode.IsUnknown() && !data.VxlanUdpSourcePortMode.IsNull()) || false {
+	if !data.VxlanUdpSourcePortMode.IsUnknown() && !data.VxlanUdpSourcePortMode.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vxlanUDPSrcPortMode", data.VxlanUdpSourcePortMode.ValueString())
 	}
 	var attrs string
@@ -139,67 +139,67 @@ func (data NVO) toBody(config NVO) nxos.Body {
 	for key, child := range data.NveInterfaces {
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "epId", key)
-		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
-		if (!child.AdvertiseVirtualMac.IsUnknown() && !child.AdvertiseVirtualMac.IsNull()) || false {
+		if !child.AdvertiseVirtualMac.IsUnknown() && !child.AdvertiseVirtualMac.IsNull() {
 			attrs, _ = sjson.Set(attrs, "advertiseVmac", strconv.FormatBool(child.AdvertiseVirtualMac.ValueBool()))
 		}
-		if (!child.HoldDownTime.IsUnknown() && !child.HoldDownTime.IsNull()) || false {
+		if !child.HoldDownTime.IsUnknown() && !child.HoldDownTime.IsNull() {
 			attrs, _ = sjson.Set(attrs, "holdDownTime", strconv.FormatInt(child.HoldDownTime.ValueInt64(), 10))
 		}
-		if (!child.HostReachabilityProtocol.IsUnknown() && !child.HostReachabilityProtocol.IsNull()) || false {
+		if !child.HostReachabilityProtocol.IsUnknown() && !child.HostReachabilityProtocol.IsNull() {
 			attrs, _ = sjson.Set(attrs, "hostReach", child.HostReachabilityProtocol.ValueString())
 		}
-		if (!child.IngressReplicationProtocolBgp.IsUnknown() && !child.IngressReplicationProtocolBgp.IsNull()) || false {
+		if !child.IngressReplicationProtocolBgp.IsUnknown() && !child.IngressReplicationProtocolBgp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ingressReplProtoBGP", strconv.FormatBool(child.IngressReplicationProtocolBgp.ValueBool()))
 		}
-		if (!child.MulticastGroupL2.IsUnknown() && !child.MulticastGroupL2.IsNull()) || false {
+		if !child.MulticastGroupL2.IsUnknown() && !child.MulticastGroupL2.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mcastGroupL2", child.MulticastGroupL2.ValueString())
 		}
-		if (!child.MulticastGroupL3.IsUnknown() && !child.MulticastGroupL3.IsNull()) || false {
+		if !child.MulticastGroupL3.IsUnknown() && !child.MulticastGroupL3.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mcastGroupL3", child.MulticastGroupL3.ValueString())
 		}
-		if (!child.MultisiteSourceInterface.IsUnknown() && !child.MultisiteSourceInterface.IsNull()) || false {
+		if !child.MultisiteSourceInterface.IsUnknown() && !child.MultisiteSourceInterface.IsNull() {
 			attrs, _ = sjson.Set(attrs, "multisiteBordergwInterface", child.MultisiteSourceInterface.ValueString())
 		}
-		if (!child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull()) || false {
+		if !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() {
 			attrs, _ = sjson.Set(attrs, "sourceInterface", child.SourceInterface.ValueString())
 		}
-		if (!child.SuppressArp.IsUnknown() && !child.SuppressArp.IsNull()) || false {
+		if !child.SuppressArp.IsUnknown() && !child.SuppressArp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "suppressARP", strconv.FormatBool(child.SuppressArp.ValueBool()))
 		}
-		if (!child.SuppressMacRoute.IsUnknown() && !child.SuppressMacRoute.IsNull()) || false {
+		if !child.SuppressMacRoute.IsUnknown() && !child.SuppressMacRoute.IsNull() {
 			attrs, _ = sjson.Set(attrs, "suppressMacRoute", strconv.FormatBool(child.SuppressMacRoute.ValueBool()))
 		}
-		if (!child.AnycastSourceInterface.IsUnknown() && !child.AnycastSourceInterface.IsNull()) || false {
+		if !child.AnycastSourceInterface.IsUnknown() && !child.AnycastSourceInterface.IsNull() {
 			attrs, _ = sjson.Set(attrs, "anycastIntf", child.AnycastSourceInterface.ValueString())
 		}
-		if (!child.ConfigurationSource.IsUnknown() && !child.ConfigurationSource.IsNull()) || false {
+		if !child.ConfigurationSource.IsUnknown() && !child.ConfigurationSource.IsNull() {
 			attrs, _ = sjson.Set(attrs, "cfgSrc", child.ConfigurationSource.ValueString())
 		}
-		if (!child.ControllerId.IsUnknown() && !child.ControllerId.IsNull()) || false {
+		if !child.ControllerId.IsUnknown() && !child.ControllerId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "controllerId", strconv.FormatInt(child.ControllerId.ValueInt64(), 10))
 		}
-		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+		if !child.Description.IsUnknown() && !child.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 		}
-		if (!child.EncapsulationType.IsUnknown() && !child.EncapsulationType.IsNull()) || false {
+		if !child.EncapsulationType.IsUnknown() && !child.EncapsulationType.IsNull() {
 			attrs, _ = sjson.Set(attrs, "encapType", child.EncapsulationType.ValueString())
 		}
-		if (!child.FabricReadyTime.IsUnknown() && !child.FabricReadyTime.IsNull()) || false {
+		if !child.FabricReadyTime.IsUnknown() && !child.FabricReadyTime.IsNull() {
 			attrs, _ = sjson.Set(attrs, "fabricReadyTime", strconv.FormatInt(child.FabricReadyTime.ValueInt64(), 10))
 		}
-		if (!child.MulticastRoutingSourceInterface.IsUnknown() && !child.MulticastRoutingSourceInterface.IsNull()) || false {
+		if !child.MulticastRoutingSourceInterface.IsUnknown() && !child.MulticastRoutingSourceInterface.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mcastRtSrcIntf", child.MulticastRoutingSourceInterface.ValueString())
 		}
-		if (!child.MultisiteVirtualMac.IsUnknown() && !child.MultisiteVirtualMac.IsNull()) || false {
+		if !child.MultisiteVirtualMac.IsUnknown() && !child.MultisiteVirtualMac.IsNull() {
 			attrs, _ = sjson.Set(attrs, "multisiteVirtualMac", child.MultisiteVirtualMac.ValueString())
 		}
-		if (!child.SuppressNd.IsUnknown() && !child.SuppressNd.IsNull()) || false {
+		if !child.SuppressNd.IsUnknown() && !child.SuppressNd.IsNull() {
 			attrs, _ = sjson.Set(attrs, "suppressND", strconv.FormatBool(child.SuppressNd.ValueBool()))
 		}
-		if (!child.VirtualMac.IsUnknown() && !child.VirtualMac.IsNull()) || false {
+		if !child.VirtualMac.IsUnknown() && !child.VirtualMac.IsNull() {
 			attrs, _ = sjson.Set(attrs, "virtualMac", child.VirtualMac.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.nvoEp.attributes", attrs)
@@ -215,25 +215,25 @@ func (data NVO) toBody(config NVO) nxos.Body {
 				for key, child := range child.Vnis {
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "vni", key)
-					if (!child.AssociateVrf.IsUnknown() && !child.AssociateVrf.IsNull()) || false {
+					if !child.AssociateVrf.IsUnknown() && !child.AssociateVrf.IsNull() {
 						attrs, _ = sjson.Set(attrs, "associateVrfFlag", strconv.FormatBool(child.AssociateVrf.ValueBool()))
 					}
-					if (!child.MulticastGroup.IsUnknown() && !child.MulticastGroup.IsNull()) || false {
+					if !child.MulticastGroup.IsUnknown() && !child.MulticastGroup.IsNull() {
 						attrs, _ = sjson.Set(attrs, "mcastGroup", child.MulticastGroup.ValueString())
 					}
-					if (!child.MultisiteIngressReplication.IsUnknown() && !child.MultisiteIngressReplication.IsNull()) || false {
+					if !child.MultisiteIngressReplication.IsUnknown() && !child.MultisiteIngressReplication.IsNull() {
 						attrs, _ = sjson.Set(attrs, "multisiteIngRepl", child.MultisiteIngressReplication.ValueString())
 					}
-					if (!child.SuppressArp.IsUnknown() && !child.SuppressArp.IsNull()) || false {
+					if !child.SuppressArp.IsUnknown() && !child.SuppressArp.IsNull() {
 						attrs, _ = sjson.Set(attrs, "suppressARP", child.SuppressArp.ValueString())
 					}
-					if (!child.LegacyMode.IsUnknown() && !child.LegacyMode.IsNull()) || false {
+					if !child.LegacyMode.IsUnknown() && !child.LegacyMode.IsNull() {
 						attrs, _ = sjson.Set(attrs, "isLegacyMode", strconv.FormatBool(child.LegacyMode.ValueBool()))
 					}
-					if (!child.MultisiteMulticastGroup.IsUnknown() && !child.MultisiteMulticastGroup.IsNull()) || false {
+					if !child.MultisiteMulticastGroup.IsUnknown() && !child.MultisiteMulticastGroup.IsNull() {
 						attrs, _ = sjson.Set(attrs, "multisiteMcastGroup", child.MultisiteMulticastGroup.ValueString())
 					}
-					if (!child.SpineAnycastGateway.IsUnknown() && !child.SpineAnycastGateway.IsNull()) || false {
+					if !child.SpineAnycastGateway.IsUnknown() && !child.SpineAnycastGateway.IsNull() {
 						attrs, _ = sjson.Set(attrs, "spineAnyCastGw", strconv.FormatBool(child.SpineAnycastGateway.ValueBool()))
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoNw.attributes", attrs)
@@ -241,10 +241,10 @@ func (data NVO) toBody(config NVO) nxos.Body {
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".nvoNw.children"
 						attrs = "{}"
-						if (!child.IngressReplicationProtocol.IsUnknown() && !child.IngressReplicationProtocol.IsNull()) || false {
+						if !child.IngressReplicationProtocol.IsUnknown() && !child.IngressReplicationProtocol.IsNull() {
 							attrs, _ = sjson.Set(attrs, "proto", child.IngressReplicationProtocol.ValueString())
 						}
-						if attrs != "{}" || false {
+						if attrs != "{}" {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoIngRepl.attributes", attrs)
 						}
 					}

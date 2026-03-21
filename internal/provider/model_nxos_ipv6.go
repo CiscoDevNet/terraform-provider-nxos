@@ -159,25 +159,25 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6Inst"
 		attrs = "{}"
-		if (!data.AccessListMatchLocal.IsUnknown() && !data.AccessListMatchLocal.IsNull()) || false {
+		if !data.AccessListMatchLocal.IsUnknown() && !data.AccessListMatchLocal.IsNull() {
 			attrs, _ = sjson.Set(attrs, "accessListMatchLocal", data.AccessListMatchLocal.ValueString())
 		}
-		if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+		if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.AdminState.ValueString())
 		}
-		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+		if !data.Control.IsUnknown() && !data.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		if (!data.DropNdFragments.IsUnknown() && !data.DropNdFragments.IsNull()) || false {
+		if !data.DropNdFragments.IsUnknown() && !data.DropNdFragments.IsNull() {
 			attrs, _ = sjson.Set(attrs, "dropNdFragments", data.DropNdFragments.ValueString())
 		}
-		if (!data.QueuePackets.IsUnknown() && !data.QueuePackets.IsNull()) || false {
+		if !data.QueuePackets.IsUnknown() && !data.QueuePackets.IsNull() {
 			attrs, _ = sjson.Set(attrs, "queuePackets", data.QueuePackets.ValueString())
 		}
-		if (!data.StaticNeighborOutsideSubnet.IsUnknown() && !data.StaticNeighborOutsideSubnet.IsNull()) || false {
+		if !data.StaticNeighborOutsideSubnet.IsUnknown() && !data.StaticNeighborOutsideSubnet.IsNull() {
 			attrs, _ = sjson.Set(attrs, "staticNeighborOutsideSubnet", data.StaticNeighborOutsideSubnet.ValueString())
 		}
-		if (!data.SwitchPackets.IsUnknown() && !data.SwitchPackets.IsNull()) || false {
+		if !data.SwitchPackets.IsUnknown() && !data.SwitchPackets.IsNull() {
 			attrs, _ = sjson.Set(attrs, "switchPackets", data.SwitchPackets.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -192,16 +192,16 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 				for key, child := range child.StaticRoutes {
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "prefix", key)
-					if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+					if !child.Control.IsUnknown() && !child.Control.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 					}
-					if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+					if !child.Description.IsUnknown() && !child.Description.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 					}
-					if (!child.Preference.IsUnknown() && !child.Preference.IsNull()) || false {
+					if !child.Preference.IsUnknown() && !child.Preference.IsNull() {
 						attrs, _ = sjson.Set(attrs, "pref", strconv.FormatInt(child.Preference.ValueInt64(), 10))
 					}
-					if (!child.Tag.IsUnknown() && !child.Tag.IsNull()) || false {
+					if !child.Tag.IsUnknown() && !child.Tag.IsNull() {
 						attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.Tag.ValueInt64(), 10))
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv6Route.attributes", attrs)
@@ -214,22 +214,22 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 							attrs, _ = sjson.Set(attrs, "nhIf", keyParts[0])
 							attrs, _ = sjson.Set(attrs, "nhAddr", keyParts[1])
 							attrs, _ = sjson.Set(attrs, "nhVrf", keyParts[2])
-							if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+							if !child.Description.IsUnknown() && !child.Description.IsNull() {
 								attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 							}
-							if (!child.Object.IsUnknown() && !child.Object.IsNull()) || false {
+							if !child.Object.IsUnknown() && !child.Object.IsNull() {
 								attrs, _ = sjson.Set(attrs, "object", strconv.FormatInt(child.Object.ValueInt64(), 10))
 							}
-							if (!child.Preference.IsUnknown() && !child.Preference.IsNull()) || false {
+							if !child.Preference.IsUnknown() && !child.Preference.IsNull() {
 								attrs, _ = sjson.Set(attrs, "pref", strconv.FormatInt(child.Preference.ValueInt64(), 10))
 							}
-							if (!child.Tag.IsUnknown() && !child.Tag.IsNull()) || false {
+							if !child.Tag.IsUnknown() && !child.Tag.IsNull() {
 								attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.Tag.ValueInt64(), 10))
 							}
-							if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+							if !child.Name.IsUnknown() && !child.Name.IsNull() {
 								attrs, _ = sjson.Set(attrs, "rtname", child.Name.ValueString())
 							}
-							if (!child.RewriteEncapsulation.IsUnknown() && !child.RewriteEncapsulation.IsNull()) || false {
+							if !child.RewriteEncapsulation.IsUnknown() && !child.RewriteEncapsulation.IsNull() {
 								attrs, _ = sjson.Set(attrs, "rwEncap", child.RewriteEncapsulation.ValueString())
 							}
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv6Nexthop.attributes", attrs)
@@ -239,25 +239,25 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 				for key, child := range child.Interfaces {
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "id", key)
-					if (!child.AutoConfiguration.IsUnknown() && !child.AutoConfiguration.IsNull()) || false {
+					if !child.AutoConfiguration.IsUnknown() && !child.AutoConfiguration.IsNull() {
 						attrs, _ = sjson.Set(attrs, "autoconfig", child.AutoConfiguration.ValueString())
 					}
-					if (!child.DefaultRoute.IsUnknown() && !child.DefaultRoute.IsNull()) || false {
+					if !child.DefaultRoute.IsUnknown() && !child.DefaultRoute.IsNull() {
 						attrs, _ = sjson.Set(attrs, "defaultRoute", child.DefaultRoute.ValueString())
 					}
-					if (!child.Forward.IsUnknown() && !child.Forward.IsNull()) || false {
+					if !child.Forward.IsUnknown() && !child.Forward.IsNull() {
 						attrs, _ = sjson.Set(attrs, "forward", child.Forward.ValueString())
 					}
-					if (!child.LinkLocalAddressUseBia.IsUnknown() && !child.LinkLocalAddressUseBia.IsNull()) || false {
+					if !child.LinkLocalAddressUseBia.IsUnknown() && !child.LinkLocalAddressUseBia.IsNull() {
 						attrs, _ = sjson.Set(attrs, "llAddrUseBia", child.LinkLocalAddressUseBia.ValueString())
 					}
-					if (!child.UseLinkLocalAddress.IsUnknown() && !child.UseLinkLocalAddress.IsNull()) || false {
+					if !child.UseLinkLocalAddress.IsUnknown() && !child.UseLinkLocalAddress.IsNull() {
 						attrs, _ = sjson.Set(attrs, "useLinkLocalAddr", child.UseLinkLocalAddress.ValueString())
 					}
-					if (!child.Urpf.IsUnknown() && !child.Urpf.IsNull()) || false {
+					if !child.Urpf.IsUnknown() && !child.Urpf.IsNull() {
 						attrs, _ = sjson.Set(attrs, "urpf", child.Urpf.ValueString())
 					}
-					if (!child.LinkLocalAddress.IsUnknown() && !child.LinkLocalAddress.IsNull()) || false {
+					if !child.LinkLocalAddress.IsUnknown() && !child.LinkLocalAddress.IsNull() {
 						attrs, _ = sjson.Set(attrs, "llAddr", child.LinkLocalAddress.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv6If.attributes", attrs)
@@ -267,25 +267,25 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 						for key, child := range child.Addresses {
 							attrs = "{}"
 							attrs, _ = sjson.Set(attrs, "addr", key)
-							if (!child.Type.IsUnknown() && !child.Type.IsNull()) || false {
+							if !child.Type.IsUnknown() && !child.Type.IsNull() {
 								attrs, _ = sjson.Set(attrs, "type", child.Type.ValueString())
 							}
-							if (!child.Tag.IsUnknown() && !child.Tag.IsNull()) || false {
+							if !child.Tag.IsUnknown() && !child.Tag.IsNull() {
 								attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.Tag.ValueInt64(), 10))
 							}
-							if (!child.AggregatePrefixLength.IsUnknown() && !child.AggregatePrefixLength.IsNull()) || false {
+							if !child.AggregatePrefixLength.IsUnknown() && !child.AggregatePrefixLength.IsNull() {
 								attrs, _ = sjson.Set(attrs, "aggregatePrefixLength", strconv.FormatInt(child.AggregatePrefixLength.ValueInt64(), 10))
 							}
-							if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+							if !child.Control.IsUnknown() && !child.Control.IsNull() {
 								attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 							}
-							if (!child.Preference.IsUnknown() && !child.Preference.IsNull()) || false {
+							if !child.Preference.IsUnknown() && !child.Preference.IsNull() {
 								attrs, _ = sjson.Set(attrs, "pref", strconv.FormatInt(child.Preference.ValueInt64(), 10))
 							}
-							if (!child.UseBia.IsUnknown() && !child.UseBia.IsNull()) || false {
+							if !child.UseBia.IsUnknown() && !child.UseBia.IsNull() {
 								attrs, _ = sjson.Set(attrs, "useBia", child.UseBia.ValueString())
 							}
-							if (!child.VpcPeer.IsUnknown() && !child.VpcPeer.IsNull()) || false {
+							if !child.VpcPeer.IsUnknown() && !child.VpcPeer.IsNull() {
 								attrs, _ = sjson.Set(attrs, "vpcPeer", child.VpcPeer.ValueString())
 							}
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv6Addr.attributes", attrs)

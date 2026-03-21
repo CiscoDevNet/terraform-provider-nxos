@@ -98,7 +98,7 @@ func (data HMM) getClassName() string {
 func (data HMM) toBody(config HMM) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
@@ -107,22 +107,22 @@ func (data HMM) toBody(config HMM) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".hmmFwdInst"
 		attrs = "{}"
-		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
+		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
-		if (!data.AnycastMac.IsUnknown() && !data.AnycastMac.IsNull()) || false {
+		if !data.AnycastMac.IsUnknown() && !data.AnycastMac.IsNull() {
 			attrs, _ = sjson.Set(attrs, "amac", data.AnycastMac.ValueString())
 		}
-		if (!data.AdministrativeDistance.IsUnknown() && !data.AdministrativeDistance.IsNull()) || false {
+		if !data.AdministrativeDistance.IsUnknown() && !data.AdministrativeDistance.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminDist", strconv.FormatInt(data.AdministrativeDistance.ValueInt64(), 10))
 		}
-		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+		if !data.Control.IsUnknown() && !data.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		if (!data.LimitVlanMac.IsUnknown() && !data.LimitVlanMac.IsNull()) || false {
+		if !data.LimitVlanMac.IsUnknown() && !data.LimitVlanMac.IsNull() {
 			attrs, _ = sjson.Set(attrs, "limitVlanMac", strconv.FormatInt(data.LimitVlanMac.ValueInt64(), 10))
 		}
-		if (!data.SelectiveHostProbe.IsUnknown() && !data.SelectiveHostProbe.IsNull()) || false {
+		if !data.SelectiveHostProbe.IsUnknown() && !data.SelectiveHostProbe.IsNull() {
 			attrs, _ = sjson.Set(attrs, "selHostProbe", data.SelectiveHostProbe.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -130,13 +130,13 @@ func (data HMM) toBody(config HMM) nxos.Body {
 		for key, child := range data.Interfaces {
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "id", key)
-			if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 			}
-			if (!child.Mode.IsUnknown() && !child.Mode.IsNull()) || false {
+			if !child.Mode.IsUnknown() && !child.Mode.IsNull() {
 				attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
 			}
-			if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+			if !child.Description.IsUnknown() && !child.Description.IsNull() {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.hmmFwdIf.attributes", attrs)

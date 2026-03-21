@@ -100,7 +100,7 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	{{- $name := .Name }}
 	{{- range  .Attributes}}
-	{{- if and (not .ReferenceOnly) (not .WriteOnly) (not .ExcludeTest)}}
+	{{- if and (not .WriteOnly) (not .ExcludeTest)}}
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
@@ -138,7 +138,7 @@ resource "nxos_dme" "PreReq{{$index}}" {
   {{- if .Attributes}}
   content = {
     {{- range .Attributes}}
-      {{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+      {{.Name}} = "{{.Value}}"
     {{- end}}
   }
   {{- end}}
@@ -212,7 +212,7 @@ resource "nxos_dme" "PreReq{{$index}}" {
 {{- range .Children}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
-{{- if or .Id .ReferenceOnly}}
+{{- if .Id}}
 	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}
 {{- end}}
 {{- end}}
@@ -247,7 +247,7 @@ func testAccDataSourceNxos{{camelCase .Name}}Config() string {
 	config += `
 data "nxos_{{snakeCase .Name}}" "test" {
 {{- range  .Attributes}}
-{{- if or .Id .ReferenceOnly}}
+{{- if .Id}}
 	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}
 {{- end}}
 {{- end}}

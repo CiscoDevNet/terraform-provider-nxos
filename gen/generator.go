@@ -113,9 +113,6 @@ type YamlConfig struct {
 	DsDescription     string                 `yaml:"ds_description"`
 	ResDescription    string                 `yaml:"res_description"`
 	DocPath           string                 `yaml:"doc_path"`
-	Parents           []string               `yaml:"parents"`
-	Children          []string               `yaml:"children"`
-	References        []string               `yaml:"references"`
 	Attributes        []YamlConfigAttribute  `yaml:"attributes"`
 	ChildClasses      []YamlConfigChildClass `yaml:"child_classes"`
 	TfChildClasses    []YamlConfigChildClass `yaml:"-"`
@@ -127,7 +124,6 @@ type YamlConfigAttribute struct {
 	TfName             string   `yaml:"tf_name"`
 	Type               string   `yaml:"type"`
 	Id                 bool     `yaml:"id"`
-	ReferenceOnly      bool     `yaml:"reference_only"`
 	Mandatory          bool     `yaml:"mandatory"`
 	WriteOnly          bool     `yaml:"write_only"`
 	Sensitive          bool     `yaml:"sensitive"`
@@ -135,10 +131,8 @@ type YamlConfigAttribute struct {
 	Example            string   `yaml:"example"`
 	EnumValues         []string `yaml:"enum_values"`
 	AllowNonEnumValues bool     `yaml:"allow_non_enum_values"`
-	AlwaysInclude      bool     `yaml:"always_include"`
 	MinInt             int      `yaml:"min_int"`
 	MaxInt             int      `yaml:"max_int"`
-	DefaultValue       string   `yaml:"default_value"`
 	Value              string   `yaml:"value"`
 	ExcludeTest        bool     `yaml:"exclude_test"`
 	RequiresReplace    bool     `yaml:"requires_replace"`
@@ -154,7 +148,6 @@ type YamlConfigChildClass struct {
 	DocPath        string                 `yaml:"doc_path"`
 	Mandatory      bool                   `yaml:"mandatory"`
 	NoDelete       bool                   `yaml:"no_delete"`
-	AlwaysInclude  bool                   `yaml:"always_include"`
 	Attributes     []YamlConfigAttribute  `yaml:"attributes"`
 	ChildClasses   []YamlConfigChildClass `yaml:"child_classes"`
 	TfChildClasses []YamlConfigChildClass `yaml:"-"`
@@ -171,7 +164,6 @@ type YamlTest struct {
 type YamlTestAttribute struct {
 	Name      string `yaml:"name"`
 	Value     string `yaml:"value"`
-	Reference string `yaml:"reference"`
 }
 
 // Templating helper function to convert TF name to GO name
@@ -280,11 +272,11 @@ func ChildDocPaths(children []YamlConfigChildClass) []string {
 	return paths
 }
 
-// Templating helper function to return import attributes (reference_only or id)
+// Templating helper function to return import attributes (id)
 func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	attributes := []YamlConfigAttribute{}
 	for _, attr := range config.Attributes {
-		if attr.ReferenceOnly || attr.Id {
+		if attr.Id {
 			attributes = append(attributes, attr)
 		}
 	}
@@ -400,10 +392,10 @@ func AllChildClassNames(children []YamlConfigChildClass) []string {
 	return names
 }
 
-// HasNonIdAttrs returns true if there is at least one non-id attribute (excluding reference_only and value-only).
+// HasNonIdAttrs returns true if there is at least one non-id attribute (excluding value-only).
 func HasNonIdAttrs(attrs []YamlConfigAttribute) bool {
 	for _, a := range attrs {
-		if !a.Id && !a.ReferenceOnly && a.Value == "" {
+		if !a.Id && a.Value == "" {
 			return true
 		}
 	}

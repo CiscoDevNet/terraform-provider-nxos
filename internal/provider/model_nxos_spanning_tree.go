@@ -110,7 +110,7 @@ func (data SpanningTree) getClassName() string {
 func (data SpanningTree) toBody(config SpanningTree) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
@@ -119,31 +119,31 @@ func (data SpanningTree) toBody(config SpanningTree) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".stpInst"
 		attrs = "{}"
-		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
+		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
-		if (!data.BridgeAssurance.IsUnknown() && !data.BridgeAssurance.IsNull()) || false {
+		if !data.BridgeAssurance.IsUnknown() && !data.BridgeAssurance.IsNull() {
 			attrs, _ = sjson.Set(attrs, "bridge", data.BridgeAssurance.ValueString())
 		}
-		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+		if !data.Control.IsUnknown() && !data.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		if (!data.Fcoe.IsUnknown() && !data.Fcoe.IsNull()) || false {
+		if !data.Fcoe.IsUnknown() && !data.Fcoe.IsNull() {
 			attrs, _ = sjson.Set(attrs, "fcoe", data.Fcoe.ValueString())
 		}
-		if (!data.L2GatewayStpDomainId.IsUnknown() && !data.L2GatewayStpDomainId.IsNull()) || false {
+		if !data.L2GatewayStpDomainId.IsUnknown() && !data.L2GatewayStpDomainId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "l2GStpDomId", strconv.FormatInt(data.L2GatewayStpDomainId.ValueInt64(), 10))
 		}
-		if (!data.LinecardIssu.IsUnknown() && !data.LinecardIssu.IsNull()) || false {
+		if !data.LinecardIssu.IsUnknown() && !data.LinecardIssu.IsNull() {
 			attrs, _ = sjson.Set(attrs, "lcIssu", data.LinecardIssu.ValueString())
 		}
-		if (!data.Loopguard.IsUnknown() && !data.Loopguard.IsNull()) || false {
+		if !data.Loopguard.IsUnknown() && !data.Loopguard.IsNull() {
 			attrs, _ = sjson.Set(attrs, "loopguard", data.Loopguard.ValueString())
 		}
-		if (!data.Mode.IsUnknown() && !data.Mode.IsNull()) || false {
+		if !data.Mode.IsUnknown() && !data.Mode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mode", data.Mode.ValueString())
 		}
-		if (!data.PathcostOption.IsUnknown() && !data.PathcostOption.IsNull()) || false {
+		if !data.PathcostOption.IsUnknown() && !data.PathcostOption.IsNull() {
 			attrs, _ = sjson.Set(attrs, "pathcostOp", data.PathcostOption.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -151,40 +151,40 @@ func (data SpanningTree) toBody(config SpanningTree) nxos.Body {
 		for key, child := range data.Interfaces {
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "id", key)
-			if (!child.BpduFilter.IsUnknown() && !child.BpduFilter.IsNull()) || false {
+			if !child.BpduFilter.IsUnknown() && !child.BpduFilter.IsNull() {
 				attrs, _ = sjson.Set(attrs, "bpdufilter", child.BpduFilter.ValueString())
 			}
-			if (!child.BpduGuard.IsUnknown() && !child.BpduGuard.IsNull()) || false {
+			if !child.BpduGuard.IsUnknown() && !child.BpduGuard.IsNull() {
 				attrs, _ = sjson.Set(attrs, "bpduguard", child.BpduGuard.ValueString())
 			}
-			if (!child.Cost.IsUnknown() && !child.Cost.IsNull()) || false {
+			if !child.Cost.IsUnknown() && !child.Cost.IsNull() {
 				attrs, _ = sjson.Set(attrs, "cost", strconv.FormatInt(child.Cost.ValueInt64(), 10))
 			}
-			if (!child.Guard.IsUnknown() && !child.Guard.IsNull()) || false {
+			if !child.Guard.IsUnknown() && !child.Guard.IsNull() {
 				attrs, _ = sjson.Set(attrs, "guard", child.Guard.ValueString())
 			}
-			if (!child.LinkType.IsUnknown() && !child.LinkType.IsNull()) || false {
+			if !child.LinkType.IsUnknown() && !child.LinkType.IsNull() {
 				attrs, _ = sjson.Set(attrs, "linkType", child.LinkType.ValueString())
 			}
-			if (!child.Mode.IsUnknown() && !child.Mode.IsNull()) || false {
+			if !child.Mode.IsUnknown() && !child.Mode.IsNull() {
 				attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
 			}
-			if (!child.Priority.IsUnknown() && !child.Priority.IsNull()) || false {
+			if !child.Priority.IsUnknown() && !child.Priority.IsNull() {
 				attrs, _ = sjson.Set(attrs, "priority", strconv.FormatInt(child.Priority.ValueInt64(), 10))
 			}
-			if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+			if !child.Control.IsUnknown() && !child.Control.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 			}
-			if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+			if !child.Description.IsUnknown() && !child.Description.IsNull() {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
-			if (!child.LinecardIssu.IsUnknown() && !child.LinecardIssu.IsNull()) || false {
+			if !child.LinecardIssu.IsUnknown() && !child.LinecardIssu.IsNull() {
 				attrs, _ = sjson.Set(attrs, "lcIssu", child.LinecardIssu.ValueString())
 			}
-			if (!child.PrestandardConfiguration.IsUnknown() && !child.PrestandardConfiguration.IsNull()) || false {
+			if !child.PrestandardConfiguration.IsUnknown() && !child.PrestandardConfiguration.IsNull() {
 				attrs, _ = sjson.Set(attrs, "prestdCfg", child.PrestandardConfiguration.ValueString())
 			}
-			if (!child.SimulatePvst.IsUnknown() && !child.SimulatePvst.IsNull()) || false {
+			if !child.SimulatePvst.IsUnknown() && !child.SimulatePvst.IsNull() {
 				attrs, _ = sjson.Set(attrs, "simulatePvst", child.SimulatePvst.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.stpIf.attributes", attrs)

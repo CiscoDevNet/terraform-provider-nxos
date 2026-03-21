@@ -109,7 +109,7 @@ func (data EVPN) getClassName() string {
 func (data EVPN) toBody(config EVPN) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
@@ -117,13 +117,13 @@ func (data EVPN) toBody(config EVPN) nxos.Body {
 	for key, child := range data.Vnis {
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "encap", key)
-		if (!child.RouteDistinguisher.IsUnknown() && !child.RouteDistinguisher.IsNull()) || false {
+		if !child.RouteDistinguisher.IsUnknown() && !child.RouteDistinguisher.IsNull() {
 			attrs, _ = sjson.Set(attrs, "rd", child.RouteDistinguisher.ValueString())
 		}
-		if (!child.TableMap.IsUnknown() && !child.TableMap.IsNull()) || false {
+		if !child.TableMap.IsUnknown() && !child.TableMap.IsNull() {
 			attrs, _ = sjson.Set(attrs, "tblMap", child.TableMap.ValueString())
 		}
-		if (!child.TableMapFilter.IsUnknown() && !child.TableMapFilter.IsNull()) || false {
+		if !child.TableMapFilter.IsUnknown() && !child.TableMapFilter.IsNull() {
 			attrs, _ = sjson.Set(attrs, "tblMapFltr", strconv.FormatBool(child.TableMapFilter.ValueBool()))
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.rtctrlBDEvi.attributes", attrs)

@@ -139,7 +139,7 @@ func (data HSRP) getClassName() string {
 func (data HSRP) toBody(config HSRP) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
@@ -148,19 +148,19 @@ func (data HSRP) toBody(config HSRP) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".hsrpInst"
 		attrs = "{}"
-		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
+		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
-		if (!data.Bfd.IsUnknown() && !data.Bfd.IsNull()) || false {
+		if !data.Bfd.IsUnknown() && !data.Bfd.IsNull() {
 			attrs, _ = sjson.Set(attrs, "bfd", data.Bfd.ValueString())
 		}
-		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+		if !data.Control.IsUnknown() && !data.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		if (!data.ExtendedHoldInterval.IsUnknown() && !data.ExtendedHoldInterval.IsNull()) || false {
+		if !data.ExtendedHoldInterval.IsUnknown() && !data.ExtendedHoldInterval.IsNull() {
 			attrs, _ = sjson.Set(attrs, "extendedHoldIntvl", strconv.FormatInt(data.ExtendedHoldInterval.ValueInt64(), 10))
 		}
-		if (!data.ExtendedHoldIntervalConfiguration.IsUnknown() && !data.ExtendedHoldIntervalConfiguration.IsNull()) || false {
+		if !data.ExtendedHoldIntervalConfiguration.IsUnknown() && !data.ExtendedHoldIntervalConfiguration.IsNull() {
 			attrs, _ = sjson.Set(attrs, "extendedHoldIntvlCfg", data.ExtendedHoldIntervalConfiguration.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -171,37 +171,37 @@ func (data HSRP) toBody(config HSRP) nxos.Body {
 			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "id", key)
-			if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 			}
-			if (!child.Bfd.IsUnknown() && !child.Bfd.IsNull()) || false {
+			if !child.Bfd.IsUnknown() && !child.Bfd.IsNull() {
 				attrs, _ = sjson.Set(attrs, "bfd", child.Bfd.ValueString())
 			}
-			if (!child.BiaScope.IsUnknown() && !child.BiaScope.IsNull()) || false {
+			if !child.BiaScope.IsUnknown() && !child.BiaScope.IsNull() {
 				attrs, _ = sjson.Set(attrs, "biaScope", child.BiaScope.ValueString())
 			}
-			if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+			if !child.Control.IsUnknown() && !child.Control.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 			}
-			if (!child.DelayMinimum.IsUnknown() && !child.DelayMinimum.IsNull()) || false {
+			if !child.DelayMinimum.IsUnknown() && !child.DelayMinimum.IsNull() {
 				attrs, _ = sjson.Set(attrs, "delayIntfMin", strconv.FormatInt(child.DelayMinimum.ValueInt64(), 10))
 			}
-			if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+			if !child.Description.IsUnknown() && !child.Description.IsNull() {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
-			if (!child.MacRefreshInterval.IsUnknown() && !child.MacRefreshInterval.IsNull()) || false {
+			if !child.MacRefreshInterval.IsUnknown() && !child.MacRefreshInterval.IsNull() {
 				attrs, _ = sjson.Set(attrs, "macRefreshIntvl", strconv.FormatInt(child.MacRefreshInterval.ValueInt64(), 10))
 			}
-			if (!child.MacRefreshIntervalConfiguration.IsUnknown() && !child.MacRefreshIntervalConfiguration.IsNull()) || false {
+			if !child.MacRefreshIntervalConfiguration.IsUnknown() && !child.MacRefreshIntervalConfiguration.IsNull() {
 				attrs, _ = sjson.Set(attrs, "macRefreshIntvlCfg", child.MacRefreshIntervalConfiguration.ValueString())
 			}
-			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+			if !child.Name.IsUnknown() && !child.Name.IsNull() {
 				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 			}
-			if (!child.ReloadDelay.IsUnknown() && !child.ReloadDelay.IsNull()) || false {
+			if !child.ReloadDelay.IsUnknown() && !child.ReloadDelay.IsNull() {
 				attrs, _ = sjson.Set(attrs, "reloadDelay", strconv.FormatInt(child.ReloadDelay.ValueInt64(), 10))
 			}
-			if (!child.Version.IsUnknown() && !child.Version.IsNull()) || false {
+			if !child.Version.IsUnknown() && !child.Version.IsNull() {
 				attrs, _ = sjson.Set(attrs, "version", child.Version.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.hsrpIf.attributes", attrs)
@@ -216,69 +216,69 @@ func (data HSRP) toBody(config HSRP) nxos.Body {
 					keyParts := strings.SplitN(key, ";", 2)
 					attrs, _ = sjson.Set(attrs, "id", keyParts[0])
 					attrs, _ = sjson.Set(attrs, "af", keyParts[1])
-					if (!child.AuthenticationMd5CompatibilityMode.IsUnknown() && !child.AuthenticationMd5CompatibilityMode.IsNull()) || false {
+					if !child.AuthenticationMd5CompatibilityMode.IsUnknown() && !child.AuthenticationMd5CompatibilityMode.IsNull() {
 						attrs, _ = sjson.Set(attrs, "authMd5CompatibilityMode", child.AuthenticationMd5CompatibilityMode.ValueString())
 					}
-					if (!child.AuthenticationMd5KeyChainName.IsUnknown() && !child.AuthenticationMd5KeyChainName.IsNull()) || false {
+					if !child.AuthenticationMd5KeyChainName.IsUnknown() && !child.AuthenticationMd5KeyChainName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "authMd5KeyChainName", child.AuthenticationMd5KeyChainName.ValueString())
 					}
-					if (!child.AuthenticationMd5KeyName.IsUnknown() && !child.AuthenticationMd5KeyName.IsNull()) || false {
+					if !child.AuthenticationMd5KeyName.IsUnknown() && !child.AuthenticationMd5KeyName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "authMd5KeyName", child.AuthenticationMd5KeyName.ValueString())
 					}
-					if (!child.AuthenticationMd5KeyStringType.IsUnknown() && !child.AuthenticationMd5KeyStringType.IsNull()) || false {
+					if !child.AuthenticationMd5KeyStringType.IsUnknown() && !child.AuthenticationMd5KeyStringType.IsNull() {
 						attrs, _ = sjson.Set(attrs, "authMd5KeyStringType", child.AuthenticationMd5KeyStringType.ValueString())
 					}
-					if (!child.AuthenticationMd5Timeout.IsUnknown() && !child.AuthenticationMd5Timeout.IsNull()) || false {
+					if !child.AuthenticationMd5Timeout.IsUnknown() && !child.AuthenticationMd5Timeout.IsNull() {
 						attrs, _ = sjson.Set(attrs, "authMd5Timeout", strconv.FormatInt(child.AuthenticationMd5Timeout.ValueInt64(), 10))
 					}
-					if (!child.AuthenticationMd5Type.IsUnknown() && !child.AuthenticationMd5Type.IsNull()) || false {
+					if !child.AuthenticationMd5Type.IsUnknown() && !child.AuthenticationMd5Type.IsNull() {
 						attrs, _ = sjson.Set(attrs, "authMd5Type", child.AuthenticationMd5Type.ValueString())
 					}
 					if configChildOk && !configChild.AuthenticationSecretWo.IsNull() {
 						attrs, _ = sjson.Set(attrs, "authSecret", configChild.AuthenticationSecretWo.ValueString())
-					} else if (!child.AuthenticationSecret.IsUnknown() && !child.AuthenticationSecret.IsNull()) || false {
+					} else if !child.AuthenticationSecret.IsUnknown() && !child.AuthenticationSecret.IsNull() {
 						attrs, _ = sjson.Set(attrs, "authSecret", child.AuthenticationSecret.ValueString())
 					}
-					if (!child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull()) || false {
+					if !child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull() {
 						attrs, _ = sjson.Set(attrs, "authType", child.AuthenticationType.ValueString())
 					}
-					if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+					if !child.Control.IsUnknown() && !child.Control.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 					}
-					if (!child.Follow.IsUnknown() && !child.Follow.IsNull()) || false {
+					if !child.Follow.IsUnknown() && !child.Follow.IsNull() {
 						attrs, _ = sjson.Set(attrs, "follow", child.Follow.ValueString())
 					}
-					if (!child.ForwardingLowerThreshold.IsUnknown() && !child.ForwardingLowerThreshold.IsNull()) || false {
+					if !child.ForwardingLowerThreshold.IsUnknown() && !child.ForwardingLowerThreshold.IsNull() {
 						attrs, _ = sjson.Set(attrs, "fwdLwrThrld", strconv.FormatInt(child.ForwardingLowerThreshold.ValueInt64(), 10))
 					}
-					if (!child.HelloInterval.IsUnknown() && !child.HelloInterval.IsNull()) || false {
+					if !child.HelloInterval.IsUnknown() && !child.HelloInterval.IsNull() {
 						attrs, _ = sjson.Set(attrs, "helloIntvl", strconv.FormatInt(child.HelloInterval.ValueInt64(), 10))
 					}
-					if (!child.HoldInterval.IsUnknown() && !child.HoldInterval.IsNull()) || false {
+					if !child.HoldInterval.IsUnknown() && !child.HoldInterval.IsNull() {
 						attrs, _ = sjson.Set(attrs, "holdIntvl", strconv.FormatInt(child.HoldInterval.ValueInt64(), 10))
 					}
-					if (!child.IpAddress.IsUnknown() && !child.IpAddress.IsNull()) || false {
+					if !child.IpAddress.IsUnknown() && !child.IpAddress.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ip", child.IpAddress.ValueString())
 					}
-					if (!child.IpObtainMode.IsUnknown() && !child.IpObtainMode.IsNull()) || false {
+					if !child.IpObtainMode.IsUnknown() && !child.IpObtainMode.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ipObtainMode", child.IpObtainMode.ValueString())
 					}
-					if (!child.MacAddress.IsUnknown() && !child.MacAddress.IsNull()) || false {
+					if !child.MacAddress.IsUnknown() && !child.MacAddress.IsNull() {
 						attrs, _ = sjson.Set(attrs, "mac", child.MacAddress.ValueString())
 					}
-					if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+					if !child.Name.IsUnknown() && !child.Name.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 					}
-					if (!child.PreemptDelayMinimum.IsUnknown() && !child.PreemptDelayMinimum.IsNull()) || false {
+					if !child.PreemptDelayMinimum.IsUnknown() && !child.PreemptDelayMinimum.IsNull() {
 						attrs, _ = sjson.Set(attrs, "preemptDelayMin", strconv.FormatInt(child.PreemptDelayMinimum.ValueInt64(), 10))
 					}
-					if (!child.PreemptDelayReload.IsUnknown() && !child.PreemptDelayReload.IsNull()) || false {
+					if !child.PreemptDelayReload.IsUnknown() && !child.PreemptDelayReload.IsNull() {
 						attrs, _ = sjson.Set(attrs, "preemptDelayReload", strconv.FormatInt(child.PreemptDelayReload.ValueInt64(), 10))
 					}
-					if (!child.PreemptDelaySync.IsUnknown() && !child.PreemptDelaySync.IsNull()) || false {
+					if !child.PreemptDelaySync.IsUnknown() && !child.PreemptDelaySync.IsNull() {
 						attrs, _ = sjson.Set(attrs, "preemptDelaySync", strconv.FormatInt(child.PreemptDelaySync.ValueInt64(), 10))
 					}
-					if (!child.Priority.IsUnknown() && !child.Priority.IsNull()) || false {
+					if !child.Priority.IsUnknown() && !child.Priority.IsNull() {
 						attrs, _ = sjson.Set(attrs, "prio", strconv.FormatInt(child.Priority.ValueInt64(), 10))
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.hsrpGroup.attributes", attrs)

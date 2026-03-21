@@ -220,7 +220,6 @@ func (data {{camelCase .Name}}) getClassName() string {
 {{- $rnArgs := .RnArgs}}
 {{- range .Children}}
 {{- $childClassName := .ClassName}}
-{{- $childAlwaysInclude := .AlwaysInclude}}
 {{- $childRn := .Rn}}
 {{- if eq .Type "single"}}
 {{- if .ChildClasses}}
@@ -234,15 +233,15 @@ func (data {{camelCase .Name}}) getClassName() string {
 	{{- range .Attributes}}
 	{{- if .Value}}
 	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
-	{{- else if not .ReferenceOnly}}
+	{{- else}}
 	{{- if and .Sensitive (eq .Type "String")}}
 	if !{{$configVar}}.{{toGoName .TfName}}Wo.IsNull() {
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$configVar}}.{{toGoName .TfName}}Wo.ValueString())
-	} else if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+	} else if !{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull() {
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$dataVar}}.{{toGoName .TfName}}.ValueString())
 	}
 	{{- else}}
-	if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+	if !{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt({{$dataVar}}.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -266,15 +265,15 @@ func (data {{camelCase .Name}}) getClassName() string {
 	{{- range .Attributes}}
 	{{- if .Value}}
 	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
-	{{- else if not .ReferenceOnly}}
+	{{- else}}
 	{{- if and .Sensitive (eq .Type "String")}}
 	if !{{$configVar}}.{{toGoName .TfName}}Wo.IsNull() {
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$configVar}}.{{toGoName .TfName}}Wo.ValueString())
-	} else if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+	} else if !{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull() {
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$dataVar}}.{{toGoName .TfName}}.ValueString())
 	}
 	{{- else}}
-	if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+	if !{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt({{$dataVar}}.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -286,7 +285,7 @@ func (data {{camelCase .Name}}) getClassName() string {
 	{{- end}}
 	{{- end}}
 	{{- end}}
-	if attrs != "{}" || {{$childAlwaysInclude}} {
+	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1.{{$childClassName}}.attributes", attrs)
 	}
 {{- end}}
@@ -311,11 +310,11 @@ func (data {{camelCase .Name}}) getClassName() string {
 		{{- if and .Sensitive (eq .Type "String")}}
 		if configChildOk && !configChild.{{toGoName .TfName}}Wo.IsNull() {
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", configChild.{{toGoName .TfName}}Wo.ValueString())
-		} else if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+		} else if !child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull() {
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", child.{{toGoName .TfName}}.ValueString())
 		}
 		{{- else}}
-		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+		if !child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull() {
 			{{- if eq .Type "Int64"}}
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
 			{{- else if eq .Type "Bool"}}
@@ -349,15 +348,14 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	{{- range .Attributes}}
-	{{- if not .ReferenceOnly}}
 	{{- if and .Sensitive (eq .Type "String")}}
 	if !config.{{toGoName .TfName}}Wo.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", config.{{toGoName .TfName}}Wo.ValueString())
-	} else if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+	} else if !data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
 	}
 	{{- else}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+	if !data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -366,7 +364,6 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
 		{{- end}}
 	}
-	{{- end}}
 	{{- end}}
 	{{- end}}
 
@@ -403,7 +400,7 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 {{- if or (len .Attributes) .ChildClasses}}
 {{- if eq .Type "single"}}
 {{- $hasNonRefAttribs := false}}
-{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
+{{- range .Attributes}}{{- if and (not .Value) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
 {{- if or $hasNonRefAttribs .ChildClasses}}
 	{
 	var r{{$childClassName}} gjson.Result
@@ -423,7 +420,7 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 	)
 {{- end}}
 {{- range .Attributes}}
-{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+{{- if and (not .Value) (not .WriteOnly)}}
 {{- if eq .Type "Int64"}}
 	{{$dataVar}}.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
 {{- else if eq .Type "Bool"}}
@@ -445,7 +442,7 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 					if classname.String() == "{{$childClassName}}" {
 						var child {{$typePrefix}}{{toGoName .TfName}}
 						{{- range .Attributes}}
-						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly) (not .Id)}}
+						{{- if and (not .Value) (not .WriteOnly) (not .Id)}}
 						{{- if eq .Type "Int64"}}
 						child.{{toGoName .TfName}} = types.Int64Value(value.Get("attributes.{{.NxosName}}").Int())
 						{{- else if eq .Type "Bool"}}
@@ -512,7 +509,7 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 							},
 						)
 						{{- range .Attributes}}
-						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+						{{- if and (not .Value) (not .WriteOnly)}}
 						{{- if eq .Type "Int64"}}
 						{{$parentVar}}.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
 						{{- else if eq .Type "Bool"}}
@@ -534,7 +531,7 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 										if nestedClassname.String() == "{{$childClassName}}" {
 											var nestedChild{{$childClassName}} {{$typePrefix}}{{toGoName .TfName}}
 											{{- range .Attributes}}
-											{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly) (not .Id)}}
+											{{- if and (not .Value) (not .WriteOnly) (not .Id)}}
 											{{- if eq .Type "Int64"}}
 											nestedChild{{$childClassName}}.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
 											{{- else if eq .Type "Bool"}}
@@ -566,7 +563,7 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 
 func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- range .Attributes}}
-	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+	{{- if and (not .Value) (not .WriteOnly)}}
 	{{- if eq .Type "Int64"}}
 	data.{{toGoName .TfName}} = types.Int64Value(res.Get(data.getClassName()+".attributes.{{.NxosName}}").Int())
 	{{- else if eq .Type "Bool"}}
@@ -605,7 +602,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 {{- $list := (toGoName .TfName)}}
 {{- if eq .Type "single"}}
 {{- $hasNonRefAttribs := false}}
-{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
+{{- range .Attributes}}{{- if and (not .Value) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
 {{- $hasChildren := false}}
 {{- if .ChildClasses}}{{$hasChildren = true}}{{end}}
 {{- if or $hasNonRefAttribs $hasChildren}}
@@ -627,7 +624,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	)
 {{- end}}
 {{- range .Attributes}}
-{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+{{- if and (not .Value) (not .WriteOnly)}}
 	if !{{$dataAccessor}}.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		{{$dataAccessor}}.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
@@ -667,7 +664,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 			continue
 		}
 		{{- range .Attributes}}
-		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly) (not .Id)}}
+		{{- if and (not .Value) (not .WriteOnly) (not .Id)}}
 		if !item.{{toGoName .TfName}}.IsNull() {
 			{{- if eq .Type "Int64"}}
 			item.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
@@ -729,7 +726,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 		},
 	)
 	{{- range .Attributes}}
-	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+	{{- if and (not .Value) (not .WriteOnly)}}
 	if !{{$dataListExpr}}.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		{{$dataListExpr}}.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
@@ -768,7 +765,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 			continue
 		}
 		{{- range .Attributes}}
-		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly) (not .Id)}}
+		{{- if and (not .Value) (not .WriteOnly) (not .Id)}}
 		if !{{$indexVar}}Item.{{toGoName .TfName}}.IsNull() {
 			{{- if eq .Type "Int64"}}
 			{{$indexVar}}Item.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
@@ -794,7 +791,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 
 func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{{- range .Attributes}}
-	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+	{{- if and (not .Value) (not .WriteOnly)}}
 	if !data.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		data.{{toGoName .TfName}} = types.Int64Value(res.Get(data.getClassName()+".attributes.{{.NxosName}}").Int())
@@ -815,7 +812,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{{- $list := (toGoName .TfName)}}
 	{{- if eq .Type "single"}}
 	{{- $hasNonRefAttribs := false}}
-	{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
+	{{- range .Attributes}}{{- if and (not .Value) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
 	{{- $hasChildren := false}}
 	{{- if .ChildClasses}}{{$hasChildren = true}}{{end}}
 	{{- if or $hasNonRefAttribs $hasChildren}}
@@ -836,7 +833,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	)
 	{{- end}}
 	{{- range .Attributes}}
-	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+	{{- if and (not .Value) (not .WriteOnly)}}
 	if !data.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		data.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
@@ -873,7 +870,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 			continue
 		}
 		{{- range .Attributes}}
-		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly) (not .Id)}}
+		{{- if and (not .Value) (not .WriteOnly) (not .Id)}}
 		if !item.{{toGoName .TfName}}.IsNull() {
 			{{- if eq .Type "Int64"}}
 			item.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
@@ -926,7 +923,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	childBodyPath := {{$childrenPathVar}} + "." + strconv.Itoa(childIndex) + ".{{$childClassName}}"
 	body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 {{- range .Attributes}}
-{{- if and (not .ReferenceOnly) (not .Id) (eq .Value "")}}
+{{- if and (not .Id) (eq .Value "")}}
 	if !data.{{toGoName .TfName}}.IsNull() {
 		body, _ = sjson.Set(body, childBodyPath+".attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 	}
@@ -940,7 +937,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{
 	childBody := ""
 {{- range .Attributes}}
-{{- if and (not .ReferenceOnly) (not .Id) (eq .Value "")}}
+{{- if and (not .Id) (eq .Value "")}}
 	if !data.{{toGoName .TfName}}.IsNull() {
 		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 	}
@@ -958,7 +955,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		childBody := ""
 		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
 {{- range .Attributes}}
-{{- if and (not .ReferenceOnly) (not .Id) (eq .Value "")}}
+{{- if and (not .Id) (eq .Value "")}}
 		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 {{- end}}
 {{- end}}
@@ -993,7 +990,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 	{{- else}}
 	{{- range .Attributes}}
-	{{- if and (not .ReferenceOnly) (not .Id) (eq .Value "")}}
+	{{- if and (not .Id) (eq .Value "")}}
 	if !data.{{toGoName .TfName}}.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 	}
@@ -1128,7 +1125,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- if .NoDelete}}
 			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.rn", stateChild.getRn(stateKey))
 {{- range .Attributes}}
-{{- if and (not .ReferenceOnly) (not .Id) (eq .Value "")}}
+{{- if and (not .Id) (eq .Value "")}}
 			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 {{- end}}
 {{- end}}

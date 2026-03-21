@@ -97,10 +97,10 @@ func (data Logging) toBody(config Logging) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
 		attrs = "{}"
-		if (!data.All.IsUnknown() && !data.All.IsNull()) || false {
+		if !data.All.IsUnknown() && !data.All.IsNull() {
 			attrs, _ = sjson.Set(attrs, "all", data.All.ValueString())
 		}
-		if (!data.Level.IsUnknown() && !data.Level.IsNull()) || false {
+		if !data.Level.IsUnknown() && !data.Level.IsNull() {
 			attrs, _ = sjson.Set(attrs, "severityLevel", data.Level.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -108,7 +108,7 @@ func (data Logging) toBody(config Logging) nxos.Body {
 		for key, child := range data.Facilities {
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "facilityName", key)
-			if (!child.Level.IsUnknown() && !child.Level.IsNull()) || false {
+			if !child.Level.IsUnknown() && !child.Level.IsNull() {
 				attrs, _ = sjson.Set(attrs, "severityLevel", child.Level.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", attrs)

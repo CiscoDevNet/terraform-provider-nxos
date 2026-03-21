@@ -174,7 +174,7 @@ func (data System) getClassName() string {
 func (data System) toBody(config System) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
+	if !data.Name.IsUnknown() && !data.Name.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
 	var attrs string
@@ -186,67 +186,67 @@ func (data System) toBody(config System) nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
-		if (!data.EthernetMtu.IsUnknown() && !data.EthernetMtu.IsNull()) || false {
+		if !data.EthernetMtu.IsUnknown() && !data.EthernetMtu.IsNull() {
 			attrs, _ = sjson.Set(attrs, "systemJumboMtu", strconv.FormatInt(data.EthernetMtu.ValueInt64(), 10))
 		}
-		if (!data.EthernetDefaultAdminState.IsUnknown() && !data.EthernetDefaultAdminState.IsNull()) || false {
+		if !data.EthernetDefaultAdminState.IsUnknown() && !data.EthernetDefaultAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "systemDefaultAdminSt", data.EthernetDefaultAdminState.ValueString())
 		}
-		if (!data.EthernetAdminLinkDownSyslogLevel.IsUnknown() && !data.EthernetAdminLinkDownSyslogLevel.IsNull()) || false {
+		if !data.EthernetAdminLinkDownSyslogLevel.IsUnknown() && !data.EthernetAdminLinkDownSyslogLevel.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminLinkDownSyslogLevel", strconv.FormatInt(data.EthernetAdminLinkDownSyslogLevel.ValueInt64(), 10))
 		}
-		if (!data.EthernetAdminLinkUpSyslogLevel.IsUnknown() && !data.EthernetAdminLinkUpSyslogLevel.IsNull()) || false {
+		if !data.EthernetAdminLinkUpSyslogLevel.IsUnknown() && !data.EthernetAdminLinkUpSyslogLevel.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminLinkUpSyslogLevel", strconv.FormatInt(data.EthernetAdminLinkUpSyslogLevel.ValueInt64(), 10))
 		}
-		if (!data.EthernetAdminState.IsUnknown() && !data.EthernetAdminState.IsNull()) || false {
+		if !data.EthernetAdminState.IsUnknown() && !data.EthernetAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.EthernetAdminState.ValueString())
 		}
-		if (!data.EthernetAllowUnsupportedSfp.IsUnknown() && !data.EthernetAllowUnsupportedSfp.IsNull()) || false {
+		if !data.EthernetAllowUnsupportedSfp.IsUnknown() && !data.EthernetAllowUnsupportedSfp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "allowUnsupportedSfp", strconv.FormatBool(data.EthernetAllowUnsupportedSfp.ValueBool()))
 		}
-		if (!data.EthernetChassisInfrastructureAdaptorVlan.IsUnknown() && !data.EthernetChassisInfrastructureAdaptorVlan.IsNull()) || false {
+		if !data.EthernetChassisInfrastructureAdaptorVlan.IsUnknown() && !data.EthernetChassisInfrastructureAdaptorVlan.IsNull() {
 			attrs, _ = sjson.Set(attrs, "chassisInfraAdaptorVlan", strconv.FormatInt(data.EthernetChassisInfrastructureAdaptorVlan.ValueInt64(), 10))
 		}
-		if (!data.EthernetChassisInfrastructureEpdsPortNumber.IsUnknown() && !data.EthernetChassisInfrastructureEpdsPortNumber.IsNull()) || false {
+		if !data.EthernetChassisInfrastructureEpdsPortNumber.IsUnknown() && !data.EthernetChassisInfrastructureEpdsPortNumber.IsNull() {
 			attrs, _ = sjson.Set(attrs, "chassisInfraEpdsPortNo", strconv.FormatInt(data.EthernetChassisInfrastructureEpdsPortNumber.ValueInt64(), 10))
 		}
-		if (!data.EthernetChassisInfrastructureIpv6Address.IsUnknown() && !data.EthernetChassisInfrastructureIpv6Address.IsNull()) || false {
+		if !data.EthernetChassisInfrastructureIpv6Address.IsUnknown() && !data.EthernetChassisInfrastructureIpv6Address.IsNull() {
 			attrs, _ = sjson.Set(attrs, "chassisInfraIPv6addr", data.EthernetChassisInfrastructureIpv6Address.ValueString())
 		}
-		if (!data.EthernetChassisInfrastructureVlan.IsUnknown() && !data.EthernetChassisInfrastructureVlan.IsNull()) || false {
+		if !data.EthernetChassisInfrastructureVlan.IsUnknown() && !data.EthernetChassisInfrastructureVlan.IsNull() {
 			attrs, _ = sjson.Set(attrs, "chassisInfraVlan", strconv.FormatInt(data.EthernetChassisInfrastructureVlan.ValueInt64(), 10))
 		}
-		if (!data.EthernetChassisManagementInstance.IsUnknown() && !data.EthernetChassisManagementInstance.IsNull()) || false {
+		if !data.EthernetChassisManagementInstance.IsUnknown() && !data.EthernetChassisManagementInstance.IsNull() {
 			attrs, _ = sjson.Set(attrs, "chassisMgmtInst", data.EthernetChassisManagementInstance.ValueString())
 		}
-		if (!data.EthernetChassisManagementInstanceFabricNumber.IsUnknown() && !data.EthernetChassisManagementInstanceFabricNumber.IsNull()) || false {
+		if !data.EthernetChassisManagementInstanceFabricNumber.IsUnknown() && !data.EthernetChassisManagementInstanceFabricNumber.IsNull() {
 			attrs, _ = sjson.Set(attrs, "chassisMgmtInstFabricNo", data.EthernetChassisManagementInstanceFabricNumber.ValueString())
 		}
-		if (!data.EthernetControl.IsUnknown() && !data.EthernetControl.IsNull()) || false {
+		if !data.EthernetControl.IsUnknown() && !data.EthernetControl.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.EthernetControl.ValueString())
 		}
-		if (!data.EthernetInterfaceSyslogInfo.IsUnknown() && !data.EthernetInterfaceSyslogInfo.IsNull()) || false {
+		if !data.EthernetInterfaceSyslogInfo.IsUnknown() && !data.EthernetInterfaceSyslogInfo.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ifSyslogInfo", data.EthernetInterfaceSyslogInfo.ValueString())
 		}
-		if (!data.EthernetLogEvent.IsUnknown() && !data.EthernetLogEvent.IsNull()) || false {
+		if !data.EthernetLogEvent.IsUnknown() && !data.EthernetLogEvent.IsNull() {
 			attrs, _ = sjson.Set(attrs, "logEvent", data.EthernetLogEvent.ValueString())
 		}
-		if (!data.EthernetDefaultLayer.IsUnknown() && !data.EthernetDefaultLayer.IsNull()) || false {
+		if !data.EthernetDefaultLayer.IsUnknown() && !data.EthernetDefaultLayer.IsNull() {
 			attrs, _ = sjson.Set(attrs, "systemDefaultLayer", data.EthernetDefaultLayer.ValueString())
 		}
-		if (!data.EthernetSystemInterfaceAdminState.IsUnknown() && !data.EthernetSystemInterfaceAdminState.IsNull()) || false {
+		if !data.EthernetSystemInterfaceAdminState.IsUnknown() && !data.EthernetSystemInterfaceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "systemIfAdminState", data.EthernetSystemInterfaceAdminState.ValueString())
 		}
-		if (!data.EthernetSystemLinkFailureLaserOn.IsUnknown() && !data.EthernetSystemLinkFailureLaserOn.IsNull()) || false {
+		if !data.EthernetSystemLinkFailureLaserOn.IsUnknown() && !data.EthernetSystemLinkFailureLaserOn.IsNull() {
 			attrs, _ = sjson.Set(attrs, "systemLinkFailLaserOn", strconv.FormatBool(data.EthernetSystemLinkFailureLaserOn.ValueBool()))
 		}
-		if (!data.EthernetSystemStormControlMultiThreshold.IsUnknown() && !data.EthernetSystemStormControlMultiThreshold.IsNull()) || false {
+		if !data.EthernetSystemStormControlMultiThreshold.IsUnknown() && !data.EthernetSystemStormControlMultiThreshold.IsNull() {
 			attrs, _ = sjson.Set(attrs, "systemStormControlMultiThreshold", strconv.FormatBool(data.EthernetSystemStormControlMultiThreshold.ValueBool()))
 		}
-		if (!data.EthernetVlanTagNative.IsUnknown() && !data.EthernetVlanTagNative.IsNull()) || false {
+		if !data.EthernetVlanTagNative.IsUnknown() && !data.EthernetVlanTagNative.IsNull() {
 			attrs, _ = sjson.Set(attrs, "vlanTagNative", strconv.FormatBool(data.EthernetVlanTagNative.ValueBool()))
 		}
-		if attrs != "{}" || false {
+		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ethpmInst.attributes", attrs)
 		}
 	}
@@ -254,7 +254,7 @@ func (data System) toBody(config System) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".arpEntity"
 		attrs = "{}"
-		if (!data.ArpAdminState.IsUnknown() && !data.ArpAdminState.IsNull()) || false {
+		if !data.ArpAdminState.IsUnknown() && !data.ArpAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.ArpAdminState.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -263,52 +263,52 @@ func (data System) toBody(config System) nxos.Body {
 			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".arpInst"
 			attrs = "{}"
-			if (!data.ArpInstanceAdminState.IsUnknown() && !data.ArpInstanceAdminState.IsNull()) || false {
+			if !data.ArpInstanceAdminState.IsUnknown() && !data.ArpInstanceAdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", data.ArpInstanceAdminState.ValueString())
 			}
-			if (!data.ArpAllowStaticArpOutsideSubnet.IsUnknown() && !data.ArpAllowStaticArpOutsideSubnet.IsNull()) || false {
+			if !data.ArpAllowStaticArpOutsideSubnet.IsUnknown() && !data.ArpAllowStaticArpOutsideSubnet.IsNull() {
 				attrs, _ = sjson.Set(attrs, "allowStaticArpOutsideSubnet", data.ArpAllowStaticArpOutsideSubnet.ValueString())
 			}
-			if (!data.ArpUnnumberedSviSoftwareReplication.IsUnknown() && !data.ArpUnnumberedSviSoftwareReplication.IsNull()) || false {
+			if !data.ArpUnnumberedSviSoftwareReplication.IsUnknown() && !data.ArpUnnumberedSviSoftwareReplication.IsNull() {
 				attrs, _ = sjson.Set(attrs, "arpUnnumSviSwReplication", data.ArpUnnumberedSviSoftwareReplication.ValueString())
 			}
-			if (!data.ArpCacheLimit.IsUnknown() && !data.ArpCacheLimit.IsNull()) || false {
+			if !data.ArpCacheLimit.IsUnknown() && !data.ArpCacheLimit.IsNull() {
 				attrs, _ = sjson.Set(attrs, "cacheLimit", strconv.FormatInt(data.ArpCacheLimit.ValueInt64(), 10))
 			}
-			if (!data.ArpCacheSyslogRate.IsUnknown() && !data.ArpCacheSyslogRate.IsNull()) || false {
+			if !data.ArpCacheSyslogRate.IsUnknown() && !data.ArpCacheSyslogRate.IsNull() {
 				attrs, _ = sjson.Set(attrs, "cacheSyslogRate", strconv.FormatInt(data.ArpCacheSyslogRate.ValueInt64(), 10))
 			}
-			if (!data.ArpControl.IsUnknown() && !data.ArpControl.IsNull()) || false {
+			if !data.ArpControl.IsUnknown() && !data.ArpControl.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ctrl", data.ArpControl.ValueString())
 			}
-			if (!data.ArpEvpnTimeout.IsUnknown() && !data.ArpEvpnTimeout.IsNull()) || false {
+			if !data.ArpEvpnTimeout.IsUnknown() && !data.ArpEvpnTimeout.IsNull() {
 				attrs, _ = sjson.Set(attrs, "evpn_timeout", strconv.FormatInt(data.ArpEvpnTimeout.ValueInt64(), 10))
 			}
-			if (!data.ArpInterfaceCacheLimit.IsUnknown() && !data.ArpInterfaceCacheLimit.IsNull()) || false {
+			if !data.ArpInterfaceCacheLimit.IsUnknown() && !data.ArpInterfaceCacheLimit.IsNull() {
 				attrs, _ = sjson.Set(attrs, "intfCacheLimit", strconv.FormatInt(data.ArpInterfaceCacheLimit.ValueInt64(), 10))
 			}
-			if (!data.ArpIpAdjacencyRouteDistance.IsUnknown() && !data.ArpIpAdjacencyRouteDistance.IsNull()) || false {
+			if !data.ArpIpAdjacencyRouteDistance.IsUnknown() && !data.ArpIpAdjacencyRouteDistance.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ipAdjRouteDistance", strconv.FormatInt(data.ArpIpAdjacencyRouteDistance.ValueInt64(), 10))
 			}
-			if (!data.ArpIpArpCos.IsUnknown() && !data.ArpIpArpCos.IsNull()) || false {
+			if !data.ArpIpArpCos.IsUnknown() && !data.ArpIpArpCos.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ipArpCos", strconv.FormatInt(data.ArpIpArpCos.ValueInt64(), 10))
 			}
-			if (!data.ArpOffListTimeout.IsUnknown() && !data.ArpOffListTimeout.IsNull()) || false {
+			if !data.ArpOffListTimeout.IsUnknown() && !data.ArpOffListTimeout.IsNull() {
 				attrs, _ = sjson.Set(attrs, "offListTimeout", strconv.FormatInt(data.ArpOffListTimeout.ValueInt64(), 10))
 			}
-			if (!data.ArpRarpFabricForwarding.IsUnknown() && !data.ArpRarpFabricForwarding.IsNull()) || false {
+			if !data.ArpRarpFabricForwarding.IsUnknown() && !data.ArpRarpFabricForwarding.IsNull() {
 				attrs, _ = sjson.Set(attrs, "rarpFabricFwding", data.ArpRarpFabricForwarding.ValueString())
 			}
-			if (!data.ArpRarpFabricForwardingRate.IsUnknown() && !data.ArpRarpFabricForwardingRate.IsNull()) || false {
+			if !data.ArpRarpFabricForwardingRate.IsUnknown() && !data.ArpRarpFabricForwardingRate.IsNull() {
 				attrs, _ = sjson.Set(attrs, "rarpFabricFwdingRate", strconv.FormatInt(data.ArpRarpFabricForwardingRate.ValueInt64(), 10))
 			}
-			if (!data.ArpResolveOutsideSubnet.IsUnknown() && !data.ArpResolveOutsideSubnet.IsNull()) || false {
+			if !data.ArpResolveOutsideSubnet.IsUnknown() && !data.ArpResolveOutsideSubnet.IsNull() {
 				attrs, _ = sjson.Set(attrs, "resolveARPOutsideSubnet", data.ArpResolveOutsideSubnet.ValueString())
 			}
-			if (!data.ArpSuppressionTimeout.IsUnknown() && !data.ArpSuppressionTimeout.IsNull()) || false {
+			if !data.ArpSuppressionTimeout.IsUnknown() && !data.ArpSuppressionTimeout.IsNull() {
 				attrs, _ = sjson.Set(attrs, "suppression_timeout", strconv.FormatInt(data.ArpSuppressionTimeout.ValueInt64(), 10))
 			}
-			if (!data.ArpTimeout.IsUnknown() && !data.ArpTimeout.IsNull()) || false {
+			if !data.ArpTimeout.IsUnknown() && !data.ArpTimeout.IsNull() {
 				attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(data.ArpTimeout.ValueInt64(), 10))
 			}
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -322,7 +322,7 @@ func (data System) toBody(config System) nxos.Body {
 				for key, child := range data.ArpVpcDomains {
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "domainId", key)
-					if (!child.ArpSync.IsUnknown() && !child.ArpSync.IsNull()) || false {
+					if !child.ArpSync.IsUnknown() && !child.ArpSync.IsNull() {
 						attrs, _ = sjson.Set(attrs, "arpSync", child.ArpSync.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.arpVpcDom.attributes", attrs)
@@ -334,7 +334,7 @@ func (data System) toBody(config System) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ndEntity"
 		attrs = "{}"
-		if (!data.NdAdminState.IsUnknown() && !data.NdAdminState.IsNull()) || false {
+		if !data.NdAdminState.IsUnknown() && !data.NdAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.NdAdminState.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -343,34 +343,34 @@ func (data System) toBody(config System) nxos.Body {
 			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ndInst"
 			attrs = "{}"
-			if (!data.NdAcceptSolicitNeighborEntry.IsUnknown() && !data.NdAcceptSolicitNeighborEntry.IsNull()) || false {
+			if !data.NdAcceptSolicitNeighborEntry.IsUnknown() && !data.NdAcceptSolicitNeighborEntry.IsNull() {
 				attrs, _ = sjson.Set(attrs, "acceptSolicitNghbrEntry", data.NdAcceptSolicitNeighborEntry.ValueString())
 			}
-			if (!data.NdInstanceAdminState.IsUnknown() && !data.NdInstanceAdminState.IsNull()) || false {
+			if !data.NdInstanceAdminState.IsUnknown() && !data.NdInstanceAdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", data.NdInstanceAdminState.ValueString())
 			}
-			if (!data.NdAgingInterval.IsUnknown() && !data.NdAgingInterval.IsNull()) || false {
+			if !data.NdAgingInterval.IsUnknown() && !data.NdAgingInterval.IsNull() {
 				attrs, _ = sjson.Set(attrs, "agingInterval", strconv.FormatInt(data.NdAgingInterval.ValueInt64(), 10))
 			}
-			if (!data.NdCacheLimit.IsUnknown() && !data.NdCacheLimit.IsNull()) || false {
+			if !data.NdCacheLimit.IsUnknown() && !data.NdCacheLimit.IsNull() {
 				attrs, _ = sjson.Set(attrs, "cacheLimit", strconv.FormatInt(data.NdCacheLimit.ValueInt64(), 10))
 			}
-			if (!data.NdCacheSyslogRate.IsUnknown() && !data.NdCacheSyslogRate.IsNull()) || false {
+			if !data.NdCacheSyslogRate.IsUnknown() && !data.NdCacheSyslogRate.IsNull() {
 				attrs, _ = sjson.Set(attrs, "cacheSyslogRate", strconv.FormatInt(data.NdCacheSyslogRate.ValueInt64(), 10))
 			}
-			if (!data.NdControl.IsUnknown() && !data.NdControl.IsNull()) || false {
+			if !data.NdControl.IsUnknown() && !data.NdControl.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ctrl", data.NdControl.ValueString())
 			}
-			if (!data.NdIpv6AdjacencyRouteDistance.IsUnknown() && !data.NdIpv6AdjacencyRouteDistance.IsNull()) || false {
+			if !data.NdIpv6AdjacencyRouteDistance.IsUnknown() && !data.NdIpv6AdjacencyRouteDistance.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ipv6AdjRouteDistance", strconv.FormatInt(data.NdIpv6AdjacencyRouteDistance.ValueInt64(), 10))
 			}
-			if (!data.NdOffListTimeout.IsUnknown() && !data.NdOffListTimeout.IsNull()) || false {
+			if !data.NdOffListTimeout.IsUnknown() && !data.NdOffListTimeout.IsNull() {
 				attrs, _ = sjson.Set(attrs, "offListTimeout", strconv.FormatInt(data.NdOffListTimeout.ValueInt64(), 10))
 			}
-			if (!data.NdProbeIntervalForSolicitNeighbor.IsUnknown() && !data.NdProbeIntervalForSolicitNeighbor.IsNull()) || false {
+			if !data.NdProbeIntervalForSolicitNeighbor.IsUnknown() && !data.NdProbeIntervalForSolicitNeighbor.IsNull() {
 				attrs, _ = sjson.Set(attrs, "probeIntervalForSolicitNghbr", strconv.FormatInt(data.NdProbeIntervalForSolicitNeighbor.ValueInt64(), 10))
 			}
-			if (!data.NdSolicitNeighborAdvertisement.IsUnknown() && !data.NdSolicitNeighborAdvertisement.IsNull()) || false {
+			if !data.NdSolicitNeighborAdvertisement.IsUnknown() && !data.NdSolicitNeighborAdvertisement.IsNull() {
 				attrs, _ = sjson.Set(attrs, "solicitNghbrAdvertisement", data.NdSolicitNeighborAdvertisement.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -385,61 +385,61 @@ func (data System) toBody(config System) nxos.Body {
 					for key, child := range child.Interfaces {
 						attrs = "{}"
 						attrs, _ = sjson.Set(attrs, "id", key)
-						if (!child.BootFileUrl.IsUnknown() && !child.BootFileUrl.IsNull()) || false {
+						if !child.BootFileUrl.IsUnknown() && !child.BootFileUrl.IsNull() {
 							attrs, _ = sjson.Set(attrs, "bootFileUrl", child.BootFileUrl.ValueString())
 						}
-						if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+						if !child.Control.IsUnknown() && !child.Control.IsNull() {
 							attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 						}
-						if (!child.DadAttempts.IsUnknown() && !child.DadAttempts.IsNull()) || false {
+						if !child.DadAttempts.IsUnknown() && !child.DadAttempts.IsNull() {
 							attrs, _ = sjson.Set(attrs, "dadAttempts", strconv.FormatInt(child.DadAttempts.ValueInt64(), 10))
 						}
-						if (!child.DadnsInterval.IsUnknown() && !child.DadnsInterval.IsNull()) || false {
+						if !child.DadnsInterval.IsUnknown() && !child.DadnsInterval.IsNull() {
 							attrs, _ = sjson.Set(attrs, "dadnsInterval", strconv.FormatInt(child.DadnsInterval.ValueInt64(), 10))
 						}
-						if (!child.DefaultRaLifetime.IsUnknown() && !child.DefaultRaLifetime.IsNull()) || false {
+						if !child.DefaultRaLifetime.IsUnknown() && !child.DefaultRaLifetime.IsNull() {
 							attrs, _ = sjson.Set(attrs, "defaultRaLifetime", child.DefaultRaLifetime.ValueString())
 						}
-						if (!child.DeleteAdjacencyOnMacDelete.IsUnknown() && !child.DeleteAdjacencyOnMacDelete.IsNull()) || false {
+						if !child.DeleteAdjacencyOnMacDelete.IsUnknown() && !child.DeleteAdjacencyOnMacDelete.IsNull() {
 							attrs, _ = sjson.Set(attrs, "delAdjOnMacDel", child.DeleteAdjacencyOnMacDelete.ValueString())
 						}
-						if (!child.DnsSearchListSuppress.IsUnknown() && !child.DnsSearchListSuppress.IsNull()) || false {
+						if !child.DnsSearchListSuppress.IsUnknown() && !child.DnsSearchListSuppress.IsNull() {
 							attrs, _ = sjson.Set(attrs, "dnsSearchListSuppress", child.DnsSearchListSuppress.ValueString())
 						}
-						if (!child.DnsSuppress.IsUnknown() && !child.DnsSuppress.IsNull()) || false {
+						if !child.DnsSuppress.IsUnknown() && !child.DnsSuppress.IsNull() {
 							attrs, _ = sjson.Set(attrs, "dnsSuppress", child.DnsSuppress.ValueString())
 						}
-						if (!child.HopLimit.IsUnknown() && !child.HopLimit.IsNull()) || false {
+						if !child.HopLimit.IsUnknown() && !child.HopLimit.IsNull() {
 							attrs, _ = sjson.Set(attrs, "hopLimit", strconv.FormatInt(child.HopLimit.ValueInt64(), 10))
 						}
-						if (!child.MacExtract.IsUnknown() && !child.MacExtract.IsNull()) || false {
+						if !child.MacExtract.IsUnknown() && !child.MacExtract.IsNull() {
 							attrs, _ = sjson.Set(attrs, "macExtract", child.MacExtract.ValueString())
 						}
-						if (!child.Mtu.IsUnknown() && !child.Mtu.IsNull()) || false {
+						if !child.Mtu.IsUnknown() && !child.Mtu.IsNull() {
 							attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
 						}
-						if (!child.NeighborSolicitInterval.IsUnknown() && !child.NeighborSolicitInterval.IsNull()) || false {
+						if !child.NeighborSolicitInterval.IsUnknown() && !child.NeighborSolicitInterval.IsNull() {
 							attrs, _ = sjson.Set(attrs, "nsIntvl", strconv.FormatInt(child.NeighborSolicitInterval.ValueInt64(), 10))
 						}
-						if (!child.RaInterval.IsUnknown() && !child.RaInterval.IsNull()) || false {
+						if !child.RaInterval.IsUnknown() && !child.RaInterval.IsNull() {
 							attrs, _ = sjson.Set(attrs, "raIntvl", strconv.FormatInt(child.RaInterval.ValueInt64(), 10))
 						}
-						if (!child.RaIntervalMin.IsUnknown() && !child.RaIntervalMin.IsNull()) || false {
+						if !child.RaIntervalMin.IsUnknown() && !child.RaIntervalMin.IsNull() {
 							attrs, _ = sjson.Set(attrs, "raIntvlMin", strconv.FormatInt(child.RaIntervalMin.ValueInt64(), 10))
 						}
-						if (!child.RaLifetime.IsUnknown() && !child.RaLifetime.IsNull()) || false {
+						if !child.RaLifetime.IsUnknown() && !child.RaLifetime.IsNull() {
 							attrs, _ = sjson.Set(attrs, "raLifetime", strconv.FormatInt(child.RaLifetime.ValueInt64(), 10))
 						}
-						if (!child.ReachableTime.IsUnknown() && !child.ReachableTime.IsNull()) || false {
+						if !child.ReachableTime.IsUnknown() && !child.ReachableTime.IsNull() {
 							attrs, _ = sjson.Set(attrs, "reachableTime", strconv.FormatInt(child.ReachableTime.ValueInt64(), 10))
 						}
-						if (!child.RetransmitTimer.IsUnknown() && !child.RetransmitTimer.IsNull()) || false {
+						if !child.RetransmitTimer.IsUnknown() && !child.RetransmitTimer.IsNull() {
 							attrs, _ = sjson.Set(attrs, "retransTimer", strconv.FormatInt(child.RetransmitTimer.ValueInt64(), 10))
 						}
-						if (!child.RouteSuppress.IsUnknown() && !child.RouteSuppress.IsNull()) || false {
+						if !child.RouteSuppress.IsUnknown() && !child.RouteSuppress.IsNull() {
 							attrs, _ = sjson.Set(attrs, "routeSuppress", child.RouteSuppress.ValueString())
 						}
-						if (!child.RouterPreference.IsUnknown() && !child.RouterPreference.IsNull()) || false {
+						if !child.RouterPreference.IsUnknown() && !child.RouterPreference.IsNull() {
 							attrs, _ = sjson.Set(attrs, "routerPreference", child.RouterPreference.ValueString())
 						}
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ndIf.attributes", attrs)

@@ -148,166 +148,166 @@ func (data PhysicalInterface) toBody(config PhysicalInterface) nxos.Body {
 	for key, child := range data.PhysicalInterfaces {
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "id", key)
-		if (!child.FecMode.IsUnknown() && !child.FecMode.IsNull()) || false {
+		if !child.FecMode.IsUnknown() && !child.FecMode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "FECMode", child.FecMode.ValueString())
 		}
-		if (!child.AccessVlan.IsUnknown() && !child.AccessVlan.IsNull()) || false {
+		if !child.AccessVlan.IsUnknown() && !child.AccessVlan.IsNull() {
 			attrs, _ = sjson.Set(attrs, "accessVlan", child.AccessVlan.ValueString())
 		}
-		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
-		if (!child.AutoNegotiation.IsUnknown() && !child.AutoNegotiation.IsNull()) || false {
+		if !child.AutoNegotiation.IsUnknown() && !child.AutoNegotiation.IsNull() {
 			attrs, _ = sjson.Set(attrs, "autoNeg", child.AutoNegotiation.ValueString())
 		}
-		if (!child.Bandwidth.IsUnknown() && !child.Bandwidth.IsNull()) || false {
+		if !child.Bandwidth.IsUnknown() && !child.Bandwidth.IsNull() {
 			attrs, _ = sjson.Set(attrs, "bw", strconv.FormatInt(child.Bandwidth.ValueInt64(), 10))
 		}
-		if (!child.Delay.IsUnknown() && !child.Delay.IsNull()) || false {
+		if !child.Delay.IsUnknown() && !child.Delay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "delay", strconv.FormatInt(child.Delay.ValueInt64(), 10))
 		}
-		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+		if !child.Description.IsUnknown() && !child.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 		}
-		if (!child.Duplex.IsUnknown() && !child.Duplex.IsNull()) || false {
+		if !child.Duplex.IsUnknown() && !child.Duplex.IsNull() {
 			attrs, _ = sjson.Set(attrs, "duplex", child.Duplex.ValueString())
 		}
-		if (!child.Layer.IsUnknown() && !child.Layer.IsNull()) || false {
+		if !child.Layer.IsUnknown() && !child.Layer.IsNull() {
 			attrs, _ = sjson.Set(attrs, "layer", child.Layer.ValueString())
 		}
-		if (!child.LinkLogging.IsUnknown() && !child.LinkLogging.IsNull()) || false {
+		if !child.LinkLogging.IsUnknown() && !child.LinkLogging.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkLog", child.LinkLogging.ValueString())
 		}
-		if (!child.LinkDebounceDown.IsUnknown() && !child.LinkDebounceDown.IsNull()) || false {
+		if !child.LinkDebounceDown.IsUnknown() && !child.LinkDebounceDown.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkDebounce", strconv.FormatInt(child.LinkDebounceDown.ValueInt64(), 10))
 		}
-		if (!child.LinkDebounceUp.IsUnknown() && !child.LinkDebounceUp.IsNull()) || false {
+		if !child.LinkDebounceUp.IsUnknown() && !child.LinkDebounceUp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkDebounceLinkUp", strconv.FormatInt(child.LinkDebounceUp.ValueInt64(), 10))
 		}
-		if (!child.Medium.IsUnknown() && !child.Medium.IsNull()) || false {
+		if !child.Medium.IsUnknown() && !child.Medium.IsNull() {
 			attrs, _ = sjson.Set(attrs, "medium", child.Medium.ValueString())
 		}
-		if (!child.Mode.IsUnknown() && !child.Mode.IsNull()) || false {
+		if !child.Mode.IsUnknown() && !child.Mode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
 		}
-		if (!child.Mtu.IsUnknown() && !child.Mtu.IsNull()) || false {
+		if !child.Mtu.IsUnknown() && !child.Mtu.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
 		}
-		if (!child.NativeVlan.IsUnknown() && !child.NativeVlan.IsNull()) || false {
+		if !child.NativeVlan.IsUnknown() && !child.NativeVlan.IsNull() {
 			attrs, _ = sjson.Set(attrs, "nativeVlan", child.NativeVlan.ValueString())
 		}
-		if (!child.Speed.IsUnknown() && !child.Speed.IsNull()) || false {
+		if !child.Speed.IsUnknown() && !child.Speed.IsNull() {
 			attrs, _ = sjson.Set(attrs, "speed", child.Speed.ValueString())
 		}
-		if (!child.SpeedGroup.IsUnknown() && !child.SpeedGroup.IsNull()) || false {
+		if !child.SpeedGroup.IsUnknown() && !child.SpeedGroup.IsNull() {
 			attrs, _ = sjson.Set(attrs, "speedGroup", child.SpeedGroup.ValueString())
 		}
-		if (!child.TrunkVlans.IsUnknown() && !child.TrunkVlans.IsNull()) || false {
+		if !child.TrunkVlans.IsUnknown() && !child.TrunkVlans.IsNull() {
 			attrs, _ = sjson.Set(attrs, "trunkVlans", child.TrunkVlans.ValueString())
 		}
-		if (!child.UniDirectionalEthernet.IsUnknown() && !child.UniDirectionalEthernet.IsNull()) || false {
+		if !child.UniDirectionalEthernet.IsUnknown() && !child.UniDirectionalEthernet.IsNull() {
 			attrs, _ = sjson.Set(attrs, "uniDirectionalEthernet", child.UniDirectionalEthernet.ValueString())
 		}
-		if (!child.UserConfiguredFlags.IsUnknown() && !child.UserConfiguredFlags.IsNull()) || false {
+		if !child.UserConfiguredFlags.IsUnknown() && !child.UserConfiguredFlags.IsNull() {
 			attrs, _ = sjson.Set(attrs, "userCfgdFlags", child.UserConfiguredFlags.ValueString())
 		}
-		if (!child.Beacon.IsUnknown() && !child.Beacon.IsNull()) || false {
+		if !child.Beacon.IsUnknown() && !child.Beacon.IsNull() {
 			attrs, _ = sjson.Set(attrs, "beacon", child.Beacon.ValueString())
 		}
-		if (!child.DfeAdaptiveTuning.IsUnknown() && !child.DfeAdaptiveTuning.IsNull()) || false {
+		if !child.DfeAdaptiveTuning.IsUnknown() && !child.DfeAdaptiveTuning.IsNull() {
 			attrs, _ = sjson.Set(attrs, "dfeAdaptiveTuning", child.DfeAdaptiveTuning.ValueString())
 		}
-		if (!child.DfeTuningDelay.IsUnknown() && !child.DfeTuningDelay.IsNull()) || false {
+		if !child.DfeTuningDelay.IsUnknown() && !child.DfeTuningDelay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "dfeTuningDelay", strconv.FormatInt(child.DfeTuningDelay.ValueInt64(), 10))
 		}
-		if (!child.Dot1qEtherType.IsUnknown() && !child.Dot1qEtherType.IsNull()) || false {
+		if !child.Dot1qEtherType.IsUnknown() && !child.Dot1qEtherType.IsNull() {
 			attrs, _ = sjson.Set(attrs, "dot1qEtherType", strconv.FormatInt(child.Dot1qEtherType.ValueInt64(), 10))
 		}
-		if (!child.EqualizationDelay.IsUnknown() && !child.EqualizationDelay.IsNull()) || false {
+		if !child.EqualizationDelay.IsUnknown() && !child.EqualizationDelay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "equalizationDelay", strconv.FormatInt(child.EqualizationDelay.ValueInt64(), 10))
 		}
-		if (!child.InheritBandwidth.IsUnknown() && !child.InheritBandwidth.IsNull()) || false {
+		if !child.InheritBandwidth.IsUnknown() && !child.InheritBandwidth.IsNull() {
 			attrs, _ = sjson.Set(attrs, "inhBw", strconv.FormatInt(child.InheritBandwidth.ValueInt64(), 10))
 		}
-		if (!child.ItuChannel.IsUnknown() && !child.ItuChannel.IsNull()) || false {
+		if !child.ItuChannel.IsUnknown() && !child.ItuChannel.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ituChannel", strconv.FormatInt(child.ItuChannel.ValueInt64(), 10))
 		}
-		if (!child.LinkActiveJitterManagement.IsUnknown() && !child.LinkActiveJitterManagement.IsNull()) || false {
+		if !child.LinkActiveJitterManagement.IsUnknown() && !child.LinkActiveJitterManagement.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkActiveJitterMgmt", child.LinkActiveJitterManagement.ValueString())
 		}
-		if (!child.LinkFlapErrorDisable.IsUnknown() && !child.LinkFlapErrorDisable.IsNull()) || false {
+		if !child.LinkFlapErrorDisable.IsUnknown() && !child.LinkFlapErrorDisable.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkFlapErrDis", child.LinkFlapErrorDisable.ValueString())
 		}
-		if (!child.LinkFlapErrorMax.IsUnknown() && !child.LinkFlapErrorMax.IsNull()) || false {
+		if !child.LinkFlapErrorMax.IsUnknown() && !child.LinkFlapErrorMax.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkFlapErrorMax", strconv.FormatInt(child.LinkFlapErrorMax.ValueInt64(), 10))
 		}
-		if (!child.LinkFlapErrorSeconds.IsUnknown() && !child.LinkFlapErrorSeconds.IsNull()) || false {
+		if !child.LinkFlapErrorSeconds.IsUnknown() && !child.LinkFlapErrorSeconds.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkFlapErrorSeconds", strconv.FormatInt(child.LinkFlapErrorSeconds.ValueInt64(), 10))
 		}
-		if (!child.LinkLoopback.IsUnknown() && !child.LinkLoopback.IsNull()) || false {
+		if !child.LinkLoopback.IsUnknown() && !child.LinkLoopback.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkLoopback", child.LinkLoopback.ValueString())
 		}
-		if (!child.LinkMacUpTimer.IsUnknown() && !child.LinkMacUpTimer.IsNull()) || false {
+		if !child.LinkMacUpTimer.IsUnknown() && !child.LinkMacUpTimer.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkMacUpTimer", strconv.FormatInt(child.LinkMacUpTimer.ValueInt64(), 10))
 		}
-		if (!child.LinkMaxBringUpTimer.IsUnknown() && !child.LinkMaxBringUpTimer.IsNull()) || false {
+		if !child.LinkMaxBringUpTimer.IsUnknown() && !child.LinkMaxBringUpTimer.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkMaxBringUpTimer", strconv.FormatInt(child.LinkMaxBringUpTimer.ValueInt64(), 10))
 		}
-		if (!child.LinkTransmitReset.IsUnknown() && !child.LinkTransmitReset.IsNull()) || false {
+		if !child.LinkTransmitReset.IsUnknown() && !child.LinkTransmitReset.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkTransmitReset", child.LinkTransmitReset.ValueString())
 		}
-		if (!child.Mdix.IsUnknown() && !child.Mdix.IsNull()) || false {
+		if !child.Mdix.IsUnknown() && !child.Mdix.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mdix", child.Mdix.ValueString())
 		}
-		if (!child.MediaType.IsUnknown() && !child.MediaType.IsNull()) || false {
+		if !child.MediaType.IsUnknown() && !child.MediaType.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mediaType", child.MediaType.ValueString())
 		}
-		if (!child.OpticsLoopback.IsUnknown() && !child.OpticsLoopback.IsNull()) || false {
+		if !child.OpticsLoopback.IsUnknown() && !child.OpticsLoopback.IsNull() {
 			attrs, _ = sjson.Set(attrs, "opticsLoopback", child.OpticsLoopback.ValueString())
 		}
-		if (!child.PacketTimestampEgressSourceId.IsUnknown() && !child.PacketTimestampEgressSourceId.IsNull()) || false {
+		if !child.PacketTimestampEgressSourceId.IsUnknown() && !child.PacketTimestampEgressSourceId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "packetTimestampEgressSourceId", strconv.FormatInt(child.PacketTimestampEgressSourceId.ValueInt64(), 10))
 		}
-		if (!child.PacketTimestampIngressSourceId.IsUnknown() && !child.PacketTimestampIngressSourceId.IsNull()) || false {
+		if !child.PacketTimestampIngressSourceId.IsUnknown() && !child.PacketTimestampIngressSourceId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "packetTimestampIngressSourceId", strconv.FormatInt(child.PacketTimestampIngressSourceId.ValueInt64(), 10))
 		}
-		if (!child.PacketTimestampState.IsUnknown() && !child.PacketTimestampState.IsNull()) || false {
+		if !child.PacketTimestampState.IsUnknown() && !child.PacketTimestampState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "packetTimestampState", child.PacketTimestampState.ValueString())
 		}
-		if (!child.PortType.IsUnknown() && !child.PortType.IsNull()) || false {
+		if !child.PortType.IsUnknown() && !child.PortType.IsNull() {
 			attrs, _ = sjson.Set(attrs, "portT", child.PortType.ValueString())
 		}
-		if (!child.RouterMac.IsUnknown() && !child.RouterMac.IsNull()) || false {
+		if !child.RouterMac.IsUnknown() && !child.RouterMac.IsNull() {
 			attrs, _ = sjson.Set(attrs, "routerMac", child.RouterMac.ValueString())
 		}
-		if (!child.SnmpTrapState.IsUnknown() && !child.SnmpTrapState.IsNull()) || false {
+		if !child.SnmpTrapState.IsUnknown() && !child.SnmpTrapState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "snmpTrapSt", child.SnmpTrapState.ValueString())
 		}
-		if (!child.SpanMode.IsUnknown() && !child.SpanMode.IsNull()) || false {
+		if !child.SpanMode.IsUnknown() && !child.SpanMode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "spanMode", child.SpanMode.ValueString())
 		}
-		if (!child.Squelch.IsUnknown() && !child.Squelch.IsNull()) || false {
+		if !child.Squelch.IsUnknown() && !child.Squelch.IsNull() {
 			attrs, _ = sjson.Set(attrs, "squelch", child.Squelch.ValueString())
 		}
-		if (!child.TransparentMode.IsUnknown() && !child.TransparentMode.IsNull()) || false {
+		if !child.TransparentMode.IsUnknown() && !child.TransparentMode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "transMode", child.TransparentMode.ValueString())
 		}
-		if (!child.TrunkLogging.IsUnknown() && !child.TrunkLogging.IsNull()) || false {
+		if !child.TrunkLogging.IsUnknown() && !child.TrunkLogging.IsNull() {
 			attrs, _ = sjson.Set(attrs, "trunkLog", child.TrunkLogging.ValueString())
 		}
-		if (!child.Usage.IsUnknown() && !child.Usage.IsNull()) || false {
+		if !child.Usage.IsUnknown() && !child.Usage.IsNull() {
 			attrs, _ = sjson.Set(attrs, "usage", child.Usage.ValueString())
 		}
-		if (!child.VoicePortCos.IsUnknown() && !child.VoicePortCos.IsNull()) || false {
+		if !child.VoicePortCos.IsUnknown() && !child.VoicePortCos.IsNull() {
 			attrs, _ = sjson.Set(attrs, "voicePortCos", strconv.FormatInt(child.VoicePortCos.ValueInt64(), 10))
 		}
-		if (!child.VoicePortTrust.IsUnknown() && !child.VoicePortTrust.IsNull()) || false {
+		if !child.VoicePortTrust.IsUnknown() && !child.VoicePortTrust.IsNull() {
 			attrs, _ = sjson.Set(attrs, "voicePortTrust", child.VoicePortTrust.ValueString())
 		}
-		if (!child.VoiceVlanId.IsUnknown() && !child.VoiceVlanId.IsNull()) || false {
+		if !child.VoiceVlanId.IsUnknown() && !child.VoiceVlanId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "voiceVlanId", strconv.FormatInt(child.VoiceVlanId.ValueInt64(), 10))
 		}
-		if (!child.VoiceVlanType.IsUnknown() && !child.VoiceVlanType.IsNull()) || false {
+		if !child.VoiceVlanType.IsUnknown() && !child.VoiceVlanType.IsNull() {
 			attrs, _ = sjson.Set(attrs, "voiceVlanType", child.VoiceVlanType.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.l1PhysIf.attributes", attrs)
@@ -315,10 +315,10 @@ func (data PhysicalInterface) toBody(config PhysicalInterface) nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".l1PhysIf.children"
 			attrs = "{}"
-			if (!child.VrfDn.IsUnknown() && !child.VrfDn.IsNull()) || false {
+			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())
 			}
-			if attrs != "{}" || false {
+			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nwRtVrfMbr.attributes", attrs)
 			}
 		}

@@ -30,11 +30,6 @@ func NewAttributeDescription(s string) *AttributeDescription {
 	return &AttributeDescription{s}
 }
 
-func (d *AttributeDescription) AddDefaultValueDescription(defaultValue string) *AttributeDescription {
-	d.String = fmt.Sprintf("%s\n  - Default value: `%s`", d.String, defaultValue)
-	return d
-}
-
 func (d *AttributeDescription) AddStringEnumDescription(values ...string) *AttributeDescription {
 	v := make([]string, len(values))
 	for i, value := range values {
@@ -56,30 +51,6 @@ type ResourceDescription struct {
 func NewResourceDescription(description string) *ResourceDescription {
 	d := description + "\n"
 	return &ResourceDescription{d}
-}
-
-func (d *ResourceDescription) AddParents(values ...string) *ResourceDescription {
-	d.String += "\n### Parent resources\n\n"
-	for _, value := range values {
-		d.String += fmt.Sprintf("- [nxos_%s](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/%s)\n", value, value)
-	}
-	return d
-}
-
-func (d *ResourceDescription) AddChildren(values ...string) *ResourceDescription {
-	d.String += "\n### Child resources\n\n"
-	for _, value := range values {
-		d.String += fmt.Sprintf("- [nxos_%s](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/%s)\n", value, value)
-	}
-	return d
-}
-
-func (d *ResourceDescription) AddReferences(values ...string) *ResourceDescription {
-	d.String += "\n### Referenced resources\n\n"
-	for _, value := range values {
-		d.String += fmt.Sprintf("- [nxos_%s](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/%s)\n", value, value)
-	}
-	return d
 }
 
 func (d *ResourceDescription) AddApiDocumentation(rootClassName, rootDocPath string, childClassNames, childDocPaths []string) *ResourceDescription {

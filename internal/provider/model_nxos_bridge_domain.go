@@ -103,7 +103,7 @@ func (data BridgeDomain) getClassName() string {
 func (data BridgeDomain) toBody(config BridgeDomain) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.SviAutostate.IsUnknown() && !data.SviAutostate.IsNull()) || false {
+	if !data.SviAutostate.IsUnknown() && !data.SviAutostate.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sysDefaultSVIAutostate", data.SviAutostate.ValueString())
 	}
 	var attrs string
@@ -111,43 +111,43 @@ func (data BridgeDomain) toBody(config BridgeDomain) nxos.Body {
 	for key, child := range data.BridgeDomains {
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "fabEncap", key)
-		if (!child.AccessEncap.IsUnknown() && !child.AccessEncap.IsNull()) || false {
+		if !child.AccessEncap.IsUnknown() && !child.AccessEncap.IsNull() {
 			attrs, _ = sjson.Set(attrs, "accEncap", child.AccessEncap.ValueString())
 		}
-		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+		if !child.Name.IsUnknown() && !child.Name.IsNull() {
 			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 		}
-		if (!child.BridgeDomainState.IsUnknown() && !child.BridgeDomainState.IsNull()) || false {
+		if !child.BridgeDomainState.IsUnknown() && !child.BridgeDomainState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "BdState", child.BridgeDomainState.ValueString())
 		}
-		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
-		if (!child.BridgeMode.IsUnknown() && !child.BridgeMode.IsNull()) || false {
+		if !child.BridgeMode.IsUnknown() && !child.BridgeMode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "bridgeMode", child.BridgeMode.ValueString())
 		}
-		if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+		if !child.Control.IsUnknown() && !child.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 		}
-		if (!child.ForwardingControl.IsUnknown() && !child.ForwardingControl.IsNull()) || false {
+		if !child.ForwardingControl.IsUnknown() && !child.ForwardingControl.IsNull() {
 			attrs, _ = sjson.Set(attrs, "fwdCtrl", child.ForwardingControl.ValueString())
 		}
-		if (!child.ForwardingMode.IsUnknown() && !child.ForwardingMode.IsNull()) || false {
+		if !child.ForwardingMode.IsUnknown() && !child.ForwardingMode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "fwdMode", child.ForwardingMode.ValueString())
 		}
-		if (!child.LongName.IsUnknown() && !child.LongName.IsNull()) || false {
+		if !child.LongName.IsUnknown() && !child.LongName.IsNull() {
 			attrs, _ = sjson.Set(attrs, "longName", strconv.FormatBool(child.LongName.ValueBool()))
 		}
-		if (!child.MacPacketClassify.IsUnknown() && !child.MacPacketClassify.IsNull()) || false {
+		if !child.MacPacketClassify.IsUnknown() && !child.MacPacketClassify.IsNull() {
 			attrs, _ = sjson.Set(attrs, "macPacketClassify", child.MacPacketClassify.ValueString())
 		}
-		if (!child.Mode.IsUnknown() && !child.Mode.IsNull()) || false {
+		if !child.Mode.IsUnknown() && !child.Mode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
 		}
-		if (!child.VrfName.IsUnknown() && !child.VrfName.IsNull()) || false {
+		if !child.VrfName.IsUnknown() && !child.VrfName.IsNull() {
 			attrs, _ = sjson.Set(attrs, "vrfName", child.VrfName.ValueString())
 		}
-		if (!child.CrossConnect.IsUnknown() && !child.CrossConnect.IsNull()) || false {
+		if !child.CrossConnect.IsUnknown() && !child.CrossConnect.IsNull() {
 			attrs, _ = sjson.Set(attrs, "xConnect", child.CrossConnect.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.l2BD.attributes", attrs)

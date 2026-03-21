@@ -171,7 +171,7 @@ resource "nxos_dme" "PreReq{{$index}}" {
   {{- if .Attributes}}
   content = {
     {{- range .Attributes}}
-      {{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+      {{.Name}} = "{{.Value}}"
     {{- end}}
   }
   {{- end}}
@@ -189,7 +189,7 @@ resource "nxos_dme" "PreReq{{$index}}" {
 func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	config := `resource "nxos_{{snakeCase $name}}" "test" {` + "\n"
 	{{- range  .Attributes}}
-	{{- if or .Id .ReferenceOnly .Mandatory}}
+	{{- if or .Id .Mandatory}}
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"

@@ -8,9 +8,6 @@ ds_description: str() # Description for the data source
 res_description: str() # Description for the resource
 doc_path: str(required=False) # NX-API documentation path
 doc_category: str() # Documentation category for the resource
-parents: list(str(), required=False) # List of parent resource names
-children: list(str(), required=False) # List of child resource names
-references: list(str(), required=False) # List of referenced resource names
 attributes: list(include('attribute'), required=False) # List of attributes
 child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
 test_prerequisites: list(include('test_prerequisite'), required=False) # List of test prerequisites
@@ -20,7 +17,6 @@ attribute:
   tf_name: str() # Terraform attribute name
   type: enum('String', 'Int64', 'Bool') # Terraform attribute type
   id: bool(required=False) # Set to true if the attribute is part of the resource ID
-  reference_only: bool(required=False) # Set to true if the attribute is only used as a reference to a parent resource
   mandatory: bool(required=False) # Set to true if the attribute is mandatory
   write_only: bool(required=False) # Set to true if the attribute is write-only, meaning we cannot read the value
   sensitive: bool(required=False) # Set to true if the attribute is sensitive, meaning it should not show up in clear-text in plan and logs
@@ -28,10 +24,8 @@ attribute:
   example: any(str(), int(), bool(), required=False) # Example value for documentation, also used for acceptance test
   enum_values: list(str(), required=False) # List of enum values, only relevant if type is "String"
   allow_non_enum_values: bool(required=False) # Set to true if non-enum values should also be accepted
-  always_include: bool(required=False) # Set to true if the attribute should always be included in the payload even when the value is empty
   min_int: int(required=False) # Minimum value of an integer, only relevant if type is "Int64"
   max_int: int(required=False) # Maximum value of an integer, only relevant if type is "Int64"
-  default_value: any(str(), int(), bool(), required=False) # Default value for the attribute
   value: any(str(), int(), bool(), required=False) # Static value always sent to the API, attribute hidden from Terraform schema
   exclude_test: bool(required=False) # Exclude attribute from acceptance test
   requires_replace: bool(required=False) # Set to true if the attribute update forces Terraform to destroy/recreate the entire resource
@@ -46,7 +40,6 @@ child_classes:
   doc_path: str(required=False) # NX-API documentation path of the child class
   mandatory: bool(required=False) # Set to true if the child class(es) are mandatory
   no_delete: bool(required=False) # Set to true if the child class should not be deleted
-  always_include: bool(required=False) # Always include child class in payload even when attributes are empty
   test_tags: list(str(), required=False) # List of test tags, child class only included in test if env var is set
   attributes: list(include('attribute'), required=False) # List of child class attributes
   child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
@@ -61,4 +54,3 @@ test_prerequisite:
 test_attribute:
   name: str() # NX-API attribute name
   value: any(str(), int(), bool()) # Attribute value
-  reference: str(required=False) # Reference to a test prerequisite attribute value

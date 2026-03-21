@@ -135,25 +135,25 @@ func (data VRF) toBody(config VRF) nxos.Body {
 	for key, child := range data.Vrfs {
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "name", key)
-		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+		if !child.Description.IsUnknown() && !child.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 		}
-		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminState", child.AdminState.ValueString())
 		}
-		if (!child.ControllerId.IsUnknown() && !child.ControllerId.IsNull()) || false {
+		if !child.ControllerId.IsUnknown() && !child.ControllerId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrlrId", strconv.FormatInt(child.ControllerId.ValueInt64(), 10))
 		}
-		if (!child.Encap.IsUnknown() && !child.Encap.IsNull()) || false {
+		if !child.Encap.IsUnknown() && !child.Encap.IsNull() {
 			attrs, _ = sjson.Set(attrs, "encap", child.Encap.ValueString())
 		}
-		if (!child.L3vni.IsUnknown() && !child.L3vni.IsNull()) || false {
+		if !child.L3vni.IsUnknown() && !child.L3vni.IsNull() {
 			attrs, _ = sjson.Set(attrs, "l3vni", strconv.FormatBool(child.L3vni.ValueBool()))
 		}
-		if (!child.Oui.IsUnknown() && !child.Oui.IsNull()) || false {
+		if !child.Oui.IsUnknown() && !child.Oui.IsNull() {
 			attrs, _ = sjson.Set(attrs, "oui", child.Oui.ValueString())
 		}
-		if (!child.VpnId.IsUnknown() && !child.VpnId.IsNull()) || false {
+		if !child.VpnId.IsUnknown() && !child.VpnId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "vpnId", child.VpnId.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.l3Inst.attributes", attrs)
@@ -165,10 +165,10 @@ func (data VRF) toBody(config VRF) nxos.Body {
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtctrlDom"
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "name", key)
-				if (!child.RoutingEncap.IsUnknown() && !child.RoutingEncap.IsNull()) || false {
+				if !child.RoutingEncap.IsUnknown() && !child.RoutingEncap.IsNull() {
 					attrs, _ = sjson.Set(attrs, "encap", child.RoutingEncap.ValueString())
 				}
-				if (!child.RouteDistinguisher.IsUnknown() && !child.RouteDistinguisher.IsNull()) || false {
+				if !child.RouteDistinguisher.IsUnknown() && !child.RouteDistinguisher.IsNull() {
 					attrs, _ = sjson.Set(attrs, "rd", child.RouteDistinguisher.ValueString())
 				}
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)

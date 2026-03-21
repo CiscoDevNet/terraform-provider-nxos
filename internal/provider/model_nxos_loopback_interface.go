@@ -97,13 +97,13 @@ func (data LoopbackInterface) toBody(config LoopbackInterface) nxos.Body {
 	for key, child := range data.LoopbackInterfaces {
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "id", key)
-		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
-		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+		if !child.Description.IsUnknown() && !child.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 		}
-		if (!child.LinkLogging.IsUnknown() && !child.LinkLogging.IsNull()) || false {
+		if !child.LinkLogging.IsUnknown() && !child.LinkLogging.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkLog", child.LinkLogging.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.l3LbRtdIf.attributes", attrs)
@@ -111,10 +111,10 @@ func (data LoopbackInterface) toBody(config LoopbackInterface) nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".l3LbRtdIf.children"
 			attrs = "{}"
-			if (!child.VrfDn.IsUnknown() && !child.VrfDn.IsNull()) || false {
+			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())
 			}
-			if attrs != "{}" || false {
+			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nwRtVrfMbr.attributes", attrs)
 			}
 		}

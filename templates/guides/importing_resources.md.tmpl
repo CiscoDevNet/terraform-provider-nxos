@@ -93,3 +93,25 @@ import {
   id = "sys/intf/phys-[eth1/1],l1PhysIf"
 }
 ```
+
+When managing multiple devices, the device name can be appended as a third element:
+
+```terraform
+import {
+  to = nxos_dme.example
+  id = "sys/intf/phys-[eth1/1],l1PhysIf,LEAF-1"
+}
+```
+
+Or using identity-based import:
+
+```terraform
+import {
+  to = nxos_dme.example
+  identity = {
+    "dn"         = "sys/intf/phys-[eth1/1]"
+    "class_name" = "l1PhysIf"
+    "device"     = "LEAF-1"
+  }
+}
+```

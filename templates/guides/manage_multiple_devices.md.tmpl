@@ -25,15 +25,21 @@ provider "nxos" {
 }
 
 resource "nxos_vrf" "LEAF-1-VRF1" {
-  provider    = nxos.LEAF-1
-  name        = "VRF1"
-  description = "My VRF1 Description"
+  provider = nxos.LEAF-1
+  vrfs = {
+    "VRF1" = {
+      description = "My VRF1 Description"
+    }
+  }
 }
 
 resource "nxos_vrf" "LEAF-2-VRF1" {
-  provider    = nxos.LEAF-2
-  name        = "VRF1"
-  description = "My VRF1 Description"
+  provider = nxos.LEAF-2
+  vrfs = {
+    "VRF1" = {
+      description = "My VRF1 Description"
+    }
+  }
 }
 ```
 
@@ -68,10 +74,13 @@ provider "nxos" {
 }
 
 resource "nxos_vrf" "VRF1" {
-  for_each    = toset([for leaf in local.leafs : leaf.name])
-  device      = each.key
-  name        = "VRF1"
-  description = "My VRF1 Description"
+  for_each = toset([for leaf in local.leafs : leaf.name])
+  device   = each.key
+  vrfs = {
+    "VRF1" = {
+      description = "My VRF1 Description"
+    }
+  }
 }
 ```
 
@@ -115,10 +124,13 @@ provider "nxos" {
 }
 
 resource "nxos_vrf" "VRF1" {
-  for_each    = toset([for device in local.devices : device.name])
-  device      = each.key
-  name        = "VRF1"
-  description = "My VRF1 Description"
+  for_each = toset([for device in local.devices : device.name])
+  device   = each.key
+  vrfs = {
+    "VRF1" = {
+      description = "My VRF1 Description"
+    }
+  }
 }
 ```
 

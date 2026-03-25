@@ -224,7 +224,6 @@ child_classes:
               - nxos_name: destIp
                 tf_name: keepalive_destination_ip
                 type: String
-                mandatory: true
                 description: "destination address."
                 example: "192.168.1.1"
               - nxos_name: flushTout
@@ -265,7 +264,6 @@ child_classes:
               - nxos_name: srcIp
                 tf_name: keepalive_source_ip
                 type: String
-                mandatory: true
                 description: "source address."
                 example: "192.168.1.2"
               - nxos_name: timeout
@@ -333,7 +331,6 @@ child_classes:
                   - nxos_name: id
                     tf_name: peerlink_interface_id
                     type: String
-                    mandatory: true
                     description: "An identifier."
                     example: "eth1/9"
                   - nxos_name: adminSt

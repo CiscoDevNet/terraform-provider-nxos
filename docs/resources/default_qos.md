@@ -119,12 +119,9 @@ Optional:
 <a id="nestedatt--policy_interface_in"></a>
 ### Nested Schema for `policy_interface_in`
 
-Required:
-
-- `policy_map_name` (String) Policy-map Name.
-
 Optional:
 
+- `policy_map_name` (String) Policy-map Name.
 - `policy_map_statistics` (Boolean) Turn on/off statistics.
 
 
@@ -141,11 +138,6 @@ Optional:
 <a id="nestedatt--policy_maps--match_class_maps"></a>
 ### Nested Schema for `policy_maps.match_class_maps`
 
-Required:
-
-- `police_cir_rate` (Number) CIR.
-  - Range: `0`-`100000000000`
-
 Optional:
 
 - `next_class_map` (String) Insert before the given class-map.
@@ -157,6 +149,8 @@ Optional:
   - Range: `0`-`536870912`
 - `police_be_unit` (String) PIR burst unit.
   - Choices: `unspecified`, `bytes`, `kbytes`, `mbytes`, `ms`, `us`, `packets`
+- `police_cir_rate` (Number) CIR.
+  - Range: `0`-`100000000000`
 - `police_cir_unit` (String) CIR unit.
   - Choices: `unspecified`, `bps`, `kbps`, `mbps`, `gbps`, `pps`, `pct`
 - `police_conform_action` (String) Conform action.

@@ -124,7 +124,7 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"system_out_policy_map_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Policy-map Name.").String,
-				Required:            true,
+				Optional:            true,
 			},
 			"policy_map_statistics": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Turn on/off statistics.").String,

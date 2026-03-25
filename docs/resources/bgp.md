@@ -573,10 +573,6 @@ Optional:
 <a id="nestedatt--vrfs--peers"></a>
 ### Nested Schema for `vrfs.peers`
 
-Required:
-
-- `local_asn` (String) Local Autonomous System Number.
-
 Optional:
 
 - `admin_state` (String) Administrative State.
@@ -602,6 +598,7 @@ Optional:
   - Range: `3`-`3600`
 - `keepalive_interval` (Number) Keepalive Interval.
   - Range: `0`-`3600`
+- `local_asn` (String) Local Autonomous System Number.
 - `local_asn_propagation` (String) ASN Propagation.
   - Choices: `none`, `no-prepend`, `replace-as`, `dual-as`
 - `log_neighbor_changes` (String) Log messages for Neighbor up/down events.

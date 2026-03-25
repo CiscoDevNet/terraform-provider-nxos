@@ -254,7 +254,7 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 			},
 			"keepalive_destination_ip": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("destination address.").String,
-				Required:            true,
+				Optional:            true,
 			},
 			"keepalive_flush_timeout": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("flush timeout.").AddIntegerRangeDescription(3, 10).String,
@@ -286,7 +286,7 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 			},
 			"keepalive_source_ip": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("source address.").String,
-				Required:            true,
+				Optional:            true,
 			},
 			"keepalive_timeout": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("timeout.").AddIntegerRangeDescription(3, 20).String,
@@ -336,7 +336,7 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 			},
 			"peerlink_interface_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("An identifier.").String,
-				Required:            true,
+				Optional:            true,
 			},
 			"peerlink_admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,

@@ -1358,7 +1358,6 @@ child_classes:
                     tf_name: local_asn
                     type: String
                     description: 'Local Autonomous System Number.'
-                    mandatory: true
                     example: '65001'
               - class_name: bgpPeerAf
                 doc_path: Routing%20and%20Forwarding/bgp:PeerAf/

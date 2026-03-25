@@ -161,7 +161,7 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"police_cir_rate": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("CIR.").AddIntegerRangeDescription(0, 100000000000).String,
-										Required:            true,
+										Optional:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(0, 100000000000),
 										},
@@ -296,7 +296,7 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"policy_map_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Policy-map Name.").String,
-							Required:            true,
+							Optional:            true,
 						},
 						"policy_map_statistics": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Turn on/off statistics.").String,

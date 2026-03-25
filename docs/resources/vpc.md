@@ -85,9 +85,6 @@ resource "nxos_vpc" "example" {
 
 - `domain_id` (Number) Domain id.
   - Range: `1`-`1000`
-- `keepalive_destination_ip` (String) destination address.
-- `keepalive_source_ip` (String) source address.
-- `peerlink_interface_id` (String) An identifier.
 
 ### Optional
 
@@ -122,6 +119,7 @@ resource "nxos_vpc" "example" {
 - `interfaces` (Attributes Map) List of vPC interfaces.
   - Map key: `vpc_interface_id` - The vPC interface identifier.
   - Key range: `1`-`16384` (see [below for nested schema](#nestedatt--interfaces))
+- `keepalive_destination_ip` (String) destination address.
 - `keepalive_flush_timeout` (Number) flush timeout.
   - Range: `3`-`10`
 - `keepalive_interval` (Number) interval.
@@ -130,6 +128,7 @@ resource "nxos_vpc" "example" {
   - Choices: `network`, `internet`, `critical`, `flash-override`, `flash`, `immediate`, `priority`, `routine`
 - `keepalive_precedence_value` (Number) precedence value.
   - Range: `0`-`7`
+- `keepalive_source_ip` (String) source address.
 - `keepalive_timeout` (Number) timeout.
   - Range: `3`-`20`
 - `keepalive_type_of_service_byte` (Number) tos byte.
@@ -159,6 +158,7 @@ resource "nxos_vpc" "example" {
 - `peerlink_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `peerlink_description` (String) Description.
+- `peerlink_interface_id` (String) An identifier.
 - `role_priority` (Number) role priority.
   - Range: `1`-`65535`
 - `sys_mac` (String) system mac.

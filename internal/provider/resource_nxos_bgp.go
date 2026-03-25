@@ -1125,7 +1125,7 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 									},
 									"local_asn": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Local Autonomous System Number.").String,
-										Required:            true,
+										Optional:            true,
 									},
 									"peer_address_families": schema.MapNestedAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("List of BGP peer address families.\n  - Map key: `address_family` - Type.\n  - Key choices: `ipv4-ucast`, `ipv4-mvpn`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`").String,

@@ -169,7 +169,6 @@ child_classes:
                   - nxos_name: cirRate
                     tf_name: police_cir_rate
                     type: Int64
-                    mandatory: true
                     description: 'CIR.'
                     min_int: 0
                     max_int: 100000000000
@@ -381,7 +380,6 @@ child_classes:
                   - nxos_name: name
                     tf_name: policy_map_name
                     type: String
-                    mandatory: true
                     description: 'Policy-map Name.'
                     example: PM1
                   - nxos_name: stats

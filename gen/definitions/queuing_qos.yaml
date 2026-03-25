@@ -121,7 +121,6 @@ child_classes:
                   - nxos_name: name
                     tf_name: system_out_policy_map_name
                     type: String
-                    mandatory: true
                     description: 'Policy-map Name.'
                     example: PM1
                   - nxos_name: stats

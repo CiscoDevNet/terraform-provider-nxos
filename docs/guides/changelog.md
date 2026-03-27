@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## Unreleased
+## 0.8.0
 
 - BREAKING CHANGE: Complete provider rewrite — all resources and data sources have been redesigned with breaking changes and no backwards compatibility with 0.7.x . Related NX-API objects that were previously managed as separate resources are now consolidated into single, unified resources (e.g., `nxos_bgp` replaces 15 individual BGP resources, `nxos_features` replaces 27 individual feature resources)
 - BREAKING CHANGE: Rename `nxos_rest` resource and data source to `nxos_dme`

@@ -161,7 +161,7 @@ func (data NTP) toBody(config NTP) nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.datetimeNtpProvider.attributes", attrs)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -356,7 +356,7 @@ func (data NTP) toDeleteBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP, config NTP) nxos.Body {

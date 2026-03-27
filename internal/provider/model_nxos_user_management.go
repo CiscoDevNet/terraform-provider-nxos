@@ -472,7 +472,7 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -1284,7 +1284,7 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserManagement, config UserManagement) nxos.Body {

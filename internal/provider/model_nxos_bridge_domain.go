@@ -153,7 +153,7 @@ func (data BridgeDomain) toBody(config BridgeDomain) nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.l2BD.attributes", attrs)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -309,7 +309,7 @@ func (data BridgeDomain) toDeleteBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDomain, config BridgeDomain) nxos.Body {

@@ -273,7 +273,7 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -723,7 +723,7 @@ func (data DHCP) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP) nxos.Body {

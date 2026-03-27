@@ -325,7 +325,7 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -932,7 +932,7 @@ func (data DefaultQoS) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, config DefaultQoS) nxos.Body {

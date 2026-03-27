@@ -449,7 +449,7 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -1375,7 +1375,7 @@ func (data System) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data System) toBodyWithDeletes(ctx context.Context, state System, config System) nxos.Body {

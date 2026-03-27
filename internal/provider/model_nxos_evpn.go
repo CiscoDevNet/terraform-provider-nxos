@@ -147,7 +147,7 @@ func (data EVPN) toBody(config EVPN) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -303,7 +303,7 @@ func (data EVPN) toDeleteBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN) nxos.Body {

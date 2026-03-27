@@ -310,7 +310,7 @@ func (data VPC) toBody(config VPC) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -768,7 +768,7 @@ func (data VPC) toDeleteBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC, config VPC) nxos.Body {

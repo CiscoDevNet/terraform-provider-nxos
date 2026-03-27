@@ -525,7 +525,7 @@ func (data ISIS) toBody(config ISIS) nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.isisInternalIf.attributes", attrs)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -1210,7 +1210,7 @@ func (data ISIS) toDeleteBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data ISIS) toBodyWithDeletes(ctx context.Context, state ISIS, config ISIS) nxos.Body {

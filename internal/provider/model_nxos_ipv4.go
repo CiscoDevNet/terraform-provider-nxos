@@ -312,7 +312,7 @@ func (data IPv4) toBody(config IPv4) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -802,7 +802,7 @@ func (data IPv4) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4) nxos.Body {

@@ -143,7 +143,7 @@ func (data HMM) toBody(config HMM) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -287,7 +287,7 @@ func (data HMM) toDeleteBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM, config HMM) nxos.Body {

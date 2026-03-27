@@ -296,7 +296,7 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -750,7 +750,7 @@ func (data IPv6) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6) nxos.Body {

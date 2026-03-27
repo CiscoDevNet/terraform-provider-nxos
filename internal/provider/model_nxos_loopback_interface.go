@@ -120,7 +120,7 @@ func (data LoopbackInterface) toBody(config LoopbackInterface) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -239,7 +239,7 @@ func (data LoopbackInterface) toDeleteBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data LoopbackInterface) toBodyWithDeletes(ctx context.Context, state LoopbackInterface, config LoopbackInterface) nxos.Body {

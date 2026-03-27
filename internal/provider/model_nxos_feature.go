@@ -306,7 +306,7 @@ func (data Feature) toBody(config Feature) nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmVpc.attributes", attrs)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -1482,7 +1482,7 @@ func (data Feature) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toDeleteBody

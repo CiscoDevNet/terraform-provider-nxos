@@ -290,7 +290,7 @@ func (data PortChannelInterface) toBody(config PortChannelInterface) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -679,7 +679,7 @@ func (data PortChannelInterface) toDeleteBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data PortChannelInterface) toBodyWithDeletes(ctx context.Context, state PortChannelInterface, config PortChannelInterface) nxos.Body {

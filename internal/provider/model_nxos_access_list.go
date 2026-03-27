@@ -436,7 +436,7 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -1156,7 +1156,7 @@ func (data AccessList) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, config AccessList) nxos.Body {

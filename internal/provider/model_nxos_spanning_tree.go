@@ -191,7 +191,7 @@ func (data SpanningTree) toBody(config SpanningTree) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -464,7 +464,7 @@ func (data SpanningTree) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data SpanningTree) toBodyWithDeletes(ctx context.Context, state SpanningTree, config SpanningTree) nxos.Body {

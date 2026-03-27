@@ -115,7 +115,7 @@ func (data Logging) toBody(config Logging) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -227,7 +227,7 @@ func (data Logging) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging, config Logging) nxos.Body {

@@ -186,7 +186,7 @@ func (data QueuingQoS) toBody(config QueuingQoS) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -538,7 +538,7 @@ func (data QueuingQoS) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS, config QueuingQoS) nxos.Body {

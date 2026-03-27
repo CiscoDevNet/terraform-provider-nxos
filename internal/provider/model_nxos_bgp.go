@@ -1022,7 +1022,7 @@ func (data BGP) toBody(config BGP) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -2654,7 +2654,7 @@ func (data BGP) toDeleteBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nxos.Body {

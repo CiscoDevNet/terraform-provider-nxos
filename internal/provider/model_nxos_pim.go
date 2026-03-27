@@ -405,7 +405,7 @@ func (data PIM) toBody(config PIM) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -1100,7 +1100,7 @@ func (data PIM) toDeleteBody() nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM) nxos.Body {

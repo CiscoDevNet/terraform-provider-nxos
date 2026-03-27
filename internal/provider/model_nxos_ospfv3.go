@@ -309,7 +309,7 @@ func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.ospfv3If.attributes", attrs)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -740,7 +740,7 @@ func (data OSPFv3) toDeleteBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config OSPFv3) nxos.Body {

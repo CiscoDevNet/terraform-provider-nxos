@@ -373,7 +373,7 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 	{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "data" "ConfigVar" "config" "ChildrenPathVar" "childrenPath" "RnArgs" (rnFormatArgs "data" .Attributes))}}
 	{{- end}}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -1005,7 +1005,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	{{- end}}
 	{{- end}}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 {{- /* ==================== toBodyDeletedSingleInListTemplate ====================

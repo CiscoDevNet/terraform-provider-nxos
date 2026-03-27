@@ -324,7 +324,7 @@ func (data PhysicalInterface) toBody(config PhysicalInterface) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -802,7 +802,7 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.l1PhysIf.attributes", childBody)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state PhysicalInterface, config PhysicalInterface) nxos.Body {

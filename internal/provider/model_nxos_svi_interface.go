@@ -173,7 +173,7 @@ func (data SVIInterface) toBody(config SVIInterface) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -370,7 +370,7 @@ func (data SVIInterface) toDeleteBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data SVIInterface) toBodyWithDeletes(ctx context.Context, state SVIInterface, config SVIInterface) nxos.Body {

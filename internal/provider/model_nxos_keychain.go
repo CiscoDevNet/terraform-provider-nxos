@@ -147,7 +147,7 @@ func (data Keychain) toBody(config Keychain) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -285,7 +285,7 @@ func (data Keychain) toDeleteBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, config Keychain) nxos.Body {

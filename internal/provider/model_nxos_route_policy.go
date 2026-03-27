@@ -317,7 +317,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 		}
 	}
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 // End of section. //template:end toBody
@@ -818,7 +818,7 @@ func (data RoutePolicy) toDeleteBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
-	return nxos.Body{body}
+	return nxos.Body{Str: body}
 }
 
 func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy, config RoutePolicy) nxos.Body {

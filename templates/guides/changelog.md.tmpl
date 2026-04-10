@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## Unreleased
+## 0.8.1
 
 - Fix `nxos_dme` resource not detecting out-of-band deletion of managed objects
 

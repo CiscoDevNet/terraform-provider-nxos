@@ -80,4 +80,23 @@ resource "nxos_system" "example" {
       }
     }
   }
+  clock_admin_state                = "enabled"
+  clock_authentication_state       = "disabled"
+  clock_format                     = "24hours"
+  clock_format_debug               = false
+  clock_format_syslog              = false
+  clock_protocol                   = "ntp"
+  clock_timezone_name              = "PST"
+  clock_timezone_hours             = -8
+  clock_timezone_minutes           = 0
+  clock_summer_time_name           = "PDT"
+  clock_summer_time_offset_minutes = 60
+  clock_summer_time_start_week     = 2
+  clock_summer_time_start_day      = "Sun"
+  clock_summer_time_start_month    = "Mar"
+  clock_summer_time_start_time     = "02:00"
+  clock_summer_time_end_week       = 1
+  clock_summer_time_end_day        = "Sun"
+  clock_summer_time_end_month      = "Nov"
+  clock_summer_time_end_time       = "02:00"
 }

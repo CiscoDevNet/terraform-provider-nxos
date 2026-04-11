@@ -57,7 +57,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -368,6 +368,82 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
+			"clock_admin_state": schema.StringAttribute{
+				MarkdownDescription: "A property that indicates if the NTP protocol is enabled or disabled.",
+				Computed:            true,
+			},
+			"clock_authentication_state": schema.StringAttribute{
+				MarkdownDescription: "A property that indicates if the Datetime policy authentication is enabled or disabled.",
+				Computed:            true,
+			},
+			"clock_format": schema.StringAttribute{
+				MarkdownDescription: "Clock Format.",
+				Computed:            true,
+			},
+			"clock_format_debug": schema.BoolAttribute{
+				MarkdownDescription: "enable/disable Clock Format for debug.",
+				Computed:            true,
+			},
+			"clock_format_syslog": schema.BoolAttribute{
+				MarkdownDescription: "enable/disable Clock Format for syslog.",
+				Computed:            true,
+			},
+			"clock_protocol": schema.StringAttribute{
+				MarkdownDescription: "Protocol Type.",
+				Computed:            true,
+			},
+			"clock_timezone_name": schema.StringAttribute{
+				MarkdownDescription: "Name of timezone.",
+				Computed:            true,
+			},
+			"clock_timezone_hours": schema.Int64Attribute{
+				MarkdownDescription: "Hours offset from UTC.",
+				Computed:            true,
+			},
+			"clock_timezone_minutes": schema.Int64Attribute{
+				MarkdownDescription: "Minutes offset from UTC.",
+				Computed:            true,
+			},
+			"clock_summer_time_name": schema.StringAttribute{
+				MarkdownDescription: "Name of timezone in summer.",
+				Computed:            true,
+			},
+			"clock_summer_time_offset_minutes": schema.Int64Attribute{
+				MarkdownDescription: "Offset to add in minutes.",
+				Computed:            true,
+			},
+			"clock_summer_time_start_week": schema.Int64Attribute{
+				MarkdownDescription: "Week number to start.",
+				Computed:            true,
+			},
+			"clock_summer_time_start_day": schema.StringAttribute{
+				MarkdownDescription: "Weekday to start.",
+				Computed:            true,
+			},
+			"clock_summer_time_start_month": schema.StringAttribute{
+				MarkdownDescription: "Month to start.",
+				Computed:            true,
+			},
+			"clock_summer_time_start_time": schema.StringAttribute{
+				MarkdownDescription: "HH:MM Time to start.",
+				Computed:            true,
+			},
+			"clock_summer_time_end_week": schema.Int64Attribute{
+				MarkdownDescription: "Week number to end.",
+				Computed:            true,
+			},
+			"clock_summer_time_end_day": schema.StringAttribute{
+				MarkdownDescription: "Weekday to end.",
+				Computed:            true,
+			},
+			"clock_summer_time_end_month": schema.StringAttribute{
+				MarkdownDescription: "Month to end.",
+				Computed:            true,
+			},
+			"clock_summer_time_end_time": schema.StringAttribute{
+				MarkdownDescription: "HH:MM Time to end.",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -400,7 +476,7 @@ func (d *SystemDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/
 ---
 
 # nxos_system (Resource)
@@ -25,6 +25,9 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [ndInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/)
 - [ndDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/)
 - [ndIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/)
+- [datetimeClock](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/)
+- [datetimeTimezone](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/)
+- [datetimeSummerT](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/)
 
 ## Example Usage
 
@@ -111,6 +114,25 @@ resource "nxos_system" "example" {
       }
     }
   }
+  clock_admin_state                = "enabled"
+  clock_authentication_state       = "disabled"
+  clock_format                     = "24hours"
+  clock_format_debug               = false
+  clock_format_syslog              = false
+  clock_protocol                   = "ntp"
+  clock_timezone_name              = "PST"
+  clock_timezone_hours             = -8
+  clock_timezone_minutes           = 0
+  clock_summer_time_name           = "PDT"
+  clock_summer_time_offset_minutes = 60
+  clock_summer_time_start_week     = 2
+  clock_summer_time_start_day      = "Sun"
+  clock_summer_time_start_month    = "Mar"
+  clock_summer_time_start_time     = "02:00"
+  clock_summer_time_end_week       = 1
+  clock_summer_time_end_day        = "Sun"
+  clock_summer_time_end_month      = "Nov"
+  clock_summer_time_end_time       = "02:00"
 }
 ```
 
@@ -156,6 +178,34 @@ resource "nxos_system" "example" {
 - `arp_vpc_domains` (Attributes Map) ARP VPC Domain.
   - Map key: `domain_id` - VPC domain id.
   - Key range: `1`-`1000` (see [below for nested schema](#nestedatt--arp_vpc_domains))
+- `clock_admin_state` (String) A property that indicates if the NTP protocol is enabled or disabled.
+  - Choices: `enabled`, `disabled`
+- `clock_authentication_state` (String) A property that indicates if the Datetime policy authentication is enabled or disabled.
+  - Choices: `enabled`, `disabled`
+- `clock_format` (String) Clock Format.
+  - Choices: `24hours`, `12hours`
+- `clock_format_debug` (Boolean) enable/disable Clock Format for debug.
+- `clock_format_syslog` (Boolean) enable/disable Clock Format for syslog.
+- `clock_protocol` (String) Protocol Type.
+  - Choices: `unspecified`, `ptp`, `ntp`, `none`, `gnss`
+- `clock_summer_time_end_day` (String) Weekday to end.
+- `clock_summer_time_end_month` (String) Month to end.
+- `clock_summer_time_end_time` (String) HH:MM Time to end.
+- `clock_summer_time_end_week` (Number) Week number to end.
+  - Range: `1`-`5`
+- `clock_summer_time_name` (String) Name of timezone in summer.
+- `clock_summer_time_offset_minutes` (Number) Offset to add in minutes.
+  - Range: `1`-`1440`
+- `clock_summer_time_start_day` (String) Weekday to start.
+- `clock_summer_time_start_month` (String) Month to start.
+- `clock_summer_time_start_time` (String) HH:MM Time to start.
+- `clock_summer_time_start_week` (Number) Week number to start.
+  - Range: `1`-`5`
+- `clock_timezone_hours` (Number) Hours offset from UTC.
+  - Range: `-12`-`14`
+- `clock_timezone_minutes` (Number) Minutes offset from UTC.
+  - Range: `0`-`59`
+- `clock_timezone_name` (String) Name of timezone.
 - `device` (String) A device name from the provider configuration.
 - `ethernet_admin_link_down_syslog_level` (Number) Admin link-down syslog level.
   - Range: `0`-`7`

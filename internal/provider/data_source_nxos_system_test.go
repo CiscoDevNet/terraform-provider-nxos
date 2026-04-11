@@ -78,6 +78,24 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_off_list_timeout", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_probe_interval_for_solicit_neighbor", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_solicit_neighbor_advertisement", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_authentication_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_format", "24hours"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_format_debug", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_format_syslog", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_timezone_name", "PST"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_timezone_hours", "-8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_timezone_minutes", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_name", "PDT"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_offset_minutes", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_start_week", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_start_day", "Sun"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_start_month", "Mar"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_start_time", "02:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_end_week", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_end_day", "Sun"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_end_month", "Nov"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_end_time", "02:00"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -146,6 +164,24 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `	nd_off_list_timeout = 300` + "\n"
 	config += `	nd_probe_interval_for_solicit_neighbor = 10` + "\n"
 	config += `	nd_solicit_neighbor_advertisement = "enabled"` + "\n"
+	config += `	clock_admin_state = "enabled"` + "\n"
+	config += `	clock_authentication_state = "disabled"` + "\n"
+	config += `	clock_format = "24hours"` + "\n"
+	config += `	clock_format_debug = false` + "\n"
+	config += `	clock_format_syslog = false` + "\n"
+	config += `	clock_timezone_name = "PST"` + "\n"
+	config += `	clock_timezone_hours = -8` + "\n"
+	config += `	clock_timezone_minutes = 0` + "\n"
+	config += `	clock_summer_time_name = "PDT"` + "\n"
+	config += `	clock_summer_time_offset_minutes = 60` + "\n"
+	config += `	clock_summer_time_start_week = 2` + "\n"
+	config += `	clock_summer_time_start_day = "Sun"` + "\n"
+	config += `	clock_summer_time_start_month = "Mar"` + "\n"
+	config += `	clock_summer_time_start_time = "02:00"` + "\n"
+	config += `	clock_summer_time_end_week = 1` + "\n"
+	config += `	clock_summer_time_end_day = "Sun"` + "\n"
+	config += `	clock_summer_time_end_month = "Nov"` + "\n"
+	config += `	clock_summer_time_end_time = "02:00"` + "\n"
 	config += `}` + "\n"
 
 	config += `

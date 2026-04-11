@@ -628,3 +628,158 @@ child_classes:
                       - high
                     example: high
                     exclude_test: true
+  - class_name: datetimeClock
+    doc_path: System/datetime:Clock/
+    rn: clock
+    type: single
+    no_delete: true
+    tf_name: clock
+    description: 'Clock Manager.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: clock_admin_state
+        type: String
+        description: 'A property that indicates if the NTP protocol is enabled or disabled.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: authSt
+        tf_name: clock_authentication_state
+        type: String
+        description: 'A property that indicates if the Datetime policy authentication is enabled or disabled.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+      - nxos_name: format
+        tf_name: clock_format
+        type: String
+        description: 'Clock Format.'
+        enum_values:
+          - 24hours
+          - 12hours
+        example: 24hours
+      - nxos_name: formatDebug
+        tf_name: clock_format_debug
+        type: Bool
+        description: 'enable/disable Clock Format for debug.'
+        example: false
+      - nxos_name: formatSyslog
+        tf_name: clock_format_syslog
+        type: Bool
+        description: 'enable/disable Clock Format for syslog.'
+        example: false
+      - nxos_name: protocol
+        tf_name: clock_protocol
+        type: String
+        description: 'Protocol Type.'
+        enum_values:
+          - unspecified
+          - ptp
+          - ntp
+          - none
+          - gnss
+        example: ntp
+        exclude_test: true
+    child_classes:
+      - class_name: datetimeTimezone
+        doc_path: System/datetime:Timezone/
+        rn: timezone
+        type: single
+        no_delete: true
+        tf_name: timezone
+        description: 'Clock Timezone.'
+        attributes:
+          - nxos_name: nameT
+            tf_name: clock_timezone_name
+            type: String
+            description: 'Name of timezone.'
+            example: PST
+          - nxos_name: hours
+            tf_name: clock_timezone_hours
+            type: Int64
+            description: 'Hours offset from UTC.'
+            min_int: -12
+            max_int: 14
+            example: -8
+          - nxos_name: minutes
+            tf_name: clock_timezone_minutes
+            type: Int64
+            description: 'Minutes offset from UTC.'
+            min_int: 0
+            max_int: 59
+            example: 0
+      - class_name: datetimeSummerT
+        doc_path: System/datetime:SummerT/
+        rn: summertime
+        type: single
+        no_delete: true
+        tf_name: summer_time
+        description: 'Clock Summer-time.'
+        attributes:
+          - nxos_name: nameT
+            tf_name: clock_summer_time_name
+            type: String
+            description: 'Name of timezone in summer.'
+            example: PDT
+            exclude_test: true
+          - nxos_name: offsetMin
+            tf_name: clock_summer_time_offset_minutes
+            type: Int64
+            description: 'Offset to add in minutes.'
+            min_int: 1
+            max_int: 1440
+            example: 60
+            exclude_test: true
+          - nxos_name: startWeek
+            tf_name: clock_summer_time_start_week
+            type: Int64
+            description: 'Week number to start.'
+            min_int: 1
+            max_int: 5
+            example: 2
+            exclude_test: true
+          - nxos_name: startDay
+            tf_name: clock_summer_time_start_day
+            type: String
+            description: 'Weekday to start.'
+            example: Sun
+            exclude_test: true
+          - nxos_name: startMon
+            tf_name: clock_summer_time_start_month
+            type: String
+            description: 'Month to start.'
+            example: Mar
+            exclude_test: true
+          - nxos_name: startTime
+            tf_name: clock_summer_time_start_time
+            type: String
+            description: 'HH:MM Time to start.'
+            example: "02:00"
+            exclude_test: true
+          - nxos_name: endWeek
+            tf_name: clock_summer_time_end_week
+            type: Int64
+            description: 'Week number to end.'
+            min_int: 1
+            max_int: 5
+            example: 1
+            exclude_test: true
+          - nxos_name: endDay
+            tf_name: clock_summer_time_end_day
+            type: String
+            description: 'Weekday to end.'
+            example: Sun
+            exclude_test: true
+          - nxos_name: endMon
+            tf_name: clock_summer_time_end_month
+            type: String
+            description: 'Month to end.'
+            example: Nov
+            exclude_test: true
+          - nxos_name: endTime
+            tf_name: clock_summer_time_end_time
+            type: String
+            description: 'HH:MM Time to end.'
+            example: "02:00"

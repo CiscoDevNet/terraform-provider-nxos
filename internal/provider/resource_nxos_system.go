@@ -63,7 +63,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -557,6 +557,109 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
+			"clock_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A property that indicates if the NTP protocol is enabled or disabled.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"clock_authentication_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A property that indicates if the Datetime policy authentication is enabled or disabled.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"clock_format": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Clock Format.").AddStringEnumDescription("24hours", "12hours").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("24hours", "12hours"),
+				},
+			},
+			"clock_format_debug": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("enable/disable Clock Format for debug.").String,
+				Optional:            true,
+			},
+			"clock_format_syslog": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("enable/disable Clock Format for syslog.").String,
+				Optional:            true,
+			},
+			"clock_protocol": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Protocol Type.").AddStringEnumDescription("unspecified", "ptp", "ntp", "none", "gnss").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "ptp", "ntp", "none", "gnss"),
+				},
+			},
+			"clock_timezone_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of timezone.").String,
+				Optional:            true,
+			},
+			"clock_timezone_hours": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hours offset from UTC.").AddIntegerRangeDescription(-12, 14).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-12, 14),
+				},
+			},
+			"clock_timezone_minutes": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minutes offset from UTC.").AddIntegerRangeDescription(0, 59).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 59),
+				},
+			},
+			"clock_summer_time_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of timezone in summer.").String,
+				Optional:            true,
+			},
+			"clock_summer_time_offset_minutes": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Offset to add in minutes.").AddIntegerRangeDescription(1, 1440).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1440),
+				},
+			},
+			"clock_summer_time_start_week": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Week number to start.").AddIntegerRangeDescription(1, 5).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 5),
+				},
+			},
+			"clock_summer_time_start_day": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Weekday to start.").String,
+				Optional:            true,
+			},
+			"clock_summer_time_start_month": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Month to start.").String,
+				Optional:            true,
+			},
+			"clock_summer_time_start_time": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("HH:MM Time to start.").String,
+				Optional:            true,
+			},
+			"clock_summer_time_end_week": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Week number to end.").AddIntegerRangeDescription(1, 5).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 5),
+				},
+			},
+			"clock_summer_time_end_day": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Weekday to end.").String,
+				Optional:            true,
+			},
+			"clock_summer_time_end_month": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Month to end.").String,
+				Optional:            true,
+			},
+			"clock_summer_time_end_time": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("HH:MM Time to end.").String,
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -666,7 +769,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

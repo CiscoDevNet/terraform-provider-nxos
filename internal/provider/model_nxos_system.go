@@ -91,6 +91,25 @@ type System struct {
 	NdProbeIntervalForSolicitNeighbor             types.Int64                    `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
 	NdSolicitNeighborAdvertisement                types.String                   `tfsdk:"nd_solicit_neighbor_advertisement"`
 	NdVrfs                                        map[string]SystemNdVrfs        `tfsdk:"nd_vrfs"`
+	ClockAdminState                               types.String                   `tfsdk:"clock_admin_state"`
+	ClockAuthenticationState                      types.String                   `tfsdk:"clock_authentication_state"`
+	ClockFormat                                   types.String                   `tfsdk:"clock_format"`
+	ClockFormatDebug                              types.Bool                     `tfsdk:"clock_format_debug"`
+	ClockFormatSyslog                             types.Bool                     `tfsdk:"clock_format_syslog"`
+	ClockProtocol                                 types.String                   `tfsdk:"clock_protocol"`
+	ClockTimezoneName                             types.String                   `tfsdk:"clock_timezone_name"`
+	ClockTimezoneHours                            types.Int64                    `tfsdk:"clock_timezone_hours"`
+	ClockTimezoneMinutes                          types.Int64                    `tfsdk:"clock_timezone_minutes"`
+	ClockSummerTimeName                           types.String                   `tfsdk:"clock_summer_time_name"`
+	ClockSummerTimeOffsetMinutes                  types.Int64                    `tfsdk:"clock_summer_time_offset_minutes"`
+	ClockSummerTimeStartWeek                      types.Int64                    `tfsdk:"clock_summer_time_start_week"`
+	ClockSummerTimeStartDay                       types.String                   `tfsdk:"clock_summer_time_start_day"`
+	ClockSummerTimeStartMonth                     types.String                   `tfsdk:"clock_summer_time_start_month"`
+	ClockSummerTimeStartTime                      types.String                   `tfsdk:"clock_summer_time_start_time"`
+	ClockSummerTimeEndWeek                        types.Int64                    `tfsdk:"clock_summer_time_end_week"`
+	ClockSummerTimeEndDay                         types.String                   `tfsdk:"clock_summer_time_end_day"`
+	ClockSummerTimeEndMonth                       types.String                   `tfsdk:"clock_summer_time_end_month"`
+	ClockSummerTimeEndTime                        types.String                   `tfsdk:"clock_summer_time_end_time"`
 }
 
 type SystemArpVpcDomains struct {
@@ -448,6 +467,78 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".datetimeClock"
+		attrs = "{}"
+		if !data.ClockAdminState.IsUnknown() && !data.ClockAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.ClockAdminState.ValueString())
+		}
+		if !data.ClockAuthenticationState.IsUnknown() && !data.ClockAuthenticationState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "authSt", data.ClockAuthenticationState.ValueString())
+		}
+		if !data.ClockFormat.IsUnknown() && !data.ClockFormat.IsNull() {
+			attrs, _ = sjson.Set(attrs, "format", data.ClockFormat.ValueString())
+		}
+		if !data.ClockFormatDebug.IsUnknown() && !data.ClockFormatDebug.IsNull() {
+			attrs, _ = sjson.Set(attrs, "formatDebug", strconv.FormatBool(data.ClockFormatDebug.ValueBool()))
+		}
+		if !data.ClockFormatSyslog.IsUnknown() && !data.ClockFormatSyslog.IsNull() {
+			attrs, _ = sjson.Set(attrs, "formatSyslog", strconv.FormatBool(data.ClockFormatSyslog.ValueBool()))
+		}
+		if !data.ClockProtocol.IsUnknown() && !data.ClockProtocol.IsNull() {
+			attrs, _ = sjson.Set(attrs, "protocol", data.ClockProtocol.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		attrs = "{}"
+		if !data.ClockTimezoneName.IsUnknown() && !data.ClockTimezoneName.IsNull() {
+			attrs, _ = sjson.Set(attrs, "nameT", data.ClockTimezoneName.ValueString())
+		}
+		if !data.ClockTimezoneHours.IsUnknown() && !data.ClockTimezoneHours.IsNull() {
+			attrs, _ = sjson.Set(attrs, "hours", strconv.FormatInt(data.ClockTimezoneHours.ValueInt64(), 10))
+		}
+		if !data.ClockTimezoneMinutes.IsUnknown() && !data.ClockTimezoneMinutes.IsNull() {
+			attrs, _ = sjson.Set(attrs, "minutes", strconv.FormatInt(data.ClockTimezoneMinutes.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.datetimeTimezone.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.ClockSummerTimeName.IsUnknown() && !data.ClockSummerTimeName.IsNull() {
+			attrs, _ = sjson.Set(attrs, "nameT", data.ClockSummerTimeName.ValueString())
+		}
+		if !data.ClockSummerTimeOffsetMinutes.IsUnknown() && !data.ClockSummerTimeOffsetMinutes.IsNull() {
+			attrs, _ = sjson.Set(attrs, "offsetMin", strconv.FormatInt(data.ClockSummerTimeOffsetMinutes.ValueInt64(), 10))
+		}
+		if !data.ClockSummerTimeStartWeek.IsUnknown() && !data.ClockSummerTimeStartWeek.IsNull() {
+			attrs, _ = sjson.Set(attrs, "startWeek", strconv.FormatInt(data.ClockSummerTimeStartWeek.ValueInt64(), 10))
+		}
+		if !data.ClockSummerTimeStartDay.IsUnknown() && !data.ClockSummerTimeStartDay.IsNull() {
+			attrs, _ = sjson.Set(attrs, "startDay", data.ClockSummerTimeStartDay.ValueString())
+		}
+		if !data.ClockSummerTimeStartMonth.IsUnknown() && !data.ClockSummerTimeStartMonth.IsNull() {
+			attrs, _ = sjson.Set(attrs, "startMon", data.ClockSummerTimeStartMonth.ValueString())
+		}
+		if !data.ClockSummerTimeStartTime.IsUnknown() && !data.ClockSummerTimeStartTime.IsNull() {
+			attrs, _ = sjson.Set(attrs, "startTime", data.ClockSummerTimeStartTime.ValueString())
+		}
+		if !data.ClockSummerTimeEndWeek.IsUnknown() && !data.ClockSummerTimeEndWeek.IsNull() {
+			attrs, _ = sjson.Set(attrs, "endWeek", strconv.FormatInt(data.ClockSummerTimeEndWeek.ValueInt64(), 10))
+		}
+		if !data.ClockSummerTimeEndDay.IsUnknown() && !data.ClockSummerTimeEndDay.IsNull() {
+			attrs, _ = sjson.Set(attrs, "endDay", data.ClockSummerTimeEndDay.ValueString())
+		}
+		if !data.ClockSummerTimeEndMonth.IsUnknown() && !data.ClockSummerTimeEndMonth.IsNull() {
+			attrs, _ = sjson.Set(attrs, "endMon", data.ClockSummerTimeEndMonth.ValueString())
+		}
+		if !data.ClockSummerTimeEndTime.IsUnknown() && !data.ClockSummerTimeEndTime.IsNull() {
+			attrs, _ = sjson.Set(attrs, "endTime", data.ClockSummerTimeEndTime.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.datetimeSummerT.attributes", attrs)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -669,6 +760,64 @@ func (data *System) fromBody(res gjson.Result) {
 					return true
 				},
 			)
+		}
+	}
+	{
+		var rdatetimeClock gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("datetimeClock.attributes.rn").String()
+				if rnValue == "clock" {
+					rdatetimeClock = v
+					return false
+				}
+				return true
+			},
+		)
+		data.ClockAdminState = types.StringValue(rdatetimeClock.Get("datetimeClock.attributes.adminSt").String())
+		data.ClockAuthenticationState = types.StringValue(rdatetimeClock.Get("datetimeClock.attributes.authSt").String())
+		data.ClockFormat = types.StringValue(rdatetimeClock.Get("datetimeClock.attributes.format").String())
+		data.ClockFormatDebug = types.BoolValue(helpers.ParseNxosBoolean(rdatetimeClock.Get("datetimeClock.attributes.formatDebug").String()))
+		data.ClockFormatSyslog = types.BoolValue(helpers.ParseNxosBoolean(rdatetimeClock.Get("datetimeClock.attributes.formatSyslog").String()))
+		data.ClockProtocol = types.StringValue(rdatetimeClock.Get("datetimeClock.attributes.protocol").String())
+		{
+			var rdatetimeTimezone gjson.Result
+			rdatetimeClock.Get("datetimeClock.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("datetimeTimezone.attributes.rn").String()
+					if rnValue == "timezone" {
+						rdatetimeTimezone = v
+						return false
+					}
+					return true
+				},
+			)
+			data.ClockTimezoneName = types.StringValue(rdatetimeTimezone.Get("datetimeTimezone.attributes.nameT").String())
+			data.ClockTimezoneHours = types.Int64Value(rdatetimeTimezone.Get("datetimeTimezone.attributes.hours").Int())
+			data.ClockTimezoneMinutes = types.Int64Value(rdatetimeTimezone.Get("datetimeTimezone.attributes.minutes").Int())
+		}
+		{
+			var rdatetimeSummerT gjson.Result
+			rdatetimeClock.Get("datetimeClock.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("datetimeSummerT.attributes.rn").String()
+					if rnValue == "summertime" {
+						rdatetimeSummerT = v
+						return false
+					}
+					return true
+				},
+			)
+			data.ClockSummerTimeName = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.nameT").String())
+			data.ClockSummerTimeOffsetMinutes = types.Int64Value(rdatetimeSummerT.Get("datetimeSummerT.attributes.offsetMin").Int())
+			data.ClockSummerTimeStartWeek = types.Int64Value(rdatetimeSummerT.Get("datetimeSummerT.attributes.startWeek").Int())
+			data.ClockSummerTimeStartDay = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.startDay").String())
+			data.ClockSummerTimeStartMonth = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.startMon").String())
+			data.ClockSummerTimeStartTime = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.startTime").String())
+			data.ClockSummerTimeEndWeek = types.Int64Value(rdatetimeSummerT.Get("datetimeSummerT.attributes.endWeek").Int())
+			data.ClockSummerTimeEndDay = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.endDay").String())
+			data.ClockSummerTimeEndMonth = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.endMon").String())
+			data.ClockSummerTimeEndTime = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.endTime").String())
 		}
 	}
 }
@@ -1160,6 +1309,138 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.NdVrfs[key] = item
 		}
 	}
+	var rdatetimeClock gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("datetimeClock.attributes.rn").String()
+			if rnValue == "clock" {
+				rdatetimeClock = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.ClockAdminState.IsNull() {
+		data.ClockAdminState = types.StringValue(rdatetimeClock.Get("datetimeClock.attributes.adminSt").String())
+	} else {
+		data.ClockAdminState = types.StringNull()
+	}
+	if !data.ClockAuthenticationState.IsNull() {
+		data.ClockAuthenticationState = types.StringValue(rdatetimeClock.Get("datetimeClock.attributes.authSt").String())
+	} else {
+		data.ClockAuthenticationState = types.StringNull()
+	}
+	if !data.ClockFormat.IsNull() {
+		data.ClockFormat = types.StringValue(rdatetimeClock.Get("datetimeClock.attributes.format").String())
+	} else {
+		data.ClockFormat = types.StringNull()
+	}
+	if !data.ClockFormatDebug.IsNull() {
+		data.ClockFormatDebug = types.BoolValue(helpers.ParseNxosBoolean(rdatetimeClock.Get("datetimeClock.attributes.formatDebug").String()))
+	} else {
+		data.ClockFormatDebug = types.BoolNull()
+	}
+	if !data.ClockFormatSyslog.IsNull() {
+		data.ClockFormatSyslog = types.BoolValue(helpers.ParseNxosBoolean(rdatetimeClock.Get("datetimeClock.attributes.formatSyslog").String()))
+	} else {
+		data.ClockFormatSyslog = types.BoolNull()
+	}
+	if !data.ClockProtocol.IsNull() {
+		data.ClockProtocol = types.StringValue(rdatetimeClock.Get("datetimeClock.attributes.protocol").String())
+	} else {
+		data.ClockProtocol = types.StringNull()
+	}
+	{
+		var rdatetimeTimezone gjson.Result
+		rdatetimeClock.Get("datetimeClock.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("datetimeTimezone.attributes.rn").String()
+				if rnValue == "timezone" {
+					rdatetimeTimezone = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.ClockTimezoneName.IsNull() {
+			data.ClockTimezoneName = types.StringValue(rdatetimeTimezone.Get("datetimeTimezone.attributes.nameT").String())
+		} else {
+			data.ClockTimezoneName = types.StringNull()
+		}
+		if !data.ClockTimezoneHours.IsNull() {
+			data.ClockTimezoneHours = types.Int64Value(rdatetimeTimezone.Get("datetimeTimezone.attributes.hours").Int())
+		} else {
+			data.ClockTimezoneHours = types.Int64Null()
+		}
+		if !data.ClockTimezoneMinutes.IsNull() {
+			data.ClockTimezoneMinutes = types.Int64Value(rdatetimeTimezone.Get("datetimeTimezone.attributes.minutes").Int())
+		} else {
+			data.ClockTimezoneMinutes = types.Int64Null()
+		}
+	}
+	{
+		var rdatetimeSummerT gjson.Result
+		rdatetimeClock.Get("datetimeClock.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("datetimeSummerT.attributes.rn").String()
+				if rnValue == "summertime" {
+					rdatetimeSummerT = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.ClockSummerTimeName.IsNull() {
+			data.ClockSummerTimeName = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.nameT").String())
+		} else {
+			data.ClockSummerTimeName = types.StringNull()
+		}
+		if !data.ClockSummerTimeOffsetMinutes.IsNull() {
+			data.ClockSummerTimeOffsetMinutes = types.Int64Value(rdatetimeSummerT.Get("datetimeSummerT.attributes.offsetMin").Int())
+		} else {
+			data.ClockSummerTimeOffsetMinutes = types.Int64Null()
+		}
+		if !data.ClockSummerTimeStartWeek.IsNull() {
+			data.ClockSummerTimeStartWeek = types.Int64Value(rdatetimeSummerT.Get("datetimeSummerT.attributes.startWeek").Int())
+		} else {
+			data.ClockSummerTimeStartWeek = types.Int64Null()
+		}
+		if !data.ClockSummerTimeStartDay.IsNull() {
+			data.ClockSummerTimeStartDay = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.startDay").String())
+		} else {
+			data.ClockSummerTimeStartDay = types.StringNull()
+		}
+		if !data.ClockSummerTimeStartMonth.IsNull() {
+			data.ClockSummerTimeStartMonth = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.startMon").String())
+		} else {
+			data.ClockSummerTimeStartMonth = types.StringNull()
+		}
+		if !data.ClockSummerTimeStartTime.IsNull() {
+			data.ClockSummerTimeStartTime = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.startTime").String())
+		} else {
+			data.ClockSummerTimeStartTime = types.StringNull()
+		}
+		if !data.ClockSummerTimeEndWeek.IsNull() {
+			data.ClockSummerTimeEndWeek = types.Int64Value(rdatetimeSummerT.Get("datetimeSummerT.attributes.endWeek").Int())
+		} else {
+			data.ClockSummerTimeEndWeek = types.Int64Null()
+		}
+		if !data.ClockSummerTimeEndDay.IsNull() {
+			data.ClockSummerTimeEndDay = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.endDay").String())
+		} else {
+			data.ClockSummerTimeEndDay = types.StringNull()
+		}
+		if !data.ClockSummerTimeEndMonth.IsNull() {
+			data.ClockSummerTimeEndMonth = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.endMon").String())
+		} else {
+			data.ClockSummerTimeEndMonth = types.StringNull()
+		}
+		if !data.ClockSummerTimeEndTime.IsNull() {
+			data.ClockSummerTimeEndTime = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.endTime").String())
+		} else {
+			data.ClockSummerTimeEndTime = types.StringNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1371,6 +1652,86 @@ func (data System) toDeleteBody() nxos.Body {
 				deleteBody, _ = sjson.Set(deleteBody, "ndDom.attributes.rn", child.getRn(key))
 				deleteBody, _ = sjson.Set(deleteBody, "ndDom.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".datetimeClock"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.ClockAdminState.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.ClockAuthenticationState.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"authSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.ClockFormat.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"format", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.ClockFormatDebug.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"formatDebug", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.ClockFormatSyslog.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"formatSyslog", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.ClockProtocol.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
+		}
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.ClockTimezoneName.IsNull() {
+				childBody, _ = sjson.Set(childBody, "nameT", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockTimezoneHours.IsNull() {
+				childBody, _ = sjson.Set(childBody, "hours", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockTimezoneMinutes.IsNull() {
+				childBody, _ = sjson.Set(childBody, "minutes", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".datetimeTimezone"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		{
+			childBody := ""
+			if !data.ClockSummerTimeName.IsNull() {
+				childBody, _ = sjson.Set(childBody, "nameT", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockSummerTimeOffsetMinutes.IsNull() {
+				childBody, _ = sjson.Set(childBody, "offsetMin", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockSummerTimeStartWeek.IsNull() {
+				childBody, _ = sjson.Set(childBody, "startWeek", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockSummerTimeStartDay.IsNull() {
+				childBody, _ = sjson.Set(childBody, "startDay", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockSummerTimeStartMonth.IsNull() {
+				childBody, _ = sjson.Set(childBody, "startMon", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockSummerTimeStartTime.IsNull() {
+				childBody, _ = sjson.Set(childBody, "startTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockSummerTimeEndWeek.IsNull() {
+				childBody, _ = sjson.Set(childBody, "endWeek", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockSummerTimeEndDay.IsNull() {
+				childBody, _ = sjson.Set(childBody, "endDay", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockSummerTimeEndMonth.IsNull() {
+				childBody, _ = sjson.Set(childBody, "endMon", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ClockSummerTimeEndTime.IsNull() {
+				childBody, _ = sjson.Set(childBody, "endTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".datetimeSummerT"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			}
 		}
 	}

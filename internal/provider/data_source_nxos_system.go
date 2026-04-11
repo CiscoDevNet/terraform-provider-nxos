@@ -548,11 +548,11 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
-			"transport_mode": schema.StringAttribute{
+			"smart_licensing_transport_mode": schema.StringAttribute{
 				MarkdownDescription: "Defining transport mode property.",
 				Computed:            true,
 			},
-			"url": schema.StringAttribute{
+			"smart_licensing_transport_cslu_url": schema.StringAttribute{
 				MarkdownDescription: "Defining Transport CSLU url property.",
 				Computed:            true,
 			},

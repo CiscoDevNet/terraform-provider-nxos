@@ -986,7 +986,7 @@ child_classes:
             description: 'Smart Licensing container for licence manager.'
             attributes:
               - nxos_name: transportMode
-                tf_name: transport_mode
+                tf_name: smart_licensing_transport_mode
                 type: String
                 description: 'Defining transport mode property.'
                 enum_values:
@@ -1005,7 +1005,7 @@ child_classes:
                 description: 'Holds Transport CSLU Url information for Smart Licensing container.'
                 attributes:
                   - nxos_name: url
-                    tf_name: url
+                    tf_name: smart_licensing_transport_cslu_url
                     type: String
                     description: 'Defining Transport CSLU url property.'
                     example: 'https://cslu.example.com'

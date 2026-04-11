@@ -809,14 +809,14 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
-			"transport_mode": schema.StringAttribute{
+			"smart_licensing_transport_mode": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Defining transport mode property.").AddStringEnumDescription("transportCallhome", "transportCslu", "transportOff", "transportSmart").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("transportCallhome", "transportCslu", "transportOff", "transportSmart"),
 				},
 			},
-			"url": schema.StringAttribute{
+			"smart_licensing_transport_cslu_url": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Defining Transport CSLU url property.").String,
 				Optional:            true,
 			},

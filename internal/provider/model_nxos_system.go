@@ -113,8 +113,8 @@ type System struct {
 	DnsAdminState                                 types.String                   `tfsdk:"dns_admin_state"`
 	DnsProfiles                                   map[string]SystemDnsProfiles   `tfsdk:"dns_profiles"`
 	Vdcs                                          map[string]SystemVdcs          `tfsdk:"vdcs"`
-	TransportMode                                 types.String                   `tfsdk:"transport_mode"`
-	Url                                           types.String                   `tfsdk:"url"`
+	SmartLicensingTransportMode                   types.String                   `tfsdk:"smart_licensing_transport_mode"`
+	SmartLicensingTransportCsluUrl                types.String                   `tfsdk:"smart_licensing_transport_cslu_url"`
 }
 
 type SystemArpVpcDomains struct {
@@ -694,14 +694,14 @@ func (data System) toBody(config System) nxos.Body {
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerSmartLicensing"
 				attrs = "{}"
-				if !data.TransportMode.IsUnknown() && !data.TransportMode.IsNull() {
-					attrs, _ = sjson.Set(attrs, "transportMode", data.TransportMode.ValueString())
+				if !data.SmartLicensingTransportMode.IsUnknown() && !data.SmartLicensingTransportMode.IsNull() {
+					attrs, _ = sjson.Set(attrs, "transportMode", data.SmartLicensingTransportMode.ValueString())
 				}
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
-				if !data.Url.IsUnknown() && !data.Url.IsNull() {
-					attrs, _ = sjson.Set(attrs, "url", data.Url.ValueString())
+				if !data.SmartLicensingTransportCsluUrl.IsUnknown() && !data.SmartLicensingTransportCsluUrl.IsNull() {
+					attrs, _ = sjson.Set(attrs, "url", data.SmartLicensingTransportCsluUrl.ValueString())
 				}
 				if attrs != "{}" {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.licensemanagerTransportCsluUrl.attributes", attrs)
@@ -1123,7 +1123,7 @@ func (data *System) fromBody(res gjson.Result) {
 						return true
 					},
 				)
-				data.TransportMode = types.StringValue(rlicensemanagerSmartLicensing.Get("licensemanagerSmartLicensing.attributes.transportMode").String())
+				data.SmartLicensingTransportMode = types.StringValue(rlicensemanagerSmartLicensing.Get("licensemanagerSmartLicensing.attributes.transportMode").String())
 				{
 					var rlicensemanagerTransportCsluUrl gjson.Result
 					rlicensemanagerSmartLicensing.Get("licensemanagerSmartLicensing.children").ForEach(
@@ -1136,7 +1136,7 @@ func (data *System) fromBody(res gjson.Result) {
 							return true
 						},
 					)
-					data.Url = types.StringValue(rlicensemanagerTransportCsluUrl.Get("licensemanagerTransportCsluUrl.attributes.url").String())
+					data.SmartLicensingTransportCsluUrl = types.StringValue(rlicensemanagerTransportCsluUrl.Get("licensemanagerTransportCsluUrl.attributes.url").String())
 				}
 			}
 		}
@@ -1978,10 +1978,10 @@ func (data *System) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
-			if !data.TransportMode.IsNull() {
-				data.TransportMode = types.StringValue(rlicensemanagerSmartLicensing.Get("licensemanagerSmartLicensing.attributes.transportMode").String())
+			if !data.SmartLicensingTransportMode.IsNull() {
+				data.SmartLicensingTransportMode = types.StringValue(rlicensemanagerSmartLicensing.Get("licensemanagerSmartLicensing.attributes.transportMode").String())
 			} else {
-				data.TransportMode = types.StringNull()
+				data.SmartLicensingTransportMode = types.StringNull()
 			}
 			{
 				var rlicensemanagerTransportCsluUrl gjson.Result
@@ -1995,10 +1995,10 @@ func (data *System) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
-				if !data.Url.IsNull() {
-					data.Url = types.StringValue(rlicensemanagerTransportCsluUrl.Get("licensemanagerTransportCsluUrl.attributes.url").String())
+				if !data.SmartLicensingTransportCsluUrl.IsNull() {
+					data.SmartLicensingTransportCsluUrl = types.StringValue(rlicensemanagerTransportCsluUrl.Get("licensemanagerTransportCsluUrl.attributes.url").String())
 				} else {
-					data.Url = types.StringNull()
+					data.SmartLicensingTransportCsluUrl = types.StringNull()
 				}
 			}
 		}
@@ -2282,14 +2282,14 @@ func (data System) toDeleteBody() nxos.Body {
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerSmartLicensing"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-				if !data.TransportMode.IsNull() {
+				if !data.SmartLicensingTransportMode.IsNull() {
 					body, _ = sjson.Set(body, childBodyPath+".attributes."+"transportMode", "DME_UNSET_PROPERTY_MARKER")
 				}
 				nestedChildrenPath := childBodyPath + ".children"
 				_ = nestedChildrenPath
 				{
 					childBody := ""
-					if !data.Url.IsNull() {
+					if !data.SmartLicensingTransportCsluUrl.IsNull() {
 						childBody, _ = sjson.Set(childBody, "url", "DME_UNSET_PROPERTY_MARKER")
 					}
 					if childBody != "" {

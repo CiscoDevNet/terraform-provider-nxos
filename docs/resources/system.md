@@ -172,8 +172,8 @@ resource "nxos_system" "example" {
       vrf_minimum                         = 4
     }
   }
-  transport_mode = "transportSmart"
-  url            = "https://cslu.example.com"
+  smart_licensing_transport_mode     = "transportSmart"
+  smart_licensing_transport_cslu_url = "https://cslu.example.com"
 }
 ```
 
@@ -311,9 +311,9 @@ resource "nxos_system" "example" {
   - Choices: `enabled`, `disabled`
 - `nd_vrfs` (Attributes Map) Neighbor Discovery Domain.
   - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--nd_vrfs))
-- `transport_mode` (String) Defining transport mode property.
+- `smart_licensing_transport_cslu_url` (String) Defining Transport CSLU url property.
+- `smart_licensing_transport_mode` (String) Defining transport mode property.
   - Choices: `transportCallhome`, `transportCslu`, `transportOff`, `transportSmart`
-- `url` (String) Defining Transport CSLU url property.
 - `vdcs` (Attributes Map) A virtual device context.
   - Map key: `id` - An identifier.
   - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--vdcs))

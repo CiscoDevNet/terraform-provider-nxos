@@ -131,8 +131,8 @@ data "nxos_system" "example" {
 - `nd_solicit_neighbor_advertisement` (String) Solicit neighbor advertisement.
 - `nd_vrfs` (Attributes Map) Neighbor Discovery Domain.
   - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--nd_vrfs))
-- `transport_mode` (String) Defining transport mode property.
-- `url` (String) Defining Transport CSLU url property.
+- `smart_licensing_transport_cslu_url` (String) Defining Transport CSLU url property.
+- `smart_licensing_transport_mode` (String) Defining transport mode property.
 - `vdcs` (Attributes Map) A virtual device context.
   - Map key: `id` - An identifier.
   - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--vdcs))

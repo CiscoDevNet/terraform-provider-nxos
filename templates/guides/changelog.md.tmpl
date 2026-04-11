@@ -9,6 +9,7 @@ description: |-
 
 ## Unreleased
 
+- Add DNS configuration support to `nxos_system` resource
 - Add optional per-device `username` and `password` attributes to override provider-level credentials
 - Add clock timezone and summer time attributes to `nxos_system` resource and data source
 

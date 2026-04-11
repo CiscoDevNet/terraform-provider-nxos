@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/
 ---
 
 # nxos_system (Resource)
@@ -28,6 +28,9 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [datetimeClock](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/)
 - [datetimeTimezone](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/)
 - [datetimeSummerT](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/)
+- [dnsEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/)
+- [dnsProf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/)
+- [dnsDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/)
 
 ## Example Usage
 
@@ -133,6 +136,17 @@ resource "nxos_system" "example" {
   clock_summer_time_end_day        = "Sun"
   clock_summer_time_end_month      = "Nov"
   clock_summer_time_end_time       = "02:00"
+  dns_admin_state                  = "enabled"
+  dns_profiles = {
+    "default" = {
+      description        = "My DNS Profile"
+      owner_key          = "owner_key_1"
+      owner_tag          = "owner_tag_1"
+      domain_name        = "example.com"
+      domain_description = "DNS domain description."
+      domain_is_default  = false
+    }
+  }
 }
 ```
 
@@ -207,6 +221,10 @@ resource "nxos_system" "example" {
   - Range: `0`-`59`
 - `clock_timezone_name` (String) Name of timezone.
 - `device` (String) A device name from the provider configuration.
+- `dns_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `dns_profiles` (Attributes Map) DNS instance information.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--dns_profiles))
 - `ethernet_admin_link_down_syslog_level` (Number) Admin link-down syslog level.
   - Range: `0`-`7`
 - `ethernet_admin_link_up_syslog_level` (Number) Admin link-up syslog level.
@@ -278,6 +296,19 @@ Optional:
 
 - `arp_sync` (String) ARP Sync.
   - Choices: `disabled`, `enabled`
+
+
+<a id="nestedatt--dns_profiles"></a>
+### Nested Schema for `dns_profiles`
+
+Optional:
+
+- `description` (String) Description of the specified attribute.
+- `domain_description` (String) Description of the specified attribute.
+- `domain_is_default` (Boolean) A property used to indicate whether this domain is the default domain. Only one domain in the group can be the default.
+- `domain_name` (String) Object name.
+- `owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 
 
 <a id="nestedatt--nd_vrfs"></a>

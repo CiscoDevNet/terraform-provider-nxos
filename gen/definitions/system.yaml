@@ -772,3 +772,68 @@ child_classes:
             type: String
             description: 'HH:MM Time to end.'
             example: "02:00"
+  - class_name: dnsEntity
+    doc_path: DNS/dns:Entity/
+    rn: dns
+    type: single
+    attributes:
+      - nxos_name: adminSt
+        tf_name: dns_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+    child_classes:
+      - class_name: dnsProf
+        doc_path: DNS/dns:Prof/
+        rn: prof-[%s]
+        type: list
+        tf_name: dns_profiles
+        description: 'DNS instance information.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Object name.'
+            example: default
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: My DNS Profile
+          - nxos_name: ownerKey
+            tf_name: owner_key
+            type: String
+            description: 'The key for enabling clients to own their data for entity correlation.'
+            example: owner_key_1
+          - nxos_name: ownerTag
+            tf_name: owner_tag
+            type: String
+            description: 'A tag for enabling clients to add their own data. For example, to indicate who created this object.'
+            example: owner_tag_1
+        child_classes:
+          - class_name: dnsDom
+            doc_path: DNS/dns:Dom/
+            rn: dom
+            type: single
+            tf_name: domain
+            description: 'The DNS domain.'
+            attributes:
+              - nxos_name: name
+                tf_name: domain_name
+                type: String
+                description: 'Object name.'
+                example: example.com
+              - nxos_name: descr
+                tf_name: domain_description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: DNS domain description.
+              - nxos_name: isDefault
+                tf_name: domain_is_default
+                type: Bool
+                description: 'A property used to indicate whether this domain is the default domain. Only one domain in the group can be the default.'
+                example: "false"

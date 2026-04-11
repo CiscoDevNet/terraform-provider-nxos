@@ -100,6 +100,13 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_end_day", "Sun"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_end_month", "Nov"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_end_time", "02:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "dns_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "dns_profiles.default.description", "My DNS Profile"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "dns_profiles.default.owner_key", "owner_key_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "dns_profiles.default.owner_tag", "owner_tag_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "dns_profiles.default.domain_name", "example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "dns_profiles.default.domain_description", "DNS domain description."))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "dns_profiles.default.domain_is_default", "false"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -221,6 +228,17 @@ func testAccNxosSystemConfig_all() string {
 	config += `	clock_summer_time_end_day = "Sun"` + "\n"
 	config += `	clock_summer_time_end_month = "Nov"` + "\n"
 	config += `	clock_summer_time_end_time = "02:00"` + "\n"
+	config += `	dns_admin_state = "enabled"` + "\n"
+	config += `	dns_profiles = {` + "\n"
+	config += `		"default" = {` + "\n"
+	config += `			description = "My DNS Profile"` + "\n"
+	config += `			owner_key = "owner_key_1"` + "\n"
+	config += `			owner_tag = "owner_tag_1"` + "\n"
+	config += `			domain_name = "example.com"` + "\n"
+	config += `			domain_description = "DNS domain description."` + "\n"
+	config += `			domain_is_default = false` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -107,6 +107,21 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "dns_profiles.default.domain_name", "example.com"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "dns_profiles.default.domain_description", "DNS domain description."))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "dns_profiles.default.domain_is_default", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.name", "LEAF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.multicast_ipv4_route_memory_maximum", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.multicast_ipv4_route_memory_minimum", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.multicast_ipv6_route_memory_maximum", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.multicast_ipv6_route_memory_minimum", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.port_channel_maximum", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.port_channel_minimum", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.unicast_ipv4_route_memory_maximum", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.unicast_ipv4_route_memory_minimum", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.unicast_ipv6_route_memory_maximum", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.unicast_ipv6_route_memory_minimum", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.vlan_maximum", "4094"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.vlan_minimum", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.vrf_maximum", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.vrf_minimum", "4"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -237,6 +252,25 @@ func testAccNxosSystemConfig_all() string {
 	config += `			domain_name = "example.com"` + "\n"
 	config += `			domain_description = "DNS domain description."` + "\n"
 	config += `			domain_is_default = false` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	vdcs = {` + "\n"
+	config += `		"1" = {` + "\n"
+	config += `			name = "LEAF1"` + "\n"
+	config += `			multicast_ipv4_route_memory_maximum = 50` + "\n"
+	config += `			multicast_ipv4_route_memory_minimum = 50` + "\n"
+	config += `			multicast_ipv6_route_memory_maximum = 5` + "\n"
+	config += `			multicast_ipv6_route_memory_minimum = 5` + "\n"
+	config += `			port_channel_maximum = 500` + "\n"
+	config += `			port_channel_minimum = 10` + "\n"
+	config += `			unicast_ipv4_route_memory_maximum = 500` + "\n"
+	config += `			unicast_ipv4_route_memory_minimum = 500` + "\n"
+	config += `			unicast_ipv6_route_memory_maximum = 200` + "\n"
+	config += `			unicast_ipv6_route_memory_minimum = 200` + "\n"
+	config += `			vlan_maximum = 4094` + "\n"
+	config += `			vlan_minimum = 16` + "\n"
+	config += `			vrf_maximum = 4096` + "\n"
+	config += `			vrf_minimum = 4` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `}` + "\n"

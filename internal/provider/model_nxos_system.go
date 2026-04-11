@@ -112,6 +112,7 @@ type System struct {
 	ClockSummerTimeEndTime                        types.String                   `tfsdk:"clock_summer_time_end_time"`
 	DnsAdminState                                 types.String                   `tfsdk:"dns_admin_state"`
 	DnsProfiles                                   map[string]SystemDnsProfiles   `tfsdk:"dns_profiles"`
+	Vdcs                                          map[string]SystemVdcs          `tfsdk:"vdcs"`
 }
 
 type SystemArpVpcDomains struct {
@@ -151,6 +152,24 @@ type SystemDnsProfiles struct {
 	DomainName        types.String `tfsdk:"domain_name"`
 	DomainDescription types.String `tfsdk:"domain_description"`
 	DomainIsDefault   types.Bool   `tfsdk:"domain_is_default"`
+}
+
+type SystemVdcs struct {
+	Name                            types.String `tfsdk:"name"`
+	MulticastIpv4RouteMemoryMaximum types.Int64  `tfsdk:"multicast_ipv4_route_memory_maximum"`
+	MulticastIpv4RouteMemoryMinimum types.Int64  `tfsdk:"multicast_ipv4_route_memory_minimum"`
+	MulticastIpv6RouteMemoryMaximum types.Int64  `tfsdk:"multicast_ipv6_route_memory_maximum"`
+	MulticastIpv6RouteMemoryMinimum types.Int64  `tfsdk:"multicast_ipv6_route_memory_minimum"`
+	PortChannelMaximum              types.Int64  `tfsdk:"port_channel_maximum"`
+	PortChannelMinimum              types.Int64  `tfsdk:"port_channel_minimum"`
+	UnicastIpv4RouteMemoryMaximum   types.Int64  `tfsdk:"unicast_ipv4_route_memory_maximum"`
+	UnicastIpv4RouteMemoryMinimum   types.Int64  `tfsdk:"unicast_ipv4_route_memory_minimum"`
+	UnicastIpv6RouteMemoryMaximum   types.Int64  `tfsdk:"unicast_ipv6_route_memory_maximum"`
+	UnicastIpv6RouteMemoryMinimum   types.Int64  `tfsdk:"unicast_ipv6_route_memory_minimum"`
+	VlanMaximum                     types.Int64  `tfsdk:"vlan_maximum"`
+	VlanMinimum                     types.Int64  `tfsdk:"vlan_minimum"`
+	VrfMaximum                      types.Int64  `tfsdk:"vrf_maximum"`
+	VrfMinimum                      types.Int64  `tfsdk:"vrf_minimum"`
 }
 
 type SystemIdentity struct {
@@ -195,6 +214,10 @@ func (data SystemNdVrfsInterfaces) getRn(key string) string {
 
 func (data SystemDnsProfiles) getRn(key string) string {
 	return fmt.Sprintf("prof-[%s]", key)
+}
+
+func (data SystemVdcs) getRn(key string) string {
+	return fmt.Sprintf("vdc-[%v]", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
 func (data System) getClassName() string {
@@ -595,6 +618,64 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	for key, child := range data.Vdcs {
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "id", key)
+		if !child.Name.IsUnknown() && !child.Name.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nwVdc.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".nwVdc.children"
+			attrs = "{}"
+			if !child.MulticastIpv4RouteMemoryMaximum.IsUnknown() && !child.MulticastIpv4RouteMemoryMaximum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "m4rtMemMax", strconv.FormatInt(child.MulticastIpv4RouteMemoryMaximum.ValueInt64(), 10))
+			}
+			if !child.MulticastIpv4RouteMemoryMinimum.IsUnknown() && !child.MulticastIpv4RouteMemoryMinimum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "m4rtMemMin", strconv.FormatInt(child.MulticastIpv4RouteMemoryMinimum.ValueInt64(), 10))
+			}
+			if !child.MulticastIpv6RouteMemoryMaximum.IsUnknown() && !child.MulticastIpv6RouteMemoryMaximum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "m6rtMemMax", strconv.FormatInt(child.MulticastIpv6RouteMemoryMaximum.ValueInt64(), 10))
+			}
+			if !child.MulticastIpv6RouteMemoryMinimum.IsUnknown() && !child.MulticastIpv6RouteMemoryMinimum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "m6rtMemMin", strconv.FormatInt(child.MulticastIpv6RouteMemoryMinimum.ValueInt64(), 10))
+			}
+			if !child.PortChannelMaximum.IsUnknown() && !child.PortChannelMaximum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "poMax", strconv.FormatInt(child.PortChannelMaximum.ValueInt64(), 10))
+			}
+			if !child.PortChannelMinimum.IsUnknown() && !child.PortChannelMinimum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "poMin", strconv.FormatInt(child.PortChannelMinimum.ValueInt64(), 10))
+			}
+			if !child.UnicastIpv4RouteMemoryMaximum.IsUnknown() && !child.UnicastIpv4RouteMemoryMaximum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "u4rtMemMax", strconv.FormatInt(child.UnicastIpv4RouteMemoryMaximum.ValueInt64(), 10))
+			}
+			if !child.UnicastIpv4RouteMemoryMinimum.IsUnknown() && !child.UnicastIpv4RouteMemoryMinimum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "u4rtMemMin", strconv.FormatInt(child.UnicastIpv4RouteMemoryMinimum.ValueInt64(), 10))
+			}
+			if !child.UnicastIpv6RouteMemoryMaximum.IsUnknown() && !child.UnicastIpv6RouteMemoryMaximum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "u6rtMemMax", strconv.FormatInt(child.UnicastIpv6RouteMemoryMaximum.ValueInt64(), 10))
+			}
+			if !child.UnicastIpv6RouteMemoryMinimum.IsUnknown() && !child.UnicastIpv6RouteMemoryMinimum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "u6rtMemMin", strconv.FormatInt(child.UnicastIpv6RouteMemoryMinimum.ValueInt64(), 10))
+			}
+			if !child.VlanMaximum.IsUnknown() && !child.VlanMaximum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "vlanMax", strconv.FormatInt(child.VlanMaximum.ValueInt64(), 10))
+			}
+			if !child.VlanMinimum.IsUnknown() && !child.VlanMinimum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "vlanMin", strconv.FormatInt(child.VlanMinimum.ValueInt64(), 10))
+			}
+			if !child.VrfMaximum.IsUnknown() && !child.VrfMaximum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "vrfMax", strconv.FormatInt(child.VrfMaximum.ValueInt64(), 10))
+			}
+			if !child.VrfMinimum.IsUnknown() && !child.VrfMinimum.IsNull() {
+				attrs, _ = sjson.Set(attrs, "vrfMin", strconv.FormatInt(child.VrfMinimum.ValueInt64(), 10))
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.resmgrLimRes.attributes", attrs)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -927,6 +1008,52 @@ func (data *System) fromBody(res gjson.Result) {
 			},
 		)
 	}
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "nwVdc" {
+						var child SystemVdcs
+						child.Name = types.StringValue(value.Get("attributes.name").String())
+						mapKey := value.Get("attributes.id").String()
+						{
+							var rresmgrLimRes gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("resmgrLimRes.attributes.rn").String()
+									if rnValue == "limres" {
+										rresmgrLimRes = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.MulticastIpv4RouteMemoryMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.m4rtMemMax").Int())
+							child.MulticastIpv4RouteMemoryMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.m4rtMemMin").Int())
+							child.MulticastIpv6RouteMemoryMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.m6rtMemMax").Int())
+							child.MulticastIpv6RouteMemoryMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.m6rtMemMin").Int())
+							child.PortChannelMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.poMax").Int())
+							child.PortChannelMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.poMin").Int())
+							child.UnicastIpv4RouteMemoryMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.u4rtMemMax").Int())
+							child.UnicastIpv4RouteMemoryMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.u4rtMemMin").Int())
+							child.UnicastIpv6RouteMemoryMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.u6rtMemMax").Int())
+							child.UnicastIpv6RouteMemoryMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.u6rtMemMin").Int())
+							child.VlanMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.vlanMax").Int())
+							child.VlanMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.vlanMin").Int())
+							child.VrfMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.vrfMax").Int())
+							child.VrfMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.vrfMin").Int())
+						}
+						if data.Vdcs == nil {
+							data.Vdcs = make(map[string]SystemVdcs)
+						}
+						data.Vdcs[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -1624,6 +1751,111 @@ func (data *System) updateFromBody(res gjson.Result) {
 		}
 		data.DnsProfiles[key] = item
 	}
+	for key, item := range data.Vdcs {
+		var rnwVdc gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("nwVdc.attributes.id").String() == key {
+					rnwVdc = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rnwVdc.Exists() {
+			delete(data.Vdcs, key)
+			continue
+		}
+		if !item.Name.IsNull() {
+			item.Name = types.StringValue(rnwVdc.Get("nwVdc.attributes.name").String())
+		} else {
+			item.Name = types.StringNull()
+		}
+		{
+			var rresmgrLimRes gjson.Result
+			rnwVdc.Get("nwVdc.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("resmgrLimRes.attributes.rn").String()
+					if rnValue == "limres" {
+						rresmgrLimRes = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.MulticastIpv4RouteMemoryMaximum.IsNull() {
+				item.MulticastIpv4RouteMemoryMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.m4rtMemMax").Int())
+			} else {
+				item.MulticastIpv4RouteMemoryMaximum = types.Int64Null()
+			}
+			if !item.MulticastIpv4RouteMemoryMinimum.IsNull() {
+				item.MulticastIpv4RouteMemoryMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.m4rtMemMin").Int())
+			} else {
+				item.MulticastIpv4RouteMemoryMinimum = types.Int64Null()
+			}
+			if !item.MulticastIpv6RouteMemoryMaximum.IsNull() {
+				item.MulticastIpv6RouteMemoryMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.m6rtMemMax").Int())
+			} else {
+				item.MulticastIpv6RouteMemoryMaximum = types.Int64Null()
+			}
+			if !item.MulticastIpv6RouteMemoryMinimum.IsNull() {
+				item.MulticastIpv6RouteMemoryMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.m6rtMemMin").Int())
+			} else {
+				item.MulticastIpv6RouteMemoryMinimum = types.Int64Null()
+			}
+			if !item.PortChannelMaximum.IsNull() {
+				item.PortChannelMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.poMax").Int())
+			} else {
+				item.PortChannelMaximum = types.Int64Null()
+			}
+			if !item.PortChannelMinimum.IsNull() {
+				item.PortChannelMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.poMin").Int())
+			} else {
+				item.PortChannelMinimum = types.Int64Null()
+			}
+			if !item.UnicastIpv4RouteMemoryMaximum.IsNull() {
+				item.UnicastIpv4RouteMemoryMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.u4rtMemMax").Int())
+			} else {
+				item.UnicastIpv4RouteMemoryMaximum = types.Int64Null()
+			}
+			if !item.UnicastIpv4RouteMemoryMinimum.IsNull() {
+				item.UnicastIpv4RouteMemoryMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.u4rtMemMin").Int())
+			} else {
+				item.UnicastIpv4RouteMemoryMinimum = types.Int64Null()
+			}
+			if !item.UnicastIpv6RouteMemoryMaximum.IsNull() {
+				item.UnicastIpv6RouteMemoryMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.u6rtMemMax").Int())
+			} else {
+				item.UnicastIpv6RouteMemoryMaximum = types.Int64Null()
+			}
+			if !item.UnicastIpv6RouteMemoryMinimum.IsNull() {
+				item.UnicastIpv6RouteMemoryMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.u6rtMemMin").Int())
+			} else {
+				item.UnicastIpv6RouteMemoryMinimum = types.Int64Null()
+			}
+			if !item.VlanMaximum.IsNull() {
+				item.VlanMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.vlanMax").Int())
+			} else {
+				item.VlanMaximum = types.Int64Null()
+			}
+			if !item.VlanMinimum.IsNull() {
+				item.VlanMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.vlanMin").Int())
+			} else {
+				item.VlanMinimum = types.Int64Null()
+			}
+			if !item.VrfMaximum.IsNull() {
+				item.VrfMaximum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.vrfMax").Int())
+			} else {
+				item.VrfMaximum = types.Int64Null()
+			}
+			if !item.VrfMinimum.IsNull() {
+				item.VrfMinimum = types.Int64Value(rresmgrLimRes.Get("resmgrLimRes.attributes.vrfMin").Int())
+			} else {
+				item.VrfMinimum = types.Int64Null()
+			}
+		}
+		data.Vdcs[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1881,6 +2113,12 @@ func (data System) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "dnsEntity.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
+	for key, child := range data.Vdcs {
+		childBody := ""
+		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+		childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nwVdc.attributes", childBody)
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1951,6 +2189,31 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.dnsEntity.children").Array() {
 			if mv.Get("dnsProf.attributes.rn").String() == stateItemdi.getRn(di) {
 				matchBodyPathdi = bodyPath + ".0.dnsEntity.children" + "." + strconv.Itoa(mi) + ".dnsProf.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+	}
+	for stateKey := range state.Vdcs {
+		if _, found := data.Vdcs[stateKey]; !found {
+			stateChild := state.Vdcs[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "nwVdc.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "nwVdc.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+		}
+	}
+	for di := range state.Vdcs {
+		if _, found := data.Vdcs[di]; !found {
+			continue
+		}
+		stateItemdi := state.Vdcs[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+			if mv.Get("nwVdc.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".nwVdc.children"
 				break
 			}
 		}

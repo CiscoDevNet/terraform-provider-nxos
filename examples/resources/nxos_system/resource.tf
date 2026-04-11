@@ -110,4 +110,23 @@ resource "nxos_system" "example" {
       domain_is_default  = false
     }
   }
+  vdcs = {
+    "1" = {
+      name                                = "LEAF1"
+      multicast_ipv4_route_memory_maximum = 50
+      multicast_ipv4_route_memory_minimum = 50
+      multicast_ipv6_route_memory_maximum = 5
+      multicast_ipv6_route_memory_minimum = 5
+      port_channel_maximum                = 500
+      port_channel_minimum                = 10
+      unicast_ipv4_route_memory_maximum   = 500
+      unicast_ipv4_route_memory_minimum   = 500
+      unicast_ipv6_route_memory_maximum   = 200
+      unicast_ipv6_route_memory_minimum   = 200
+      vlan_maximum                        = 4094
+      vlan_minimum                        = 16
+      vrf_maximum                         = 4096
+      vrf_minimum                         = 4
+    }
+  }
 }

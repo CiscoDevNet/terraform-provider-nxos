@@ -63,7 +63,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -699,6 +699,116 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
+			"vdcs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A virtual device context.\n  - Map key: `id` - An identifier.\n  - Key range: `0`-`65535`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
+							Optional:            true,
+						},
+						"multicast_ipv4_route_memory_maximum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maxiimum route memory to allocate for multicast Ipv4.").AddIntegerRangeDescription(3, 150).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 150),
+							},
+						},
+						"multicast_ipv4_route_memory_minimum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum route memory to allocate for multicast Ipv4.").AddIntegerRangeDescription(3, 150).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 150),
+							},
+						},
+						"multicast_ipv6_route_memory_maximum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum route memory to allocate for multicast Ipv6.").AddIntegerRangeDescription(3, 20).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 20),
+							},
+						},
+						"multicast_ipv6_route_memory_minimum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum route memory to allocate for multicast Ipv6.").AddIntegerRangeDescription(3, 20).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 20),
+							},
+						},
+						"port_channel_maximum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum port channels to allocate.").AddIntegerRangeDescription(0, 766).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 766),
+							},
+						},
+						"port_channel_minimum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum port channels to allocate.").AddIntegerRangeDescription(0, 766).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 766),
+							},
+						},
+						"unicast_ipv4_route_memory_maximum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum route memory to allocate for unicast Ipv4.").AddIntegerRangeDescription(1, 768).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 768),
+							},
+						},
+						"unicast_ipv4_route_memory_minimum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum route memory to allocate for unicast Ipv4.").AddIntegerRangeDescription(1, 768).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 768),
+							},
+						},
+						"unicast_ipv6_route_memory_maximum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum route memory to allocate for unicast Ipv6.").AddIntegerRangeDescription(1, 512).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 512),
+							},
+						},
+						"unicast_ipv6_route_memory_minimum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum route memory to allocate for unicast Ipv6.").AddIntegerRangeDescription(1, 512).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 512),
+							},
+						},
+						"vlan_maximum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum VLANs to allocate.").AddIntegerRangeDescription(16, 4094).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(16, 4094),
+							},
+						},
+						"vlan_minimum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum VLANs to allocate.").AddIntegerRangeDescription(16, 4094).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(16, 4094),
+							},
+						},
+						"vrf_maximum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum vrf resources to allocate.").AddIntegerRangeDescription(2, 4097).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(2, 4097),
+							},
+						},
+						"vrf_minimum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum vrf resources to allocate.").AddIntegerRangeDescription(2, 4097).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(2, 4097),
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -808,7 +918,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

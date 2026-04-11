@@ -48,7 +48,7 @@ provider "nxos" {
 
 ### Optional
 
-- `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
+- `devices` (Attributes List) This can be used to manage a list of devices from a single provider. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
 - `insecure` (Boolean) Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.
 - `password` (String, Sensitive) Password for the NX-OS device account. This can also be set as the NXOS_PASSWORD environment variable.
 - `retries` (Number) Number of retries for REST API calls. This can also be set as the NXOS_RETRIES environment variable. Defaults to `3`.
@@ -67,3 +67,5 @@ Required:
 Optional:
 
 - `managed` (Boolean) Enable or disable device management. This can be used to temporarily skip a device due to maintainance for example. Defaults to `true`.
+- `password` (String, Sensitive) Password for this specific device. Overrides the provider-level `password`.
+- `username` (String) Username for this specific device. Overrides the provider-level `username`.

@@ -1,3 +1,7 @@
+## Unreleased
+
+- Add optional per-device `username` and `password` attributes to override provider-level credentials
+
 ## 0.8.1
 
 - Fix `nxos_dme` resource not detecting out-of-band deletion of managed objects

@@ -62,9 +62,11 @@ type NxosProviderModel struct {
 }
 
 type NxosProviderModelDevice struct {
-	Name    types.String `tfsdk:"name"`
-	URL     types.String `tfsdk:"url"`
-	Managed types.Bool `tfsdk:"managed"`
+	Name     types.String `tfsdk:"name"`
+	URL      types.String `tfsdk:"url"`
+	Username types.String `tfsdk:"username"`
+	Password types.String `tfsdk:"password"`
+	Managed  types.Bool   `tfsdk:"managed"`
 }
 
 // NxosProviderData describes the data maintained by the provider.
@@ -115,7 +117,7 @@ func (p *NxosProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				ElementType:         types.StringType,
 			},
 			"devices": schema.ListNestedAttribute{
-				MarkdownDescription: "This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list.",
+				MarkdownDescription: "This can be used to manage a list of devices from a single provider. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -126,6 +128,15 @@ func (p *NxosProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 						"url": schema.StringAttribute{
 							MarkdownDescription: "URL of the Cisco NX-OS device.",
 							Required:            true,
+						},
+						"username": schema.StringAttribute{
+							MarkdownDescription: "Username for this specific device. Overrides the provider-level `username`.",
+							Optional:            true,
+						},
+						"password": schema.StringAttribute{
+							MarkdownDescription: "Password for this specific device. Overrides the provider-level `password`.",
+							Optional:            true,
+							Sensitive:           true,
 						},
 						"managed": schema.BoolAttribute{
 							MarkdownDescription: "Enable or disable device management. This can be used to temporarily skip a device due to maintainance for example. Defaults to `true`.",
@@ -336,7 +347,16 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 				managed = device.Managed.ValueBool()
 			}
 		}
-		c, err := nxos.NewClient(device.URL.ValueString(), username, password, insecure, nxos.MaxRetries(int(retries)))
+		// Use per-device credentials if provided, otherwise fall back to provider-level
+		deviceUsername := username
+		if !device.Username.IsNull() && !device.Username.IsUnknown() {
+			deviceUsername = device.Username.ValueString()
+		}
+		devicePassword := password
+		if !device.Password.IsNull() && !device.Password.IsUnknown() {
+			devicePassword = device.Password.ValueString()
+		}
+		c, err := nxos.NewClient(device.URL.ValueString(), deviceUsername, devicePassword, insecure, nxos.MaxRetries(int(retries)))
 		if err != nil {
 			resp.Diagnostics.AddError(
 				"Unable to create client",

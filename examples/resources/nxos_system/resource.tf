@@ -129,4 +129,6 @@ resource "nxos_system" "example" {
       vrf_minimum                         = 4
     }
   }
+  transport_mode = "transportSmart"
+  url            = "https://cslu.example.com"
 }

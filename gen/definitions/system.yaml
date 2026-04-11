@@ -965,3 +965,47 @@ child_classes:
             min_int: 2
             max_int: 4097
             example: 4
+  - class_name: licensemanagerLicenseManager
+    doc_path: System/licensemanager:LicenseManager/
+    rn: licensemanager
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: licensemanagerInst
+        doc_path: System/licensemanager:Inst/
+        rn: inst
+        type: single
+        no_delete: true
+        child_classes:
+          - class_name: licensemanagerSmartLicensing
+            doc_path: System/licensemanager:SmartLicensing/
+            rn: smartlicensing
+            type: single
+            no_delete: true
+            tf_name: smart_licensing
+            description: 'Smart Licensing container for licence manager.'
+            attributes:
+              - nxos_name: transportMode
+                tf_name: transport_mode
+                type: String
+                description: 'Defining transport mode property.'
+                enum_values:
+                  - transportCallhome
+                  - transportCslu
+                  - transportOff
+                  - transportSmart
+                example: transportSmart
+            child_classes:
+              - class_name: licensemanagerTransportCsluUrl
+                doc_path: System/licensemanager:TransportCsluUrl/
+                rn: transportcsluurl
+                type: single
+                no_delete: true
+                tf_name: transport_cslu_url
+                description: 'Holds Transport CSLU Url information for Smart Licensing container.'
+                attributes:
+                  - nxos_name: url
+                    tf_name: url
+                    type: String
+                    description: 'Defining Transport CSLU url property.'
+                    example: 'https://cslu.example.com'

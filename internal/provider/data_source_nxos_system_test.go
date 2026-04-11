@@ -118,6 +118,8 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.vlan_minimum", "16"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.vrf_maximum", "4096"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.vrf_minimum", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "transport_mode", "transportSmart"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "url", "https://cslu.example.com"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -234,6 +236,8 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `			vrf_minimum = 4` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	transport_mode = "transportSmart"` + "\n"
+	config += `	url = "https://cslu.example.com"` + "\n"
 	config += `}` + "\n"
 
 	config += `

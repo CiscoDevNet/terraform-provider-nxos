@@ -837,3 +837,131 @@ child_classes:
                 type: Bool
                 description: 'A property used to indicate whether this domain is the default domain. Only one domain in the group can be the default.'
                 example: "false"
+  - class_name: nwVdc
+    doc_path: Routing%20and%20Forwarding/nw%3AVdc/
+    rn: vdc-[%v]
+    type: list
+    tf_name: vdcs
+    no_delete: true
+    description: 'A virtual device context.'
+    attributes:
+      - nxos_name: id
+        tf_name: id
+        type: Int64
+        id: true
+        description: 'An identifier.'
+        min_int: 0
+        max_int: 65535
+        example: 1
+      - nxos_name: name
+        tf_name: name
+        type: String
+        description: 'The name of the object.'
+        example: 'LEAF1'
+    child_classes:
+      - class_name: resmgrLimRes
+        doc_path: System/resmgr%3ALimRes/
+        rn: limres
+        type: single
+        tf_name: resource_limits
+        no_delete: true
+        description: 'Resource configuration.'
+        attributes:
+          - nxos_name: m4rtMemMax
+            tf_name: multicast_ipv4_route_memory_maximum
+            type: Int64
+            description: 'Maxiimum route memory to allocate for multicast Ipv4.'
+            min_int: 3
+            max_int: 150
+            example: 50
+          - nxos_name: m4rtMemMin
+            tf_name: multicast_ipv4_route_memory_minimum
+            type: Int64
+            description: 'Minimum route memory to allocate for multicast Ipv4.'
+            min_int: 3
+            max_int: 150
+            example: 50
+          - nxos_name: m6rtMemMax
+            tf_name: multicast_ipv6_route_memory_maximum
+            type: Int64
+            description: 'Maximum route memory to allocate for multicast Ipv6.'
+            min_int: 3
+            max_int: 20
+            example: 5
+          - nxos_name: m6rtMemMin
+            tf_name: multicast_ipv6_route_memory_minimum
+            type: Int64
+            description: 'Minimum route memory to allocate for multicast Ipv6.'
+            min_int: 3
+            max_int: 20
+            example: 5
+          - nxos_name: poMax
+            tf_name: port_channel_maximum
+            type: Int64
+            description: 'Maximum port channels to allocate.'
+            min_int: 0
+            max_int: 766
+            example: 500
+          - nxos_name: poMin
+            tf_name: port_channel_minimum
+            type: Int64
+            description: 'Minimum port channels to allocate.'
+            min_int: 0
+            max_int: 766
+            example: 10
+          - nxos_name: u4rtMemMax
+            tf_name: unicast_ipv4_route_memory_maximum
+            type: Int64
+            description: 'Maximum route memory to allocate for unicast Ipv4.'
+            min_int: 1
+            max_int: 768
+            example: 500
+          - nxos_name: u4rtMemMin
+            tf_name: unicast_ipv4_route_memory_minimum
+            type: Int64
+            description: 'Minimum route memory to allocate for unicast Ipv4.'
+            min_int: 1
+            max_int: 768
+            example: 500
+          - nxos_name: u6rtMemMax
+            tf_name: unicast_ipv6_route_memory_maximum
+            type: Int64
+            description: 'Maximum route memory to allocate for unicast Ipv6.'
+            min_int: 1
+            max_int: 512
+            example: 200
+          - nxos_name: u6rtMemMin
+            tf_name: unicast_ipv6_route_memory_minimum
+            type: Int64
+            description: 'Minimum route memory to allocate for unicast Ipv6.'
+            min_int: 1
+            max_int: 512
+            example: 200
+          - nxos_name: vlanMax
+            tf_name: vlan_maximum
+            type: Int64
+            description: 'Maximum VLANs to allocate.'
+            min_int: 16
+            max_int: 4094
+            example: 4094
+          - nxos_name: vlanMin
+            tf_name: vlan_minimum
+            type: Int64
+            description: 'Minimum VLANs to allocate.'
+            min_int: 16
+            max_int: 4094
+            example: 16
+          - nxos_name: vrfMax
+            tf_name: vrf_maximum
+            type: Int64
+            description: 'Maximum vrf resources to allocate.'
+            min_int: 2
+            max_int: 4097
+            example: 4096
+          - nxos_name: vrfMin
+            tf_name: vrf_minimum
+            type: Int64
+            description: 'Minimum vrf resources to allocate.'
+            min_int: 2
+            max_int: 4097
+            example: 4

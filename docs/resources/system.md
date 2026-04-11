@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/
 ---
 
 # nxos_system (Resource)
@@ -31,6 +31,8 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [dnsEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/)
 - [dnsProf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/)
 - [dnsDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/)
+- [nwVdc](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/)
+- [resmgrLimRes](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/)
 
 ## Example Usage
 
@@ -145,6 +147,25 @@ resource "nxos_system" "example" {
       domain_name        = "example.com"
       domain_description = "DNS domain description."
       domain_is_default  = false
+    }
+  }
+  vdcs = {
+    "1" = {
+      name                                = "LEAF1"
+      multicast_ipv4_route_memory_maximum = 50
+      multicast_ipv4_route_memory_minimum = 50
+      multicast_ipv6_route_memory_maximum = 5
+      multicast_ipv6_route_memory_minimum = 5
+      port_channel_maximum                = 500
+      port_channel_minimum                = 10
+      unicast_ipv4_route_memory_maximum   = 500
+      unicast_ipv4_route_memory_minimum   = 500
+      unicast_ipv6_route_memory_maximum   = 200
+      unicast_ipv6_route_memory_minimum   = 200
+      vlan_maximum                        = 4094
+      vlan_minimum                        = 16
+      vrf_maximum                         = 4096
+      vrf_minimum                         = 4
     }
   }
 }
@@ -284,6 +305,9 @@ resource "nxos_system" "example" {
   - Choices: `enabled`, `disabled`
 - `nd_vrfs` (Attributes Map) Neighbor Discovery Domain.
   - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--nd_vrfs))
+- `vdcs` (Attributes Map) A virtual device context.
+  - Map key: `id` - An identifier.
+  - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--vdcs))
 
 ### Read-Only
 
@@ -361,6 +385,43 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `router_preference` (String) Set Router Preference (RFC 4191).
   - Choices: `unspecified`, `low`, `medium`, `high`
+
+
+
+<a id="nestedatt--vdcs"></a>
+### Nested Schema for `vdcs`
+
+Optional:
+
+- `multicast_ipv4_route_memory_maximum` (Number) Maxiimum route memory to allocate for multicast Ipv4.
+  - Range: `3`-`150`
+- `multicast_ipv4_route_memory_minimum` (Number) Minimum route memory to allocate for multicast Ipv4.
+  - Range: `3`-`150`
+- `multicast_ipv6_route_memory_maximum` (Number) Maximum route memory to allocate for multicast Ipv6.
+  - Range: `3`-`20`
+- `multicast_ipv6_route_memory_minimum` (Number) Minimum route memory to allocate for multicast Ipv6.
+  - Range: `3`-`20`
+- `name` (String) The name of the object.
+- `port_channel_maximum` (Number) Maximum port channels to allocate.
+  - Range: `0`-`766`
+- `port_channel_minimum` (Number) Minimum port channels to allocate.
+  - Range: `0`-`766`
+- `unicast_ipv4_route_memory_maximum` (Number) Maximum route memory to allocate for unicast Ipv4.
+  - Range: `1`-`768`
+- `unicast_ipv4_route_memory_minimum` (Number) Minimum route memory to allocate for unicast Ipv4.
+  - Range: `1`-`768`
+- `unicast_ipv6_route_memory_maximum` (Number) Maximum route memory to allocate for unicast Ipv6.
+  - Range: `1`-`512`
+- `unicast_ipv6_route_memory_minimum` (Number) Minimum route memory to allocate for unicast Ipv6.
+  - Range: `1`-`512`
+- `vlan_maximum` (Number) Maximum VLANs to allocate.
+  - Range: `16`-`4094`
+- `vlan_minimum` (Number) Minimum VLANs to allocate.
+  - Range: `16`-`4094`
+- `vrf_maximum` (Number) Maximum vrf resources to allocate.
+  - Range: `2`-`4097`
+- `vrf_minimum` (Number) Minimum vrf resources to allocate.
+  - Range: `2`-`4097`
 
 ## Import
 

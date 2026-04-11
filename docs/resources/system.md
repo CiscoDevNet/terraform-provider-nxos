@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/
 ---
 
 # nxos_system (Resource)
@@ -37,6 +37,8 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [licensemanagerInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/)
 - [licensemanagerSmartLicensing](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/)
 - [licensemanagerTransportCsluUrl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/)
+- [bootBoot](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/)
+- [bootImage](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/)
 
 ## Example Usage
 
@@ -174,6 +176,17 @@ resource "nxos_system" "example" {
   }
   smart_licensing_transport_mode     = "transportSmart"
   smart_licensing_transport_cslu_url = "https://cslu.example.com"
+  boot_aci                           = "bootflash:aci.bin"
+  boot_auto_copy                     = "disable"
+  boot_dhcp                          = 500
+  boot_exclude_configuration         = "enable"
+  boot_fex                           = "bootflash:fex.img"
+  boot_mode                          = "lxc"
+  boot_order                         = "pxe"
+  boot_poap                          = "enable"
+  boot_image_verification            = "enable"
+  boot_image_supervisor_1            = "bootflash:nxos64.10.5.3.F.bin"
+  boot_image_supervisor_2            = "bootflash:nxos64.10.5.3.F.bin"
 }
 ```
 
@@ -219,6 +232,24 @@ resource "nxos_system" "example" {
 - `arp_vpc_domains` (Attributes Map) ARP VPC Domain.
   - Map key: `domain_id` - VPC domain id.
   - Key range: `1`-`1000` (see [below for nested schema](#nestedatt--arp_vpc_domains))
+- `boot_aci` (String) Boot aci.
+- `boot_auto_copy` (String) Boot Auto Copy.
+  - Choices: `disable`, `enable`
+- `boot_dhcp` (Number) Set the dhcp value.
+  - Range: `0`-`2147483647`
+- `boot_exclude_configuration` (String) Select boot config exclusion type.
+  - Choices: `disable`, `enable`
+- `boot_fex` (String) Boot fex image with the image provided.
+- `boot_image_supervisor_1` (String) Image to configure on sup-1.
+- `boot_image_supervisor_2` (String) Image to configure on sup-2.
+- `boot_image_verification` (String) Enable/Disable Image Verification.
+  - Choices: `disable`, `enable`
+- `boot_mode` (String) Select boot mode type.
+  - Choices: `none`, `lxc`, `dockerCluster`, `ucs`, `convergedTOR`
+- `boot_order` (String) Boot Order bootflash/pxe.
+  - Choices: `bootflash`, `pxe`, `pxe2bootflash`, `bootflash2pxe`
+- `boot_poap` (String) Boot Poap Enable Disable.
+  - Choices: `disable`, `enable`
 - `clock_admin_state` (String) A property that indicates if the NTP protocol is enabled or disabled.
   - Choices: `enabled`, `disabled`
 - `clock_authentication_state` (String) A property that indicates if the Datetime policy authentication is enabled or disabled.

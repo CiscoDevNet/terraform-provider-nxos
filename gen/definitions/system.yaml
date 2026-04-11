@@ -1009,3 +1009,103 @@ child_classes:
                     type: String
                     description: 'Defining Transport CSLU url property.'
                     example: 'https://cslu.example.com'
+  - class_name: bootBoot
+    doc_path: System/boot:Boot/
+    rn: boot
+    type: single
+    tf_name: boot
+    description: 'Configure boot images.'
+    attributes:
+      - nxos_name: aci
+        tf_name: boot_aci
+        type: String
+        description: 'Boot aci.'
+        example: 'bootflash:aci.bin'
+        exclude_test: true
+      - nxos_name: autoCopy
+        tf_name: boot_auto_copy
+        type: String
+        description: 'Boot Auto Copy.'
+        enum_values:
+          - disable
+          - enable
+        example: disable
+      - nxos_name: dhcp
+        tf_name: boot_dhcp
+        type: Int64
+        description: 'Set the dhcp value.'
+        min_int: 0
+        max_int: 2147483647
+        example: 500
+      - nxos_name: excludeCfg
+        tf_name: boot_exclude_configuration
+        type: String
+        description: 'Select boot config exclusion type.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+      - nxos_name: fex
+        tf_name: boot_fex
+        type: String
+        description: 'Boot fex image with the image provided.'
+        example: 'bootflash:fex.img'
+        exclude_test: true
+      - nxos_name: mode
+        tf_name: boot_mode
+        type: String
+        description: 'Select boot mode type.'
+        enum_values:
+          - none
+          - lxc
+          - dockerCluster
+          - ucs
+          - convergedTOR
+        example: lxc
+        exclude_test: true
+      - nxos_name: order
+        tf_name: boot_order
+        type: String
+        description: 'Boot Order bootflash/pxe.'
+        enum_values:
+          - bootflash
+          - pxe
+          - pxe2bootflash
+          - bootflash2pxe
+        example: pxe
+      - nxos_name: poap
+        tf_name: boot_poap
+        type: String
+        description: 'Boot Poap Enable Disable.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+    child_classes:
+      - class_name: bootImage
+        doc_path: System/boot:Image/
+        rn: image
+        type: single
+        tf_name: image
+        description: 'Configure images.'
+        attributes:
+          - nxos_name: imageverification
+            tf_name: boot_image_verification
+            type: String
+            description: 'Enable/Disable Image Verification.'
+            enum_values:
+              - disable
+              - enable
+            example: enable
+          - nxos_name: sup1
+            tf_name: boot_image_supervisor_1
+            type: String
+            description: 'Image to configure on sup-1.'
+            example: 'bootflash:nxos64.10.5.3.F.bin'
+            exclude_test: true
+          - nxos_name: sup2
+            tf_name: boot_image_supervisor_2
+            type: String
+            description: 'Image to configure on sup-2.'
+            example: 'bootflash:nxos64.10.5.3.F.bin'
+            exclude_test: true

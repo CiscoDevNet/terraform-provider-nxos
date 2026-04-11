@@ -57,7 +57,7 @@ func (d *UserManagementDataSource) Metadata(_ context.Context, req datasource.Me
 func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/", "Security%20and%20Policing/aaa:AuthRealm/", "Security%20and%20Policing/aaa:DefaultAuth/", "Security%20and%20Policing/aaa:ConsoleAuth/", "Security%20and%20Policing/aaa:DefaultAuthor/", "Security%20and%20Policing/aaa:DefaultAcc/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -424,6 +424,310 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 					},
 				},
 			},
+			"authentication_realm_default_role_policy": schema.StringAttribute{
+				MarkdownDescription: "The default role policy for the remote user with invalid CiscoAVPairs. CiscoAVPairs provide support for Remote Access Dial-In User Service attribute-value (AV) pairs.",
+				Computed:            true,
+			},
+			"authentication_realm_description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"authentication_realm_logging_level": schema.Int64Attribute{
+				MarkdownDescription: "AAA Logging level.",
+				Computed:            true,
+			},
+			"authentication_realm_name": schema.StringAttribute{
+				MarkdownDescription: "Object name.",
+				Computed:            true,
+			},
+			"authentication_realm_owner_key": schema.StringAttribute{
+				MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+				Computed:            true,
+			},
+			"authentication_realm_owner_tag": schema.StringAttribute{
+				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+				Computed:            true,
+			},
+			"authentication_realm_radius_directed_request": schema.StringAttribute{
+				MarkdownDescription: "Enable direct authentication requests to server.",
+				Computed:            true,
+			},
+			"authentication_realm_tacacs_directed_request": schema.StringAttribute{
+				MarkdownDescription: "Enable direct authentication requests to server.",
+				Computed:            true,
+			},
+			"default_authentication_protocol": schema.StringAttribute{
+				MarkdownDescription: "Authentication Protocol.",
+				Computed:            true,
+			},
+			"default_authentication_description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"default_authentication_error_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable display of error message on login failures.",
+				Computed:            true,
+			},
+			"default_authentication_fallback": schema.StringAttribute{
+				MarkdownDescription: "Fallback in case all AAA servers configured for remote authentication are unreachable.",
+				Computed:            true,
+			},
+			"default_authentication_invalid_user_log": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging for invalid users.",
+				Computed:            true,
+			},
+			"default_authentication_local": schema.StringAttribute{
+				MarkdownDescription: "Use local username authentication.",
+				Computed:            true,
+			},
+			"default_authentication_name": schema.StringAttribute{
+				MarkdownDescription: "Object name.",
+				Computed:            true,
+			},
+			"default_authentication_none": schema.StringAttribute{
+				MarkdownDescription: "No authentication.",
+				Computed:            true,
+			},
+			"default_authentication_owner_key": schema.StringAttribute{
+				MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+				Computed:            true,
+			},
+			"default_authentication_owner_tag": schema.StringAttribute{
+				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+				Computed:            true,
+			},
+			"default_authentication_provider_group": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_authentication_provider_group_2": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_authentication_provider_group_3": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_authentication_provider_group_4": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_authentication_provider_group_5": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_authentication_provider_group_6": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_authentication_provider_group_7": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_authentication_provider_group_8": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_authentication_realm": schema.StringAttribute{
+				MarkdownDescription: "Realm.",
+				Computed:            true,
+			},
+			"console_authentication_protocol": schema.StringAttribute{
+				MarkdownDescription: "Authentication Protocol.",
+				Computed:            true,
+			},
+			"console_authentication_description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"console_authentication_error_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable display of error message on login failures.",
+				Computed:            true,
+			},
+			"console_authentication_fallback": schema.StringAttribute{
+				MarkdownDescription: "Fallback in case all AAA servers configured for remote authentication are unreachable.",
+				Computed:            true,
+			},
+			"console_authentication_invalid_user_log": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging for invalid users.",
+				Computed:            true,
+			},
+			"console_authentication_local": schema.StringAttribute{
+				MarkdownDescription: "Use local username authentication.",
+				Computed:            true,
+			},
+			"console_authentication_name": schema.StringAttribute{
+				MarkdownDescription: "Object name.",
+				Computed:            true,
+			},
+			"console_authentication_none": schema.StringAttribute{
+				MarkdownDescription: "No authentication.",
+				Computed:            true,
+			},
+			"console_authentication_owner_key": schema.StringAttribute{
+				MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+				Computed:            true,
+			},
+			"console_authentication_owner_tag": schema.StringAttribute{
+				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+				Computed:            true,
+			},
+			"console_authentication_provider_group": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"console_authentication_provider_group_2": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"console_authentication_provider_group_3": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"console_authentication_provider_group_4": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"console_authentication_provider_group_5": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"console_authentication_provider_group_6": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"console_authentication_provider_group_7": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"console_authentication_provider_group_8": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"console_authentication_realm": schema.StringAttribute{
+				MarkdownDescription: "Realm.",
+				Computed:            true,
+			},
+			"default_authorizations": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default authorization methods.\n  - Map key: `command_type` - Type of command for authorization.\n  - Key choices: `config`, `exec`").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"authorization_method_none": schema.BoolAttribute{
+							MarkdownDescription: "No authorization.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"local_rbac": schema.BoolAttribute{
+							MarkdownDescription: "Use Local RBAC based Authorization.",
+							Computed:            true,
+						},
+						"owner_key": schema.StringAttribute{
+							MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+							Computed:            true,
+						},
+						"owner_tag": schema.StringAttribute{
+							MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+							Computed:            true,
+						},
+						"provider_group": schema.StringAttribute{
+							MarkdownDescription: "Provider Group.",
+							Computed:            true,
+						},
+						"provider_group_2": schema.StringAttribute{
+							MarkdownDescription: "Provider Group.",
+							Computed:            true,
+						},
+						"provider_group_3": schema.StringAttribute{
+							MarkdownDescription: "Provider Group.",
+							Computed:            true,
+						},
+						"provider_group_4": schema.StringAttribute{
+							MarkdownDescription: "Provider Group.",
+							Computed:            true,
+						},
+						"provider_group_5": schema.StringAttribute{
+							MarkdownDescription: "Provider Group.",
+							Computed:            true,
+						},
+						"provider_group_6": schema.StringAttribute{
+							MarkdownDescription: "Provider Group.",
+							Computed:            true,
+						},
+						"provider_group_7": schema.StringAttribute{
+							MarkdownDescription: "Provider Group.",
+							Computed:            true,
+						},
+						"provider_group_8": schema.StringAttribute{
+							MarkdownDescription: "Provider Group.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"default_accounting_method_none": schema.BoolAttribute{
+				MarkdownDescription: "No accounting.",
+				Computed:            true,
+			},
+			"default_accounting_description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"default_accounting_local_rbac": schema.BoolAttribute{
+				MarkdownDescription: "Use Local.",
+				Computed:            true,
+			},
+			"default_accounting_name": schema.StringAttribute{
+				MarkdownDescription: "Object name.",
+				Computed:            true,
+			},
+			"default_accounting_owner_key": schema.StringAttribute{
+				MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+				Computed:            true,
+			},
+			"default_accounting_owner_tag": schema.StringAttribute{
+				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+				Computed:            true,
+			},
+			"default_accounting_provider_group": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_accounting_provider_group_2": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_accounting_provider_group_3": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_accounting_provider_group_4": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_accounting_provider_group_5": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_accounting_provider_group_6": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_accounting_provider_group_7": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_accounting_provider_group_8": schema.StringAttribute{
+				MarkdownDescription: "Provider Group.",
+				Computed:            true,
+			},
+			"default_accounting_realm": schema.StringAttribute{
+				MarkdownDescription: "Realm.",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -456,7 +760,7 @@ func (d *UserManagementDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "aaaPreLoginBanner,aaaPostLoginBanner,aaaUser,aaaUserDomain,aaaUserRole,aaaTacacsPlusEp,aaaTacacsPlusProvider,aaaTacacsPlusProviderGroup")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "aaaPreLoginBanner,aaaPostLoginBanner,aaaUser,aaaUserDomain,aaaUserRole,aaaTacacsPlusEp,aaaTacacsPlusProvider,aaaTacacsPlusProviderGroup,aaaAuthRealm,aaaDefaultAuth,aaaConsoleAuth,aaaDefaultAuthor,aaaDefaultAcc")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

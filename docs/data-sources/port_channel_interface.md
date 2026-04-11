@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
   API Documentation
-  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
+  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Data Source)
@@ -16,6 +16,7 @@ This data source can read the configuration of port-channel interfaces on NX-OS 
 
 - [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
 - [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/)
 
 ## Example Usage
@@ -80,6 +81,11 @@ Read-Only:
 - `span_mode` (String) Administrative port span mode.
 - `speed` (String) Administrative port speed.
 - `squelch` (String) Configured Squelch.
+- `storm_control_burst_packets_per_second` (Number) Max burst size.
+- `storm_control_burst_rate` (String) Max burst size.
+- `storm_control_packet_type` (String) Packet Type.
+- `storm_control_rate` (String) Traffic rate.
+- `storm_control_rate_packets_per_second` (Number) Tarffic rate.
 - `suspend_individual` (String) Suspend Individual Port.
 - `transmission_mode` (String) Administrative port layer1 mode.
 - `trunk_logging` (String) Administrative trunk logging enable.

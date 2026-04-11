@@ -57,7 +57,7 @@ func (d *PhysicalInterfaceDataSource) Metadata(_ context.Context, req datasource
 func (d *PhysicalInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -293,6 +293,26 @@ func (d *PhysicalInterfaceDataSource) Schema(ctx context.Context, req datasource
 							MarkdownDescription: "DN of VRF. For example: `sys/inst-VRF1`.",
 							Computed:            true,
 						},
+						"storm_control_burst_packets_per_second": schema.Int64Attribute{
+							MarkdownDescription: "Max burst size.",
+							Computed:            true,
+						},
+						"storm_control_burst_rate": schema.StringAttribute{
+							MarkdownDescription: "Max burst size.",
+							Computed:            true,
+						},
+						"storm_control_rate": schema.StringAttribute{
+							MarkdownDescription: "Traffic rate.",
+							Computed:            true,
+						},
+						"storm_control_rate_packets_per_second": schema.Int64Attribute{
+							MarkdownDescription: "Tarffic rate.",
+							Computed:            true,
+						},
+						"storm_control_packet_type": schema.StringAttribute{
+							MarkdownDescription: "Packet Type.",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -328,7 +348,7 @@ func (d *PhysicalInterfaceDataSource) Read(ctx context.Context, req datasource.R
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l1PhysIf,nwRtVrfMbr")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l1PhysIf,nwRtVrfMbr,l1StormCtrlP")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

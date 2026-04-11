@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/
 ---
 
 # nxos_physical_interface (Resource)
@@ -16,6 +16,7 @@ This resource can manage physical interfaces on NX-OS devices, including setting
 
 - [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
 
 ## Example Usage
 
@@ -23,61 +24,66 @@ This resource can manage physical interfaces on NX-OS devices, including setting
 resource "nxos_physical_interface" "example" {
   physical_interfaces = {
     "eth1/10" = {
-      fec_mode                           = "auto"
-      access_vlan                        = "unknown"
-      admin_state                        = "down"
-      auto_negotiation                   = "on"
-      bandwidth                          = 1000
-      delay                              = 10
-      description                        = "My Description"
-      duplex                             = "auto"
-      layer                              = "Layer3"
-      link_logging                       = "enable"
-      link_debounce_down                 = 200
-      link_debounce_up                   = 0
-      medium                             = "broadcast"
-      mode                               = "access"
-      mtu                                = 1500
-      native_vlan                        = "unknown"
-      speed                              = "auto"
-      speed_group                        = "auto"
-      trunk_vlans                        = "1-4094"
-      uni_directional_ethernet           = "disable"
-      user_configured_flags              = "admin_layer,admin_mtu,admin_state"
-      beacon                             = "off"
-      dfe_adaptive_tuning                = "disable"
-      dfe_tuning_delay                   = 500
-      dot1q_ether_type                   = 33024
-      equalization_delay                 = 1
-      inherit_bandwidth                  = 1000
-      itu_channel                        = 50
-      link_active_jitter_management      = "disable"
-      link_flap_error_disable            = "disable"
-      link_flap_error_max                = 10
-      link_flap_error_seconds            = 60
-      link_loopback                      = "disable"
-      link_mac_up_timer                  = 10
-      link_max_bring_up_timer            = 10
-      link_transmit_reset                = "enable"
-      mdix                               = "auto"
-      media_type                         = "none"
-      optics_loopback                    = "disable"
-      packet_timestamp_egress_source_id  = 100
-      packet_timestamp_ingress_source_id = 100
-      packet_timestamp_state             = "disable"
-      port_type                          = "unknown"
-      router_mac                         = "not-applicable"
-      snmp_trap_state                    = "enable"
-      span_mode                          = "not-a-span-dest"
-      squelch                            = "enable"
-      transparent_mode                   = "not-a-trans-port"
-      trunk_logging                      = "default"
-      usage                              = "discovery"
-      voice_port_cos                     = 0
-      voice_port_trust                   = "disable"
-      voice_vlan_id                      = 0
-      voice_vlan_type                    = "none"
-      vrf_dn                             = "sys/inst-default"
+      fec_mode                               = "auto"
+      access_vlan                            = "unknown"
+      admin_state                            = "down"
+      auto_negotiation                       = "on"
+      bandwidth                              = 1000
+      delay                                  = 10
+      description                            = "My Description"
+      duplex                                 = "auto"
+      layer                                  = "Layer3"
+      link_logging                           = "enable"
+      link_debounce_down                     = 200
+      link_debounce_up                       = 0
+      medium                                 = "broadcast"
+      mode                                   = "access"
+      mtu                                    = 1500
+      native_vlan                            = "unknown"
+      speed                                  = "auto"
+      speed_group                            = "auto"
+      trunk_vlans                            = "1-4094"
+      uni_directional_ethernet               = "disable"
+      user_configured_flags                  = "admin_layer,admin_mtu,admin_state"
+      beacon                                 = "off"
+      dfe_adaptive_tuning                    = "disable"
+      dfe_tuning_delay                       = 500
+      dot1q_ether_type                       = 33024
+      equalization_delay                     = 1
+      inherit_bandwidth                      = 1000
+      itu_channel                            = 50
+      link_active_jitter_management          = "disable"
+      link_flap_error_disable                = "disable"
+      link_flap_error_max                    = 10
+      link_flap_error_seconds                = 60
+      link_loopback                          = "disable"
+      link_mac_up_timer                      = 10
+      link_max_bring_up_timer                = 10
+      link_transmit_reset                    = "enable"
+      mdix                                   = "auto"
+      media_type                             = "none"
+      optics_loopback                        = "disable"
+      packet_timestamp_egress_source_id      = 100
+      packet_timestamp_ingress_source_id     = 100
+      packet_timestamp_state                 = "disable"
+      port_type                              = "unknown"
+      router_mac                             = "not-applicable"
+      snmp_trap_state                        = "enable"
+      span_mode                              = "not-a-span-dest"
+      squelch                                = "enable"
+      transparent_mode                       = "not-a-trans-port"
+      trunk_logging                          = "default"
+      usage                                  = "discovery"
+      voice_port_cos                         = 0
+      voice_port_trust                       = "disable"
+      voice_vlan_id                          = 0
+      voice_vlan_type                        = "none"
+      vrf_dn                                 = "sys/inst-default"
+      storm_control_burst_packets_per_second = 600
+      storm_control_burst_rate               = "75.000000"
+      storm_control_rate                     = "50.000000"
+      storm_control_rate_packets_per_second  = 500
+      storm_control_packet_type              = "bcast"
     }
   }
 }
@@ -185,6 +191,14 @@ Optional:
   - Choices: `unknown`, `1000`, `10000`, `40000`, `auto`, `25000`
 - `squelch` (String) Configured Squelch.
   - Choices: `enable`, `disable`
+- `storm_control_burst_packets_per_second` (Number) Max burst size.
+  - Range: `0`-`4294967295`
+- `storm_control_burst_rate` (String) Max burst size.
+- `storm_control_packet_type` (String) Packet Type.
+  - Choices: `bcast`, `unk-ucast`, `mcast`, `all`
+- `storm_control_rate` (String) Traffic rate.
+- `storm_control_rate_packets_per_second` (Number) Tarffic rate.
+  - Range: `0`-`4294967295`
 - `transparent_mode` (String) Administrative port layer1 mode.
   - Choices: `not-a-trans-port`, `trans-port`
 - `trunk_logging` (String) Administrative trunk logging enable.

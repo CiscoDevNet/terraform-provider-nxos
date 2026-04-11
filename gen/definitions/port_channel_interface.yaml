@@ -395,6 +395,47 @@ child_classes:
             description: "DN of VRF. For example: `sys/inst-VRF1`."
             example: sys/inst-default
             exclude_test: true
+      - class_name: l1StormCtrlP
+        rn: stormctrlp
+        type: single
+        tf_name: storm_control
+        description: "Storm Control Policy."
+        doc_path: System/l1:StormCtrlP/
+        attributes:
+          - nxos_name: burstPps
+            tf_name: storm_control_burst_packets_per_second
+            type: Int64
+            description: "Max burst size."
+            min_int: 0
+            max_int: 4294967295
+            example: 600
+          - nxos_name: burstRate
+            tf_name: storm_control_burst_rate
+            type: String
+            description: "Max burst size."
+            example: "75.000000"
+          - nxos_name: rate
+            tf_name: storm_control_rate
+            type: String
+            description: "Traffic rate."
+            example: "50.000000"
+          - nxos_name: ratePps
+            tf_name: storm_control_rate_packets_per_second
+            type: Int64
+            description: "Tarffic rate."
+            min_int: 0
+            max_int: 4294967295
+            example: 500
+          - nxos_name: type
+            tf_name: storm_control_packet_type
+            type: String
+            description: "Packet Type."
+            enum_values:
+              - bcast
+              - unk-ucast
+              - mcast
+              - all
+            example: bcast
       - class_name: pcRsMbrIfs
         rn: rsmbrIfs-[%s]
         type: list

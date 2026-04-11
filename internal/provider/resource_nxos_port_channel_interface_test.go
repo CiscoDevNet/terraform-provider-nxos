@@ -72,6 +72,11 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.transmission_mode", "not-a-trans-port"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.usage", "discovery"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.user_configured_flags", "admin_layer,admin_state"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_burst_packets_per_second", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_burst_rate", "75.000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_rate", "50.000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_rate_packets_per_second", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_packet_type", "bcast"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.members.sys/intf/phys-[eth1/11].force", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -176,6 +181,11 @@ func testAccNxosPortChannelInterfaceConfig_all() string {
 	config += `			transmission_mode = "not-a-trans-port"` + "\n"
 	config += `			usage = "discovery"` + "\n"
 	config += `			user_configured_flags = "admin_layer,admin_state"` + "\n"
+	config += `			storm_control_burst_packets_per_second = 600` + "\n"
+	config += `			storm_control_burst_rate = "75.000000"` + "\n"
+	config += `			storm_control_rate = "50.000000"` + "\n"
+	config += `			storm_control_rate_packets_per_second = 500` + "\n"
+	config += `			storm_control_packet_type = "bcast"` + "\n"
 	config += `			members = {` + "\n"
 	config += `				"sys/intf/phys-[eth1/11]" = {` + "\n"
 	config += `					force = true` + "\n"

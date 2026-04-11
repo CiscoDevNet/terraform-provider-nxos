@@ -84,6 +84,11 @@ func TestAccDataSourceNxosPhysicalInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.voice_vlan_id", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.voice_vlan_type", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.vrf_dn", "sys/inst-default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_burst_packets_per_second", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_burst_rate", "75.000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_rate", "50.000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_rate_packets_per_second", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_packet_type", "bcast"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -160,6 +165,11 @@ func testAccDataSourceNxosPhysicalInterfaceConfig() string {
 	config += `			voice_vlan_id = 0` + "\n"
 	config += `			voice_vlan_type = "none"` + "\n"
 	config += `			vrf_dn = "sys/inst-default"` + "\n"
+	config += `			storm_control_burst_packets_per_second = 600` + "\n"
+	config += `			storm_control_burst_rate = "75.000000"` + "\n"
+	config += `			storm_control_rate = "50.000000"` + "\n"
+	config += `			storm_control_rate_packets_per_second = 500` + "\n"
+	config += `			storm_control_packet_type = "bcast"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `}` + "\n"

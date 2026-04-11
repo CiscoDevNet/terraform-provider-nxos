@@ -1680,59 +1680,16 @@ func (data System) toDeleteBody() nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 		{
-			childBody := ""
-			if !data.ClockTimezoneName.IsNull() {
-				childBody, _ = sjson.Set(childBody, "nameT", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockTimezoneHours.IsNull() {
-				childBody, _ = sjson.Set(childBody, "hours", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockTimezoneMinutes.IsNull() {
-				childBody, _ = sjson.Set(childBody, "minutes", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if childBody != "" {
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".datetimeTimezone"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-			}
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "datetimeTimezone.attributes.rn", "timezone")
+			deleteBody, _ = sjson.Set(deleteBody, "datetimeTimezone.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
 		{
-			childBody := ""
-			if !data.ClockSummerTimeName.IsNull() {
-				childBody, _ = sjson.Set(childBody, "nameT", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockSummerTimeOffsetMinutes.IsNull() {
-				childBody, _ = sjson.Set(childBody, "offsetMin", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockSummerTimeStartWeek.IsNull() {
-				childBody, _ = sjson.Set(childBody, "startWeek", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockSummerTimeStartDay.IsNull() {
-				childBody, _ = sjson.Set(childBody, "startDay", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockSummerTimeStartMonth.IsNull() {
-				childBody, _ = sjson.Set(childBody, "startMon", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockSummerTimeStartTime.IsNull() {
-				childBody, _ = sjson.Set(childBody, "startTime", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockSummerTimeEndWeek.IsNull() {
-				childBody, _ = sjson.Set(childBody, "endWeek", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockSummerTimeEndDay.IsNull() {
-				childBody, _ = sjson.Set(childBody, "endDay", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockSummerTimeEndMonth.IsNull() {
-				childBody, _ = sjson.Set(childBody, "endMon", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ClockSummerTimeEndTime.IsNull() {
-				childBody, _ = sjson.Set(childBody, "endTime", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if childBody != "" {
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".datetimeSummerT"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-			}
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "datetimeSummerT.attributes.rn", "summertime")
+			deleteBody, _ = sjson.Set(deleteBody, "datetimeSummerT.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
 	}
 

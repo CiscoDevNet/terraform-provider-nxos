@@ -687,7 +687,6 @@ child_classes:
         doc_path: System/datetime:Timezone/
         rn: timezone
         type: single
-        no_delete: true
         tf_name: timezone
         description: 'Clock Timezone.'
         attributes:
@@ -714,7 +713,6 @@ child_classes:
         doc_path: System/datetime:SummerT/
         rn: summertime
         type: single
-        no_delete: true
         tf_name: summer_time
         description: 'Clock Summer-time.'
         attributes:
@@ -723,7 +721,6 @@ child_classes:
             type: String
             description: 'Name of timezone in summer.'
             example: PDT
-            exclude_test: true
           - nxos_name: offsetMin
             tf_name: clock_summer_time_offset_minutes
             type: Int64
@@ -731,7 +728,6 @@ child_classes:
             min_int: 1
             max_int: 1440
             example: 60
-            exclude_test: true
           - nxos_name: startWeek
             tf_name: clock_summer_time_start_week
             type: Int64
@@ -739,25 +735,21 @@ child_classes:
             min_int: 1
             max_int: 5
             example: 2
-            exclude_test: true
           - nxos_name: startDay
             tf_name: clock_summer_time_start_day
             type: String
             description: 'Weekday to start.'
             example: Sun
-            exclude_test: true
           - nxos_name: startMon
             tf_name: clock_summer_time_start_month
             type: String
             description: 'Month to start.'
             example: Mar
-            exclude_test: true
           - nxos_name: startTime
             tf_name: clock_summer_time_start_time
             type: String
             description: 'HH:MM Time to start.'
             example: "02:00"
-            exclude_test: true
           - nxos_name: endWeek
             tf_name: clock_summer_time_end_week
             type: Int64
@@ -765,19 +757,16 @@ child_classes:
             min_int: 1
             max_int: 5
             example: 1
-            exclude_test: true
           - nxos_name: endDay
             tf_name: clock_summer_time_end_day
             type: String
             description: 'Weekday to end.'
             example: Sun
-            exclude_test: true
           - nxos_name: endMon
             tf_name: clock_summer_time_end_month
             type: String
             description: 'Month to end.'
             example: Nov
-            exclude_test: true
           - nxos_name: endTime
             tf_name: clock_summer_time_end_time
             type: String

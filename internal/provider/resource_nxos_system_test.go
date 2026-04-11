@@ -90,6 +90,15 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_timezone_name", "PST"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_timezone_hours", "-8"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_timezone_minutes", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_name", "PDT"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_offset_minutes", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_start_week", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_start_day", "Sun"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_start_month", "Mar"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_start_time", "02:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_end_week", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_end_day", "Sun"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_end_month", "Nov"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_summer_time_end_time", "02:00"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -202,6 +211,15 @@ func testAccNxosSystemConfig_all() string {
 	config += `	clock_timezone_name = "PST"` + "\n"
 	config += `	clock_timezone_hours = -8` + "\n"
 	config += `	clock_timezone_minutes = 0` + "\n"
+	config += `	clock_summer_time_name = "PDT"` + "\n"
+	config += `	clock_summer_time_offset_minutes = 60` + "\n"
+	config += `	clock_summer_time_start_week = 2` + "\n"
+	config += `	clock_summer_time_start_day = "Sun"` + "\n"
+	config += `	clock_summer_time_start_month = "Mar"` + "\n"
+	config += `	clock_summer_time_start_time = "02:00"` + "\n"
+	config += `	clock_summer_time_end_week = 1` + "\n"
+	config += `	clock_summer_time_end_day = "Sun"` + "\n"
+	config += `	clock_summer_time_end_month = "Nov"` + "\n"
 	config += `	clock_summer_time_end_time = "02:00"` + "\n"
 	config += `}` + "\n"
 	return config

@@ -110,6 +110,8 @@ type System struct {
 	ClockSummerTimeEndDay                         types.String                   `tfsdk:"clock_summer_time_end_day"`
 	ClockSummerTimeEndMonth                       types.String                   `tfsdk:"clock_summer_time_end_month"`
 	ClockSummerTimeEndTime                        types.String                   `tfsdk:"clock_summer_time_end_time"`
+	DnsAdminState                                 types.String                   `tfsdk:"dns_admin_state"`
+	DnsProfiles                                   map[string]SystemDnsProfiles   `tfsdk:"dns_profiles"`
 }
 
 type SystemArpVpcDomains struct {
@@ -140,6 +142,15 @@ type SystemNdVrfsInterfaces struct {
 	RetransmitTimer            types.Int64  `tfsdk:"retransmit_timer"`
 	RouteSuppress              types.String `tfsdk:"route_suppress"`
 	RouterPreference           types.String `tfsdk:"router_preference"`
+}
+
+type SystemDnsProfiles struct {
+	Description       types.String `tfsdk:"description"`
+	OwnerKey          types.String `tfsdk:"owner_key"`
+	OwnerTag          types.String `tfsdk:"owner_tag"`
+	DomainName        types.String `tfsdk:"domain_name"`
+	DomainDescription types.String `tfsdk:"domain_description"`
+	DomainIsDefault   types.Bool   `tfsdk:"domain_is_default"`
 }
 
 type SystemIdentity struct {
@@ -180,6 +191,10 @@ func (data SystemNdVrfs) getRn(key string) string {
 
 func (data SystemNdVrfsInterfaces) getRn(key string) string {
 	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data SystemDnsProfiles) getRn(key string) string {
+	return fmt.Sprintf("prof-[%s]", key)
 }
 
 func (data System) getClassName() string {
@@ -539,6 +554,47 @@ func (data System) toBody(config System) nxos.Body {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.datetimeSummerT.attributes", attrs)
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".dnsEntity"
+		attrs = "{}"
+		if !data.DnsAdminState.IsUnknown() && !data.DnsAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.DnsAdminState.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		for key, child := range data.DnsProfiles {
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "name", key)
+			if !child.Description.IsUnknown() && !child.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ownerKey", child.OwnerKey.ValueString())
+			}
+			if !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ownerTag", child.OwnerTag.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsProf.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".dnsProf.children"
+				attrs = "{}"
+				if !child.DomainName.IsUnknown() && !child.DomainName.IsNull() {
+					attrs, _ = sjson.Set(attrs, "name", child.DomainName.ValueString())
+				}
+				if !child.DomainDescription.IsUnknown() && !child.DomainDescription.IsNull() {
+					attrs, _ = sjson.Set(attrs, "descr", child.DomainDescription.ValueString())
+				}
+				if !child.DomainIsDefault.IsUnknown() && !child.DomainIsDefault.IsNull() {
+					attrs, _ = sjson.Set(attrs, "isDefault", strconv.FormatBool(child.DomainIsDefault.ValueBool()))
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsDom.attributes", attrs)
+				}
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -819,6 +875,57 @@ func (data *System) fromBody(res gjson.Result) {
 			data.ClockSummerTimeEndMonth = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.endMon").String())
 			data.ClockSummerTimeEndTime = types.StringValue(rdatetimeSummerT.Get("datetimeSummerT.attributes.endTime").String())
 		}
+	}
+	{
+		var rdnsEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("dnsEntity.attributes.rn").String()
+				if rnValue == "dns" {
+					rdnsEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.DnsAdminState = types.StringValue(rdnsEntity.Get("dnsEntity.attributes.adminSt").String())
+		rdnsEntity.Get("dnsEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "dnsProf" {
+							var child SystemDnsProfiles
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.OwnerKey = types.StringValue(value.Get("attributes.ownerKey").String())
+							child.OwnerTag = types.StringValue(value.Get("attributes.ownerTag").String())
+							mapKey := value.Get("attributes.name").String()
+							{
+								var rdnsDom gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("dnsDom.attributes.rn").String()
+										if rnValue == "dom" {
+											rdnsDom = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.DomainName = types.StringValue(rdnsDom.Get("dnsDom.attributes.name").String())
+								child.DomainDescription = types.StringValue(rdnsDom.Get("dnsDom.attributes.descr").String())
+								child.DomainIsDefault = types.BoolValue(helpers.ParseNxosBoolean(rdnsDom.Get("dnsDom.attributes.isDefault").String()))
+							}
+							if data.DnsProfiles == nil {
+								data.DnsProfiles = make(map[string]SystemDnsProfiles)
+							}
+							data.DnsProfiles[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
 	}
 }
 
@@ -1441,6 +1548,82 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.ClockSummerTimeEndTime = types.StringNull()
 		}
 	}
+	var rdnsEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("dnsEntity.attributes.rn").String()
+			if rnValue == "dns" {
+				rdnsEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.DnsAdminState.IsNull() {
+		data.DnsAdminState = types.StringValue(rdnsEntity.Get("dnsEntity.attributes.adminSt").String())
+	} else {
+		data.DnsAdminState = types.StringNull()
+	}
+	for key, item := range data.DnsProfiles {
+		var rdnsProf gjson.Result
+		rdnsEntity.Get("dnsEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("dnsProf.attributes.name").String() == key {
+					rdnsProf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rdnsProf.Exists() {
+			delete(data.DnsProfiles, key)
+			continue
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rdnsProf.Get("dnsProf.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.OwnerKey.IsNull() {
+			item.OwnerKey = types.StringValue(rdnsProf.Get("dnsProf.attributes.ownerKey").String())
+		} else {
+			item.OwnerKey = types.StringNull()
+		}
+		if !item.OwnerTag.IsNull() {
+			item.OwnerTag = types.StringValue(rdnsProf.Get("dnsProf.attributes.ownerTag").String())
+		} else {
+			item.OwnerTag = types.StringNull()
+		}
+		{
+			var rdnsDom gjson.Result
+			rdnsProf.Get("dnsProf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("dnsDom.attributes.rn").String()
+					if rnValue == "dom" {
+						rdnsDom = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.DomainName.IsNull() {
+				item.DomainName = types.StringValue(rdnsDom.Get("dnsDom.attributes.name").String())
+			} else {
+				item.DomainName = types.StringNull()
+			}
+			if !item.DomainDescription.IsNull() {
+				item.DomainDescription = types.StringValue(rdnsDom.Get("dnsDom.attributes.descr").String())
+			} else {
+				item.DomainDescription = types.StringNull()
+			}
+			if !item.DomainIsDefault.IsNull() {
+				item.DomainIsDefault = types.BoolValue(helpers.ParseNxosBoolean(rdnsDom.Get("dnsDom.attributes.isDefault").String()))
+			} else {
+				item.DomainIsDefault = types.BoolNull()
+			}
+		}
+		data.DnsProfiles[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1692,6 +1875,12 @@ func (data System) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
 	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "dnsEntity.attributes.rn", "dns")
+		deleteBody, _ = sjson.Set(deleteBody, "dnsEntity.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1742,6 +1931,31 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				deleteBody, _ = sjson.Set(deleteBody, "ndIf.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 			}
+		}
+	}
+	for stateKey := range state.DnsProfiles {
+		if _, found := data.DnsProfiles[stateKey]; !found {
+			stateChild := state.DnsProfiles[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "dnsProf.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "dnsProf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.dnsEntity.children"+".-1", deleteBody)
+		}
+	}
+	for di := range state.DnsProfiles {
+		if _, found := data.DnsProfiles[di]; !found {
+			continue
+		}
+		stateItemdi := state.DnsProfiles[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.dnsEntity.children").Array() {
+			if mv.Get("dnsProf.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.dnsEntity.children" + "." + strconv.Itoa(mi) + ".dnsProf.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
 		}
 	}
 	return body

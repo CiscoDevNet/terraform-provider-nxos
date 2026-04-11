@@ -99,4 +99,15 @@ resource "nxos_system" "example" {
   clock_summer_time_end_day        = "Sun"
   clock_summer_time_end_month      = "Nov"
   clock_summer_time_end_time       = "02:00"
+  dns_admin_state                  = "enabled"
+  dns_profiles = {
+    "default" = {
+      description        = "My DNS Profile"
+      owner_key          = "owner_key_1"
+      owner_tag          = "owner_tag_1"
+      domain_name        = "example.com"
+      domain_description = "DNS domain description."
+      domain_is_default  = false
+    }
+  }
 }

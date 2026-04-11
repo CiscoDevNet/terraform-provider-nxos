@@ -57,7 +57,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -444,6 +444,42 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "HH:MM Time to end.",
 				Computed:            true,
 			},
+			"dns_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"dns_profiles": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DNS instance information.\n  - Map key: `name` - Object name.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"owner_key": schema.StringAttribute{
+							MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+							Computed:            true,
+						},
+						"owner_tag": schema.StringAttribute{
+							MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+							Computed:            true,
+						},
+						"domain_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"domain_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"domain_is_default": schema.BoolAttribute{
+							MarkdownDescription: "A property used to indicate whether this domain is the default domain. Only one domain in the group can be the default.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -476,7 +512,7 @@ func (d *SystemDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

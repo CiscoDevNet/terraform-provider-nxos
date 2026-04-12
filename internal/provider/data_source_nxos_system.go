@@ -57,7 +57,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "coppEntity", "coppProfile"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1040,6 +1040,18 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "Profile type.",
 				Computed:            true,
 			},
+			"console_exec_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Timeout.",
+				Computed:            true,
+			},
+			"vty_exec_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Timeout.",
+				Computed:            true,
+			},
+			"vty_session_limit": schema.Int64Attribute{
+				MarkdownDescription: "Configure maximum number of concurrent vsh sessions allowed.",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -1072,7 +1084,7 @@ func (d *SystemDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,udldEntity,udldInst,udldPhysIf,platformEntity,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,coppEntity,coppProfile")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,udldEntity,udldInst,udldPhysIf,platformEntity,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

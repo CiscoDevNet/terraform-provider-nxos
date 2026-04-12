@@ -257,7 +257,10 @@ resource "nxos_system" "example" {
       tlv_vlan             = 100
     }
   }
-  copp_admin_state  = "enabled"
-  copp_rate_limiter = true
-  copp_profile_type = "strict"
+  copp_admin_state     = "enabled"
+  copp_rate_limiter    = true
+  copp_profile_type    = "strict"
+  console_exec_timeout = 30
+  vty_exec_timeout     = 30
+  vty_session_limit    = 16
 }

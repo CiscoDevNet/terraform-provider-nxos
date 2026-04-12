@@ -57,7 +57,7 @@ func (d *AccessListDataSource) Metadata(_ context.Context, req datasource.Metada
 func (d *AccessListDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read IPv4 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.").AddApiDocumentation("aclEntity", "Security%20and%20Policing/acl:Entity/", []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclEgress", "aclIf", "aclInst"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read IPv4 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.").AddApiDocumentation("aclEntity", "Security%20and%20Policing/acl:Entity/", []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -340,6 +340,10 @@ func (d *AccessListDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
+			"ingress_vty_access_list_name": schema.StringAttribute{
+				MarkdownDescription: "Access Control List name.",
+				Computed:            true,
+			},
 			"egress_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv4 egress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Computed:            true,
@@ -351,6 +355,10 @@ func (d *AccessListDataSource) Schema(ctx context.Context, req datasource.Schema
 						},
 					},
 				},
+			},
+			"egress_vty_access_list_name": schema.StringAttribute{
+				MarkdownDescription: "Access Control List name.",
+				Computed:            true,
 			},
 		},
 	}
@@ -384,7 +392,7 @@ func (d *AccessListDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ipv4aclAF,ipv4aclACL,ipv4aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclEgress,aclIf,aclInst")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ipv4aclAF,ipv4aclACL,ipv4aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

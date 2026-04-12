@@ -76,7 +76,9 @@ func TestAccNxosAccessList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "access_lists.ACL1.entries.10.telemetry_queue", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "access_lists.ACL1.entries.10.type_of_service", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ingress_interfaces.eth1/10.access_list_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ingress_vty_access_list_name", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "egress_interfaces.eth1/10.access_list_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "egress_vty_access_list_name", "ACL1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -197,11 +199,13 @@ func testAccNxosAccessListConfig_all() string {
 	config += `			access_list_name = "ACL1"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	ingress_vty_access_list_name = "ACL1"` + "\n"
 	config += `	egress_interfaces = {` + "\n"
 	config += `		"eth1/10" = {` + "\n"
 	config += `			access_list_name = "ACL1"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	egress_vty_access_list_name = "ACL1"` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/coppEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Entity/coppProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Profile/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/coppEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Entity/coppProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Profile/terminalTerminal https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Terminal/terminalLine https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Line/terminalConsole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Console/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Vty/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalSesLmt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:SesLmt/
 ---
 
 # nxos_system (Resource)
@@ -50,6 +50,13 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [lldpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/)
 - [coppEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Entity/)
 - [coppProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Profile/)
+- [terminalTerminal](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Terminal/)
+- [terminalLine](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Line/)
+- [terminalConsole](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Console/)
+- [terminalExecTimeout](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/)
+- [terminalVty](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Vty/)
+- [terminalExecTimeout](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/)
+- [terminalSesLmt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:SesLmt/)
 
 ## Example Usage
 
@@ -313,9 +320,12 @@ resource "nxos_system" "example" {
       tlv_vlan             = 100
     }
   }
-  copp_admin_state  = "enabled"
-  copp_rate_limiter = true
-  copp_profile_type = "strict"
+  copp_admin_state     = "enabled"
+  copp_rate_limiter    = true
+  copp_profile_type    = "strict"
+  console_exec_timeout = 30
+  vty_exec_timeout     = 30
+  vty_session_limit    = 16
 }
 ```
 
@@ -409,6 +419,8 @@ resource "nxos_system" "example" {
 - `clock_timezone_minutes` (Number) Minutes offset from UTC.
   - Range: `0`-`59`
 - `clock_timezone_name` (String) Name of timezone.
+- `console_exec_timeout` (Number) Timeout.
+  - Range: `0`-`525600`
 - `copp_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `copp_profile_type` (String) Profile type.
@@ -636,6 +648,10 @@ resource "nxos_system" "example" {
 - `vdcs` (Attributes Map) A virtual device context.
   - Map key: `id` - An identifier.
   - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--vdcs))
+- `vty_exec_timeout` (Number) Timeout.
+  - Range: `0`-`525600`
+- `vty_session_limit` (Number) Configure maximum number of concurrent vsh sessions allowed.
+  - Range: `1`-`64`
 
 ### Read-Only
 

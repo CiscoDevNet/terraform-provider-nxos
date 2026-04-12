@@ -2151,6 +2151,75 @@ child_classes:
               - dense
             example: strict
             exclude_test: true
+  - class_name: terminalTerminal
+    doc_path: System/terminal:Terminal/
+    rn: terml
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: terminalLine
+        doc_path: System/terminal:Line/
+        rn: ln
+        type: single
+        no_delete: true
+        child_classes:
+          - class_name: terminalConsole
+            doc_path: System/terminal:Console/
+            rn: cons
+            type: single
+            no_delete: true
+            child_classes:
+              - class_name: terminalExecTimeout
+                doc_path: System/terminal:ExecTimeout/
+                rn: execTmeout
+                type: single
+                no_delete: true
+                tf_name: console_exec_timeout
+                description: 'Configure exec timeout of console terminal.'
+                attributes:
+                  - nxos_name: timeout
+                    tf_name: console_exec_timeout
+                    type: Int64
+                    min_int: 0
+                    max_int: 525600
+                    description: 'Timeout.'
+                    example: 30
+          - class_name: terminalVty
+            doc_path: System/terminal:Vty/
+            rn: vty
+            type: single
+            no_delete: true
+            child_classes:
+              - class_name: terminalExecTimeout
+                doc_path: System/terminal:ExecTimeout/
+                rn: execTmeout
+                type: single
+                no_delete: true
+                tf_name: vty_exec_timeout
+                description: 'Configure exec timeout of VTY terminal.'
+                attributes:
+                  - nxos_name: timeout
+                    tf_name: vty_exec_timeout
+                    type: Int64
+                    min_int: 0
+                    max_int: 525600
+                    description: 'Timeout.'
+                    example: 30
+              - class_name: terminalSesLmt
+                doc_path: System/terminal:SesLmt/
+                rn: ssLmt
+                type: single
+                no_delete: true
+                tf_name: vty_session_limit
+                description: 'Configure session limit.'
+                attributes:
+                  - nxos_name: sesLmt
+                    tf_name: vty_session_limit
+                    type: Int64
+                    min_int: 1
+                    max_int: 64
+                    description: 'Configure maximum number of concurrent vsh sessions allowed.'
+                    example: 16
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld

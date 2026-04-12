@@ -63,7 +63,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -820,6 +820,71 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				MarkdownDescription: helpers.NewAttributeDescription("Defining Transport CSLU url property.").String,
 				Optional:            true,
 			},
+			"boot_aci": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Boot aci.").String,
+				Optional:            true,
+			},
+			"boot_auto_copy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Boot Auto Copy.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"boot_dhcp": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the dhcp value.").AddIntegerRangeDescription(0, 2147483647).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 2147483647),
+				},
+			},
+			"boot_exclude_configuration": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Select boot config exclusion type.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"boot_fex": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Boot fex image with the image provided.").String,
+				Optional:            true,
+			},
+			"boot_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Select boot mode type.").AddStringEnumDescription("none", "lxc", "dockerCluster", "ucs", "convergedTOR").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "lxc", "dockerCluster", "ucs", "convergedTOR"),
+				},
+			},
+			"boot_order": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Boot Order bootflash/pxe.").AddStringEnumDescription("bootflash", "pxe", "pxe2bootflash", "bootflash2pxe").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("bootflash", "pxe", "pxe2bootflash", "bootflash2pxe"),
+				},
+			},
+			"boot_poap": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Boot Poap Enable Disable.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"boot_image_verification": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable/Disable Image Verification.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"boot_image_supervisor_1": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Image to configure on sup-1.").String,
+				Optional:            true,
+			},
+			"boot_image_supervisor_2": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Image to configure on sup-2.").String,
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -929,7 +994,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

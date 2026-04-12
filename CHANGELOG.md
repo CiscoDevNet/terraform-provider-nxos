@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add boot configuration and boot image attributes to `nxos_system` resource and data source
 - Add Smart Licensing transport mode and CSLU URL attributes to `nxos_system` resource and data source
 - Add VDC and resource limit attributes to `nxos_system` resource and data source
 - Add DNS configuration support to `nxos_system` resource

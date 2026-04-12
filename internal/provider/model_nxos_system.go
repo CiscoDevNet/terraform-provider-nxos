@@ -115,6 +115,17 @@ type System struct {
 	Vdcs                                          map[string]SystemVdcs          `tfsdk:"vdcs"`
 	SmartLicensingTransportMode                   types.String                   `tfsdk:"smart_licensing_transport_mode"`
 	SmartLicensingTransportCsluUrl                types.String                   `tfsdk:"smart_licensing_transport_cslu_url"`
+	BootAci                                       types.String                   `tfsdk:"boot_aci"`
+	BootAutoCopy                                  types.String                   `tfsdk:"boot_auto_copy"`
+	BootDhcp                                      types.Int64                    `tfsdk:"boot_dhcp"`
+	BootExcludeConfiguration                      types.String                   `tfsdk:"boot_exclude_configuration"`
+	BootFex                                       types.String                   `tfsdk:"boot_fex"`
+	BootMode                                      types.String                   `tfsdk:"boot_mode"`
+	BootOrder                                     types.String                   `tfsdk:"boot_order"`
+	BootPoap                                      types.String                   `tfsdk:"boot_poap"`
+	BootImageVerification                         types.String                   `tfsdk:"boot_image_verification"`
+	BootImageSupervisor1                          types.String                   `tfsdk:"boot_image_supervisor_1"`
+	BootImageSupervisor2                          types.String                   `tfsdk:"boot_image_supervisor_2"`
 }
 
 type SystemArpVpcDomains struct {
@@ -709,6 +720,50 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".bootBoot"
+		attrs = "{}"
+		if !data.BootAci.IsUnknown() && !data.BootAci.IsNull() {
+			attrs, _ = sjson.Set(attrs, "aci", data.BootAci.ValueString())
+		}
+		if !data.BootAutoCopy.IsUnknown() && !data.BootAutoCopy.IsNull() {
+			attrs, _ = sjson.Set(attrs, "autoCopy", data.BootAutoCopy.ValueString())
+		}
+		if !data.BootDhcp.IsUnknown() && !data.BootDhcp.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dhcp", strconv.FormatInt(data.BootDhcp.ValueInt64(), 10))
+		}
+		if !data.BootExcludeConfiguration.IsUnknown() && !data.BootExcludeConfiguration.IsNull() {
+			attrs, _ = sjson.Set(attrs, "excludeCfg", data.BootExcludeConfiguration.ValueString())
+		}
+		if !data.BootFex.IsUnknown() && !data.BootFex.IsNull() {
+			attrs, _ = sjson.Set(attrs, "fex", data.BootFex.ValueString())
+		}
+		if !data.BootMode.IsUnknown() && !data.BootMode.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mode", data.BootMode.ValueString())
+		}
+		if !data.BootOrder.IsUnknown() && !data.BootOrder.IsNull() {
+			attrs, _ = sjson.Set(attrs, "order", data.BootOrder.ValueString())
+		}
+		if !data.BootPoap.IsUnknown() && !data.BootPoap.IsNull() {
+			attrs, _ = sjson.Set(attrs, "poap", data.BootPoap.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		attrs = "{}"
+		if !data.BootImageVerification.IsUnknown() && !data.BootImageVerification.IsNull() {
+			attrs, _ = sjson.Set(attrs, "imageverification", data.BootImageVerification.ValueString())
+		}
+		if !data.BootImageSupervisor1.IsUnknown() && !data.BootImageSupervisor1.IsNull() {
+			attrs, _ = sjson.Set(attrs, "sup1", data.BootImageSupervisor1.ValueString())
+		}
+		if !data.BootImageSupervisor2.IsUnknown() && !data.BootImageSupervisor2.IsNull() {
+			attrs, _ = sjson.Set(attrs, "sup2", data.BootImageSupervisor2.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bootImage.attributes", attrs)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1139,6 +1194,43 @@ func (data *System) fromBody(res gjson.Result) {
 					data.SmartLicensingTransportCsluUrl = types.StringValue(rlicensemanagerTransportCsluUrl.Get("licensemanagerTransportCsluUrl.attributes.url").String())
 				}
 			}
+		}
+	}
+	{
+		var rbootBoot gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("bootBoot.attributes.rn").String()
+				if rnValue == "boot" {
+					rbootBoot = v
+					return false
+				}
+				return true
+			},
+		)
+		data.BootAci = types.StringValue(rbootBoot.Get("bootBoot.attributes.aci").String())
+		data.BootAutoCopy = types.StringValue(rbootBoot.Get("bootBoot.attributes.autoCopy").String())
+		data.BootDhcp = types.Int64Value(rbootBoot.Get("bootBoot.attributes.dhcp").Int())
+		data.BootExcludeConfiguration = types.StringValue(rbootBoot.Get("bootBoot.attributes.excludeCfg").String())
+		data.BootFex = types.StringValue(rbootBoot.Get("bootBoot.attributes.fex").String())
+		data.BootMode = types.StringValue(rbootBoot.Get("bootBoot.attributes.mode").String())
+		data.BootOrder = types.StringValue(rbootBoot.Get("bootBoot.attributes.order").String())
+		data.BootPoap = types.StringValue(rbootBoot.Get("bootBoot.attributes.poap").String())
+		{
+			var rbootImage gjson.Result
+			rbootBoot.Get("bootBoot.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("bootImage.attributes.rn").String()
+					if rnValue == "image" {
+						rbootImage = v
+						return false
+					}
+					return true
+				},
+			)
+			data.BootImageVerification = types.StringValue(rbootImage.Get("bootImage.attributes.imageverification").String())
+			data.BootImageSupervisor1 = types.StringValue(rbootImage.Get("bootImage.attributes.sup1").String())
+			data.BootImageSupervisor2 = types.StringValue(rbootImage.Get("bootImage.attributes.sup2").String())
 		}
 	}
 }
@@ -2003,6 +2095,85 @@ func (data *System) updateFromBody(res gjson.Result) {
 			}
 		}
 	}
+	var rbootBoot gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("bootBoot.attributes.rn").String()
+			if rnValue == "boot" {
+				rbootBoot = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.BootAci.IsNull() {
+		data.BootAci = types.StringValue(rbootBoot.Get("bootBoot.attributes.aci").String())
+	} else {
+		data.BootAci = types.StringNull()
+	}
+	if !data.BootAutoCopy.IsNull() {
+		data.BootAutoCopy = types.StringValue(rbootBoot.Get("bootBoot.attributes.autoCopy").String())
+	} else {
+		data.BootAutoCopy = types.StringNull()
+	}
+	if !data.BootDhcp.IsNull() {
+		data.BootDhcp = types.Int64Value(rbootBoot.Get("bootBoot.attributes.dhcp").Int())
+	} else {
+		data.BootDhcp = types.Int64Null()
+	}
+	if !data.BootExcludeConfiguration.IsNull() {
+		data.BootExcludeConfiguration = types.StringValue(rbootBoot.Get("bootBoot.attributes.excludeCfg").String())
+	} else {
+		data.BootExcludeConfiguration = types.StringNull()
+	}
+	if !data.BootFex.IsNull() {
+		data.BootFex = types.StringValue(rbootBoot.Get("bootBoot.attributes.fex").String())
+	} else {
+		data.BootFex = types.StringNull()
+	}
+	if !data.BootMode.IsNull() {
+		data.BootMode = types.StringValue(rbootBoot.Get("bootBoot.attributes.mode").String())
+	} else {
+		data.BootMode = types.StringNull()
+	}
+	if !data.BootOrder.IsNull() {
+		data.BootOrder = types.StringValue(rbootBoot.Get("bootBoot.attributes.order").String())
+	} else {
+		data.BootOrder = types.StringNull()
+	}
+	if !data.BootPoap.IsNull() {
+		data.BootPoap = types.StringValue(rbootBoot.Get("bootBoot.attributes.poap").String())
+	} else {
+		data.BootPoap = types.StringNull()
+	}
+	{
+		var rbootImage gjson.Result
+		rbootBoot.Get("bootBoot.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("bootImage.attributes.rn").String()
+				if rnValue == "image" {
+					rbootImage = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.BootImageVerification.IsNull() {
+			data.BootImageVerification = types.StringValue(rbootImage.Get("bootImage.attributes.imageverification").String())
+		} else {
+			data.BootImageVerification = types.StringNull()
+		}
+		if !data.BootImageSupervisor1.IsNull() {
+			data.BootImageSupervisor1 = types.StringValue(rbootImage.Get("bootImage.attributes.sup1").String())
+		} else {
+			data.BootImageSupervisor1 = types.StringNull()
+		}
+		if !data.BootImageSupervisor2.IsNull() {
+			data.BootImageSupervisor2 = types.StringValue(rbootImage.Get("bootImage.attributes.sup2").String())
+		} else {
+			data.BootImageSupervisor2 = types.StringNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -2300,6 +2471,12 @@ func (data System) toDeleteBody() nxos.Body {
 				}
 			}
 		}
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "bootBoot.attributes.rn", "boot")
+		deleteBody, _ = sjson.Set(deleteBody, "bootBoot.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
 	return nxos.Body{Str: body}

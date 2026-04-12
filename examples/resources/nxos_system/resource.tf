@@ -131,4 +131,15 @@ resource "nxos_system" "example" {
   }
   smart_licensing_transport_mode     = "transportSmart"
   smart_licensing_transport_cslu_url = "https://cslu.example.com"
+  boot_aci                           = "bootflash:aci.bin"
+  boot_auto_copy                     = "disable"
+  boot_dhcp                          = 500
+  boot_exclude_configuration         = "enable"
+  boot_fex                           = "bootflash:fex.img"
+  boot_mode                          = "lxc"
+  boot_order                         = "pxe"
+  boot_poap                          = "enable"
+  boot_image_verification            = "enable"
+  boot_image_supervisor_1            = "bootflash:nxos64.10.5.3.F.bin"
+  boot_image_supervisor_2            = "bootflash:nxos64.10.5.3.F.bin"
 }

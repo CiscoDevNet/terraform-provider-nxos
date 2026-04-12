@@ -124,6 +124,12 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.vrf_minimum", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "smart_licensing_transport_mode", "transportSmart"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "smart_licensing_transport_cslu_url", "https://cslu.example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_auto_copy", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_dhcp", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_exclude_configuration", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_order", "pxe"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_poap", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_image_verification", "enable"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -277,6 +283,12 @@ func testAccNxosSystemConfig_all() string {
 	config += `	}` + "\n"
 	config += `	smart_licensing_transport_mode = "transportSmart"` + "\n"
 	config += `	smart_licensing_transport_cslu_url = "https://cslu.example.com"` + "\n"
+	config += `	boot_auto_copy = "disable"` + "\n"
+	config += `	boot_dhcp = 500` + "\n"
+	config += `	boot_exclude_configuration = "enable"` + "\n"
+	config += `	boot_order = "pxe"` + "\n"
+	config += `	boot_poap = "enable"` + "\n"
+	config += `	boot_image_verification = "enable"` + "\n"
 	config += `}` + "\n"
 	return config
 }

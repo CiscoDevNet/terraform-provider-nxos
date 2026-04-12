@@ -107,6 +107,7 @@ func TestAccNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_none", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_owner_key", "owner1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_provider_group", "TACACS_GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_realm", "tacacs"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_protocol", "chap"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_description", "Console authentication"))
@@ -117,17 +118,20 @@ func TestAccNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_none", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_owner_key", "owner1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_provider_group", "TACACS_GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_realm", "tacacs"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authorizations.config.authorization_method_none", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authorizations.config.description", "Default authorization"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authorizations.config.local_rbac", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authorizations.config.owner_key", "owner1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authorizations.config.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authorizations.config.provider_group", "TACACS_GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_method_none", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_description", "Default accounting"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_local_rbac", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_owner_key", "owner1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_provider_group", "TACACS_GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_realm", "tacacs"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
@@ -286,6 +290,7 @@ func testAccNxosUserManagementConfig_all(includeWriteOnly bool) string {
 	config += `	default_authentication_none = "no"` + "\n"
 	config += `	default_authentication_owner_key = "owner1"` + "\n"
 	config += `	default_authentication_owner_tag = "tag1"` + "\n"
+	config += `	default_authentication_provider_group = "TACACS_GROUP1"` + "\n"
 	config += `	default_authentication_realm = "tacacs"` + "\n"
 	config += `	console_authentication_protocol = "chap"` + "\n"
 	config += `	console_authentication_description = "Console authentication"` + "\n"
@@ -296,6 +301,7 @@ func testAccNxosUserManagementConfig_all(includeWriteOnly bool) string {
 	config += `	console_authentication_none = "no"` + "\n"
 	config += `	console_authentication_owner_key = "owner1"` + "\n"
 	config += `	console_authentication_owner_tag = "tag1"` + "\n"
+	config += `	console_authentication_provider_group = "TACACS_GROUP1"` + "\n"
 	config += `	console_authentication_realm = "tacacs"` + "\n"
 	config += `	default_authorizations = {` + "\n"
 	config += `		"config" = {` + "\n"
@@ -304,6 +310,7 @@ func testAccNxosUserManagementConfig_all(includeWriteOnly bool) string {
 	config += `			local_rbac = true` + "\n"
 	config += `			owner_key = "owner1"` + "\n"
 	config += `			owner_tag = "tag1"` + "\n"
+	config += `			provider_group = "TACACS_GROUP1"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	default_accounting_method_none = false` + "\n"
@@ -311,6 +318,7 @@ func testAccNxosUserManagementConfig_all(includeWriteOnly bool) string {
 	config += `	default_accounting_local_rbac = true` + "\n"
 	config += `	default_accounting_owner_key = "owner1"` + "\n"
 	config += `	default_accounting_owner_tag = "tag1"` + "\n"
+	config += `	default_accounting_provider_group = "TACACS_GROUP1"` + "\n"
 	config += `	default_accounting_realm = "tacacs"` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"

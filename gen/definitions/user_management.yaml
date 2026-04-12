@@ -699,8 +699,7 @@ child_classes:
             tf_name: default_authentication_provider_group
             type: String
             description: "Provider Group."
-            example: "GROUP1"
-            exclude_test: true
+            example: "TACACS_GROUP1"
           - nxos_name: providerGroup2
             tf_name: default_authentication_provider_group_2
             type: String
@@ -823,8 +822,7 @@ child_classes:
             tf_name: console_authentication_provider_group
             type: String
             description: "Provider Group."
-            example: "GROUP1"
-            exclude_test: true
+            example: "TACACS_GROUP1"
           - nxos_name: providerGroup2
             tf_name: console_authentication_provider_group_2
             type: String
@@ -923,8 +921,7 @@ child_classes:
             tf_name: provider_group
             type: String
             description: "Provider Group."
-            example: "GROUP1"
-            exclude_test: true
+            example: "TACACS_GROUP1"
           - nxos_name: providerGroup2
             tf_name: provider_group_2
             type: String
@@ -1002,8 +999,7 @@ child_classes:
             tf_name: default_accounting_provider_group
             type: String
             description: "Provider Group."
-            example: "GROUP1"
-            exclude_test: true
+            example: "TACACS_GROUP1"
           - nxos_name: providerGroup2
             tf_name: default_accounting_provider_group_2
             type: String

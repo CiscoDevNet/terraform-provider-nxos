@@ -147,4 +147,14 @@ resource "nxos_system" "example" {
   boot_image_verification            = "enable"
   boot_image_supervisor_1            = "bootflash:nxos64.10.5.3.F.bin"
   boot_image_supervisor_2            = "bootflash:nxos64.10.5.3.F.bin"
+  udld_admin_state                   = "enabled"
+  udld_aggressive                    = "enabled"
+  udld_message_interval              = 20
+  udld_interfaces = {
+    "eth1/9" = {
+      admin_state             = "port-enabled"
+      aggressive              = "enabled"
+      bidirectional_detection = "port-enabled"
+    }
+  }
 }

@@ -38,95 +38,99 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type System struct {
-	Device                                        types.String                   `tfsdk:"device"`
-	Dn                                            types.String                   `tfsdk:"id"`
-	Name                                          types.String                   `tfsdk:"name"`
-	EthernetMtu                                   types.Int64                    `tfsdk:"ethernet_mtu"`
-	EthernetDefaultAdminState                     types.String                   `tfsdk:"ethernet_default_admin_state"`
-	EthernetAdminLinkDownSyslogLevel              types.Int64                    `tfsdk:"ethernet_admin_link_down_syslog_level"`
-	EthernetAdminLinkUpSyslogLevel                types.Int64                    `tfsdk:"ethernet_admin_link_up_syslog_level"`
-	EthernetAdminState                            types.String                   `tfsdk:"ethernet_admin_state"`
-	EthernetAllowUnsupportedSfp                   types.Bool                     `tfsdk:"ethernet_allow_unsupported_sfp"`
-	EthernetChassisInfrastructureAdaptorVlan      types.Int64                    `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
-	EthernetChassisInfrastructureEpdsPortNumber   types.Int64                    `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
-	EthernetChassisInfrastructureIpv6Address      types.String                   `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
-	EthernetChassisInfrastructureVlan             types.Int64                    `tfsdk:"ethernet_chassis_infrastructure_vlan"`
-	EthernetChassisManagementInstance             types.String                   `tfsdk:"ethernet_chassis_management_instance"`
-	EthernetChassisManagementInstanceFabricNumber types.String                   `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
-	EthernetControl                               types.String                   `tfsdk:"ethernet_control"`
-	EthernetInterfaceSyslogInfo                   types.String                   `tfsdk:"ethernet_interface_syslog_info"`
-	EthernetLogEvent                              types.String                   `tfsdk:"ethernet_log_event"`
-	EthernetDefaultLayer                          types.String                   `tfsdk:"ethernet_default_layer"`
-	EthernetSystemInterfaceAdminState             types.String                   `tfsdk:"ethernet_system_interface_admin_state"`
-	EthernetSystemLinkFailureLaserOn              types.Bool                     `tfsdk:"ethernet_system_link_failure_laser_on"`
-	EthernetSystemStormControlMultiThreshold      types.Bool                     `tfsdk:"ethernet_system_storm_control_multi_threshold"`
-	EthernetVlanTagNative                         types.Bool                     `tfsdk:"ethernet_vlan_tag_native"`
-	ArpAdminState                                 types.String                   `tfsdk:"arp_admin_state"`
-	ArpInstanceAdminState                         types.String                   `tfsdk:"arp_instance_admin_state"`
-	ArpAllowStaticArpOutsideSubnet                types.String                   `tfsdk:"arp_allow_static_arp_outside_subnet"`
-	ArpUnnumberedSviSoftwareReplication           types.String                   `tfsdk:"arp_unnumbered_svi_software_replication"`
-	ArpCacheLimit                                 types.Int64                    `tfsdk:"arp_cache_limit"`
-	ArpCacheSyslogRate                            types.Int64                    `tfsdk:"arp_cache_syslog_rate"`
-	ArpControl                                    types.String                   `tfsdk:"arp_control"`
-	ArpEvpnTimeout                                types.Int64                    `tfsdk:"arp_evpn_timeout"`
-	ArpInterfaceCacheLimit                        types.Int64                    `tfsdk:"arp_interface_cache_limit"`
-	ArpIpAdjacencyRouteDistance                   types.Int64                    `tfsdk:"arp_ip_adjacency_route_distance"`
-	ArpIpArpCos                                   types.Int64                    `tfsdk:"arp_ip_arp_cos"`
-	ArpOffListTimeout                             types.Int64                    `tfsdk:"arp_off_list_timeout"`
-	ArpRarpFabricForwarding                       types.String                   `tfsdk:"arp_rarp_fabric_forwarding"`
-	ArpRarpFabricForwardingRate                   types.Int64                    `tfsdk:"arp_rarp_fabric_forwarding_rate"`
-	ArpResolveOutsideSubnet                       types.String                   `tfsdk:"arp_resolve_outside_subnet"`
-	ArpSuppressionTimeout                         types.Int64                    `tfsdk:"arp_suppression_timeout"`
-	ArpTimeout                                    types.Int64                    `tfsdk:"arp_timeout"`
-	ArpVpcDomains                                 map[string]SystemArpVpcDomains `tfsdk:"arp_vpc_domains"`
-	NdAdminState                                  types.String                   `tfsdk:"nd_admin_state"`
-	NdAcceptSolicitNeighborEntry                  types.String                   `tfsdk:"nd_accept_solicit_neighbor_entry"`
-	NdInstanceAdminState                          types.String                   `tfsdk:"nd_instance_admin_state"`
-	NdAgingInterval                               types.Int64                    `tfsdk:"nd_aging_interval"`
-	NdCacheLimit                                  types.Int64                    `tfsdk:"nd_cache_limit"`
-	NdCacheSyslogRate                             types.Int64                    `tfsdk:"nd_cache_syslog_rate"`
-	NdControl                                     types.String                   `tfsdk:"nd_control"`
-	NdIpv6AdjacencyRouteDistance                  types.Int64                    `tfsdk:"nd_ipv6_adjacency_route_distance"`
-	NdOffListTimeout                              types.Int64                    `tfsdk:"nd_off_list_timeout"`
-	NdProbeIntervalForSolicitNeighbor             types.Int64                    `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
-	NdSolicitNeighborAdvertisement                types.String                   `tfsdk:"nd_solicit_neighbor_advertisement"`
-	NdVrfs                                        map[string]SystemNdVrfs        `tfsdk:"nd_vrfs"`
-	ClockAdminState                               types.String                   `tfsdk:"clock_admin_state"`
-	ClockAuthenticationState                      types.String                   `tfsdk:"clock_authentication_state"`
-	ClockFormat                                   types.String                   `tfsdk:"clock_format"`
-	ClockFormatDebug                              types.Bool                     `tfsdk:"clock_format_debug"`
-	ClockFormatSyslog                             types.Bool                     `tfsdk:"clock_format_syslog"`
-	ClockProtocol                                 types.String                   `tfsdk:"clock_protocol"`
-	ClockTimezoneName                             types.String                   `tfsdk:"clock_timezone_name"`
-	ClockTimezoneHours                            types.Int64                    `tfsdk:"clock_timezone_hours"`
-	ClockTimezoneMinutes                          types.Int64                    `tfsdk:"clock_timezone_minutes"`
-	ClockSummerTimeName                           types.String                   `tfsdk:"clock_summer_time_name"`
-	ClockSummerTimeOffsetMinutes                  types.Int64                    `tfsdk:"clock_summer_time_offset_minutes"`
-	ClockSummerTimeStartWeek                      types.Int64                    `tfsdk:"clock_summer_time_start_week"`
-	ClockSummerTimeStartDay                       types.String                   `tfsdk:"clock_summer_time_start_day"`
-	ClockSummerTimeStartMonth                     types.String                   `tfsdk:"clock_summer_time_start_month"`
-	ClockSummerTimeStartTime                      types.String                   `tfsdk:"clock_summer_time_start_time"`
-	ClockSummerTimeEndWeek                        types.Int64                    `tfsdk:"clock_summer_time_end_week"`
-	ClockSummerTimeEndDay                         types.String                   `tfsdk:"clock_summer_time_end_day"`
-	ClockSummerTimeEndMonth                       types.String                   `tfsdk:"clock_summer_time_end_month"`
-	ClockSummerTimeEndTime                        types.String                   `tfsdk:"clock_summer_time_end_time"`
-	DnsAdminState                                 types.String                   `tfsdk:"dns_admin_state"`
-	DnsProfiles                                   map[string]SystemDnsProfiles   `tfsdk:"dns_profiles"`
-	Vdcs                                          map[string]SystemVdcs          `tfsdk:"vdcs"`
-	CliAliases                                    map[string]SystemCliAliases    `tfsdk:"cli_aliases"`
-	SmartLicensingTransportMode                   types.String                   `tfsdk:"smart_licensing_transport_mode"`
-	SmartLicensingTransportCsluUrl                types.String                   `tfsdk:"smart_licensing_transport_cslu_url"`
-	BootAci                                       types.String                   `tfsdk:"boot_aci"`
-	BootAutoCopy                                  types.String                   `tfsdk:"boot_auto_copy"`
-	BootDhcp                                      types.Int64                    `tfsdk:"boot_dhcp"`
-	BootExcludeConfiguration                      types.String                   `tfsdk:"boot_exclude_configuration"`
-	BootFex                                       types.String                   `tfsdk:"boot_fex"`
-	BootMode                                      types.String                   `tfsdk:"boot_mode"`
-	BootOrder                                     types.String                   `tfsdk:"boot_order"`
-	BootPoap                                      types.String                   `tfsdk:"boot_poap"`
-	BootImageVerification                         types.String                   `tfsdk:"boot_image_verification"`
-	BootImageSupervisor1                          types.String                   `tfsdk:"boot_image_supervisor_1"`
-	BootImageSupervisor2                          types.String                   `tfsdk:"boot_image_supervisor_2"`
+	Device                                        types.String                    `tfsdk:"device"`
+	Dn                                            types.String                    `tfsdk:"id"`
+	Name                                          types.String                    `tfsdk:"name"`
+	EthernetMtu                                   types.Int64                     `tfsdk:"ethernet_mtu"`
+	EthernetDefaultAdminState                     types.String                    `tfsdk:"ethernet_default_admin_state"`
+	EthernetAdminLinkDownSyslogLevel              types.Int64                     `tfsdk:"ethernet_admin_link_down_syslog_level"`
+	EthernetAdminLinkUpSyslogLevel                types.Int64                     `tfsdk:"ethernet_admin_link_up_syslog_level"`
+	EthernetAdminState                            types.String                    `tfsdk:"ethernet_admin_state"`
+	EthernetAllowUnsupportedSfp                   types.Bool                      `tfsdk:"ethernet_allow_unsupported_sfp"`
+	EthernetChassisInfrastructureAdaptorVlan      types.Int64                     `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
+	EthernetChassisInfrastructureEpdsPortNumber   types.Int64                     `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
+	EthernetChassisInfrastructureIpv6Address      types.String                    `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
+	EthernetChassisInfrastructureVlan             types.Int64                     `tfsdk:"ethernet_chassis_infrastructure_vlan"`
+	EthernetChassisManagementInstance             types.String                    `tfsdk:"ethernet_chassis_management_instance"`
+	EthernetChassisManagementInstanceFabricNumber types.String                    `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
+	EthernetControl                               types.String                    `tfsdk:"ethernet_control"`
+	EthernetInterfaceSyslogInfo                   types.String                    `tfsdk:"ethernet_interface_syslog_info"`
+	EthernetLogEvent                              types.String                    `tfsdk:"ethernet_log_event"`
+	EthernetDefaultLayer                          types.String                    `tfsdk:"ethernet_default_layer"`
+	EthernetSystemInterfaceAdminState             types.String                    `tfsdk:"ethernet_system_interface_admin_state"`
+	EthernetSystemLinkFailureLaserOn              types.Bool                      `tfsdk:"ethernet_system_link_failure_laser_on"`
+	EthernetSystemStormControlMultiThreshold      types.Bool                      `tfsdk:"ethernet_system_storm_control_multi_threshold"`
+	EthernetVlanTagNative                         types.Bool                      `tfsdk:"ethernet_vlan_tag_native"`
+	ArpAdminState                                 types.String                    `tfsdk:"arp_admin_state"`
+	ArpInstanceAdminState                         types.String                    `tfsdk:"arp_instance_admin_state"`
+	ArpAllowStaticArpOutsideSubnet                types.String                    `tfsdk:"arp_allow_static_arp_outside_subnet"`
+	ArpUnnumberedSviSoftwareReplication           types.String                    `tfsdk:"arp_unnumbered_svi_software_replication"`
+	ArpCacheLimit                                 types.Int64                     `tfsdk:"arp_cache_limit"`
+	ArpCacheSyslogRate                            types.Int64                     `tfsdk:"arp_cache_syslog_rate"`
+	ArpControl                                    types.String                    `tfsdk:"arp_control"`
+	ArpEvpnTimeout                                types.Int64                     `tfsdk:"arp_evpn_timeout"`
+	ArpInterfaceCacheLimit                        types.Int64                     `tfsdk:"arp_interface_cache_limit"`
+	ArpIpAdjacencyRouteDistance                   types.Int64                     `tfsdk:"arp_ip_adjacency_route_distance"`
+	ArpIpArpCos                                   types.Int64                     `tfsdk:"arp_ip_arp_cos"`
+	ArpOffListTimeout                             types.Int64                     `tfsdk:"arp_off_list_timeout"`
+	ArpRarpFabricForwarding                       types.String                    `tfsdk:"arp_rarp_fabric_forwarding"`
+	ArpRarpFabricForwardingRate                   types.Int64                     `tfsdk:"arp_rarp_fabric_forwarding_rate"`
+	ArpResolveOutsideSubnet                       types.String                    `tfsdk:"arp_resolve_outside_subnet"`
+	ArpSuppressionTimeout                         types.Int64                     `tfsdk:"arp_suppression_timeout"`
+	ArpTimeout                                    types.Int64                     `tfsdk:"arp_timeout"`
+	ArpVpcDomains                                 map[string]SystemArpVpcDomains  `tfsdk:"arp_vpc_domains"`
+	NdAdminState                                  types.String                    `tfsdk:"nd_admin_state"`
+	NdAcceptSolicitNeighborEntry                  types.String                    `tfsdk:"nd_accept_solicit_neighbor_entry"`
+	NdInstanceAdminState                          types.String                    `tfsdk:"nd_instance_admin_state"`
+	NdAgingInterval                               types.Int64                     `tfsdk:"nd_aging_interval"`
+	NdCacheLimit                                  types.Int64                     `tfsdk:"nd_cache_limit"`
+	NdCacheSyslogRate                             types.Int64                     `tfsdk:"nd_cache_syslog_rate"`
+	NdControl                                     types.String                    `tfsdk:"nd_control"`
+	NdIpv6AdjacencyRouteDistance                  types.Int64                     `tfsdk:"nd_ipv6_adjacency_route_distance"`
+	NdOffListTimeout                              types.Int64                     `tfsdk:"nd_off_list_timeout"`
+	NdProbeIntervalForSolicitNeighbor             types.Int64                     `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
+	NdSolicitNeighborAdvertisement                types.String                    `tfsdk:"nd_solicit_neighbor_advertisement"`
+	NdVrfs                                        map[string]SystemNdVrfs         `tfsdk:"nd_vrfs"`
+	ClockAdminState                               types.String                    `tfsdk:"clock_admin_state"`
+	ClockAuthenticationState                      types.String                    `tfsdk:"clock_authentication_state"`
+	ClockFormat                                   types.String                    `tfsdk:"clock_format"`
+	ClockFormatDebug                              types.Bool                      `tfsdk:"clock_format_debug"`
+	ClockFormatSyslog                             types.Bool                      `tfsdk:"clock_format_syslog"`
+	ClockProtocol                                 types.String                    `tfsdk:"clock_protocol"`
+	ClockTimezoneName                             types.String                    `tfsdk:"clock_timezone_name"`
+	ClockTimezoneHours                            types.Int64                     `tfsdk:"clock_timezone_hours"`
+	ClockTimezoneMinutes                          types.Int64                     `tfsdk:"clock_timezone_minutes"`
+	ClockSummerTimeName                           types.String                    `tfsdk:"clock_summer_time_name"`
+	ClockSummerTimeOffsetMinutes                  types.Int64                     `tfsdk:"clock_summer_time_offset_minutes"`
+	ClockSummerTimeStartWeek                      types.Int64                     `tfsdk:"clock_summer_time_start_week"`
+	ClockSummerTimeStartDay                       types.String                    `tfsdk:"clock_summer_time_start_day"`
+	ClockSummerTimeStartMonth                     types.String                    `tfsdk:"clock_summer_time_start_month"`
+	ClockSummerTimeStartTime                      types.String                    `tfsdk:"clock_summer_time_start_time"`
+	ClockSummerTimeEndWeek                        types.Int64                     `tfsdk:"clock_summer_time_end_week"`
+	ClockSummerTimeEndDay                         types.String                    `tfsdk:"clock_summer_time_end_day"`
+	ClockSummerTimeEndMonth                       types.String                    `tfsdk:"clock_summer_time_end_month"`
+	ClockSummerTimeEndTime                        types.String                    `tfsdk:"clock_summer_time_end_time"`
+	DnsAdminState                                 types.String                    `tfsdk:"dns_admin_state"`
+	DnsProfiles                                   map[string]SystemDnsProfiles    `tfsdk:"dns_profiles"`
+	Vdcs                                          map[string]SystemVdcs           `tfsdk:"vdcs"`
+	CliAliases                                    map[string]SystemCliAliases     `tfsdk:"cli_aliases"`
+	SmartLicensingTransportMode                   types.String                    `tfsdk:"smart_licensing_transport_mode"`
+	SmartLicensingTransportCsluUrl                types.String                    `tfsdk:"smart_licensing_transport_cslu_url"`
+	BootAci                                       types.String                    `tfsdk:"boot_aci"`
+	BootAutoCopy                                  types.String                    `tfsdk:"boot_auto_copy"`
+	BootDhcp                                      types.Int64                     `tfsdk:"boot_dhcp"`
+	BootExcludeConfiguration                      types.String                    `tfsdk:"boot_exclude_configuration"`
+	BootFex                                       types.String                    `tfsdk:"boot_fex"`
+	BootMode                                      types.String                    `tfsdk:"boot_mode"`
+	BootOrder                                     types.String                    `tfsdk:"boot_order"`
+	BootPoap                                      types.String                    `tfsdk:"boot_poap"`
+	BootImageVerification                         types.String                    `tfsdk:"boot_image_verification"`
+	BootImageSupervisor1                          types.String                    `tfsdk:"boot_image_supervisor_1"`
+	BootImageSupervisor2                          types.String                    `tfsdk:"boot_image_supervisor_2"`
+	UdldAdminState                                types.String                    `tfsdk:"udld_admin_state"`
+	UdldAggressive                                types.String                    `tfsdk:"udld_aggressive"`
+	UdldMessageInterval                           types.Int64                     `tfsdk:"udld_message_interval"`
+	UdldInterfaces                                map[string]SystemUdldInterfaces `tfsdk:"udld_interfaces"`
 }
 
 type SystemArpVpcDomains struct {
@@ -190,6 +194,12 @@ type SystemCliAliases struct {
 	Command types.String `tfsdk:"command"`
 }
 
+type SystemUdldInterfaces struct {
+	AdminState             types.String `tfsdk:"admin_state"`
+	Aggressive             types.String `tfsdk:"aggressive"`
+	BidirectionalDetection types.String `tfsdk:"bidirectional_detection"`
+}
+
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -240,6 +250,10 @@ func (data SystemVdcs) getRn(key string) string {
 
 func (data SystemCliAliases) getRn(key string) string {
 	return fmt.Sprintf("clialias-[%s]", key)
+}
+
+func (data SystemUdldInterfaces) getRn(key string) string {
+	return fmt.Sprintf("physif-[%s]", key)
 }
 
 func (data System) getClassName() string {
@@ -781,6 +795,43 @@ func (data System) toBody(config System) nxos.Body {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bootImage.attributes", attrs)
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".udldEntity"
+		attrs = "{}"
+		if !data.UdldAdminState.IsUnknown() && !data.UdldAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.UdldAdminState.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".udldInst"
+			attrs = "{}"
+			if !data.UdldAggressive.IsUnknown() && !data.UdldAggressive.IsNull() {
+				attrs, _ = sjson.Set(attrs, "aggressive", data.UdldAggressive.ValueString())
+			}
+			if !data.UdldMessageInterval.IsUnknown() && !data.UdldMessageInterval.IsNull() {
+				attrs, _ = sjson.Set(attrs, "msgIntvl", strconv.FormatInt(data.UdldMessageInterval.ValueInt64(), 10))
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			for key, child := range data.UdldInterfaces {
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "id", key)
+				if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+					attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+				}
+				if !child.Aggressive.IsUnknown() && !child.Aggressive.IsNull() {
+					attrs, _ = sjson.Set(attrs, "aggressive", child.Aggressive.ValueString())
+				}
+				if !child.BidirectionalDetection.IsUnknown() && !child.BidirectionalDetection.IsNull() {
+					attrs, _ = sjson.Set(attrs, "biDirDetect", child.BidirectionalDetection.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.udldPhysIf.attributes", attrs)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1267,6 +1318,54 @@ func (data *System) fromBody(res gjson.Result) {
 			data.BootImageVerification = types.StringValue(rbootImage.Get("bootImage.attributes.imageverification").String())
 			data.BootImageSupervisor1 = types.StringValue(rbootImage.Get("bootImage.attributes.sup1").String())
 			data.BootImageSupervisor2 = types.StringValue(rbootImage.Get("bootImage.attributes.sup2").String())
+		}
+	}
+	{
+		var rudldEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("udldEntity.attributes.rn").String()
+				if rnValue == "udld" {
+					rudldEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rudldInst gjson.Result
+			rudldEntity.Get("udldEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("udldInst.attributes.rn").String()
+					if rnValue == "inst" {
+						rudldInst = v
+						return false
+					}
+					return true
+				},
+			)
+			data.UdldAggressive = types.StringValue(rudldInst.Get("udldInst.attributes.aggressive").String())
+			data.UdldMessageInterval = types.Int64Value(rudldInst.Get("udldInst.attributes.msgIntvl").Int())
+			rudldInst.Get("udldInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "udldPhysIf" {
+								var child SystemUdldInterfaces
+								child.Aggressive = types.StringValue(value.Get("attributes.aggressive").String())
+								child.BidirectionalDetection = types.StringValue(value.Get("attributes.biDirDetect").String())
+								mapKey := value.Get("attributes.id").String()
+								if data.UdldInterfaces == nil {
+									data.UdldInterfaces = make(map[string]SystemUdldInterfaces)
+								}
+								data.UdldInterfaces[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
 		}
 	}
 }
@@ -2232,6 +2331,67 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.BootImageSupervisor2 = types.StringNull()
 		}
 	}
+	var rudldEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("udldEntity.attributes.rn").String()
+			if rnValue == "udld" {
+				rudldEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rudldInst gjson.Result
+		rudldEntity.Get("udldEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("udldInst.attributes.rn").String()
+				if rnValue == "inst" {
+					rudldInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.UdldAggressive.IsNull() {
+			data.UdldAggressive = types.StringValue(rudldInst.Get("udldInst.attributes.aggressive").String())
+		} else {
+			data.UdldAggressive = types.StringNull()
+		}
+		if !data.UdldMessageInterval.IsNull() {
+			data.UdldMessageInterval = types.Int64Value(rudldInst.Get("udldInst.attributes.msgIntvl").Int())
+		} else {
+			data.UdldMessageInterval = types.Int64Null()
+		}
+		for key, item := range data.UdldInterfaces {
+			var rudldPhysIf gjson.Result
+			rudldInst.Get("udldInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("udldPhysIf.attributes.id").String() == key {
+						rudldPhysIf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rudldPhysIf.Exists() {
+				delete(data.UdldInterfaces, key)
+				continue
+			}
+			if !item.Aggressive.IsNull() {
+				item.Aggressive = types.StringValue(rudldPhysIf.Get("udldPhysIf.attributes.aggressive").String())
+			} else {
+				item.Aggressive = types.StringNull()
+			}
+			if !item.BidirectionalDetection.IsNull() {
+				item.BidirectionalDetection = types.StringValue(rudldPhysIf.Get("udldPhysIf.attributes.biDirDetect").String())
+			} else {
+				item.BidirectionalDetection = types.StringNull()
+			}
+			data.UdldInterfaces[key] = item
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -2542,6 +2702,35 @@ func (data System) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "bootBoot.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".udldEntity"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.UdldAdminState.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".udldInst"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			if !data.UdldAggressive.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"aggressive", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.UdldMessageInterval.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"msgIntvl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.UdldInterfaces {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -2651,6 +2840,15 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			deleteBody, _ = sjson.Set(deleteBody, "vshdCliAlias.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "vshdCliAlias.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.UdldInterfaces {
+		if _, found := data.UdldInterfaces[stateKey]; !found {
+			stateChild := state.UdldInterfaces[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.udldEntity.children"+".0.udldInst.children"+".-1", deleteBody)
 		}
 	}
 	return body

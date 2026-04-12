@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -1127,3 +1127,93 @@ child_classes:
             description: 'Image to configure on sup-2.'
             example: 'bootflash:nxos64.10.5.3.F.bin'
             exclude_test: true
+  - class_name: udldEntity
+    doc_path: Discovery%20Protocols/udld:Entity/
+    rn: udld
+    type: single
+    no_delete: true
+    tf_name: udld
+    description: 'UDLD configuration.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: udld_admin_state
+        type: String
+        write_only: true
+        enum_values:
+          - enabled
+          - disabled
+        description: "The administrative state of the object or policy."
+        example: enabled
+    child_classes:
+      - class_name: udldInst
+        doc_path: Discovery%20Protocols/udld:Inst/
+        rn: inst
+        type: single
+        no_delete: true
+        tf_name: udld_instance
+        description: 'UDLD instance configuration.'
+        attributes:
+          - nxos_name: aggressive
+            tf_name: udld_aggressive
+            type: String
+            enum_values:
+              - enabled
+              - disabled
+            description: "Global Aggressive Mode."
+            example: enabled
+          - nxos_name: msgIntvl
+            tf_name: udld_message_interval
+            type: Int64
+            min_int: 7
+            max_int: 90
+            description: "Probe Message Interval."
+            example: 20
+        child_classes:
+          - class_name: udldPhysIf
+            doc_path: Discovery%20Protocols/udld:PhysIf/
+            rn: physif-[%s]
+            type: list
+            tf_name: udld_interfaces
+            description: 'List of UDLD interfaces.'
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: String
+                id: true
+                description: "Must match first field in the output of `show intf brief`. Example: `eth1/1`."
+                example: eth1/9
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                write_only: true
+                enum_values:
+                  - port-enabled
+                  - port-fiber-disabled
+                  - port-default
+                  - port-default-disable
+                description: "UDLD enable/disable per port."
+                example: port-enabled
+              - nxos_name: aggressive
+                tf_name: aggressive
+                type: String
+                enum_values:
+                  - enabled
+                  - disabled
+                description: "Interface Aggressive Mode."
+                example: enabled
+              - nxos_name: biDirDetect
+                tf_name: bidirectional_detection
+                type: String
+                enum_values:
+                  - port-enabled
+                  - port-fiber-disabled
+                  - port-default
+                  - port-default-disable
+                description: "Bidirectional Detection Enabled."
+                example: port-enabled
+test_prerequisites:
+  - dn: sys/fm/udld
+    class_name: fmUdld
+    attributes:
+      - name: adminSt
+        value: enabled

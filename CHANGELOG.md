@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add UDLD configuration to `nxos_system` resource and data source
 - Add NTP source interface configuration to `nxos_ntp` resource and data source
 - Add NTP access group configuration to `nxos_ntp` resource and data source
 - Add CLI alias configuration to `nxos_system` resource and data source

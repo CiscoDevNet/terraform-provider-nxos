@@ -145,6 +145,7 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_hold_time", "180"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_init_delay_time", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_multi_peer", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_optional_tlv_select", "port-desc"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_port_channel", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_port_id_sub_type", "short"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_system_description", "Cisco NX-OS"))
@@ -332,6 +333,7 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `	lldp_hold_time = 180` + "\n"
 	config += `	lldp_init_delay_time = 5` + "\n"
 	config += `	lldp_multi_peer = "disabled"` + "\n"
+	config += `	lldp_optional_tlv_select = "port-desc"` + "\n"
 	config += `	lldp_port_channel = "disabled"` + "\n"
 	config += `	lldp_port_id_sub_type = "short"` + "\n"
 	config += `	lldp_system_description = "Cisco NX-OS"` + "\n"

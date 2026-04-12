@@ -1982,7 +1982,6 @@ child_classes:
               - link-aggregation
             allow_non_enum_values: true
             example: port-desc
-            exclude_test: true
           - nxos_name: optTlvSelHidden
             tf_name: lldp_optional_tlv_select_hidden
             type: String

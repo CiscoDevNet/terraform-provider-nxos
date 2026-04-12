@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/
 ---
 
 # nxos_physical_interface (Data Source)
@@ -16,6 +16,7 @@ This data source can read the configuration of physical interfaces on NX-OS devi
 
 - [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
 
 ## Example Usage
 
@@ -86,6 +87,11 @@ Read-Only:
 - `speed` (String) Administrative port speed.
 - `speed_group` (String) Speed Group.
 - `squelch` (String) Configured Squelch.
+- `storm_control_burst_packets_per_second` (Number) Max burst size.
+- `storm_control_burst_rate` (String) Max burst size.
+- `storm_control_packet_type` (String) Packet Type.
+- `storm_control_rate` (String) Traffic rate.
+- `storm_control_rate_packets_per_second` (Number) Tarffic rate.
 - `transparent_mode` (String) Administrative port layer1 mode.
 - `trunk_logging` (String) Administrative trunk logging enable.
 - `trunk_vlans` (String) Configed Trunk Vlans.

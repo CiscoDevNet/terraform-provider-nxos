@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
   API Documentation
-  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
+  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Resource)
@@ -16,6 +16,7 @@ This resource can manage port-channel interfaces on NX-OS devices, including cha
 
 - [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
 - [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/)
 
 ## Example Usage
@@ -24,48 +25,53 @@ This resource can manage port-channel interfaces on NX-OS devices, including cha
 resource "nxos_port_channel_interface" "example" {
   port_channel_interfaces = {
     "po123" = {
-      port_channel_mode      = "active"
-      minimum_links          = 2
-      maximum_links          = 10
-      suspend_individual     = "disable"
-      access_vlan            = "vlan-1"
-      admin_state            = "up"
-      auto_negotiation       = "on"
-      bandwidth              = 0
-      delay                  = 1
-      description            = "My Description"
-      duplex                 = "auto"
-      layer                  = "Layer2"
-      link_logging           = "enable"
-      medium                 = "broadcast"
-      mode                   = "access"
-      mtu                    = 1500
-      native_vlan            = "unknown"
-      speed                  = "auto"
-      trunk_vlans            = "1-4094"
-      dot1q_ether_type       = 33024
-      equalization_delay     = 5
-      graceful_convergence   = "disable"
-      hash_distribution      = "adaptive"
-      inherit_bandwidth      = 1000000
-      itu_channel            = 50
-      lacp_delay_mode        = "enable"
-      lacp_vpc_convergence   = "enable"
-      link_debounce_down     = 200
-      load_defer             = "enable"
-      mdix                   = "auto"
-      optics_loopback        = "internal"
-      port_type              = "leaf"
-      pxe_transition_timeout = 5
-      router_mac             = "00:00:00:11:22:33"
-      snmp_trap_state        = "disable"
-      span_mode              = "not-a-span-dest"
-      squelch                = "disable"
-      transmission_mode      = "not-a-trans-port"
-      trunk_logging          = "enable"
-      usage                  = "discovery"
-      user_configured_flags  = "admin_layer,admin_state"
-      vrf_dn                 = "sys/inst-default"
+      port_channel_mode                      = "active"
+      minimum_links                          = 2
+      maximum_links                          = 10
+      suspend_individual                     = "disable"
+      access_vlan                            = "vlan-1"
+      admin_state                            = "up"
+      auto_negotiation                       = "on"
+      bandwidth                              = 0
+      delay                                  = 1
+      description                            = "My Description"
+      duplex                                 = "auto"
+      layer                                  = "Layer2"
+      link_logging                           = "enable"
+      medium                                 = "broadcast"
+      mode                                   = "access"
+      mtu                                    = 1500
+      native_vlan                            = "unknown"
+      speed                                  = "auto"
+      trunk_vlans                            = "1-4094"
+      dot1q_ether_type                       = 33024
+      equalization_delay                     = 5
+      graceful_convergence                   = "disable"
+      hash_distribution                      = "adaptive"
+      inherit_bandwidth                      = 1000000
+      itu_channel                            = 50
+      lacp_delay_mode                        = "enable"
+      lacp_vpc_convergence                   = "enable"
+      link_debounce_down                     = 200
+      load_defer                             = "enable"
+      mdix                                   = "auto"
+      optics_loopback                        = "internal"
+      port_type                              = "leaf"
+      pxe_transition_timeout                 = 5
+      router_mac                             = "00:00:00:11:22:33"
+      snmp_trap_state                        = "disable"
+      span_mode                              = "not-a-span-dest"
+      squelch                                = "disable"
+      transmission_mode                      = "not-a-trans-port"
+      trunk_logging                          = "enable"
+      usage                                  = "discovery"
+      user_configured_flags                  = "admin_layer,admin_state"
+      vrf_dn                                 = "sys/inst-default"
+      storm_control_burst_packets_per_second = 600
+      storm_control_burst_rate               = "75.000000"
+      storm_control_rate                     = "50.000000"
+      storm_control_rate_packets_per_second  = 500
+      storm_control_packet_type              = "bcast"
       members = {
         "sys/intf/phys-[eth1/11]" = {
           force = true
@@ -162,6 +168,14 @@ Optional:
   - Choices: `unknown`, `100M`, `1G`, `10G`, `40G`, `auto`, `auto 100M`, `auto 100M 1G`, `100G`, `25G`, `10M`, `50G`, `200G`, `400G`, `2.5G`, `5G`, `auto 2.5G 5G 10G`, `auto 100M 1G 2.5G 5G`, `800G`
 - `squelch` (String) Configured Squelch.
   - Choices: `enable`, `disable`
+- `storm_control_burst_packets_per_second` (Number) Max burst size.
+  - Range: `0`-`4294967295`
+- `storm_control_burst_rate` (String) Max burst size.
+- `storm_control_packet_type` (String) Packet Type.
+  - Choices: `bcast`, `unk-ucast`, `mcast`, `all`
+- `storm_control_rate` (String) Traffic rate.
+- `storm_control_rate_packets_per_second` (Number) Tarffic rate.
+  - Range: `0`-`4294967295`
 - `suspend_individual` (String) Suspend Individual Port.
   - Choices: `enable`, `disable`
 - `transmission_mode` (String) Administrative port layer1 mode.

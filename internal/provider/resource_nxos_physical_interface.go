@@ -63,7 +63,7 @@ func (r *PhysicalInterfaceResource) Metadata(ctx context.Context, req resource.M
 func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -443,6 +443,35 @@ func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.Sch
 							MarkdownDescription: helpers.NewAttributeDescription("DN of VRF. For example: `sys/inst-VRF1`.").String,
 							Optional:            true,
 						},
+						"storm_control_burst_packets_per_second": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Max burst size.").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"storm_control_burst_rate": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Max burst size.").String,
+							Optional:            true,
+						},
+						"storm_control_rate": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Traffic rate.").String,
+							Optional:            true,
+						},
+						"storm_control_rate_packets_per_second": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Tarffic rate.").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"storm_control_packet_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Packet Type.").AddStringEnumDescription("bcast", "unk-ucast", "mcast", "all").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bcast", "unk-ucast", "mcast", "all"),
+							},
+						},
 					},
 				},
 			},
@@ -555,7 +584,7 @@ func (r *PhysicalInterfaceResource) Read(ctx context.Context, req resource.ReadR
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l1PhysIf,nwRtVrfMbr")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l1PhysIf,nwRtVrfMbr,l1StormCtrlP")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

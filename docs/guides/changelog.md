@@ -9,6 +9,8 @@ description: |-
 
 ## Unreleased
 
+- Add storm control policy attributes to `nxos_physical_interface` resource and data source
+- Add storm control policy attributes to `nxos_port_channel_interface` resource and data source
 - Add boot configuration and boot image attributes to `nxos_system` resource and data source
 - Add Smart Licensing transport mode and CSLU URL attributes to `nxos_system` resource and data source
 - Add VDC and resource limit attributes to `nxos_system` resource and data source

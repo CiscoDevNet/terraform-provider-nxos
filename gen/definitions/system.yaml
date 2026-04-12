@@ -2113,6 +2113,44 @@ child_classes:
                 min_int: 0
                 max_int: 4094
                 example: 100
+  - class_name: coppEntity
+    doc_path: Security%20and%20Policing/copp:Entity/
+    rn: copp
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: adminSt
+        tf_name: copp_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: enableFlag
+        tf_name: copp_rate_limiter
+        type: Bool
+        description: 'Property Flag to enable or disable rate limiter for various CoPP classes.'
+        example: "true"
+    child_classes:
+      - class_name: coppProfile
+        doc_path: Security%20and%20Policing/copp:Profile/
+        rn: profile
+        type: single
+        no_delete: true
+        attributes:
+          - nxos_name: prof
+            tf_name: copp_profile_type
+            type: String
+            description: 'Profile type.'
+            enum_values:
+              - unknown
+              - strict
+              - moderate
+              - lenient
+              - dense
+            example: strict
+            exclude_test: true
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld

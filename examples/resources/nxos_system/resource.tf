@@ -257,4 +257,7 @@ resource "nxos_system" "example" {
       tlv_vlan             = 100
     }
   }
+  copp_admin_state  = "enabled"
+  copp_rate_limiter = true
+  copp_profile_type = "strict"
 }

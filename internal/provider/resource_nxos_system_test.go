@@ -164,6 +164,8 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.tlv_management_ipv4", "10.0.0.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.tlv_management_ipv6", "2001:db8::1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.tlv_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "copp_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "copp_rate_limiter", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -392,6 +394,8 @@ func testAccNxosSystemConfig_all() string {
 	config += `			tlv_vlan = 100` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	copp_admin_state = "enabled"` + "\n"
+	config += `	copp_rate_limiter = true` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

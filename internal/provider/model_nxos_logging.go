@@ -37,15 +37,42 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type Logging struct {
-	Device     types.String                 `tfsdk:"device"`
-	Dn         types.String                 `tfsdk:"id"`
-	All        types.String                 `tfsdk:"all"`
-	Level      types.String                 `tfsdk:"level"`
-	Facilities map[string]LoggingFacilities `tfsdk:"facilities"`
+	Device                    types.String                         `tfsdk:"device"`
+	Dn                        types.String                         `tfsdk:"id"`
+	All                       types.String                         `tfsdk:"all"`
+	Level                     types.String                         `tfsdk:"level"`
+	Facilities                map[string]LoggingFacilities         `tfsdk:"facilities"`
+	FileAdminState            types.String                         `tfsdk:"file_admin_state"`
+	FileDescription           types.String                         `tfsdk:"file_description"`
+	FileName                  types.String                         `tfsdk:"file_name"`
+	FilePersistentThreshold   types.Int64                          `tfsdk:"file_persistent_threshold"`
+	FileSize                  types.Int64                          `tfsdk:"file_size"`
+	RemoteDestinations        map[string]LoggingRemoteDestinations `tfsdk:"remote_destinations"`
+	SourceInterfaceAdminState types.String                         `tfsdk:"source_interface_admin_state"`
+	SourceInterfaceName       types.String                         `tfsdk:"source_interface_name"`
+	TimestampFormat           types.String                         `tfsdk:"timestamp_format"`
+	MonitorAdminState         types.String                         `tfsdk:"monitor_admin_state"`
+	MonitorSeverity           types.String                         `tfsdk:"monitor_severity"`
+	ConsoleAdminState         types.String                         `tfsdk:"console_admin_state"`
+	ConsoleSeverity           types.String                         `tfsdk:"console_severity"`
+	OriginIdType              types.String                         `tfsdk:"origin_id_type"`
+	OriginIdValue             types.String                         `tfsdk:"origin_id_value"`
 }
 
 type LoggingFacilities struct {
 	Level types.String `tfsdk:"level"`
+}
+
+type LoggingRemoteDestinations struct {
+	AdminState               types.String `tfsdk:"admin_state"`
+	Description              types.String `tfsdk:"description"`
+	Name                     types.String `tfsdk:"name"`
+	Port                     types.Int64  `tfsdk:"port"`
+	Transport                types.String `tfsdk:"transport"`
+	TrustpointClientIdentity types.String `tfsdk:"trustpoint_client_identity"`
+	VrfName                  types.String `tfsdk:"vrf_name"`
+	Severity                 types.String `tfsdk:"severity"`
+	ForwardingFacility       types.String `tfsdk:"forwarding_facility"`
 }
 
 type LoggingIdentity struct {
@@ -73,15 +100,19 @@ func (data *Logging) fromIdentity(ctx context.Context, identity *LoggingIdentity
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
 func (data Logging) getDn() string {
-	return "sys/logging"
+	return "sys"
 }
 
 func (data LoggingFacilities) getRn(key string) string {
 	return fmt.Sprintf("facility-[%v]", key)
 }
 
+func (data LoggingRemoteDestinations) getRn(key string) string {
+	return fmt.Sprintf("rdst-[%s]", key)
+}
+
 func (data Logging) getClassName() string {
-	return "loggingLogging"
+	return "topSystem"
 }
 
 // End of section. //template:end getPath
@@ -95,23 +126,135 @@ func (data Logging) toBody(config Logging) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogging"
 		attrs = "{}"
-		if !data.All.IsUnknown() && !data.All.IsNull() {
-			attrs, _ = sjson.Set(attrs, "all", data.All.ValueString())
-		}
-		if !data.Level.IsUnknown() && !data.Level.IsNull() {
-			attrs, _ = sjson.Set(attrs, "severityLevel", data.Level.ValueString())
-		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
-		for key, child := range data.Facilities {
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
 			attrs = "{}"
-			attrs, _ = sjson.Set(attrs, "facilityName", key)
-			if !child.Level.IsUnknown() && !child.Level.IsNull() {
-				attrs, _ = sjson.Set(attrs, "severityLevel", child.Level.ValueString())
+			if !data.All.IsUnknown() && !data.All.IsNull() {
+				attrs, _ = sjson.Set(attrs, "all", data.All.ValueString())
 			}
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", attrs)
+			if !data.Level.IsUnknown() && !data.Level.IsNull() {
+				attrs, _ = sjson.Set(attrs, "severityLevel", data.Level.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			for key, child := range data.Facilities {
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "facilityName", key)
+				if !child.Level.IsUnknown() && !child.Level.IsNull() {
+					attrs, _ = sjson.Set(attrs, "severityLevel", child.Level.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", attrs)
+			}
+		}
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".syslogSyslog"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		attrs = "{}"
+		if !data.FileAdminState.IsUnknown() && !data.FileAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminState", data.FileAdminState.ValueString())
+		}
+		if !data.FileDescription.IsUnknown() && !data.FileDescription.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", data.FileDescription.ValueString())
+		}
+		if !data.FileName.IsUnknown() && !data.FileName.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", data.FileName.ValueString())
+		}
+		if !data.FilePersistentThreshold.IsUnknown() && !data.FilePersistentThreshold.IsNull() {
+			attrs, _ = sjson.Set(attrs, "persistentThreshold", strconv.FormatInt(data.FilePersistentThreshold.ValueInt64(), 10))
+		}
+		if !data.FileSize.IsUnknown() && !data.FileSize.IsNull() {
+			attrs, _ = sjson.Set(attrs, "size", strconv.FormatInt(data.FileSize.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogFile.attributes", attrs)
+		}
+		for key, child := range data.RemoteDestinations {
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "host", key)
+			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminState", child.AdminState.ValueString())
+			}
+			if !child.Description.IsUnknown() && !child.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if !child.Name.IsUnknown() && !child.Name.IsNull() {
+				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+			}
+			if !child.Port.IsUnknown() && !child.Port.IsNull() {
+				attrs, _ = sjson.Set(attrs, "port", strconv.FormatInt(child.Port.ValueInt64(), 10))
+			}
+			if !child.Transport.IsUnknown() && !child.Transport.IsNull() {
+				attrs, _ = sjson.Set(attrs, "transport", child.Transport.ValueString())
+			}
+			if !child.TrustpointClientIdentity.IsUnknown() && !child.TrustpointClientIdentity.IsNull() {
+				attrs, _ = sjson.Set(attrs, "trustpointClientIdentity", child.TrustpointClientIdentity.ValueString())
+			}
+			if !child.VrfName.IsUnknown() && !child.VrfName.IsNull() {
+				attrs, _ = sjson.Set(attrs, "vrfName", child.VrfName.ValueString())
+			}
+			if !child.Severity.IsUnknown() && !child.Severity.IsNull() {
+				attrs, _ = sjson.Set(attrs, "severity", child.Severity.ValueString())
+			}
+			if !child.ForwardingFacility.IsUnknown() && !child.ForwardingFacility.IsNull() {
+				attrs, _ = sjson.Set(attrs, "forwardingFacility", child.ForwardingFacility.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogRemoteDest.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.SourceInterfaceAdminState.IsUnknown() && !data.SourceInterfaceAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminState", data.SourceInterfaceAdminState.ValueString())
+		}
+		if !data.SourceInterfaceName.IsUnknown() && !data.SourceInterfaceName.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ifName", data.SourceInterfaceName.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogSourceInterface.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.TimestampFormat.IsUnknown() && !data.TimestampFormat.IsNull() {
+			attrs, _ = sjson.Set(attrs, "format", data.TimestampFormat.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogTimeStamp.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.MonitorAdminState.IsUnknown() && !data.MonitorAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminState", data.MonitorAdminState.ValueString())
+		}
+		if !data.MonitorSeverity.IsUnknown() && !data.MonitorSeverity.IsNull() {
+			attrs, _ = sjson.Set(attrs, "severity", data.MonitorSeverity.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogTermMonitor.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.ConsoleAdminState.IsUnknown() && !data.ConsoleAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminState", data.ConsoleAdminState.ValueString())
+		}
+		if !data.ConsoleSeverity.IsUnknown() && !data.ConsoleSeverity.IsNull() {
+			attrs, _ = sjson.Set(attrs, "severity", data.ConsoleSeverity.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogConsole.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.OriginIdType.IsUnknown() && !data.OriginIdType.IsNull() {
+			attrs, _ = sjson.Set(attrs, "idtype", data.OriginIdType.ValueString())
+		}
+		if !data.OriginIdValue.IsUnknown() && !data.OriginIdValue.IsNull() {
+			attrs, _ = sjson.Set(attrs, "idvalue", data.OriginIdValue.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogOriginid.attributes", attrs)
 		}
 	}
 
@@ -124,8 +267,203 @@ func (data Logging) toBody(config Logging) nxos.Body {
 
 func (data *Logging) fromBody(res gjson.Result) {
 	{
-		var rloggingLogLevel gjson.Result
+		var rloggingLogging gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("loggingLogging.attributes.rn").String()
+				if rnValue == "logging" {
+					rloggingLogging = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rloggingLogLevel gjson.Result
+			rloggingLogging.Get("loggingLogging.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("loggingLogLevel.attributes.rn").String()
+					if rnValue == "loglevel" {
+						rloggingLogLevel = v
+						return false
+					}
+					return true
+				},
+			)
+			rloggingLogLevel.Get("loggingLogLevel.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "loggingFacility" {
+								var child LoggingFacilities
+								child.Level = types.StringValue(value.Get("attributes.severityLevel").String())
+								mapKey := value.Get("attributes.facilityName").String()
+								if data.Facilities == nil {
+									data.Facilities = make(map[string]LoggingFacilities)
+								}
+								data.Facilities[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
+		}
+	}
+	{
+		var rsyslogSyslog gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("syslogSyslog.attributes.rn").String()
+				if rnValue == "syslog" {
+					rsyslogSyslog = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rsyslogFile gjson.Result
+			rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("syslogFile.attributes.rn").String()
+					if rnValue == "file" {
+						rsyslogFile = v
+						return false
+					}
+					return true
+				},
+			)
+			data.FileAdminState = types.StringValue(rsyslogFile.Get("syslogFile.attributes.adminState").String())
+			data.FileDescription = types.StringValue(rsyslogFile.Get("syslogFile.attributes.descr").String())
+			data.FileName = types.StringValue(rsyslogFile.Get("syslogFile.attributes.name").String())
+			data.FilePersistentThreshold = types.Int64Value(rsyslogFile.Get("syslogFile.attributes.persistentThreshold").Int())
+			data.FileSize = types.Int64Value(rsyslogFile.Get("syslogFile.attributes.size").Int())
+		}
+		rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "syslogRemoteDest" {
+							var child LoggingRemoteDestinations
+							child.AdminState = types.StringValue(value.Get("attributes.adminState").String())
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.Name = types.StringValue(value.Get("attributes.name").String())
+							child.Port = types.Int64Value(value.Get("attributes.port").Int())
+							child.Transport = types.StringValue(value.Get("attributes.transport").String())
+							child.TrustpointClientIdentity = types.StringValue(value.Get("attributes.trustpointClientIdentity").String())
+							child.VrfName = types.StringValue(value.Get("attributes.vrfName").String())
+							child.Severity = types.StringValue(value.Get("attributes.severity").String())
+							child.ForwardingFacility = types.StringValue(value.Get("attributes.forwardingFacility").String())
+							mapKey := value.Get("attributes.host").String()
+							if data.RemoteDestinations == nil {
+								data.RemoteDestinations = make(map[string]LoggingRemoteDestinations)
+							}
+							data.RemoteDestinations[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		{
+			var rsyslogSourceInterface gjson.Result
+			rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("syslogSourceInterface.attributes.rn").String()
+					if rnValue == "source" {
+						rsyslogSourceInterface = v
+						return false
+					}
+					return true
+				},
+			)
+			data.SourceInterfaceAdminState = types.StringValue(rsyslogSourceInterface.Get("syslogSourceInterface.attributes.adminState").String())
+			data.SourceInterfaceName = types.StringValue(rsyslogSourceInterface.Get("syslogSourceInterface.attributes.ifName").String())
+		}
+		{
+			var rsyslogTimeStamp gjson.Result
+			rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("syslogTimeStamp.attributes.rn").String()
+					if rnValue == "timestamp" {
+						rsyslogTimeStamp = v
+						return false
+					}
+					return true
+				},
+			)
+			data.TimestampFormat = types.StringValue(rsyslogTimeStamp.Get("syslogTimeStamp.attributes.format").String())
+		}
+		{
+			var rsyslogTermMonitor gjson.Result
+			rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("syslogTermMonitor.attributes.rn").String()
+					if rnValue == "monitor" {
+						rsyslogTermMonitor = v
+						return false
+					}
+					return true
+				},
+			)
+			data.MonitorAdminState = types.StringValue(rsyslogTermMonitor.Get("syslogTermMonitor.attributes.adminState").String())
+			data.MonitorSeverity = types.StringValue(rsyslogTermMonitor.Get("syslogTermMonitor.attributes.severity").String())
+		}
+		{
+			var rsyslogConsole gjson.Result
+			rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("syslogConsole.attributes.rn").String()
+					if rnValue == "console" {
+						rsyslogConsole = v
+						return false
+					}
+					return true
+				},
+			)
+			data.ConsoleAdminState = types.StringValue(rsyslogConsole.Get("syslogConsole.attributes.adminState").String())
+			data.ConsoleSeverity = types.StringValue(rsyslogConsole.Get("syslogConsole.attributes.severity").String())
+		}
+		{
+			var rsyslogOriginid gjson.Result
+			rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("syslogOriginid.attributes.rn").String()
+					if rnValue == "originid" {
+						rsyslogOriginid = v
+						return false
+					}
+					return true
+				},
+			)
+			data.OriginIdType = types.StringValue(rsyslogOriginid.Get("syslogOriginid.attributes.idtype").String())
+			data.OriginIdValue = types.StringValue(rsyslogOriginid.Get("syslogOriginid.attributes.idvalue").String())
+		}
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
+func (data *Logging) updateFromBody(res gjson.Result) {
+	var rloggingLogging gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("loggingLogging.attributes.rn").String()
+			if rnValue == "logging" {
+				rloggingLogging = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rloggingLogLevel gjson.Result
+		rloggingLogging.Get("loggingLogging.children").ForEach(
 			func(_, v gjson.Result) bool {
 				rnValue := v.Get("loggingLogLevel.attributes.rn").String()
 				if rnValue == "loglevel" {
@@ -135,65 +473,249 @@ func (data *Logging) fromBody(res gjson.Result) {
 				return true
 			},
 		)
-		rloggingLogLevel.Get("loggingLogLevel.children").ForEach(
-			func(_, v gjson.Result) bool {
-				v.ForEach(
-					func(classname, value gjson.Result) bool {
-						if classname.String() == "loggingFacility" {
-							var child LoggingFacilities
-							child.Level = types.StringValue(value.Get("attributes.severityLevel").String())
-							mapKey := value.Get("attributes.facilityName").String()
-							if data.Facilities == nil {
-								data.Facilities = make(map[string]LoggingFacilities)
-							}
-							data.Facilities[mapKey] = child
-						}
-						return true
-					},
-				)
-				return true
-			},
-		)
+		for key, item := range data.Facilities {
+			var rloggingFacility gjson.Result
+			rloggingLogLevel.Get("loggingLogLevel.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("loggingFacility.attributes.facilityName").String() == key {
+						rloggingFacility = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rloggingFacility.Exists() {
+				delete(data.Facilities, key)
+				continue
+			}
+			if !item.Level.IsNull() {
+				item.Level = types.StringValue(rloggingFacility.Get("loggingFacility.attributes.severityLevel").String())
+			} else {
+				item.Level = types.StringNull()
+			}
+			data.Facilities[key] = item
+		}
 	}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *Logging) updateFromBody(res gjson.Result) {
-	var rloggingLogLevel gjson.Result
+	var rsyslogSyslog gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			rnValue := v.Get("loggingLogLevel.attributes.rn").String()
-			if rnValue == "loglevel" {
-				rloggingLogLevel = v
+			rnValue := v.Get("syslogSyslog.attributes.rn").String()
+			if rnValue == "syslog" {
+				rsyslogSyslog = v
 				return false
 			}
 			return true
 		},
 	)
-	for key, item := range data.Facilities {
-		var rloggingFacility gjson.Result
-		rloggingLogLevel.Get("loggingLogLevel.children").ForEach(
+	{
+		var rsyslogFile gjson.Result
+		rsyslogSyslog.Get("syslogSyslog.children").ForEach(
 			func(_, v gjson.Result) bool {
-				if v.Get("loggingFacility.attributes.facilityName").String() == key {
-					rloggingFacility = v
+				rnValue := v.Get("syslogFile.attributes.rn").String()
+				if rnValue == "file" {
+					rsyslogFile = v
 					return false
 				}
 				return true
 			},
 		)
-		if !rloggingFacility.Exists() {
-			delete(data.Facilities, key)
+		if !data.FileAdminState.IsNull() {
+			data.FileAdminState = types.StringValue(rsyslogFile.Get("syslogFile.attributes.adminState").String())
+		} else {
+			data.FileAdminState = types.StringNull()
+		}
+		if !data.FileDescription.IsNull() {
+			data.FileDescription = types.StringValue(rsyslogFile.Get("syslogFile.attributes.descr").String())
+		} else {
+			data.FileDescription = types.StringNull()
+		}
+		if !data.FileName.IsNull() {
+			data.FileName = types.StringValue(rsyslogFile.Get("syslogFile.attributes.name").String())
+		} else {
+			data.FileName = types.StringNull()
+		}
+		if !data.FilePersistentThreshold.IsNull() {
+			data.FilePersistentThreshold = types.Int64Value(rsyslogFile.Get("syslogFile.attributes.persistentThreshold").Int())
+		} else {
+			data.FilePersistentThreshold = types.Int64Null()
+		}
+		if !data.FileSize.IsNull() {
+			data.FileSize = types.Int64Value(rsyslogFile.Get("syslogFile.attributes.size").Int())
+		} else {
+			data.FileSize = types.Int64Null()
+		}
+	}
+	for key, item := range data.RemoteDestinations {
+		var rsyslogRemoteDest gjson.Result
+		rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("syslogRemoteDest.attributes.host").String() == key {
+					rsyslogRemoteDest = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rsyslogRemoteDest.Exists() {
+			delete(data.RemoteDestinations, key)
 			continue
 		}
-		if !item.Level.IsNull() {
-			item.Level = types.StringValue(rloggingFacility.Get("loggingFacility.attributes.severityLevel").String())
+		if !item.AdminState.IsNull() {
+			item.AdminState = types.StringValue(rsyslogRemoteDest.Get("syslogRemoteDest.attributes.adminState").String())
 		} else {
-			item.Level = types.StringNull()
+			item.AdminState = types.StringNull()
 		}
-		data.Facilities[key] = item
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rsyslogRemoteDest.Get("syslogRemoteDest.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.Name.IsNull() {
+			item.Name = types.StringValue(rsyslogRemoteDest.Get("syslogRemoteDest.attributes.name").String())
+		} else {
+			item.Name = types.StringNull()
+		}
+		if !item.Port.IsNull() {
+			item.Port = types.Int64Value(rsyslogRemoteDest.Get("syslogRemoteDest.attributes.port").Int())
+		} else {
+			item.Port = types.Int64Null()
+		}
+		if !item.Transport.IsNull() {
+			item.Transport = types.StringValue(rsyslogRemoteDest.Get("syslogRemoteDest.attributes.transport").String())
+		} else {
+			item.Transport = types.StringNull()
+		}
+		if !item.TrustpointClientIdentity.IsNull() {
+			item.TrustpointClientIdentity = types.StringValue(rsyslogRemoteDest.Get("syslogRemoteDest.attributes.trustpointClientIdentity").String())
+		} else {
+			item.TrustpointClientIdentity = types.StringNull()
+		}
+		if !item.VrfName.IsNull() {
+			item.VrfName = types.StringValue(rsyslogRemoteDest.Get("syslogRemoteDest.attributes.vrfName").String())
+		} else {
+			item.VrfName = types.StringNull()
+		}
+		if !item.Severity.IsNull() {
+			item.Severity = types.StringValue(rsyslogRemoteDest.Get("syslogRemoteDest.attributes.severity").String())
+		} else {
+			item.Severity = types.StringNull()
+		}
+		if !item.ForwardingFacility.IsNull() {
+			item.ForwardingFacility = types.StringValue(rsyslogRemoteDest.Get("syslogRemoteDest.attributes.forwardingFacility").String())
+		} else {
+			item.ForwardingFacility = types.StringNull()
+		}
+		data.RemoteDestinations[key] = item
+	}
+	{
+		var rsyslogSourceInterface gjson.Result
+		rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("syslogSourceInterface.attributes.rn").String()
+				if rnValue == "source" {
+					rsyslogSourceInterface = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.SourceInterfaceAdminState.IsNull() {
+			data.SourceInterfaceAdminState = types.StringValue(rsyslogSourceInterface.Get("syslogSourceInterface.attributes.adminState").String())
+		} else {
+			data.SourceInterfaceAdminState = types.StringNull()
+		}
+		if !data.SourceInterfaceName.IsNull() {
+			data.SourceInterfaceName = types.StringValue(rsyslogSourceInterface.Get("syslogSourceInterface.attributes.ifName").String())
+		} else {
+			data.SourceInterfaceName = types.StringNull()
+		}
+	}
+	{
+		var rsyslogTimeStamp gjson.Result
+		rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("syslogTimeStamp.attributes.rn").String()
+				if rnValue == "timestamp" {
+					rsyslogTimeStamp = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.TimestampFormat.IsNull() {
+			data.TimestampFormat = types.StringValue(rsyslogTimeStamp.Get("syslogTimeStamp.attributes.format").String())
+		} else {
+			data.TimestampFormat = types.StringNull()
+		}
+	}
+	{
+		var rsyslogTermMonitor gjson.Result
+		rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("syslogTermMonitor.attributes.rn").String()
+				if rnValue == "monitor" {
+					rsyslogTermMonitor = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.MonitorAdminState.IsNull() {
+			data.MonitorAdminState = types.StringValue(rsyslogTermMonitor.Get("syslogTermMonitor.attributes.adminState").String())
+		} else {
+			data.MonitorAdminState = types.StringNull()
+		}
+		if !data.MonitorSeverity.IsNull() {
+			data.MonitorSeverity = types.StringValue(rsyslogTermMonitor.Get("syslogTermMonitor.attributes.severity").String())
+		} else {
+			data.MonitorSeverity = types.StringNull()
+		}
+	}
+	{
+		var rsyslogConsole gjson.Result
+		rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("syslogConsole.attributes.rn").String()
+				if rnValue == "console" {
+					rsyslogConsole = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.ConsoleAdminState.IsNull() {
+			data.ConsoleAdminState = types.StringValue(rsyslogConsole.Get("syslogConsole.attributes.adminState").String())
+		} else {
+			data.ConsoleAdminState = types.StringNull()
+		}
+		if !data.ConsoleSeverity.IsNull() {
+			data.ConsoleSeverity = types.StringValue(rsyslogConsole.Get("syslogConsole.attributes.severity").String())
+		} else {
+			data.ConsoleSeverity = types.StringNull()
+		}
+	}
+	{
+		var rsyslogOriginid gjson.Result
+		rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("syslogOriginid.attributes.rn").String()
+				if rnValue == "originid" {
+					rsyslogOriginid = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.OriginIdType.IsNull() {
+			data.OriginIdType = types.StringValue(rsyslogOriginid.Get("syslogOriginid.attributes.idtype").String())
+		} else {
+			data.OriginIdType = types.StringNull()
+		}
+		if !data.OriginIdValue.IsNull() {
+			data.OriginIdValue = types.StringValue(rsyslogOriginid.Get("syslogOriginid.attributes.idvalue").String())
+		} else {
+			data.OriginIdValue = types.StringNull()
+		}
 	}
 }
 
@@ -209,21 +731,77 @@ func (data Logging) toDeleteBody() nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogging"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-		if !data.All.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"all", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.Level.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"severityLevel", "DME_UNSET_PROPERTY_MARKER")
-		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
-		for key, child := range data.Facilities {
-			childBody := ""
-			childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
-			childBody, _ = sjson.Set(childBody, "severityLevel", "DME_UNSET_PROPERTY_MARKER")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", childBody)
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			if !data.All.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"all", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Level.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"severityLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.Facilities {
+				childBody := ""
+				childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+				childBody, _ = sjson.Set(childBody, "severityLevel", "DME_UNSET_PROPERTY_MARKER")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", childBody)
+			}
+		}
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".syslogSyslog"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "syslogFile.attributes.rn", "file")
+			deleteBody, _ = sjson.Set(deleteBody, "syslogFile.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+		for key, child := range data.RemoteDestinations {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "syslogRemoteDest.attributes.rn", child.getRn(key))
+			deleteBody, _ = sjson.Set(deleteBody, "syslogRemoteDest.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+		{
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "syslogSourceInterface.attributes.rn", "source")
+			deleteBody, _ = sjson.Set(deleteBody, "syslogSourceInterface.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+		{
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "syslogTimeStamp.attributes.rn", "timestamp")
+			deleteBody, _ = sjson.Set(deleteBody, "syslogTimeStamp.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+		{
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "syslogTermMonitor.attributes.rn", "monitor")
+			deleteBody, _ = sjson.Set(deleteBody, "syslogTermMonitor.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+		{
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "syslogConsole.attributes.rn", "console")
+			deleteBody, _ = sjson.Set(deleteBody, "syslogConsole.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+		{
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "syslogOriginid.attributes.rn", "originid")
+			deleteBody, _ = sjson.Set(deleteBody, "syslogOriginid.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
 	}
 
@@ -240,7 +818,16 @@ func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging, config
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.severityLevel", "DME_UNSET_PROPERTY_MARKER")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.loggingLogLevel.children"+".-1", deleteBody)
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.loggingLogging.children"+".0.loggingLogLevel.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.RemoteDestinations {
+		if _, found := data.RemoteDestinations[stateKey]; !found {
+			stateChild := state.RemoteDestinations[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "syslogRemoteDest.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "syslogRemoteDest.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.syslogSyslog.children"+".-1", deleteBody)
 		}
 	}
 	return body

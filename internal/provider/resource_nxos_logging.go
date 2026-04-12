@@ -26,6 +26,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -62,7 +63,7 @@ func (r *LoggingResource) Metadata(ctx context.Context, req resource.MetadataReq
 func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.").AddApiDocumentation("loggingLogging", "System/logging:Logging/", []string{"loggingLogLevel", "loggingFacility"}, []string{"System/logging:LogLevel/", "System/logging:Facility/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.").AddApiDocumentation("topSystem", "", []string{"loggingLogging", "loggingLogLevel", "loggingFacility", "syslogSyslog", "syslogFile", "syslogRemoteDest", "syslogSourceInterface", "syslogTimeStamp", "syslogTermMonitor", "syslogConsole", "syslogOriginid"}, []string{"System/logging:Logging/", "System/logging:LogLevel/", "System/logging:Facility/", "System/syslog:Syslog/", "System/syslog:File/", "System/syslog:RemoteDest/", "System/syslog:SourceInterface/", "System/syslog:TimeStamp/", "System/syslog:TermMonitor/", "System/syslog:Console/", "System/syslog:Originid/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -91,7 +92,7 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"facilities": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("List of logging facilities.\n  - Map key: `name` - Facility Name of individual processes subscribed for logging level.\n  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`").String,
+				MarkdownDescription: helpers.NewAttributeDescription("List of logging facilities.\n  - Map key: `name` - Facility Name of individual processes subscribed for logging level.\n  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`, `otm`").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -104,6 +105,151 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 						},
 					},
 				},
+			},
+			"file_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the local file.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"file_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+				Optional:            true,
+			},
+			"file_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+				Optional:            true,
+			},
+			"file_persistent_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set persistent logging utilization alert threshold in percentage.").AddIntegerRangeDescription(0, 99).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 99),
+				},
+			},
+			"file_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies the maximum file size.").AddIntegerRangeDescription(4096, 4194304).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(4096, 4194304),
+				},
+			},
+			"remote_destinations": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of syslog remote destination hosts.\n  - Map key: `host` - Hostname or IP for export destination.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the remote destination host.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The syslog service port of the remote destination.").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"transport": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Transport.").AddStringEnumDescription("none", "tcp", "udp", "all", "tls").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("none", "tcp", "udp", "all", "tls"),
+							},
+						},
+						"trustpoint_client_identity": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Trustpoint Client Identity.").String,
+							Optional:            true,
+						},
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The vrf that remote host belongs to.").String,
+							Optional:            true,
+						},
+						"severity": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The severity of the event, alert, or issue that caused the syslog entry to be generated.").AddStringEnumDescription("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging"),
+							},
+						},
+						"forwarding_facility": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The facility to be used to send messages to this destination.").AddStringEnumDescription("kern", "user", "mail", "daemon", "auth", "syslog", "lpr", "news", "uucp", "cron", "authpriv", "ftp", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("kern", "user", "mail", "daemon", "auth", "syslog", "lpr", "news", "uucp", "cron", "authpriv", "ftp", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7"),
+							},
+						},
+					},
+				},
+			},
+			"source_interface_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The destination policy administrative state.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"source_interface_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface.").String,
+				Optional:            true,
+			},
+			"timestamp_format": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Format.").AddStringEnumDescription("microseconds", "milliseconds", "seconds").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("microseconds", "milliseconds", "seconds"),
+				},
+			},
+			"monitor_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The destination policy administrative state.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"monitor_severity": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Severity.").AddStringEnumDescription("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging"),
+				},
+			},
+			"console_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the console terminal.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"console_severity": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The minimum severity level of the messages to be displayed.").AddStringEnumDescription("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging"),
+				},
+			},
+			"origin_id_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OriginId type for Hostname, IP or String.").AddStringEnumDescription("unknown", "hostname", "ip", "string").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unknown", "hostname", "ip", "string"),
+				},
+			},
+			"origin_id_value": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OriginId value for Hostname, IP or String.").String,
+				Optional:            true,
 			},
 		},
 	}
@@ -214,7 +360,7 @@ func (r *LoggingResource) Read(ctx context.Context, req resource.ReadRequest, re
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "loggingLogLevel,loggingFacility")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "loggingLogging,loggingLogLevel,loggingFacility,syslogSyslog,syslogFile,syslogRemoteDest,syslogSourceInterface,syslogTimeStamp,syslogTermMonitor,syslogConsole,syslogOriginid")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

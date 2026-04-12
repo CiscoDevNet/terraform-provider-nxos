@@ -1,81 +1,38 @@
 ---
 name: Logging
-class_name: loggingLogging
-dn: sys/logging
+class_name: topSystem
+dn: sys
 no_delete: true
-ds_description: This data source can read the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.
-res_description: This resource can manage the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.
-doc_path: System/logging:Logging/
+ds_description: This data source can read the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.
+res_description: This resource can manage the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.
 doc_category: System
 child_classes:
-  - class_name: loggingLogLevel
-    doc_path: System/logging:LogLevel/
-    rn: loglevel
+  - class_name: loggingLogging
+    doc_path: System/logging:Logging/
+    rn: logging
     type: single
     no_delete: true
-    attributes:
-      - nxos_name: all
-        tf_name: all
-        type: String
-        description: "Logging level all state disabled/enabled."
-        enum_values:
-          - "unspecified"
-          - "enableall"
-          - "disableall"
-        example: "unspecified"
-        write_only: true
-      - nxos_name: severityLevel
-        tf_name: level
-        type: String
-        description: "Logging severity level for all the facilites."
-        enum_values:
-          - "emergencies"
-          - "alerts"
-          - "critical"
-          - "errors"
-          - "warnings"
-          - "notifications"
-          - "information"
-          - "debugging"
-        example: "information"
-        write_only: true
     child_classes:
-      - class_name: loggingFacility
-        doc_path: System/logging:Facility/
-        rn: facility-[%v]
-        tf_name: facilities
-        description: List of logging facilities.
-        type: list
+      - class_name: loggingLogLevel
+        doc_path: System/logging:LogLevel/
+        rn: loglevel
+        type: single
         no_delete: true
         attributes:
-          - nxos_name: facilityName
-            tf_name: name
+          - nxos_name: all
+            tf_name: all
             type: String
-            id: true
-            description: "Facility Name of individual processes subscribed for logging level."
+            description: "Logging level all state disabled/enabled."
             enum_values:
-              - "spanning-tree"
-              - "session-mgr"
-              - "radius"
-              - "security"
-              - "plugin"
-              - "cdp"
-              - "bootvar"
-              - "aaa"
-              - "interface-vlan"
-              - "vshd"
-              - "cfs"
-              - "monitor"
-              - "ntp"
-              - "acllog"
-              - "track"
-              - "pltfm_config"
-              - "lacp"
-            example: "spanning-tree"
+              - "unspecified"
+              - "enableall"
+              - "disableall"
+            example: "unspecified"
+            write_only: true
           - nxos_name: severityLevel
             tf_name: level
             type: String
-            description: "Logging severity level for individual facility name."
+            description: "Logging severity level for all the facilites."
             enum_values:
               - "emergencies"
               - "alerts"
@@ -86,3 +43,312 @@ child_classes:
               - "information"
               - "debugging"
             example: "information"
+            write_only: true
+        child_classes:
+          - class_name: loggingFacility
+            doc_path: System/logging:Facility/
+            rn: facility-[%v]
+            tf_name: facilities
+            description: List of logging facilities.
+            type: list
+            no_delete: true
+            attributes:
+              - nxos_name: facilityName
+                tf_name: name
+                type: String
+                id: true
+                description: "Facility Name of individual processes subscribed for logging level."
+                enum_values:
+                  - "spanning-tree"
+                  - "session-mgr"
+                  - "radius"
+                  - "security"
+                  - "plugin"
+                  - "cdp"
+                  - "bootvar"
+                  - "aaa"
+                  - "interface-vlan"
+                  - "vshd"
+                  - "cfs"
+                  - "monitor"
+                  - "ntp"
+                  - "acllog"
+                  - "track"
+                  - "pltfm_config"
+                  - "lacp"
+                  - "otm"
+                example: "spanning-tree"
+              - nxos_name: severityLevel
+                tf_name: level
+                type: String
+                description: "Logging severity level for individual facility name."
+                enum_values:
+                  - "emergencies"
+                  - "alerts"
+                  - "critical"
+                  - "errors"
+                  - "warnings"
+                  - "notifications"
+                  - "information"
+                  - "debugging"
+                example: "information"
+  - class_name: syslogSyslog
+    doc_path: System/syslog:Syslog/
+    rn: syslog
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: syslogFile
+        doc_path: System/syslog:File/
+        rn: file
+        type: single
+        tf_name: file
+        description: 'A local file.'
+        attributes:
+          - nxos_name: adminState
+            tf_name: file_admin_state
+            type: String
+            description: 'The administrative state of the local file.'
+            enum_values:
+              - "enabled"
+              - "disabled"
+            example: "disabled"
+          - nxos_name: descr
+            tf_name: file_description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: "syslog file"
+          - nxos_name: name
+            tf_name: file_name
+            type: String
+            description: 'Object name.'
+            example: "messages"
+          - nxos_name: persistentThreshold
+            tf_name: file_persistent_threshold
+            type: Int64
+            description: 'Set persistent logging utilization alert threshold in percentage.'
+            min_int: 0
+            max_int: 99
+            example: 90
+          - nxos_name: size
+            tf_name: file_size
+            type: Int64
+            description: 'Specifies the maximum file size.'
+            min_int: 4096
+            max_int: 4194304
+            example: 4194304
+      - class_name: syslogRemoteDest
+        doc_path: System/syslog:RemoteDest/
+        rn: rdst-[%s]
+        type: list
+        tf_name: remote_destinations
+        description: 'List of syslog remote destination hosts.'
+        attributes:
+          - nxos_name: adminState
+            tf_name: admin_state
+            type: String
+            description: 'The administrative state of the remote destination host.'
+            enum_values:
+              - "enabled"
+              - "disabled"
+            example: "enabled"
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: "remote syslog server"
+          - nxos_name: host
+            tf_name: host
+            type: String
+            id: true
+            description: 'Hostname or IP for export destination.'
+            example: "10.0.0.1"
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: 'Object name.'
+            example: "server1"
+          - nxos_name: port
+            tf_name: port
+            type: Int64
+            description: 'The syslog service port of the remote destination.'
+            min_int: 1
+            max_int: 65535
+            example: 514
+          - nxos_name: transport
+            tf_name: transport
+            type: String
+            description: 'Transport.'
+            enum_values:
+              - "none"
+              - "tcp"
+              - "udp"
+              - "all"
+              - "tls"
+            example: "udp"
+          - nxos_name: trustpointClientIdentity
+            tf_name: trustpoint_client_identity
+            type: String
+            description: 'Trustpoint Client Identity.'
+            example: "my-trustpoint"
+          - nxos_name: vrfName
+            tf_name: vrf_name
+            type: String
+            description: 'The vrf that remote host belongs to.'
+            example: "management"
+          - nxos_name: severity
+            tf_name: severity
+            type: String
+            description: 'The severity of the event, alert, or issue that caused the syslog entry to be generated.'
+            enum_values:
+              - "emergencies"
+              - "alerts"
+              - "critical"
+              - "errors"
+              - "warnings"
+              - "notifications"
+              - "information"
+              - "debugging"
+            example: "warnings"
+          - nxos_name: forwardingFacility
+            tf_name: forwarding_facility
+            type: String
+            description: 'The facility to be used to send messages to this destination.'
+            enum_values:
+              - "kern"
+              - "user"
+              - "mail"
+              - "daemon"
+              - "auth"
+              - "syslog"
+              - "lpr"
+              - "news"
+              - "uucp"
+              - "cron"
+              - "authpriv"
+              - "ftp"
+              - "local0"
+              - "local1"
+              - "local2"
+              - "local3"
+              - "local4"
+              - "local5"
+              - "local6"
+              - "local7"
+            example: "local7"
+      - class_name: syslogSourceInterface
+        doc_path: System/syslog:SourceInterface/
+        rn: source
+        type: single
+        tf_name: source_interface
+        description: 'Source interface.'
+        attributes:
+          - nxos_name: adminState
+            tf_name: source_interface_admin_state
+            type: String
+            description: 'The destination policy administrative state.'
+            enum_values:
+              - "enabled"
+              - "disabled"
+            example: "enabled"
+          - nxos_name: ifName
+            tf_name: source_interface_name
+            type: String
+            description: 'Interface.'
+            example: "lo0"
+      - class_name: syslogTimeStamp
+        doc_path: System/syslog:TimeStamp/
+        rn: timestamp
+        type: single
+        tf_name: timestamp
+        description: 'Syslog timestamp format.'
+        attributes:
+          - nxos_name: format
+            tf_name: timestamp_format
+            type: String
+            description: 'Format.'
+            enum_values:
+              - "microseconds"
+              - "milliseconds"
+              - "seconds"
+            example: "milliseconds"
+      - class_name: syslogTermMonitor
+        doc_path: System/syslog:TermMonitor/
+        rn: monitor
+        type: single
+        tf_name: monitor
+        description: 'Terminal monitor.'
+        attributes:
+          - nxos_name: adminState
+            tf_name: monitor_admin_state
+            type: String
+            description: 'The destination policy administrative state.'
+            enum_values:
+              - "enabled"
+              - "disabled"
+            example: "enabled"
+          - nxos_name: severity
+            tf_name: monitor_severity
+            type: String
+            description: 'Severity.'
+            enum_values:
+              - "emergencies"
+              - "alerts"
+              - "critical"
+              - "errors"
+              - "warnings"
+              - "notifications"
+              - "information"
+              - "debugging"
+            example: "warnings"
+      - class_name: syslogConsole
+        doc_path: System/syslog:Console/
+        rn: console
+        type: single
+        tf_name: console
+        description: 'A console terminal.'
+        attributes:
+          - nxos_name: adminState
+            tf_name: console_admin_state
+            type: String
+            description: 'The administrative state of the console terminal.'
+            enum_values:
+              - "enabled"
+              - "disabled"
+            example: "enabled"
+          - nxos_name: severity
+            tf_name: console_severity
+            type: String
+            description: 'The minimum severity level of the messages to be displayed.'
+            enum_values:
+              - "emergencies"
+              - "alerts"
+              - "critical"
+              - "errors"
+              - "warnings"
+              - "notifications"
+              - "information"
+              - "debugging"
+            example: "warnings"
+      - class_name: syslogOriginid
+        doc_path: System/syslog:Originid/
+        rn: originid
+        type: single
+        tf_name: origin_id
+        description: 'Hostname, IP address, or string to append to syslog messages.'
+        attributes:
+          - nxos_name: idtype
+            tf_name: origin_id_type
+            type: String
+            description: 'OriginId type for Hostname, IP or String.'
+            enum_values:
+              - "unknown"
+              - "hostname"
+              - "ip"
+              - "string"
+            example: "string"
+          - nxos_name: idvalue
+            tf_name: origin_id_value
+            type: String
+            description: 'OriginId value for Hostname, IP or String.'
+            example: "SWITCH1"

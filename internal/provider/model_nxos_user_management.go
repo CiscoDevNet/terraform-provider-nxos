@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -37,47 +38,105 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type UserManagement struct {
-	Device                     types.String                                  `tfsdk:"device"`
-	Dn                         types.String                                  `tfsdk:"id"`
-	AlphabetSequence           types.Int64                                   `tfsdk:"alphabet_sequence"`
-	Description                types.String                                  `tfsdk:"description"`
-	KeyboardSequence           types.Int64                                   `tfsdk:"keyboard_sequence"`
-	MaxLogins                  types.Int64                                   `tfsdk:"max_logins"`
-	MinUnique                  types.Int64                                   `tfsdk:"min_unique"`
-	PasswordGraceTime          types.Int64                                   `tfsdk:"password_grace_time"`
-	PasswordLifeTime           types.Int64                                   `tfsdk:"password_life_time"`
-	PasswordMaxLength          types.Int64                                   `tfsdk:"password_max_length"`
-	PasswordMinLength          types.Int64                                   `tfsdk:"password_min_length"`
-	PasswordSecureMode         types.String                                  `tfsdk:"password_secure_mode"`
-	PasswordStrengthCheck      types.String                                  `tfsdk:"password_strength_check"`
-	PasswordWarningTime        types.Int64                                   `tfsdk:"password_warning_time"`
-	ServicePasswordRecovery    types.String                                  `tfsdk:"service_password_recovery"`
-	PreLoginBannerDescription  types.String                                  `tfsdk:"pre_login_banner_description"`
-	PreLoginBannerName         types.String                                  `tfsdk:"pre_login_banner_name"`
-	PreLoginBannerOwnerKey     types.String                                  `tfsdk:"pre_login_banner_owner_key"`
-	PreLoginBannerMessage      types.String                                  `tfsdk:"pre_login_banner_message"`
-	PreLoginBannerOwnerTag     types.String                                  `tfsdk:"pre_login_banner_owner_tag"`
-	PostLoginBannerDescription types.String                                  `tfsdk:"post_login_banner_description"`
-	PostLoginBannerName        types.String                                  `tfsdk:"post_login_banner_name"`
-	PostLoginBannerOwnerKey    types.String                                  `tfsdk:"post_login_banner_owner_key"`
-	PostLoginBannerMessage     types.String                                  `tfsdk:"post_login_banner_message"`
-	PostLoginBannerOwnerTag    types.String                                  `tfsdk:"post_login_banner_owner_tag"`
-	Users                      map[string]UserManagementUsers                `tfsdk:"users"`
-	TacacsDeadtime             types.Int64                                   `tfsdk:"tacacs_deadtime"`
-	TacacsDescription          types.String                                  `tfsdk:"tacacs_description"`
-	TacacsKey                  types.String                                  `tfsdk:"tacacs_key"`
-	TacacsKeyWo                types.String                                  `tfsdk:"tacacs_key_wo"`
-	TacacsKeyWoVersion         types.Int64                                   `tfsdk:"tacacs_key_wo_version"`
-	TacacsKeyEncryption        types.String                                  `tfsdk:"tacacs_key_encryption"`
-	TacacsLoggingLevel         types.Int64                                   `tfsdk:"tacacs_logging_level"`
-	TacacsName                 types.String                                  `tfsdk:"tacacs_name"`
-	TacacsOwnerKey             types.String                                  `tfsdk:"tacacs_owner_key"`
-	TacacsOwnerTag             types.String                                  `tfsdk:"tacacs_owner_tag"`
-	TacacsRetries              types.Int64                                   `tfsdk:"tacacs_retries"`
-	TacacsSourceInterface      types.String                                  `tfsdk:"tacacs_source_interface"`
-	TacacsTimeout              types.Int64                                   `tfsdk:"tacacs_timeout"`
-	TacacsProviders            map[string]UserManagementTacacsProviders      `tfsdk:"tacacs_providers"`
-	TacacsProviderGroups       map[string]UserManagementTacacsProviderGroups `tfsdk:"tacacs_provider_groups"`
+	Device                                   types.String                                   `tfsdk:"device"`
+	Dn                                       types.String                                   `tfsdk:"id"`
+	AlphabetSequence                         types.Int64                                    `tfsdk:"alphabet_sequence"`
+	Description                              types.String                                   `tfsdk:"description"`
+	KeyboardSequence                         types.Int64                                    `tfsdk:"keyboard_sequence"`
+	MaxLogins                                types.Int64                                    `tfsdk:"max_logins"`
+	MinUnique                                types.Int64                                    `tfsdk:"min_unique"`
+	PasswordGraceTime                        types.Int64                                    `tfsdk:"password_grace_time"`
+	PasswordLifeTime                         types.Int64                                    `tfsdk:"password_life_time"`
+	PasswordMaxLength                        types.Int64                                    `tfsdk:"password_max_length"`
+	PasswordMinLength                        types.Int64                                    `tfsdk:"password_min_length"`
+	PasswordSecureMode                       types.String                                   `tfsdk:"password_secure_mode"`
+	PasswordStrengthCheck                    types.String                                   `tfsdk:"password_strength_check"`
+	PasswordWarningTime                      types.Int64                                    `tfsdk:"password_warning_time"`
+	ServicePasswordRecovery                  types.String                                   `tfsdk:"service_password_recovery"`
+	PreLoginBannerDescription                types.String                                   `tfsdk:"pre_login_banner_description"`
+	PreLoginBannerName                       types.String                                   `tfsdk:"pre_login_banner_name"`
+	PreLoginBannerOwnerKey                   types.String                                   `tfsdk:"pre_login_banner_owner_key"`
+	PreLoginBannerMessage                    types.String                                   `tfsdk:"pre_login_banner_message"`
+	PreLoginBannerOwnerTag                   types.String                                   `tfsdk:"pre_login_banner_owner_tag"`
+	PostLoginBannerDescription               types.String                                   `tfsdk:"post_login_banner_description"`
+	PostLoginBannerName                      types.String                                   `tfsdk:"post_login_banner_name"`
+	PostLoginBannerOwnerKey                  types.String                                   `tfsdk:"post_login_banner_owner_key"`
+	PostLoginBannerMessage                   types.String                                   `tfsdk:"post_login_banner_message"`
+	PostLoginBannerOwnerTag                  types.String                                   `tfsdk:"post_login_banner_owner_tag"`
+	Users                                    map[string]UserManagementUsers                 `tfsdk:"users"`
+	TacacsDeadtime                           types.Int64                                    `tfsdk:"tacacs_deadtime"`
+	TacacsDescription                        types.String                                   `tfsdk:"tacacs_description"`
+	TacacsKey                                types.String                                   `tfsdk:"tacacs_key"`
+	TacacsKeyWo                              types.String                                   `tfsdk:"tacacs_key_wo"`
+	TacacsKeyWoVersion                       types.Int64                                    `tfsdk:"tacacs_key_wo_version"`
+	TacacsKeyEncryption                      types.String                                   `tfsdk:"tacacs_key_encryption"`
+	TacacsLoggingLevel                       types.Int64                                    `tfsdk:"tacacs_logging_level"`
+	TacacsName                               types.String                                   `tfsdk:"tacacs_name"`
+	TacacsOwnerKey                           types.String                                   `tfsdk:"tacacs_owner_key"`
+	TacacsOwnerTag                           types.String                                   `tfsdk:"tacacs_owner_tag"`
+	TacacsRetries                            types.Int64                                    `tfsdk:"tacacs_retries"`
+	TacacsSourceInterface                    types.String                                   `tfsdk:"tacacs_source_interface"`
+	TacacsTimeout                            types.Int64                                    `tfsdk:"tacacs_timeout"`
+	TacacsProviders                          map[string]UserManagementTacacsProviders       `tfsdk:"tacacs_providers"`
+	TacacsProviderGroups                     map[string]UserManagementTacacsProviderGroups  `tfsdk:"tacacs_provider_groups"`
+	AuthenticationRealmDefaultRolePolicy     types.String                                   `tfsdk:"authentication_realm_default_role_policy"`
+	AuthenticationRealmDescription           types.String                                   `tfsdk:"authentication_realm_description"`
+	AuthenticationRealmLoggingLevel          types.Int64                                    `tfsdk:"authentication_realm_logging_level"`
+	AuthenticationRealmOwnerKey              types.String                                   `tfsdk:"authentication_realm_owner_key"`
+	AuthenticationRealmOwnerTag              types.String                                   `tfsdk:"authentication_realm_owner_tag"`
+	AuthenticationRealmRadiusDirectedRequest types.String                                   `tfsdk:"authentication_realm_radius_directed_request"`
+	AuthenticationRealmTacacsDirectedRequest types.String                                   `tfsdk:"authentication_realm_tacacs_directed_request"`
+	DefaultAuthenticationProtocol            types.String                                   `tfsdk:"default_authentication_protocol"`
+	DefaultAuthenticationDescription         types.String                                   `tfsdk:"default_authentication_description"`
+	DefaultAuthenticationErrorEnable         types.Bool                                     `tfsdk:"default_authentication_error_enable"`
+	DefaultAuthenticationFallback            types.String                                   `tfsdk:"default_authentication_fallback"`
+	DefaultAuthenticationInvalidUserLog      types.Bool                                     `tfsdk:"default_authentication_invalid_user_log"`
+	DefaultAuthenticationLocal               types.String                                   `tfsdk:"default_authentication_local"`
+	DefaultAuthenticationNone                types.String                                   `tfsdk:"default_authentication_none"`
+	DefaultAuthenticationOwnerKey            types.String                                   `tfsdk:"default_authentication_owner_key"`
+	DefaultAuthenticationOwnerTag            types.String                                   `tfsdk:"default_authentication_owner_tag"`
+	DefaultAuthenticationProviderGroup       types.String                                   `tfsdk:"default_authentication_provider_group"`
+	DefaultAuthenticationProviderGroup2      types.String                                   `tfsdk:"default_authentication_provider_group_2"`
+	DefaultAuthenticationProviderGroup3      types.String                                   `tfsdk:"default_authentication_provider_group_3"`
+	DefaultAuthenticationProviderGroup4      types.String                                   `tfsdk:"default_authentication_provider_group_4"`
+	DefaultAuthenticationProviderGroup5      types.String                                   `tfsdk:"default_authentication_provider_group_5"`
+	DefaultAuthenticationProviderGroup6      types.String                                   `tfsdk:"default_authentication_provider_group_6"`
+	DefaultAuthenticationProviderGroup7      types.String                                   `tfsdk:"default_authentication_provider_group_7"`
+	DefaultAuthenticationProviderGroup8      types.String                                   `tfsdk:"default_authentication_provider_group_8"`
+	DefaultAuthenticationRealm               types.String                                   `tfsdk:"default_authentication_realm"`
+	ConsoleAuthenticationProtocol            types.String                                   `tfsdk:"console_authentication_protocol"`
+	ConsoleAuthenticationDescription         types.String                                   `tfsdk:"console_authentication_description"`
+	ConsoleAuthenticationErrorEnable         types.Bool                                     `tfsdk:"console_authentication_error_enable"`
+	ConsoleAuthenticationFallback            types.String                                   `tfsdk:"console_authentication_fallback"`
+	ConsoleAuthenticationInvalidUserLog      types.Bool                                     `tfsdk:"console_authentication_invalid_user_log"`
+	ConsoleAuthenticationLocal               types.String                                   `tfsdk:"console_authentication_local"`
+	ConsoleAuthenticationNone                types.String                                   `tfsdk:"console_authentication_none"`
+	ConsoleAuthenticationOwnerKey            types.String                                   `tfsdk:"console_authentication_owner_key"`
+	ConsoleAuthenticationOwnerTag            types.String                                   `tfsdk:"console_authentication_owner_tag"`
+	ConsoleAuthenticationProviderGroup       types.String                                   `tfsdk:"console_authentication_provider_group"`
+	ConsoleAuthenticationProviderGroup2      types.String                                   `tfsdk:"console_authentication_provider_group_2"`
+	ConsoleAuthenticationProviderGroup3      types.String                                   `tfsdk:"console_authentication_provider_group_3"`
+	ConsoleAuthenticationProviderGroup4      types.String                                   `tfsdk:"console_authentication_provider_group_4"`
+	ConsoleAuthenticationProviderGroup5      types.String                                   `tfsdk:"console_authentication_provider_group_5"`
+	ConsoleAuthenticationProviderGroup6      types.String                                   `tfsdk:"console_authentication_provider_group_6"`
+	ConsoleAuthenticationProviderGroup7      types.String                                   `tfsdk:"console_authentication_provider_group_7"`
+	ConsoleAuthenticationProviderGroup8      types.String                                   `tfsdk:"console_authentication_provider_group_8"`
+	ConsoleAuthenticationRealm               types.String                                   `tfsdk:"console_authentication_realm"`
+	DefaultAuthorizations                    map[string]UserManagementDefaultAuthorizations `tfsdk:"default_authorizations"`
+	DefaultAccountingMethodNone              types.Bool                                     `tfsdk:"default_accounting_method_none"`
+	DefaultAccountingDescription             types.String                                   `tfsdk:"default_accounting_description"`
+	DefaultAccountingLocalRbac               types.Bool                                     `tfsdk:"default_accounting_local_rbac"`
+	DefaultAccountingOwnerKey                types.String                                   `tfsdk:"default_accounting_owner_key"`
+	DefaultAccountingOwnerTag                types.String                                   `tfsdk:"default_accounting_owner_tag"`
+	DefaultAccountingProviderGroup           types.String                                   `tfsdk:"default_accounting_provider_group"`
+	DefaultAccountingProviderGroup2          types.String                                   `tfsdk:"default_accounting_provider_group_2"`
+	DefaultAccountingProviderGroup3          types.String                                   `tfsdk:"default_accounting_provider_group_3"`
+	DefaultAccountingProviderGroup4          types.String                                   `tfsdk:"default_accounting_provider_group_4"`
+	DefaultAccountingProviderGroup5          types.String                                   `tfsdk:"default_accounting_provider_group_5"`
+	DefaultAccountingProviderGroup6          types.String                                   `tfsdk:"default_accounting_provider_group_6"`
+	DefaultAccountingProviderGroup7          types.String                                   `tfsdk:"default_accounting_provider_group_7"`
+	DefaultAccountingProviderGroup8          types.String                                   `tfsdk:"default_accounting_provider_group_8"`
+	DefaultAccountingRealm                   types.String                                   `tfsdk:"default_accounting_realm"`
 }
 
 type UserManagementUsers struct {
@@ -137,6 +196,22 @@ type UserManagementTacacsProviderGroups struct {
 	Vrf             types.String `tfsdk:"vrf"`
 }
 
+type UserManagementDefaultAuthorizations struct {
+	AuthorizationMethodNone types.Bool   `tfsdk:"authorization_method_none"`
+	Description             types.String `tfsdk:"description"`
+	LocalRbac               types.Bool   `tfsdk:"local_rbac"`
+	OwnerKey                types.String `tfsdk:"owner_key"`
+	OwnerTag                types.String `tfsdk:"owner_tag"`
+	ProviderGroup           types.String `tfsdk:"provider_group"`
+	ProviderGroup2          types.String `tfsdk:"provider_group_2"`
+	ProviderGroup3          types.String `tfsdk:"provider_group_3"`
+	ProviderGroup4          types.String `tfsdk:"provider_group_4"`
+	ProviderGroup5          types.String `tfsdk:"provider_group_5"`
+	ProviderGroup6          types.String `tfsdk:"provider_group_6"`
+	ProviderGroup7          types.String `tfsdk:"provider_group_7"`
+	ProviderGroup8          types.String `tfsdk:"provider_group_8"`
+}
+
 type UserManagementIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -179,6 +254,10 @@ func (data UserManagementTacacsProviders) getRn(key string) string {
 
 func (data UserManagementTacacsProviderGroups) getRn(key string) string {
 	return fmt.Sprintf("tacacsplusprovidergroup-[%s]", key)
+}
+
+func (data UserManagementDefaultAuthorizations) getRn(key string) string {
+	return fmt.Sprintf("defaultauthor-[%s]", key)
 }
 
 func (data UserManagement) getClassName() string {
@@ -471,6 +550,240 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaTacacsPlusProviderGroup.attributes", attrs)
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaAuthRealm"
+		attrs = "{}"
+		if !data.AuthenticationRealmDefaultRolePolicy.IsUnknown() && !data.AuthenticationRealmDefaultRolePolicy.IsNull() {
+			attrs, _ = sjson.Set(attrs, "defRolePolicy", data.AuthenticationRealmDefaultRolePolicy.ValueString())
+		}
+		if !data.AuthenticationRealmDescription.IsUnknown() && !data.AuthenticationRealmDescription.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", data.AuthenticationRealmDescription.ValueString())
+		}
+		if !data.AuthenticationRealmLoggingLevel.IsUnknown() && !data.AuthenticationRealmLoggingLevel.IsNull() {
+			attrs, _ = sjson.Set(attrs, "loggingLevel", strconv.FormatInt(data.AuthenticationRealmLoggingLevel.ValueInt64(), 10))
+		}
+		if !data.AuthenticationRealmOwnerKey.IsUnknown() && !data.AuthenticationRealmOwnerKey.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerKey", data.AuthenticationRealmOwnerKey.ValueString())
+		}
+		if !data.AuthenticationRealmOwnerTag.IsUnknown() && !data.AuthenticationRealmOwnerTag.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerTag", data.AuthenticationRealmOwnerTag.ValueString())
+		}
+		if !data.AuthenticationRealmRadiusDirectedRequest.IsUnknown() && !data.AuthenticationRealmRadiusDirectedRequest.IsNull() {
+			attrs, _ = sjson.Set(attrs, "radDirectedReq", data.AuthenticationRealmRadiusDirectedRequest.ValueString())
+		}
+		if !data.AuthenticationRealmTacacsDirectedRequest.IsUnknown() && !data.AuthenticationRealmTacacsDirectedRequest.IsNull() {
+			attrs, _ = sjson.Set(attrs, "tacDirectedReq", data.AuthenticationRealmTacacsDirectedRequest.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		attrs = "{}"
+		if !data.DefaultAuthenticationProtocol.IsUnknown() && !data.DefaultAuthenticationProtocol.IsNull() {
+			attrs, _ = sjson.Set(attrs, "authProtocol", data.DefaultAuthenticationProtocol.ValueString())
+		}
+		if !data.DefaultAuthenticationDescription.IsUnknown() && !data.DefaultAuthenticationDescription.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", data.DefaultAuthenticationDescription.ValueString())
+		}
+		if !data.DefaultAuthenticationErrorEnable.IsUnknown() && !data.DefaultAuthenticationErrorEnable.IsNull() {
+			attrs, _ = sjson.Set(attrs, "errEn", strconv.FormatBool(data.DefaultAuthenticationErrorEnable.ValueBool()))
+		}
+		if !data.DefaultAuthenticationFallback.IsUnknown() && !data.DefaultAuthenticationFallback.IsNull() {
+			attrs, _ = sjson.Set(attrs, "fallback", data.DefaultAuthenticationFallback.ValueString())
+		}
+		if !data.DefaultAuthenticationInvalidUserLog.IsUnknown() && !data.DefaultAuthenticationInvalidUserLog.IsNull() {
+			attrs, _ = sjson.Set(attrs, "invalidUserLog", strconv.FormatBool(data.DefaultAuthenticationInvalidUserLog.ValueBool()))
+		}
+		if !data.DefaultAuthenticationLocal.IsUnknown() && !data.DefaultAuthenticationLocal.IsNull() {
+			attrs, _ = sjson.Set(attrs, "local", data.DefaultAuthenticationLocal.ValueString())
+		}
+		if !data.DefaultAuthenticationNone.IsUnknown() && !data.DefaultAuthenticationNone.IsNull() {
+			attrs, _ = sjson.Set(attrs, "none", data.DefaultAuthenticationNone.ValueString())
+		}
+		if !data.DefaultAuthenticationOwnerKey.IsUnknown() && !data.DefaultAuthenticationOwnerKey.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerKey", data.DefaultAuthenticationOwnerKey.ValueString())
+		}
+		if !data.DefaultAuthenticationOwnerTag.IsUnknown() && !data.DefaultAuthenticationOwnerTag.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerTag", data.DefaultAuthenticationOwnerTag.ValueString())
+		}
+		if !data.DefaultAuthenticationProviderGroup.IsUnknown() && !data.DefaultAuthenticationProviderGroup.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup", data.DefaultAuthenticationProviderGroup.ValueString())
+		}
+		if !data.DefaultAuthenticationProviderGroup2.IsUnknown() && !data.DefaultAuthenticationProviderGroup2.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup2", data.DefaultAuthenticationProviderGroup2.ValueString())
+		}
+		if !data.DefaultAuthenticationProviderGroup3.IsUnknown() && !data.DefaultAuthenticationProviderGroup3.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup3", data.DefaultAuthenticationProviderGroup3.ValueString())
+		}
+		if !data.DefaultAuthenticationProviderGroup4.IsUnknown() && !data.DefaultAuthenticationProviderGroup4.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup4", data.DefaultAuthenticationProviderGroup4.ValueString())
+		}
+		if !data.DefaultAuthenticationProviderGroup5.IsUnknown() && !data.DefaultAuthenticationProviderGroup5.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup5", data.DefaultAuthenticationProviderGroup5.ValueString())
+		}
+		if !data.DefaultAuthenticationProviderGroup6.IsUnknown() && !data.DefaultAuthenticationProviderGroup6.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup6", data.DefaultAuthenticationProviderGroup6.ValueString())
+		}
+		if !data.DefaultAuthenticationProviderGroup7.IsUnknown() && !data.DefaultAuthenticationProviderGroup7.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup7", data.DefaultAuthenticationProviderGroup7.ValueString())
+		}
+		if !data.DefaultAuthenticationProviderGroup8.IsUnknown() && !data.DefaultAuthenticationProviderGroup8.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup8", data.DefaultAuthenticationProviderGroup8.ValueString())
+		}
+		if !data.DefaultAuthenticationRealm.IsUnknown() && !data.DefaultAuthenticationRealm.IsNull() {
+			attrs, _ = sjson.Set(attrs, "realm", data.DefaultAuthenticationRealm.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaDefaultAuth.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.ConsoleAuthenticationProtocol.IsUnknown() && !data.ConsoleAuthenticationProtocol.IsNull() {
+			attrs, _ = sjson.Set(attrs, "authProtocol", data.ConsoleAuthenticationProtocol.ValueString())
+		}
+		if !data.ConsoleAuthenticationDescription.IsUnknown() && !data.ConsoleAuthenticationDescription.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", data.ConsoleAuthenticationDescription.ValueString())
+		}
+		if !data.ConsoleAuthenticationErrorEnable.IsUnknown() && !data.ConsoleAuthenticationErrorEnable.IsNull() {
+			attrs, _ = sjson.Set(attrs, "errEn", strconv.FormatBool(data.ConsoleAuthenticationErrorEnable.ValueBool()))
+		}
+		if !data.ConsoleAuthenticationFallback.IsUnknown() && !data.ConsoleAuthenticationFallback.IsNull() {
+			attrs, _ = sjson.Set(attrs, "fallback", data.ConsoleAuthenticationFallback.ValueString())
+		}
+		if !data.ConsoleAuthenticationInvalidUserLog.IsUnknown() && !data.ConsoleAuthenticationInvalidUserLog.IsNull() {
+			attrs, _ = sjson.Set(attrs, "invalidUserLog", strconv.FormatBool(data.ConsoleAuthenticationInvalidUserLog.ValueBool()))
+		}
+		if !data.ConsoleAuthenticationLocal.IsUnknown() && !data.ConsoleAuthenticationLocal.IsNull() {
+			attrs, _ = sjson.Set(attrs, "local", data.ConsoleAuthenticationLocal.ValueString())
+		}
+		if !data.ConsoleAuthenticationNone.IsUnknown() && !data.ConsoleAuthenticationNone.IsNull() {
+			attrs, _ = sjson.Set(attrs, "none", data.ConsoleAuthenticationNone.ValueString())
+		}
+		if !data.ConsoleAuthenticationOwnerKey.IsUnknown() && !data.ConsoleAuthenticationOwnerKey.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerKey", data.ConsoleAuthenticationOwnerKey.ValueString())
+		}
+		if !data.ConsoleAuthenticationOwnerTag.IsUnknown() && !data.ConsoleAuthenticationOwnerTag.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerTag", data.ConsoleAuthenticationOwnerTag.ValueString())
+		}
+		if !data.ConsoleAuthenticationProviderGroup.IsUnknown() && !data.ConsoleAuthenticationProviderGroup.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup", data.ConsoleAuthenticationProviderGroup.ValueString())
+		}
+		if !data.ConsoleAuthenticationProviderGroup2.IsUnknown() && !data.ConsoleAuthenticationProviderGroup2.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup2", data.ConsoleAuthenticationProviderGroup2.ValueString())
+		}
+		if !data.ConsoleAuthenticationProviderGroup3.IsUnknown() && !data.ConsoleAuthenticationProviderGroup3.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup3", data.ConsoleAuthenticationProviderGroup3.ValueString())
+		}
+		if !data.ConsoleAuthenticationProviderGroup4.IsUnknown() && !data.ConsoleAuthenticationProviderGroup4.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup4", data.ConsoleAuthenticationProviderGroup4.ValueString())
+		}
+		if !data.ConsoleAuthenticationProviderGroup5.IsUnknown() && !data.ConsoleAuthenticationProviderGroup5.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup5", data.ConsoleAuthenticationProviderGroup5.ValueString())
+		}
+		if !data.ConsoleAuthenticationProviderGroup6.IsUnknown() && !data.ConsoleAuthenticationProviderGroup6.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup6", data.ConsoleAuthenticationProviderGroup6.ValueString())
+		}
+		if !data.ConsoleAuthenticationProviderGroup7.IsUnknown() && !data.ConsoleAuthenticationProviderGroup7.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup7", data.ConsoleAuthenticationProviderGroup7.ValueString())
+		}
+		if !data.ConsoleAuthenticationProviderGroup8.IsUnknown() && !data.ConsoleAuthenticationProviderGroup8.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup8", data.ConsoleAuthenticationProviderGroup8.ValueString())
+		}
+		if !data.ConsoleAuthenticationRealm.IsUnknown() && !data.ConsoleAuthenticationRealm.IsNull() {
+			attrs, _ = sjson.Set(attrs, "realm", data.ConsoleAuthenticationRealm.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaConsoleAuth.attributes", attrs)
+		}
+		for key, child := range data.DefaultAuthorizations {
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "cmdType", key)
+			if !child.AuthorizationMethodNone.IsUnknown() && !child.AuthorizationMethodNone.IsNull() {
+				attrs, _ = sjson.Set(attrs, "authorMethodNone", strconv.FormatBool(child.AuthorizationMethodNone.ValueBool()))
+			}
+			if !child.Description.IsUnknown() && !child.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if !child.LocalRbac.IsUnknown() && !child.LocalRbac.IsNull() {
+				attrs, _ = sjson.Set(attrs, "localRbac", strconv.FormatBool(child.LocalRbac.ValueBool()))
+			}
+			if !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ownerKey", child.OwnerKey.ValueString())
+			}
+			if !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ownerTag", child.OwnerTag.ValueString())
+			}
+			if !child.ProviderGroup.IsUnknown() && !child.ProviderGroup.IsNull() {
+				attrs, _ = sjson.Set(attrs, "providerGroup", child.ProviderGroup.ValueString())
+			}
+			if !child.ProviderGroup2.IsUnknown() && !child.ProviderGroup2.IsNull() {
+				attrs, _ = sjson.Set(attrs, "providerGroup2", child.ProviderGroup2.ValueString())
+			}
+			if !child.ProviderGroup3.IsUnknown() && !child.ProviderGroup3.IsNull() {
+				attrs, _ = sjson.Set(attrs, "providerGroup3", child.ProviderGroup3.ValueString())
+			}
+			if !child.ProviderGroup4.IsUnknown() && !child.ProviderGroup4.IsNull() {
+				attrs, _ = sjson.Set(attrs, "providerGroup4", child.ProviderGroup4.ValueString())
+			}
+			if !child.ProviderGroup5.IsUnknown() && !child.ProviderGroup5.IsNull() {
+				attrs, _ = sjson.Set(attrs, "providerGroup5", child.ProviderGroup5.ValueString())
+			}
+			if !child.ProviderGroup6.IsUnknown() && !child.ProviderGroup6.IsNull() {
+				attrs, _ = sjson.Set(attrs, "providerGroup6", child.ProviderGroup6.ValueString())
+			}
+			if !child.ProviderGroup7.IsUnknown() && !child.ProviderGroup7.IsNull() {
+				attrs, _ = sjson.Set(attrs, "providerGroup7", child.ProviderGroup7.ValueString())
+			}
+			if !child.ProviderGroup8.IsUnknown() && !child.ProviderGroup8.IsNull() {
+				attrs, _ = sjson.Set(attrs, "providerGroup8", child.ProviderGroup8.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaDefaultAuthor.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.DefaultAccountingMethodNone.IsUnknown() && !data.DefaultAccountingMethodNone.IsNull() {
+			attrs, _ = sjson.Set(attrs, "accMethodNone", strconv.FormatBool(data.DefaultAccountingMethodNone.ValueBool()))
+		}
+		if !data.DefaultAccountingDescription.IsUnknown() && !data.DefaultAccountingDescription.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", data.DefaultAccountingDescription.ValueString())
+		}
+		if !data.DefaultAccountingLocalRbac.IsUnknown() && !data.DefaultAccountingLocalRbac.IsNull() {
+			attrs, _ = sjson.Set(attrs, "localRbac", strconv.FormatBool(data.DefaultAccountingLocalRbac.ValueBool()))
+		}
+		if !data.DefaultAccountingOwnerKey.IsUnknown() && !data.DefaultAccountingOwnerKey.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerKey", data.DefaultAccountingOwnerKey.ValueString())
+		}
+		if !data.DefaultAccountingOwnerTag.IsUnknown() && !data.DefaultAccountingOwnerTag.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerTag", data.DefaultAccountingOwnerTag.ValueString())
+		}
+		if !data.DefaultAccountingProviderGroup.IsUnknown() && !data.DefaultAccountingProviderGroup.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup", data.DefaultAccountingProviderGroup.ValueString())
+		}
+		if !data.DefaultAccountingProviderGroup2.IsUnknown() && !data.DefaultAccountingProviderGroup2.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup2", data.DefaultAccountingProviderGroup2.ValueString())
+		}
+		if !data.DefaultAccountingProviderGroup3.IsUnknown() && !data.DefaultAccountingProviderGroup3.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup3", data.DefaultAccountingProviderGroup3.ValueString())
+		}
+		if !data.DefaultAccountingProviderGroup4.IsUnknown() && !data.DefaultAccountingProviderGroup4.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup4", data.DefaultAccountingProviderGroup4.ValueString())
+		}
+		if !data.DefaultAccountingProviderGroup5.IsUnknown() && !data.DefaultAccountingProviderGroup5.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup5", data.DefaultAccountingProviderGroup5.ValueString())
+		}
+		if !data.DefaultAccountingProviderGroup6.IsUnknown() && !data.DefaultAccountingProviderGroup6.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup6", data.DefaultAccountingProviderGroup6.ValueString())
+		}
+		if !data.DefaultAccountingProviderGroup7.IsUnknown() && !data.DefaultAccountingProviderGroup7.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup7", data.DefaultAccountingProviderGroup7.ValueString())
+		}
+		if !data.DefaultAccountingProviderGroup8.IsUnknown() && !data.DefaultAccountingProviderGroup8.IsNull() {
+			attrs, _ = sjson.Set(attrs, "providerGroup8", data.DefaultAccountingProviderGroup8.ValueString())
+		}
+		if !data.DefaultAccountingRealm.IsUnknown() && !data.DefaultAccountingRealm.IsNull() {
+			attrs, _ = sjson.Set(attrs, "realm", data.DefaultAccountingRealm.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaDefaultAcc.attributes", attrs)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -670,6 +983,146 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 				return true
 			},
 		)
+	}
+	{
+		var raaaAuthRealm gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("aaaAuthRealm.attributes.rn").String()
+				if rnValue == "authrealm" {
+					raaaAuthRealm = v
+					return false
+				}
+				return true
+			},
+		)
+		data.AuthenticationRealmDefaultRolePolicy = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.defRolePolicy").String())
+		data.AuthenticationRealmDescription = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.descr").String())
+		data.AuthenticationRealmLoggingLevel = types.Int64Value(raaaAuthRealm.Get("aaaAuthRealm.attributes.loggingLevel").Int())
+		data.AuthenticationRealmOwnerKey = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.ownerKey").String())
+		data.AuthenticationRealmOwnerTag = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.ownerTag").String())
+		data.AuthenticationRealmRadiusDirectedRequest = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.radDirectedReq").String())
+		data.AuthenticationRealmTacacsDirectedRequest = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.tacDirectedReq").String())
+		{
+			var raaaDefaultAuth gjson.Result
+			raaaAuthRealm.Get("aaaAuthRealm.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("aaaDefaultAuth.attributes.rn").String()
+					if rnValue == "defaultauth" {
+						raaaDefaultAuth = v
+						return false
+					}
+					return true
+				},
+			)
+			data.DefaultAuthenticationProtocol = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.authProtocol").String())
+			data.DefaultAuthenticationDescription = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.descr").String())
+			data.DefaultAuthenticationErrorEnable = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.errEn").String()))
+			data.DefaultAuthenticationFallback = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.fallback").String())
+			data.DefaultAuthenticationInvalidUserLog = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.invalidUserLog").String()))
+			data.DefaultAuthenticationLocal = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.local").String())
+			data.DefaultAuthenticationNone = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.none").String())
+			data.DefaultAuthenticationOwnerKey = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.ownerKey").String())
+			data.DefaultAuthenticationOwnerTag = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.ownerTag").String())
+			data.DefaultAuthenticationProviderGroup = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup").String())
+			data.DefaultAuthenticationProviderGroup2 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup2").String())
+			data.DefaultAuthenticationProviderGroup3 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup3").String())
+			data.DefaultAuthenticationProviderGroup4 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup4").String())
+			data.DefaultAuthenticationProviderGroup5 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup5").String())
+			data.DefaultAuthenticationProviderGroup6 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup6").String())
+			data.DefaultAuthenticationProviderGroup7 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup7").String())
+			data.DefaultAuthenticationProviderGroup8 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup8").String())
+			data.DefaultAuthenticationRealm = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.realm").String())
+		}
+		{
+			var raaaConsoleAuth gjson.Result
+			raaaAuthRealm.Get("aaaAuthRealm.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("aaaConsoleAuth.attributes.rn").String()
+					if rnValue == "consoleauth" {
+						raaaConsoleAuth = v
+						return false
+					}
+					return true
+				},
+			)
+			data.ConsoleAuthenticationProtocol = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.authProtocol").String())
+			data.ConsoleAuthenticationDescription = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.descr").String())
+			data.ConsoleAuthenticationErrorEnable = types.BoolValue(helpers.ParseNxosBoolean(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.errEn").String()))
+			data.ConsoleAuthenticationFallback = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.fallback").String())
+			data.ConsoleAuthenticationInvalidUserLog = types.BoolValue(helpers.ParseNxosBoolean(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.invalidUserLog").String()))
+			data.ConsoleAuthenticationLocal = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.local").String())
+			data.ConsoleAuthenticationNone = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.none").String())
+			data.ConsoleAuthenticationOwnerKey = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.ownerKey").String())
+			data.ConsoleAuthenticationOwnerTag = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.ownerTag").String())
+			data.ConsoleAuthenticationProviderGroup = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup").String())
+			data.ConsoleAuthenticationProviderGroup2 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup2").String())
+			data.ConsoleAuthenticationProviderGroup3 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup3").String())
+			data.ConsoleAuthenticationProviderGroup4 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup4").String())
+			data.ConsoleAuthenticationProviderGroup5 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup5").String())
+			data.ConsoleAuthenticationProviderGroup6 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup6").String())
+			data.ConsoleAuthenticationProviderGroup7 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup7").String())
+			data.ConsoleAuthenticationProviderGroup8 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup8").String())
+			data.ConsoleAuthenticationRealm = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.realm").String())
+		}
+		raaaAuthRealm.Get("aaaAuthRealm.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "aaaDefaultAuthor" {
+							var child UserManagementDefaultAuthorizations
+							child.AuthorizationMethodNone = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.authorMethodNone").String()))
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.LocalRbac = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.localRbac").String()))
+							child.OwnerKey = types.StringValue(value.Get("attributes.ownerKey").String())
+							child.OwnerTag = types.StringValue(value.Get("attributes.ownerTag").String())
+							child.ProviderGroup = types.StringValue(value.Get("attributes.providerGroup").String())
+							child.ProviderGroup2 = types.StringValue(value.Get("attributes.providerGroup2").String())
+							child.ProviderGroup3 = types.StringValue(value.Get("attributes.providerGroup3").String())
+							child.ProviderGroup4 = types.StringValue(value.Get("attributes.providerGroup4").String())
+							child.ProviderGroup5 = types.StringValue(value.Get("attributes.providerGroup5").String())
+							child.ProviderGroup6 = types.StringValue(value.Get("attributes.providerGroup6").String())
+							child.ProviderGroup7 = types.StringValue(value.Get("attributes.providerGroup7").String())
+							child.ProviderGroup8 = types.StringValue(value.Get("attributes.providerGroup8").String())
+							mapKey := value.Get("attributes.cmdType").String()
+							if data.DefaultAuthorizations == nil {
+								data.DefaultAuthorizations = make(map[string]UserManagementDefaultAuthorizations)
+							}
+							data.DefaultAuthorizations[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		{
+			var raaaDefaultAcc gjson.Result
+			raaaAuthRealm.Get("aaaAuthRealm.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("aaaDefaultAcc.attributes.rn").String()
+					if rnValue == "defaultacc" {
+						raaaDefaultAcc = v
+						return false
+					}
+					return true
+				},
+			)
+			data.DefaultAccountingMethodNone = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.accMethodNone").String()))
+			data.DefaultAccountingDescription = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.descr").String())
+			data.DefaultAccountingLocalRbac = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.localRbac").String()))
+			data.DefaultAccountingOwnerKey = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.ownerKey").String())
+			data.DefaultAccountingOwnerTag = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.ownerTag").String())
+			data.DefaultAccountingProviderGroup = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup").String())
+			data.DefaultAccountingProviderGroup2 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup2").String())
+			data.DefaultAccountingProviderGroup3 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup3").String())
+			data.DefaultAccountingProviderGroup4 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup4").String())
+			data.DefaultAccountingProviderGroup5 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup5").String())
+			data.DefaultAccountingProviderGroup6 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup6").String())
+			data.DefaultAccountingProviderGroup7 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup7").String())
+			data.DefaultAccountingProviderGroup8 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup8").String())
+			data.DefaultAccountingRealm = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.realm").String())
+		}
 	}
 }
 
@@ -1128,6 +1581,423 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 		}
 		data.TacacsProviderGroups[key] = item
 	}
+	var raaaAuthRealm gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("aaaAuthRealm.attributes.rn").String()
+			if rnValue == "authrealm" {
+				raaaAuthRealm = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.AuthenticationRealmDefaultRolePolicy.IsNull() {
+		data.AuthenticationRealmDefaultRolePolicy = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.defRolePolicy").String())
+	} else {
+		data.AuthenticationRealmDefaultRolePolicy = types.StringNull()
+	}
+	if !data.AuthenticationRealmDescription.IsNull() {
+		data.AuthenticationRealmDescription = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.descr").String())
+	} else {
+		data.AuthenticationRealmDescription = types.StringNull()
+	}
+	if !data.AuthenticationRealmLoggingLevel.IsNull() {
+		data.AuthenticationRealmLoggingLevel = types.Int64Value(raaaAuthRealm.Get("aaaAuthRealm.attributes.loggingLevel").Int())
+	} else {
+		data.AuthenticationRealmLoggingLevel = types.Int64Null()
+	}
+	if !data.AuthenticationRealmOwnerKey.IsNull() {
+		data.AuthenticationRealmOwnerKey = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.ownerKey").String())
+	} else {
+		data.AuthenticationRealmOwnerKey = types.StringNull()
+	}
+	if !data.AuthenticationRealmOwnerTag.IsNull() {
+		data.AuthenticationRealmOwnerTag = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.ownerTag").String())
+	} else {
+		data.AuthenticationRealmOwnerTag = types.StringNull()
+	}
+	if !data.AuthenticationRealmRadiusDirectedRequest.IsNull() {
+		data.AuthenticationRealmRadiusDirectedRequest = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.radDirectedReq").String())
+	} else {
+		data.AuthenticationRealmRadiusDirectedRequest = types.StringNull()
+	}
+	if !data.AuthenticationRealmTacacsDirectedRequest.IsNull() {
+		data.AuthenticationRealmTacacsDirectedRequest = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.tacDirectedReq").String())
+	} else {
+		data.AuthenticationRealmTacacsDirectedRequest = types.StringNull()
+	}
+	{
+		var raaaDefaultAuth gjson.Result
+		raaaAuthRealm.Get("aaaAuthRealm.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("aaaDefaultAuth.attributes.rn").String()
+				if rnValue == "defaultauth" {
+					raaaDefaultAuth = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.DefaultAuthenticationProtocol.IsNull() {
+			data.DefaultAuthenticationProtocol = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.authProtocol").String())
+		} else {
+			data.DefaultAuthenticationProtocol = types.StringNull()
+		}
+		if !data.DefaultAuthenticationDescription.IsNull() {
+			data.DefaultAuthenticationDescription = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.descr").String())
+		} else {
+			data.DefaultAuthenticationDescription = types.StringNull()
+		}
+		if !data.DefaultAuthenticationErrorEnable.IsNull() {
+			data.DefaultAuthenticationErrorEnable = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.errEn").String()))
+		} else {
+			data.DefaultAuthenticationErrorEnable = types.BoolNull()
+		}
+		if !data.DefaultAuthenticationFallback.IsNull() {
+			data.DefaultAuthenticationFallback = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.fallback").String())
+		} else {
+			data.DefaultAuthenticationFallback = types.StringNull()
+		}
+		if !data.DefaultAuthenticationInvalidUserLog.IsNull() {
+			data.DefaultAuthenticationInvalidUserLog = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.invalidUserLog").String()))
+		} else {
+			data.DefaultAuthenticationInvalidUserLog = types.BoolNull()
+		}
+		if !data.DefaultAuthenticationLocal.IsNull() {
+			data.DefaultAuthenticationLocal = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.local").String())
+		} else {
+			data.DefaultAuthenticationLocal = types.StringNull()
+		}
+		if !data.DefaultAuthenticationNone.IsNull() {
+			data.DefaultAuthenticationNone = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.none").String())
+		} else {
+			data.DefaultAuthenticationNone = types.StringNull()
+		}
+		if !data.DefaultAuthenticationOwnerKey.IsNull() {
+			data.DefaultAuthenticationOwnerKey = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.ownerKey").String())
+		} else {
+			data.DefaultAuthenticationOwnerKey = types.StringNull()
+		}
+		if !data.DefaultAuthenticationOwnerTag.IsNull() {
+			data.DefaultAuthenticationOwnerTag = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.ownerTag").String())
+		} else {
+			data.DefaultAuthenticationOwnerTag = types.StringNull()
+		}
+		if !data.DefaultAuthenticationProviderGroup.IsNull() {
+			data.DefaultAuthenticationProviderGroup = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup").String())
+		} else {
+			data.DefaultAuthenticationProviderGroup = types.StringNull()
+		}
+		if !data.DefaultAuthenticationProviderGroup2.IsNull() {
+			data.DefaultAuthenticationProviderGroup2 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup2").String())
+		} else {
+			data.DefaultAuthenticationProviderGroup2 = types.StringNull()
+		}
+		if !data.DefaultAuthenticationProviderGroup3.IsNull() {
+			data.DefaultAuthenticationProviderGroup3 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup3").String())
+		} else {
+			data.DefaultAuthenticationProviderGroup3 = types.StringNull()
+		}
+		if !data.DefaultAuthenticationProviderGroup4.IsNull() {
+			data.DefaultAuthenticationProviderGroup4 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup4").String())
+		} else {
+			data.DefaultAuthenticationProviderGroup4 = types.StringNull()
+		}
+		if !data.DefaultAuthenticationProviderGroup5.IsNull() {
+			data.DefaultAuthenticationProviderGroup5 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup5").String())
+		} else {
+			data.DefaultAuthenticationProviderGroup5 = types.StringNull()
+		}
+		if !data.DefaultAuthenticationProviderGroup6.IsNull() {
+			data.DefaultAuthenticationProviderGroup6 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup6").String())
+		} else {
+			data.DefaultAuthenticationProviderGroup6 = types.StringNull()
+		}
+		if !data.DefaultAuthenticationProviderGroup7.IsNull() {
+			data.DefaultAuthenticationProviderGroup7 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup7").String())
+		} else {
+			data.DefaultAuthenticationProviderGroup7 = types.StringNull()
+		}
+		if !data.DefaultAuthenticationProviderGroup8.IsNull() {
+			data.DefaultAuthenticationProviderGroup8 = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.providerGroup8").String())
+		} else {
+			data.DefaultAuthenticationProviderGroup8 = types.StringNull()
+		}
+		if !data.DefaultAuthenticationRealm.IsNull() {
+			data.DefaultAuthenticationRealm = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.realm").String())
+		} else {
+			data.DefaultAuthenticationRealm = types.StringNull()
+		}
+	}
+	{
+		var raaaConsoleAuth gjson.Result
+		raaaAuthRealm.Get("aaaAuthRealm.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("aaaConsoleAuth.attributes.rn").String()
+				if rnValue == "consoleauth" {
+					raaaConsoleAuth = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.ConsoleAuthenticationProtocol.IsNull() {
+			data.ConsoleAuthenticationProtocol = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.authProtocol").String())
+		} else {
+			data.ConsoleAuthenticationProtocol = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationDescription.IsNull() {
+			data.ConsoleAuthenticationDescription = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.descr").String())
+		} else {
+			data.ConsoleAuthenticationDescription = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationErrorEnable.IsNull() {
+			data.ConsoleAuthenticationErrorEnable = types.BoolValue(helpers.ParseNxosBoolean(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.errEn").String()))
+		} else {
+			data.ConsoleAuthenticationErrorEnable = types.BoolNull()
+		}
+		if !data.ConsoleAuthenticationFallback.IsNull() {
+			data.ConsoleAuthenticationFallback = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.fallback").String())
+		} else {
+			data.ConsoleAuthenticationFallback = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationInvalidUserLog.IsNull() {
+			data.ConsoleAuthenticationInvalidUserLog = types.BoolValue(helpers.ParseNxosBoolean(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.invalidUserLog").String()))
+		} else {
+			data.ConsoleAuthenticationInvalidUserLog = types.BoolNull()
+		}
+		if !data.ConsoleAuthenticationLocal.IsNull() {
+			data.ConsoleAuthenticationLocal = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.local").String())
+		} else {
+			data.ConsoleAuthenticationLocal = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationNone.IsNull() {
+			data.ConsoleAuthenticationNone = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.none").String())
+		} else {
+			data.ConsoleAuthenticationNone = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationOwnerKey.IsNull() {
+			data.ConsoleAuthenticationOwnerKey = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.ownerKey").String())
+		} else {
+			data.ConsoleAuthenticationOwnerKey = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationOwnerTag.IsNull() {
+			data.ConsoleAuthenticationOwnerTag = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.ownerTag").String())
+		} else {
+			data.ConsoleAuthenticationOwnerTag = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationProviderGroup.IsNull() {
+			data.ConsoleAuthenticationProviderGroup = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup").String())
+		} else {
+			data.ConsoleAuthenticationProviderGroup = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationProviderGroup2.IsNull() {
+			data.ConsoleAuthenticationProviderGroup2 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup2").String())
+		} else {
+			data.ConsoleAuthenticationProviderGroup2 = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationProviderGroup3.IsNull() {
+			data.ConsoleAuthenticationProviderGroup3 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup3").String())
+		} else {
+			data.ConsoleAuthenticationProviderGroup3 = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationProviderGroup4.IsNull() {
+			data.ConsoleAuthenticationProviderGroup4 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup4").String())
+		} else {
+			data.ConsoleAuthenticationProviderGroup4 = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationProviderGroup5.IsNull() {
+			data.ConsoleAuthenticationProviderGroup5 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup5").String())
+		} else {
+			data.ConsoleAuthenticationProviderGroup5 = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationProviderGroup6.IsNull() {
+			data.ConsoleAuthenticationProviderGroup6 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup6").String())
+		} else {
+			data.ConsoleAuthenticationProviderGroup6 = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationProviderGroup7.IsNull() {
+			data.ConsoleAuthenticationProviderGroup7 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup7").String())
+		} else {
+			data.ConsoleAuthenticationProviderGroup7 = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationProviderGroup8.IsNull() {
+			data.ConsoleAuthenticationProviderGroup8 = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.providerGroup8").String())
+		} else {
+			data.ConsoleAuthenticationProviderGroup8 = types.StringNull()
+		}
+		if !data.ConsoleAuthenticationRealm.IsNull() {
+			data.ConsoleAuthenticationRealm = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.realm").String())
+		} else {
+			data.ConsoleAuthenticationRealm = types.StringNull()
+		}
+	}
+	for key, item := range data.DefaultAuthorizations {
+		var raaaDefaultAuthor gjson.Result
+		raaaAuthRealm.Get("aaaAuthRealm.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("aaaDefaultAuthor.attributes.cmdType").String() == key {
+					raaaDefaultAuthor = v
+					return false
+				}
+				return true
+			},
+		)
+		if !raaaDefaultAuthor.Exists() {
+			delete(data.DefaultAuthorizations, key)
+			continue
+		}
+		if !item.AuthorizationMethodNone.IsNull() {
+			item.AuthorizationMethodNone = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.authorMethodNone").String()))
+		} else {
+			item.AuthorizationMethodNone = types.BoolNull()
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.LocalRbac.IsNull() {
+			item.LocalRbac = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.localRbac").String()))
+		} else {
+			item.LocalRbac = types.BoolNull()
+		}
+		if !item.OwnerKey.IsNull() {
+			item.OwnerKey = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.ownerKey").String())
+		} else {
+			item.OwnerKey = types.StringNull()
+		}
+		if !item.OwnerTag.IsNull() {
+			item.OwnerTag = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.ownerTag").String())
+		} else {
+			item.OwnerTag = types.StringNull()
+		}
+		if !item.ProviderGroup.IsNull() {
+			item.ProviderGroup = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.providerGroup").String())
+		} else {
+			item.ProviderGroup = types.StringNull()
+		}
+		if !item.ProviderGroup2.IsNull() {
+			item.ProviderGroup2 = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.providerGroup2").String())
+		} else {
+			item.ProviderGroup2 = types.StringNull()
+		}
+		if !item.ProviderGroup3.IsNull() {
+			item.ProviderGroup3 = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.providerGroup3").String())
+		} else {
+			item.ProviderGroup3 = types.StringNull()
+		}
+		if !item.ProviderGroup4.IsNull() {
+			item.ProviderGroup4 = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.providerGroup4").String())
+		} else {
+			item.ProviderGroup4 = types.StringNull()
+		}
+		if !item.ProviderGroup5.IsNull() {
+			item.ProviderGroup5 = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.providerGroup5").String())
+		} else {
+			item.ProviderGroup5 = types.StringNull()
+		}
+		if !item.ProviderGroup6.IsNull() {
+			item.ProviderGroup6 = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.providerGroup6").String())
+		} else {
+			item.ProviderGroup6 = types.StringNull()
+		}
+		if !item.ProviderGroup7.IsNull() {
+			item.ProviderGroup7 = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.providerGroup7").String())
+		} else {
+			item.ProviderGroup7 = types.StringNull()
+		}
+		if !item.ProviderGroup8.IsNull() {
+			item.ProviderGroup8 = types.StringValue(raaaDefaultAuthor.Get("aaaDefaultAuthor.attributes.providerGroup8").String())
+		} else {
+			item.ProviderGroup8 = types.StringNull()
+		}
+		data.DefaultAuthorizations[key] = item
+	}
+	{
+		var raaaDefaultAcc gjson.Result
+		raaaAuthRealm.Get("aaaAuthRealm.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("aaaDefaultAcc.attributes.rn").String()
+				if rnValue == "defaultacc" {
+					raaaDefaultAcc = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.DefaultAccountingMethodNone.IsNull() {
+			data.DefaultAccountingMethodNone = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.accMethodNone").String()))
+		} else {
+			data.DefaultAccountingMethodNone = types.BoolNull()
+		}
+		if !data.DefaultAccountingDescription.IsNull() {
+			data.DefaultAccountingDescription = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.descr").String())
+		} else {
+			data.DefaultAccountingDescription = types.StringNull()
+		}
+		if !data.DefaultAccountingLocalRbac.IsNull() {
+			data.DefaultAccountingLocalRbac = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.localRbac").String()))
+		} else {
+			data.DefaultAccountingLocalRbac = types.BoolNull()
+		}
+		if !data.DefaultAccountingOwnerKey.IsNull() {
+			data.DefaultAccountingOwnerKey = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.ownerKey").String())
+		} else {
+			data.DefaultAccountingOwnerKey = types.StringNull()
+		}
+		if !data.DefaultAccountingOwnerTag.IsNull() {
+			data.DefaultAccountingOwnerTag = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.ownerTag").String())
+		} else {
+			data.DefaultAccountingOwnerTag = types.StringNull()
+		}
+		if !data.DefaultAccountingProviderGroup.IsNull() {
+			data.DefaultAccountingProviderGroup = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup").String())
+		} else {
+			data.DefaultAccountingProviderGroup = types.StringNull()
+		}
+		if !data.DefaultAccountingProviderGroup2.IsNull() {
+			data.DefaultAccountingProviderGroup2 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup2").String())
+		} else {
+			data.DefaultAccountingProviderGroup2 = types.StringNull()
+		}
+		if !data.DefaultAccountingProviderGroup3.IsNull() {
+			data.DefaultAccountingProviderGroup3 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup3").String())
+		} else {
+			data.DefaultAccountingProviderGroup3 = types.StringNull()
+		}
+		if !data.DefaultAccountingProviderGroup4.IsNull() {
+			data.DefaultAccountingProviderGroup4 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup4").String())
+		} else {
+			data.DefaultAccountingProviderGroup4 = types.StringNull()
+		}
+		if !data.DefaultAccountingProviderGroup5.IsNull() {
+			data.DefaultAccountingProviderGroup5 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup5").String())
+		} else {
+			data.DefaultAccountingProviderGroup5 = types.StringNull()
+		}
+		if !data.DefaultAccountingProviderGroup6.IsNull() {
+			data.DefaultAccountingProviderGroup6 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup6").String())
+		} else {
+			data.DefaultAccountingProviderGroup6 = types.StringNull()
+		}
+		if !data.DefaultAccountingProviderGroup7.IsNull() {
+			data.DefaultAccountingProviderGroup7 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup7").String())
+		} else {
+			data.DefaultAccountingProviderGroup7 = types.StringNull()
+		}
+		if !data.DefaultAccountingProviderGroup8.IsNull() {
+			data.DefaultAccountingProviderGroup8 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup8").String())
+		} else {
+			data.DefaultAccountingProviderGroup8 = types.StringNull()
+		}
+		if !data.DefaultAccountingRealm.IsNull() {
+			data.DefaultAccountingRealm = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.realm").String())
+		} else {
+			data.DefaultAccountingRealm = types.StringNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1283,6 +2153,226 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaAuthRealm"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.AuthenticationRealmDefaultRolePolicy.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"defRolePolicy", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.AuthenticationRealmDescription.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.AuthenticationRealmLoggingLevel.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.AuthenticationRealmOwnerKey.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.AuthenticationRealmOwnerTag.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.AuthenticationRealmRadiusDirectedRequest.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"radDirectedReq", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.AuthenticationRealmTacacsDirectedRequest.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"tacDirectedReq", "DME_UNSET_PROPERTY_MARKER")
+		}
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.DefaultAuthenticationProtocol.IsNull() {
+				childBody, _ = sjson.Set(childBody, "authProtocol", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationDescription.IsNull() {
+				childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationErrorEnable.IsNull() {
+				childBody, _ = sjson.Set(childBody, "errEn", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationFallback.IsNull() {
+				childBody, _ = sjson.Set(childBody, "fallback", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationInvalidUserLog.IsNull() {
+				childBody, _ = sjson.Set(childBody, "invalidUserLog", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationLocal.IsNull() {
+				childBody, _ = sjson.Set(childBody, "local", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationNone.IsNull() {
+				childBody, _ = sjson.Set(childBody, "none", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationOwnerKey.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationOwnerTag.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationProviderGroup.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationProviderGroup2.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationProviderGroup3.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationProviderGroup4.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationProviderGroup5.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationProviderGroup6.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationProviderGroup7.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationProviderGroup8.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAuthenticationRealm.IsNull() {
+				childBody, _ = sjson.Set(childBody, "realm", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaDefaultAuth"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		{
+			childBody := ""
+			if !data.ConsoleAuthenticationProtocol.IsNull() {
+				childBody, _ = sjson.Set(childBody, "authProtocol", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationDescription.IsNull() {
+				childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationErrorEnable.IsNull() {
+				childBody, _ = sjson.Set(childBody, "errEn", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationFallback.IsNull() {
+				childBody, _ = sjson.Set(childBody, "fallback", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationInvalidUserLog.IsNull() {
+				childBody, _ = sjson.Set(childBody, "invalidUserLog", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationLocal.IsNull() {
+				childBody, _ = sjson.Set(childBody, "local", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationNone.IsNull() {
+				childBody, _ = sjson.Set(childBody, "none", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationOwnerKey.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationOwnerTag.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationProviderGroup.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationProviderGroup2.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationProviderGroup3.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationProviderGroup4.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationProviderGroup5.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationProviderGroup6.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationProviderGroup7.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationProviderGroup8.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ConsoleAuthenticationRealm.IsNull() {
+				childBody, _ = sjson.Set(childBody, "realm", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaConsoleAuth"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		for key, child := range data.DefaultAuthorizations {
+			childBody := ""
+			childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+			childBody, _ = sjson.Set(childBody, "authorMethodNone", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "localRbac", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaDefaultAuthor.attributes", childBody)
+		}
+		{
+			childBody := ""
+			if !data.DefaultAccountingMethodNone.IsNull() {
+				childBody, _ = sjson.Set(childBody, "accMethodNone", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingDescription.IsNull() {
+				childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingLocalRbac.IsNull() {
+				childBody, _ = sjson.Set(childBody, "localRbac", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingOwnerKey.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingOwnerTag.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingProviderGroup.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingProviderGroup2.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingProviderGroup3.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingProviderGroup4.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingProviderGroup5.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingProviderGroup6.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingProviderGroup7.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingProviderGroup8.IsNull() {
+				childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DefaultAccountingRealm.IsNull() {
+				childBody, _ = sjson.Set(childBody, "realm", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaDefaultAcc"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1342,6 +2432,27 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.aaaTacacsPlusEp.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.DefaultAuthorizations {
+		if _, found := data.DefaultAuthorizations[stateKey]; !found {
+			stateChild := state.DefaultAuthorizations[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.authorMethodNone", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.localRbac", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.providerGroup", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.aaaAuthRealm.children"+".-1", deleteBody)
 		}
 	}
 	return body

@@ -63,7 +63,7 @@ func (r *UserManagementResource) Metadata(ctx context.Context, req resource.Meta
 func (r *UserManagementResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/", "Security%20and%20Policing/aaa:AuthRealm/", "Security%20and%20Policing/aaa:DefaultAuth/", "Security%20and%20Policing/aaa:ConsoleAuth/", "Security%20and%20Policing/aaa:DefaultAuthor/", "Security%20and%20Policing/aaa:DefaultAcc/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -542,6 +542,339 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 					},
 				},
 			},
+			"authentication_realm_default_role_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The default role policy for the remote user with invalid CiscoAVPairs. CiscoAVPairs provide support for Remote Access Dial-In User Service attribute-value (AV) pairs.").AddStringEnumDescription("no-login", "assign-default-role").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no-login", "assign-default-role"),
+				},
+			},
+			"authentication_realm_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+				Optional:            true,
+			},
+			"authentication_realm_logging_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("AAA Logging level.").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"authentication_realm_owner_key": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The key for enabling clients to own their data for entity correlation.").String,
+				Optional:            true,
+			},
+			"authentication_realm_owner_tag": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A tag for enabling clients to add their own data. For example, to indicate who created this object.").String,
+				Optional:            true,
+			},
+			"authentication_realm_radius_directed_request": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable direct authentication requests to server.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"authentication_realm_tacacs_directed_request": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable direct authentication requests to server.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"default_authentication_protocol": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Authentication Protocol.").AddStringEnumDescription("pap", "chap", "mschap", "mschapv2", "ascii").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("pap", "chap", "mschap", "mschapv2", "ascii"),
+				},
+			},
+			"default_authentication_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+				Optional:            true,
+			},
+			"default_authentication_error_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable display of error message on login failures.").String,
+				Optional:            true,
+			},
+			"default_authentication_fallback": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Fallback in case all AAA servers configured for remote authentication are unreachable.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"default_authentication_invalid_user_log": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable logging for invalid users.").String,
+				Optional:            true,
+			},
+			"default_authentication_local": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use local username authentication.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"default_authentication_none": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("No authentication.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"default_authentication_owner_key": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The key for enabling clients to own their data for entity correlation.").String,
+				Optional:            true,
+			},
+			"default_authentication_owner_tag": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A tag for enabling clients to add their own data. For example, to indicate who created this object.").String,
+				Optional:            true,
+			},
+			"default_authentication_provider_group": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_authentication_provider_group_2": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_authentication_provider_group_3": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_authentication_provider_group_4": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_authentication_provider_group_5": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_authentication_provider_group_6": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_authentication_provider_group_7": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_authentication_provider_group_8": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_authentication_realm": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Realm.").AddStringEnumDescription("local", "radius", "tacacs", "ldap").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("local", "radius", "tacacs", "ldap"),
+				},
+			},
+			"console_authentication_protocol": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Authentication Protocol.").AddStringEnumDescription("pap", "chap", "mschap", "mschapv2", "ascii").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("pap", "chap", "mschap", "mschapv2", "ascii"),
+				},
+			},
+			"console_authentication_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+				Optional:            true,
+			},
+			"console_authentication_error_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable display of error message on login failures.").String,
+				Optional:            true,
+			},
+			"console_authentication_fallback": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Fallback in case all AAA servers configured for remote authentication are unreachable.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"console_authentication_invalid_user_log": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable logging for invalid users.").String,
+				Optional:            true,
+			},
+			"console_authentication_local": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use local username authentication.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"console_authentication_none": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("No authentication.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"console_authentication_owner_key": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The key for enabling clients to own their data for entity correlation.").String,
+				Optional:            true,
+			},
+			"console_authentication_owner_tag": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A tag for enabling clients to add their own data. For example, to indicate who created this object.").String,
+				Optional:            true,
+			},
+			"console_authentication_provider_group": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"console_authentication_provider_group_2": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"console_authentication_provider_group_3": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"console_authentication_provider_group_4": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"console_authentication_provider_group_5": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"console_authentication_provider_group_6": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"console_authentication_provider_group_7": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"console_authentication_provider_group_8": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"console_authentication_realm": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Realm.").AddStringEnumDescription("local", "radius", "tacacs", "ldap").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("local", "radius", "tacacs", "ldap"),
+				},
+			},
+			"default_authorizations": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default authorization methods.\n  - Map key: `command_type` - Type of command for authorization.\n  - Key choices: `config`, `exec`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"authorization_method_none": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("No authorization.").String,
+							Optional:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"local_rbac": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use Local RBAC based Authorization.").String,
+							Optional:            true,
+						},
+						"owner_key": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The key for enabling clients to own their data for entity correlation.").String,
+							Optional:            true,
+						},
+						"owner_tag": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("A tag for enabling clients to add their own data. For example, to indicate who created this object.").String,
+							Optional:            true,
+						},
+						"provider_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+							Optional:            true,
+						},
+						"provider_group_2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+							Optional:            true,
+						},
+						"provider_group_3": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+							Optional:            true,
+						},
+						"provider_group_4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+							Optional:            true,
+						},
+						"provider_group_5": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+							Optional:            true,
+						},
+						"provider_group_6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+							Optional:            true,
+						},
+						"provider_group_7": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+							Optional:            true,
+						},
+						"provider_group_8": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"default_accounting_method_none": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("No accounting.").String,
+				Optional:            true,
+			},
+			"default_accounting_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+				Optional:            true,
+			},
+			"default_accounting_local_rbac": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use Local.").String,
+				Optional:            true,
+			},
+			"default_accounting_owner_key": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The key for enabling clients to own their data for entity correlation.").String,
+				Optional:            true,
+			},
+			"default_accounting_owner_tag": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A tag for enabling clients to add their own data. For example, to indicate who created this object.").String,
+				Optional:            true,
+			},
+			"default_accounting_provider_group": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_accounting_provider_group_2": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_accounting_provider_group_3": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_accounting_provider_group_4": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_accounting_provider_group_5": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_accounting_provider_group_6": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_accounting_provider_group_7": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_accounting_provider_group_8": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provider Group.").String,
+				Optional:            true,
+			},
+			"default_accounting_realm": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Realm.").AddStringEnumDescription("local", "radius", "tacacs", "ldap").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("local", "radius", "tacacs", "ldap"),
+				},
+			},
 		},
 	}
 }
@@ -651,7 +984,7 @@ func (r *UserManagementResource) Read(ctx context.Context, req resource.ReadRequ
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "aaaPreLoginBanner,aaaPostLoginBanner,aaaUser,aaaUserDomain,aaaUserRole,aaaTacacsPlusEp,aaaTacacsPlusProvider,aaaTacacsPlusProviderGroup")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "aaaPreLoginBanner,aaaPostLoginBanner,aaaUser,aaaUserDomain,aaaUserRole,aaaTacacsPlusEp,aaaTacacsPlusProvider,aaaTacacsPlusProviderGroup,aaaAuthRealm,aaaDefaultAuth,aaaConsoleAuth,aaaDefaultAuthor,aaaDefaultAcc")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

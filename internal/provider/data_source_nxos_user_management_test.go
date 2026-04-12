@@ -88,6 +88,47 @@ func TestAccDataSourceNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.source_interface", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_default_role_policy", "no-login"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_description", "AAA authentication realm"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_radius_directed_request", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_tacacs_directed_request", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_protocol", "chap"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_description", "Default authentication"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_error_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_fallback", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_invalid_user_log", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_local", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_none", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_provider_group", "TACACS_GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_realm", "tacacs"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_protocol", "chap"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_description", "Console authentication"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_error_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_fallback", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_invalid_user_log", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_local", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_none", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_provider_group", "TACACS_GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_realm", "tacacs"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.authorization_method_none", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.description", "Default authorization"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.local_rbac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.provider_group", "TACACS_GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_method_none", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_description", "Default accounting"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_local_rbac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_provider_group", "TACACS_GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_realm", "tacacs"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -193,6 +234,51 @@ func testAccDataSourceNxosUserManagementConfig() string {
 	config += `			vrf = "default"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	authentication_realm_default_role_policy = "no-login"` + "\n"
+	config += `	authentication_realm_description = "AAA authentication realm"` + "\n"
+	config += `	authentication_realm_owner_key = "owner1"` + "\n"
+	config += `	authentication_realm_owner_tag = "tag1"` + "\n"
+	config += `	authentication_realm_radius_directed_request = "yes"` + "\n"
+	config += `	authentication_realm_tacacs_directed_request = "yes"` + "\n"
+	config += `	default_authentication_protocol = "chap"` + "\n"
+	config += `	default_authentication_description = "Default authentication"` + "\n"
+	config += `	default_authentication_error_enable = true` + "\n"
+	config += `	default_authentication_fallback = "no"` + "\n"
+	config += `	default_authentication_invalid_user_log = true` + "\n"
+	config += `	default_authentication_local = "no"` + "\n"
+	config += `	default_authentication_none = "no"` + "\n"
+	config += `	default_authentication_owner_key = "owner1"` + "\n"
+	config += `	default_authentication_owner_tag = "tag1"` + "\n"
+	config += `	default_authentication_provider_group = "TACACS_GROUP1"` + "\n"
+	config += `	default_authentication_realm = "tacacs"` + "\n"
+	config += `	console_authentication_protocol = "chap"` + "\n"
+	config += `	console_authentication_description = "Console authentication"` + "\n"
+	config += `	console_authentication_error_enable = true` + "\n"
+	config += `	console_authentication_fallback = "no"` + "\n"
+	config += `	console_authentication_invalid_user_log = true` + "\n"
+	config += `	console_authentication_local = "no"` + "\n"
+	config += `	console_authentication_none = "no"` + "\n"
+	config += `	console_authentication_owner_key = "owner1"` + "\n"
+	config += `	console_authentication_owner_tag = "tag1"` + "\n"
+	config += `	console_authentication_provider_group = "TACACS_GROUP1"` + "\n"
+	config += `	console_authentication_realm = "tacacs"` + "\n"
+	config += `	default_authorizations = {` + "\n"
+	config += `		"config" = {` + "\n"
+	config += `			authorization_method_none = false` + "\n"
+	config += `			description = "Default authorization"` + "\n"
+	config += `			local_rbac = true` + "\n"
+	config += `			owner_key = "owner1"` + "\n"
+	config += `			owner_tag = "tag1"` + "\n"
+	config += `			provider_group = "TACACS_GROUP1"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	default_accounting_method_none = false` + "\n"
+	config += `	default_accounting_description = "Default accounting"` + "\n"
+	config += `	default_accounting_local_rbac = true` + "\n"
+	config += `	default_accounting_owner_key = "owner1"` + "\n"
+	config += `	default_accounting_owner_tag = "tag1"` + "\n"
+	config += `	default_accounting_provider_group = "TACACS_GROUP1"` + "\n"
+	config += `	default_accounting_realm = "tacacs"` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

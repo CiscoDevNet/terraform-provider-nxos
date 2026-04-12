@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
   API Documentation
-  aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanneraaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanneraaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/
+  aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanneraaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanneraaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/aaaAuthRealm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:AuthRealm/aaaDefaultAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuth/aaaConsoleAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/aaaDefaultAuthor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuthor/aaaDefaultAcc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAcc/
 ---
 
 # nxos_user_management (Resource)
@@ -23,6 +23,11 @@ This resource can manage the user management configuration on NX-OS devices, inc
 - [aaaTacacsPlusEp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/)
 - [aaaTacacsPlusProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/)
 - [aaaTacacsPlusProviderGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/)
+- [aaaAuthRealm](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:AuthRealm/)
+- [aaaDefaultAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuth/)
+- [aaaConsoleAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/)
+- [aaaDefaultAuthor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuthor/)
+- [aaaDefaultAcc](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAcc/)
 
 ## Example Usage
 
@@ -116,6 +121,80 @@ resource "nxos_user_management" "example" {
       vrf              = "default"
     }
   }
+  authentication_realm_default_role_policy     = "no-login"
+  authentication_realm_description             = "AAA authentication realm"
+  authentication_realm_logging_level           = 4
+  authentication_realm_owner_key               = "owner1"
+  authentication_realm_owner_tag               = "tag1"
+  authentication_realm_radius_directed_request = "yes"
+  authentication_realm_tacacs_directed_request = "yes"
+  default_authentication_protocol              = "chap"
+  default_authentication_description           = "Default authentication"
+  default_authentication_error_enable          = true
+  default_authentication_fallback              = "no"
+  default_authentication_invalid_user_log      = true
+  default_authentication_local                 = "no"
+  default_authentication_none                  = "no"
+  default_authentication_owner_key             = "owner1"
+  default_authentication_owner_tag             = "tag1"
+  default_authentication_provider_group        = "TACACS_GROUP1"
+  default_authentication_provider_group_2      = "GROUP2"
+  default_authentication_provider_group_3      = "GROUP3"
+  default_authentication_provider_group_4      = "GROUP4"
+  default_authentication_provider_group_5      = "GROUP5"
+  default_authentication_provider_group_6      = "GROUP6"
+  default_authentication_provider_group_7      = "GROUP7"
+  default_authentication_provider_group_8      = "GROUP8"
+  default_authentication_realm                 = "tacacs"
+  console_authentication_protocol              = "chap"
+  console_authentication_description           = "Console authentication"
+  console_authentication_error_enable          = true
+  console_authentication_fallback              = "no"
+  console_authentication_invalid_user_log      = true
+  console_authentication_local                 = "no"
+  console_authentication_none                  = "no"
+  console_authentication_owner_key             = "owner1"
+  console_authentication_owner_tag             = "tag1"
+  console_authentication_provider_group        = "TACACS_GROUP1"
+  console_authentication_provider_group_2      = "GROUP2"
+  console_authentication_provider_group_3      = "GROUP3"
+  console_authentication_provider_group_4      = "GROUP4"
+  console_authentication_provider_group_5      = "GROUP5"
+  console_authentication_provider_group_6      = "GROUP6"
+  console_authentication_provider_group_7      = "GROUP7"
+  console_authentication_provider_group_8      = "GROUP8"
+  console_authentication_realm                 = "tacacs"
+  default_authorizations = {
+    "config" = {
+      authorization_method_none = false
+      description               = "Default authorization"
+      local_rbac                = true
+      owner_key                 = "owner1"
+      owner_tag                 = "tag1"
+      provider_group            = "TACACS_GROUP1"
+      provider_group_2          = "GROUP2"
+      provider_group_3          = "GROUP3"
+      provider_group_4          = "GROUP4"
+      provider_group_5          = "GROUP5"
+      provider_group_6          = "GROUP6"
+      provider_group_7          = "GROUP7"
+      provider_group_8          = "GROUP8"
+    }
+  }
+  default_accounting_method_none      = false
+  default_accounting_description      = "Default accounting"
+  default_accounting_local_rbac       = true
+  default_accounting_owner_key        = "owner1"
+  default_accounting_owner_tag        = "tag1"
+  default_accounting_provider_group   = "TACACS_GROUP1"
+  default_accounting_provider_group_2 = "GROUP2"
+  default_accounting_provider_group_3 = "GROUP3"
+  default_accounting_provider_group_4 = "GROUP4"
+  default_accounting_provider_group_5 = "GROUP5"
+  default_accounting_provider_group_6 = "GROUP6"
+  default_accounting_provider_group_7 = "GROUP7"
+  default_accounting_provider_group_8 = "GROUP8"
+  default_accounting_realm            = "tacacs"
 }
 ```
 
@@ -128,6 +207,81 @@ resource "nxos_user_management" "example" {
 
 - `alphabet_sequence` (Number) Disallow sequential alphabetical characters in password.
   - Range: `0`-`10`
+- `authentication_realm_default_role_policy` (String) The default role policy for the remote user with invalid CiscoAVPairs. CiscoAVPairs provide support for Remote Access Dial-In User Service attribute-value (AV) pairs.
+  - Choices: `no-login`, `assign-default-role`
+- `authentication_realm_description` (String) Description of the specified attribute.
+- `authentication_realm_logging_level` (Number) AAA Logging level.
+  - Range: `0`-`7`
+- `authentication_realm_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `authentication_realm_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `authentication_realm_radius_directed_request` (String) Enable direct authentication requests to server.
+  - Choices: `no`, `yes`
+- `authentication_realm_tacacs_directed_request` (String) Enable direct authentication requests to server.
+  - Choices: `no`, `yes`
+- `console_authentication_description` (String) Description of the specified attribute.
+- `console_authentication_error_enable` (Boolean) Enable display of error message on login failures.
+- `console_authentication_fallback` (String) Fallback in case all AAA servers configured for remote authentication are unreachable.
+  - Choices: `no`, `yes`
+- `console_authentication_invalid_user_log` (Boolean) Enable logging for invalid users.
+- `console_authentication_local` (String) Use local username authentication.
+  - Choices: `no`, `yes`
+- `console_authentication_none` (String) No authentication.
+  - Choices: `no`, `yes`
+- `console_authentication_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `console_authentication_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `console_authentication_protocol` (String) Authentication Protocol.
+  - Choices: `pap`, `chap`, `mschap`, `mschapv2`, `ascii`
+- `console_authentication_provider_group` (String) Provider Group.
+- `console_authentication_provider_group_2` (String) Provider Group.
+- `console_authentication_provider_group_3` (String) Provider Group.
+- `console_authentication_provider_group_4` (String) Provider Group.
+- `console_authentication_provider_group_5` (String) Provider Group.
+- `console_authentication_provider_group_6` (String) Provider Group.
+- `console_authentication_provider_group_7` (String) Provider Group.
+- `console_authentication_provider_group_8` (String) Provider Group.
+- `console_authentication_realm` (String) Realm.
+  - Choices: `local`, `radius`, `tacacs`, `ldap`
+- `default_accounting_description` (String) Description of the specified attribute.
+- `default_accounting_local_rbac` (Boolean) Use Local.
+- `default_accounting_method_none` (Boolean) No accounting.
+- `default_accounting_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `default_accounting_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `default_accounting_provider_group` (String) Provider Group.
+- `default_accounting_provider_group_2` (String) Provider Group.
+- `default_accounting_provider_group_3` (String) Provider Group.
+- `default_accounting_provider_group_4` (String) Provider Group.
+- `default_accounting_provider_group_5` (String) Provider Group.
+- `default_accounting_provider_group_6` (String) Provider Group.
+- `default_accounting_provider_group_7` (String) Provider Group.
+- `default_accounting_provider_group_8` (String) Provider Group.
+- `default_accounting_realm` (String) Realm.
+  - Choices: `local`, `radius`, `tacacs`, `ldap`
+- `default_authentication_description` (String) Description of the specified attribute.
+- `default_authentication_error_enable` (Boolean) Enable display of error message on login failures.
+- `default_authentication_fallback` (String) Fallback in case all AAA servers configured for remote authentication are unreachable.
+  - Choices: `no`, `yes`
+- `default_authentication_invalid_user_log` (Boolean) Enable logging for invalid users.
+- `default_authentication_local` (String) Use local username authentication.
+  - Choices: `no`, `yes`
+- `default_authentication_none` (String) No authentication.
+  - Choices: `no`, `yes`
+- `default_authentication_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `default_authentication_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `default_authentication_protocol` (String) Authentication Protocol.
+  - Choices: `pap`, `chap`, `mschap`, `mschapv2`, `ascii`
+- `default_authentication_provider_group` (String) Provider Group.
+- `default_authentication_provider_group_2` (String) Provider Group.
+- `default_authentication_provider_group_3` (String) Provider Group.
+- `default_authentication_provider_group_4` (String) Provider Group.
+- `default_authentication_provider_group_5` (String) Provider Group.
+- `default_authentication_provider_group_6` (String) Provider Group.
+- `default_authentication_provider_group_7` (String) Provider Group.
+- `default_authentication_provider_group_8` (String) Provider Group.
+- `default_authentication_realm` (String) Realm.
+  - Choices: `local`, `radius`, `tacacs`, `ldap`
+- `default_authorizations` (Attributes Map) Default authorization methods.
+  - Map key: `command_type` - Type of command for authorization.
+  - Key choices: `config`, `exec` (see [below for nested schema](#nestedatt--default_authorizations))
 - `description` (String) Description of the specified attribute.
 - `device` (String) A device name from the provider configuration.
 - `keyboard_sequence` (Number) Disallow sequential keyboard characters in password.
@@ -190,6 +344,26 @@ resource "nxos_user_management" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--default_authorizations"></a>
+### Nested Schema for `default_authorizations`
+
+Optional:
+
+- `authorization_method_none` (Boolean) No authorization.
+- `description` (String) Description of the specified attribute.
+- `local_rbac` (Boolean) Use Local RBAC based Authorization.
+- `owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `provider_group` (String) Provider Group.
+- `provider_group_2` (String) Provider Group.
+- `provider_group_3` (String) Provider Group.
+- `provider_group_4` (String) Provider Group.
+- `provider_group_5` (String) Provider Group.
+- `provider_group_6` (String) Provider Group.
+- `provider_group_7` (String) Provider Group.
+- `provider_group_8` (String) Provider Group.
+
 
 <a id="nestedatt--tacacs_provider_groups"></a>
 ### Nested Schema for `tacacs_provider_groups`

@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
   API Documentation
-  aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanneraaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanneraaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/
+  aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanneraaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanneraaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/aaaAuthRealm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:AuthRealm/aaaDefaultAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuth/aaaConsoleAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/aaaDefaultAuthor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuthor/aaaDefaultAcc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAcc/
 ---
 
 # nxos_user_management (Data Source)
@@ -23,6 +23,11 @@ This data source can read the user management configuration on NX-OS devices, in
 - [aaaTacacsPlusEp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/)
 - [aaaTacacsPlusProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/)
 - [aaaTacacsPlusProviderGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/)
+- [aaaAuthRealm](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:AuthRealm/)
+- [aaaDefaultAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuth/)
+- [aaaConsoleAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/)
+- [aaaDefaultAuthor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuthor/)
+- [aaaDefaultAcc](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAcc/)
 
 ## Example Usage
 
@@ -41,6 +46,66 @@ data "nxos_user_management" "example" {
 ### Read-Only
 
 - `alphabet_sequence` (Number) Disallow sequential alphabetical characters in password.
+- `authentication_realm_default_role_policy` (String) The default role policy for the remote user with invalid CiscoAVPairs. CiscoAVPairs provide support for Remote Access Dial-In User Service attribute-value (AV) pairs.
+- `authentication_realm_description` (String) Description of the specified attribute.
+- `authentication_realm_logging_level` (Number) AAA Logging level.
+- `authentication_realm_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `authentication_realm_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `authentication_realm_radius_directed_request` (String) Enable direct authentication requests to server.
+- `authentication_realm_tacacs_directed_request` (String) Enable direct authentication requests to server.
+- `console_authentication_description` (String) Description of the specified attribute.
+- `console_authentication_error_enable` (Boolean) Enable display of error message on login failures.
+- `console_authentication_fallback` (String) Fallback in case all AAA servers configured for remote authentication are unreachable.
+- `console_authentication_invalid_user_log` (Boolean) Enable logging for invalid users.
+- `console_authentication_local` (String) Use local username authentication.
+- `console_authentication_none` (String) No authentication.
+- `console_authentication_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `console_authentication_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `console_authentication_protocol` (String) Authentication Protocol.
+- `console_authentication_provider_group` (String) Provider Group.
+- `console_authentication_provider_group_2` (String) Provider Group.
+- `console_authentication_provider_group_3` (String) Provider Group.
+- `console_authentication_provider_group_4` (String) Provider Group.
+- `console_authentication_provider_group_5` (String) Provider Group.
+- `console_authentication_provider_group_6` (String) Provider Group.
+- `console_authentication_provider_group_7` (String) Provider Group.
+- `console_authentication_provider_group_8` (String) Provider Group.
+- `console_authentication_realm` (String) Realm.
+- `default_accounting_description` (String) Description of the specified attribute.
+- `default_accounting_local_rbac` (Boolean) Use Local.
+- `default_accounting_method_none` (Boolean) No accounting.
+- `default_accounting_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `default_accounting_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `default_accounting_provider_group` (String) Provider Group.
+- `default_accounting_provider_group_2` (String) Provider Group.
+- `default_accounting_provider_group_3` (String) Provider Group.
+- `default_accounting_provider_group_4` (String) Provider Group.
+- `default_accounting_provider_group_5` (String) Provider Group.
+- `default_accounting_provider_group_6` (String) Provider Group.
+- `default_accounting_provider_group_7` (String) Provider Group.
+- `default_accounting_provider_group_8` (String) Provider Group.
+- `default_accounting_realm` (String) Realm.
+- `default_authentication_description` (String) Description of the specified attribute.
+- `default_authentication_error_enable` (Boolean) Enable display of error message on login failures.
+- `default_authentication_fallback` (String) Fallback in case all AAA servers configured for remote authentication are unreachable.
+- `default_authentication_invalid_user_log` (Boolean) Enable logging for invalid users.
+- `default_authentication_local` (String) Use local username authentication.
+- `default_authentication_none` (String) No authentication.
+- `default_authentication_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `default_authentication_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `default_authentication_protocol` (String) Authentication Protocol.
+- `default_authentication_provider_group` (String) Provider Group.
+- `default_authentication_provider_group_2` (String) Provider Group.
+- `default_authentication_provider_group_3` (String) Provider Group.
+- `default_authentication_provider_group_4` (String) Provider Group.
+- `default_authentication_provider_group_5` (String) Provider Group.
+- `default_authentication_provider_group_6` (String) Provider Group.
+- `default_authentication_provider_group_7` (String) Provider Group.
+- `default_authentication_provider_group_8` (String) Provider Group.
+- `default_authentication_realm` (String) Realm.
+- `default_authorizations` (Attributes Map) Default authorization methods.
+  - Map key: `command_type` - Type of command for authorization.
+  - Key choices: `config`, `exec` (see [below for nested schema](#nestedatt--default_authorizations))
 - `description` (String) Description of the specified attribute.
 - `id` (String) The distinguished name of the object.
 - `keyboard_sequence` (Number) Disallow sequential keyboard characters in password.
@@ -83,6 +148,26 @@ data "nxos_user_management" "example" {
 - `tacacs_timeout` (Number) The amount of time between authentication attempts.
 - `users` (Attributes Map) List of users.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--users))
+
+<a id="nestedatt--default_authorizations"></a>
+### Nested Schema for `default_authorizations`
+
+Read-Only:
+
+- `authorization_method_none` (Boolean) No authorization.
+- `description` (String) Description of the specified attribute.
+- `local_rbac` (Boolean) Use Local RBAC based Authorization.
+- `owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `provider_group` (String) Provider Group.
+- `provider_group_2` (String) Provider Group.
+- `provider_group_3` (String) Provider Group.
+- `provider_group_4` (String) Provider Group.
+- `provider_group_5` (String) Provider Group.
+- `provider_group_6` (String) Provider Group.
+- `provider_group_7` (String) Provider Group.
+- `provider_group_8` (String) Provider Group.
+
 
 <a id="nestedatt--tacacs_provider_groups"></a>
 ### Nested Schema for `tacacs_provider_groups`

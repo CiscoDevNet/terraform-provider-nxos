@@ -4,6 +4,11 @@
 - Add storm control policy attributes to `nxos_port_channel_interface` resource and data source
 - Add boot configuration and boot image attributes to `nxos_system` resource and data source
 - Add Smart Licensing transport mode and CSLU URL attributes to `nxos_system` resource and data source
+- Add AAA authentication realm configuration to `nxos_user_management` resource and data source
+- Add default authentication configuration to `nxos_user_management` resource and data source
+- Add console authentication configuration to `nxos_user_management` resource and data source
+- Add default authorization configuration to `nxos_user_management` resource and data source
+- Add default accounting configuration to `nxos_user_management` resource and data source
 - Add VDC and resource limit attributes to `nxos_system` resource and data source
 - Add DNS configuration support to `nxos_system` resource
 - Add optional per-device `username` and `password` attributes to override provider-level credentials

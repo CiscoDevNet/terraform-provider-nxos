@@ -9,6 +9,8 @@ description: |-
 
 ## Unreleased
 
+- Add NTP source interface configuration to `nxos_ntp` resource and data source
+- Add NTP access group configuration to `nxos_ntp` resource and data source
 - Add CLI alias configuration to `nxos_system` resource and data source
 - Add storm control policy attributes to `nxos_physical_interface` resource and data source
 - Add storm control policy attributes to `nxos_port_channel_interface` resource and data source

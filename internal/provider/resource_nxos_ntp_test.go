@@ -51,6 +51,12 @@ func TestAccNxosNTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.min_poll", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.max_poll", "6"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.preferred", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_match_all", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_peer", "PeerAcl"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_query_only", "QueryOnlyAcl"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_serve", "ServeAcl"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_serve_only", "ServeOnlyAcl"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -127,6 +133,12 @@ func testAccNxosNTPConfig_all() string {
 	config += `			preferred = true` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	source_interface = "lo0"` + "\n"
+	config += `	access_group_match_all = "enabled"` + "\n"
+	config += `	access_group_peer = "PeerAcl"` + "\n"
+	config += `	access_group_query_only = "QueryOnlyAcl"` + "\n"
+	config += `	access_group_serve = "ServeAcl"` + "\n"
+	config += `	access_group_serve_only = "ServeOnlyAcl"` + "\n"
 	config += `}` + "\n"
 	return config
 }

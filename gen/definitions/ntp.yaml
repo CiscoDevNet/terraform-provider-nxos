@@ -146,3 +146,50 @@ child_classes:
         type: Bool
         description: 'A property that indicates if the NTP server is preferred. Only one preferred server is allowed.'
         example: true
+  - class_name: datetimeNtpSrcIf
+    rn: srcIf
+    type: single
+    tf_name: source_interface
+    description: 'NTP source interface.'
+    doc_path: System/datetime:NtpSrcIf/
+    attributes:
+      - nxos_name: srcIf
+        tf_name: source_interface
+        type: String
+        description: 'Source Interface.'
+        example: lo0
+  - class_name: datetimeAccessGroup
+    rn: accessgroup
+    type: single
+    tf_name: access_group
+    description: 'NTP Access Group.'
+    doc_path: System/datetime:AccessGroup/
+    attributes:
+      - nxos_name: matchAll
+        tf_name: access_group_match_all
+        type: String
+        description: 'Scan All NTP Access-Group Options.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: peer
+        tf_name: access_group_peer
+        type: String
+        description: 'NTP Peer Access Group Name (max 63 characters).'
+        example: PeerAcl
+      - nxos_name: queryOnly
+        tf_name: access_group_query_only
+        type: String
+        description: 'NTP QueryOnly Access Group Name (max 63 characters).'
+        example: QueryOnlyAcl
+      - nxos_name: serve
+        tf_name: access_group_serve
+        type: String
+        description: 'NTP Serve Access Group Name (max 63 characters).'
+        example: ServeAcl
+      - nxos_name: serveOnly
+        tf_name: access_group_serve_only
+        type: String
+        description: 'NTP ServeOnly Access Group Name (max 63 characters).'
+        example: ServeOnlyAcl

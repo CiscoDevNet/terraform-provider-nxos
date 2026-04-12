@@ -326,3 +326,48 @@ child_classes:
               - "yes"
               - unspecified
             example: "yes"
+      - class_name: snmpRmon
+        doc_path: System/snmp:Rmon/
+        rn: rmon
+        type: single
+        tf_name: rmon
+        description: 'SNMP RMON configurations.'
+        child_classes:
+          - class_name: snmpEvent
+            doc_path: System/snmp:Event/
+            rn: event-[%d]
+            type: list
+            tf_name: rmon_events
+            description: 'List of SNMP RMON event configurations.'
+            attributes:
+              - nxos_name: num
+                tf_name: number
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 65535
+                description: 'rmon event number.'
+                example: 1
+              - nxos_name: description
+                tf_name: description
+                type: String
+                description: 'rmon event description.'
+                example: 'Test event'
+              - nxos_name: log
+                tf_name: log
+                type: String
+                description: 'Whether to generate / not log when alarm event is fired.'
+                enum_values:
+                  - "no"
+                  - "yes"
+                example: "yes"
+              - nxos_name: owner
+                tf_name: owner
+                type: String
+                description: 'rmon event owner.'
+                example: 'admin'
+              - nxos_name: trap
+                tf_name: trap
+                type: String
+                description: 'rmon event description.'
+                example: 'public'

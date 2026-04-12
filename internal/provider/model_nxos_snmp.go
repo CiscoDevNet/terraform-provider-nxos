@@ -59,6 +59,7 @@ type SNMP struct {
 	LocalUsers               map[string]SNMPLocalUsers `tfsdk:"local_users"`
 	Hosts                    map[string]SNMPHosts      `tfsdk:"hosts"`
 	EnableAll                types.String              `tfsdk:"enable_all"`
+	RmonEvents               map[string]SNMPRmonEvents `tfsdk:"rmon_events"`
 }
 
 type SNMPLocalUsers struct {
@@ -89,6 +90,13 @@ type SNMPHosts struct {
 	NotificationType types.String `tfsdk:"notification_type"`
 	SecurityLevel    types.String `tfsdk:"security_level"`
 	Version          types.String `tfsdk:"version"`
+}
+
+type SNMPRmonEvents struct {
+	Description types.String `tfsdk:"description"`
+	Log         types.String `tfsdk:"log"`
+	Owner       types.String `tfsdk:"owner"`
+	Trap        types.String `tfsdk:"trap"`
 }
 
 type SNMPIdentity struct {
@@ -130,6 +138,10 @@ func (data SNMPLocalUsersGroups) getRn(key string) string {
 func (data SNMPHosts) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("host-[%s]-udp-[%d]", keyParts[0], helpers.Must(strconv.ParseInt(keyParts[1], 10, 64)))
+}
+
+func (data SNMPRmonEvents) getRn(key string) string {
+	return fmt.Sprintf("event-[%d]", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
 func (data SNMP) getClassName() string {
@@ -294,6 +306,30 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTraps.attributes", attrs)
 		}
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRmon"
+			attrs = "{}"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			for key, child := range data.RmonEvents {
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "num", key)
+				if !child.Description.IsUnknown() && !child.Description.IsNull() {
+					attrs, _ = sjson.Set(attrs, "description", child.Description.ValueString())
+				}
+				if !child.Log.IsUnknown() && !child.Log.IsNull() {
+					attrs, _ = sjson.Set(attrs, "log", child.Log.ValueString())
+				}
+				if !child.Owner.IsUnknown() && !child.Owner.IsNull() {
+					attrs, _ = sjson.Set(attrs, "owner", child.Owner.ValueString())
+				}
+				if !child.Trap.IsUnknown() && !child.Trap.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trap", child.Trap.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEvent.attributes", attrs)
+			}
+		}
 	}
 
 	return nxos.Body{Str: body}
@@ -451,6 +487,41 @@ func (data *SNMP) fromBody(res gjson.Result) {
 				},
 			)
 			data.EnableAll = types.StringValue(rsnmpTraps.Get("snmpTraps.attributes.enableAllViaCLI").String())
+		}
+		{
+			var rsnmpRmon gjson.Result
+			rsnmpInst.Get("snmpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpRmon.attributes.rn").String()
+					if rnValue == "rmon" {
+						rsnmpRmon = v
+						return false
+					}
+					return true
+				},
+			)
+			rsnmpRmon.Get("snmpRmon.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "snmpEvent" {
+								var child SNMPRmonEvents
+								child.Description = types.StringValue(value.Get("attributes.description").String())
+								child.Log = types.StringValue(value.Get("attributes.log").String())
+								child.Owner = types.StringValue(value.Get("attributes.owner").String())
+								child.Trap = types.StringValue(value.Get("attributes.trap").String())
+								mapKey := value.Get("attributes.num").String()
+								if data.RmonEvents == nil {
+									data.RmonEvents = make(map[string]SNMPRmonEvents)
+								}
+								data.RmonEvents[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
 		}
 	}
 }
@@ -727,6 +798,56 @@ func (data *SNMP) updateFromBody(res gjson.Result) {
 			data.EnableAll = types.StringNull()
 		}
 	}
+	{
+		var rsnmpRmon gjson.Result
+		rsnmpInst.Get("snmpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("snmpRmon.attributes.rn").String()
+				if rnValue == "rmon" {
+					rsnmpRmon = v
+					return false
+				}
+				return true
+			},
+		)
+		for key, item := range data.RmonEvents {
+			var rsnmpEvent gjson.Result
+			rsnmpRmon.Get("snmpRmon.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("snmpEvent.attributes.num").String() == key {
+						rsnmpEvent = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rsnmpEvent.Exists() {
+				delete(data.RmonEvents, key)
+				continue
+			}
+			if !item.Description.IsNull() {
+				item.Description = types.StringValue(rsnmpEvent.Get("snmpEvent.attributes.description").String())
+			} else {
+				item.Description = types.StringNull()
+			}
+			if !item.Log.IsNull() {
+				item.Log = types.StringValue(rsnmpEvent.Get("snmpEvent.attributes.log").String())
+			} else {
+				item.Log = types.StringNull()
+			}
+			if !item.Owner.IsNull() {
+				item.Owner = types.StringValue(rsnmpEvent.Get("snmpEvent.attributes.owner").String())
+			} else {
+				item.Owner = types.StringNull()
+			}
+			if !item.Trap.IsNull() {
+				item.Trap = types.StringValue(rsnmpEvent.Get("snmpEvent.attributes.trap").String())
+			} else {
+				item.Trap = types.StringNull()
+			}
+			data.RmonEvents[key] = item
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -836,6 +957,12 @@ func (data SNMP) toDeleteBody() nxos.Body {
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			}
 		}
+		{
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "snmpRmon.attributes.rn", "rmon")
+			deleteBody, _ = sjson.Set(deleteBody, "snmpRmon.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
 	}
 
 	return nxos.Body{Str: body}
@@ -887,6 +1014,15 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP)
 			deleteBody, _ = sjson.Set(deleteBody, "snmpHost.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "snmpHost.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.snmpInst.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.RmonEvents {
+		if _, found := data.RmonEvents[stateKey]; !found {
+			stateChild := state.RmonEvents[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "snmpEvent.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "snmpEvent.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.snmpInst.children"+".0.snmpRmon.children"+".-1", deleteBody)
 		}
 	}
 	return body

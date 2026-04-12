@@ -42,4 +42,12 @@ resource "nxos_snmp" "example" {
     }
   }
   enable_all = "yes"
+  rmon_events = {
+    "1" = {
+      description = "Test event"
+      log         = "yes"
+      owner       = "admin"
+      trap        = "public"
+    }
+  }
 }

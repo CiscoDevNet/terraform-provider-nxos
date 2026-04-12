@@ -57,6 +57,10 @@ func TestAccDataSourceNxosSNMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.security_level", "auth"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.version", "v3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "enable_all", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.description", "Test event"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.log", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.owner", "admin"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.trap", "public"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -118,6 +122,14 @@ func testAccDataSourceNxosSNMPConfig() string {
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	enable_all = "yes"` + "\n"
+	config += `	rmon_events = {` + "\n"
+	config += `		"1" = {` + "\n"
+	config += `			description = "Test event"` + "\n"
+	config += `			log = "yes"` + "\n"
+	config += `			owner = "admin"` + "\n"
+	config += `			trap = "public"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 
 	config += `

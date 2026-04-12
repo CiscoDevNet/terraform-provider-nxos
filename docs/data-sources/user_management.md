@@ -49,7 +49,6 @@ data "nxos_user_management" "example" {
 - `authentication_realm_default_role_policy` (String) The default role policy for the remote user with invalid CiscoAVPairs. CiscoAVPairs provide support for Remote Access Dial-In User Service attribute-value (AV) pairs.
 - `authentication_realm_description` (String) Description of the specified attribute.
 - `authentication_realm_logging_level` (Number) AAA Logging level.
-- `authentication_realm_name` (String) Object name.
 - `authentication_realm_owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `authentication_realm_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `authentication_realm_radius_directed_request` (String) Enable direct authentication requests to server.
@@ -59,7 +58,6 @@ data "nxos_user_management" "example" {
 - `console_authentication_fallback` (String) Fallback in case all AAA servers configured for remote authentication are unreachable.
 - `console_authentication_invalid_user_log` (Boolean) Enable logging for invalid users.
 - `console_authentication_local` (String) Use local username authentication.
-- `console_authentication_name` (String) Object name.
 - `console_authentication_none` (String) No authentication.
 - `console_authentication_owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `console_authentication_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
@@ -76,7 +74,6 @@ data "nxos_user_management" "example" {
 - `default_accounting_description` (String) Description of the specified attribute.
 - `default_accounting_local_rbac` (Boolean) Use Local.
 - `default_accounting_method_none` (Boolean) No accounting.
-- `default_accounting_name` (String) Object name.
 - `default_accounting_owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `default_accounting_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `default_accounting_provider_group` (String) Provider Group.
@@ -93,7 +90,6 @@ data "nxos_user_management" "example" {
 - `default_authentication_fallback` (String) Fallback in case all AAA servers configured for remote authentication are unreachable.
 - `default_authentication_invalid_user_log` (Boolean) Enable logging for invalid users.
 - `default_authentication_local` (String) Use local username authentication.
-- `default_authentication_name` (String) Object name.
 - `default_authentication_none` (String) No authentication.
 - `default_authentication_owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `default_authentication_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.

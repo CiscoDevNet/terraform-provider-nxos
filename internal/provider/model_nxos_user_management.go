@@ -82,7 +82,6 @@ type UserManagement struct {
 	AuthenticationRealmDefaultRolePolicy     types.String                                   `tfsdk:"authentication_realm_default_role_policy"`
 	AuthenticationRealmDescription           types.String                                   `tfsdk:"authentication_realm_description"`
 	AuthenticationRealmLoggingLevel          types.Int64                                    `tfsdk:"authentication_realm_logging_level"`
-	AuthenticationRealmName                  types.String                                   `tfsdk:"authentication_realm_name"`
 	AuthenticationRealmOwnerKey              types.String                                   `tfsdk:"authentication_realm_owner_key"`
 	AuthenticationRealmOwnerTag              types.String                                   `tfsdk:"authentication_realm_owner_tag"`
 	AuthenticationRealmRadiusDirectedRequest types.String                                   `tfsdk:"authentication_realm_radius_directed_request"`
@@ -93,7 +92,6 @@ type UserManagement struct {
 	DefaultAuthenticationFallback            types.String                                   `tfsdk:"default_authentication_fallback"`
 	DefaultAuthenticationInvalidUserLog      types.Bool                                     `tfsdk:"default_authentication_invalid_user_log"`
 	DefaultAuthenticationLocal               types.String                                   `tfsdk:"default_authentication_local"`
-	DefaultAuthenticationName                types.String                                   `tfsdk:"default_authentication_name"`
 	DefaultAuthenticationNone                types.String                                   `tfsdk:"default_authentication_none"`
 	DefaultAuthenticationOwnerKey            types.String                                   `tfsdk:"default_authentication_owner_key"`
 	DefaultAuthenticationOwnerTag            types.String                                   `tfsdk:"default_authentication_owner_tag"`
@@ -112,7 +110,6 @@ type UserManagement struct {
 	ConsoleAuthenticationFallback            types.String                                   `tfsdk:"console_authentication_fallback"`
 	ConsoleAuthenticationInvalidUserLog      types.Bool                                     `tfsdk:"console_authentication_invalid_user_log"`
 	ConsoleAuthenticationLocal               types.String                                   `tfsdk:"console_authentication_local"`
-	ConsoleAuthenticationName                types.String                                   `tfsdk:"console_authentication_name"`
 	ConsoleAuthenticationNone                types.String                                   `tfsdk:"console_authentication_none"`
 	ConsoleAuthenticationOwnerKey            types.String                                   `tfsdk:"console_authentication_owner_key"`
 	ConsoleAuthenticationOwnerTag            types.String                                   `tfsdk:"console_authentication_owner_tag"`
@@ -129,7 +126,6 @@ type UserManagement struct {
 	DefaultAccountingMethodNone              types.Bool                                     `tfsdk:"default_accounting_method_none"`
 	DefaultAccountingDescription             types.String                                   `tfsdk:"default_accounting_description"`
 	DefaultAccountingLocalRbac               types.Bool                                     `tfsdk:"default_accounting_local_rbac"`
-	DefaultAccountingName                    types.String                                   `tfsdk:"default_accounting_name"`
 	DefaultAccountingOwnerKey                types.String                                   `tfsdk:"default_accounting_owner_key"`
 	DefaultAccountingOwnerTag                types.String                                   `tfsdk:"default_accounting_owner_tag"`
 	DefaultAccountingProviderGroup           types.String                                   `tfsdk:"default_accounting_provider_group"`
@@ -567,9 +563,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		if !data.AuthenticationRealmLoggingLevel.IsUnknown() && !data.AuthenticationRealmLoggingLevel.IsNull() {
 			attrs, _ = sjson.Set(attrs, "loggingLevel", strconv.FormatInt(data.AuthenticationRealmLoggingLevel.ValueInt64(), 10))
 		}
-		if !data.AuthenticationRealmName.IsUnknown() && !data.AuthenticationRealmName.IsNull() {
-			attrs, _ = sjson.Set(attrs, "name", data.AuthenticationRealmName.ValueString())
-		}
 		if !data.AuthenticationRealmOwnerKey.IsUnknown() && !data.AuthenticationRealmOwnerKey.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerKey", data.AuthenticationRealmOwnerKey.ValueString())
 		}
@@ -602,9 +595,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		}
 		if !data.DefaultAuthenticationLocal.IsUnknown() && !data.DefaultAuthenticationLocal.IsNull() {
 			attrs, _ = sjson.Set(attrs, "local", data.DefaultAuthenticationLocal.ValueString())
-		}
-		if !data.DefaultAuthenticationName.IsUnknown() && !data.DefaultAuthenticationName.IsNull() {
-			attrs, _ = sjson.Set(attrs, "name", data.DefaultAuthenticationName.ValueString())
 		}
 		if !data.DefaultAuthenticationNone.IsUnknown() && !data.DefaultAuthenticationNone.IsNull() {
 			attrs, _ = sjson.Set(attrs, "none", data.DefaultAuthenticationNone.ValueString())
@@ -663,9 +653,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		}
 		if !data.ConsoleAuthenticationLocal.IsUnknown() && !data.ConsoleAuthenticationLocal.IsNull() {
 			attrs, _ = sjson.Set(attrs, "local", data.ConsoleAuthenticationLocal.ValueString())
-		}
-		if !data.ConsoleAuthenticationName.IsUnknown() && !data.ConsoleAuthenticationName.IsNull() {
-			attrs, _ = sjson.Set(attrs, "name", data.ConsoleAuthenticationName.ValueString())
 		}
 		if !data.ConsoleAuthenticationNone.IsUnknown() && !data.ConsoleAuthenticationNone.IsNull() {
 			attrs, _ = sjson.Set(attrs, "none", data.ConsoleAuthenticationNone.ValueString())
@@ -759,9 +746,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		}
 		if !data.DefaultAccountingLocalRbac.IsUnknown() && !data.DefaultAccountingLocalRbac.IsNull() {
 			attrs, _ = sjson.Set(attrs, "localRbac", strconv.FormatBool(data.DefaultAccountingLocalRbac.ValueBool()))
-		}
-		if !data.DefaultAccountingName.IsUnknown() && !data.DefaultAccountingName.IsNull() {
-			attrs, _ = sjson.Set(attrs, "name", data.DefaultAccountingName.ValueString())
 		}
 		if !data.DefaultAccountingOwnerKey.IsUnknown() && !data.DefaultAccountingOwnerKey.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerKey", data.DefaultAccountingOwnerKey.ValueString())
@@ -1015,7 +999,6 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 		data.AuthenticationRealmDefaultRolePolicy = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.defRolePolicy").String())
 		data.AuthenticationRealmDescription = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.descr").String())
 		data.AuthenticationRealmLoggingLevel = types.Int64Value(raaaAuthRealm.Get("aaaAuthRealm.attributes.loggingLevel").Int())
-		data.AuthenticationRealmName = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.name").String())
 		data.AuthenticationRealmOwnerKey = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.ownerKey").String())
 		data.AuthenticationRealmOwnerTag = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.ownerTag").String())
 		data.AuthenticationRealmRadiusDirectedRequest = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.radDirectedReq").String())
@@ -1038,7 +1021,6 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 			data.DefaultAuthenticationFallback = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.fallback").String())
 			data.DefaultAuthenticationInvalidUserLog = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.invalidUserLog").String()))
 			data.DefaultAuthenticationLocal = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.local").String())
-			data.DefaultAuthenticationName = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.name").String())
 			data.DefaultAuthenticationNone = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.none").String())
 			data.DefaultAuthenticationOwnerKey = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.ownerKey").String())
 			data.DefaultAuthenticationOwnerTag = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.ownerTag").String())
@@ -1070,7 +1052,6 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 			data.ConsoleAuthenticationFallback = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.fallback").String())
 			data.ConsoleAuthenticationInvalidUserLog = types.BoolValue(helpers.ParseNxosBoolean(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.invalidUserLog").String()))
 			data.ConsoleAuthenticationLocal = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.local").String())
-			data.ConsoleAuthenticationName = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.name").String())
 			data.ConsoleAuthenticationNone = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.none").String())
 			data.ConsoleAuthenticationOwnerKey = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.ownerKey").String())
 			data.ConsoleAuthenticationOwnerTag = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.ownerTag").String())
@@ -1130,7 +1111,6 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 			data.DefaultAccountingMethodNone = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.accMethodNone").String()))
 			data.DefaultAccountingDescription = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.descr").String())
 			data.DefaultAccountingLocalRbac = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.localRbac").String()))
-			data.DefaultAccountingName = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.name").String())
 			data.DefaultAccountingOwnerKey = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.ownerKey").String())
 			data.DefaultAccountingOwnerTag = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.ownerTag").String())
 			data.DefaultAccountingProviderGroup = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup").String())
@@ -1627,11 +1607,6 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 	} else {
 		data.AuthenticationRealmLoggingLevel = types.Int64Null()
 	}
-	if !data.AuthenticationRealmName.IsNull() {
-		data.AuthenticationRealmName = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.name").String())
-	} else {
-		data.AuthenticationRealmName = types.StringNull()
-	}
 	if !data.AuthenticationRealmOwnerKey.IsNull() {
 		data.AuthenticationRealmOwnerKey = types.StringValue(raaaAuthRealm.Get("aaaAuthRealm.attributes.ownerKey").String())
 	} else {
@@ -1693,11 +1668,6 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 			data.DefaultAuthenticationLocal = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.local").String())
 		} else {
 			data.DefaultAuthenticationLocal = types.StringNull()
-		}
-		if !data.DefaultAuthenticationName.IsNull() {
-			data.DefaultAuthenticationName = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.name").String())
-		} else {
-			data.DefaultAuthenticationName = types.StringNull()
 		}
 		if !data.DefaultAuthenticationNone.IsNull() {
 			data.DefaultAuthenticationNone = types.StringValue(raaaDefaultAuth.Get("aaaDefaultAuth.attributes.none").String())
@@ -1801,11 +1771,6 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 			data.ConsoleAuthenticationLocal = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.local").String())
 		} else {
 			data.ConsoleAuthenticationLocal = types.StringNull()
-		}
-		if !data.ConsoleAuthenticationName.IsNull() {
-			data.ConsoleAuthenticationName = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.name").String())
-		} else {
-			data.ConsoleAuthenticationName = types.StringNull()
 		}
 		if !data.ConsoleAuthenticationNone.IsNull() {
 			data.ConsoleAuthenticationNone = types.StringValue(raaaConsoleAuth.Get("aaaConsoleAuth.attributes.none").String())
@@ -1976,11 +1941,6 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 			data.DefaultAccountingLocalRbac = types.BoolValue(helpers.ParseNxosBoolean(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.localRbac").String()))
 		} else {
 			data.DefaultAccountingLocalRbac = types.BoolNull()
-		}
-		if !data.DefaultAccountingName.IsNull() {
-			data.DefaultAccountingName = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.name").String())
-		} else {
-			data.DefaultAccountingName = types.StringNull()
 		}
 		if !data.DefaultAccountingOwnerKey.IsNull() {
 			data.DefaultAccountingOwnerKey = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.ownerKey").String())
@@ -2206,9 +2166,6 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 		if !data.AuthenticationRealmLoggingLevel.IsNull() {
 			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
 		}
-		if !data.AuthenticationRealmName.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-		}
 		if !data.AuthenticationRealmOwnerKey.IsNull() {
 			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
 		}
@@ -2242,9 +2199,6 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 			}
 			if !data.DefaultAuthenticationLocal.IsNull() {
 				childBody, _ = sjson.Set(childBody, "local", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationName.IsNull() {
-				childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
 			}
 			if !data.DefaultAuthenticationNone.IsNull() {
 				childBody, _ = sjson.Set(childBody, "none", "DME_UNSET_PROPERTY_MARKER")
@@ -2307,9 +2261,6 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 			}
 			if !data.ConsoleAuthenticationLocal.IsNull() {
 				childBody, _ = sjson.Set(childBody, "local", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationName.IsNull() {
-				childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
 			}
 			if !data.ConsoleAuthenticationNone.IsNull() {
 				childBody, _ = sjson.Set(childBody, "none", "DME_UNSET_PROPERTY_MARKER")
@@ -2381,9 +2332,6 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 			}
 			if !data.DefaultAccountingLocalRbac.IsNull() {
 				childBody, _ = sjson.Set(childBody, "localRbac", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingName.IsNull() {
-				childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
 			}
 			if !data.DefaultAccountingOwnerKey.IsNull() {
 				childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")

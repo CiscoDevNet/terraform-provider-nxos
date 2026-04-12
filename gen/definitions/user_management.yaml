@@ -602,12 +602,6 @@ child_classes:
         description: "AAA Logging level."
         example: 4
         exclude_test: true
-      - nxos_name: name
-        tf_name: authentication_realm_name
-        type: String
-        description: "Object name."
-        example: "authrealm"
-        exclude_test: true
       - nxos_name: ownerKey
         tf_name: authentication_realm_owner_key
         type: String
@@ -683,12 +677,6 @@ child_classes:
               - "yes"
             description: "Use local username authentication."
             example: "no"
-          - nxos_name: name
-            tf_name: default_authentication_name
-            type: String
-            description: "Object name."
-            example: "default"
-            exclude_test: true
           - nxos_name: none
             tf_name: default_authentication_none
             type: String
@@ -813,12 +801,6 @@ child_classes:
               - "yes"
             description: "Use local username authentication."
             example: "no"
-          - nxos_name: name
-            tf_name: console_authentication_name
-            type: String
-            description: "Object name."
-            example: "console"
-            exclude_test: true
           - nxos_name: none
             tf_name: console_authentication_none
             type: String
@@ -1006,12 +988,6 @@ child_classes:
             type: Bool
             description: "Use Local."
             example: true
-          - nxos_name: name
-            tf_name: default_accounting_name
-            type: String
-            description: "Object name."
-            example: "default"
-            exclude_test: true
           - nxos_name: ownerKey
             tf_name: default_accounting_owner_key
             type: String

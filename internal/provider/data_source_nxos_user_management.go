@@ -436,10 +436,6 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "AAA Logging level.",
 				Computed:            true,
 			},
-			"authentication_realm_name": schema.StringAttribute{
-				MarkdownDescription: "Object name.",
-				Computed:            true,
-			},
 			"authentication_realm_owner_key": schema.StringAttribute{
 				MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
 				Computed:            true,
@@ -478,10 +474,6 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"default_authentication_local": schema.StringAttribute{
 				MarkdownDescription: "Use local username authentication.",
-				Computed:            true,
-			},
-			"default_authentication_name": schema.StringAttribute{
-				MarkdownDescription: "Object name.",
 				Computed:            true,
 			},
 			"default_authentication_none": schema.StringAttribute{
@@ -554,10 +546,6 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"console_authentication_local": schema.StringAttribute{
 				MarkdownDescription: "Use local username authentication.",
-				Computed:            true,
-			},
-			"console_authentication_name": schema.StringAttribute{
-				MarkdownDescription: "Object name.",
 				Computed:            true,
 			},
 			"console_authentication_none": schema.StringAttribute{
@@ -678,10 +666,6 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"default_accounting_local_rbac": schema.BoolAttribute{
 				MarkdownDescription: "Use Local.",
-				Computed:            true,
-			},
-			"default_accounting_name": schema.StringAttribute{
-				MarkdownDescription: "Object name.",
 				Computed:            true,
 			},
 			"default_accounting_owner_key": schema.StringAttribute{

@@ -90,7 +90,6 @@ resource "nxos_user_management" "example" {
   authentication_realm_default_role_policy     = "no-login"
   authentication_realm_description             = "AAA authentication realm"
   authentication_realm_logging_level           = 4
-  authentication_realm_name                    = "authrealm"
   authentication_realm_owner_key               = "owner1"
   authentication_realm_owner_tag               = "tag1"
   authentication_realm_radius_directed_request = "yes"
@@ -101,7 +100,6 @@ resource "nxos_user_management" "example" {
   default_authentication_fallback              = "no"
   default_authentication_invalid_user_log      = true
   default_authentication_local                 = "no"
-  default_authentication_name                  = "default"
   default_authentication_none                  = "no"
   default_authentication_owner_key             = "owner1"
   default_authentication_owner_tag             = "tag1"
@@ -120,7 +118,6 @@ resource "nxos_user_management" "example" {
   console_authentication_fallback              = "no"
   console_authentication_invalid_user_log      = true
   console_authentication_local                 = "no"
-  console_authentication_name                  = "console"
   console_authentication_none                  = "no"
   console_authentication_owner_key             = "owner1"
   console_authentication_owner_tag             = "tag1"
@@ -153,7 +150,6 @@ resource "nxos_user_management" "example" {
   default_accounting_method_none      = false
   default_accounting_description      = "Default accounting"
   default_accounting_local_rbac       = true
-  default_accounting_name             = "default"
   default_accounting_owner_key        = "owner1"
   default_accounting_owner_tag        = "tag1"
   default_accounting_provider_group   = "GROUP1"

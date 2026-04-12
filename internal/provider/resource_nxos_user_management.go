@@ -560,10 +560,6 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 					int64validator.Between(0, 7),
 				},
 			},
-			"authentication_realm_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
-				Optional:            true,
-			},
 			"authentication_realm_owner_key": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The key for enabling clients to own their data for entity correlation.").String,
 				Optional:            true,
@@ -618,10 +614,6 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 				Validators: []validator.String{
 					stringvalidator.OneOf("no", "yes"),
 				},
-			},
-			"default_authentication_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
-				Optional:            true,
 			},
 			"default_authentication_none": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("No authentication.").AddStringEnumDescription("no", "yes").String,
@@ -709,10 +701,6 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 				Validators: []validator.String{
 					stringvalidator.OneOf("no", "yes"),
 				},
-			},
-			"console_authentication_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
-				Optional:            true,
 			},
 			"console_authentication_none": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("No authentication.").AddStringEnumDescription("no", "yes").String,
@@ -838,10 +826,6 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"default_accounting_local_rbac": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Use Local.").String,
-				Optional:            true,
-			},
-			"default_accounting_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 				Optional:            true,
 			},
 			"default_accounting_owner_key": schema.StringAttribute{

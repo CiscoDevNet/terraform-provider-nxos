@@ -122,6 +122,7 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.vlan_minimum", "16"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.vrf_maximum", "4096"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vdcs.1.vrf_minimum", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "cli_aliases.myalias.command", "show ip route"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "smart_licensing_transport_mode", "transportSmart"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "smart_licensing_transport_cslu_url", "https://cslu.example.com"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_auto_copy", "disable"))
@@ -279,6 +280,11 @@ func testAccNxosSystemConfig_all() string {
 	config += `			vlan_minimum = 16` + "\n"
 	config += `			vrf_maximum = 4096` + "\n"
 	config += `			vrf_minimum = 4` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	cli_aliases = {` + "\n"
+	config += `		"myalias" = {` + "\n"
+	config += `			command = "show ip route"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	smart_licensing_transport_mode = "transportSmart"` + "\n"

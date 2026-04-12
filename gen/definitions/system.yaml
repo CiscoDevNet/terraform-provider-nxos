@@ -965,6 +965,24 @@ child_classes:
             min_int: 2
             max_int: 4097
             example: 4
+  - class_name: vshdCliAlias
+    doc_path: System/vshd:CliAlias/
+    rn: clialias-[%s]
+    type: list
+    tf_name: cli_aliases
+    description: 'CLI alias configuration.'
+    attributes:
+      - nxos_name: aliasName
+        tf_name: name
+        type: String
+        id: true
+        description: 'Name of the alias.'
+        example: 'myalias'
+      - nxos_name: aliasCmd
+        tf_name: command
+        type: String
+        description: 'Alias command definition.'
+        example: 'show ip route'
   - class_name: licensemanagerLicenseManager
     doc_path: System/licensemanager:LicenseManager/
     rn: licensemanager

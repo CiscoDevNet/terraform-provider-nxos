@@ -1,5 +1,9 @@
 ## Unreleased
 
+- Add terminal console exec timeout configuration to `nxos_system` resource and data source
+- Add terminal VTY exec timeout configuration to `nxos_system` resource and data source
+- Add terminal VTY session limit configuration to `nxos_system` resource and data source
+- Add VTY ingress and egress access list policy to `nxos_access_list` resource and data source
 - Add CoPP configuration to `nxos_system` resource and data source
 - Add `extchp-edge`, `extchp-bpdu-filter`, and `extchp-bpdu-guard` enum values to spanning tree instance `control` attribute in `nxos_spanning_tree` resource and data source
 - Add TACACS+ provider group server members to `nxos_user_management` resource and data source

@@ -38,11 +38,13 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type AccessList struct {
-	Device            types.String                           `tfsdk:"device"`
-	Dn                types.String                           `tfsdk:"id"`
-	AccessLists       map[string]AccessListAccessLists       `tfsdk:"access_lists"`
-	IngressInterfaces map[string]AccessListIngressInterfaces `tfsdk:"ingress_interfaces"`
-	EgressInterfaces  map[string]AccessListEgressInterfaces  `tfsdk:"egress_interfaces"`
+	Device                   types.String                           `tfsdk:"device"`
+	Dn                       types.String                           `tfsdk:"id"`
+	AccessLists              map[string]AccessListAccessLists       `tfsdk:"access_lists"`
+	IngressInterfaces        map[string]AccessListIngressInterfaces `tfsdk:"ingress_interfaces"`
+	IngressVtyAccessListName types.String                           `tfsdk:"ingress_vty_access_list_name"`
+	EgressInterfaces         map[string]AccessListEgressInterfaces  `tfsdk:"egress_interfaces"`
+	EgressVtyAccessListName  types.String                           `tfsdk:"egress_vty_access_list_name"`
 }
 
 type AccessListAccessLists struct {
@@ -409,6 +411,20 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 						}
 					}
 				}
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aclVty"
+					attrs = "{}"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+					nestedChildrenPath := childBodyPath + ".children"
+					attrs = "{}"
+					if !data.IngressVtyAccessListName.IsUnknown() && !data.IngressVtyAccessListName.IsNull() {
+						attrs, _ = sjson.Set(attrs, "name", data.IngressVtyAccessListName.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aclInst.attributes", attrs)
+					}
+				}
 			}
 			{
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
@@ -430,6 +446,20 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 						if attrs != "{}" {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aclInst.attributes", attrs)
 						}
+					}
+				}
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aclVty"
+					attrs = "{}"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+					nestedChildrenPath := childBodyPath + ".children"
+					attrs = "{}"
+					if !data.EgressVtyAccessListName.IsUnknown() && !data.EgressVtyAccessListName.IsNull() {
+						attrs, _ = sjson.Set(attrs, "name", data.EgressVtyAccessListName.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aclInst.attributes", attrs)
 					}
 				}
 			}
@@ -609,6 +639,33 @@ func (data *AccessList) fromBody(res gjson.Result) {
 						return true
 					},
 				)
+				{
+					var raclVty gjson.Result
+					raclIngress.Get("aclIngress.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("aclVty.attributes.rn").String()
+							if rnValue == "vty" {
+								raclVty = v
+								return false
+							}
+							return true
+						},
+					)
+					{
+						var raclInst gjson.Result
+						raclVty.Get("aclVty.children").ForEach(
+							func(_, v gjson.Result) bool {
+								rnValue := v.Get("aclInst.attributes.rn").String()
+								if rnValue == "acl" {
+									raclInst = v
+									return false
+								}
+								return true
+							},
+						)
+						data.IngressVtyAccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
+					}
+				}
 			}
 			{
 				var raclEgress gjson.Result
@@ -654,6 +711,33 @@ func (data *AccessList) fromBody(res gjson.Result) {
 						return true
 					},
 				)
+				{
+					var raclVty gjson.Result
+					raclEgress.Get("aclEgress.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("aclVty.attributes.rn").String()
+							if rnValue == "vty" {
+								raclVty = v
+								return false
+							}
+							return true
+						},
+					)
+					{
+						var raclInst gjson.Result
+						raclVty.Get("aclVty.children").ForEach(
+							func(_, v gjson.Result) bool {
+								rnValue := v.Get("aclInst.attributes.rn").String()
+								if rnValue == "acl" {
+									raclInst = v
+									return false
+								}
+								return true
+							},
+						)
+						data.EgressVtyAccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
+					}
+				}
 			}
 		}
 	}
@@ -1074,6 +1158,37 @@ func (data *AccessList) updateFromBody(res gjson.Result) {
 				}
 				data.IngressInterfaces[key] = item
 			}
+			{
+				var raclVty gjson.Result
+				raclIngress.Get("aclIngress.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("aclVty.attributes.rn").String()
+						if rnValue == "vty" {
+							raclVty = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var raclInst gjson.Result
+					raclVty.Get("aclVty.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("aclInst.attributes.rn").String()
+							if rnValue == "acl" {
+								raclInst = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.IngressVtyAccessListName.IsNull() {
+						data.IngressVtyAccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
+					} else {
+						data.IngressVtyAccessListName = types.StringNull()
+					}
+				}
+			}
 		}
 		{
 			var raclEgress gjson.Result
@@ -1121,6 +1236,37 @@ func (data *AccessList) updateFromBody(res gjson.Result) {
 					}
 				}
 				data.EgressInterfaces[key] = item
+			}
+			{
+				var raclVty gjson.Result
+				raclEgress.Get("aclEgress.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("aclVty.attributes.rn").String()
+						if rnValue == "vty" {
+							raclVty = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var raclInst gjson.Result
+					raclVty.Get("aclVty.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("aclInst.attributes.rn").String()
+							if rnValue == "acl" {
+								raclInst = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.EgressVtyAccessListName.IsNull() {
+						data.EgressVtyAccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
+					} else {
+						data.EgressVtyAccessListName = types.StringNull()
+					}
+				}
 			}
 		}
 	}

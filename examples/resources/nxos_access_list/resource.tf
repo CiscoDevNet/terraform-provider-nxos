@@ -73,9 +73,11 @@ resource "nxos_access_list" "example" {
       access_list_name = "ACL1"
     }
   }
+  ingress_vty_access_list_name = "ACL1"
   egress_interfaces = {
     "eth1/10" = {
       access_list_name = "ACL1"
     }
   }
+  egress_vty_access_list_name = "ACL1"
 }

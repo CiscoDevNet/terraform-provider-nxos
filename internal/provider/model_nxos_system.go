@@ -208,6 +208,9 @@ type System struct {
 	CoppAdminState                                types.String                          `tfsdk:"copp_admin_state"`
 	CoppRateLimiter                               types.Bool                            `tfsdk:"copp_rate_limiter"`
 	CoppProfileType                               types.String                          `tfsdk:"copp_profile_type"`
+	ConsoleExecTimeout                            types.Int64                           `tfsdk:"console_exec_timeout"`
+	VtyExecTimeout                                types.Int64                           `tfsdk:"vty_exec_timeout"`
+	VtySessionLimit                               types.Int64                           `tfsdk:"vty_session_limit"`
 }
 
 type SystemArpVpcDomains struct {
@@ -1267,6 +1270,55 @@ func (data System) toBody(config System) nxos.Body {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppProfile.attributes", attrs)
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".terminalTerminal"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalLine"
+			attrs = "{}"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalConsole"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.ConsoleExecTimeout.IsUnknown() && !data.ConsoleExecTimeout.IsNull() {
+					attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(data.ConsoleExecTimeout.ValueInt64(), 10))
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.terminalExecTimeout.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalVty"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.VtyExecTimeout.IsUnknown() && !data.VtyExecTimeout.IsNull() {
+					attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(data.VtyExecTimeout.ValueInt64(), 10))
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.terminalExecTimeout.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.VtySessionLimit.IsUnknown() && !data.VtySessionLimit.IsNull() {
+					attrs, _ = sjson.Set(attrs, "sesLmt", strconv.FormatInt(data.VtySessionLimit.ValueInt64(), 10))
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.terminalSesLmt.attributes", attrs)
+				}
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1997,6 +2049,100 @@ func (data *System) fromBody(res gjson.Result) {
 				},
 			)
 			data.CoppProfileType = types.StringValue(rcoppProfile.Get("coppProfile.attributes.prof").String())
+		}
+	}
+	{
+		var rterminalTerminal gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("terminalTerminal.attributes.rn").String()
+				if rnValue == "terml" {
+					rterminalTerminal = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rterminalLine gjson.Result
+			rterminalTerminal.Get("terminalTerminal.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("terminalLine.attributes.rn").String()
+					if rnValue == "ln" {
+						rterminalLine = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rterminalConsole gjson.Result
+				rterminalLine.Get("terminalLine.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("terminalConsole.attributes.rn").String()
+						if rnValue == "cons" {
+							rterminalConsole = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rterminalExecTimeout gjson.Result
+					rterminalConsole.Get("terminalConsole.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("terminalExecTimeout.attributes.rn").String()
+							if rnValue == "execTmeout" {
+								rterminalExecTimeout = v
+								return false
+							}
+							return true
+						},
+					)
+					data.ConsoleExecTimeout = types.Int64Value(rterminalExecTimeout.Get("terminalExecTimeout.attributes.timeout").Int())
+				}
+			}
+			{
+				var rterminalVty gjson.Result
+				rterminalLine.Get("terminalLine.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("terminalVty.attributes.rn").String()
+						if rnValue == "vty" {
+							rterminalVty = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rterminalExecTimeout gjson.Result
+					rterminalVty.Get("terminalVty.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("terminalExecTimeout.attributes.rn").String()
+							if rnValue == "execTmeout" {
+								rterminalExecTimeout = v
+								return false
+							}
+							return true
+						},
+					)
+					data.VtyExecTimeout = types.Int64Value(rterminalExecTimeout.Get("terminalExecTimeout.attributes.timeout").Int())
+				}
+				{
+					var rterminalSesLmt gjson.Result
+					rterminalVty.Get("terminalVty.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("terminalSesLmt.attributes.rn").String()
+							if rnValue == "ssLmt" {
+								rterminalSesLmt = v
+								return false
+							}
+							return true
+						},
+					)
+					data.VtySessionLimit = types.Int64Value(rterminalSesLmt.Get("terminalSesLmt.attributes.sesLmt").Int())
+				}
+			}
 		}
 	}
 }
@@ -3591,6 +3737,110 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.CoppProfileType = types.StringNull()
 		}
 	}
+	var rterminalTerminal gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("terminalTerminal.attributes.rn").String()
+			if rnValue == "terml" {
+				rterminalTerminal = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rterminalLine gjson.Result
+		rterminalTerminal.Get("terminalTerminal.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("terminalLine.attributes.rn").String()
+				if rnValue == "ln" {
+					rterminalLine = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rterminalConsole gjson.Result
+			rterminalLine.Get("terminalLine.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("terminalConsole.attributes.rn").String()
+					if rnValue == "cons" {
+						rterminalConsole = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rterminalExecTimeout gjson.Result
+				rterminalConsole.Get("terminalConsole.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("terminalExecTimeout.attributes.rn").String()
+						if rnValue == "execTmeout" {
+							rterminalExecTimeout = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.ConsoleExecTimeout.IsNull() {
+					data.ConsoleExecTimeout = types.Int64Value(rterminalExecTimeout.Get("terminalExecTimeout.attributes.timeout").Int())
+				} else {
+					data.ConsoleExecTimeout = types.Int64Null()
+				}
+			}
+		}
+		{
+			var rterminalVty gjson.Result
+			rterminalLine.Get("terminalLine.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("terminalVty.attributes.rn").String()
+					if rnValue == "vty" {
+						rterminalVty = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rterminalExecTimeout gjson.Result
+				rterminalVty.Get("terminalVty.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("terminalExecTimeout.attributes.rn").String()
+						if rnValue == "execTmeout" {
+							rterminalExecTimeout = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.VtyExecTimeout.IsNull() {
+					data.VtyExecTimeout = types.Int64Value(rterminalExecTimeout.Get("terminalExecTimeout.attributes.timeout").Int())
+				} else {
+					data.VtyExecTimeout = types.Int64Null()
+				}
+			}
+			{
+				var rterminalSesLmt gjson.Result
+				rterminalVty.Get("terminalVty.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("terminalSesLmt.attributes.rn").String()
+						if rnValue == "ssLmt" {
+							rterminalSesLmt = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.VtySessionLimit.IsNull() {
+					data.VtySessionLimit = types.Int64Value(rterminalSesLmt.Get("terminalSesLmt.attributes.sesLmt").Int())
+				} else {
+					data.VtySessionLimit = types.Int64Null()
+				}
+			}
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -4219,6 +4469,67 @@ func (data System) toDeleteBody() nxos.Body {
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".coppProfile"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".terminalTerminal"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalLine"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalConsole"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.ConsoleExecTimeout.IsNull() {
+						childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalExecTimeout"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalVty"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.VtyExecTimeout.IsNull() {
+						childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalExecTimeout"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.VtySessionLimit.IsNull() {
+						childBody, _ = sjson.Set(childBody, "sesLmt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalSesLmt"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
 			}
 		}
 	}

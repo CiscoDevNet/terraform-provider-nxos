@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/
 ---
 
 # nxos_system (Resource)
@@ -44,6 +44,10 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [udldInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/)
 - [udldPhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/)
 - [platformEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/)
+- [mgmtMgmtIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/)
+- [lldpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/)
+- [lldpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/)
+- [lldpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/)
 
 ## Example Usage
 
@@ -265,6 +269,48 @@ resource "nxos_system" "example" {
   platform_unknown_unicast_flood                     = "disabled"
   platform_urpf_status                               = "disabled"
   platform_wrr_unicast_bandwidth                     = 60
+  management_interfaces = {
+    "mgmt0" = {
+      admin_state      = "up"
+      auto_negotiation = "on"
+      description      = "My Description"
+      duplex           = "auto"
+      itu_channel      = 50
+      media_type       = "auto"
+      mtu              = 1500
+      name             = "mgmt0"
+      snmp_trap_state  = "enable"
+      speed            = "auto"
+    }
+  }
+  lldp_admin_state                 = "enabled"
+  lldp_instance_admin_state        = "enabled"
+  lldp_advertise_system_chassis_id = "enabled"
+  lldp_control                     = "stateful-ha"
+  lldp_hold_time                   = 180
+  lldp_infra_vlan                  = 0
+  lldp_init_delay_time             = 5
+  lldp_multi_peer                  = "disabled"
+  lldp_optional_tlv_select         = "port-desc"
+  lldp_optional_tlv_select_hidden  = "unknown"
+  lldp_port_channel                = "disabled"
+  lldp_port_id_sub_type            = "short"
+  lldp_system_description          = "Cisco NX-OS"
+  lldp_transmit_frequency          = 60
+  lldp_interfaces = {
+    "eth1/1" = {
+      admin_receive_state  = "disabled"
+      admin_transmit_state = "disabled"
+      description          = "My Description"
+      name                 = "eth1/1"
+      port_dcbxp_version   = "CEE"
+      port_description     = "My Port"
+      system_description   = "Cisco NX-OS"
+      tlv_management_ipv4  = "10.0.0.1"
+      tlv_management_ipv6  = "2001:db8::1"
+      tlv_vlan             = 100
+    }
+  }
 }
 ```
 
@@ -397,6 +443,37 @@ resource "nxos_system" "example" {
 - `ethernet_system_link_failure_laser_on` (Boolean) Enable or disable the system link failure laser on.
 - `ethernet_system_storm_control_multi_threshold` (Boolean) Enable or disable the storm control multi threshold.
 - `ethernet_vlan_tag_native` (Boolean) Tag native vlan.
+- `lldp_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `lldp_advertise_system_chassis_id` (String) LLDP chassis-id switch configuration.
+  - Choices: `enabled`, `disabled`
+- `lldp_control` (String) The control state.
+  - Choices: `stateful-ha`
+- `lldp_hold_time` (Number) The hold time (in seconds) that a receiving device should hold the information sent by your device before discarding it.
+  - Range: `1`-`255`
+- `lldp_infra_vlan` (Number) Specifies the Infra VLAN.
+  - Range: `0`-`4094`
+- `lldp_init_delay_time` (Number) The delay time (in seconds) for LLDP to initialize on any interface.
+  - Range: `1`-`10`
+- `lldp_instance_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `lldp_interfaces` (Attributes Map) LLDP interface configuration.
+  - Map key: `interface_id` - An identifier. (see [below for nested schema](#nestedatt--lldp_interfaces))
+- `lldp_multi_peer` (String) LLDP multi-neighbor configuration.
+  - Choices: `enabled`, `disabled`
+- `lldp_optional_tlv_select` (String) The selectors for optional TLVs according to the LLDP protocol (802.1AB) specifications.
+  - Choices: `unknown`, `port-desc`, `sys-name`, `sys-desc`, `sys-cap`, `mgmt-addr-v4`, `port-vlan`, `dcbx`, `mgmt-addr-v6`, `dcbxp`, `power-mgmt`, `four-wire-pwr-mgmt`, `dcbxp egress-queuing`, `max-framesize`, `vlan-name`, `link-aggregation`
+- `lldp_optional_tlv_select_hidden` (String) Optional TLV Selector.
+  - Choices: `unknown`, `port-desc`, `sys-name`, `sys-desc`, `sys-cap`, `mgmt-addr-v4`, `port-vlan`, `dcbx`, `mgmt-addr-v6`, `dcbxp`, `power-mgmt`, `four-wire-pwr-mgmt`, `dcbxp egress-queuing`, `max-framesize`, `vlan-name`, `link-aggregation`
+- `lldp_port_channel` (String) LLDP enabled on PortChannel.
+  - Choices: `enabled`, `disabled`
+- `lldp_port_id_sub_type` (String) PortId SubType.
+  - Choices: `long`, `short`
+- `lldp_system_description` (String) System description.
+- `lldp_transmit_frequency` (Number) The transmission frequency of LLDP updates (in seconds).
+  - Range: `1`-`254`
+- `management_interfaces` (Attributes Map) Management interface configuration.
+  - Map key: `interface_id` - An identifier. (see [below for nested schema](#nestedatt--management_interfaces))
 - `name` (String) The system name (hostname).
 - `nd_accept_solicit_neighbor_entry` (String) Accept or no-accept entry in Solicit neighbor advertisement.
   - Choices: `none`, `accept`, `no-accept`
@@ -582,6 +659,51 @@ Optional:
 - `domain_name` (String) Object name.
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+
+
+<a id="nestedatt--lldp_interfaces"></a>
+### Nested Schema for `lldp_interfaces`
+
+Optional:
+
+- `admin_receive_state` (String) Receive admin state.
+  - Choices: `enabled`, `disabled`
+- `admin_transmit_state` (String) Transmit admin state.
+  - Choices: `enabled`, `disabled`
+- `description` (String) Description.
+- `name` (String) The name of the object.
+- `port_dcbxp_version` (String) DCBXP Version.
+  - Choices: `auto`, `CEE`, `IEEE`
+- `port_description` (String) Port description.
+- `system_description` (String) System description.
+- `tlv_management_ipv4` (String) Tlv ipv4.
+- `tlv_management_ipv6` (String) Tlv ipv6.
+- `tlv_vlan` (Number) Tlv vlan.
+  - Range: `0`-`4094`
+
+
+<a id="nestedatt--management_interfaces"></a>
+### Nested Schema for `management_interfaces`
+
+Optional:
+
+- `admin_state` (String) Administrative port state.
+  - Choices: `down`, `up`
+- `auto_negotiation` (String) Administrative port auto-negotiation.
+  - Choices: `on`, `off`, `25G`
+- `description` (String) Interface description.
+- `duplex` (String) Duplex.
+  - Choices: `auto`, `full`, `half`
+- `itu_channel` (Number) ITU Channel to support DWDM XCVR.
+  - Range: `1`-`96`
+- `media_type` (String) Configuring the interface media-type.
+- `mtu` (Number) Administrative port mtu.
+  - Range: `576`-`9216`
+- `name` (String) The name of the object.
+- `snmp_trap_state` (String) Administrative port snmp trap state.
+  - Choices: `enable`, `disable`
+- `speed` (String) Administrative port speed.
+  - Choices: `unknown`, `100M`, `1G`, `10G`, `40G`, `auto`, `auto 100M`, `auto 100M 1G`, `100G`, `25G`, `10M`, `50G`, `200G`, `400G`, `2.5G`, `5G`, `auto 2.5G 5G 10G`, `auto 100M 1G 2.5G 5G`, `800G`
 
 
 <a id="nestedatt--nd_vrfs"></a>

@@ -137,6 +137,32 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.admin_state", "port-enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.aggressive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.bidirectional_detection", "port-enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.auto_negotiation", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.duplex", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.itu_channel", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.media_type", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.name", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.snmp_trap_state", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.speed", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_advertise_system_chassis_id", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_hold_time", "180"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_init_delay_time", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_multi_peer", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_port_channel", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_port_id_sub_type", "short"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_system_description", "Cisco NX-OS"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_transmit_frequency", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.admin_receive_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.admin_transmit_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.port_dcbxp_version", "CEE"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.port_description", "My Port"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.system_description", "Cisco NX-OS"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.tlv_management_ipv4", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.tlv_management_ipv6", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_interfaces.eth1/1.tlv_vlan", "100"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -187,6 +213,14 @@ resource "nxos_dme" "PreReq0" {
   }
 }
 
+resource "nxos_dme" "PreReq1" {
+  dn = "sys/fm/lldp"
+  class_name = "fmLldp"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -194,7 +228,7 @@ resource "nxos_dme" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSystemConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -322,7 +356,41 @@ func testAccNxosSystemConfig_all() string {
 	config += `			bidirectional_detection = "port-enabled"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
+	config += `	management_interfaces = {` + "\n"
+	config += `		"mgmt0" = {` + "\n"
+	config += `			admin_state = "up"` + "\n"
+	config += `			auto_negotiation = "on"` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `			duplex = "auto"` + "\n"
+	config += `			itu_channel = 50` + "\n"
+	config += `			media_type = "auto"` + "\n"
+	config += `			mtu = 1500` + "\n"
+	config += `			name = "mgmt0"` + "\n"
+	config += `			snmp_trap_state = "enable"` + "\n"
+	config += `			speed = "auto"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	lldp_advertise_system_chassis_id = "enabled"` + "\n"
+	config += `	lldp_hold_time = 180` + "\n"
+	config += `	lldp_init_delay_time = 5` + "\n"
+	config += `	lldp_multi_peer = "disabled"` + "\n"
+	config += `	lldp_port_channel = "disabled"` + "\n"
+	config += `	lldp_port_id_sub_type = "short"` + "\n"
+	config += `	lldp_system_description = "Cisco NX-OS"` + "\n"
+	config += `	lldp_transmit_frequency = 60` + "\n"
+	config += `	lldp_interfaces = {` + "\n"
+	config += `		"eth1/1" = {` + "\n"
+	config += `			admin_receive_state = "disabled"` + "\n"
+	config += `			admin_transmit_state = "disabled"` + "\n"
+	config += `			port_dcbxp_version = "CEE"` + "\n"
+	config += `			port_description = "My Port"` + "\n"
+	config += `			system_description = "Cisco NX-OS"` + "\n"
+	config += `			tlv_management_ipv4 = "10.0.0.1"` + "\n"
+	config += `			tlv_management_ipv6 = "2001:db8::1"` + "\n"
+	config += `			tlv_vlan = 100` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

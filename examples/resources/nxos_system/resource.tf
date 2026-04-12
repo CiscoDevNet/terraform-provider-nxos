@@ -215,4 +215,46 @@ resource "nxos_system" "example" {
   platform_unknown_unicast_flood                     = "disabled"
   platform_urpf_status                               = "disabled"
   platform_wrr_unicast_bandwidth                     = 60
+  management_interfaces = {
+    "mgmt0" = {
+      admin_state      = "up"
+      auto_negotiation = "on"
+      description      = "My Description"
+      duplex           = "auto"
+      itu_channel      = 50
+      media_type       = "auto"
+      mtu              = 1500
+      name             = "mgmt0"
+      snmp_trap_state  = "enable"
+      speed            = "auto"
+    }
+  }
+  lldp_admin_state                 = "enabled"
+  lldp_instance_admin_state        = "enabled"
+  lldp_advertise_system_chassis_id = "enabled"
+  lldp_control                     = "stateful-ha"
+  lldp_hold_time                   = 180
+  lldp_infra_vlan                  = 0
+  lldp_init_delay_time             = 5
+  lldp_multi_peer                  = "disabled"
+  lldp_optional_tlv_select         = "port-desc"
+  lldp_optional_tlv_select_hidden  = "unknown"
+  lldp_port_channel                = "disabled"
+  lldp_port_id_sub_type            = "short"
+  lldp_system_description          = "Cisco NX-OS"
+  lldp_transmit_frequency          = 60
+  lldp_interfaces = {
+    "eth1/1" = {
+      admin_receive_state  = "disabled"
+      admin_transmit_state = "disabled"
+      description          = "My Description"
+      name                 = "eth1/1"
+      port_dcbxp_version   = "CEE"
+      port_description     = "My Port"
+      system_description   = "Cisco NX-OS"
+      tlv_management_ipv4  = "10.0.0.1"
+      tlv_management_ipv6  = "2001:db8::1"
+      tlv_vlan             = 100
+    }
+  }
 }

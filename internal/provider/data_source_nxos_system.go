@@ -57,7 +57,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "udldEntity", "udldInst", "udldPhysIf", "platformEntity"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -876,6 +876,158 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "WRR Unicast Bandwidth Value.",
 				Computed:            true,
 			},
+			"management_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Management interface configuration.\n  - Map key: `interface_id` - An identifier.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "Administrative port state.",
+							Computed:            true,
+						},
+						"auto_negotiation": schema.StringAttribute{
+							MarkdownDescription: "Administrative port auto-negotiation.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Interface description.",
+							Computed:            true,
+						},
+						"duplex": schema.StringAttribute{
+							MarkdownDescription: "Duplex.",
+							Computed:            true,
+						},
+						"itu_channel": schema.Int64Attribute{
+							MarkdownDescription: "ITU Channel to support DWDM XCVR.",
+							Computed:            true,
+						},
+						"media_type": schema.StringAttribute{
+							MarkdownDescription: "Configuring the interface media-type.",
+							Computed:            true,
+						},
+						"mtu": schema.Int64Attribute{
+							MarkdownDescription: "Administrative port mtu.",
+							Computed:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: "The name of the object.",
+							Computed:            true,
+						},
+						"snmp_trap_state": schema.StringAttribute{
+							MarkdownDescription: "Administrative port snmp trap state.",
+							Computed:            true,
+						},
+						"speed": schema.StringAttribute{
+							MarkdownDescription: "Administrative port speed.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"lldp_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"lldp_instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"lldp_advertise_system_chassis_id": schema.StringAttribute{
+				MarkdownDescription: "LLDP chassis-id switch configuration.",
+				Computed:            true,
+			},
+			"lldp_control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
+			"lldp_hold_time": schema.Int64Attribute{
+				MarkdownDescription: "The hold time (in seconds) that a receiving device should hold the information sent by your device before discarding it.",
+				Computed:            true,
+			},
+			"lldp_infra_vlan": schema.Int64Attribute{
+				MarkdownDescription: "Specifies the Infra VLAN.",
+				Computed:            true,
+			},
+			"lldp_init_delay_time": schema.Int64Attribute{
+				MarkdownDescription: "The delay time (in seconds) for LLDP to initialize on any interface.",
+				Computed:            true,
+			},
+			"lldp_multi_peer": schema.StringAttribute{
+				MarkdownDescription: "LLDP multi-neighbor configuration.",
+				Computed:            true,
+			},
+			"lldp_optional_tlv_select": schema.StringAttribute{
+				MarkdownDescription: "The selectors for optional TLVs according to the LLDP protocol (802.1AB) specifications.",
+				Computed:            true,
+			},
+			"lldp_optional_tlv_select_hidden": schema.StringAttribute{
+				MarkdownDescription: "Optional TLV Selector.",
+				Computed:            true,
+			},
+			"lldp_port_channel": schema.StringAttribute{
+				MarkdownDescription: "LLDP enabled on PortChannel.",
+				Computed:            true,
+			},
+			"lldp_port_id_sub_type": schema.StringAttribute{
+				MarkdownDescription: "PortId SubType.",
+				Computed:            true,
+			},
+			"lldp_system_description": schema.StringAttribute{
+				MarkdownDescription: "System description.",
+				Computed:            true,
+			},
+			"lldp_transmit_frequency": schema.Int64Attribute{
+				MarkdownDescription: "The transmission frequency of LLDP updates (in seconds).",
+				Computed:            true,
+			},
+			"lldp_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP interface configuration.\n  - Map key: `interface_id` - An identifier.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"admin_receive_state": schema.StringAttribute{
+							MarkdownDescription: "Receive admin state.",
+							Computed:            true,
+						},
+						"admin_transmit_state": schema.StringAttribute{
+							MarkdownDescription: "Transmit admin state.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description.",
+							Computed:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: "The name of the object.",
+							Computed:            true,
+						},
+						"port_dcbxp_version": schema.StringAttribute{
+							MarkdownDescription: "DCBXP Version.",
+							Computed:            true,
+						},
+						"port_description": schema.StringAttribute{
+							MarkdownDescription: "Port description.",
+							Computed:            true,
+						},
+						"system_description": schema.StringAttribute{
+							MarkdownDescription: "System description.",
+							Computed:            true,
+						},
+						"tlv_management_ipv4": schema.StringAttribute{
+							MarkdownDescription: "Tlv ipv4.",
+							Computed:            true,
+						},
+						"tlv_management_ipv6": schema.StringAttribute{
+							MarkdownDescription: "Tlv ipv6.",
+							Computed:            true,
+						},
+						"tlv_vlan": schema.Int64Attribute{
+							MarkdownDescription: "Tlv vlan.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -908,7 +1060,7 @@ func (d *SystemDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,udldEntity,udldInst,udldPhysIf,platformEntity")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,udldEntity,udldInst,udldPhysIf,platformEntity,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

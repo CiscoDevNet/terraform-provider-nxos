@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Add management interface configuration to `nxos_system` resource and data source
+- Add LLDP configuration to `nxos_system` resource and data source
 - Add platform entity configuration to `nxos_system` resource and data source
 - Add `nxos_snmp` resource and data source
 - Add UDLD configuration to `nxos_system` resource and data source

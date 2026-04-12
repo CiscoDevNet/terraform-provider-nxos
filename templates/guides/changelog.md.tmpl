@@ -25,6 +25,14 @@ description: |-
 - Add DNS configuration support to `nxos_system` resource
 - Add optional per-device `username` and `password` attributes to override provider-level credentials
 - Add clock timezone and summer time attributes to `nxos_system` resource and data source
+- Add `otm` to logging facilities in `nxos_logging` resource and data source
+- Add syslog file configuration to `nxos_logging` resource and data source
+- Add syslog remote destinations to `nxos_logging` resource and data source
+- Add syslog source interface to `nxos_logging` resource and data source
+- Add syslog timestamp format to `nxos_logging` resource and data source
+- Add syslog terminal monitor to `nxos_logging` resource and data source
+- Add syslog console to `nxos_logging` resource and data source
+- Add syslog origin ID to `nxos_logging` resource and data source
 
 ## 0.8.1
 

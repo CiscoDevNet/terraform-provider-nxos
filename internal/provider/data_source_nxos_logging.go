@@ -57,7 +57,7 @@ func (d *LoggingDataSource) Metadata(_ context.Context, req datasource.MetadataR
 func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.").AddApiDocumentation("loggingLogging", "System/logging:Logging/", []string{"loggingLogLevel", "loggingFacility"}, []string{"System/logging:LogLevel/", "System/logging:Facility/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.").AddApiDocumentation("topSystem", "", []string{"loggingLogging", "loggingLogLevel", "loggingFacility", "syslogSyslog", "syslogFile", "syslogRemoteDest", "syslogSourceInterface", "syslogTimeStamp", "syslogTermMonitor", "syslogConsole", "syslogOriginid"}, []string{"System/logging:Logging/", "System/logging:LogLevel/", "System/logging:Facility/", "System/syslog:Syslog/", "System/syslog:File/", "System/syslog:RemoteDest/", "System/syslog:SourceInterface/", "System/syslog:TimeStamp/", "System/syslog:TermMonitor/", "System/syslog:Console/", "System/syslog:Originid/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -77,7 +77,7 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				Computed:            true,
 			},
 			"facilities": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("List of logging facilities.\n  - Map key: `name` - Facility Name of individual processes subscribed for logging level.\n  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`").String,
+				MarkdownDescription: helpers.NewAttributeDescription("List of logging facilities.\n  - Map key: `name` - Facility Name of individual processes subscribed for logging level.\n  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`, `otm`").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -87,6 +87,106 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						},
 					},
 				},
+			},
+			"file_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the local file.",
+				Computed:            true,
+			},
+			"file_description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"file_name": schema.StringAttribute{
+				MarkdownDescription: "Object name.",
+				Computed:            true,
+			},
+			"file_persistent_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Set persistent logging utilization alert threshold in percentage.",
+				Computed:            true,
+			},
+			"file_size": schema.Int64Attribute{
+				MarkdownDescription: "Specifies the maximum file size.",
+				Computed:            true,
+			},
+			"remote_destinations": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of syslog remote destination hosts.\n  - Map key: `host` - Hostname or IP for export destination.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "The administrative state of the remote destination host.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: "The syslog service port of the remote destination.",
+							Computed:            true,
+						},
+						"transport": schema.StringAttribute{
+							MarkdownDescription: "Transport.",
+							Computed:            true,
+						},
+						"trustpoint_client_identity": schema.StringAttribute{
+							MarkdownDescription: "Trustpoint Client Identity.",
+							Computed:            true,
+						},
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "The vrf that remote host belongs to.",
+							Computed:            true,
+						},
+						"severity": schema.StringAttribute{
+							MarkdownDescription: "The severity of the event, alert, or issue that caused the syslog entry to be generated.",
+							Computed:            true,
+						},
+						"forwarding_facility": schema.StringAttribute{
+							MarkdownDescription: "The facility to be used to send messages to this destination.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"source_interface_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The destination policy administrative state.",
+				Computed:            true,
+			},
+			"source_interface_name": schema.StringAttribute{
+				MarkdownDescription: "Interface.",
+				Computed:            true,
+			},
+			"timestamp_format": schema.StringAttribute{
+				MarkdownDescription: "Format.",
+				Computed:            true,
+			},
+			"monitor_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The destination policy administrative state.",
+				Computed:            true,
+			},
+			"monitor_severity": schema.StringAttribute{
+				MarkdownDescription: "Severity.",
+				Computed:            true,
+			},
+			"console_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the console terminal.",
+				Computed:            true,
+			},
+			"console_severity": schema.StringAttribute{
+				MarkdownDescription: "The minimum severity level of the messages to be displayed.",
+				Computed:            true,
+			},
+			"origin_id_type": schema.StringAttribute{
+				MarkdownDescription: "OriginId type for Hostname, IP or String.",
+				Computed:            true,
+			},
+			"origin_id_value": schema.StringAttribute{
+				MarkdownDescription: "OriginId value for Hostname, IP or String.",
+				Computed:            true,
 			},
 		},
 	}
@@ -120,7 +220,7 @@ func (d *LoggingDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "loggingLogLevel,loggingFacility")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "loggingLogging,loggingLogLevel,loggingFacility,syslogSyslog,syslogFile,syslogRemoteDest,syslogSourceInterface,syslogTimeStamp,syslogTermMonitor,syslogConsole,syslogOriginid")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

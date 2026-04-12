@@ -3,20 +3,28 @@
 page_title: "nxos_logging Data Source - terraform-provider-nxos"
 subcategory: "System"
 description: |-
-  This data source can read the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.
+  This data source can read the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.
   API Documentation
-  loggingLogging https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:LogLevel/loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Facility/
+  loggingLogging https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:LogLevel/loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Facility/syslogSyslog https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Syslog/syslogFile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:File/syslogRemoteDest https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:RemoteDest/syslogSourceInterface https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:SourceInterface/syslogTimeStamp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:TimeStamp/syslogTermMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:TermMonitor/syslogConsole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Console/syslogOriginid https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Originid/
 ---
 
 # nxos_logging (Data Source)
 
-This data source can read the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.
+This data source can read the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.
 
 ### API Documentation
 
 - [loggingLogging](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/)
 - [loggingLogLevel](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:LogLevel/)
 - [loggingFacility](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Facility/)
+- [syslogSyslog](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Syslog/)
+- [syslogFile](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:File/)
+- [syslogRemoteDest](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:RemoteDest/)
+- [syslogSourceInterface](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:SourceInterface/)
+- [syslogTimeStamp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:TimeStamp/)
+- [syslogTermMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:TermMonitor/)
+- [syslogConsole](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Console/)
+- [syslogOriginid](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Originid/)
 
 ## Example Usage
 
@@ -35,11 +43,27 @@ data "nxos_logging" "example" {
 ### Read-Only
 
 - `all` (String) Logging level all state disabled/enabled.
+- `console_admin_state` (String) The administrative state of the console terminal.
+- `console_severity` (String) The minimum severity level of the messages to be displayed.
 - `facilities` (Attributes Map) List of logging facilities.
   - Map key: `name` - Facility Name of individual processes subscribed for logging level.
-  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp` (see [below for nested schema](#nestedatt--facilities))
+  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`, `otm` (see [below for nested schema](#nestedatt--facilities))
+- `file_admin_state` (String) The administrative state of the local file.
+- `file_description` (String) Description of the specified attribute.
+- `file_name` (String) Object name.
+- `file_persistent_threshold` (Number) Set persistent logging utilization alert threshold in percentage.
+- `file_size` (Number) Specifies the maximum file size.
 - `id` (String) The distinguished name of the object.
 - `level` (String) Logging severity level for all the facilites.
+- `monitor_admin_state` (String) The destination policy administrative state.
+- `monitor_severity` (String) Severity.
+- `origin_id_type` (String) OriginId type for Hostname, IP or String.
+- `origin_id_value` (String) OriginId value for Hostname, IP or String.
+- `remote_destinations` (Attributes Map) List of syslog remote destination hosts.
+  - Map key: `host` - Hostname or IP for export destination. (see [below for nested schema](#nestedatt--remote_destinations))
+- `source_interface_admin_state` (String) The destination policy administrative state.
+- `source_interface_name` (String) Interface.
+- `timestamp_format` (String) Format.
 
 <a id="nestedatt--facilities"></a>
 ### Nested Schema for `facilities`
@@ -47,3 +71,19 @@ data "nxos_logging" "example" {
 Read-Only:
 
 - `level` (String) Logging severity level for individual facility name.
+
+
+<a id="nestedatt--remote_destinations"></a>
+### Nested Schema for `remote_destinations`
+
+Read-Only:
+
+- `admin_state` (String) The administrative state of the remote destination host.
+- `description` (String) Description of the specified attribute.
+- `forwarding_facility` (String) The facility to be used to send messages to this destination.
+- `name` (String) Object name.
+- `port` (Number) The syslog service port of the remote destination.
+- `severity` (String) The severity of the event, alert, or issue that caused the syslog entry to be generated.
+- `transport` (String) Transport.
+- `trustpoint_client_identity` (String) Trustpoint Client Identity.
+- `vrf_name` (String) The vrf that remote host belongs to.

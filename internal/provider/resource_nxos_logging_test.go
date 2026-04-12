@@ -38,6 +38,29 @@ func TestAccNxosLogging(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "all", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "level", "information"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "facilities.spanning-tree.level", "information"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "file_admin_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "file_description", "syslog file"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "file_name", "messages"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "file_persistent_threshold", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "file_size", "4194304"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "remote_destinations.10.0.0.1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "remote_destinations.10.0.0.1.description", "remote syslog server"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "remote_destinations.10.0.0.1.name", "server1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "remote_destinations.10.0.0.1.port", "514"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "remote_destinations.10.0.0.1.transport", "udp"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "remote_destinations.10.0.0.1.trustpoint_client_identity", "my-trustpoint"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "remote_destinations.10.0.0.1.vrf_name", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "remote_destinations.10.0.0.1.severity", "warnings"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "remote_destinations.10.0.0.1.forwarding_facility", "local7"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "source_interface_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "source_interface_name", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "timestamp_format", "milliseconds"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "monitor_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "monitor_severity", "warnings"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "console_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "console_severity", "warnings"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "origin_id_type", "string"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "origin_id_value", "SWITCH1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -101,6 +124,33 @@ func testAccNxosLoggingConfig_all() string {
 	config += `			level = "information"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	file_admin_state = "disabled"` + "\n"
+	config += `	file_description = "syslog file"` + "\n"
+	config += `	file_name = "messages"` + "\n"
+	config += `	file_persistent_threshold = 90` + "\n"
+	config += `	file_size = 4194304` + "\n"
+	config += `	remote_destinations = {` + "\n"
+	config += `		"10.0.0.1" = {` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			description = "remote syslog server"` + "\n"
+	config += `			name = "server1"` + "\n"
+	config += `			port = 514` + "\n"
+	config += `			transport = "udp"` + "\n"
+	config += `			trustpoint_client_identity = "my-trustpoint"` + "\n"
+	config += `			vrf_name = "management"` + "\n"
+	config += `			severity = "warnings"` + "\n"
+	config += `			forwarding_facility = "local7"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	source_interface_admin_state = "enabled"` + "\n"
+	config += `	source_interface_name = "lo0"` + "\n"
+	config += `	timestamp_format = "milliseconds"` + "\n"
+	config += `	monitor_admin_state = "enabled"` + "\n"
+	config += `	monitor_severity = "warnings"` + "\n"
+	config += `	console_admin_state = "enabled"` + "\n"
+	config += `	console_severity = "warnings"` + "\n"
+	config += `	origin_id_type = "string"` + "\n"
+	config += `	origin_id_value = "SWITCH1"` + "\n"
 	config += `}` + "\n"
 	return config
 }

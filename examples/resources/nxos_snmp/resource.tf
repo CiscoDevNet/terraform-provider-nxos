@@ -42,7 +42,7 @@ resource "nxos_snmp" "example" {
     }
   }
   enable_all = "yes"
-  events = {
+  rmon_events = {
     "1" = {
       description = "Test event"
       log         = "yes"

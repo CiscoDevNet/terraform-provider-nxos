@@ -337,7 +337,7 @@ child_classes:
             doc_path: System/snmp:Event/
             rn: event-[%d]
             type: list
-            tf_name: events
+            tf_name: rmon_events
             description: 'List of SNMP RMON event configurations.'
             attributes:
               - nxos_name: num

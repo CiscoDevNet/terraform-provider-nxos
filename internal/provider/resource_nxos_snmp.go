@@ -293,7 +293,7 @@ func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("no", "yes", "unspecified"),
 				},
 			},
-			"events": schema.MapNestedAttribute{
+			"rmon_events": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("List of SNMP RMON event configurations.\n  - Map key: `number` - rmon event number.\n  - Key range: `1`-`65535`").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

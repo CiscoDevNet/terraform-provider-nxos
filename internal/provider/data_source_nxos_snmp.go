@@ -237,7 +237,7 @@ func (d *SNMPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Enable/Disable all traps.",
 				Computed:            true,
 			},
-			"events": schema.MapNestedAttribute{
+			"rmon_events": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("List of SNMP RMON event configurations.\n  - Map key: `number` - rmon event number.\n  - Key range: `1`-`65535`").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

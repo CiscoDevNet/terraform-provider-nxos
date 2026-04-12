@@ -59,7 +59,7 @@ type SNMP struct {
 	LocalUsers               map[string]SNMPLocalUsers `tfsdk:"local_users"`
 	Hosts                    map[string]SNMPHosts      `tfsdk:"hosts"`
 	EnableAll                types.String              `tfsdk:"enable_all"`
-	Events                   map[string]SNMPEvents     `tfsdk:"events"`
+	RmonEvents               map[string]SNMPRmonEvents `tfsdk:"rmon_events"`
 }
 
 type SNMPLocalUsers struct {
@@ -92,7 +92,7 @@ type SNMPHosts struct {
 	Version          types.String `tfsdk:"version"`
 }
 
-type SNMPEvents struct {
+type SNMPRmonEvents struct {
 	Description types.String `tfsdk:"description"`
 	Log         types.String `tfsdk:"log"`
 	Owner       types.String `tfsdk:"owner"`
@@ -140,7 +140,7 @@ func (data SNMPHosts) getRn(key string) string {
 	return fmt.Sprintf("host-[%s]-udp-[%d]", keyParts[0], helpers.Must(strconv.ParseInt(keyParts[1], 10, 64)))
 }
 
-func (data SNMPEvents) getRn(key string) string {
+func (data SNMPRmonEvents) getRn(key string) string {
 	return fmt.Sprintf("event-[%d]", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
@@ -312,7 +312,7 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 			attrs = "{}"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
-			for key, child := range data.Events {
+			for key, child := range data.RmonEvents {
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "num", key)
 				if !child.Description.IsUnknown() && !child.Description.IsNull() {
@@ -505,16 +505,16 @@ func (data *SNMP) fromBody(res gjson.Result) {
 					v.ForEach(
 						func(classname, value gjson.Result) bool {
 							if classname.String() == "snmpEvent" {
-								var child SNMPEvents
+								var child SNMPRmonEvents
 								child.Description = types.StringValue(value.Get("attributes.description").String())
 								child.Log = types.StringValue(value.Get("attributes.log").String())
 								child.Owner = types.StringValue(value.Get("attributes.owner").String())
 								child.Trap = types.StringValue(value.Get("attributes.trap").String())
 								mapKey := value.Get("attributes.num").String()
-								if data.Events == nil {
-									data.Events = make(map[string]SNMPEvents)
+								if data.RmonEvents == nil {
+									data.RmonEvents = make(map[string]SNMPRmonEvents)
 								}
-								data.Events[mapKey] = child
+								data.RmonEvents[mapKey] = child
 							}
 							return true
 						},
@@ -810,7 +810,7 @@ func (data *SNMP) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
-		for key, item := range data.Events {
+		for key, item := range data.RmonEvents {
 			var rsnmpEvent gjson.Result
 			rsnmpRmon.Get("snmpRmon.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -822,7 +822,7 @@ func (data *SNMP) updateFromBody(res gjson.Result) {
 				},
 			)
 			if !rsnmpEvent.Exists() {
-				delete(data.Events, key)
+				delete(data.RmonEvents, key)
 				continue
 			}
 			if !item.Description.IsNull() {
@@ -845,7 +845,7 @@ func (data *SNMP) updateFromBody(res gjson.Result) {
 			} else {
 				item.Trap = types.StringNull()
 			}
-			data.Events[key] = item
+			data.RmonEvents[key] = item
 		}
 	}
 }
@@ -1016,9 +1016,9 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP)
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.snmpInst.children"+".-1", deleteBody)
 		}
 	}
-	for stateKey := range state.Events {
-		if _, found := data.Events[stateKey]; !found {
-			stateChild := state.Events[stateKey]
+	for stateKey := range state.RmonEvents {
+		if _, found := data.RmonEvents[stateKey]; !found {
+			stateChild := state.RmonEvents[stateKey]
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "snmpEvent.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "snmpEvent.attributes.status", "deleted")

@@ -73,7 +73,7 @@ resource "nxos_snmp" "example" {
     }
   }
   enable_all = "yes"
-  events = {
+  rmon_events = {
     "1" = {
       description = "Test event"
       log         = "yes"
@@ -97,9 +97,6 @@ resource "nxos_snmp" "example" {
 - `enable_all` (String) Enable/Disable all traps.
   - Choices: `no`, `yes`, `unspecified`
 - `engine_id` (String) Engine Id.
-- `events` (Attributes Map) List of SNMP RMON event configurations.
-  - Map key: `number` - rmon event number.
-  - Key range: `1`-`65535` (see [below for nested schema](#nestedatt--events))
 - `hosts` (Attributes Map) List of SNMP host configurations.
   - Map key format: `<name>;<udp_port>`
   - Key component `name`: snmp-server host name.
@@ -115,6 +112,9 @@ resource "nxos_snmp" "example" {
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `packet_size` (Number) Packet size config.
   - Range: `484`-`17382`
+- `rmon_events` (Attributes Map) List of SNMP RMON event configurations.
+  - Map key: `number` - rmon event number.
+  - Key range: `1`-`65535` (see [below for nested schema](#nestedatt--rmon_events))
 - `source_interface_traps` (String) Source interface name for Traps.
 - `system_info_description` (String) System Description.
 - `tcp_session_authentication` (String) tcp-session auth config.
@@ -127,18 +127,6 @@ resource "nxos_snmp" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-<a id="nestedatt--events"></a>
-### Nested Schema for `events`
-
-Optional:
-
-- `description` (String) rmon event description.
-- `log` (String) Whether to generate / not log when alarm event is fired.
-  - Choices: `no`, `yes`
-- `owner` (String) rmon event owner.
-- `trap` (String) rmon event description.
-
 
 <a id="nestedatt--hosts"></a>
 ### Nested Schema for `hosts`
@@ -184,6 +172,19 @@ Optional:
 
 <a id="nestedatt--local_users--groups"></a>
 ### Nested Schema for `local_users.groups`
+
+
+
+<a id="nestedatt--rmon_events"></a>
+### Nested Schema for `rmon_events`
+
+Optional:
+
+- `description` (String) rmon event description.
+- `log` (String) Whether to generate / not log when alarm event is fired.
+  - Choices: `no`, `yes`
+- `owner` (String) rmon event owner.
+- `trap` (String) rmon event description.
 
 ## Import
 

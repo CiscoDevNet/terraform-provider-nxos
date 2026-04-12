@@ -47,9 +47,6 @@ data "nxos_snmp" "example" {
 - `description` (String) Description of the specified attribute.
 - `enable_all` (String) Enable/Disable all traps.
 - `engine_id` (String) Engine Id.
-- `events` (Attributes Map) List of SNMP RMON event configurations.
-  - Map key: `number` - rmon event number.
-  - Key range: `1`-`65535` (see [below for nested schema](#nestedatt--events))
 - `hosts` (Attributes Map) List of SNMP host configurations.
   - Map key format: `<name>;<udp_port>`
   - Key component `name`: snmp-server host name.
@@ -63,22 +60,14 @@ data "nxos_snmp" "example" {
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `packet_size` (Number) Packet size config.
+- `rmon_events` (Attributes Map) List of SNMP RMON event configurations.
+  - Map key: `number` - rmon event number.
+  - Key range: `1`-`65535` (see [below for nested schema](#nestedatt--rmon_events))
 - `source_interface_traps` (String) Source interface name for Traps.
 - `system_info_description` (String) System Description.
 - `tcp_session_authentication` (String) tcp-session auth config.
 - `unknown_engine_id` (String) Indicates the Unknown Engine Id MO thats needs to be created.
 - `unknown_user` (String) Indicates the Unknown User MO thats needs to be created.
-
-<a id="nestedatt--events"></a>
-### Nested Schema for `events`
-
-Read-Only:
-
-- `description` (String) rmon event description.
-- `log` (String) Whether to generate / not log when alarm event is fired.
-- `owner` (String) rmon event owner.
-- `trap` (String) rmon event description.
-
 
 <a id="nestedatt--hosts"></a>
 ### Nested Schema for `hosts`
@@ -117,3 +106,15 @@ Read-Only:
 
 <a id="nestedatt--local_users--groups"></a>
 ### Nested Schema for `local_users.groups`
+
+
+
+<a id="nestedatt--rmon_events"></a>
+### Nested Schema for `rmon_events`
+
+Read-Only:
+
+- `description` (String) rmon event description.
+- `log` (String) Whether to generate / not log when alarm event is fired.
+- `owner` (String) rmon event owner.
+- `trap` (String) rmon event description.

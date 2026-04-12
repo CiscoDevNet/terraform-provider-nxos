@@ -61,7 +61,7 @@ resource "nxos_spanning_tree" "example" {
 - `bridge_assurance` (String) Enable spanning-tree bridge assurance on all ports.
   - Choices: `enabled`, `disabled`
 - `control` (String) The control state.
-  - Choices: `normal`, `stateful-ha`
+  - Choices: `normal`, `stateful-ha`, `extchp-edge`, `extchp-bpdu-filter`, `extchp-bpdu-guard`
 - `device` (String) A device name from the provider configuration.
 - `fcoe` (String) Disable spanning tree for fcoe vlan.
   - Choices: `enabled`, `disabled`

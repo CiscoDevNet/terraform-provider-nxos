@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.
   API Documentation
-  snmpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Entity/snmpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Inst/snmpSysInfo https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SysInfo/snmpGlobals https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Globals/snmpSourceInterfaceTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SourceInterfaceTraps/snmpLocalUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LocalUser/snmpUserGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/snmpHost https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/snmpTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/
+  snmpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Entity/snmpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Inst/snmpSysInfo https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SysInfo/snmpGlobals https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Globals/snmpSourceInterfaceTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SourceInterfaceTraps/snmpLocalUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LocalUser/snmpUserGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/snmpHost https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/snmpTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/snmpRmon https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/snmpEvent https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/
 ---
 
 # nxos_snmp (Data Source)
@@ -23,6 +23,8 @@ This data source can read the SNMP configuration on NX-OS devices, including sys
 - [snmpUserGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/)
 - [snmpHost](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/)
 - [snmpTraps](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/)
+- [snmpRmon](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/)
+- [snmpEvent](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/)
 
 ## Example Usage
 
@@ -45,6 +47,9 @@ data "nxos_snmp" "example" {
 - `description` (String) Description of the specified attribute.
 - `enable_all` (String) Enable/Disable all traps.
 - `engine_id` (String) Engine Id.
+- `events` (Attributes Map) List of SNMP RMON event configurations.
+  - Map key: `number` - rmon event number.
+  - Key range: `1`-`65535` (see [below for nested schema](#nestedatt--events))
 - `hosts` (Attributes Map) List of SNMP host configurations.
   - Map key format: `<name>;<udp_port>`
   - Key component `name`: snmp-server host name.
@@ -63,6 +68,17 @@ data "nxos_snmp" "example" {
 - `tcp_session_authentication` (String) tcp-session auth config.
 - `unknown_engine_id` (String) Indicates the Unknown Engine Id MO thats needs to be created.
 - `unknown_user` (String) Indicates the Unknown User MO thats needs to be created.
+
+<a id="nestedatt--events"></a>
+### Nested Schema for `events`
+
+Read-Only:
+
+- `description` (String) rmon event description.
+- `log` (String) Whether to generate / not log when alarm event is fired.
+- `owner` (String) rmon event owner.
+- `trap` (String) rmon event description.
+
 
 <a id="nestedatt--hosts"></a>
 ### Nested Schema for `hosts`

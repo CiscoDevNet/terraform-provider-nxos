@@ -63,6 +63,10 @@ func TestAccNxosSNMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "hosts.10.0.0.1;1162.security_level", "auth"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "hosts.10.0.0.1;1162.version", "v3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "enable_all", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "events.1.description", "Test event"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "events.1.log", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "events.1.owner", "admin"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "events.1.trap", "public"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
@@ -172,6 +176,14 @@ func testAccNxosSNMPConfig_all(includeWriteOnly bool) string {
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	enable_all = "yes"` + "\n"
+	config += `	events = {` + "\n"
+	config += `		"1" = {` + "\n"
+	config += `			description = "Test event"` + "\n"
+	config += `			log = "yes"` + "\n"
+	config += `			owner = "admin"` + "\n"
+	config += `			trap = "public"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
 }

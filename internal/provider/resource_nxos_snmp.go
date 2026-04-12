@@ -63,7 +63,7 @@ func (r *SNMPResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.").AddApiDocumentation("snmpEntity", "System/snmp:Entity/", []string{"snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpTraps"}, []string{"System/snmp:Inst/", "System/snmp:SysInfo/", "System/snmp:Globals/", "System/snmp:SourceInterfaceTraps/", "System/snmp:LocalUser/", "System/snmp:UserGroup/", "System/snmp:Host/", "System/snmp:Traps/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.").AddApiDocumentation("snmpEntity", "System/snmp:Entity/", []string{"snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpTraps", "snmpRmon", "snmpEvent"}, []string{"System/snmp:Inst/", "System/snmp:SysInfo/", "System/snmp:Globals/", "System/snmp:SourceInterfaceTraps/", "System/snmp:LocalUser/", "System/snmp:UserGroup/", "System/snmp:Host/", "System/snmp:Traps/", "System/snmp:Rmon/", "System/snmp:Event/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -293,6 +293,33 @@ func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("no", "yes", "unspecified"),
 				},
 			},
+			"events": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of SNMP RMON event configurations.\n  - Map key: `number` - rmon event number.\n  - Key range: `1`-`65535`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("rmon event description.").String,
+							Optional:            true,
+						},
+						"log": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Whether to generate / not log when alarm event is fired.").AddStringEnumDescription("no", "yes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("no", "yes"),
+							},
+						},
+						"owner": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("rmon event owner.").String,
+							Optional:            true,
+						},
+						"trap": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("rmon event description.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -402,7 +429,7 @@ func (r *SNMPResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "snmpInst,snmpSysInfo,snmpGlobals,snmpSourceInterfaceTraps,snmpLocalUser,snmpUserGroup,snmpHost,snmpTraps")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "snmpInst,snmpSysInfo,snmpGlobals,snmpSourceInterfaceTraps,snmpLocalUser,snmpUserGroup,snmpHost,snmpTraps,snmpRmon,snmpEvent")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

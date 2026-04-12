@@ -92,6 +92,10 @@ func TestAccNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.source_interface", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.description", "TACACS+ server reference"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.order", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "authentication_realm_default_role_policy", "no-login"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "authentication_realm_description", "AAA authentication realm"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "authentication_realm_owner_key", "owner1"))
@@ -273,6 +277,14 @@ func testAccNxosUserManagementConfig_all(includeWriteOnly bool) string {
 	config += `			owner_tag = "tag1"` + "\n"
 	config += `			source_interface = "unspecified"` + "\n"
 	config += `			vrf = "default"` + "\n"
+	config += `			servers = {` + "\n"
+	config += `				"10.1.1.1" = {` + "\n"
+	config += `					description = "TACACS+ server reference"` + "\n"
+	config += `					order = 1` + "\n"
+	config += `					owner_key = "owner1"` + "\n"
+	config += `					owner_tag = "tag1"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	authentication_realm_default_role_policy = "no-login"` + "\n"

@@ -85,6 +85,14 @@ resource "nxos_user_management" "example" {
       owner_tag        = "tag1"
       source_interface = "unspecified"
       vrf              = "default"
+      servers = {
+        "10.1.1.1" = {
+          description = "TACACS+ server reference"
+          order       = 1
+          owner_key   = "owner1"
+          owner_tag   = "tag1"
+        }
+      }
     }
   }
   authentication_realm_default_role_policy     = "no-login"

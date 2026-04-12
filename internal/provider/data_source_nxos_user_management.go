@@ -57,7 +57,7 @@ func (d *UserManagementDataSource) Metadata(_ context.Context, req datasource.Me
 func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/", "Security%20and%20Policing/aaa:AuthRealm/", "Security%20and%20Policing/aaa:DefaultAuth/", "Security%20and%20Policing/aaa:ConsoleAuth/", "Security%20and%20Policing/aaa:DefaultAuthor/", "Security%20and%20Policing/aaa:DefaultAcc/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:AuthRealm/", "Security%20and%20Policing/aaa:DefaultAuth/", "Security%20and%20Policing/aaa:ConsoleAuth/", "Security%20and%20Policing/aaa:DefaultAuthor/", "Security%20and%20Policing/aaa:DefaultAcc/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -421,6 +421,30 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "VRF.",
 							Computed:            true,
 						},
+						"servers": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("TACACS+ provider group server members.\n  - Map key: `name` - Object name.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description of the specified attribute.",
+										Computed:            true,
+									},
+									"order": schema.Int64Attribute{
+										MarkdownDescription: "Relative priority in which the AAA provider will be contacted.",
+										Computed:            true,
+									},
+									"owner_key": schema.StringAttribute{
+										MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+										Computed:            true,
+									},
+									"owner_tag": schema.StringAttribute{
+										MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+										Computed:            true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -744,7 +768,7 @@ func (d *UserManagementDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "aaaPreLoginBanner,aaaPostLoginBanner,aaaUser,aaaUserDomain,aaaUserRole,aaaTacacsPlusEp,aaaTacacsPlusProvider,aaaTacacsPlusProviderGroup,aaaAuthRealm,aaaDefaultAuth,aaaConsoleAuth,aaaDefaultAuthor,aaaDefaultAcc")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "aaaPreLoginBanner,aaaPostLoginBanner,aaaUser,aaaUserDomain,aaaUserRole,aaaTacacsPlusEp,aaaTacacsPlusProvider,aaaTacacsPlusProviderGroup,aaaProviderRef,aaaAuthRealm,aaaDefaultAuth,aaaConsoleAuth,aaaDefaultAuthor,aaaDefaultAcc")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

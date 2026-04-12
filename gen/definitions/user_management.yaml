@@ -575,6 +575,42 @@ child_classes:
             type: String
             description: "VRF."
             example: "default"
+        child_classes:
+          - class_name: aaaProviderRef
+            doc_path: Security%20and%20Policing/aaa:ProviderRef/
+            rn: providerref-[%s]
+            tf_name: servers
+            description: "TACACS+ provider group server members."
+            type: list
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: "Object name."
+                example: "10.1.1.1"
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: "Description of the specified attribute."
+                example: "TACACS+ server reference"
+              - nxos_name: order
+                tf_name: order
+                type: Int64
+                min_int: 0
+                max_int: 16
+                description: "Relative priority in which the AAA provider will be contacted."
+                example: 1
+              - nxos_name: ownerKey
+                tf_name: owner_key
+                type: String
+                description: "The key for enabling clients to own their data for entity correlation."
+                example: "owner1"
+              - nxos_name: ownerTag
+                tf_name: owner_tag
+                type: String
+                description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
+                example: "tag1"
   - class_name: aaaAuthRealm
     doc_path: Security%20and%20Policing/aaa:AuthRealm/
     rn: authrealm

@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
   API Documentation
-  aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanneraaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanneraaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/aaaAuthRealm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:AuthRealm/aaaDefaultAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuth/aaaConsoleAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/aaaDefaultAuthor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuthor/aaaDefaultAcc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAcc/
+  aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanneraaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanneraaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/aaaProviderRef https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:ProviderRef/aaaAuthRealm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:AuthRealm/aaaDefaultAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuth/aaaConsoleAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/aaaDefaultAuthor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuthor/aaaDefaultAcc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAcc/
 ---
 
 # nxos_user_management (Data Source)
@@ -23,6 +23,7 @@ This data source can read the user management configuration on NX-OS devices, in
 - [aaaTacacsPlusEp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/)
 - [aaaTacacsPlusProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/)
 - [aaaTacacsPlusProviderGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/)
+- [aaaProviderRef](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:ProviderRef/)
 - [aaaAuthRealm](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:AuthRealm/)
 - [aaaDefaultAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:DefaultAuth/)
 - [aaaConsoleAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/)
@@ -178,8 +179,21 @@ Read-Only:
 - `description` (String) Description of the specified attribute.
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `servers` (Attributes Map) TACACS+ provider group server members.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--tacacs_provider_groups--servers))
 - `source_interface` (String) Source Interface.
 - `vrf` (String) VRF.
+
+<a id="nestedatt--tacacs_provider_groups--servers"></a>
+### Nested Schema for `tacacs_provider_groups.servers`
+
+Read-Only:
+
+- `description` (String) Description of the specified attribute.
+- `order` (Number) Relative priority in which the AAA provider will be contacted.
+- `owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+
 
 
 <a id="nestedatt--tacacs_providers"></a>

@@ -127,12 +127,16 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "boot_order", "pxe"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "boot_poap", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "boot_image_verification", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_aggressive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_message_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_interfaces.eth1/9.aggressive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_interfaces.eth1/9.bidirectional_detection", "port-enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosSystemConfig(),
+				Config: testAccDataSourceNxosSystemPrerequisitesConfig + testAccDataSourceNxosSystemConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -142,6 +146,16 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosSystemPrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/udld"
+  class_name = "fmUdld"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -256,6 +270,17 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `	boot_order = "pxe"` + "\n"
 	config += `	boot_poap = "enable"` + "\n"
 	config += `	boot_image_verification = "enable"` + "\n"
+	config += `	udld_admin_state = "enabled"` + "\n"
+	config += `	udld_aggressive = "enabled"` + "\n"
+	config += `	udld_message_interval = 20` + "\n"
+	config += `	udld_interfaces = {` + "\n"
+	config += `		"eth1/9" = {` + "\n"
+	config += `			admin_state = "port-enabled"` + "\n"
+	config += `			aggressive = "enabled"` + "\n"
+	config += `			bidirectional_detection = "port-enabled"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

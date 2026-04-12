@@ -131,6 +131,12 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_order", "pxe"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_poap", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_image_verification", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_aggressive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_message_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.admin_state", "port-enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.aggressive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.bidirectional_detection", "port-enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -140,7 +146,7 @@ func TestAccNxosSystem(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosSystemConfig_all(),
+				Config: testAccNxosSystemPrerequisitesConfig + testAccNxosSystemConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -172,12 +178,23 @@ func nxosSystemImportStateIdFunc(resourceName string) resource.ImportStateIdFunc
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosSystemPrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/udld"
+  class_name = "fmUdld"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSystemConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -295,6 +312,17 @@ func testAccNxosSystemConfig_all() string {
 	config += `	boot_order = "pxe"` + "\n"
 	config += `	boot_poap = "enable"` + "\n"
 	config += `	boot_image_verification = "enable"` + "\n"
+	config += `	udld_admin_state = "enabled"` + "\n"
+	config += `	udld_aggressive = "enabled"` + "\n"
+	config += `	udld_message_interval = 20` + "\n"
+	config += `	udld_interfaces = {` + "\n"
+	config += `		"eth1/9" = {` + "\n"
+	config += `			admin_state = "port-enabled"` + "\n"
+	config += `			aggressive = "enabled"` + "\n"
+	config += `			bidirectional_detection = "port-enabled"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -57,7 +57,7 @@ func (d *NTPDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.").AddApiDocumentation("datetimeClkPol", "System/datetime:ClkPol/", []string{"datetimeNtpProvider"}, []string{"System/datetime:NtpProvider/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.").AddApiDocumentation("datetimeClkPol", "System/datetime:ClkPol/", []string{"datetimeNtpProvider", "datetimeNtpSrcIf", "datetimeAccessGroup"}, []string{"System/datetime:NtpProvider/", "System/datetime:NtpSrcIf/", "System/datetime:AccessGroup/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -140,6 +140,30 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
+			"source_interface": schema.StringAttribute{
+				MarkdownDescription: "Source Interface.",
+				Computed:            true,
+			},
+			"access_group_match_all": schema.StringAttribute{
+				MarkdownDescription: "Scan All NTP Access-Group Options.",
+				Computed:            true,
+			},
+			"access_group_peer": schema.StringAttribute{
+				MarkdownDescription: "NTP Peer Access Group Name (max 63 characters).",
+				Computed:            true,
+			},
+			"access_group_query_only": schema.StringAttribute{
+				MarkdownDescription: "NTP QueryOnly Access Group Name (max 63 characters).",
+				Computed:            true,
+			},
+			"access_group_serve": schema.StringAttribute{
+				MarkdownDescription: "NTP Serve Access Group Name (max 63 characters).",
+				Computed:            true,
+			},
+			"access_group_serve_only": schema.StringAttribute{
+				MarkdownDescription: "NTP ServeOnly Access Group Name (max 63 characters).",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -172,7 +196,7 @@ func (d *NTPDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "datetimeNtpProvider")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "datetimeNtpProvider,datetimeNtpSrcIf,datetimeAccessGroup")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

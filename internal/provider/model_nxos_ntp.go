@@ -38,19 +38,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type NTP struct {
-	Device              types.String          `tfsdk:"device"`
-	Dn                  types.String          `tfsdk:"id"`
-	AdminState          types.String          `tfsdk:"admin_state"`
-	AllowControl        types.String          `tfsdk:"allow_control"`
-	AllowPrivate        types.String          `tfsdk:"allow_private"`
-	AuthenticationState types.String          `tfsdk:"authentication_state"`
-	Logging             types.String          `tfsdk:"logging"`
-	LoggingLevel        types.String          `tfsdk:"logging_level"`
-	Master              types.String          `tfsdk:"master"`
-	MasterStratum       types.Int64           `tfsdk:"master_stratum"`
-	Passive             types.String          `tfsdk:"passive"`
-	RateLimit           types.Int64           `tfsdk:"rate_limit"`
-	Servers             map[string]NTPServers `tfsdk:"servers"`
+	Device               types.String          `tfsdk:"device"`
+	Dn                   types.String          `tfsdk:"id"`
+	AdminState           types.String          `tfsdk:"admin_state"`
+	AllowControl         types.String          `tfsdk:"allow_control"`
+	AllowPrivate         types.String          `tfsdk:"allow_private"`
+	AuthenticationState  types.String          `tfsdk:"authentication_state"`
+	Logging              types.String          `tfsdk:"logging"`
+	LoggingLevel         types.String          `tfsdk:"logging_level"`
+	Master               types.String          `tfsdk:"master"`
+	MasterStratum        types.Int64           `tfsdk:"master_stratum"`
+	Passive              types.String          `tfsdk:"passive"`
+	RateLimit            types.Int64           `tfsdk:"rate_limit"`
+	Servers              map[string]NTPServers `tfsdk:"servers"`
+	SourceInterface      types.String          `tfsdk:"source_interface"`
+	AccessGroupMatchAll  types.String          `tfsdk:"access_group_match_all"`
+	AccessGroupPeer      types.String          `tfsdk:"access_group_peer"`
+	AccessGroupQueryOnly types.String          `tfsdk:"access_group_query_only"`
+	AccessGroupServe     types.String          `tfsdk:"access_group_serve"`
+	AccessGroupServeOnly types.String          `tfsdk:"access_group_serve_only"`
 }
 
 type NTPServers struct {
@@ -160,6 +166,32 @@ func (data NTP) toBody(config NTP) nxos.Body {
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.datetimeNtpProvider.attributes", attrs)
 	}
+	attrs = "{}"
+	if !data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull() {
+		attrs, _ = sjson.Set(attrs, "srcIf", data.SourceInterface.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.datetimeNtpSrcIf.attributes", attrs)
+	}
+	attrs = "{}"
+	if !data.AccessGroupMatchAll.IsUnknown() && !data.AccessGroupMatchAll.IsNull() {
+		attrs, _ = sjson.Set(attrs, "matchAll", data.AccessGroupMatchAll.ValueString())
+	}
+	if !data.AccessGroupPeer.IsUnknown() && !data.AccessGroupPeer.IsNull() {
+		attrs, _ = sjson.Set(attrs, "peer", data.AccessGroupPeer.ValueString())
+	}
+	if !data.AccessGroupQueryOnly.IsUnknown() && !data.AccessGroupQueryOnly.IsNull() {
+		attrs, _ = sjson.Set(attrs, "queryOnly", data.AccessGroupQueryOnly.ValueString())
+	}
+	if !data.AccessGroupServe.IsUnknown() && !data.AccessGroupServe.IsNull() {
+		attrs, _ = sjson.Set(attrs, "serve", data.AccessGroupServe.ValueString())
+	}
+	if !data.AccessGroupServeOnly.IsUnknown() && !data.AccessGroupServeOnly.IsNull() {
+		attrs, _ = sjson.Set(attrs, "serveOnly", data.AccessGroupServeOnly.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.datetimeAccessGroup.attributes", attrs)
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -203,6 +235,38 @@ func (data *NTP) fromBody(res gjson.Result) {
 			return true
 		},
 	)
+	{
+		var rdatetimeNtpSrcIf gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("datetimeNtpSrcIf.attributes.rn").String()
+				if rnValue == "srcIf" {
+					rdatetimeNtpSrcIf = v
+					return false
+				}
+				return true
+			},
+		)
+		data.SourceInterface = types.StringValue(rdatetimeNtpSrcIf.Get("datetimeNtpSrcIf.attributes.srcIf").String())
+	}
+	{
+		var rdatetimeAccessGroup gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("datetimeAccessGroup.attributes.rn").String()
+				if rnValue == "accessgroup" {
+					rdatetimeAccessGroup = v
+					return false
+				}
+				return true
+			},
+		)
+		data.AccessGroupMatchAll = types.StringValue(rdatetimeAccessGroup.Get("datetimeAccessGroup.attributes.matchAll").String())
+		data.AccessGroupPeer = types.StringValue(rdatetimeAccessGroup.Get("datetimeAccessGroup.attributes.peer").String())
+		data.AccessGroupQueryOnly = types.StringValue(rdatetimeAccessGroup.Get("datetimeAccessGroup.attributes.queryOnly").String())
+		data.AccessGroupServe = types.StringValue(rdatetimeAccessGroup.Get("datetimeAccessGroup.attributes.serve").String())
+		data.AccessGroupServeOnly = types.StringValue(rdatetimeAccessGroup.Get("datetimeAccessGroup.attributes.serveOnly").String())
+	}
 }
 
 // End of section. //template:end fromBody
@@ -307,6 +371,58 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 		}
 		data.Servers[key] = item
 	}
+	var rdatetimeNtpSrcIf gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("datetimeNtpSrcIf.attributes.rn").String()
+			if rnValue == "srcIf" {
+				rdatetimeNtpSrcIf = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.SourceInterface.IsNull() {
+		data.SourceInterface = types.StringValue(rdatetimeNtpSrcIf.Get("datetimeNtpSrcIf.attributes.srcIf").String())
+	} else {
+		data.SourceInterface = types.StringNull()
+	}
+	var rdatetimeAccessGroup gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("datetimeAccessGroup.attributes.rn").String()
+			if rnValue == "accessgroup" {
+				rdatetimeAccessGroup = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.AccessGroupMatchAll.IsNull() {
+		data.AccessGroupMatchAll = types.StringValue(rdatetimeAccessGroup.Get("datetimeAccessGroup.attributes.matchAll").String())
+	} else {
+		data.AccessGroupMatchAll = types.StringNull()
+	}
+	if !data.AccessGroupPeer.IsNull() {
+		data.AccessGroupPeer = types.StringValue(rdatetimeAccessGroup.Get("datetimeAccessGroup.attributes.peer").String())
+	} else {
+		data.AccessGroupPeer = types.StringNull()
+	}
+	if !data.AccessGroupQueryOnly.IsNull() {
+		data.AccessGroupQueryOnly = types.StringValue(rdatetimeAccessGroup.Get("datetimeAccessGroup.attributes.queryOnly").String())
+	} else {
+		data.AccessGroupQueryOnly = types.StringNull()
+	}
+	if !data.AccessGroupServe.IsNull() {
+		data.AccessGroupServe = types.StringValue(rdatetimeAccessGroup.Get("datetimeAccessGroup.attributes.serve").String())
+	} else {
+		data.AccessGroupServe = types.StringNull()
+	}
+	if !data.AccessGroupServeOnly.IsNull() {
+		data.AccessGroupServeOnly = types.StringValue(rdatetimeAccessGroup.Get("datetimeAccessGroup.attributes.serveOnly").String())
+	} else {
+		data.AccessGroupServeOnly = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -353,6 +469,18 @@ func (data NTP) toDeleteBody() nxos.Body {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.rn", child.getRn(key))
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpSrcIf.attributes.rn", "srcIf")
+		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpSrcIf.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "datetimeAccessGroup.attributes.rn", "accessgroup")
+		deleteBody, _ = sjson.Set(deleteBody, "datetimeAccessGroup.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 

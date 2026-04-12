@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
   API Documentation
-  datetimeClkPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/
+  datetimeClkPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/datetimeNtpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpSrcIf/datetimeAccessGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:AccessGroup/
 ---
 
 # nxos_ntp (Resource)
@@ -16,6 +16,8 @@ This resource can manage the NTP configuration on NX-OS devices, including NTP s
 
 - [datetimeClkPol](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/)
 - [datetimeNtpProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/)
+- [datetimeNtpSrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpSrcIf/)
+- [datetimeAccessGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:AccessGroup/)
 
 ## Example Usage
 
@@ -41,6 +43,12 @@ resource "nxos_ntp" "example" {
       preferred = true
     }
   }
+  source_interface        = "lo0"
+  access_group_match_all  = "enabled"
+  access_group_peer       = "PeerAcl"
+  access_group_query_only = "QueryOnlyAcl"
+  access_group_serve      = "ServeAcl"
+  access_group_serve_only = "ServeOnlyAcl"
 }
 ```
 
@@ -49,6 +57,12 @@ resource "nxos_ntp" "example" {
 
 ### Optional
 
+- `access_group_match_all` (String) Scan All NTP Access-Group Options.
+  - Choices: `enabled`, `disabled`
+- `access_group_peer` (String) NTP Peer Access Group Name (max 63 characters).
+- `access_group_query_only` (String) NTP QueryOnly Access Group Name (max 63 characters).
+- `access_group_serve` (String) NTP Serve Access Group Name (max 63 characters).
+- `access_group_serve_only` (String) NTP ServeOnly Access Group Name (max 63 characters).
 - `admin_state` (String) A property that indicates if the NTP protocol is enabled or disabled.
   - Choices: `enabled`, `disabled`
 - `allow_control` (String) Allow Control Mode NTP Packets.
@@ -72,6 +86,7 @@ resource "nxos_ntp" "example" {
   - Range: `1`-`65535`
 - `servers` (Attributes Map) List of NTP servers or peers.
   - Map key: `name` - NTP server or peer address. (see [below for nested schema](#nestedatt--servers))
+- `source_interface` (String) Source Interface.
 
 ### Read-Only
 

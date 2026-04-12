@@ -19,4 +19,10 @@ resource "nxos_ntp" "example" {
       preferred = true
     }
   }
+  source_interface        = "lo0"
+  access_group_match_all  = "enabled"
+  access_group_peer       = "PeerAcl"
+  access_group_query_only = "QueryOnlyAcl"
+  access_group_serve      = "ServeAcl"
+  access_group_serve_only = "ServeOnlyAcl"
 }

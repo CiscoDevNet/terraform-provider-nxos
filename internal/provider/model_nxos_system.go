@@ -205,6 +205,9 @@ type System struct {
 	LldpSystemDescription                         types.String                          `tfsdk:"lldp_system_description"`
 	LldpTransmitFrequency                         types.Int64                           `tfsdk:"lldp_transmit_frequency"`
 	LldpInterfaces                                map[string]SystemLldpInterfaces       `tfsdk:"lldp_interfaces"`
+	CoppAdminState                                types.String                          `tfsdk:"copp_admin_state"`
+	CoppRateLimiter                               types.Bool                            `tfsdk:"copp_rate_limiter"`
+	CoppProfileType                               types.String                          `tfsdk:"copp_profile_type"`
 }
 
 type SystemArpVpcDomains struct {
@@ -1244,6 +1247,26 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".coppEntity"
+		attrs = "{}"
+		if !data.CoppAdminState.IsUnknown() && !data.CoppAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.CoppAdminState.ValueString())
+		}
+		if !data.CoppRateLimiter.IsUnknown() && !data.CoppRateLimiter.IsNull() {
+			attrs, _ = sjson.Set(attrs, "enableFlag", strconv.FormatBool(data.CoppRateLimiter.ValueBool()))
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		attrs = "{}"
+		if !data.CoppProfileType.IsUnknown() && !data.CoppProfileType.IsNull() {
+			attrs, _ = sjson.Set(attrs, "prof", data.CoppProfileType.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppProfile.attributes", attrs)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1945,6 +1968,35 @@ func (data *System) fromBody(res gjson.Result) {
 					return true
 				},
 			)
+		}
+	}
+	{
+		var rcoppEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("coppEntity.attributes.rn").String()
+				if rnValue == "copp" {
+					rcoppEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.CoppAdminState = types.StringValue(rcoppEntity.Get("coppEntity.attributes.adminSt").String())
+		data.CoppRateLimiter = types.BoolValue(helpers.ParseNxosBoolean(rcoppEntity.Get("coppEntity.attributes.enableFlag").String()))
+		{
+			var rcoppProfile gjson.Result
+			rcoppEntity.Get("coppEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("coppProfile.attributes.rn").String()
+					if rnValue == "profile" {
+						rcoppProfile = v
+						return false
+					}
+					return true
+				},
+			)
+			data.CoppProfileType = types.StringValue(rcoppProfile.Get("coppProfile.attributes.prof").String())
 		}
 	}
 }
@@ -3500,6 +3552,45 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.LldpInterfaces[key] = item
 		}
 	}
+	var rcoppEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("coppEntity.attributes.rn").String()
+			if rnValue == "copp" {
+				rcoppEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.CoppAdminState.IsNull() {
+		data.CoppAdminState = types.StringValue(rcoppEntity.Get("coppEntity.attributes.adminSt").String())
+	} else {
+		data.CoppAdminState = types.StringNull()
+	}
+	if !data.CoppRateLimiter.IsNull() {
+		data.CoppRateLimiter = types.BoolValue(helpers.ParseNxosBoolean(rcoppEntity.Get("coppEntity.attributes.enableFlag").String()))
+	} else {
+		data.CoppRateLimiter = types.BoolNull()
+	}
+	{
+		var rcoppProfile gjson.Result
+		rcoppEntity.Get("coppEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("coppProfile.attributes.rn").String()
+				if rnValue == "profile" {
+					rcoppProfile = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.CoppProfileType.IsNull() {
+			data.CoppProfileType = types.StringValue(rcoppProfile.Get("coppProfile.attributes.prof").String())
+		} else {
+			data.CoppProfileType = types.StringNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -4104,6 +4195,30 @@ func (data System) toDeleteBody() nxos.Body {
 				childBody, _ = sjson.Set(childBody, "tlvSetMgmtIpv6", "DME_UNSET_PROPERTY_MARKER")
 				childBody, _ = sjson.Set(childBody, "tlvSetVlan", "DME_UNSET_PROPERTY_MARKER")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.lldpIf.attributes", childBody)
+			}
+		}
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".coppEntity"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.CoppAdminState.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.CoppRateLimiter.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"enableFlag", "DME_UNSET_PROPERTY_MARKER")
+		}
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.CoppProfileType.IsNull() {
+				childBody, _ = sjson.Set(childBody, "prof", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".coppProfile"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			}
 		}
 	}

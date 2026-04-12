@@ -99,7 +99,7 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"control": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("normal", "stateful-ha").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("normal", "stateful-ha", "extchp-edge", "extchp-bpdu-filter", "extchp-bpdu-guard").String,
 				Optional:            true,
 			},
 			"fcoe": schema.StringAttribute{

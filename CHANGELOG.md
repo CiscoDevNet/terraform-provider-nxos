@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add TACACS+ provider group server members to `nxos_user_management` resource and data source
 - Add RMON event configuration to `nxos_snmp` resource and data source
 - Add management interface configuration to `nxos_system` resource and data source
 - Add LLDP configuration to `nxos_system` resource and data source

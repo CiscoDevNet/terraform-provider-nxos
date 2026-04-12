@@ -188,12 +188,20 @@ type UserManagementTacacsProviders struct {
 }
 
 type UserManagementTacacsProviderGroups struct {
-	Deadtime        types.Int64  `tfsdk:"deadtime"`
-	Description     types.String `tfsdk:"description"`
-	OwnerKey        types.String `tfsdk:"owner_key"`
-	OwnerTag        types.String `tfsdk:"owner_tag"`
-	SourceInterface types.String `tfsdk:"source_interface"`
-	Vrf             types.String `tfsdk:"vrf"`
+	Deadtime        types.Int64                                          `tfsdk:"deadtime"`
+	Description     types.String                                         `tfsdk:"description"`
+	OwnerKey        types.String                                         `tfsdk:"owner_key"`
+	OwnerTag        types.String                                         `tfsdk:"owner_tag"`
+	SourceInterface types.String                                         `tfsdk:"source_interface"`
+	Vrf             types.String                                         `tfsdk:"vrf"`
+	Servers         map[string]UserManagementTacacsProviderGroupsServers `tfsdk:"servers"`
+}
+
+type UserManagementTacacsProviderGroupsServers struct {
+	Description types.String `tfsdk:"description"`
+	Order       types.Int64  `tfsdk:"order"`
+	OwnerKey    types.String `tfsdk:"owner_key"`
+	OwnerTag    types.String `tfsdk:"owner_tag"`
 }
 
 type UserManagementDefaultAuthorizations struct {
@@ -254,6 +262,10 @@ func (data UserManagementTacacsProviders) getRn(key string) string {
 
 func (data UserManagementTacacsProviderGroups) getRn(key string) string {
 	return fmt.Sprintf("tacacsplusprovidergroup-[%s]", key)
+}
+
+func (data UserManagementTacacsProviderGroupsServers) getRn(key string) string {
+	return fmt.Sprintf("providerref-[%s]", key)
 }
 
 func (data UserManagementDefaultAuthorizations) getRn(key string) string {
@@ -548,6 +560,27 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 				attrs, _ = sjson.Set(attrs, "vrf", child.Vrf.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaTacacsPlusProviderGroup.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".aaaTacacsPlusProviderGroup.children"
+				for key, child := range child.Servers {
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "name", key)
+					if !child.Description.IsUnknown() && !child.Description.IsNull() {
+						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+					}
+					if !child.Order.IsUnknown() && !child.Order.IsNull() {
+						attrs, _ = sjson.Set(attrs, "order", strconv.FormatInt(child.Order.ValueInt64(), 10))
+					}
+					if !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ownerKey", child.OwnerKey.ValueString())
+					}
+					if !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ownerTag", child.OwnerTag.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaProviderRef.attributes", attrs)
+				}
+			}
 		}
 	}
 	{
@@ -972,6 +1005,28 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 							child.SourceInterface = types.StringValue(value.Get("attributes.srcIf").String())
 							child.Vrf = types.StringValue(value.Get("attributes.vrf").String())
 							mapKey := value.Get("attributes.name").String()
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "aaaProviderRef" {
+												var nestedChildaaaProviderRef UserManagementTacacsProviderGroupsServers
+												nestedChildaaaProviderRef.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+												nestedChildaaaProviderRef.Order = types.Int64Value(nestedValue.Get("attributes.order").Int())
+												nestedChildaaaProviderRef.OwnerKey = types.StringValue(nestedValue.Get("attributes.ownerKey").String())
+												nestedChildaaaProviderRef.OwnerTag = types.StringValue(nestedValue.Get("attributes.ownerTag").String())
+												nestedMapKey := nestedValue.Get("attributes.name").String()
+												if child.Servers == nil {
+													child.Servers = make(map[string]UserManagementTacacsProviderGroupsServers)
+												}
+												child.Servers[nestedMapKey] = nestedChildaaaProviderRef
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
 							if data.TacacsProviderGroups == nil {
 								data.TacacsProviderGroups = make(map[string]UserManagementTacacsProviderGroups)
 							}
@@ -1578,6 +1633,44 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 			item.Vrf = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.vrf").String())
 		} else {
 			item.Vrf = types.StringNull()
+		}
+		for nc := range item.Servers {
+			ncItem := item.Servers[nc]
+			var raaaProviderRef gjson.Result
+			raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("aaaProviderRef.attributes.name").String() == nc {
+						raaaProviderRef = v
+						return false
+					}
+					return true
+				},
+			)
+			if !raaaProviderRef.Exists() {
+				delete(item.Servers, nc)
+				continue
+			}
+			if !ncItem.Description.IsNull() {
+				ncItem.Description = types.StringValue(raaaProviderRef.Get("aaaProviderRef.attributes.descr").String())
+			} else {
+				ncItem.Description = types.StringNull()
+			}
+			if !ncItem.Order.IsNull() {
+				ncItem.Order = types.Int64Value(raaaProviderRef.Get("aaaProviderRef.attributes.order").Int())
+			} else {
+				ncItem.Order = types.Int64Null()
+			}
+			if !ncItem.OwnerKey.IsNull() {
+				ncItem.OwnerKey = types.StringValue(raaaProviderRef.Get("aaaProviderRef.attributes.ownerKey").String())
+			} else {
+				ncItem.OwnerKey = types.StringNull()
+			}
+			if !ncItem.OwnerTag.IsNull() {
+				ncItem.OwnerTag = types.StringValue(raaaProviderRef.Get("aaaProviderRef.attributes.ownerTag").String())
+			} else {
+				ncItem.OwnerTag = types.StringNull()
+			}
+			item.Servers[nc] = ncItem
 		}
 		data.TacacsProviderGroups[key] = item
 	}
@@ -2432,6 +2525,32 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.aaaTacacsPlusEp.children"+".-1", deleteBody)
+		}
+	}
+	for di := range state.TacacsProviderGroups {
+		if _, found := data.TacacsProviderGroups[di]; !found {
+			continue
+		}
+		stateItemdi := state.TacacsProviderGroups[di]
+		planItemdi := data.TacacsProviderGroups[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.aaaTacacsPlusEp.children").Array() {
+			if mv.Get("aaaTacacsPlusProviderGroup.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.aaaTacacsPlusEp.children" + "." + strconv.Itoa(mi) + ".aaaTacacsPlusProviderGroup.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.Servers {
+			if _, found := planItemdi.Servers[stateChildKey]; !found {
+				stateChild := stateItemdi.Servers[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aaaProviderRef.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "aaaProviderRef.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
 		}
 	}
 	for stateKey := range state.DefaultAuthorizations {

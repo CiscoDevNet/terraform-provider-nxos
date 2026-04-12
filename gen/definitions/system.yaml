@@ -1780,9 +1780,347 @@ child_classes:
         max_int: 100
         example: 60
         exclude_test: true
+  - class_name: mgmtMgmtIf
+    doc_path: System/mgmt%3AMgmtIf/
+    rn: mgmt-[%s]
+    type: list
+    no_delete: true
+    tf_name: management_interfaces
+    description: 'Management interface configuration.'
+    attributes:
+      - nxos_name: id
+        tf_name: interface_id
+        type: String
+        id: true
+        description: 'An identifier.'
+        example: mgmt0
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'Administrative port state.'
+        enum_values:
+          - down
+          - up
+        example: up
+      - nxos_name: autoNeg
+        tf_name: auto_negotiation
+        type: String
+        description: 'Administrative port auto-negotiation.'
+        enum_values:
+          - 'on'
+          - 'off'
+          - 25G
+        example: 'on'
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: 'Interface description.'
+        example: My Description
+      - nxos_name: duplex
+        tf_name: duplex
+        type: String
+        description: 'Duplex.'
+        enum_values:
+          - auto
+          - full
+          - half
+        example: auto
+      - nxos_name: ituChannel
+        tf_name: itu_channel
+        type: Int64
+        description: 'ITU Channel to support DWDM XCVR.'
+        min_int: 1
+        max_int: 96
+        example: 50
+      - nxos_name: mediaType
+        tf_name: media_type
+        type: String
+        description: 'Configuring the interface media-type.'
+        example: auto
+      - nxos_name: mtu
+        tf_name: mtu
+        type: Int64
+        description: 'Administrative port mtu.'
+        min_int: 576
+        max_int: 9216
+        example: 1500
+      - nxos_name: name
+        tf_name: name
+        type: String
+        description: 'The name of the object.'
+        example: mgmt0
+      - nxos_name: snmpTrapSt
+        tf_name: snmp_trap_state
+        type: String
+        description: 'Administrative port snmp trap state.'
+        enum_values:
+          - enable
+          - disable
+        example: enable
+      - nxos_name: speed
+        tf_name: speed
+        type: String
+        description: 'Administrative port speed.'
+        enum_values:
+          - unknown
+          - 100M
+          - 1G
+          - 10G
+          - 40G
+          - auto
+          - auto 100M
+          - auto 100M 1G
+          - 100G
+          - 25G
+          - 10M
+          - 50G
+          - 200G
+          - 400G
+          - 2.5G
+          - 5G
+          - auto 2.5G 5G 10G
+          - auto 100M 1G 2.5G 5G
+          - 800G
+        example: auto
+  - class_name: lldpEntity
+    doc_path: Discovery%20Protocols/lldp%3AEntity/
+    rn: lldp
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: adminSt
+        tf_name: lldp_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
+    child_classes:
+      - class_name: lldpInst
+        doc_path: Discovery%20Protocols/lldp%3AInst/
+        rn: inst
+        type: single
+        no_delete: true
+        attributes:
+          - nxos_name: adminSt
+            tf_name: lldp_instance_admin_state
+            type: String
+            description: 'The administrative state of the object or policy.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+            exclude_test: true
+          - nxos_name: advertiseSystemChassisIdEnable
+            tf_name: lldp_advertise_system_chassis_id
+            type: String
+            description: 'LLDP chassis-id switch configuration.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: ctrl
+            tf_name: lldp_control
+            type: String
+            description: 'The control state.'
+            enum_values:
+              - stateful-ha
+            example: stateful-ha
+            exclude_test: true
+          - nxos_name: holdTime
+            tf_name: lldp_hold_time
+            type: Int64
+            description: 'The hold time (in seconds) that a receiving device should hold the information sent by your device before discarding it.'
+            min_int: 1
+            max_int: 255
+            example: 180
+          - nxos_name: infraVlan
+            tf_name: lldp_infra_vlan
+            type: Int64
+            description: 'Specifies the Infra VLAN.'
+            min_int: 0
+            max_int: 4094
+            example: 0
+            exclude_test: true
+          - nxos_name: initDelayTime
+            tf_name: lldp_init_delay_time
+            type: Int64
+            description: 'The delay time (in seconds) for LLDP to initialize on any interface.'
+            min_int: 1
+            max_int: 10
+            example: 5
+          - nxos_name: multiPeerEnable
+            tf_name: lldp_multi_peer
+            type: String
+            description: 'LLDP multi-neighbor configuration.'
+            enum_values:
+              - enabled
+              - disabled
+            example: disabled
+          - nxos_name: optTlvSel
+            tf_name: lldp_optional_tlv_select
+            type: String
+            description: 'The selectors for optional TLVs according to the LLDP protocol (802.1AB) specifications.'
+            enum_values:
+              - unknown
+              - port-desc
+              - sys-name
+              - sys-desc
+              - sys-cap
+              - mgmt-addr-v4
+              - port-vlan
+              - dcbx
+              - mgmt-addr-v6
+              - dcbxp
+              - power-mgmt
+              - four-wire-pwr-mgmt
+              - dcbxp egress-queuing
+              - max-framesize
+              - vlan-name
+              - link-aggregation
+            allow_non_enum_values: true
+            example: port-desc
+          - nxos_name: optTlvSelHidden
+            tf_name: lldp_optional_tlv_select_hidden
+            type: String
+            description: 'Optional TLV Selector.'
+            enum_values:
+              - unknown
+              - port-desc
+              - sys-name
+              - sys-desc
+              - sys-cap
+              - mgmt-addr-v4
+              - port-vlan
+              - dcbx
+              - mgmt-addr-v6
+              - dcbxp
+              - power-mgmt
+              - four-wire-pwr-mgmt
+              - dcbxp egress-queuing
+              - max-framesize
+              - vlan-name
+              - link-aggregation
+            allow_non_enum_values: true
+            example: unknown
+            exclude_test: true
+          - nxos_name: pcEnable
+            tf_name: lldp_port_channel
+            type: String
+            description: 'LLDP enabled on PortChannel.'
+            enum_values:
+              - enabled
+              - disabled
+            example: disabled
+          - nxos_name: portIdSubType
+            tf_name: lldp_port_id_sub_type
+            type: String
+            description: 'PortId SubType.'
+            enum_values:
+              - long
+              - short
+            example: short
+          - nxos_name: sysDesc
+            tf_name: lldp_system_description
+            type: String
+            description: 'System description.'
+            example: Cisco NX-OS
+          - nxos_name: txFreq
+            tf_name: lldp_transmit_frequency
+            type: Int64
+            description: 'The transmission frequency of LLDP updates (in seconds).'
+            min_int: 1
+            max_int: 254
+            example: 60
+        child_classes:
+          - class_name: lldpIf
+            doc_path: Discovery%20Protocols/lldp%3AIf/
+            rn: if-[%s]
+            type: list
+            no_delete: true
+            tf_name: lldp_interfaces
+            description: 'LLDP interface configuration.'
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'An identifier.'
+                example: eth1/1
+              - nxos_name: adminRxSt
+                tf_name: admin_receive_state
+                type: String
+                description: 'Receive admin state.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: adminTxSt
+                tf_name: admin_transmit_state
+                type: String
+                description: 'Transmit admin state.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description.'
+                example: My Description
+                exclude_test: true
+              - nxos_name: name
+                tf_name: name
+                type: String
+                description: 'The name of the object.'
+                example: eth1/1
+                exclude_test: true
+              - nxos_name: portDCBXPVer
+                tf_name: port_dcbxp_version
+                type: String
+                description: 'DCBXP Version.'
+                enum_values:
+                  - auto
+                  - CEE
+                  - IEEE
+                example: CEE
+              - nxos_name: portDesc
+                tf_name: port_description
+                type: String
+                description: 'Port description.'
+                example: My Port
+              - nxos_name: sysDesc
+                tf_name: system_description
+                type: String
+                description: 'System description.'
+                example: Cisco NX-OS
+              - nxos_name: tlvSetMgmtIpv4
+                tf_name: tlv_management_ipv4
+                type: String
+                description: 'Tlv ipv4.'
+                example: 10.0.0.1
+              - nxos_name: tlvSetMgmtIpv6
+                tf_name: tlv_management_ipv6
+                type: String
+                description: 'Tlv ipv6.'
+                example: '2001:db8::1'
+              - nxos_name: tlvSetVlan
+                tf_name: tlv_vlan
+                type: Int64
+                description: 'Tlv vlan.'
+                min_int: 0
+                max_int: 4094
+                example: 100
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/lldp
+    class_name: fmLldp
     attributes:
       - name: adminSt
         value: enabled

@@ -63,7 +63,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "udldEntity", "udldInst", "udldPhysIf", "platformEntity"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1344,6 +1344,224 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					int64validator.Between(0, 100),
 				},
 			},
+			"management_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Management interface configuration.\n  - Map key: `interface_id` - An identifier.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port state.").AddStringEnumDescription("down", "up").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("down", "up"),
+							},
+						},
+						"auto_negotiation": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port auto-negotiation.").AddStringEnumDescription("on", "off", "25G").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("on", "off", "25G"),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interface description.").String,
+							Optional:            true,
+						},
+						"duplex": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Duplex.").AddStringEnumDescription("auto", "full", "half").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("auto", "full", "half"),
+							},
+						},
+						"itu_channel": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ITU Channel to support DWDM XCVR.").AddIntegerRangeDescription(1, 96).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 96),
+							},
+						},
+						"media_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configuring the interface media-type.").String,
+							Optional:            true,
+						},
+						"mtu": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port mtu.").AddIntegerRangeDescription(576, 9216).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(576, 9216),
+							},
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
+							Optional:            true,
+						},
+						"snmp_trap_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port snmp trap state.").AddStringEnumDescription("enable", "disable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enable", "disable"),
+							},
+						},
+						"speed": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port speed.").AddStringEnumDescription("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G", "800G").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G", "800G"),
+							},
+						},
+					},
+				},
+			},
+			"lldp_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"lldp_instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"lldp_advertise_system_chassis_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP chassis-id switch configuration.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"lldp_control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("stateful-ha"),
+				},
+			},
+			"lldp_hold_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The hold time (in seconds) that a receiving device should hold the information sent by your device before discarding it.").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"lldp_infra_vlan": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies the Infra VLAN.").AddIntegerRangeDescription(0, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4094),
+				},
+			},
+			"lldp_init_delay_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The delay time (in seconds) for LLDP to initialize on any interface.").AddIntegerRangeDescription(1, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 10),
+				},
+			},
+			"lldp_multi_peer": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP multi-neighbor configuration.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"lldp_optional_tlv_select": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The selectors for optional TLVs according to the LLDP protocol (802.1AB) specifications.").AddStringEnumDescription("unknown", "port-desc", "sys-name", "sys-desc", "sys-cap", "mgmt-addr-v4", "port-vlan", "dcbx", "mgmt-addr-v6", "dcbxp", "power-mgmt", "four-wire-pwr-mgmt", "dcbxp egress-queuing", "max-framesize", "vlan-name", "link-aggregation").String,
+				Optional:            true,
+			},
+			"lldp_optional_tlv_select_hidden": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Optional TLV Selector.").AddStringEnumDescription("unknown", "port-desc", "sys-name", "sys-desc", "sys-cap", "mgmt-addr-v4", "port-vlan", "dcbx", "mgmt-addr-v6", "dcbxp", "power-mgmt", "four-wire-pwr-mgmt", "dcbxp egress-queuing", "max-framesize", "vlan-name", "link-aggregation").String,
+				Optional:            true,
+			},
+			"lldp_port_channel": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP enabled on PortChannel.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"lldp_port_id_sub_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PortId SubType.").AddStringEnumDescription("long", "short").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("long", "short"),
+				},
+			},
+			"lldp_system_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("System description.").String,
+				Optional:            true,
+			},
+			"lldp_transmit_frequency": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The transmission frequency of LLDP updates (in seconds).").AddIntegerRangeDescription(1, 254).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 254),
+				},
+			},
+			"lldp_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP interface configuration.\n  - Map key: `interface_id` - An identifier.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"admin_receive_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Receive admin state.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"admin_transmit_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Transmit admin state.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+							Optional:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
+							Optional:            true,
+						},
+						"port_dcbxp_version": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DCBXP Version.").AddStringEnumDescription("auto", "CEE", "IEEE").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("auto", "CEE", "IEEE"),
+							},
+						},
+						"port_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port description.").String,
+							Optional:            true,
+						},
+						"system_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("System description.").String,
+							Optional:            true,
+						},
+						"tlv_management_ipv4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Tlv ipv4.").String,
+							Optional:            true,
+						},
+						"tlv_management_ipv6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Tlv ipv6.").String,
+							Optional:            true,
+						},
+						"tlv_vlan": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Tlv vlan.").AddIntegerRangeDescription(0, 4094).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4094),
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -1453,7 +1671,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,udldEntity,udldInst,udldPhysIf,platformEntity")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,udldEntity,udldInst,udldPhysIf,platformEntity,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

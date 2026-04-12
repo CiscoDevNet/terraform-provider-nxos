@@ -38,157 +38,173 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type System struct {
-	Device                                        types.String                    `tfsdk:"device"`
-	Dn                                            types.String                    `tfsdk:"id"`
-	Name                                          types.String                    `tfsdk:"name"`
-	EthernetMtu                                   types.Int64                     `tfsdk:"ethernet_mtu"`
-	EthernetDefaultAdminState                     types.String                    `tfsdk:"ethernet_default_admin_state"`
-	EthernetAdminLinkDownSyslogLevel              types.Int64                     `tfsdk:"ethernet_admin_link_down_syslog_level"`
-	EthernetAdminLinkUpSyslogLevel                types.Int64                     `tfsdk:"ethernet_admin_link_up_syslog_level"`
-	EthernetAdminState                            types.String                    `tfsdk:"ethernet_admin_state"`
-	EthernetAllowUnsupportedSfp                   types.Bool                      `tfsdk:"ethernet_allow_unsupported_sfp"`
-	EthernetChassisInfrastructureAdaptorVlan      types.Int64                     `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
-	EthernetChassisInfrastructureEpdsPortNumber   types.Int64                     `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
-	EthernetChassisInfrastructureIpv6Address      types.String                    `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
-	EthernetChassisInfrastructureVlan             types.Int64                     `tfsdk:"ethernet_chassis_infrastructure_vlan"`
-	EthernetChassisManagementInstance             types.String                    `tfsdk:"ethernet_chassis_management_instance"`
-	EthernetChassisManagementInstanceFabricNumber types.String                    `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
-	EthernetControl                               types.String                    `tfsdk:"ethernet_control"`
-	EthernetInterfaceSyslogInfo                   types.String                    `tfsdk:"ethernet_interface_syslog_info"`
-	EthernetLogEvent                              types.String                    `tfsdk:"ethernet_log_event"`
-	EthernetDefaultLayer                          types.String                    `tfsdk:"ethernet_default_layer"`
-	EthernetSystemInterfaceAdminState             types.String                    `tfsdk:"ethernet_system_interface_admin_state"`
-	EthernetSystemLinkFailureLaserOn              types.Bool                      `tfsdk:"ethernet_system_link_failure_laser_on"`
-	EthernetSystemStormControlMultiThreshold      types.Bool                      `tfsdk:"ethernet_system_storm_control_multi_threshold"`
-	EthernetVlanTagNative                         types.Bool                      `tfsdk:"ethernet_vlan_tag_native"`
-	ArpAdminState                                 types.String                    `tfsdk:"arp_admin_state"`
-	ArpInstanceAdminState                         types.String                    `tfsdk:"arp_instance_admin_state"`
-	ArpAllowStaticArpOutsideSubnet                types.String                    `tfsdk:"arp_allow_static_arp_outside_subnet"`
-	ArpUnnumberedSviSoftwareReplication           types.String                    `tfsdk:"arp_unnumbered_svi_software_replication"`
-	ArpCacheLimit                                 types.Int64                     `tfsdk:"arp_cache_limit"`
-	ArpCacheSyslogRate                            types.Int64                     `tfsdk:"arp_cache_syslog_rate"`
-	ArpControl                                    types.String                    `tfsdk:"arp_control"`
-	ArpEvpnTimeout                                types.Int64                     `tfsdk:"arp_evpn_timeout"`
-	ArpInterfaceCacheLimit                        types.Int64                     `tfsdk:"arp_interface_cache_limit"`
-	ArpIpAdjacencyRouteDistance                   types.Int64                     `tfsdk:"arp_ip_adjacency_route_distance"`
-	ArpIpArpCos                                   types.Int64                     `tfsdk:"arp_ip_arp_cos"`
-	ArpOffListTimeout                             types.Int64                     `tfsdk:"arp_off_list_timeout"`
-	ArpRarpFabricForwarding                       types.String                    `tfsdk:"arp_rarp_fabric_forwarding"`
-	ArpRarpFabricForwardingRate                   types.Int64                     `tfsdk:"arp_rarp_fabric_forwarding_rate"`
-	ArpResolveOutsideSubnet                       types.String                    `tfsdk:"arp_resolve_outside_subnet"`
-	ArpSuppressionTimeout                         types.Int64                     `tfsdk:"arp_suppression_timeout"`
-	ArpTimeout                                    types.Int64                     `tfsdk:"arp_timeout"`
-	ArpVpcDomains                                 map[string]SystemArpVpcDomains  `tfsdk:"arp_vpc_domains"`
-	NdAdminState                                  types.String                    `tfsdk:"nd_admin_state"`
-	NdAcceptSolicitNeighborEntry                  types.String                    `tfsdk:"nd_accept_solicit_neighbor_entry"`
-	NdInstanceAdminState                          types.String                    `tfsdk:"nd_instance_admin_state"`
-	NdAgingInterval                               types.Int64                     `tfsdk:"nd_aging_interval"`
-	NdCacheLimit                                  types.Int64                     `tfsdk:"nd_cache_limit"`
-	NdCacheSyslogRate                             types.Int64                     `tfsdk:"nd_cache_syslog_rate"`
-	NdControl                                     types.String                    `tfsdk:"nd_control"`
-	NdIpv6AdjacencyRouteDistance                  types.Int64                     `tfsdk:"nd_ipv6_adjacency_route_distance"`
-	NdOffListTimeout                              types.Int64                     `tfsdk:"nd_off_list_timeout"`
-	NdProbeIntervalForSolicitNeighbor             types.Int64                     `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
-	NdSolicitNeighborAdvertisement                types.String                    `tfsdk:"nd_solicit_neighbor_advertisement"`
-	NdVrfs                                        map[string]SystemNdVrfs         `tfsdk:"nd_vrfs"`
-	ClockAdminState                               types.String                    `tfsdk:"clock_admin_state"`
-	ClockAuthenticationState                      types.String                    `tfsdk:"clock_authentication_state"`
-	ClockFormat                                   types.String                    `tfsdk:"clock_format"`
-	ClockFormatDebug                              types.Bool                      `tfsdk:"clock_format_debug"`
-	ClockFormatSyslog                             types.Bool                      `tfsdk:"clock_format_syslog"`
-	ClockProtocol                                 types.String                    `tfsdk:"clock_protocol"`
-	ClockTimezoneName                             types.String                    `tfsdk:"clock_timezone_name"`
-	ClockTimezoneHours                            types.Int64                     `tfsdk:"clock_timezone_hours"`
-	ClockTimezoneMinutes                          types.Int64                     `tfsdk:"clock_timezone_minutes"`
-	ClockSummerTimeName                           types.String                    `tfsdk:"clock_summer_time_name"`
-	ClockSummerTimeOffsetMinutes                  types.Int64                     `tfsdk:"clock_summer_time_offset_minutes"`
-	ClockSummerTimeStartWeek                      types.Int64                     `tfsdk:"clock_summer_time_start_week"`
-	ClockSummerTimeStartDay                       types.String                    `tfsdk:"clock_summer_time_start_day"`
-	ClockSummerTimeStartMonth                     types.String                    `tfsdk:"clock_summer_time_start_month"`
-	ClockSummerTimeStartTime                      types.String                    `tfsdk:"clock_summer_time_start_time"`
-	ClockSummerTimeEndWeek                        types.Int64                     `tfsdk:"clock_summer_time_end_week"`
-	ClockSummerTimeEndDay                         types.String                    `tfsdk:"clock_summer_time_end_day"`
-	ClockSummerTimeEndMonth                       types.String                    `tfsdk:"clock_summer_time_end_month"`
-	ClockSummerTimeEndTime                        types.String                    `tfsdk:"clock_summer_time_end_time"`
-	DnsAdminState                                 types.String                    `tfsdk:"dns_admin_state"`
-	DnsProfiles                                   map[string]SystemDnsProfiles    `tfsdk:"dns_profiles"`
-	Vdcs                                          map[string]SystemVdcs           `tfsdk:"vdcs"`
-	CliAliases                                    map[string]SystemCliAliases     `tfsdk:"cli_aliases"`
-	SmartLicensingTransportMode                   types.String                    `tfsdk:"smart_licensing_transport_mode"`
-	SmartLicensingTransportCsluUrl                types.String                    `tfsdk:"smart_licensing_transport_cslu_url"`
-	BootAci                                       types.String                    `tfsdk:"boot_aci"`
-	BootAutoCopy                                  types.String                    `tfsdk:"boot_auto_copy"`
-	BootDhcp                                      types.Int64                     `tfsdk:"boot_dhcp"`
-	BootExcludeConfiguration                      types.String                    `tfsdk:"boot_exclude_configuration"`
-	BootFex                                       types.String                    `tfsdk:"boot_fex"`
-	BootMode                                      types.String                    `tfsdk:"boot_mode"`
-	BootOrder                                     types.String                    `tfsdk:"boot_order"`
-	BootPoap                                      types.String                    `tfsdk:"boot_poap"`
-	BootImageVerification                         types.String                    `tfsdk:"boot_image_verification"`
-	BootImageSupervisor1                          types.String                    `tfsdk:"boot_image_supervisor_1"`
-	BootImageSupervisor2                          types.String                    `tfsdk:"boot_image_supervisor_2"`
-	UdldAdminState                                types.String                    `tfsdk:"udld_admin_state"`
-	UdldAggressive                                types.String                    `tfsdk:"udld_aggressive"`
-	UdldMessageInterval                           types.Int64                     `tfsdk:"udld_message_interval"`
-	UdldInterfaces                                map[string]SystemUdldInterfaces `tfsdk:"udld_interfaces"`
-	PlatformAccessListMatchInnerHeader            types.String                    `tfsdk:"platform_access_list_match_inner_header"`
-	PlatformAclTapAggregation                     types.String                    `tfsdk:"platform_acl_tap_aggregation"`
-	PlatformDescription                           types.String                    `tfsdk:"platform_description"`
-	PlatformDisableParseError                     types.String                    `tfsdk:"platform_disable_parse_error"`
-	PlatformGlobalTxSpan                          types.String                    `tfsdk:"platform_global_tx_span"`
-	PlatformHighMulticastPriority                 types.String                    `tfsdk:"platform_high_multicast_priority"`
-	PlatformHardwareLouResourceThreshold          types.Int64                     `tfsdk:"platform_hardware_lou_resource_threshold"`
-	PlatformIngressBdIfaclLabelOptimization       types.String                    `tfsdk:"platform_ingress_bd_ifacl_label_optimization"`
-	PlatformIngressRaclSize                       types.String                    `tfsdk:"platform_ingress_racl_size"`
-	PlatformIngressReplicationRoundRobin          types.Bool                      `tfsdk:"platform_ingress_replication_round_robin"`
-	PlatformIpStatistics                          types.String                    `tfsdk:"platform_ip_statistics"`
-	PlatformIpv6AlpmCarveValue                    types.Int64                     `tfsdk:"platform_ipv6_alpm_carve_value"`
-	PlatformIpv6LpmMaxEntries                     types.Int64                     `tfsdk:"platform_ipv6_lpm_max_entries"`
-	PlatformLpmMaxLimit                           types.Int64                     `tfsdk:"platform_lpm_max_limit"`
-	PlatformMulticastDcsCheck                     types.String                    `tfsdk:"platform_multicast_dcs_check"`
-	PlatformMulticastFlexStats                    types.String                    `tfsdk:"platform_multicast_flex_stats"`
-	PlatformMulticastLpmMaxEntries                types.Int64                     `tfsdk:"platform_multicast_lpm_max_entries"`
-	PlatformMulticastNlb                          types.String                    `tfsdk:"platform_multicast_nlb"`
-	PlatformMulticastRaclBridge                   types.String                    `tfsdk:"platform_multicast_racl_bridge"`
-	PlatformMldSnooping                           types.String                    `tfsdk:"platform_mld_snooping"`
-	PlatformMplsAdjacencyStatsMode                types.String                    `tfsdk:"platform_mpls_adjacency_stats_mode"`
-	PlatformMplsEcmpMode                          types.String                    `tfsdk:"platform_mpls_ecmp_mode"`
-	PlatformMroutingDisableL2Update               types.String                    `tfsdk:"platform_mrouting_disable_l2_update"`
-	PlatformMroutingDisableSecondRouteUpdate      types.String                    `tfsdk:"platform_mrouting_disable_second_route_update"`
-	PlatformMroutingPerformanceMode               types.String                    `tfsdk:"platform_mrouting_performance_mode"`
-	PlatformMulticastMaxLimit                     types.Int64                     `tfsdk:"platform_multicast_max_limit"`
-	PlatformMulticastRpfCheckOptimization         types.String                    `tfsdk:"platform_multicast_rpf_check_optimization"`
-	PlatformMulticastServiceReflectPort           types.Int64                     `tfsdk:"platform_multicast_service_reflect_port"`
-	PlatformMulticastSyslogThreshold              types.Int64                     `tfsdk:"platform_multicast_syslog_threshold"`
-	PlatformOpenflowForwardPdu                    types.String                    `tfsdk:"platform_openflow_forward_pdu"`
-	PlatformPbrSkipSelfIp                         types.String                    `tfsdk:"platform_pbr_skip_self_ip"`
-	PlatformPortChannelFastConvergence            types.String                    `tfsdk:"platform_port_channel_fast_convergence"`
-	PlatformPortChannelLoadBalanceAlgorithm       types.String                    `tfsdk:"platform_port_channel_load_balance_algorithm"`
-	PlatformPortChannelLoadBalanceResilient       types.String                    `tfsdk:"platform_port_channel_load_balance_resilient"`
-	PlatformPortChannelMplsLoadBalanceLabelIp     types.String                    `tfsdk:"platform_port_channel_mpls_load_balance_label_ip"`
-	PlatformPortChannelMplsLoadBalanceLabelOnly   types.String                    `tfsdk:"platform_port_channel_mpls_load_balance_label_only"`
-	PlatformPortChannelScaleFanout                types.String                    `tfsdk:"platform_port_channel_scale_fanout"`
-	PlatformPicCoreEnable                         types.String                    `tfsdk:"platform_pic_core_enable"`
-	PlatformProfileFrontPortMode                  types.String                    `tfsdk:"platform_profile_front_port_mode"`
-	PlatformProfileMode                           types.String                    `tfsdk:"platform_profile_mode"`
-	PlatformProfileTuple                          types.String                    `tfsdk:"platform_profile_tuple"`
-	PlatformPstatConfiguration                    types.String                    `tfsdk:"platform_pstat_configuration"`
-	PlatformQosMinBuffer                          types.String                    `tfsdk:"platform_qos_min_buffer"`
-	PlatformRoutingMode                           types.String                    `tfsdk:"platform_routing_mode"`
-	PlatformServiceTemplateName                   types.String                    `tfsdk:"platform_service_template_name"`
-	PlatformSviAndSiFlexStats                     types.String                    `tfsdk:"platform_svi_and_si_flex_stats"`
-	PlatformSviFlexStats                          types.String                    `tfsdk:"platform_svi_flex_stats"`
-	PlatformSwitchMode                            types.String                    `tfsdk:"platform_switch_mode"`
-	PlatformSwitchingFabricSpeed                  types.String                    `tfsdk:"platform_switching_fabric_speed"`
-	PlatformSwitchingMode                         types.String                    `tfsdk:"platform_switching_mode"`
-	PlatformSystemFabricMode                      types.String                    `tfsdk:"platform_system_fabric_mode"`
-	PlatformTcamSyslogThreshold                   types.Int64                     `tfsdk:"platform_tcam_syslog_threshold"`
-	PlatformUnicastMaxLimit                       types.Int64                     `tfsdk:"platform_unicast_max_limit"`
-	PlatformUnicastSyslogThreshold                types.Int64                     `tfsdk:"platform_unicast_syslog_threshold"`
-	PlatformUnicastTrace                          types.String                    `tfsdk:"platform_unicast_trace"`
-	PlatformUnknownUnicastFlood                   types.String                    `tfsdk:"platform_unknown_unicast_flood"`
-	PlatformUrpfStatus                            types.String                    `tfsdk:"platform_urpf_status"`
-	PlatformWrrUnicastBandwidth                   types.Int64                     `tfsdk:"platform_wrr_unicast_bandwidth"`
+	Device                                        types.String                          `tfsdk:"device"`
+	Dn                                            types.String                          `tfsdk:"id"`
+	Name                                          types.String                          `tfsdk:"name"`
+	EthernetMtu                                   types.Int64                           `tfsdk:"ethernet_mtu"`
+	EthernetDefaultAdminState                     types.String                          `tfsdk:"ethernet_default_admin_state"`
+	EthernetAdminLinkDownSyslogLevel              types.Int64                           `tfsdk:"ethernet_admin_link_down_syslog_level"`
+	EthernetAdminLinkUpSyslogLevel                types.Int64                           `tfsdk:"ethernet_admin_link_up_syslog_level"`
+	EthernetAdminState                            types.String                          `tfsdk:"ethernet_admin_state"`
+	EthernetAllowUnsupportedSfp                   types.Bool                            `tfsdk:"ethernet_allow_unsupported_sfp"`
+	EthernetChassisInfrastructureAdaptorVlan      types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
+	EthernetChassisInfrastructureEpdsPortNumber   types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
+	EthernetChassisInfrastructureIpv6Address      types.String                          `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
+	EthernetChassisInfrastructureVlan             types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_vlan"`
+	EthernetChassisManagementInstance             types.String                          `tfsdk:"ethernet_chassis_management_instance"`
+	EthernetChassisManagementInstanceFabricNumber types.String                          `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
+	EthernetControl                               types.String                          `tfsdk:"ethernet_control"`
+	EthernetInterfaceSyslogInfo                   types.String                          `tfsdk:"ethernet_interface_syslog_info"`
+	EthernetLogEvent                              types.String                          `tfsdk:"ethernet_log_event"`
+	EthernetDefaultLayer                          types.String                          `tfsdk:"ethernet_default_layer"`
+	EthernetSystemInterfaceAdminState             types.String                          `tfsdk:"ethernet_system_interface_admin_state"`
+	EthernetSystemLinkFailureLaserOn              types.Bool                            `tfsdk:"ethernet_system_link_failure_laser_on"`
+	EthernetSystemStormControlMultiThreshold      types.Bool                            `tfsdk:"ethernet_system_storm_control_multi_threshold"`
+	EthernetVlanTagNative                         types.Bool                            `tfsdk:"ethernet_vlan_tag_native"`
+	ArpAdminState                                 types.String                          `tfsdk:"arp_admin_state"`
+	ArpInstanceAdminState                         types.String                          `tfsdk:"arp_instance_admin_state"`
+	ArpAllowStaticArpOutsideSubnet                types.String                          `tfsdk:"arp_allow_static_arp_outside_subnet"`
+	ArpUnnumberedSviSoftwareReplication           types.String                          `tfsdk:"arp_unnumbered_svi_software_replication"`
+	ArpCacheLimit                                 types.Int64                           `tfsdk:"arp_cache_limit"`
+	ArpCacheSyslogRate                            types.Int64                           `tfsdk:"arp_cache_syslog_rate"`
+	ArpControl                                    types.String                          `tfsdk:"arp_control"`
+	ArpEvpnTimeout                                types.Int64                           `tfsdk:"arp_evpn_timeout"`
+	ArpInterfaceCacheLimit                        types.Int64                           `tfsdk:"arp_interface_cache_limit"`
+	ArpIpAdjacencyRouteDistance                   types.Int64                           `tfsdk:"arp_ip_adjacency_route_distance"`
+	ArpIpArpCos                                   types.Int64                           `tfsdk:"arp_ip_arp_cos"`
+	ArpOffListTimeout                             types.Int64                           `tfsdk:"arp_off_list_timeout"`
+	ArpRarpFabricForwarding                       types.String                          `tfsdk:"arp_rarp_fabric_forwarding"`
+	ArpRarpFabricForwardingRate                   types.Int64                           `tfsdk:"arp_rarp_fabric_forwarding_rate"`
+	ArpResolveOutsideSubnet                       types.String                          `tfsdk:"arp_resolve_outside_subnet"`
+	ArpSuppressionTimeout                         types.Int64                           `tfsdk:"arp_suppression_timeout"`
+	ArpTimeout                                    types.Int64                           `tfsdk:"arp_timeout"`
+	ArpVpcDomains                                 map[string]SystemArpVpcDomains        `tfsdk:"arp_vpc_domains"`
+	NdAdminState                                  types.String                          `tfsdk:"nd_admin_state"`
+	NdAcceptSolicitNeighborEntry                  types.String                          `tfsdk:"nd_accept_solicit_neighbor_entry"`
+	NdInstanceAdminState                          types.String                          `tfsdk:"nd_instance_admin_state"`
+	NdAgingInterval                               types.Int64                           `tfsdk:"nd_aging_interval"`
+	NdCacheLimit                                  types.Int64                           `tfsdk:"nd_cache_limit"`
+	NdCacheSyslogRate                             types.Int64                           `tfsdk:"nd_cache_syslog_rate"`
+	NdControl                                     types.String                          `tfsdk:"nd_control"`
+	NdIpv6AdjacencyRouteDistance                  types.Int64                           `tfsdk:"nd_ipv6_adjacency_route_distance"`
+	NdOffListTimeout                              types.Int64                           `tfsdk:"nd_off_list_timeout"`
+	NdProbeIntervalForSolicitNeighbor             types.Int64                           `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
+	NdSolicitNeighborAdvertisement                types.String                          `tfsdk:"nd_solicit_neighbor_advertisement"`
+	NdVrfs                                        map[string]SystemNdVrfs               `tfsdk:"nd_vrfs"`
+	ClockAdminState                               types.String                          `tfsdk:"clock_admin_state"`
+	ClockAuthenticationState                      types.String                          `tfsdk:"clock_authentication_state"`
+	ClockFormat                                   types.String                          `tfsdk:"clock_format"`
+	ClockFormatDebug                              types.Bool                            `tfsdk:"clock_format_debug"`
+	ClockFormatSyslog                             types.Bool                            `tfsdk:"clock_format_syslog"`
+	ClockProtocol                                 types.String                          `tfsdk:"clock_protocol"`
+	ClockTimezoneName                             types.String                          `tfsdk:"clock_timezone_name"`
+	ClockTimezoneHours                            types.Int64                           `tfsdk:"clock_timezone_hours"`
+	ClockTimezoneMinutes                          types.Int64                           `tfsdk:"clock_timezone_minutes"`
+	ClockSummerTimeName                           types.String                          `tfsdk:"clock_summer_time_name"`
+	ClockSummerTimeOffsetMinutes                  types.Int64                           `tfsdk:"clock_summer_time_offset_minutes"`
+	ClockSummerTimeStartWeek                      types.Int64                           `tfsdk:"clock_summer_time_start_week"`
+	ClockSummerTimeStartDay                       types.String                          `tfsdk:"clock_summer_time_start_day"`
+	ClockSummerTimeStartMonth                     types.String                          `tfsdk:"clock_summer_time_start_month"`
+	ClockSummerTimeStartTime                      types.String                          `tfsdk:"clock_summer_time_start_time"`
+	ClockSummerTimeEndWeek                        types.Int64                           `tfsdk:"clock_summer_time_end_week"`
+	ClockSummerTimeEndDay                         types.String                          `tfsdk:"clock_summer_time_end_day"`
+	ClockSummerTimeEndMonth                       types.String                          `tfsdk:"clock_summer_time_end_month"`
+	ClockSummerTimeEndTime                        types.String                          `tfsdk:"clock_summer_time_end_time"`
+	DnsAdminState                                 types.String                          `tfsdk:"dns_admin_state"`
+	DnsProfiles                                   map[string]SystemDnsProfiles          `tfsdk:"dns_profiles"`
+	Vdcs                                          map[string]SystemVdcs                 `tfsdk:"vdcs"`
+	CliAliases                                    map[string]SystemCliAliases           `tfsdk:"cli_aliases"`
+	SmartLicensingTransportMode                   types.String                          `tfsdk:"smart_licensing_transport_mode"`
+	SmartLicensingTransportCsluUrl                types.String                          `tfsdk:"smart_licensing_transport_cslu_url"`
+	BootAci                                       types.String                          `tfsdk:"boot_aci"`
+	BootAutoCopy                                  types.String                          `tfsdk:"boot_auto_copy"`
+	BootDhcp                                      types.Int64                           `tfsdk:"boot_dhcp"`
+	BootExcludeConfiguration                      types.String                          `tfsdk:"boot_exclude_configuration"`
+	BootFex                                       types.String                          `tfsdk:"boot_fex"`
+	BootMode                                      types.String                          `tfsdk:"boot_mode"`
+	BootOrder                                     types.String                          `tfsdk:"boot_order"`
+	BootPoap                                      types.String                          `tfsdk:"boot_poap"`
+	BootImageVerification                         types.String                          `tfsdk:"boot_image_verification"`
+	BootImageSupervisor1                          types.String                          `tfsdk:"boot_image_supervisor_1"`
+	BootImageSupervisor2                          types.String                          `tfsdk:"boot_image_supervisor_2"`
+	UdldAdminState                                types.String                          `tfsdk:"udld_admin_state"`
+	UdldAggressive                                types.String                          `tfsdk:"udld_aggressive"`
+	UdldMessageInterval                           types.Int64                           `tfsdk:"udld_message_interval"`
+	UdldInterfaces                                map[string]SystemUdldInterfaces       `tfsdk:"udld_interfaces"`
+	PlatformAccessListMatchInnerHeader            types.String                          `tfsdk:"platform_access_list_match_inner_header"`
+	PlatformAclTapAggregation                     types.String                          `tfsdk:"platform_acl_tap_aggregation"`
+	PlatformDescription                           types.String                          `tfsdk:"platform_description"`
+	PlatformDisableParseError                     types.String                          `tfsdk:"platform_disable_parse_error"`
+	PlatformGlobalTxSpan                          types.String                          `tfsdk:"platform_global_tx_span"`
+	PlatformHighMulticastPriority                 types.String                          `tfsdk:"platform_high_multicast_priority"`
+	PlatformHardwareLouResourceThreshold          types.Int64                           `tfsdk:"platform_hardware_lou_resource_threshold"`
+	PlatformIngressBdIfaclLabelOptimization       types.String                          `tfsdk:"platform_ingress_bd_ifacl_label_optimization"`
+	PlatformIngressRaclSize                       types.String                          `tfsdk:"platform_ingress_racl_size"`
+	PlatformIngressReplicationRoundRobin          types.Bool                            `tfsdk:"platform_ingress_replication_round_robin"`
+	PlatformIpStatistics                          types.String                          `tfsdk:"platform_ip_statistics"`
+	PlatformIpv6AlpmCarveValue                    types.Int64                           `tfsdk:"platform_ipv6_alpm_carve_value"`
+	PlatformIpv6LpmMaxEntries                     types.Int64                           `tfsdk:"platform_ipv6_lpm_max_entries"`
+	PlatformLpmMaxLimit                           types.Int64                           `tfsdk:"platform_lpm_max_limit"`
+	PlatformMulticastDcsCheck                     types.String                          `tfsdk:"platform_multicast_dcs_check"`
+	PlatformMulticastFlexStats                    types.String                          `tfsdk:"platform_multicast_flex_stats"`
+	PlatformMulticastLpmMaxEntries                types.Int64                           `tfsdk:"platform_multicast_lpm_max_entries"`
+	PlatformMulticastNlb                          types.String                          `tfsdk:"platform_multicast_nlb"`
+	PlatformMulticastRaclBridge                   types.String                          `tfsdk:"platform_multicast_racl_bridge"`
+	PlatformMldSnooping                           types.String                          `tfsdk:"platform_mld_snooping"`
+	PlatformMplsAdjacencyStatsMode                types.String                          `tfsdk:"platform_mpls_adjacency_stats_mode"`
+	PlatformMplsEcmpMode                          types.String                          `tfsdk:"platform_mpls_ecmp_mode"`
+	PlatformMroutingDisableL2Update               types.String                          `tfsdk:"platform_mrouting_disable_l2_update"`
+	PlatformMroutingDisableSecondRouteUpdate      types.String                          `tfsdk:"platform_mrouting_disable_second_route_update"`
+	PlatformMroutingPerformanceMode               types.String                          `tfsdk:"platform_mrouting_performance_mode"`
+	PlatformMulticastMaxLimit                     types.Int64                           `tfsdk:"platform_multicast_max_limit"`
+	PlatformMulticastRpfCheckOptimization         types.String                          `tfsdk:"platform_multicast_rpf_check_optimization"`
+	PlatformMulticastServiceReflectPort           types.Int64                           `tfsdk:"platform_multicast_service_reflect_port"`
+	PlatformMulticastSyslogThreshold              types.Int64                           `tfsdk:"platform_multicast_syslog_threshold"`
+	PlatformOpenflowForwardPdu                    types.String                          `tfsdk:"platform_openflow_forward_pdu"`
+	PlatformPbrSkipSelfIp                         types.String                          `tfsdk:"platform_pbr_skip_self_ip"`
+	PlatformPortChannelFastConvergence            types.String                          `tfsdk:"platform_port_channel_fast_convergence"`
+	PlatformPortChannelLoadBalanceAlgorithm       types.String                          `tfsdk:"platform_port_channel_load_balance_algorithm"`
+	PlatformPortChannelLoadBalanceResilient       types.String                          `tfsdk:"platform_port_channel_load_balance_resilient"`
+	PlatformPortChannelMplsLoadBalanceLabelIp     types.String                          `tfsdk:"platform_port_channel_mpls_load_balance_label_ip"`
+	PlatformPortChannelMplsLoadBalanceLabelOnly   types.String                          `tfsdk:"platform_port_channel_mpls_load_balance_label_only"`
+	PlatformPortChannelScaleFanout                types.String                          `tfsdk:"platform_port_channel_scale_fanout"`
+	PlatformPicCoreEnable                         types.String                          `tfsdk:"platform_pic_core_enable"`
+	PlatformProfileFrontPortMode                  types.String                          `tfsdk:"platform_profile_front_port_mode"`
+	PlatformProfileMode                           types.String                          `tfsdk:"platform_profile_mode"`
+	PlatformProfileTuple                          types.String                          `tfsdk:"platform_profile_tuple"`
+	PlatformPstatConfiguration                    types.String                          `tfsdk:"platform_pstat_configuration"`
+	PlatformQosMinBuffer                          types.String                          `tfsdk:"platform_qos_min_buffer"`
+	PlatformRoutingMode                           types.String                          `tfsdk:"platform_routing_mode"`
+	PlatformServiceTemplateName                   types.String                          `tfsdk:"platform_service_template_name"`
+	PlatformSviAndSiFlexStats                     types.String                          `tfsdk:"platform_svi_and_si_flex_stats"`
+	PlatformSviFlexStats                          types.String                          `tfsdk:"platform_svi_flex_stats"`
+	PlatformSwitchMode                            types.String                          `tfsdk:"platform_switch_mode"`
+	PlatformSwitchingFabricSpeed                  types.String                          `tfsdk:"platform_switching_fabric_speed"`
+	PlatformSwitchingMode                         types.String                          `tfsdk:"platform_switching_mode"`
+	PlatformSystemFabricMode                      types.String                          `tfsdk:"platform_system_fabric_mode"`
+	PlatformTcamSyslogThreshold                   types.Int64                           `tfsdk:"platform_tcam_syslog_threshold"`
+	PlatformUnicastMaxLimit                       types.Int64                           `tfsdk:"platform_unicast_max_limit"`
+	PlatformUnicastSyslogThreshold                types.Int64                           `tfsdk:"platform_unicast_syslog_threshold"`
+	PlatformUnicastTrace                          types.String                          `tfsdk:"platform_unicast_trace"`
+	PlatformUnknownUnicastFlood                   types.String                          `tfsdk:"platform_unknown_unicast_flood"`
+	PlatformUrpfStatus                            types.String                          `tfsdk:"platform_urpf_status"`
+	PlatformWrrUnicastBandwidth                   types.Int64                           `tfsdk:"platform_wrr_unicast_bandwidth"`
+	ManagementInterfaces                          map[string]SystemManagementInterfaces `tfsdk:"management_interfaces"`
+	LldpAdminState                                types.String                          `tfsdk:"lldp_admin_state"`
+	LldpInstanceAdminState                        types.String                          `tfsdk:"lldp_instance_admin_state"`
+	LldpAdvertiseSystemChassisId                  types.String                          `tfsdk:"lldp_advertise_system_chassis_id"`
+	LldpControl                                   types.String                          `tfsdk:"lldp_control"`
+	LldpHoldTime                                  types.Int64                           `tfsdk:"lldp_hold_time"`
+	LldpInfraVlan                                 types.Int64                           `tfsdk:"lldp_infra_vlan"`
+	LldpInitDelayTime                             types.Int64                           `tfsdk:"lldp_init_delay_time"`
+	LldpMultiPeer                                 types.String                          `tfsdk:"lldp_multi_peer"`
+	LldpOptionalTlvSelect                         types.String                          `tfsdk:"lldp_optional_tlv_select"`
+	LldpOptionalTlvSelectHidden                   types.String                          `tfsdk:"lldp_optional_tlv_select_hidden"`
+	LldpPortChannel                               types.String                          `tfsdk:"lldp_port_channel"`
+	LldpPortIdSubType                             types.String                          `tfsdk:"lldp_port_id_sub_type"`
+	LldpSystemDescription                         types.String                          `tfsdk:"lldp_system_description"`
+	LldpTransmitFrequency                         types.Int64                           `tfsdk:"lldp_transmit_frequency"`
+	LldpInterfaces                                map[string]SystemLldpInterfaces       `tfsdk:"lldp_interfaces"`
 }
 
 type SystemArpVpcDomains struct {
@@ -258,6 +274,32 @@ type SystemUdldInterfaces struct {
 	BidirectionalDetection types.String `tfsdk:"bidirectional_detection"`
 }
 
+type SystemManagementInterfaces struct {
+	AdminState      types.String `tfsdk:"admin_state"`
+	AutoNegotiation types.String `tfsdk:"auto_negotiation"`
+	Description     types.String `tfsdk:"description"`
+	Duplex          types.String `tfsdk:"duplex"`
+	ItuChannel      types.Int64  `tfsdk:"itu_channel"`
+	MediaType       types.String `tfsdk:"media_type"`
+	Mtu             types.Int64  `tfsdk:"mtu"`
+	Name            types.String `tfsdk:"name"`
+	SnmpTrapState   types.String `tfsdk:"snmp_trap_state"`
+	Speed           types.String `tfsdk:"speed"`
+}
+
+type SystemLldpInterfaces struct {
+	AdminReceiveState  types.String `tfsdk:"admin_receive_state"`
+	AdminTransmitState types.String `tfsdk:"admin_transmit_state"`
+	Description        types.String `tfsdk:"description"`
+	Name               types.String `tfsdk:"name"`
+	PortDcbxpVersion   types.String `tfsdk:"port_dcbxp_version"`
+	PortDescription    types.String `tfsdk:"port_description"`
+	SystemDescription  types.String `tfsdk:"system_description"`
+	TlvManagementIpv4  types.String `tfsdk:"tlv_management_ipv4"`
+	TlvManagementIpv6  types.String `tfsdk:"tlv_management_ipv6"`
+	TlvVlan            types.Int64  `tfsdk:"tlv_vlan"`
+}
+
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -312,6 +354,14 @@ func (data SystemCliAliases) getRn(key string) string {
 
 func (data SystemUdldInterfaces) getRn(key string) string {
 	return fmt.Sprintf("physif-[%s]", key)
+}
+
+func (data SystemManagementInterfaces) getRn(key string) string {
+	return fmt.Sprintf("mgmt-[%s]", key)
+}
+
+func (data SystemLldpInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
 }
 
 func (data System) getClassName() string {
@@ -1068,6 +1118,132 @@ func (data System) toBody(config System) nxos.Body {
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformEntity.attributes", attrs)
 	}
+	for key, child := range data.ManagementInterfaces {
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "id", key)
+		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+		}
+		if !child.AutoNegotiation.IsUnknown() && !child.AutoNegotiation.IsNull() {
+			attrs, _ = sjson.Set(attrs, "autoNeg", child.AutoNegotiation.ValueString())
+		}
+		if !child.Description.IsUnknown() && !child.Description.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+		}
+		if !child.Duplex.IsUnknown() && !child.Duplex.IsNull() {
+			attrs, _ = sjson.Set(attrs, "duplex", child.Duplex.ValueString())
+		}
+		if !child.ItuChannel.IsUnknown() && !child.ItuChannel.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ituChannel", strconv.FormatInt(child.ItuChannel.ValueInt64(), 10))
+		}
+		if !child.MediaType.IsUnknown() && !child.MediaType.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mediaType", child.MediaType.ValueString())
+		}
+		if !child.Mtu.IsUnknown() && !child.Mtu.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
+		}
+		if !child.Name.IsUnknown() && !child.Name.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+		}
+		if !child.SnmpTrapState.IsUnknown() && !child.SnmpTrapState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "snmpTrapSt", child.SnmpTrapState.ValueString())
+		}
+		if !child.Speed.IsUnknown() && !child.Speed.IsNull() {
+			attrs, _ = sjson.Set(attrs, "speed", child.Speed.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.mgmtMgmtIf.attributes", attrs)
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".lldpEntity"
+		attrs = "{}"
+		if !data.LldpAdminState.IsUnknown() && !data.LldpAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.LldpAdminState.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".lldpInst"
+			attrs = "{}"
+			if !data.LldpInstanceAdminState.IsUnknown() && !data.LldpInstanceAdminState.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminSt", data.LldpInstanceAdminState.ValueString())
+			}
+			if !data.LldpAdvertiseSystemChassisId.IsUnknown() && !data.LldpAdvertiseSystemChassisId.IsNull() {
+				attrs, _ = sjson.Set(attrs, "advertiseSystemChassisIdEnable", data.LldpAdvertiseSystemChassisId.ValueString())
+			}
+			if !data.LldpControl.IsUnknown() && !data.LldpControl.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ctrl", data.LldpControl.ValueString())
+			}
+			if !data.LldpHoldTime.IsUnknown() && !data.LldpHoldTime.IsNull() {
+				attrs, _ = sjson.Set(attrs, "holdTime", strconv.FormatInt(data.LldpHoldTime.ValueInt64(), 10))
+			}
+			if !data.LldpInfraVlan.IsUnknown() && !data.LldpInfraVlan.IsNull() {
+				attrs, _ = sjson.Set(attrs, "infraVlan", strconv.FormatInt(data.LldpInfraVlan.ValueInt64(), 10))
+			}
+			if !data.LldpInitDelayTime.IsUnknown() && !data.LldpInitDelayTime.IsNull() {
+				attrs, _ = sjson.Set(attrs, "initDelayTime", strconv.FormatInt(data.LldpInitDelayTime.ValueInt64(), 10))
+			}
+			if !data.LldpMultiPeer.IsUnknown() && !data.LldpMultiPeer.IsNull() {
+				attrs, _ = sjson.Set(attrs, "multiPeerEnable", data.LldpMultiPeer.ValueString())
+			}
+			if !data.LldpOptionalTlvSelect.IsUnknown() && !data.LldpOptionalTlvSelect.IsNull() {
+				attrs, _ = sjson.Set(attrs, "optTlvSel", data.LldpOptionalTlvSelect.ValueString())
+			}
+			if !data.LldpOptionalTlvSelectHidden.IsUnknown() && !data.LldpOptionalTlvSelectHidden.IsNull() {
+				attrs, _ = sjson.Set(attrs, "optTlvSelHidden", data.LldpOptionalTlvSelectHidden.ValueString())
+			}
+			if !data.LldpPortChannel.IsUnknown() && !data.LldpPortChannel.IsNull() {
+				attrs, _ = sjson.Set(attrs, "pcEnable", data.LldpPortChannel.ValueString())
+			}
+			if !data.LldpPortIdSubType.IsUnknown() && !data.LldpPortIdSubType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "portIdSubType", data.LldpPortIdSubType.ValueString())
+			}
+			if !data.LldpSystemDescription.IsUnknown() && !data.LldpSystemDescription.IsNull() {
+				attrs, _ = sjson.Set(attrs, "sysDesc", data.LldpSystemDescription.ValueString())
+			}
+			if !data.LldpTransmitFrequency.IsUnknown() && !data.LldpTransmitFrequency.IsNull() {
+				attrs, _ = sjson.Set(attrs, "txFreq", strconv.FormatInt(data.LldpTransmitFrequency.ValueInt64(), 10))
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			for key, child := range data.LldpInterfaces {
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "id", key)
+				if !child.AdminReceiveState.IsUnknown() && !child.AdminReceiveState.IsNull() {
+					attrs, _ = sjson.Set(attrs, "adminRxSt", child.AdminReceiveState.ValueString())
+				}
+				if !child.AdminTransmitState.IsUnknown() && !child.AdminTransmitState.IsNull() {
+					attrs, _ = sjson.Set(attrs, "adminTxSt", child.AdminTransmitState.ValueString())
+				}
+				if !child.Description.IsUnknown() && !child.Description.IsNull() {
+					attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+				}
+				if !child.Name.IsUnknown() && !child.Name.IsNull() {
+					attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+				}
+				if !child.PortDcbxpVersion.IsUnknown() && !child.PortDcbxpVersion.IsNull() {
+					attrs, _ = sjson.Set(attrs, "portDCBXPVer", child.PortDcbxpVersion.ValueString())
+				}
+				if !child.PortDescription.IsUnknown() && !child.PortDescription.IsNull() {
+					attrs, _ = sjson.Set(attrs, "portDesc", child.PortDescription.ValueString())
+				}
+				if !child.SystemDescription.IsUnknown() && !child.SystemDescription.IsNull() {
+					attrs, _ = sjson.Set(attrs, "sysDesc", child.SystemDescription.ValueString())
+				}
+				if !child.TlvManagementIpv4.IsUnknown() && !child.TlvManagementIpv4.IsNull() {
+					attrs, _ = sjson.Set(attrs, "tlvSetMgmtIpv4", child.TlvManagementIpv4.ValueString())
+				}
+				if !child.TlvManagementIpv6.IsUnknown() && !child.TlvManagementIpv6.IsNull() {
+					attrs, _ = sjson.Set(attrs, "tlvSetMgmtIpv6", child.TlvManagementIpv6.ValueString())
+				}
+				if !child.TlvVlan.IsUnknown() && !child.TlvVlan.IsNull() {
+					attrs, _ = sjson.Set(attrs, "tlvSetVlan", strconv.FormatInt(child.TlvVlan.ValueInt64(), 10))
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.lldpIf.attributes", attrs)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1674,6 +1850,102 @@ func (data *System) fromBody(res gjson.Result) {
 		data.PlatformUnknownUnicastFlood = types.StringValue(rplatformEntity.Get("platformEntity.attributes.unknownUnicastFlood").String())
 		data.PlatformUrpfStatus = types.StringValue(rplatformEntity.Get("platformEntity.attributes.urpfStatus").String())
 		data.PlatformWrrUnicastBandwidth = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.wrrUnicastBw").Int())
+	}
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "mgmtMgmtIf" {
+						var child SystemManagementInterfaces
+						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+						child.AutoNegotiation = types.StringValue(value.Get("attributes.autoNeg").String())
+						child.Description = types.StringValue(value.Get("attributes.descr").String())
+						child.Duplex = types.StringValue(value.Get("attributes.duplex").String())
+						child.ItuChannel = types.Int64Value(value.Get("attributes.ituChannel").Int())
+						child.MediaType = types.StringValue(value.Get("attributes.mediaType").String())
+						child.Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
+						child.Name = types.StringValue(value.Get("attributes.name").String())
+						child.SnmpTrapState = types.StringValue(value.Get("attributes.snmpTrapSt").String())
+						child.Speed = types.StringValue(value.Get("attributes.speed").String())
+						mapKey := value.Get("attributes.id").String()
+						if data.ManagementInterfaces == nil {
+							data.ManagementInterfaces = make(map[string]SystemManagementInterfaces)
+						}
+						data.ManagementInterfaces[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	{
+		var rlldpEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("lldpEntity.attributes.rn").String()
+				if rnValue == "lldp" {
+					rlldpEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.LldpAdminState = types.StringValue(rlldpEntity.Get("lldpEntity.attributes.adminSt").String())
+		{
+			var rlldpInst gjson.Result
+			rlldpEntity.Get("lldpEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("lldpInst.attributes.rn").String()
+					if rnValue == "inst" {
+						rlldpInst = v
+						return false
+					}
+					return true
+				},
+			)
+			data.LldpInstanceAdminState = types.StringValue(rlldpInst.Get("lldpInst.attributes.adminSt").String())
+			data.LldpAdvertiseSystemChassisId = types.StringValue(rlldpInst.Get("lldpInst.attributes.advertiseSystemChassisIdEnable").String())
+			data.LldpControl = types.StringValue(rlldpInst.Get("lldpInst.attributes.ctrl").String())
+			data.LldpHoldTime = types.Int64Value(rlldpInst.Get("lldpInst.attributes.holdTime").Int())
+			data.LldpInfraVlan = types.Int64Value(rlldpInst.Get("lldpInst.attributes.infraVlan").Int())
+			data.LldpInitDelayTime = types.Int64Value(rlldpInst.Get("lldpInst.attributes.initDelayTime").Int())
+			data.LldpMultiPeer = types.StringValue(rlldpInst.Get("lldpInst.attributes.multiPeerEnable").String())
+			data.LldpOptionalTlvSelect = types.StringValue(rlldpInst.Get("lldpInst.attributes.optTlvSel").String())
+			data.LldpOptionalTlvSelectHidden = types.StringValue(rlldpInst.Get("lldpInst.attributes.optTlvSelHidden").String())
+			data.LldpPortChannel = types.StringValue(rlldpInst.Get("lldpInst.attributes.pcEnable").String())
+			data.LldpPortIdSubType = types.StringValue(rlldpInst.Get("lldpInst.attributes.portIdSubType").String())
+			data.LldpSystemDescription = types.StringValue(rlldpInst.Get("lldpInst.attributes.sysDesc").String())
+			data.LldpTransmitFrequency = types.Int64Value(rlldpInst.Get("lldpInst.attributes.txFreq").Int())
+			rlldpInst.Get("lldpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "lldpIf" {
+								var child SystemLldpInterfaces
+								child.AdminReceiveState = types.StringValue(value.Get("attributes.adminRxSt").String())
+								child.AdminTransmitState = types.StringValue(value.Get("attributes.adminTxSt").String())
+								child.Description = types.StringValue(value.Get("attributes.descr").String())
+								child.Name = types.StringValue(value.Get("attributes.name").String())
+								child.PortDcbxpVersion = types.StringValue(value.Get("attributes.portDCBXPVer").String())
+								child.PortDescription = types.StringValue(value.Get("attributes.portDesc").String())
+								child.SystemDescription = types.StringValue(value.Get("attributes.sysDesc").String())
+								child.TlvManagementIpv4 = types.StringValue(value.Get("attributes.tlvSetMgmtIpv4").String())
+								child.TlvManagementIpv6 = types.StringValue(value.Get("attributes.tlvSetMgmtIpv6").String())
+								child.TlvVlan = types.Int64Value(value.Get("attributes.tlvSetVlan").Int())
+								mapKey := value.Get("attributes.id").String()
+								if data.LldpInterfaces == nil {
+									data.LldpInterfaces = make(map[string]SystemLldpInterfaces)
+								}
+								data.LldpInterfaces[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
+		}
 	}
 }
 
@@ -3000,6 +3272,234 @@ func (data *System) updateFromBody(res gjson.Result) {
 	} else {
 		data.PlatformWrrUnicastBandwidth = types.Int64Null()
 	}
+	for key, item := range data.ManagementInterfaces {
+		var rmgmtMgmtIf gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("mgmtMgmtIf.attributes.id").String() == key {
+					rmgmtMgmtIf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rmgmtMgmtIf.Exists() {
+			delete(data.ManagementInterfaces, key)
+			continue
+		}
+		if !item.AdminState.IsNull() {
+			item.AdminState = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.adminSt").String())
+		} else {
+			item.AdminState = types.StringNull()
+		}
+		if !item.AutoNegotiation.IsNull() {
+			item.AutoNegotiation = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.autoNeg").String())
+		} else {
+			item.AutoNegotiation = types.StringNull()
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.Duplex.IsNull() {
+			item.Duplex = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.duplex").String())
+		} else {
+			item.Duplex = types.StringNull()
+		}
+		if !item.ItuChannel.IsNull() {
+			item.ItuChannel = types.Int64Value(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.ituChannel").Int())
+		} else {
+			item.ItuChannel = types.Int64Null()
+		}
+		if !item.MediaType.IsNull() {
+			item.MediaType = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.mediaType").String())
+		} else {
+			item.MediaType = types.StringNull()
+		}
+		if !item.Mtu.IsNull() {
+			item.Mtu = types.Int64Value(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.mtu").Int())
+		} else {
+			item.Mtu = types.Int64Null()
+		}
+		if !item.Name.IsNull() {
+			item.Name = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.name").String())
+		} else {
+			item.Name = types.StringNull()
+		}
+		if !item.SnmpTrapState.IsNull() {
+			item.SnmpTrapState = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.snmpTrapSt").String())
+		} else {
+			item.SnmpTrapState = types.StringNull()
+		}
+		if !item.Speed.IsNull() {
+			item.Speed = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.speed").String())
+		} else {
+			item.Speed = types.StringNull()
+		}
+		data.ManagementInterfaces[key] = item
+	}
+	var rlldpEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("lldpEntity.attributes.rn").String()
+			if rnValue == "lldp" {
+				rlldpEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.LldpAdminState.IsNull() {
+		data.LldpAdminState = types.StringValue(rlldpEntity.Get("lldpEntity.attributes.adminSt").String())
+	} else {
+		data.LldpAdminState = types.StringNull()
+	}
+	{
+		var rlldpInst gjson.Result
+		rlldpEntity.Get("lldpEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("lldpInst.attributes.rn").String()
+				if rnValue == "inst" {
+					rlldpInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.LldpInstanceAdminState.IsNull() {
+			data.LldpInstanceAdminState = types.StringValue(rlldpInst.Get("lldpInst.attributes.adminSt").String())
+		} else {
+			data.LldpInstanceAdminState = types.StringNull()
+		}
+		if !data.LldpAdvertiseSystemChassisId.IsNull() {
+			data.LldpAdvertiseSystemChassisId = types.StringValue(rlldpInst.Get("lldpInst.attributes.advertiseSystemChassisIdEnable").String())
+		} else {
+			data.LldpAdvertiseSystemChassisId = types.StringNull()
+		}
+		if !data.LldpControl.IsNull() {
+			data.LldpControl = types.StringValue(rlldpInst.Get("lldpInst.attributes.ctrl").String())
+		} else {
+			data.LldpControl = types.StringNull()
+		}
+		if !data.LldpHoldTime.IsNull() {
+			data.LldpHoldTime = types.Int64Value(rlldpInst.Get("lldpInst.attributes.holdTime").Int())
+		} else {
+			data.LldpHoldTime = types.Int64Null()
+		}
+		if !data.LldpInfraVlan.IsNull() {
+			data.LldpInfraVlan = types.Int64Value(rlldpInst.Get("lldpInst.attributes.infraVlan").Int())
+		} else {
+			data.LldpInfraVlan = types.Int64Null()
+		}
+		if !data.LldpInitDelayTime.IsNull() {
+			data.LldpInitDelayTime = types.Int64Value(rlldpInst.Get("lldpInst.attributes.initDelayTime").Int())
+		} else {
+			data.LldpInitDelayTime = types.Int64Null()
+		}
+		if !data.LldpMultiPeer.IsNull() {
+			data.LldpMultiPeer = types.StringValue(rlldpInst.Get("lldpInst.attributes.multiPeerEnable").String())
+		} else {
+			data.LldpMultiPeer = types.StringNull()
+		}
+		if !data.LldpOptionalTlvSelect.IsNull() {
+			data.LldpOptionalTlvSelect = types.StringValue(rlldpInst.Get("lldpInst.attributes.optTlvSel").String())
+		} else {
+			data.LldpOptionalTlvSelect = types.StringNull()
+		}
+		if !data.LldpOptionalTlvSelectHidden.IsNull() {
+			data.LldpOptionalTlvSelectHidden = types.StringValue(rlldpInst.Get("lldpInst.attributes.optTlvSelHidden").String())
+		} else {
+			data.LldpOptionalTlvSelectHidden = types.StringNull()
+		}
+		if !data.LldpPortChannel.IsNull() {
+			data.LldpPortChannel = types.StringValue(rlldpInst.Get("lldpInst.attributes.pcEnable").String())
+		} else {
+			data.LldpPortChannel = types.StringNull()
+		}
+		if !data.LldpPortIdSubType.IsNull() {
+			data.LldpPortIdSubType = types.StringValue(rlldpInst.Get("lldpInst.attributes.portIdSubType").String())
+		} else {
+			data.LldpPortIdSubType = types.StringNull()
+		}
+		if !data.LldpSystemDescription.IsNull() {
+			data.LldpSystemDescription = types.StringValue(rlldpInst.Get("lldpInst.attributes.sysDesc").String())
+		} else {
+			data.LldpSystemDescription = types.StringNull()
+		}
+		if !data.LldpTransmitFrequency.IsNull() {
+			data.LldpTransmitFrequency = types.Int64Value(rlldpInst.Get("lldpInst.attributes.txFreq").Int())
+		} else {
+			data.LldpTransmitFrequency = types.Int64Null()
+		}
+		for key, item := range data.LldpInterfaces {
+			var rlldpIf gjson.Result
+			rlldpInst.Get("lldpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("lldpIf.attributes.id").String() == key {
+						rlldpIf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rlldpIf.Exists() {
+				delete(data.LldpInterfaces, key)
+				continue
+			}
+			if !item.AdminReceiveState.IsNull() {
+				item.AdminReceiveState = types.StringValue(rlldpIf.Get("lldpIf.attributes.adminRxSt").String())
+			} else {
+				item.AdminReceiveState = types.StringNull()
+			}
+			if !item.AdminTransmitState.IsNull() {
+				item.AdminTransmitState = types.StringValue(rlldpIf.Get("lldpIf.attributes.adminTxSt").String())
+			} else {
+				item.AdminTransmitState = types.StringNull()
+			}
+			if !item.Description.IsNull() {
+				item.Description = types.StringValue(rlldpIf.Get("lldpIf.attributes.descr").String())
+			} else {
+				item.Description = types.StringNull()
+			}
+			if !item.Name.IsNull() {
+				item.Name = types.StringValue(rlldpIf.Get("lldpIf.attributes.name").String())
+			} else {
+				item.Name = types.StringNull()
+			}
+			if !item.PortDcbxpVersion.IsNull() {
+				item.PortDcbxpVersion = types.StringValue(rlldpIf.Get("lldpIf.attributes.portDCBXPVer").String())
+			} else {
+				item.PortDcbxpVersion = types.StringNull()
+			}
+			if !item.PortDescription.IsNull() {
+				item.PortDescription = types.StringValue(rlldpIf.Get("lldpIf.attributes.portDesc").String())
+			} else {
+				item.PortDescription = types.StringNull()
+			}
+			if !item.SystemDescription.IsNull() {
+				item.SystemDescription = types.StringValue(rlldpIf.Get("lldpIf.attributes.sysDesc").String())
+			} else {
+				item.SystemDescription = types.StringNull()
+			}
+			if !item.TlvManagementIpv4.IsNull() {
+				item.TlvManagementIpv4 = types.StringValue(rlldpIf.Get("lldpIf.attributes.tlvSetMgmtIpv4").String())
+			} else {
+				item.TlvManagementIpv4 = types.StringNull()
+			}
+			if !item.TlvManagementIpv6.IsNull() {
+				item.TlvManagementIpv6 = types.StringValue(rlldpIf.Get("lldpIf.attributes.tlvSetMgmtIpv6").String())
+			} else {
+				item.TlvManagementIpv6 = types.StringNull()
+			}
+			if !item.TlvVlan.IsNull() {
+				item.TlvVlan = types.Int64Value(rlldpIf.Get("lldpIf.attributes.tlvSetVlan").Int())
+			} else {
+				item.TlvVlan = types.Int64Null()
+			}
+			data.LldpInterfaces[key] = item
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -3521,6 +4021,92 @@ func (data System) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
+	for key, child := range data.ManagementInterfaces {
+		childBody := ""
+		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+		childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "autoNeg", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "duplex", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "ituChannel", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "mediaType", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "mtu", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "speed", "DME_UNSET_PROPERTY_MARKER")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.mgmtMgmtIf.attributes", childBody)
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".lldpEntity"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.LldpAdminState.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".lldpInst"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			if !data.LldpInstanceAdminState.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpAdvertiseSystemChassisId.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"advertiseSystemChassisIdEnable", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpControl.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpHoldTime.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"holdTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpInfraVlan.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"infraVlan", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpInitDelayTime.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"initDelayTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpMultiPeer.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"multiPeerEnable", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpOptionalTlvSelect.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"optTlvSel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpOptionalTlvSelectHidden.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"optTlvSelHidden", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpPortChannel.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"pcEnable", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpPortIdSubType.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"portIdSubType", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpSystemDescription.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"sysDesc", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LldpTransmitFrequency.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"txFreq", "DME_UNSET_PROPERTY_MARKER")
+			}
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.LldpInterfaces {
+				childBody := ""
+				childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+				childBody, _ = sjson.Set(childBody, "adminRxSt", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "adminTxSt", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "portDCBXPVer", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "portDesc", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "sysDesc", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "tlvSetMgmtIpv4", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "tlvSetMgmtIpv6", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "tlvSetVlan", "DME_UNSET_PROPERTY_MARKER")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.lldpIf.attributes", childBody)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -3639,6 +4225,42 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.udldEntity.children"+".0.udldInst.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.ManagementInterfaces {
+		if _, found := data.ManagementInterfaces[stateKey]; !found {
+			stateChild := state.ManagementInterfaces[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.autoNeg", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.duplex", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.ituChannel", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.mediaType", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.speed", "DME_UNSET_PROPERTY_MARKER")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.LldpInterfaces {
+		if _, found := data.LldpInterfaces[stateKey]; !found {
+			stateChild := state.LldpInterfaces[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.adminRxSt", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.adminTxSt", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.portDCBXPVer", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.portDesc", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.sysDesc", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.tlvSetMgmtIpv4", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.tlvSetMgmtIpv6", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.tlvSetVlan", "DME_UNSET_PROPERTY_MARKER")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.lldpEntity.children"+".0.lldpInst.children"+".-1", deleteBody)
 		}
 	}
 	return body

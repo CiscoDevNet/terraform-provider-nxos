@@ -1,0 +1,328 @@
+---
+name: SNMP
+class_name: snmpEntity
+dn: sys/snmp
+no_delete: true
+ds_description: This data source can read the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.
+res_description: This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.
+doc_path: System/snmp:Entity/
+doc_category: System
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+child_classes:
+  - class_name: snmpInst
+    doc_path: System/snmp:Inst/
+    rn: inst
+    type: single
+    no_delete: true
+    tf_name: instance
+    description: 'SNMP instance configuration.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'Indicates the administrative state of the SNMP policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: 'Description of the specified attribute.'
+        example: 'My SNMP instance'
+      - nxos_name: engId
+        tf_name: engine_id
+        type: String
+        description: 'Engine Id.'
+        example: '00:00:00:63:00:01:00:10:20:15:10:03'
+      - nxos_name: loggingLevel
+        tf_name: logging_level
+        type: String
+        description: 'Set level for SNMP syslog messages.'
+        enum_values:
+          - emergencies
+          - alerts
+          - critical
+          - errors
+          - warnings
+          - notifications
+          - information
+          - debugging
+        example: warnings
+      - nxos_name: ownerKey
+        tf_name: owner_key
+        type: String
+        description: 'The key for enabling clients to own their data for entity correlation.'
+        example: 'key1'
+      - nxos_name: ownerTag
+        tf_name: owner_tag
+        type: String
+        description: 'A tag for enabling clients to add their own data. For example, to indicate who created this object.'
+        example: 'tag1'
+      - nxos_name: unknownEngId
+        tf_name: unknown_engine_id
+        type: String
+        description: 'Indicates the Unknown Engine Id MO thats needs to be created.'
+        enum_values:
+          - "no"
+          - "yes"
+        example: "no"
+      - nxos_name: unknownUser
+        tf_name: unknown_user
+        type: String
+        description: 'Indicates the Unknown User MO thats needs to be created.'
+        enum_values:
+          - "no"
+          - "yes"
+        example: "no"
+    child_classes:
+      - class_name: snmpSysInfo
+        doc_path: System/snmp:SysInfo/
+        rn: sysinfo
+        type: single
+        no_delete: true
+        tf_name: system_info
+        description: 'SNMP system information.'
+        attributes:
+          - nxos_name: sysContact
+            tf_name: contact
+            type: String
+            description: 'System Contact.'
+            example: 'admin@example.com'
+          - nxos_name: sysDescription
+            tf_name: system_info_description
+            type: String
+            description: 'System Description.'
+            example: 'My NX-OS device'
+          - nxos_name: sysLocation
+            tf_name: location
+            type: String
+            description: 'System Location.'
+            example: 'DC1-Room42'
+      - class_name: snmpGlobals
+        doc_path: System/snmp:Globals/
+        rn: globals
+        type: single
+        no_delete: true
+        tf_name: globals
+        description: 'SNMP global settings.'
+        attributes:
+          - nxos_name: pktSize
+            tf_name: packet_size
+            type: Int64
+            min_int: 484
+            max_int: 17382
+            description: 'Packet size config.'
+            example: 8192
+          - nxos_name: tcpSessionAuth
+            tf_name: tcp_session_authentication
+            type: String
+            description: 'tcp-session auth config.'
+            enum_values:
+              - "no"
+              - tcpSessAuth
+            example: tcpSessAuth
+        child_classes:
+          - class_name: snmpSourceInterfaceTraps
+            doc_path: System/snmp:SourceInterfaceTraps/
+            rn: srcInterfaceTraps
+            type: single
+            no_delete: true
+            tf_name: source_interface_traps
+            description: 'SNMP source interface for traps.'
+            attributes:
+              - nxos_name: ifname
+                tf_name: interface_name
+                type: String
+                description: 'Source interface name for Traps.'
+                example: eth1/1
+      - class_name: snmpLocalUser
+        doc_path: System/snmp:LocalUser/
+        rn: lclUser-[%s]
+        type: list
+        tf_name: local_users
+        description: 'List of SNMP local users.'
+        attributes:
+          - nxos_name: userName
+            tf_name: name
+            type: String
+            id: true
+            description: 'snmp-server user name.'
+            example: user1
+          - nxos_name: authpwd
+            tf_name: authentication_password
+            type: String
+            write_only: true
+            sensitive: true
+            description: 'Auth Password.'
+            example: 'Xe9$mK2v!pQr'
+          - nxos_name: authtype
+            tf_name: authentication_type
+            type: String
+            description: 'Auth Protocol Type.'
+            enum_values:
+              - "no"
+              - md5
+              - sha
+              - sha-256
+              - sha-224
+              - sha-384
+              - sha-512
+            example: md5
+          - nxos_name: ipv4AclName
+            tf_name: ipv4_acl_name
+            type: String
+            description: 'IPv4 ACL name to filter SNMP requests.'
+            example: 'snmp-acl-v4'
+          - nxos_name: ipv6AclName
+            tf_name: ipv6_acl_name
+            type: String
+            description: 'IPv6 ACL name to filter SNMP requests.'
+            example: 'snmp-acl-v6'
+          - nxos_name: isenforcepriv
+            tf_name: enforce_privacy
+            type: Bool
+            description: 'whether enforce priv con.'
+            example: false
+          - nxos_name: islocalizedV2key
+            tf_name: localized_v2_key
+            type: Bool
+            description: 'whether localized V2 key configured.'
+            example: false
+            exclude_test: true
+          - nxos_name: islocalizedkey
+            tf_name: localized_key
+            type: Bool
+            description: 'whether localized key configured.'
+            example: false
+            exclude_test: true
+          - nxos_name: privpwd
+            tf_name: privacy_password
+            type: String
+            write_only: true
+            sensitive: true
+            description: 'Priv Password.'
+            example: 'Yt4&nL8w!kDs'
+          - nxos_name: privtype
+            tf_name: privacy_type
+            type: String
+            description: 'Priv Protocol Type.'
+            enum_values:
+              - "no"
+              - des
+              - aes128
+              - aes256
+            example: des
+          - nxos_name: pwd_type
+            tf_name: password_type
+            type: Int64
+            min_int: 0
+            max_int: 65535
+            description: 'Password encryption type.'
+            example: 0
+          - nxos_name: usrengineId
+            tf_name: engine_id
+            type: String
+            description: 'Configured Engine Id.'
+            example: '00:00:00:63:00:01:00:10:20:15:10:03'
+            exclude_test: true
+          - nxos_name: usrengineIdlen
+            tf_name: engine_id_length
+            type: Int64
+            min_int: 0
+            max_int: 162
+            description: 'Configured Engine Id len.'
+            example: 0
+            exclude_test: true
+        child_classes:
+          - class_name: snmpUserGroup
+            doc_path: System/snmp:UserGroup/
+            rn: group-[%s]
+            type: list
+            tf_name: groups
+            description: 'List of SNMP user groups.'
+            attributes:
+              - nxos_name: groupName
+                tf_name: name
+                type: String
+                id: true
+                description: 'snmp-server user name.'
+                example: network-operator
+      - class_name: snmpHost
+        doc_path: System/snmp:Host/
+        rn: host-[%s]-udp-[%d]
+        type: list
+        tf_name: hosts
+        description: 'List of SNMP host configurations.'
+        attributes:
+          - nxos_name: hostName
+            tf_name: name
+            type: String
+            id: true
+            description: 'snmp-server host name.'
+            example: 10.0.0.1
+          - nxos_name: udpPortID
+            tf_name: udp_port
+            type: Int64
+            id: true
+            min_int: 0
+            max_int: 65535
+            description: 'snmp-server host udp-port.'
+            example: 1162
+          - nxos_name: commName
+            tf_name: community_name
+            type: String
+            description: 'community to be associated to the host.'
+            example: public
+          - nxos_name: notifType
+            tf_name: notification_type
+            type: String
+            description: 'Ctrl bits indicating traps/informs config.'
+            enum_values:
+              - traps
+              - informs
+            example: traps
+          - nxos_name: secLevel
+            tf_name: security_level
+            type: String
+            description: 'Ctrl bits indicating auth/ priv/ noauth for v3.'
+            enum_values:
+              - unspecified
+              - noauth
+              - auth
+              - priv
+            example: auth
+          - nxos_name: version
+            tf_name: version
+            type: String
+            description: 'Ctrl bits indicating version.'
+            enum_values:
+              - v1
+              - v2c
+              - v3
+            example: v3
+      - class_name: snmpTraps
+        doc_path: System/snmp:Traps/
+        rn: traps
+        type: single
+        no_delete: true
+        tf_name: traps
+        description: 'SNMP trap configuration.'
+        attributes:
+          - nxos_name: enableAllViaCLI
+            tf_name: enable_all
+            type: String
+            description: 'Enable/Disable all traps.'
+            enum_values:
+              - "no"
+              - "yes"
+              - unspecified
+            example: "yes"

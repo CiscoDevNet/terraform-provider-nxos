@@ -113,6 +113,7 @@ type System struct {
 	DnsAdminState                                 types.String                   `tfsdk:"dns_admin_state"`
 	DnsProfiles                                   map[string]SystemDnsProfiles   `tfsdk:"dns_profiles"`
 	Vdcs                                          map[string]SystemVdcs          `tfsdk:"vdcs"`
+	CliAliases                                    map[string]SystemCliAliases    `tfsdk:"cli_aliases"`
 	SmartLicensingTransportMode                   types.String                   `tfsdk:"smart_licensing_transport_mode"`
 	SmartLicensingTransportCsluUrl                types.String                   `tfsdk:"smart_licensing_transport_cslu_url"`
 	BootAci                                       types.String                   `tfsdk:"boot_aci"`
@@ -185,6 +186,10 @@ type SystemVdcs struct {
 	VrfMinimum                      types.Int64  `tfsdk:"vrf_minimum"`
 }
 
+type SystemCliAliases struct {
+	Command types.String `tfsdk:"command"`
+}
+
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -231,6 +236,10 @@ func (data SystemDnsProfiles) getRn(key string) string {
 
 func (data SystemVdcs) getRn(key string) string {
 	return fmt.Sprintf("vdc-[%v]", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data SystemCliAliases) getRn(key string) string {
+	return fmt.Sprintf("clialias-[%s]", key)
 }
 
 func (data System) getClassName() string {
@@ -689,6 +698,14 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	for key, child := range data.CliAliases {
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "aliasName", key)
+		if !child.Command.IsUnknown() && !child.Command.IsNull() {
+			attrs, _ = sjson.Set(attrs, "aliasCmd", child.Command.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.vshdCliAlias.attributes", attrs)
+	}
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerLicenseManager"
@@ -1135,6 +1152,25 @@ func (data *System) fromBody(res gjson.Result) {
 							data.Vdcs = make(map[string]SystemVdcs)
 						}
 						data.Vdcs[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "vshdCliAlias" {
+						var child SystemCliAliases
+						child.Command = types.StringValue(value.Get("attributes.aliasCmd").String())
+						mapKey := value.Get("attributes.aliasName").String()
+						if data.CliAliases == nil {
+							data.CliAliases = make(map[string]SystemCliAliases)
+						}
+						data.CliAliases[mapKey] = child
 					}
 					return true
 				},
@@ -2035,6 +2071,28 @@ func (data *System) updateFromBody(res gjson.Result) {
 		}
 		data.Vdcs[key] = item
 	}
+	for key, item := range data.CliAliases {
+		var rvshdCliAlias gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("vshdCliAlias.attributes.aliasName").String() == key {
+					rvshdCliAlias = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rvshdCliAlias.Exists() {
+			delete(data.CliAliases, key)
+			continue
+		}
+		if !item.Command.IsNull() {
+			item.Command = types.StringValue(rvshdCliAlias.Get("vshdCliAlias.attributes.aliasCmd").String())
+		} else {
+			item.Command = types.StringNull()
+		}
+		data.CliAliases[key] = item
+	}
 	var rlicensemanagerLicenseManager gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -2437,6 +2495,12 @@ func (data System) toDeleteBody() nxos.Body {
 		childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.nwVdc.attributes", childBody)
 	}
+	for key, child := range data.CliAliases {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "vshdCliAlias.attributes.rn", child.getRn(key))
+		deleteBody, _ = sjson.Set(deleteBody, "vshdCliAlias.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerLicenseManager"
@@ -2578,6 +2642,15 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		}
 		if matchBodyPathdi == "" {
 			continue
+		}
+	}
+	for stateKey := range state.CliAliases {
+		if _, found := data.CliAliases[stateKey]; !found {
+			stateChild := state.CliAliases[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "vshdCliAlias.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "vshdCliAlias.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	return body

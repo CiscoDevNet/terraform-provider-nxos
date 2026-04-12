@@ -129,6 +129,11 @@ resource "nxos_system" "example" {
       vrf_minimum                         = 4
     }
   }
+  cli_aliases = {
+    "myalias" = {
+      command = "show ip route"
+    }
+  }
   smart_licensing_transport_mode     = "transportSmart"
   smart_licensing_transport_cslu_url = "https://cslu.example.com"
   boot_aci                           = "bootflash:aci.bin"

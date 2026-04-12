@@ -63,7 +63,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "udldEntity", "udldInst", "udldPhysIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "udldEntity", "udldInst", "udldPhysIf", "platformEntity"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -947,6 +947,403 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
+			"platform_access_list_match_inner_header": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware access-list match inner-header.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_acl_tap_aggregation": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure tap-aggregation feature.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Container to hold platform data of apps.").String,
+				Optional:            true,
+			},
+			"platform_disable_parse_error": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to disable/enable hardware profile disable parse-err.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_global_tx_span": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware multicast global tx span.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_high_multicast_priority": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("high mcast priority.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"platform_hardware_lou_resource_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hardware Lou Resource Threshold value.").AddIntegerRangeDescription(1, 50).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 50),
+				},
+			},
+			"platform_ingress_bd_ifacl_label_optimization": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To optimize the ingress QOS Ingress BD IFACL label size.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_ingress_racl_size": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To set the ingress RACL TCAM label size to 9 bits and the default value is 6 bits.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_ingress_replication_round_robin": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Round-Robin hashing of underlay-paths for VXLAN ingress-replication peers.").String,
+				Optional:            true,
+			},
+			"platform_ip_statistics": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to disable/enable hardware forwarding ip statistics.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_ipv6_alpm_carve_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hardware profile ipv6 alpm carve-value.").AddIntegerRangeDescription(0, 4096).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4096),
+				},
+			},
+			"platform_ipv6_lpm_max_entries": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum limit for IPv6 LPM routes.").AddIntegerRangeDescription(0, 6144).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 6144),
+				},
+			},
+			"platform_lpm_max_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum limit for LPM routes.").AddIntegerRangeDescription(0, 4096).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4096),
+				},
+			},
+			"platform_multicast_dcs_check": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable system mcast DCS check.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_multicast_flex_stats": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware profile multicast flex-stats.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_multicast_lpm_max_entries": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum limit for multicast LPM routes.").AddIntegerRangeDescription(0, 4096).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4096),
+				},
+			},
+			"platform_multicast_nlb": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware profile multicast nlb.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_multicast_racl_bridge": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply permit/drop for mcast bridged pkt.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"platform_mld_snooping": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable system mld snooping.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_mpls_adjacency_stats_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Corresponds to MPLS Adjacency stats type.").AddStringEnumDescription("PACKETS", "BYTES").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("PACKETS", "BYTES"),
+				},
+			},
+			"platform_mpls_ecmp_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable extended-ecmp for MPLS on RX-series Linecards N9K.").AddStringEnumDescription("invalid", "disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("invalid", "disable", "enable"),
+				},
+			},
+			"platform_mrouting_disable_l2_update": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Corresponds to enabling/disabling l2 update.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_mrouting_disable_second_route_update": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Corresponds to enabling/disabling second route update.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_mrouting_performance_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Corresponds to enabling/disabling mrouting performance mode.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_multicast_max_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum limit for multicast LPM routes.").AddIntegerRangeDescription(0, 8000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 8000),
+				},
+			},
+			"platform_multicast_rpf_check_optimization": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("mcast rpf check optimization.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"platform_multicast_service_reflect_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("mcast service-reflect port.").AddIntegerRangeDescription(0, 48).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 48),
+				},
+			},
+			"platform_multicast_syslog_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for multicast cases. The default is 90 percent of the total available shared buffer.").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
+			"platform_openflow_forward_pdu": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure openflow forward-pdu.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"platform_pbr_skip_self_ip": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure Skipping PBR for self-ip packets.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"platform_port_channel_fast_convergence": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Port-channel Fast Convergence.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"platform_port_channel_load_balance_algorithm": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Pc load-balance internal algorithm.").AddStringEnumDescription("PC_LB_ALGO_DLB", "PC_LB_ALGO_RTAG7", "PC_LB_ALGO_RTAG7_MURMUR", "PC_LB_ALGO_RTAG7_LOCAL_CRC", "PC_LB_ALGO_DYNAMIC_PIN").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("PC_LB_ALGO_DLB", "PC_LB_ALGO_RTAG7", "PC_LB_ALGO_RTAG7_MURMUR", "PC_LB_ALGO_RTAG7_LOCAL_CRC", "PC_LB_ALGO_DYNAMIC_PIN"),
+				},
+			},
+			"platform_port_channel_load_balance_resilient": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Pc load-balance resilient.").AddStringEnumDescription("yes", "no").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("yes", "no"),
+				},
+			},
+			"platform_port_channel_mpls_load_balance_label_ip": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Mpls load-balance label ip.").AddStringEnumDescription("DEFAULT", "LABEL_IP").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("DEFAULT", "LABEL_IP"),
+				},
+			},
+			"platform_port_channel_mpls_load_balance_label_only": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Mpls load-balance label only.").AddStringEnumDescription("DEFAULT", "LABEL_ONLY").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("DEFAULT", "LABEL_ONLY"),
+				},
+			},
+			"platform_port_channel_scale_fanout": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Port-channel Scale Fanout.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"platform_pic_core_enable": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure PIC core.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"platform_profile_front_port_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hardware profile front portmode for platform entity.").AddStringEnumDescription("sfp-plus", "qsfp").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("sfp-plus", "qsfp"),
+				},
+			},
+			"platform_profile_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hardware profile mode for platform entity.").AddStringEnumDescription("Default", "QS_PORT_MODE_64X10G", "QS_PORT_MODE_48X10G_4X40G", "QS_PORT_MODE_52X10G_3X40g", "QS_PORT_MODE_56X10G_2X40G", "QS_PORT_MODE_60X10G_1X40G", "QS_PORT_MODE", "QG_PORT_MODE_32X10G_8X40G", "QG_PORT_MODE_16X40G", "QG_PORT_MODE_16X10G_12X40G", "QG_PORT_MODE_8X10G_14X40G", "NEP_PORT_MODE_32X40G", "NEP_PORT_MODE_24X40G", "NEP_PORT_MODE_26X40G", "NEP_PORT_MODE_32X40G_FIXED", "QI2_PORT_MODE_72X10G", "QI2_PORT_MODE_48X10G_6x40G", "QI2_PORT_MODE_BKOUT", "DV_PORT_MODE_48X25G_4X100G", "DV_PORT_MODE_48X25G_2X100G_4X40G", "PB_PORT_MODE_48X10G_6X100G", "PB_PORT_MODE_48X10G_4X100G_2X40G", "FOST_PORT_MODE_28X40G_4X100G", "FOST_PORT_MODE_18X100G", "FOST_PORT_MODE_24X40G_6X100G", "TET_PORT_MODE_64X100G", "TET_PORT_MODE_96X25G_32X100G", "TET_PORT_MODE_128X25G", "CMR_PORT_MODE_128X100G_32X400G", "CMR_PORT_MODE_160X25G_8X100G", "CMR_PORT_MODE_128X100G_30X400G_2X200G").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("Default", "QS_PORT_MODE_64X10G", "QS_PORT_MODE_48X10G_4X40G", "QS_PORT_MODE_52X10G_3X40g", "QS_PORT_MODE_56X10G_2X40G", "QS_PORT_MODE_60X10G_1X40G", "QS_PORT_MODE", "QG_PORT_MODE_32X10G_8X40G", "QG_PORT_MODE_16X40G", "QG_PORT_MODE_16X10G_12X40G", "QG_PORT_MODE_8X10G_14X40G", "NEP_PORT_MODE_32X40G", "NEP_PORT_MODE_24X40G", "NEP_PORT_MODE_26X40G", "NEP_PORT_MODE_32X40G_FIXED", "QI2_PORT_MODE_72X10G", "QI2_PORT_MODE_48X10G_6x40G", "QI2_PORT_MODE_BKOUT", "DV_PORT_MODE_48X25G_4X100G", "DV_PORT_MODE_48X25G_2X100G_4X40G", "PB_PORT_MODE_48X10G_6X100G", "PB_PORT_MODE_48X10G_4X100G_2X40G", "FOST_PORT_MODE_28X40G_4X100G", "FOST_PORT_MODE_18X100G", "FOST_PORT_MODE_24X40G_6X100G", "TET_PORT_MODE_64X100G", "TET_PORT_MODE_96X25G_32X100G", "TET_PORT_MODE_128X25G", "CMR_PORT_MODE_128X100G_32X400G", "CMR_PORT_MODE_160X25G_8X100G", "CMR_PORT_MODE_128X100G_30X400G_2X200G"),
+				},
+			},
+			"platform_profile_tuple": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Profile tuple for platform entity.").AddStringEnumDescription("Disable", "Enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("Disable", "Enable"),
+				},
+			},
+			"platform_pstat_configuration": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("pstat enable.").AddStringEnumDescription("PSTAT_DISABLE", "PSTAT_ENABLE", "PSTAT_ENABLE_PEAK").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("PSTAT_DISABLE", "PSTAT_ENABLE", "PSTAT_ENABLE_PEAK"),
+				},
+			},
+			"platform_qos_min_buffer": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("qos min-buffer qos-group.").AddStringEnumDescription("all", "none", "default").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("all", "none", "default"),
+				},
+			},
+			"platform_routing_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Routing mode.").AddStringEnumDescription("DEFAULT", "NON_HIER_DEFAULT", "NON_HIER_MAX_L3", "MAX_HOST", "TOR_MAX_L3", "DEFAULT_64B", "NON_HIER_MAX_L3_64B", "TOR_MAX_L3_64B", "TOR_MAX_L2", "TOR_MAX_L2L3", "TOR_TEMPLATE_OVL_HOST_SCALE", "TEMPLATE_LPM_HEAVY", "TOR_TEMPLATE_LPM_SCALE_V6_64", "TOR_TEMPLATE_DUAL_STACK_HOST_SCALE", "TEMPLATE_SERVICE_PROVIDER", "TEMPLATE_MULTICAST_HEAVY", "TEMPLATE_VXLAN_SCALE", "TEMPLATE_MPLS_SCALE", "TEMPLATE_INTERNET_PEERING", "TEMPLATE_MULTICAST_EXT_HEAVY", "TEMPLATE_L3_HEAVY", "TEMPLATE_MULTICAST_DUAL_STACK", "TEMPLATE_L2_HEAVY", "TEMPLATE_L2_SCALE", "TEMPLATE_SECURITY_GROUPS").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("DEFAULT", "NON_HIER_DEFAULT", "NON_HIER_MAX_L3", "MAX_HOST", "TOR_MAX_L3", "DEFAULT_64B", "NON_HIER_MAX_L3_64B", "TOR_MAX_L3_64B", "TOR_MAX_L2", "TOR_MAX_L2L3", "TOR_TEMPLATE_OVL_HOST_SCALE", "TEMPLATE_LPM_HEAVY", "TOR_TEMPLATE_LPM_SCALE_V6_64", "TOR_TEMPLATE_DUAL_STACK_HOST_SCALE", "TEMPLATE_SERVICE_PROVIDER", "TEMPLATE_MULTICAST_HEAVY", "TEMPLATE_VXLAN_SCALE", "TEMPLATE_MPLS_SCALE", "TEMPLATE_INTERNET_PEERING", "TEMPLATE_MULTICAST_EXT_HEAVY", "TEMPLATE_L3_HEAVY", "TEMPLATE_MULTICAST_DUAL_STACK", "TEMPLATE_L2_HEAVY", "TEMPLATE_L2_SCALE", "TEMPLATE_SECURITY_GROUPS"),
+				},
+			},
+			"platform_service_template_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the user-defined service template.").String,
+				Optional:            true,
+			},
+			"platform_svi_and_si_flex_stats": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware profile sviandsi flex-stats.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_svi_flex_stats": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware profile si flex-stats.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_switch_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Corresponds to the switch mode(N3K/N9K).").AddStringEnumDescription("default", "n3k", "n9k").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("default", "n3k", "n9k"),
+				},
+			},
+			"platform_switching_fabric_speed": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Corresponds to the switching fabric speed.").AddStringEnumDescription("default", "fabric-speed-40g").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("default", "fabric-speed-40g"),
+				},
+			},
+			"platform_switching_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Corresponds to the global switching mode. Default is cut-through.").AddStringEnumDescription("DEFAULT", "STORE_FORWARD", "CUT_THROUGH").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("DEFAULT", "STORE_FORWARD", "CUT_THROUGH"),
+				},
+			},
+			"platform_system_fabric_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Corresponds to the system fabric mode.").AddStringEnumDescription("full-rate", "default").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("full-rate", "default"),
+				},
+			},
+			"platform_tcam_syslog_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for TCAM. The default is 90 percent of the total available shared buffer.").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
+			"platform_unicast_max_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum limit for unicast LPM routes.").AddIntegerRangeDescription(0, 8000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 8000),
+				},
+			},
+			"platform_unicast_syslog_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for unicast cases. The default is 90 percent of the total available shared buffer.").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
+			"platform_unicast_trace": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable unicast trace.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_unknown_unicast_flood": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hardware flood post-routed traffic on SVI if dest-mac->layer2-port binding unknown.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"platform_urpf_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Unicast Reverse Path Forwarding Status.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"platform_wrr_unicast_bandwidth": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("WRR Unicast Bandwidth Value.").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
 		},
 	}
 }
@@ -1056,7 +1453,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,udldEntity,udldInst,udldPhysIf")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,udldEntity,udldInst,udldPhysIf,platformEntity")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

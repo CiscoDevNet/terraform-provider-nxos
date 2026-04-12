@@ -1211,6 +1211,575 @@ child_classes:
                   - port-default-disable
                 description: "Bidirectional Detection Enabled."
                 example: port-enabled
+  - class_name: platformEntity
+    doc_path: System/platform%3AEntity/
+    rn: platform
+    type: single
+    tf_name: platform
+    no_delete: true
+    description: 'Platform entity configuration.'
+    attributes:
+      - nxos_name: accessListMatchInnerHeader
+        tf_name: platform_access_list_match_inner_header
+        type: String
+        description: 'Used to enable/disable hardware access-list match inner-header.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: aclTapAggregation
+        tf_name: platform_acl_tap_aggregation
+        type: String
+        description: 'Configure tap-aggregation feature.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: descr
+        tf_name: platform_description
+        type: String
+        description: 'Container to hold platform data of apps.'
+        example: 'My platform'
+        exclude_test: true
+      - nxos_name: disParseErr
+        tf_name: platform_disable_parse_error
+        type: String
+        description: 'Used to disable/enable hardware profile disable parse-err.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: globalTxSpan
+        tf_name: platform_global_tx_span
+        type: String
+        description: 'Used to enable/disable hardware multicast global tx span.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: highMulticastPriority
+        tf_name: platform_high_multicast_priority
+        type: String
+        description: 'high mcast priority.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
+      - nxos_name: hwLouResThreshold
+        tf_name: platform_hardware_lou_resource_threshold
+        type: Int64
+        description: 'Hardware Lou Resource Threshold value.'
+        min_int: 1
+        max_int: 50
+        example: 10
+        exclude_test: true
+      - nxos_name: iBdIfaclLblOpt
+        tf_name: platform_ingress_bd_ifacl_label_optimization
+        type: String
+        description: 'To optimize the ingress QOS Ingress BD IFACL label size.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: iRaclSize
+        tf_name: platform_ingress_racl_size
+        type: String
+        description: 'To set the ingress RACL TCAM label size to 9 bits and the default value is 6 bits.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: ingRepRoundRobin
+        tf_name: platform_ingress_replication_round_robin
+        type: Bool
+        description: 'Round-Robin hashing of underlay-paths for VXLAN ingress-replication peers.'
+        example: "true"
+        exclude_test: true
+      - nxos_name: ipStatistics
+        tf_name: platform_ip_statistics
+        type: String
+        description: 'Used to disable/enable hardware forwarding ip statistics.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: ipv6AlpmCarveValue
+        tf_name: platform_ipv6_alpm_carve_value
+        type: Int64
+        description: 'Hardware profile ipv6 alpm carve-value.'
+        min_int: 0
+        max_int: 4096
+        example: 128
+        exclude_test: true
+      - nxos_name: ipv6LpmMaxEntries
+        tf_name: platform_ipv6_lpm_max_entries
+        type: Int64
+        description: 'Maximum limit for IPv6 LPM routes.'
+        min_int: 0
+        max_int: 6144
+        example: 1024
+        exclude_test: true
+      - nxos_name: lpmMaxLimit
+        tf_name: platform_lpm_max_limit
+        type: Int64
+        description: 'Maximum limit for LPM routes.'
+        min_int: 0
+        max_int: 4096
+        example: 1024
+        exclude_test: true
+      - nxos_name: mcastDcsCheck
+        tf_name: platform_multicast_dcs_check
+        type: String
+        description: 'Used to enable/disable system mcast DCS check.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: mcastFlexStats
+        tf_name: platform_multicast_flex_stats
+        type: String
+        description: 'Used to enable/disable hardware profile multicast flex-stats.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: mcastLpmMaxEntries
+        tf_name: platform_multicast_lpm_max_entries
+        type: Int64
+        description: 'Maximum limit for multicast LPM routes.'
+        min_int: 0
+        max_int: 4096
+        example: 1024
+        exclude_test: true
+      - nxos_name: mcastNlb
+        tf_name: platform_multicast_nlb
+        type: String
+        description: 'Used to enable/disable hardware profile multicast nlb.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: mcastRaclBridge
+        tf_name: platform_multicast_racl_bridge
+        type: String
+        description: 'Apply permit/drop for mcast bridged pkt.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
+      - nxos_name: mldSnooping
+        tf_name: platform_mld_snooping
+        type: String
+        description: 'Used to enable/disable system mld snooping.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: mplsAdjStatsMode
+        tf_name: platform_mpls_adjacency_stats_mode
+        type: String
+        description: 'Corresponds to MPLS Adjacency stats type.'
+        enum_values:
+          - PACKETS
+          - BYTES
+        example: BYTES
+        exclude_test: true
+      - nxos_name: mplsCfgEcmpMode
+        tf_name: platform_mpls_ecmp_mode
+        type: String
+        description: 'Used to enable/disable extended-ecmp for MPLS on RX-series Linecards N9K.'
+        enum_values:
+          - invalid
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: mroutingDisableL2Upd
+        tf_name: platform_mrouting_disable_l2_update
+        type: String
+        description: 'Corresponds to enabling/disabling l2 update.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: mroutingDisableSecRouteUpd
+        tf_name: platform_mrouting_disable_second_route_update
+        type: String
+        description: 'Corresponds to enabling/disabling second route update.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: mroutingPerfMode
+        tf_name: platform_mrouting_performance_mode
+        type: String
+        description: 'Corresponds to enabling/disabling mrouting performance mode.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: multicastMaxLimit
+        tf_name: platform_multicast_max_limit
+        type: Int64
+        description: 'Maximum limit for multicast LPM routes.'
+        min_int: 0
+        max_int: 8000
+        example: 2048
+        exclude_test: true
+      - nxos_name: multicastRpfCheckOptimization
+        tf_name: platform_multicast_rpf_check_optimization
+        type: String
+        description: 'mcast rpf check optimization.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
+      - nxos_name: multicastServiceReflectPort
+        tf_name: platform_multicast_service_reflect_port
+        type: Int64
+        description: 'mcast service-reflect port.'
+        min_int: 0
+        max_int: 48
+        example: 10
+        exclude_test: true
+      - nxos_name: multicastSyslogThreshold
+        tf_name: platform_multicast_syslog_threshold
+        type: Int64
+        description: 'Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for multicast cases. The default is 90 percent of the total available shared buffer.'
+        min_int: 1
+        max_int: 100
+        example: 80
+        exclude_test: true
+      - nxos_name: openflowForwardPdu
+        tf_name: platform_openflow_forward_pdu
+        type: String
+        description: 'Configure openflow forward-pdu.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
+      - nxos_name: pbrSkipSelfIp
+        tf_name: platform_pbr_skip_self_ip
+        type: String
+        description: 'Configure Skipping PBR for self-ip packets.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
+      - nxos_name: pcFastConv
+        tf_name: platform_port_channel_fast_convergence
+        type: String
+        description: 'Port-channel Fast Convergence.'
+        enum_values:
+          - enable
+          - disable
+        example: enable
+        exclude_test: true
+      - nxos_name: pcLbAlgo
+        tf_name: platform_port_channel_load_balance_algorithm
+        type: String
+        description: 'Pc load-balance internal algorithm.'
+        enum_values:
+          - PC_LB_ALGO_DLB
+          - PC_LB_ALGO_RTAG7
+          - PC_LB_ALGO_RTAG7_MURMUR
+          - PC_LB_ALGO_RTAG7_LOCAL_CRC
+          - PC_LB_ALGO_DYNAMIC_PIN
+        example: PC_LB_ALGO_RTAG7
+        exclude_test: true
+      - nxos_name: pcLbRes
+        tf_name: platform_port_channel_load_balance_resilient
+        type: String
+        description: 'Pc load-balance resilient.'
+        enum_values:
+          - "yes"
+          - "no"
+        example: "yes"
+        exclude_test: true
+      - nxos_name: pcMplsLbLabelIp
+        tf_name: platform_port_channel_mpls_load_balance_label_ip
+        type: String
+        description: 'Mpls load-balance label ip.'
+        enum_values:
+          - DEFAULT
+          - LABEL_IP
+        example: LABEL_IP
+        exclude_test: true
+      - nxos_name: pcMplsLbLabelOnly
+        tf_name: platform_port_channel_mpls_load_balance_label_only
+        type: String
+        description: 'Mpls load-balance label only.'
+        enum_values:
+          - DEFAULT
+          - LABEL_ONLY
+        example: LABEL_ONLY
+        exclude_test: true
+      - nxos_name: pcScaleFanout
+        tf_name: platform_port_channel_scale_fanout
+        type: String
+        description: 'Port-channel Scale Fanout.'
+        enum_values:
+          - enable
+          - disable
+        example: enable
+        exclude_test: true
+      - nxos_name: picCoreEnable
+        tf_name: platform_pic_core_enable
+        type: String
+        description: 'Configure PIC core.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
+      - nxos_name: profileFrontPortmode
+        tf_name: platform_profile_front_port_mode
+        type: String
+        description: 'Hardware profile front portmode for platform entity.'
+        enum_values:
+          - sfp-plus
+          - qsfp
+        example: sfp-plus
+        exclude_test: true
+      - nxos_name: profileMode
+        tf_name: platform_profile_mode
+        type: String
+        description: 'Hardware profile mode for platform entity.'
+        enum_values:
+          - Default
+          - QS_PORT_MODE_64X10G
+          - QS_PORT_MODE_48X10G_4X40G
+          - QS_PORT_MODE_52X10G_3X40g
+          - QS_PORT_MODE_56X10G_2X40G
+          - QS_PORT_MODE_60X10G_1X40G
+          - QS_PORT_MODE
+          - QG_PORT_MODE_32X10G_8X40G
+          - QG_PORT_MODE_16X40G
+          - QG_PORT_MODE_16X10G_12X40G
+          - QG_PORT_MODE_8X10G_14X40G
+          - NEP_PORT_MODE_32X40G
+          - NEP_PORT_MODE_24X40G
+          - NEP_PORT_MODE_26X40G
+          - NEP_PORT_MODE_32X40G_FIXED
+          - QI2_PORT_MODE_72X10G
+          - QI2_PORT_MODE_48X10G_6x40G
+          - QI2_PORT_MODE_BKOUT
+          - DV_PORT_MODE_48X25G_4X100G
+          - DV_PORT_MODE_48X25G_2X100G_4X40G
+          - PB_PORT_MODE_48X10G_6X100G
+          - PB_PORT_MODE_48X10G_4X100G_2X40G
+          - FOST_PORT_MODE_28X40G_4X100G
+          - FOST_PORT_MODE_18X100G
+          - FOST_PORT_MODE_24X40G_6X100G
+          - TET_PORT_MODE_64X100G
+          - TET_PORT_MODE_96X25G_32X100G
+          - TET_PORT_MODE_128X25G
+          - CMR_PORT_MODE_128X100G_32X400G
+          - CMR_PORT_MODE_160X25G_8X100G
+          - CMR_PORT_MODE_128X100G_30X400G_2X200G
+        example: QS_PORT_MODE_64X10G
+        exclude_test: true
+      - nxos_name: profileTuple
+        tf_name: platform_profile_tuple
+        type: String
+        description: 'Profile tuple for platform entity.'
+        enum_values:
+          - Disable
+          - Enable
+        example: Enable
+        exclude_test: true
+      - nxos_name: pstatCfg
+        tf_name: platform_pstat_configuration
+        type: String
+        description: 'pstat enable.'
+        enum_values:
+          - PSTAT_DISABLE
+          - PSTAT_ENABLE
+          - PSTAT_ENABLE_PEAK
+        example: PSTAT_ENABLE
+        exclude_test: true
+      - nxos_name: qosMinBuffer
+        tf_name: platform_qos_min_buffer
+        type: String
+        description: 'qos min-buffer qos-group.'
+        enum_values:
+          - all
+          - none
+          - default
+        example: none
+        exclude_test: true
+      - nxos_name: routingMode
+        tf_name: platform_routing_mode
+        type: String
+        description: 'Routing mode.'
+        enum_values:
+          - DEFAULT
+          - NON_HIER_DEFAULT
+          - NON_HIER_MAX_L3
+          - MAX_HOST
+          - TOR_MAX_L3
+          - DEFAULT_64B
+          - NON_HIER_MAX_L3_64B
+          - TOR_MAX_L3_64B
+          - TOR_MAX_L2
+          - TOR_MAX_L2L3
+          - TOR_TEMPLATE_OVL_HOST_SCALE
+          - TEMPLATE_LPM_HEAVY
+          - TOR_TEMPLATE_LPM_SCALE_V6_64
+          - TOR_TEMPLATE_DUAL_STACK_HOST_SCALE
+          - TEMPLATE_SERVICE_PROVIDER
+          - TEMPLATE_MULTICAST_HEAVY
+          - TEMPLATE_VXLAN_SCALE
+          - TEMPLATE_MPLS_SCALE
+          - TEMPLATE_INTERNET_PEERING
+          - TEMPLATE_MULTICAST_EXT_HEAVY
+          - TEMPLATE_L3_HEAVY
+          - TEMPLATE_MULTICAST_DUAL_STACK
+          - TEMPLATE_L2_HEAVY
+          - TEMPLATE_L2_SCALE
+          - TEMPLATE_SECURITY_GROUPS
+        example: NON_HIER_DEFAULT
+        exclude_test: true
+      - nxos_name: serviceTemplateName
+        tf_name: platform_service_template_name
+        type: String
+        description: 'Name of the user-defined service template.'
+        example: 'template1'
+        exclude_test: true
+      - nxos_name: sviAndSiFlexStats
+        tf_name: platform_svi_and_si_flex_stats
+        type: String
+        description: 'Used to enable/disable hardware profile sviandsi flex-stats.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: sviFlexStats
+        tf_name: platform_svi_flex_stats
+        type: String
+        description: 'Used to enable/disable hardware profile si flex-stats.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: switchMode
+        tf_name: platform_switch_mode
+        type: String
+        description: 'Corresponds to the switch mode(N3K/N9K).'
+        enum_values:
+          - default
+          - n3k
+          - n9k
+        example: n3k
+        exclude_test: true
+      - nxos_name: switchingFabricSpeed
+        tf_name: platform_switching_fabric_speed
+        type: String
+        description: 'Corresponds to the switching fabric speed.'
+        enum_values:
+          - default
+          - fabric-speed-40g
+        example: fabric-speed-40g
+        exclude_test: true
+      - nxos_name: switchingMode
+        tf_name: platform_switching_mode
+        type: String
+        description: 'Corresponds to the global switching mode. Default is cut-through.'
+        enum_values:
+          - DEFAULT
+          - STORE_FORWARD
+          - CUT_THROUGH
+        example: STORE_FORWARD
+        exclude_test: true
+      - nxos_name: systemFabricMode
+        tf_name: platform_system_fabric_mode
+        type: String
+        description: 'Corresponds to the system fabric mode.'
+        enum_values:
+          - full-rate
+          - default
+        example: full-rate
+        exclude_test: true
+      - nxos_name: tcamSyslogThreshold
+        tf_name: platform_tcam_syslog_threshold
+        type: Int64
+        description: 'Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for TCAM. The default is 90 percent of the total available shared buffer.'
+        min_int: 1
+        max_int: 100
+        example: 80
+        exclude_test: true
+      - nxos_name: unicastMaxLimit
+        tf_name: platform_unicast_max_limit
+        type: Int64
+        description: 'Maximum limit for unicast LPM routes.'
+        min_int: 0
+        max_int: 8000
+        example: 2048
+        exclude_test: true
+      - nxos_name: unicastSyslogThreshold
+        tf_name: platform_unicast_syslog_threshold
+        type: Int64
+        description: 'Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for unicast cases. The default is 90 percent of the total available shared buffer.'
+        min_int: 1
+        max_int: 100
+        example: 80
+        exclude_test: true
+      - nxos_name: unicastTrace
+        tf_name: platform_unicast_trace
+        type: String
+        description: 'Used to enable/disable unicast trace.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: unknownUnicastFlood
+        tf_name: platform_unknown_unicast_flood
+        type: String
+        description: 'Hardware flood post-routed traffic on SVI if dest-mac->layer2-port binding unknown.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+        exclude_test: true
+      - nxos_name: urpfStatus
+        tf_name: platform_urpf_status
+        type: String
+        description: 'Unicast Reverse Path Forwarding Status.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+        exclude_test: true
+      - nxos_name: wrrUnicastBw
+        tf_name: platform_wrr_unicast_bandwidth
+        type: Int64
+        description: 'WRR Unicast Bandwidth Value.'
+        min_int: 0
+        max_int: 100
+        example: 60
+        exclude_test: true
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld

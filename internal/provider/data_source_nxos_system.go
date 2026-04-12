@@ -57,7 +57,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "udldEntity", "udldInst", "udldPhysIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "udldEntity", "udldInst", "udldPhysIf", "platformEntity"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -644,6 +644,238 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
+			"platform_access_list_match_inner_header": schema.StringAttribute{
+				MarkdownDescription: "Used to enable/disable hardware access-list match inner-header.",
+				Computed:            true,
+			},
+			"platform_acl_tap_aggregation": schema.StringAttribute{
+				MarkdownDescription: "Configure tap-aggregation feature.",
+				Computed:            true,
+			},
+			"platform_description": schema.StringAttribute{
+				MarkdownDescription: "Container to hold platform data of apps.",
+				Computed:            true,
+			},
+			"platform_disable_parse_error": schema.StringAttribute{
+				MarkdownDescription: "Used to disable/enable hardware profile disable parse-err.",
+				Computed:            true,
+			},
+			"platform_global_tx_span": schema.StringAttribute{
+				MarkdownDescription: "Used to enable/disable hardware multicast global tx span.",
+				Computed:            true,
+			},
+			"platform_high_multicast_priority": schema.StringAttribute{
+				MarkdownDescription: "high mcast priority.",
+				Computed:            true,
+			},
+			"platform_hardware_lou_resource_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Hardware Lou Resource Threshold value.",
+				Computed:            true,
+			},
+			"platform_ingress_bd_ifacl_label_optimization": schema.StringAttribute{
+				MarkdownDescription: "To optimize the ingress QOS Ingress BD IFACL label size.",
+				Computed:            true,
+			},
+			"platform_ingress_racl_size": schema.StringAttribute{
+				MarkdownDescription: "To set the ingress RACL TCAM label size to 9 bits and the default value is 6 bits.",
+				Computed:            true,
+			},
+			"platform_ingress_replication_round_robin": schema.BoolAttribute{
+				MarkdownDescription: "Round-Robin hashing of underlay-paths for VXLAN ingress-replication peers.",
+				Computed:            true,
+			},
+			"platform_ip_statistics": schema.StringAttribute{
+				MarkdownDescription: "Used to disable/enable hardware forwarding ip statistics.",
+				Computed:            true,
+			},
+			"platform_ipv6_alpm_carve_value": schema.Int64Attribute{
+				MarkdownDescription: "Hardware profile ipv6 alpm carve-value.",
+				Computed:            true,
+			},
+			"platform_ipv6_lpm_max_entries": schema.Int64Attribute{
+				MarkdownDescription: "Maximum limit for IPv6 LPM routes.",
+				Computed:            true,
+			},
+			"platform_lpm_max_limit": schema.Int64Attribute{
+				MarkdownDescription: "Maximum limit for LPM routes.",
+				Computed:            true,
+			},
+			"platform_multicast_dcs_check": schema.StringAttribute{
+				MarkdownDescription: "Used to enable/disable system mcast DCS check.",
+				Computed:            true,
+			},
+			"platform_multicast_flex_stats": schema.StringAttribute{
+				MarkdownDescription: "Used to enable/disable hardware profile multicast flex-stats.",
+				Computed:            true,
+			},
+			"platform_multicast_lpm_max_entries": schema.Int64Attribute{
+				MarkdownDescription: "Maximum limit for multicast LPM routes.",
+				Computed:            true,
+			},
+			"platform_multicast_nlb": schema.StringAttribute{
+				MarkdownDescription: "Used to enable/disable hardware profile multicast nlb.",
+				Computed:            true,
+			},
+			"platform_multicast_racl_bridge": schema.StringAttribute{
+				MarkdownDescription: "Apply permit/drop for mcast bridged pkt.",
+				Computed:            true,
+			},
+			"platform_mld_snooping": schema.StringAttribute{
+				MarkdownDescription: "Used to enable/disable system mld snooping.",
+				Computed:            true,
+			},
+			"platform_mpls_adjacency_stats_mode": schema.StringAttribute{
+				MarkdownDescription: "Corresponds to MPLS Adjacency stats type.",
+				Computed:            true,
+			},
+			"platform_mpls_ecmp_mode": schema.StringAttribute{
+				MarkdownDescription: "Used to enable/disable extended-ecmp for MPLS on RX-series Linecards N9K.",
+				Computed:            true,
+			},
+			"platform_mrouting_disable_l2_update": schema.StringAttribute{
+				MarkdownDescription: "Corresponds to enabling/disabling l2 update.",
+				Computed:            true,
+			},
+			"platform_mrouting_disable_second_route_update": schema.StringAttribute{
+				MarkdownDescription: "Corresponds to enabling/disabling second route update.",
+				Computed:            true,
+			},
+			"platform_mrouting_performance_mode": schema.StringAttribute{
+				MarkdownDescription: "Corresponds to enabling/disabling mrouting performance mode.",
+				Computed:            true,
+			},
+			"platform_multicast_max_limit": schema.Int64Attribute{
+				MarkdownDescription: "Maximum limit for multicast LPM routes.",
+				Computed:            true,
+			},
+			"platform_multicast_rpf_check_optimization": schema.StringAttribute{
+				MarkdownDescription: "mcast rpf check optimization.",
+				Computed:            true,
+			},
+			"platform_multicast_service_reflect_port": schema.Int64Attribute{
+				MarkdownDescription: "mcast service-reflect port.",
+				Computed:            true,
+			},
+			"platform_multicast_syslog_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for multicast cases. The default is 90 percent of the total available shared buffer.",
+				Computed:            true,
+			},
+			"platform_openflow_forward_pdu": schema.StringAttribute{
+				MarkdownDescription: "Configure openflow forward-pdu.",
+				Computed:            true,
+			},
+			"platform_pbr_skip_self_ip": schema.StringAttribute{
+				MarkdownDescription: "Configure Skipping PBR for self-ip packets.",
+				Computed:            true,
+			},
+			"platform_port_channel_fast_convergence": schema.StringAttribute{
+				MarkdownDescription: "Port-channel Fast Convergence.",
+				Computed:            true,
+			},
+			"platform_port_channel_load_balance_algorithm": schema.StringAttribute{
+				MarkdownDescription: "Pc load-balance internal algorithm.",
+				Computed:            true,
+			},
+			"platform_port_channel_load_balance_resilient": schema.StringAttribute{
+				MarkdownDescription: "Pc load-balance resilient.",
+				Computed:            true,
+			},
+			"platform_port_channel_mpls_load_balance_label_ip": schema.StringAttribute{
+				MarkdownDescription: "Mpls load-balance label ip.",
+				Computed:            true,
+			},
+			"platform_port_channel_mpls_load_balance_label_only": schema.StringAttribute{
+				MarkdownDescription: "Mpls load-balance label only.",
+				Computed:            true,
+			},
+			"platform_port_channel_scale_fanout": schema.StringAttribute{
+				MarkdownDescription: "Port-channel Scale Fanout.",
+				Computed:            true,
+			},
+			"platform_pic_core_enable": schema.StringAttribute{
+				MarkdownDescription: "Configure PIC core.",
+				Computed:            true,
+			},
+			"platform_profile_front_port_mode": schema.StringAttribute{
+				MarkdownDescription: "Hardware profile front portmode for platform entity.",
+				Computed:            true,
+			},
+			"platform_profile_mode": schema.StringAttribute{
+				MarkdownDescription: "Hardware profile mode for platform entity.",
+				Computed:            true,
+			},
+			"platform_profile_tuple": schema.StringAttribute{
+				MarkdownDescription: "Profile tuple for platform entity.",
+				Computed:            true,
+			},
+			"platform_pstat_configuration": schema.StringAttribute{
+				MarkdownDescription: "pstat enable.",
+				Computed:            true,
+			},
+			"platform_qos_min_buffer": schema.StringAttribute{
+				MarkdownDescription: "qos min-buffer qos-group.",
+				Computed:            true,
+			},
+			"platform_routing_mode": schema.StringAttribute{
+				MarkdownDescription: "Routing mode.",
+				Computed:            true,
+			},
+			"platform_service_template_name": schema.StringAttribute{
+				MarkdownDescription: "Name of the user-defined service template.",
+				Computed:            true,
+			},
+			"platform_svi_and_si_flex_stats": schema.StringAttribute{
+				MarkdownDescription: "Used to enable/disable hardware profile sviandsi flex-stats.",
+				Computed:            true,
+			},
+			"platform_svi_flex_stats": schema.StringAttribute{
+				MarkdownDescription: "Used to enable/disable hardware profile si flex-stats.",
+				Computed:            true,
+			},
+			"platform_switch_mode": schema.StringAttribute{
+				MarkdownDescription: "Corresponds to the switch mode(N3K/N9K).",
+				Computed:            true,
+			},
+			"platform_switching_fabric_speed": schema.StringAttribute{
+				MarkdownDescription: "Corresponds to the switching fabric speed.",
+				Computed:            true,
+			},
+			"platform_switching_mode": schema.StringAttribute{
+				MarkdownDescription: "Corresponds to the global switching mode. Default is cut-through.",
+				Computed:            true,
+			},
+			"platform_system_fabric_mode": schema.StringAttribute{
+				MarkdownDescription: "Corresponds to the system fabric mode.",
+				Computed:            true,
+			},
+			"platform_tcam_syslog_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for TCAM. The default is 90 percent of the total available shared buffer.",
+				Computed:            true,
+			},
+			"platform_unicast_max_limit": schema.Int64Attribute{
+				MarkdownDescription: "Maximum limit for unicast LPM routes.",
+				Computed:            true,
+			},
+			"platform_unicast_syslog_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for unicast cases. The default is 90 percent of the total available shared buffer.",
+				Computed:            true,
+			},
+			"platform_unicast_trace": schema.StringAttribute{
+				MarkdownDescription: "Used to enable/disable unicast trace.",
+				Computed:            true,
+			},
+			"platform_unknown_unicast_flood": schema.StringAttribute{
+				MarkdownDescription: "Hardware flood post-routed traffic on SVI if dest-mac->layer2-port binding unknown.",
+				Computed:            true,
+			},
+			"platform_urpf_status": schema.StringAttribute{
+				MarkdownDescription: "Unicast Reverse Path Forwarding Status.",
+				Computed:            true,
+			},
+			"platform_wrr_unicast_bandwidth": schema.Int64Attribute{
+				MarkdownDescription: "WRR Unicast Bandwidth Value.",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -676,7 +908,7 @@ func (d *SystemDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,udldEntity,udldInst,udldPhysIf")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,udldEntity,udldInst,udldPhysIf,platformEntity")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

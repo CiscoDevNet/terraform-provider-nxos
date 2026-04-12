@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/
 ---
 
 # nxos_system (Data Source)
@@ -43,6 +43,7 @@ This data source can read the system configuration on NX-OS devices, including t
 - [udldEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/)
 - [udldInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/)
 - [udldPhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/)
+- [platformEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/)
 
 ## Example Usage
 
@@ -150,6 +151,64 @@ data "nxos_system" "example" {
 - `nd_solicit_neighbor_advertisement` (String) Solicit neighbor advertisement.
 - `nd_vrfs` (Attributes Map) Neighbor Discovery Domain.
   - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--nd_vrfs))
+- `platform_access_list_match_inner_header` (String) Used to enable/disable hardware access-list match inner-header.
+- `platform_acl_tap_aggregation` (String) Configure tap-aggregation feature.
+- `platform_description` (String) Container to hold platform data of apps.
+- `platform_disable_parse_error` (String) Used to disable/enable hardware profile disable parse-err.
+- `platform_global_tx_span` (String) Used to enable/disable hardware multicast global tx span.
+- `platform_hardware_lou_resource_threshold` (Number) Hardware Lou Resource Threshold value.
+- `platform_high_multicast_priority` (String) high mcast priority.
+- `platform_ingress_bd_ifacl_label_optimization` (String) To optimize the ingress QOS Ingress BD IFACL label size.
+- `platform_ingress_racl_size` (String) To set the ingress RACL TCAM label size to 9 bits and the default value is 6 bits.
+- `platform_ingress_replication_round_robin` (Boolean) Round-Robin hashing of underlay-paths for VXLAN ingress-replication peers.
+- `platform_ip_statistics` (String) Used to disable/enable hardware forwarding ip statistics.
+- `platform_ipv6_alpm_carve_value` (Number) Hardware profile ipv6 alpm carve-value.
+- `platform_ipv6_lpm_max_entries` (Number) Maximum limit for IPv6 LPM routes.
+- `platform_lpm_max_limit` (Number) Maximum limit for LPM routes.
+- `platform_mld_snooping` (String) Used to enable/disable system mld snooping.
+- `platform_mpls_adjacency_stats_mode` (String) Corresponds to MPLS Adjacency stats type.
+- `platform_mpls_ecmp_mode` (String) Used to enable/disable extended-ecmp for MPLS on RX-series Linecards N9K.
+- `platform_mrouting_disable_l2_update` (String) Corresponds to enabling/disabling l2 update.
+- `platform_mrouting_disable_second_route_update` (String) Corresponds to enabling/disabling second route update.
+- `platform_mrouting_performance_mode` (String) Corresponds to enabling/disabling mrouting performance mode.
+- `platform_multicast_dcs_check` (String) Used to enable/disable system mcast DCS check.
+- `platform_multicast_flex_stats` (String) Used to enable/disable hardware profile multicast flex-stats.
+- `platform_multicast_lpm_max_entries` (Number) Maximum limit for multicast LPM routes.
+- `platform_multicast_max_limit` (Number) Maximum limit for multicast LPM routes.
+- `platform_multicast_nlb` (String) Used to enable/disable hardware profile multicast nlb.
+- `platform_multicast_racl_bridge` (String) Apply permit/drop for mcast bridged pkt.
+- `platform_multicast_rpf_check_optimization` (String) mcast rpf check optimization.
+- `platform_multicast_service_reflect_port` (Number) mcast service-reflect port.
+- `platform_multicast_syslog_threshold` (Number) Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for multicast cases. The default is 90 percent of the total available shared buffer.
+- `platform_openflow_forward_pdu` (String) Configure openflow forward-pdu.
+- `platform_pbr_skip_self_ip` (String) Configure Skipping PBR for self-ip packets.
+- `platform_pic_core_enable` (String) Configure PIC core.
+- `platform_port_channel_fast_convergence` (String) Port-channel Fast Convergence.
+- `platform_port_channel_load_balance_algorithm` (String) Pc load-balance internal algorithm.
+- `platform_port_channel_load_balance_resilient` (String) Pc load-balance resilient.
+- `platform_port_channel_mpls_load_balance_label_ip` (String) Mpls load-balance label ip.
+- `platform_port_channel_mpls_load_balance_label_only` (String) Mpls load-balance label only.
+- `platform_port_channel_scale_fanout` (String) Port-channel Scale Fanout.
+- `platform_profile_front_port_mode` (String) Hardware profile front portmode for platform entity.
+- `platform_profile_mode` (String) Hardware profile mode for platform entity.
+- `platform_profile_tuple` (String) Profile tuple for platform entity.
+- `platform_pstat_configuration` (String) pstat enable.
+- `platform_qos_min_buffer` (String) qos min-buffer qos-group.
+- `platform_routing_mode` (String) Routing mode.
+- `platform_service_template_name` (String) Name of the user-defined service template.
+- `platform_svi_and_si_flex_stats` (String) Used to enable/disable hardware profile sviandsi flex-stats.
+- `platform_svi_flex_stats` (String) Used to enable/disable hardware profile si flex-stats.
+- `platform_switch_mode` (String) Corresponds to the switch mode(N3K/N9K).
+- `platform_switching_fabric_speed` (String) Corresponds to the switching fabric speed.
+- `platform_switching_mode` (String) Corresponds to the global switching mode. Default is cut-through.
+- `platform_system_fabric_mode` (String) Corresponds to the system fabric mode.
+- `platform_tcam_syslog_threshold` (Number) Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for TCAM. The default is 90 percent of the total available shared buffer.
+- `platform_unicast_max_limit` (Number) Maximum limit for unicast LPM routes.
+- `platform_unicast_syslog_threshold` (Number) Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for unicast cases. The default is 90 percent of the total available shared buffer.
+- `platform_unicast_trace` (String) Used to enable/disable unicast trace.
+- `platform_unknown_unicast_flood` (String) Hardware flood post-routed traffic on SVI if dest-mac->layer2-port binding unknown.
+- `platform_urpf_status` (String) Unicast Reverse Path Forwarding Status.
+- `platform_wrr_unicast_bandwidth` (Number) WRR Unicast Bandwidth Value.
 - `smart_licensing_transport_cslu_url` (String) Defining Transport CSLU url property.
 - `smart_licensing_transport_mode` (String) Defining transport mode property.
 - `udld_admin_state` (String) The administrative state of the object or policy.

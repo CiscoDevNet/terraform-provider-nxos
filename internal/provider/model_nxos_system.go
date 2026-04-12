@@ -131,6 +131,64 @@ type System struct {
 	UdldAggressive                                types.String                    `tfsdk:"udld_aggressive"`
 	UdldMessageInterval                           types.Int64                     `tfsdk:"udld_message_interval"`
 	UdldInterfaces                                map[string]SystemUdldInterfaces `tfsdk:"udld_interfaces"`
+	PlatformAccessListMatchInnerHeader            types.String                    `tfsdk:"platform_access_list_match_inner_header"`
+	PlatformAclTapAggregation                     types.String                    `tfsdk:"platform_acl_tap_aggregation"`
+	PlatformDescription                           types.String                    `tfsdk:"platform_description"`
+	PlatformDisableParseError                     types.String                    `tfsdk:"platform_disable_parse_error"`
+	PlatformGlobalTxSpan                          types.String                    `tfsdk:"platform_global_tx_span"`
+	PlatformHighMulticastPriority                 types.String                    `tfsdk:"platform_high_multicast_priority"`
+	PlatformHardwareLouResourceThreshold          types.Int64                     `tfsdk:"platform_hardware_lou_resource_threshold"`
+	PlatformIngressBdIfaclLabelOptimization       types.String                    `tfsdk:"platform_ingress_bd_ifacl_label_optimization"`
+	PlatformIngressRaclSize                       types.String                    `tfsdk:"platform_ingress_racl_size"`
+	PlatformIngressReplicationRoundRobin          types.Bool                      `tfsdk:"platform_ingress_replication_round_robin"`
+	PlatformIpStatistics                          types.String                    `tfsdk:"platform_ip_statistics"`
+	PlatformIpv6AlpmCarveValue                    types.Int64                     `tfsdk:"platform_ipv6_alpm_carve_value"`
+	PlatformIpv6LpmMaxEntries                     types.Int64                     `tfsdk:"platform_ipv6_lpm_max_entries"`
+	PlatformLpmMaxLimit                           types.Int64                     `tfsdk:"platform_lpm_max_limit"`
+	PlatformMulticastDcsCheck                     types.String                    `tfsdk:"platform_multicast_dcs_check"`
+	PlatformMulticastFlexStats                    types.String                    `tfsdk:"platform_multicast_flex_stats"`
+	PlatformMulticastLpmMaxEntries                types.Int64                     `tfsdk:"platform_multicast_lpm_max_entries"`
+	PlatformMulticastNlb                          types.String                    `tfsdk:"platform_multicast_nlb"`
+	PlatformMulticastRaclBridge                   types.String                    `tfsdk:"platform_multicast_racl_bridge"`
+	PlatformMldSnooping                           types.String                    `tfsdk:"platform_mld_snooping"`
+	PlatformMplsAdjacencyStatsMode                types.String                    `tfsdk:"platform_mpls_adjacency_stats_mode"`
+	PlatformMplsEcmpMode                          types.String                    `tfsdk:"platform_mpls_ecmp_mode"`
+	PlatformMroutingDisableL2Update               types.String                    `tfsdk:"platform_mrouting_disable_l2_update"`
+	PlatformMroutingDisableSecondRouteUpdate      types.String                    `tfsdk:"platform_mrouting_disable_second_route_update"`
+	PlatformMroutingPerformanceMode               types.String                    `tfsdk:"platform_mrouting_performance_mode"`
+	PlatformMulticastMaxLimit                     types.Int64                     `tfsdk:"platform_multicast_max_limit"`
+	PlatformMulticastRpfCheckOptimization         types.String                    `tfsdk:"platform_multicast_rpf_check_optimization"`
+	PlatformMulticastServiceReflectPort           types.Int64                     `tfsdk:"platform_multicast_service_reflect_port"`
+	PlatformMulticastSyslogThreshold              types.Int64                     `tfsdk:"platform_multicast_syslog_threshold"`
+	PlatformOpenflowForwardPdu                    types.String                    `tfsdk:"platform_openflow_forward_pdu"`
+	PlatformPbrSkipSelfIp                         types.String                    `tfsdk:"platform_pbr_skip_self_ip"`
+	PlatformPortChannelFastConvergence            types.String                    `tfsdk:"platform_port_channel_fast_convergence"`
+	PlatformPortChannelLoadBalanceAlgorithm       types.String                    `tfsdk:"platform_port_channel_load_balance_algorithm"`
+	PlatformPortChannelLoadBalanceResilient       types.String                    `tfsdk:"platform_port_channel_load_balance_resilient"`
+	PlatformPortChannelMplsLoadBalanceLabelIp     types.String                    `tfsdk:"platform_port_channel_mpls_load_balance_label_ip"`
+	PlatformPortChannelMplsLoadBalanceLabelOnly   types.String                    `tfsdk:"platform_port_channel_mpls_load_balance_label_only"`
+	PlatformPortChannelScaleFanout                types.String                    `tfsdk:"platform_port_channel_scale_fanout"`
+	PlatformPicCoreEnable                         types.String                    `tfsdk:"platform_pic_core_enable"`
+	PlatformProfileFrontPortMode                  types.String                    `tfsdk:"platform_profile_front_port_mode"`
+	PlatformProfileMode                           types.String                    `tfsdk:"platform_profile_mode"`
+	PlatformProfileTuple                          types.String                    `tfsdk:"platform_profile_tuple"`
+	PlatformPstatConfiguration                    types.String                    `tfsdk:"platform_pstat_configuration"`
+	PlatformQosMinBuffer                          types.String                    `tfsdk:"platform_qos_min_buffer"`
+	PlatformRoutingMode                           types.String                    `tfsdk:"platform_routing_mode"`
+	PlatformServiceTemplateName                   types.String                    `tfsdk:"platform_service_template_name"`
+	PlatformSviAndSiFlexStats                     types.String                    `tfsdk:"platform_svi_and_si_flex_stats"`
+	PlatformSviFlexStats                          types.String                    `tfsdk:"platform_svi_flex_stats"`
+	PlatformSwitchMode                            types.String                    `tfsdk:"platform_switch_mode"`
+	PlatformSwitchingFabricSpeed                  types.String                    `tfsdk:"platform_switching_fabric_speed"`
+	PlatformSwitchingMode                         types.String                    `tfsdk:"platform_switching_mode"`
+	PlatformSystemFabricMode                      types.String                    `tfsdk:"platform_system_fabric_mode"`
+	PlatformTcamSyslogThreshold                   types.Int64                     `tfsdk:"platform_tcam_syslog_threshold"`
+	PlatformUnicastMaxLimit                       types.Int64                     `tfsdk:"platform_unicast_max_limit"`
+	PlatformUnicastSyslogThreshold                types.Int64                     `tfsdk:"platform_unicast_syslog_threshold"`
+	PlatformUnicastTrace                          types.String                    `tfsdk:"platform_unicast_trace"`
+	PlatformUnknownUnicastFlood                   types.String                    `tfsdk:"platform_unknown_unicast_flood"`
+	PlatformUrpfStatus                            types.String                    `tfsdk:"platform_urpf_status"`
+	PlatformWrrUnicastBandwidth                   types.Int64                     `tfsdk:"platform_wrr_unicast_bandwidth"`
 }
 
 type SystemArpVpcDomains struct {
@@ -832,6 +890,184 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	attrs = "{}"
+	if !data.PlatformAccessListMatchInnerHeader.IsUnknown() && !data.PlatformAccessListMatchInnerHeader.IsNull() {
+		attrs, _ = sjson.Set(attrs, "accessListMatchInnerHeader", data.PlatformAccessListMatchInnerHeader.ValueString())
+	}
+	if !data.PlatformAclTapAggregation.IsUnknown() && !data.PlatformAclTapAggregation.IsNull() {
+		attrs, _ = sjson.Set(attrs, "aclTapAggregation", data.PlatformAclTapAggregation.ValueString())
+	}
+	if !data.PlatformDescription.IsUnknown() && !data.PlatformDescription.IsNull() {
+		attrs, _ = sjson.Set(attrs, "descr", data.PlatformDescription.ValueString())
+	}
+	if !data.PlatformDisableParseError.IsUnknown() && !data.PlatformDisableParseError.IsNull() {
+		attrs, _ = sjson.Set(attrs, "disParseErr", data.PlatformDisableParseError.ValueString())
+	}
+	if !data.PlatformGlobalTxSpan.IsUnknown() && !data.PlatformGlobalTxSpan.IsNull() {
+		attrs, _ = sjson.Set(attrs, "globalTxSpan", data.PlatformGlobalTxSpan.ValueString())
+	}
+	if !data.PlatformHighMulticastPriority.IsUnknown() && !data.PlatformHighMulticastPriority.IsNull() {
+		attrs, _ = sjson.Set(attrs, "highMulticastPriority", data.PlatformHighMulticastPriority.ValueString())
+	}
+	if !data.PlatformHardwareLouResourceThreshold.IsUnknown() && !data.PlatformHardwareLouResourceThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "hwLouResThreshold", strconv.FormatInt(data.PlatformHardwareLouResourceThreshold.ValueInt64(), 10))
+	}
+	if !data.PlatformIngressBdIfaclLabelOptimization.IsUnknown() && !data.PlatformIngressBdIfaclLabelOptimization.IsNull() {
+		attrs, _ = sjson.Set(attrs, "iBdIfaclLblOpt", data.PlatformIngressBdIfaclLabelOptimization.ValueString())
+	}
+	if !data.PlatformIngressRaclSize.IsUnknown() && !data.PlatformIngressRaclSize.IsNull() {
+		attrs, _ = sjson.Set(attrs, "iRaclSize", data.PlatformIngressRaclSize.ValueString())
+	}
+	if !data.PlatformIngressReplicationRoundRobin.IsUnknown() && !data.PlatformIngressReplicationRoundRobin.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ingRepRoundRobin", strconv.FormatBool(data.PlatformIngressReplicationRoundRobin.ValueBool()))
+	}
+	if !data.PlatformIpStatistics.IsUnknown() && !data.PlatformIpStatistics.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ipStatistics", data.PlatformIpStatistics.ValueString())
+	}
+	if !data.PlatformIpv6AlpmCarveValue.IsUnknown() && !data.PlatformIpv6AlpmCarveValue.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ipv6AlpmCarveValue", strconv.FormatInt(data.PlatformIpv6AlpmCarveValue.ValueInt64(), 10))
+	}
+	if !data.PlatformIpv6LpmMaxEntries.IsUnknown() && !data.PlatformIpv6LpmMaxEntries.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ipv6LpmMaxEntries", strconv.FormatInt(data.PlatformIpv6LpmMaxEntries.ValueInt64(), 10))
+	}
+	if !data.PlatformLpmMaxLimit.IsUnknown() && !data.PlatformLpmMaxLimit.IsNull() {
+		attrs, _ = sjson.Set(attrs, "lpmMaxLimit", strconv.FormatInt(data.PlatformLpmMaxLimit.ValueInt64(), 10))
+	}
+	if !data.PlatformMulticastDcsCheck.IsUnknown() && !data.PlatformMulticastDcsCheck.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcastDcsCheck", data.PlatformMulticastDcsCheck.ValueString())
+	}
+	if !data.PlatformMulticastFlexStats.IsUnknown() && !data.PlatformMulticastFlexStats.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcastFlexStats", data.PlatformMulticastFlexStats.ValueString())
+	}
+	if !data.PlatformMulticastLpmMaxEntries.IsUnknown() && !data.PlatformMulticastLpmMaxEntries.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcastLpmMaxEntries", strconv.FormatInt(data.PlatformMulticastLpmMaxEntries.ValueInt64(), 10))
+	}
+	if !data.PlatformMulticastNlb.IsUnknown() && !data.PlatformMulticastNlb.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcastNlb", data.PlatformMulticastNlb.ValueString())
+	}
+	if !data.PlatformMulticastRaclBridge.IsUnknown() && !data.PlatformMulticastRaclBridge.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcastRaclBridge", data.PlatformMulticastRaclBridge.ValueString())
+	}
+	if !data.PlatformMldSnooping.IsUnknown() && !data.PlatformMldSnooping.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mldSnooping", data.PlatformMldSnooping.ValueString())
+	}
+	if !data.PlatformMplsAdjacencyStatsMode.IsUnknown() && !data.PlatformMplsAdjacencyStatsMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mplsAdjStatsMode", data.PlatformMplsAdjacencyStatsMode.ValueString())
+	}
+	if !data.PlatformMplsEcmpMode.IsUnknown() && !data.PlatformMplsEcmpMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mplsCfgEcmpMode", data.PlatformMplsEcmpMode.ValueString())
+	}
+	if !data.PlatformMroutingDisableL2Update.IsUnknown() && !data.PlatformMroutingDisableL2Update.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mroutingDisableL2Upd", data.PlatformMroutingDisableL2Update.ValueString())
+	}
+	if !data.PlatformMroutingDisableSecondRouteUpdate.IsUnknown() && !data.PlatformMroutingDisableSecondRouteUpdate.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mroutingDisableSecRouteUpd", data.PlatformMroutingDisableSecondRouteUpdate.ValueString())
+	}
+	if !data.PlatformMroutingPerformanceMode.IsUnknown() && !data.PlatformMroutingPerformanceMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mroutingPerfMode", data.PlatformMroutingPerformanceMode.ValueString())
+	}
+	if !data.PlatformMulticastMaxLimit.IsUnknown() && !data.PlatformMulticastMaxLimit.IsNull() {
+		attrs, _ = sjson.Set(attrs, "multicastMaxLimit", strconv.FormatInt(data.PlatformMulticastMaxLimit.ValueInt64(), 10))
+	}
+	if !data.PlatformMulticastRpfCheckOptimization.IsUnknown() && !data.PlatformMulticastRpfCheckOptimization.IsNull() {
+		attrs, _ = sjson.Set(attrs, "multicastRpfCheckOptimization", data.PlatformMulticastRpfCheckOptimization.ValueString())
+	}
+	if !data.PlatformMulticastServiceReflectPort.IsUnknown() && !data.PlatformMulticastServiceReflectPort.IsNull() {
+		attrs, _ = sjson.Set(attrs, "multicastServiceReflectPort", strconv.FormatInt(data.PlatformMulticastServiceReflectPort.ValueInt64(), 10))
+	}
+	if !data.PlatformMulticastSyslogThreshold.IsUnknown() && !data.PlatformMulticastSyslogThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "multicastSyslogThreshold", strconv.FormatInt(data.PlatformMulticastSyslogThreshold.ValueInt64(), 10))
+	}
+	if !data.PlatformOpenflowForwardPdu.IsUnknown() && !data.PlatformOpenflowForwardPdu.IsNull() {
+		attrs, _ = sjson.Set(attrs, "openflowForwardPdu", data.PlatformOpenflowForwardPdu.ValueString())
+	}
+	if !data.PlatformPbrSkipSelfIp.IsUnknown() && !data.PlatformPbrSkipSelfIp.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pbrSkipSelfIp", data.PlatformPbrSkipSelfIp.ValueString())
+	}
+	if !data.PlatformPortChannelFastConvergence.IsUnknown() && !data.PlatformPortChannelFastConvergence.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcFastConv", data.PlatformPortChannelFastConvergence.ValueString())
+	}
+	if !data.PlatformPortChannelLoadBalanceAlgorithm.IsUnknown() && !data.PlatformPortChannelLoadBalanceAlgorithm.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcLbAlgo", data.PlatformPortChannelLoadBalanceAlgorithm.ValueString())
+	}
+	if !data.PlatformPortChannelLoadBalanceResilient.IsUnknown() && !data.PlatformPortChannelLoadBalanceResilient.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcLbRes", data.PlatformPortChannelLoadBalanceResilient.ValueString())
+	}
+	if !data.PlatformPortChannelMplsLoadBalanceLabelIp.IsUnknown() && !data.PlatformPortChannelMplsLoadBalanceLabelIp.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcMplsLbLabelIp", data.PlatformPortChannelMplsLoadBalanceLabelIp.ValueString())
+	}
+	if !data.PlatformPortChannelMplsLoadBalanceLabelOnly.IsUnknown() && !data.PlatformPortChannelMplsLoadBalanceLabelOnly.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcMplsLbLabelOnly", data.PlatformPortChannelMplsLoadBalanceLabelOnly.ValueString())
+	}
+	if !data.PlatformPortChannelScaleFanout.IsUnknown() && !data.PlatformPortChannelScaleFanout.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcScaleFanout", data.PlatformPortChannelScaleFanout.ValueString())
+	}
+	if !data.PlatformPicCoreEnable.IsUnknown() && !data.PlatformPicCoreEnable.IsNull() {
+		attrs, _ = sjson.Set(attrs, "picCoreEnable", data.PlatformPicCoreEnable.ValueString())
+	}
+	if !data.PlatformProfileFrontPortMode.IsUnknown() && !data.PlatformProfileFrontPortMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "profileFrontPortmode", data.PlatformProfileFrontPortMode.ValueString())
+	}
+	if !data.PlatformProfileMode.IsUnknown() && !data.PlatformProfileMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "profileMode", data.PlatformProfileMode.ValueString())
+	}
+	if !data.PlatformProfileTuple.IsUnknown() && !data.PlatformProfileTuple.IsNull() {
+		attrs, _ = sjson.Set(attrs, "profileTuple", data.PlatformProfileTuple.ValueString())
+	}
+	if !data.PlatformPstatConfiguration.IsUnknown() && !data.PlatformPstatConfiguration.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pstatCfg", data.PlatformPstatConfiguration.ValueString())
+	}
+	if !data.PlatformQosMinBuffer.IsUnknown() && !data.PlatformQosMinBuffer.IsNull() {
+		attrs, _ = sjson.Set(attrs, "qosMinBuffer", data.PlatformQosMinBuffer.ValueString())
+	}
+	if !data.PlatformRoutingMode.IsUnknown() && !data.PlatformRoutingMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "routingMode", data.PlatformRoutingMode.ValueString())
+	}
+	if !data.PlatformServiceTemplateName.IsUnknown() && !data.PlatformServiceTemplateName.IsNull() {
+		attrs, _ = sjson.Set(attrs, "serviceTemplateName", data.PlatformServiceTemplateName.ValueString())
+	}
+	if !data.PlatformSviAndSiFlexStats.IsUnknown() && !data.PlatformSviAndSiFlexStats.IsNull() {
+		attrs, _ = sjson.Set(attrs, "sviAndSiFlexStats", data.PlatformSviAndSiFlexStats.ValueString())
+	}
+	if !data.PlatformSviFlexStats.IsUnknown() && !data.PlatformSviFlexStats.IsNull() {
+		attrs, _ = sjson.Set(attrs, "sviFlexStats", data.PlatformSviFlexStats.ValueString())
+	}
+	if !data.PlatformSwitchMode.IsUnknown() && !data.PlatformSwitchMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "switchMode", data.PlatformSwitchMode.ValueString())
+	}
+	if !data.PlatformSwitchingFabricSpeed.IsUnknown() && !data.PlatformSwitchingFabricSpeed.IsNull() {
+		attrs, _ = sjson.Set(attrs, "switchingFabricSpeed", data.PlatformSwitchingFabricSpeed.ValueString())
+	}
+	if !data.PlatformSwitchingMode.IsUnknown() && !data.PlatformSwitchingMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "switchingMode", data.PlatformSwitchingMode.ValueString())
+	}
+	if !data.PlatformSystemFabricMode.IsUnknown() && !data.PlatformSystemFabricMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "systemFabricMode", data.PlatformSystemFabricMode.ValueString())
+	}
+	if !data.PlatformTcamSyslogThreshold.IsUnknown() && !data.PlatformTcamSyslogThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "tcamSyslogThreshold", strconv.FormatInt(data.PlatformTcamSyslogThreshold.ValueInt64(), 10))
+	}
+	if !data.PlatformUnicastMaxLimit.IsUnknown() && !data.PlatformUnicastMaxLimit.IsNull() {
+		attrs, _ = sjson.Set(attrs, "unicastMaxLimit", strconv.FormatInt(data.PlatformUnicastMaxLimit.ValueInt64(), 10))
+	}
+	if !data.PlatformUnicastSyslogThreshold.IsUnknown() && !data.PlatformUnicastSyslogThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "unicastSyslogThreshold", strconv.FormatInt(data.PlatformUnicastSyslogThreshold.ValueInt64(), 10))
+	}
+	if !data.PlatformUnicastTrace.IsUnknown() && !data.PlatformUnicastTrace.IsNull() {
+		attrs, _ = sjson.Set(attrs, "unicastTrace", data.PlatformUnicastTrace.ValueString())
+	}
+	if !data.PlatformUnknownUnicastFlood.IsUnknown() && !data.PlatformUnknownUnicastFlood.IsNull() {
+		attrs, _ = sjson.Set(attrs, "unknownUnicastFlood", data.PlatformUnknownUnicastFlood.ValueString())
+	}
+	if !data.PlatformUrpfStatus.IsUnknown() && !data.PlatformUrpfStatus.IsNull() {
+		attrs, _ = sjson.Set(attrs, "urpfStatus", data.PlatformUrpfStatus.ValueString())
+	}
+	if !data.PlatformWrrUnicastBandwidth.IsUnknown() && !data.PlatformWrrUnicastBandwidth.IsNull() {
+		attrs, _ = sjson.Set(attrs, "wrrUnicastBw", strconv.FormatInt(data.PlatformWrrUnicastBandwidth.ValueInt64(), 10))
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformEntity.attributes", attrs)
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1367,6 +1603,77 @@ func (data *System) fromBody(res gjson.Result) {
 				},
 			)
 		}
+	}
+	{
+		var rplatformEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("platformEntity.attributes.rn").String()
+				if rnValue == "platform" {
+					rplatformEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.PlatformAccessListMatchInnerHeader = types.StringValue(rplatformEntity.Get("platformEntity.attributes.accessListMatchInnerHeader").String())
+		data.PlatformAclTapAggregation = types.StringValue(rplatformEntity.Get("platformEntity.attributes.aclTapAggregation").String())
+		data.PlatformDescription = types.StringValue(rplatformEntity.Get("platformEntity.attributes.descr").String())
+		data.PlatformDisableParseError = types.StringValue(rplatformEntity.Get("platformEntity.attributes.disParseErr").String())
+		data.PlatformGlobalTxSpan = types.StringValue(rplatformEntity.Get("platformEntity.attributes.globalTxSpan").String())
+		data.PlatformHighMulticastPriority = types.StringValue(rplatformEntity.Get("platformEntity.attributes.highMulticastPriority").String())
+		data.PlatformHardwareLouResourceThreshold = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.hwLouResThreshold").Int())
+		data.PlatformIngressBdIfaclLabelOptimization = types.StringValue(rplatformEntity.Get("platformEntity.attributes.iBdIfaclLblOpt").String())
+		data.PlatformIngressRaclSize = types.StringValue(rplatformEntity.Get("platformEntity.attributes.iRaclSize").String())
+		data.PlatformIngressReplicationRoundRobin = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntity.Get("platformEntity.attributes.ingRepRoundRobin").String()))
+		data.PlatformIpStatistics = types.StringValue(rplatformEntity.Get("platformEntity.attributes.ipStatistics").String())
+		data.PlatformIpv6AlpmCarveValue = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.ipv6AlpmCarveValue").Int())
+		data.PlatformIpv6LpmMaxEntries = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.ipv6LpmMaxEntries").Int())
+		data.PlatformLpmMaxLimit = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.lpmMaxLimit").Int())
+		data.PlatformMulticastDcsCheck = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mcastDcsCheck").String())
+		data.PlatformMulticastFlexStats = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mcastFlexStats").String())
+		data.PlatformMulticastLpmMaxEntries = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.mcastLpmMaxEntries").Int())
+		data.PlatformMulticastNlb = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mcastNlb").String())
+		data.PlatformMulticastRaclBridge = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mcastRaclBridge").String())
+		data.PlatformMldSnooping = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mldSnooping").String())
+		data.PlatformMplsAdjacencyStatsMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mplsAdjStatsMode").String())
+		data.PlatformMplsEcmpMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mplsCfgEcmpMode").String())
+		data.PlatformMroutingDisableL2Update = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mroutingDisableL2Upd").String())
+		data.PlatformMroutingDisableSecondRouteUpdate = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mroutingDisableSecRouteUpd").String())
+		data.PlatformMroutingPerformanceMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mroutingPerfMode").String())
+		data.PlatformMulticastMaxLimit = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.multicastMaxLimit").Int())
+		data.PlatformMulticastRpfCheckOptimization = types.StringValue(rplatformEntity.Get("platformEntity.attributes.multicastRpfCheckOptimization").String())
+		data.PlatformMulticastServiceReflectPort = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.multicastServiceReflectPort").Int())
+		data.PlatformMulticastSyslogThreshold = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.multicastSyslogThreshold").Int())
+		data.PlatformOpenflowForwardPdu = types.StringValue(rplatformEntity.Get("platformEntity.attributes.openflowForwardPdu").String())
+		data.PlatformPbrSkipSelfIp = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pbrSkipSelfIp").String())
+		data.PlatformPortChannelFastConvergence = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcFastConv").String())
+		data.PlatformPortChannelLoadBalanceAlgorithm = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcLbAlgo").String())
+		data.PlatformPortChannelLoadBalanceResilient = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcLbRes").String())
+		data.PlatformPortChannelMplsLoadBalanceLabelIp = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcMplsLbLabelIp").String())
+		data.PlatformPortChannelMplsLoadBalanceLabelOnly = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcMplsLbLabelOnly").String())
+		data.PlatformPortChannelScaleFanout = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcScaleFanout").String())
+		data.PlatformPicCoreEnable = types.StringValue(rplatformEntity.Get("platformEntity.attributes.picCoreEnable").String())
+		data.PlatformProfileFrontPortMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.profileFrontPortmode").String())
+		data.PlatformProfileMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.profileMode").String())
+		data.PlatformProfileTuple = types.StringValue(rplatformEntity.Get("platformEntity.attributes.profileTuple").String())
+		data.PlatformPstatConfiguration = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pstatCfg").String())
+		data.PlatformQosMinBuffer = types.StringValue(rplatformEntity.Get("platformEntity.attributes.qosMinBuffer").String())
+		data.PlatformRoutingMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.routingMode").String())
+		data.PlatformServiceTemplateName = types.StringValue(rplatformEntity.Get("platformEntity.attributes.serviceTemplateName").String())
+		data.PlatformSviAndSiFlexStats = types.StringValue(rplatformEntity.Get("platformEntity.attributes.sviAndSiFlexStats").String())
+		data.PlatformSviFlexStats = types.StringValue(rplatformEntity.Get("platformEntity.attributes.sviFlexStats").String())
+		data.PlatformSwitchMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.switchMode").String())
+		data.PlatformSwitchingFabricSpeed = types.StringValue(rplatformEntity.Get("platformEntity.attributes.switchingFabricSpeed").String())
+		data.PlatformSwitchingMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.switchingMode").String())
+		data.PlatformSystemFabricMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.systemFabricMode").String())
+		data.PlatformTcamSyslogThreshold = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.tcamSyslogThreshold").Int())
+		data.PlatformUnicastMaxLimit = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.unicastMaxLimit").Int())
+		data.PlatformUnicastSyslogThreshold = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.unicastSyslogThreshold").Int())
+		data.PlatformUnicastTrace = types.StringValue(rplatformEntity.Get("platformEntity.attributes.unicastTrace").String())
+		data.PlatformUnknownUnicastFlood = types.StringValue(rplatformEntity.Get("platformEntity.attributes.unknownUnicastFlood").String())
+		data.PlatformUrpfStatus = types.StringValue(rplatformEntity.Get("platformEntity.attributes.urpfStatus").String())
+		data.PlatformWrrUnicastBandwidth = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.wrrUnicastBw").Int())
 	}
 }
 
@@ -2392,6 +2699,307 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.UdldInterfaces[key] = item
 		}
 	}
+	var rplatformEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("platformEntity.attributes.rn").String()
+			if rnValue == "platform" {
+				rplatformEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.PlatformAccessListMatchInnerHeader.IsNull() {
+		data.PlatformAccessListMatchInnerHeader = types.StringValue(rplatformEntity.Get("platformEntity.attributes.accessListMatchInnerHeader").String())
+	} else {
+		data.PlatformAccessListMatchInnerHeader = types.StringNull()
+	}
+	if !data.PlatformAclTapAggregation.IsNull() {
+		data.PlatformAclTapAggregation = types.StringValue(rplatformEntity.Get("platformEntity.attributes.aclTapAggregation").String())
+	} else {
+		data.PlatformAclTapAggregation = types.StringNull()
+	}
+	if !data.PlatformDescription.IsNull() {
+		data.PlatformDescription = types.StringValue(rplatformEntity.Get("platformEntity.attributes.descr").String())
+	} else {
+		data.PlatformDescription = types.StringNull()
+	}
+	if !data.PlatformDisableParseError.IsNull() {
+		data.PlatformDisableParseError = types.StringValue(rplatformEntity.Get("platformEntity.attributes.disParseErr").String())
+	} else {
+		data.PlatformDisableParseError = types.StringNull()
+	}
+	if !data.PlatformGlobalTxSpan.IsNull() {
+		data.PlatformGlobalTxSpan = types.StringValue(rplatformEntity.Get("platformEntity.attributes.globalTxSpan").String())
+	} else {
+		data.PlatformGlobalTxSpan = types.StringNull()
+	}
+	if !data.PlatformHighMulticastPriority.IsNull() {
+		data.PlatformHighMulticastPriority = types.StringValue(rplatformEntity.Get("platformEntity.attributes.highMulticastPriority").String())
+	} else {
+		data.PlatformHighMulticastPriority = types.StringNull()
+	}
+	if !data.PlatformHardwareLouResourceThreshold.IsNull() {
+		data.PlatformHardwareLouResourceThreshold = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.hwLouResThreshold").Int())
+	} else {
+		data.PlatformHardwareLouResourceThreshold = types.Int64Null()
+	}
+	if !data.PlatformIngressBdIfaclLabelOptimization.IsNull() {
+		data.PlatformIngressBdIfaclLabelOptimization = types.StringValue(rplatformEntity.Get("platformEntity.attributes.iBdIfaclLblOpt").String())
+	} else {
+		data.PlatformIngressBdIfaclLabelOptimization = types.StringNull()
+	}
+	if !data.PlatformIngressRaclSize.IsNull() {
+		data.PlatformIngressRaclSize = types.StringValue(rplatformEntity.Get("platformEntity.attributes.iRaclSize").String())
+	} else {
+		data.PlatformIngressRaclSize = types.StringNull()
+	}
+	if !data.PlatformIngressReplicationRoundRobin.IsNull() {
+		data.PlatformIngressReplicationRoundRobin = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntity.Get("platformEntity.attributes.ingRepRoundRobin").String()))
+	} else {
+		data.PlatformIngressReplicationRoundRobin = types.BoolNull()
+	}
+	if !data.PlatformIpStatistics.IsNull() {
+		data.PlatformIpStatistics = types.StringValue(rplatformEntity.Get("platformEntity.attributes.ipStatistics").String())
+	} else {
+		data.PlatformIpStatistics = types.StringNull()
+	}
+	if !data.PlatformIpv6AlpmCarveValue.IsNull() {
+		data.PlatformIpv6AlpmCarveValue = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.ipv6AlpmCarveValue").Int())
+	} else {
+		data.PlatformIpv6AlpmCarveValue = types.Int64Null()
+	}
+	if !data.PlatformIpv6LpmMaxEntries.IsNull() {
+		data.PlatformIpv6LpmMaxEntries = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.ipv6LpmMaxEntries").Int())
+	} else {
+		data.PlatformIpv6LpmMaxEntries = types.Int64Null()
+	}
+	if !data.PlatformLpmMaxLimit.IsNull() {
+		data.PlatformLpmMaxLimit = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.lpmMaxLimit").Int())
+	} else {
+		data.PlatformLpmMaxLimit = types.Int64Null()
+	}
+	if !data.PlatformMulticastDcsCheck.IsNull() {
+		data.PlatformMulticastDcsCheck = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mcastDcsCheck").String())
+	} else {
+		data.PlatformMulticastDcsCheck = types.StringNull()
+	}
+	if !data.PlatformMulticastFlexStats.IsNull() {
+		data.PlatformMulticastFlexStats = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mcastFlexStats").String())
+	} else {
+		data.PlatformMulticastFlexStats = types.StringNull()
+	}
+	if !data.PlatformMulticastLpmMaxEntries.IsNull() {
+		data.PlatformMulticastLpmMaxEntries = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.mcastLpmMaxEntries").Int())
+	} else {
+		data.PlatformMulticastLpmMaxEntries = types.Int64Null()
+	}
+	if !data.PlatformMulticastNlb.IsNull() {
+		data.PlatformMulticastNlb = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mcastNlb").String())
+	} else {
+		data.PlatformMulticastNlb = types.StringNull()
+	}
+	if !data.PlatformMulticastRaclBridge.IsNull() {
+		data.PlatformMulticastRaclBridge = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mcastRaclBridge").String())
+	} else {
+		data.PlatformMulticastRaclBridge = types.StringNull()
+	}
+	if !data.PlatformMldSnooping.IsNull() {
+		data.PlatformMldSnooping = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mldSnooping").String())
+	} else {
+		data.PlatformMldSnooping = types.StringNull()
+	}
+	if !data.PlatformMplsAdjacencyStatsMode.IsNull() {
+		data.PlatformMplsAdjacencyStatsMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mplsAdjStatsMode").String())
+	} else {
+		data.PlatformMplsAdjacencyStatsMode = types.StringNull()
+	}
+	if !data.PlatformMplsEcmpMode.IsNull() {
+		data.PlatformMplsEcmpMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mplsCfgEcmpMode").String())
+	} else {
+		data.PlatformMplsEcmpMode = types.StringNull()
+	}
+	if !data.PlatformMroutingDisableL2Update.IsNull() {
+		data.PlatformMroutingDisableL2Update = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mroutingDisableL2Upd").String())
+	} else {
+		data.PlatformMroutingDisableL2Update = types.StringNull()
+	}
+	if !data.PlatformMroutingDisableSecondRouteUpdate.IsNull() {
+		data.PlatformMroutingDisableSecondRouteUpdate = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mroutingDisableSecRouteUpd").String())
+	} else {
+		data.PlatformMroutingDisableSecondRouteUpdate = types.StringNull()
+	}
+	if !data.PlatformMroutingPerformanceMode.IsNull() {
+		data.PlatformMroutingPerformanceMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.mroutingPerfMode").String())
+	} else {
+		data.PlatformMroutingPerformanceMode = types.StringNull()
+	}
+	if !data.PlatformMulticastMaxLimit.IsNull() {
+		data.PlatformMulticastMaxLimit = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.multicastMaxLimit").Int())
+	} else {
+		data.PlatformMulticastMaxLimit = types.Int64Null()
+	}
+	if !data.PlatformMulticastRpfCheckOptimization.IsNull() {
+		data.PlatformMulticastRpfCheckOptimization = types.StringValue(rplatformEntity.Get("platformEntity.attributes.multicastRpfCheckOptimization").String())
+	} else {
+		data.PlatformMulticastRpfCheckOptimization = types.StringNull()
+	}
+	if !data.PlatformMulticastServiceReflectPort.IsNull() {
+		data.PlatformMulticastServiceReflectPort = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.multicastServiceReflectPort").Int())
+	} else {
+		data.PlatformMulticastServiceReflectPort = types.Int64Null()
+	}
+	if !data.PlatformMulticastSyslogThreshold.IsNull() {
+		data.PlatformMulticastSyslogThreshold = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.multicastSyslogThreshold").Int())
+	} else {
+		data.PlatformMulticastSyslogThreshold = types.Int64Null()
+	}
+	if !data.PlatformOpenflowForwardPdu.IsNull() {
+		data.PlatformOpenflowForwardPdu = types.StringValue(rplatformEntity.Get("platformEntity.attributes.openflowForwardPdu").String())
+	} else {
+		data.PlatformOpenflowForwardPdu = types.StringNull()
+	}
+	if !data.PlatformPbrSkipSelfIp.IsNull() {
+		data.PlatformPbrSkipSelfIp = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pbrSkipSelfIp").String())
+	} else {
+		data.PlatformPbrSkipSelfIp = types.StringNull()
+	}
+	if !data.PlatformPortChannelFastConvergence.IsNull() {
+		data.PlatformPortChannelFastConvergence = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcFastConv").String())
+	} else {
+		data.PlatformPortChannelFastConvergence = types.StringNull()
+	}
+	if !data.PlatformPortChannelLoadBalanceAlgorithm.IsNull() {
+		data.PlatformPortChannelLoadBalanceAlgorithm = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcLbAlgo").String())
+	} else {
+		data.PlatformPortChannelLoadBalanceAlgorithm = types.StringNull()
+	}
+	if !data.PlatformPortChannelLoadBalanceResilient.IsNull() {
+		data.PlatformPortChannelLoadBalanceResilient = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcLbRes").String())
+	} else {
+		data.PlatformPortChannelLoadBalanceResilient = types.StringNull()
+	}
+	if !data.PlatformPortChannelMplsLoadBalanceLabelIp.IsNull() {
+		data.PlatformPortChannelMplsLoadBalanceLabelIp = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcMplsLbLabelIp").String())
+	} else {
+		data.PlatformPortChannelMplsLoadBalanceLabelIp = types.StringNull()
+	}
+	if !data.PlatformPortChannelMplsLoadBalanceLabelOnly.IsNull() {
+		data.PlatformPortChannelMplsLoadBalanceLabelOnly = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcMplsLbLabelOnly").String())
+	} else {
+		data.PlatformPortChannelMplsLoadBalanceLabelOnly = types.StringNull()
+	}
+	if !data.PlatformPortChannelScaleFanout.IsNull() {
+		data.PlatformPortChannelScaleFanout = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pcScaleFanout").String())
+	} else {
+		data.PlatformPortChannelScaleFanout = types.StringNull()
+	}
+	if !data.PlatformPicCoreEnable.IsNull() {
+		data.PlatformPicCoreEnable = types.StringValue(rplatformEntity.Get("platformEntity.attributes.picCoreEnable").String())
+	} else {
+		data.PlatformPicCoreEnable = types.StringNull()
+	}
+	if !data.PlatformProfileFrontPortMode.IsNull() {
+		data.PlatformProfileFrontPortMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.profileFrontPortmode").String())
+	} else {
+		data.PlatformProfileFrontPortMode = types.StringNull()
+	}
+	if !data.PlatformProfileMode.IsNull() {
+		data.PlatformProfileMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.profileMode").String())
+	} else {
+		data.PlatformProfileMode = types.StringNull()
+	}
+	if !data.PlatformProfileTuple.IsNull() {
+		data.PlatformProfileTuple = types.StringValue(rplatformEntity.Get("platformEntity.attributes.profileTuple").String())
+	} else {
+		data.PlatformProfileTuple = types.StringNull()
+	}
+	if !data.PlatformPstatConfiguration.IsNull() {
+		data.PlatformPstatConfiguration = types.StringValue(rplatformEntity.Get("platformEntity.attributes.pstatCfg").String())
+	} else {
+		data.PlatformPstatConfiguration = types.StringNull()
+	}
+	if !data.PlatformQosMinBuffer.IsNull() {
+		data.PlatformQosMinBuffer = types.StringValue(rplatformEntity.Get("platformEntity.attributes.qosMinBuffer").String())
+	} else {
+		data.PlatformQosMinBuffer = types.StringNull()
+	}
+	if !data.PlatformRoutingMode.IsNull() {
+		data.PlatformRoutingMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.routingMode").String())
+	} else {
+		data.PlatformRoutingMode = types.StringNull()
+	}
+	if !data.PlatformServiceTemplateName.IsNull() {
+		data.PlatformServiceTemplateName = types.StringValue(rplatformEntity.Get("platformEntity.attributes.serviceTemplateName").String())
+	} else {
+		data.PlatformServiceTemplateName = types.StringNull()
+	}
+	if !data.PlatformSviAndSiFlexStats.IsNull() {
+		data.PlatformSviAndSiFlexStats = types.StringValue(rplatformEntity.Get("platformEntity.attributes.sviAndSiFlexStats").String())
+	} else {
+		data.PlatformSviAndSiFlexStats = types.StringNull()
+	}
+	if !data.PlatformSviFlexStats.IsNull() {
+		data.PlatformSviFlexStats = types.StringValue(rplatformEntity.Get("platformEntity.attributes.sviFlexStats").String())
+	} else {
+		data.PlatformSviFlexStats = types.StringNull()
+	}
+	if !data.PlatformSwitchMode.IsNull() {
+		data.PlatformSwitchMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.switchMode").String())
+	} else {
+		data.PlatformSwitchMode = types.StringNull()
+	}
+	if !data.PlatformSwitchingFabricSpeed.IsNull() {
+		data.PlatformSwitchingFabricSpeed = types.StringValue(rplatformEntity.Get("platformEntity.attributes.switchingFabricSpeed").String())
+	} else {
+		data.PlatformSwitchingFabricSpeed = types.StringNull()
+	}
+	if !data.PlatformSwitchingMode.IsNull() {
+		data.PlatformSwitchingMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.switchingMode").String())
+	} else {
+		data.PlatformSwitchingMode = types.StringNull()
+	}
+	if !data.PlatformSystemFabricMode.IsNull() {
+		data.PlatformSystemFabricMode = types.StringValue(rplatformEntity.Get("platformEntity.attributes.systemFabricMode").String())
+	} else {
+		data.PlatformSystemFabricMode = types.StringNull()
+	}
+	if !data.PlatformTcamSyslogThreshold.IsNull() {
+		data.PlatformTcamSyslogThreshold = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.tcamSyslogThreshold").Int())
+	} else {
+		data.PlatformTcamSyslogThreshold = types.Int64Null()
+	}
+	if !data.PlatformUnicastMaxLimit.IsNull() {
+		data.PlatformUnicastMaxLimit = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.unicastMaxLimit").Int())
+	} else {
+		data.PlatformUnicastMaxLimit = types.Int64Null()
+	}
+	if !data.PlatformUnicastSyslogThreshold.IsNull() {
+		data.PlatformUnicastSyslogThreshold = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.unicastSyslogThreshold").Int())
+	} else {
+		data.PlatformUnicastSyslogThreshold = types.Int64Null()
+	}
+	if !data.PlatformUnicastTrace.IsNull() {
+		data.PlatformUnicastTrace = types.StringValue(rplatformEntity.Get("platformEntity.attributes.unicastTrace").String())
+	} else {
+		data.PlatformUnicastTrace = types.StringNull()
+	}
+	if !data.PlatformUnknownUnicastFlood.IsNull() {
+		data.PlatformUnknownUnicastFlood = types.StringValue(rplatformEntity.Get("platformEntity.attributes.unknownUnicastFlood").String())
+	} else {
+		data.PlatformUnknownUnicastFlood = types.StringNull()
+	}
+	if !data.PlatformUrpfStatus.IsNull() {
+		data.PlatformUrpfStatus = types.StringValue(rplatformEntity.Get("platformEntity.attributes.urpfStatus").String())
+	} else {
+		data.PlatformUrpfStatus = types.StringNull()
+	}
+	if !data.PlatformWrrUnicastBandwidth.IsNull() {
+		data.PlatformWrrUnicastBandwidth = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.wrrUnicastBw").Int())
+	} else {
+		data.PlatformWrrUnicastBandwidth = types.Int64Null()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -2729,6 +3337,188 @@ func (data System) toDeleteBody() nxos.Body {
 				deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
+		}
+	}
+	{
+		childBody := ""
+		if !data.PlatformAccessListMatchInnerHeader.IsNull() {
+			childBody, _ = sjson.Set(childBody, "accessListMatchInnerHeader", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformAclTapAggregation.IsNull() {
+			childBody, _ = sjson.Set(childBody, "aclTapAggregation", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformDescription.IsNull() {
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformDisableParseError.IsNull() {
+			childBody, _ = sjson.Set(childBody, "disParseErr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformGlobalTxSpan.IsNull() {
+			childBody, _ = sjson.Set(childBody, "globalTxSpan", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformHighMulticastPriority.IsNull() {
+			childBody, _ = sjson.Set(childBody, "highMulticastPriority", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformHardwareLouResourceThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "hwLouResThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformIngressBdIfaclLabelOptimization.IsNull() {
+			childBody, _ = sjson.Set(childBody, "iBdIfaclLblOpt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformIngressRaclSize.IsNull() {
+			childBody, _ = sjson.Set(childBody, "iRaclSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformIngressReplicationRoundRobin.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ingRepRoundRobin", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformIpStatistics.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ipStatistics", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformIpv6AlpmCarveValue.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ipv6AlpmCarveValue", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformIpv6LpmMaxEntries.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ipv6LpmMaxEntries", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformLpmMaxLimit.IsNull() {
+			childBody, _ = sjson.Set(childBody, "lpmMaxLimit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMulticastDcsCheck.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mcastDcsCheck", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMulticastFlexStats.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mcastFlexStats", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMulticastLpmMaxEntries.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mcastLpmMaxEntries", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMulticastNlb.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mcastNlb", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMulticastRaclBridge.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mcastRaclBridge", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMldSnooping.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mldSnooping", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMplsAdjacencyStatsMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mplsAdjStatsMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMplsEcmpMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mplsCfgEcmpMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMroutingDisableL2Update.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mroutingDisableL2Upd", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMroutingDisableSecondRouteUpdate.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mroutingDisableSecRouteUpd", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMroutingPerformanceMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mroutingPerfMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMulticastMaxLimit.IsNull() {
+			childBody, _ = sjson.Set(childBody, "multicastMaxLimit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMulticastRpfCheckOptimization.IsNull() {
+			childBody, _ = sjson.Set(childBody, "multicastRpfCheckOptimization", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMulticastServiceReflectPort.IsNull() {
+			childBody, _ = sjson.Set(childBody, "multicastServiceReflectPort", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformMulticastSyslogThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "multicastSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformOpenflowForwardPdu.IsNull() {
+			childBody, _ = sjson.Set(childBody, "openflowForwardPdu", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformPbrSkipSelfIp.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pbrSkipSelfIp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformPortChannelFastConvergence.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pcFastConv", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformPortChannelLoadBalanceAlgorithm.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pcLbAlgo", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformPortChannelLoadBalanceResilient.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pcLbRes", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformPortChannelMplsLoadBalanceLabelIp.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pcMplsLbLabelIp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformPortChannelMplsLoadBalanceLabelOnly.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pcMplsLbLabelOnly", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformPortChannelScaleFanout.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pcScaleFanout", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformPicCoreEnable.IsNull() {
+			childBody, _ = sjson.Set(childBody, "picCoreEnable", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformProfileFrontPortMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "profileFrontPortmode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformProfileMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "profileMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformProfileTuple.IsNull() {
+			childBody, _ = sjson.Set(childBody, "profileTuple", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformPstatConfiguration.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pstatCfg", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformQosMinBuffer.IsNull() {
+			childBody, _ = sjson.Set(childBody, "qosMinBuffer", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformRoutingMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "routingMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformServiceTemplateName.IsNull() {
+			childBody, _ = sjson.Set(childBody, "serviceTemplateName", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformSviAndSiFlexStats.IsNull() {
+			childBody, _ = sjson.Set(childBody, "sviAndSiFlexStats", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformSviFlexStats.IsNull() {
+			childBody, _ = sjson.Set(childBody, "sviFlexStats", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformSwitchMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "switchMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformSwitchingFabricSpeed.IsNull() {
+			childBody, _ = sjson.Set(childBody, "switchingFabricSpeed", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformSwitchingMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "switchingMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformSystemFabricMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "systemFabricMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformTcamSyslogThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "tcamSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformUnicastMaxLimit.IsNull() {
+			childBody, _ = sjson.Set(childBody, "unicastMaxLimit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformUnicastSyslogThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "unicastSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformUnicastTrace.IsNull() {
+			childBody, _ = sjson.Set(childBody, "unicastTrace", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformUnknownUnicastFlood.IsNull() {
+			childBody, _ = sjson.Set(childBody, "unknownUnicastFlood", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformUrpfStatus.IsNull() {
+			childBody, _ = sjson.Set(childBody, "urpfStatus", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PlatformWrrUnicastBandwidth.IsNull() {
+			childBody, _ = sjson.Set(childBody, "wrrUnicastBw", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformEntity"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
 

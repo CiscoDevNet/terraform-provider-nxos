@@ -113,6 +113,8 @@ type System struct {
 	DnsAdminState                                 types.String                   `tfsdk:"dns_admin_state"`
 	DnsProfiles                                   map[string]SystemDnsProfiles   `tfsdk:"dns_profiles"`
 	Vdcs                                          map[string]SystemVdcs          `tfsdk:"vdcs"`
+	SmartLicensingTransportMode                   types.String                   `tfsdk:"smart_licensing_transport_mode"`
+	SmartLicensingTransportCsluUrl                types.String                   `tfsdk:"smart_licensing_transport_cslu_url"`
 }
 
 type SystemArpVpcDomains struct {
@@ -676,6 +678,37 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerLicenseManager"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerInst"
+			attrs = "{}"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerSmartLicensing"
+				attrs = "{}"
+				if !data.SmartLicensingTransportMode.IsUnknown() && !data.SmartLicensingTransportMode.IsNull() {
+					attrs, _ = sjson.Set(attrs, "transportMode", data.SmartLicensingTransportMode.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.SmartLicensingTransportCsluUrl.IsUnknown() && !data.SmartLicensingTransportCsluUrl.IsNull() {
+					attrs, _ = sjson.Set(attrs, "url", data.SmartLicensingTransportCsluUrl.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.licensemanagerTransportCsluUrl.attributes", attrs)
+				}
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1054,6 +1087,60 @@ func (data *System) fromBody(res gjson.Result) {
 			return true
 		},
 	)
+	{
+		var rlicensemanagerLicenseManager gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("licensemanagerLicenseManager.attributes.rn").String()
+				if rnValue == "licensemanager" {
+					rlicensemanagerLicenseManager = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rlicensemanagerInst gjson.Result
+			rlicensemanagerLicenseManager.Get("licensemanagerLicenseManager.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("licensemanagerInst.attributes.rn").String()
+					if rnValue == "inst" {
+						rlicensemanagerInst = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rlicensemanagerSmartLicensing gjson.Result
+				rlicensemanagerInst.Get("licensemanagerInst.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("licensemanagerSmartLicensing.attributes.rn").String()
+						if rnValue == "smartlicensing" {
+							rlicensemanagerSmartLicensing = v
+							return false
+						}
+						return true
+					},
+				)
+				data.SmartLicensingTransportMode = types.StringValue(rlicensemanagerSmartLicensing.Get("licensemanagerSmartLicensing.attributes.transportMode").String())
+				{
+					var rlicensemanagerTransportCsluUrl gjson.Result
+					rlicensemanagerSmartLicensing.Get("licensemanagerSmartLicensing.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("licensemanagerTransportCsluUrl.attributes.rn").String()
+							if rnValue == "transportcsluurl" {
+								rlicensemanagerTransportCsluUrl = v
+								return false
+							}
+							return true
+						},
+					)
+					data.SmartLicensingTransportCsluUrl = types.StringValue(rlicensemanagerTransportCsluUrl.Get("licensemanagerTransportCsluUrl.attributes.url").String())
+				}
+			}
+		}
+	}
 }
 
 // End of section. //template:end fromBody
@@ -1856,6 +1943,66 @@ func (data *System) updateFromBody(res gjson.Result) {
 		}
 		data.Vdcs[key] = item
 	}
+	var rlicensemanagerLicenseManager gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("licensemanagerLicenseManager.attributes.rn").String()
+			if rnValue == "licensemanager" {
+				rlicensemanagerLicenseManager = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rlicensemanagerInst gjson.Result
+		rlicensemanagerLicenseManager.Get("licensemanagerLicenseManager.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("licensemanagerInst.attributes.rn").String()
+				if rnValue == "inst" {
+					rlicensemanagerInst = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rlicensemanagerSmartLicensing gjson.Result
+			rlicensemanagerInst.Get("licensemanagerInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("licensemanagerSmartLicensing.attributes.rn").String()
+					if rnValue == "smartlicensing" {
+						rlicensemanagerSmartLicensing = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.SmartLicensingTransportMode.IsNull() {
+				data.SmartLicensingTransportMode = types.StringValue(rlicensemanagerSmartLicensing.Get("licensemanagerSmartLicensing.attributes.transportMode").String())
+			} else {
+				data.SmartLicensingTransportMode = types.StringNull()
+			}
+			{
+				var rlicensemanagerTransportCsluUrl gjson.Result
+				rlicensemanagerSmartLicensing.Get("licensemanagerSmartLicensing.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("licensemanagerTransportCsluUrl.attributes.rn").String()
+						if rnValue == "transportcsluurl" {
+							rlicensemanagerTransportCsluUrl = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.SmartLicensingTransportCsluUrl.IsNull() {
+					data.SmartLicensingTransportCsluUrl = types.StringValue(rlicensemanagerTransportCsluUrl.Get("licensemanagerTransportCsluUrl.attributes.url").String())
+				} else {
+					data.SmartLicensingTransportCsluUrl = types.StringNull()
+				}
+			}
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -2118,6 +2265,41 @@ func (data System) toDeleteBody() nxos.Body {
 		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
 		childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.nwVdc.attributes", childBody)
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerLicenseManager"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerInst"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerSmartLicensing"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				if !data.SmartLicensingTransportMode.IsNull() {
+					body, _ = sjson.Set(body, childBodyPath+".attributes."+"transportMode", "DME_UNSET_PROPERTY_MARKER")
+				}
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.SmartLicensingTransportCsluUrl.IsNull() {
+						childBody, _ = sjson.Set(childBody, "url", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerTransportCsluUrl"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+		}
 	}
 
 	return nxos.Body{Str: body}

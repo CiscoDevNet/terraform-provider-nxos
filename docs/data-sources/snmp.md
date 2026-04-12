@@ -51,7 +51,6 @@ data "nxos_snmp" "example" {
   - Key component `udp_port`: snmp-server host udp-port. Range: `0`-`65535`. (see [below for nested schema](#nestedatt--hosts))
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) Indicates the administrative state of the SNMP policy.
-- `interface_name` (String) Source interface name for Traps.
 - `local_users` (Attributes Map) List of SNMP local users.
   - Map key: `name` - snmp-server user name. (see [below for nested schema](#nestedatt--local_users))
 - `location` (String) System Location.
@@ -59,6 +58,7 @@ data "nxos_snmp" "example" {
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `packet_size` (Number) Packet size config.
+- `source_interface_traps` (String) Source interface name for Traps.
 - `system_info_description` (String) System Description.
 - `tcp_session_authentication` (String) tcp-session auth config.
 - `unknown_engine_id` (String) Indicates the Unknown Engine Id MO thats needs to be created.

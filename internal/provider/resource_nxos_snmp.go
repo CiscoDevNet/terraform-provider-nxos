@@ -154,7 +154,7 @@ func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("no", "tcpSessAuth"),
 				},
 			},
-			"interface_name": schema.StringAttribute{
+			"source_interface_traps": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source interface name for Traps.").String,
 				Optional:            true,
 			},

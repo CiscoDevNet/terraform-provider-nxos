@@ -124,7 +124,7 @@ func (d *SNMPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "tcp-session auth config.",
 				Computed:            true,
 			},
-			"interface_name": schema.StringAttribute{
+			"source_interface_traps": schema.StringAttribute{
 				MarkdownDescription: "Source interface name for Traps.",
 				Computed:            true,
 			},

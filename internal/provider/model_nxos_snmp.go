@@ -55,7 +55,7 @@ type SNMP struct {
 	Location                 types.String              `tfsdk:"location"`
 	PacketSize               types.Int64               `tfsdk:"packet_size"`
 	TcpSessionAuthentication types.String              `tfsdk:"tcp_session_authentication"`
-	InterfaceName            types.String              `tfsdk:"interface_name"`
+	SourceInterfaceTraps     types.String              `tfsdk:"source_interface_traps"`
 	LocalUsers               map[string]SNMPLocalUsers `tfsdk:"local_users"`
 	Hosts                    map[string]SNMPHosts      `tfsdk:"hosts"`
 	EnableAll                types.String              `tfsdk:"enable_all"`
@@ -204,8 +204,8 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			attrs = "{}"
-			if !data.InterfaceName.IsUnknown() && !data.InterfaceName.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ifname", data.InterfaceName.ValueString())
+			if !data.SourceInterfaceTraps.IsUnknown() && !data.SourceInterfaceTraps.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ifname", data.SourceInterfaceTraps.ValueString())
 			}
 			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpSourceInterfaceTraps.attributes", attrs)
@@ -367,7 +367,7 @@ func (data *SNMP) fromBody(res gjson.Result) {
 						return true
 					},
 				)
-				data.InterfaceName = types.StringValue(rsnmpSourceInterfaceTraps.Get("snmpSourceInterfaceTraps.attributes.ifname").String())
+				data.SourceInterfaceTraps = types.StringValue(rsnmpSourceInterfaceTraps.Get("snmpSourceInterfaceTraps.attributes.ifname").String())
 			}
 		}
 		rsnmpInst.Get("snmpInst.children").ForEach(
@@ -578,10 +578,10 @@ func (data *SNMP) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
-			if !data.InterfaceName.IsNull() {
-				data.InterfaceName = types.StringValue(rsnmpSourceInterfaceTraps.Get("snmpSourceInterfaceTraps.attributes.ifname").String())
+			if !data.SourceInterfaceTraps.IsNull() {
+				data.SourceInterfaceTraps = types.StringValue(rsnmpSourceInterfaceTraps.Get("snmpSourceInterfaceTraps.attributes.ifname").String())
 			} else {
-				data.InterfaceName = types.StringNull()
+				data.SourceInterfaceTraps = types.StringNull()
 			}
 		}
 	}
@@ -803,7 +803,7 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			_ = nestedChildrenPath
 			{
 				childBody := ""
-				if !data.InterfaceName.IsNull() {
+				if !data.SourceInterfaceTraps.IsNull() {
 					childBody, _ = sjson.Set(childBody, "ifname", "DME_UNSET_PROPERTY_MARKER")
 				}
 				if childBody != "" {

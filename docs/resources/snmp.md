@@ -42,7 +42,7 @@ resource "nxos_snmp" "example" {
   location                   = "DC1-Room42"
   packet_size                = 8192
   tcp_session_authentication = "tcpSessAuth"
-  interface_name             = "eth1/1"
+  source_interface_traps     = "eth1/1"
   local_users = {
     "user1" = {
       authentication_password = "Xe9$mK2v!pQr"
@@ -93,7 +93,6 @@ resource "nxos_snmp" "example" {
   - Key component `udp_port`: snmp-server host udp-port. Range: `0`-`65535`. (see [below for nested schema](#nestedatt--hosts))
 - `instance_admin_state` (String) Indicates the administrative state of the SNMP policy.
   - Choices: `enabled`, `disabled`
-- `interface_name` (String) Source interface name for Traps.
 - `local_users` (Attributes Map) List of SNMP local users.
   - Map key: `name` - snmp-server user name. (see [below for nested schema](#nestedatt--local_users))
 - `location` (String) System Location.
@@ -103,6 +102,7 @@ resource "nxos_snmp" "example" {
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `packet_size` (Number) Packet size config.
   - Range: `484`-`17382`
+- `source_interface_traps` (String) Source interface name for Traps.
 - `system_info_description` (String) System Description.
 - `tcp_session_authentication` (String) tcp-session auth config.
   - Choices: `no`, `tcpSessAuth`

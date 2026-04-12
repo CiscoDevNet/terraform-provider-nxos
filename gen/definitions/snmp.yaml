@@ -140,7 +140,7 @@ child_classes:
             description: 'SNMP source interface for traps.'
             attributes:
               - nxos_name: ifname
-                tf_name: interface_name
+                tf_name: source_interface_traps
                 type: String
                 description: 'Source interface name for Traps.'
                 example: eth1/1

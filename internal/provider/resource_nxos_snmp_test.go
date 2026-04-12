@@ -49,7 +49,7 @@ func TestAccNxosSNMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "location", "DC1-Room42"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "packet_size", "8192"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "tcp_session_authentication", "tcpSessAuth"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "interface_name", "eth1/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "source_interface_traps", "eth1/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "local_users.user1.authentication_password", "Xe9$mK2v!pQr"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "local_users.user1.authentication_type", "md5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "local_users.user1.ipv4_acl_name", "snmp-acl-v4"))
@@ -134,7 +134,7 @@ func testAccNxosSNMPConfig_all(includeWriteOnly bool) string {
 	config += `	location = "DC1-Room42"` + "\n"
 	config += `	packet_size = 8192` + "\n"
 	config += `	tcp_session_authentication = "tcpSessAuth"` + "\n"
-	config += `	interface_name = "eth1/1"` + "\n"
+	config += `	source_interface_traps = "eth1/1"` + "\n"
 	config += `	local_users = {` + "\n"
 	config += `		"user1" = {` + "\n"
 	if includeWriteOnly {

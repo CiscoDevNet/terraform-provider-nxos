@@ -13,7 +13,7 @@ resource "nxos_snmp" "example" {
   location                   = "DC1-Room42"
   packet_size                = 8192
   tcp_session_authentication = "tcpSessAuth"
-  interface_name             = "eth1/1"
+  source_interface_traps     = "eth1/1"
   local_users = {
     "user1" = {
       authentication_password = "Xe9$mK2v!pQr"

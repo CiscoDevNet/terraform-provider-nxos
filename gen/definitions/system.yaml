@@ -2220,6 +2220,66 @@ child_classes:
                     max_int: 64
                     description: 'Configure maximum number of concurrent vsh sessions allowed.'
                     example: 16
+  - class_name: icamEntity
+    doc_path: System/icam:Entity/
+    rn: icam
+    type: single
+    child_classes:
+      - class_name: icamInst
+        doc_path: System/icam:Inst/
+        rn: inst
+        type: single
+        tf_name: icam
+        description: 'ICAM Instance.'
+        attributes:
+          - nxos_name: interval
+            tf_name: icam_monitor_interval
+            type: Int64
+            min_int: 1
+            max_int: 24
+            description: 'iCAM Monitor Interval.'
+            example: 4
+          - nxos_name: numinterval
+            tf_name: icam_number_of_intervals
+            type: Int64
+            min_int: 168
+            max_int: 1344
+            description: 'Num of Intervals in History.'
+            example: 336
+        child_classes:
+          - class_name: icamScale
+            doc_path: System/icam:Scale/
+            rn: scale
+            type: single
+            tf_name: icam_scale
+            description: 'ICAM Scale Monitoring Instance.'
+            attributes:
+              - nxos_name: critical
+                tf_name: icam_scale_critical_threshold
+                type: Int64
+                min_int: 1
+                max_int: 100
+                description: 'Critical threshold percent.'
+                example: 95
+              - nxos_name: info
+                tf_name: icam_scale_info_threshold
+                type: Int64
+                min_int: 1
+                max_int: 100
+                description: 'Info threshold percent.'
+                example: 70
+              - nxos_name: scalecfg
+                tf_name: icam_scale_configuration
+                type: Bool
+                description: 'Scale feature config [yes/no].'
+                example: true
+              - nxos_name: warning
+                tf_name: icam_scale_warning_threshold
+                type: Int64
+                min_int: 1
+                max_int: 100
+                description: 'Warning threshold percent.'
+                example: 85
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld

@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
 ---
 
 # nxos_physical_interface (Data Source)
@@ -17,6 +17,7 @@ This data source can read the configuration of physical interfaces on NX-OS devi
 - [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
+- [l1PhysIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/)
 
 ## Example Usage
 
@@ -45,9 +46,17 @@ Read-Only:
 
 - `access_vlan` (String) Configured Access Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `admin_state` (String) Administrative port state.
+- `allow_multi_tag` (String) Allow Multitag.
+- `auto_exclude_vlans` (String) Switchport Autostate Exclude vlans.
 - `auto_negotiation` (String) Administrative port auto-negotiation.
 - `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
 - `beacon` (String) Beacon State.
+- `buffer_boost` (String) Disable/enable buffer boost on interface.
+- `chassis_module_serial` (String) Module serial number information.
+- `chassis_module_side` (String) Module Side information.
+- `chassis_number` (Number) Chassis number information.
+- `chassis_profile_name` (String) Profile name information.
+- `chassis_serial` (String) Serial number information.
 - `delay` (Number) The administrative port delay time.
 - `description` (String) Interface description.
 - `dfe_adaptive_tuning` (String) DFE (Decision Feedback Equalizer) Adaptive Tuning.
@@ -55,10 +64,16 @@ Read-Only:
 - `dot1q_ether_type` (Number) The administrative port Dot1q ether-type. Dot1q Ether Type configures the TPID value in the VLAN tag field for packets received and sent by the interface.
 - `duplex` (String) Duplex.
 - `equalization_delay` (Number) Administrative port equalization delay time.
+- `extended_description` (String) Description.
 - `fec_mode` (String) FEC Mode.
+- `flow_control_receive` (Boolean) Disable/enable rx flowcontrol block on interface.
+- `flow_control_send` (Boolean) Disable/enable tx flowcontrol block on interface.
+- `flow_redirect` (Boolean) Disable/enable flowredirect on interface.
+- `gtp_hash_mode` (String) Gtp hash mode ipv4 or ipv6 on interface.
 - `inherit_bandwidth` (Number) Administrative port inherit bandwidth.
 - `itu_channel` (Number) ITU Channel to support DWDM XCVR.
 - `layer` (String) Administrative port layer.
+- `layer3_multicast_receiver_vlan` (Number) Set vlan ID used for L3 multicast on this interface.
 - `link_active_jitter_management` (String) Administrative port link active-jitter-management.
 - `link_debounce_down` (Number) Administrative port link debounce interval.
 - `link_debounce_up` (Number) Link Debounce Interval - LinkUp Event.
@@ -81,17 +96,41 @@ Read-Only:
 - `packet_timestamp_ingress_source_id` (Number) Ingress timestamp Source Id.
 - `packet_timestamp_state` (String) Packet timestamp feature state.
 - `port_type` (String) Type of the port: Fabric vs Leaf.
+- `port_type_external` (String) Identifies if or not the port is a external-facing port.
+- `port_type_fabric` (String) Identifies if or not the port is a fabric-facing port.
 - `router_mac` (String) The administrative router MAC address.
+- `router_mac_ipv6_extract` (String) Disable/enable switchport ipv6 extract.
+- `shut_down_lan` (String) Shut/Unshut all LAN VLANs on interface.
 - `snmp_trap_state` (String) Administrative port snmp trap state.
 - `span_mode` (String) Administrative port span mode.
 - `speed` (String) Administrative port speed.
 - `speed_group` (String) Speed Group.
 - `squelch` (String) Configured Squelch.
+- `storm_control_action` (String) Storm control action.
+- `storm_control_action_1` (String) Storm control action1.
+- `storm_control_action_2` (String) Storm control action2.
+- `storm_control_broadcast_level` (String) storm-control broadcast level.
+- `storm_control_broadcast_level_1` (String) storm-control broadcast level1.
+- `storm_control_broadcast_level_2` (String) storm-control broadcast level2.
+- `storm_control_broadcast_packets_per_second` (Number) storm-control broadcast PPS.
 - `storm_control_burst_packets_per_second` (Number) Max burst size.
 - `storm_control_burst_rate` (String) Max burst size.
+- `storm_control_multicast_level` (String) storm-control multicast level.
+- `storm_control_multicast_level_1` (String) storm-control multicast level1.
+- `storm_control_multicast_level_2` (String) storm-control multicast level2.
+- `storm_control_multicast_packets_per_second` (Number) storm-control multicast PPS.
 - `storm_control_packet_type` (String) Packet Type.
 - `storm_control_rate` (String) Traffic rate.
 - `storm_control_rate_packets_per_second` (Number) Tarffic rate.
+- `storm_control_unicast_level` (String) Storm control unicast level.
+- `storm_control_unicast_level_1` (String) Storm control unicast level1.
+- `storm_control_unicast_level_2` (String) Storm control unicast level2.
+- `storm_control_unicast_packets_per_second` (Number) Storm control unicast PPS.
+- `switchport_block` (String) Disable/enable switchport block on interface.
+- `switchport_isolated` (String) Switchport Isolated.
+- `switchport_mac_learn` (String) Disable/enable mac learning on interface.
+- `switchport_mac_permit` (String) Switchport mac-address permit related configuration.
+- `switchport_virtual_ethernet_bridge` (String) Disable/enable switchport virtual ethernet bridge on interface.
 - `transparent_mode` (String) Administrative port layer1 mode.
 - `trunk_logging` (String) Administrative trunk logging enable.
 - `trunk_vlans` (String) Configed Trunk Vlans.

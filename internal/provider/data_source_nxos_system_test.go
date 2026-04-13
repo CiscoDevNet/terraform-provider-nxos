@@ -316,6 +316,7 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `	boot_order = "pxe"` + "\n"
 	config += `	boot_poap = "enable"` + "\n"
 	config += `	boot_image_verification = "enable"` + "\n"
+	config += `	cfs_admin_state = "enabled"` + "\n"
 	config += `	udld_admin_state = "enabled"` + "\n"
 	config += `	udld_aggressive = "enabled"` + "\n"
 	config += `	udld_message_interval = 20` + "\n"

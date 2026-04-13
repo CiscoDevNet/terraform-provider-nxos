@@ -1157,6 +1157,80 @@ child_classes:
             description: 'Image to configure on sup-2.'
             example: 'bootflash:nxos64.10.5.3.F.bin'
             exclude_test: true
+  - class_name: cfsEntity
+    doc_path: Fabric/cfs:Entity/
+    rn: cfs
+    type: single
+    no_delete: true
+    tf_name: cfs
+    description: 'CFS Entity.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: cfs_admin_state
+        type: String
+        write_only: true
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+    child_classes:
+      - class_name: cfsInst
+        doc_path: Fabric/cfs:Inst/
+        rn: inst
+        type: single
+        no_delete: true
+        tf_name: cfs_instance
+        description: 'CFS Instance.'
+        attributes:
+          - nxos_name: distribute
+            tf_name: cfs_distribute
+            type: String
+            description: 'Enable CFS distribution.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+            exclude_test: true
+          - nxos_name: ethDist
+            tf_name: cfs_ethernet_distribution
+            type: String
+            description: 'Enable CFS distribution over Ethernet.'
+            enum_values:
+              - enabled
+              - disabled
+            example: disabled
+            exclude_test: true
+          - nxos_name: ipv4Dist
+            tf_name: cfs_ipv4_distribution
+            type: String
+            description: 'Enable CFS distribution over IPv4.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+            exclude_test: true
+          - nxos_name: ipv4Mcast
+            tf_name: cfs_ipv4_multicast_address
+            type: String
+            description: 'cfs IPv4 mcast address.'
+            example: '239.255.1.1'
+            exclude_test: true
+          - nxos_name: ipv6Dist
+            tf_name: cfs_ipv6_distribution
+            type: String
+            description: 'Enable CFS distribution over IPv6.'
+            enum_values:
+              - enabled
+              - disabled
+            example: disabled
+            exclude_test: true
+          - nxos_name: ipv6Mcast
+            tf_name: cfs_ipv6_multicast_address
+            type: String
+            description: 'cfs IPv6 mcast address.'
+            example: 'ff15::1'
+            exclude_test: true
   - class_name: udldEntity
     doc_path: Discovery%20Protocols/udld:Entity/
     rn: udld

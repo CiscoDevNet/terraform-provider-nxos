@@ -131,6 +131,7 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_order", "pxe"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_poap", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "boot_image_verification", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "cfs_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_aggressive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_message_interval", "20"))
@@ -358,6 +359,7 @@ func testAccNxosSystemConfig_all() string {
 	config += `	boot_order = "pxe"` + "\n"
 	config += `	boot_poap = "enable"` + "\n"
 	config += `	boot_image_verification = "enable"` + "\n"
+	config += `	cfs_admin_state = "enabled"` + "\n"
 	config += `	udld_admin_state = "enabled"` + "\n"
 	config += `	udld_aggressive = "enabled"` + "\n"
 	config += `	udld_message_interval = 20` + "\n"

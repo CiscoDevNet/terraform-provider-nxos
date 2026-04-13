@@ -1,0 +1,1 @@
+- Add `l1PhysIfExtended` child class to `nxos_physical_interface` resource and data source (storm control, switchport, flow control, chassis, and extended interface attributes)

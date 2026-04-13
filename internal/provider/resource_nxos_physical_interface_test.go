@@ -93,6 +93,7 @@ func TestAccNxosPhysicalInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_rate", "50.000000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_rate_packets_per_second", "500"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_packet_type", "bcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.extended_description", "Extended interface config"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -209,6 +210,7 @@ func testAccNxosPhysicalInterfaceConfig_all() string {
 	config += `			storm_control_rate = "50.000000"` + "\n"
 	config += `			storm_control_rate_packets_per_second = 500` + "\n"
 	config += `			storm_control_packet_type = "bcast"` + "\n"
+	config += `			extended_description = "Extended interface config"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `}` + "\n"

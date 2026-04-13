@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
 ---
 
 # nxos_physical_interface (Resource)
@@ -17,6 +17,7 @@ This resource can manage physical interfaces on NX-OS devices, including setting
 - [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
+- [l1PhysIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/)
 
 ## Example Usage
 
@@ -24,66 +25,104 @@ This resource can manage physical interfaces on NX-OS devices, including setting
 resource "nxos_physical_interface" "example" {
   physical_interfaces = {
     "eth1/10" = {
-      fec_mode                               = "auto"
-      access_vlan                            = "unknown"
-      admin_state                            = "down"
-      auto_negotiation                       = "on"
-      bandwidth                              = 1000
-      delay                                  = 10
-      description                            = "My Description"
-      duplex                                 = "auto"
-      layer                                  = "Layer3"
-      link_logging                           = "enable"
-      link_debounce_down                     = 200
-      link_debounce_up                       = 0
-      medium                                 = "broadcast"
-      mode                                   = "access"
-      mtu                                    = 1500
-      native_vlan                            = "unknown"
-      speed                                  = "auto"
-      speed_group                            = "auto"
-      trunk_vlans                            = "1-4094"
-      uni_directional_ethernet               = "disable"
-      user_configured_flags                  = "admin_layer,admin_mtu,admin_state"
-      beacon                                 = "off"
-      dfe_adaptive_tuning                    = "disable"
-      dfe_tuning_delay                       = 500
-      dot1q_ether_type                       = 33024
-      equalization_delay                     = 1
-      inherit_bandwidth                      = 1000
-      itu_channel                            = 50
-      link_active_jitter_management          = "disable"
-      link_flap_error_disable                = "disable"
-      link_flap_error_max                    = 10
-      link_flap_error_seconds                = 60
-      link_loopback                          = "disable"
-      link_mac_up_timer                      = 10
-      link_max_bring_up_timer                = 10
-      link_transmit_reset                    = "enable"
-      mdix                                   = "auto"
-      media_type                             = "none"
-      optics_loopback                        = "disable"
-      packet_timestamp_egress_source_id      = 100
-      packet_timestamp_ingress_source_id     = 100
-      packet_timestamp_state                 = "disable"
-      port_type                              = "unknown"
-      router_mac                             = "not-applicable"
-      snmp_trap_state                        = "enable"
-      span_mode                              = "not-a-span-dest"
-      squelch                                = "enable"
-      transparent_mode                       = "not-a-trans-port"
-      trunk_logging                          = "default"
-      usage                                  = "discovery"
-      voice_port_cos                         = 0
-      voice_port_trust                       = "disable"
-      voice_vlan_id                          = 0
-      voice_vlan_type                        = "none"
-      vrf_dn                                 = "sys/inst-default"
-      storm_control_burst_packets_per_second = 600
-      storm_control_burst_rate               = "75.000000"
-      storm_control_rate                     = "50.000000"
-      storm_control_rate_packets_per_second  = 500
-      storm_control_packet_type              = "bcast"
+      fec_mode                                   = "auto"
+      access_vlan                                = "unknown"
+      admin_state                                = "down"
+      auto_negotiation                           = "on"
+      bandwidth                                  = 1000
+      delay                                      = 10
+      description                                = "My Description"
+      duplex                                     = "auto"
+      layer                                      = "Layer3"
+      link_logging                               = "enable"
+      link_debounce_down                         = 200
+      link_debounce_up                           = 0
+      medium                                     = "broadcast"
+      mode                                       = "access"
+      mtu                                        = 1500
+      native_vlan                                = "unknown"
+      speed                                      = "auto"
+      speed_group                                = "auto"
+      trunk_vlans                                = "1-4094"
+      uni_directional_ethernet                   = "disable"
+      user_configured_flags                      = "admin_layer,admin_mtu,admin_state"
+      beacon                                     = "off"
+      dfe_adaptive_tuning                        = "disable"
+      dfe_tuning_delay                           = 500
+      dot1q_ether_type                           = 33024
+      equalization_delay                         = 1
+      inherit_bandwidth                          = 1000
+      itu_channel                                = 50
+      link_active_jitter_management              = "disable"
+      link_flap_error_disable                    = "disable"
+      link_flap_error_max                        = 10
+      link_flap_error_seconds                    = 60
+      link_loopback                              = "disable"
+      link_mac_up_timer                          = 10
+      link_max_bring_up_timer                    = 10
+      link_transmit_reset                        = "enable"
+      mdix                                       = "auto"
+      media_type                                 = "none"
+      optics_loopback                            = "disable"
+      packet_timestamp_egress_source_id          = 100
+      packet_timestamp_ingress_source_id         = 100
+      packet_timestamp_state                     = "disable"
+      port_type                                  = "unknown"
+      router_mac                                 = "not-applicable"
+      snmp_trap_state                            = "enable"
+      span_mode                                  = "not-a-span-dest"
+      squelch                                    = "enable"
+      transparent_mode                           = "not-a-trans-port"
+      trunk_logging                              = "default"
+      usage                                      = "discovery"
+      voice_port_cos                             = 0
+      voice_port_trust                           = "disable"
+      voice_vlan_id                              = 0
+      voice_vlan_type                            = "none"
+      vrf_dn                                     = "sys/inst-default"
+      storm_control_burst_packets_per_second     = 600
+      storm_control_burst_rate                   = "75.000000"
+      storm_control_rate                         = "50.000000"
+      storm_control_rate_packets_per_second      = 500
+      storm_control_packet_type                  = "bcast"
+      allow_multi_tag                            = "enable"
+      auto_exclude_vlans                         = "1-2"
+      buffer_boost                               = "disable"
+      chassis_module_serial                      = "FDO12345678"
+      chassis_module_side                        = "LeftIoModuleSlot"
+      chassis_number                             = 1
+      chassis_profile_name                       = "profile1"
+      chassis_serial                             = "FDO12345678"
+      extended_description                       = "Extended interface config"
+      flow_control_receive                       = true
+      flow_control_send                          = true
+      flow_redirect                              = true
+      gtp_hash_mode                              = "v4"
+      layer3_multicast_receiver_vlan             = 100
+      port_type_external                         = "yes"
+      port_type_fabric                           = "yes"
+      router_mac_ipv6_extract                    = "enable"
+      shut_down_lan                              = "enable"
+      storm_control_action                       = "shutdown"
+      storm_control_action_1                     = "shutdown"
+      storm_control_action_2                     = "shutdown"
+      storm_control_broadcast_level              = "50.000000"
+      storm_control_broadcast_level_1            = "40.000000"
+      storm_control_broadcast_level_2            = "40.000000"
+      storm_control_broadcast_packets_per_second = 1000
+      storm_control_multicast_level              = "50.000000"
+      storm_control_multicast_level_1            = "40.000000"
+      storm_control_multicast_level_2            = "40.000000"
+      storm_control_multicast_packets_per_second = 1000
+      storm_control_unicast_level                = "50.000000"
+      storm_control_unicast_level_1              = "40.000000"
+      storm_control_unicast_level_2              = "40.000000"
+      storm_control_unicast_packets_per_second   = 1000
+      switchport_block                           = "multicast"
+      switchport_isolated                        = "enable"
+      switchport_mac_learn                       = "disable"
+      switchport_mac_permit                      = "static-only"
+      switchport_virtual_ethernet_bridge         = "enable"
     }
   }
 }
@@ -110,12 +149,24 @@ Optional:
 - `access_vlan` (String) Configured Access Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `admin_state` (String) Administrative port state.
   - Choices: `down`, `up`
+- `allow_multi_tag` (String) Allow Multitag.
+  - Choices: `disable`, `enable`
+- `auto_exclude_vlans` (String) Switchport Autostate Exclude vlans.
 - `auto_negotiation` (String) Administrative port auto-negotiation.
   - Choices: `on`, `off`, `25G`
 - `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
   - Range: `0`-`3200000000`
 - `beacon` (String) Beacon State.
   - Choices: `on`, `off`
+- `buffer_boost` (String) Disable/enable buffer boost on interface.
+  - Choices: `disable`, `enable`
+- `chassis_module_serial` (String) Module serial number information.
+- `chassis_module_side` (String) Module Side information.
+  - Choices: `UnknownSlot`, `LeftIoModuleSlot`, `RightIoModuleSlot`
+- `chassis_number` (Number) Chassis number information.
+  - Range: `0`-`255`
+- `chassis_profile_name` (String) Profile name information.
+- `chassis_serial` (String) Serial number information.
 - `delay` (Number) The administrative port delay time.
   - Range: `1`-`16777215`
 - `description` (String) Interface description.
@@ -129,14 +180,22 @@ Optional:
   - Choices: `auto`, `full`, `half`
 - `equalization_delay` (Number) Administrative port equalization delay time.
   - Range: `0`-`31`
+- `extended_description` (String) Description.
 - `fec_mode` (String) FEC Mode.
   - Choices: `fc-fec`, `rs-fec`, `fec-off`, `auto`, `rs-ieee`, `rs-cons16`, `kp-fec`
+- `flow_control_receive` (Boolean) Disable/enable rx flowcontrol block on interface.
+- `flow_control_send` (Boolean) Disable/enable tx flowcontrol block on interface.
+- `flow_redirect` (Boolean) Disable/enable flowredirect on interface.
+- `gtp_hash_mode` (String) Gtp hash mode ipv4 or ipv6 on interface.
+  - Choices: `disable`, `v4`, `v6`
 - `inherit_bandwidth` (Number) Administrative port inherit bandwidth.
   - Range: `0`-`4294967295`
 - `itu_channel` (Number) ITU Channel to support DWDM XCVR.
   - Range: `1`-`96`
 - `layer` (String) Administrative port layer.
   - Choices: `Layer1`, `Layer2`, `Layer3`
+- `layer3_multicast_receiver_vlan` (Number) Set vlan ID used for L3 multicast on this interface.
+  - Range: `0`-`4094`
 - `link_active_jitter_management` (String) Administrative port link active-jitter-management.
   - Choices: `disable`, `enable`
 - `link_debounce_down` (Number) Administrative port link debounce interval.
@@ -180,7 +239,15 @@ Optional:
   - Choices: `disable`, `enable-ingress`, `enable-egress`, `enable-both`
 - `port_type` (String) Type of the port: Fabric vs Leaf.
   - Choices: `unknown`, `eobc`, `mgmt`, `fab`, `leaf`, `extchhp`, `extchfp`
+- `port_type_external` (String) Identifies if or not the port is a external-facing port.
+  - Choices: `no`, `yes`
+- `port_type_fabric` (String) Identifies if or not the port is a fabric-facing port.
+  - Choices: `no`, `yes`
 - `router_mac` (String) The administrative router MAC address.
+- `router_mac_ipv6_extract` (String) Disable/enable switchport ipv6 extract.
+  - Choices: `disable`, `enable`
+- `shut_down_lan` (String) Shut/Unshut all LAN VLANs on interface.
+  - Choices: `disable`, `enable`
 - `snmp_trap_state` (String) Administrative port snmp trap state.
   - Choices: `enable`, `disable`
 - `span_mode` (String) Administrative port span mode.
@@ -191,14 +258,45 @@ Optional:
   - Choices: `unknown`, `1000`, `10000`, `40000`, `auto`, `25000`
 - `squelch` (String) Configured Squelch.
   - Choices: `enable`, `disable`
+- `storm_control_action` (String) Storm control action.
+  - Choices: `none`, `shutdown`, `trap`
+- `storm_control_action_1` (String) Storm control action1.
+  - Choices: `none`, `shutdown`, `trap`
+- `storm_control_action_2` (String) Storm control action2.
+  - Choices: `none`, `shutdown`, `trap`
+- `storm_control_broadcast_level` (String) storm-control broadcast level.
+- `storm_control_broadcast_level_1` (String) storm-control broadcast level1.
+- `storm_control_broadcast_level_2` (String) storm-control broadcast level2.
+- `storm_control_broadcast_packets_per_second` (Number) storm-control broadcast PPS.
+  - Range: `0`-`4294967295`
 - `storm_control_burst_packets_per_second` (Number) Max burst size.
   - Range: `0`-`4294967295`
 - `storm_control_burst_rate` (String) Max burst size.
+- `storm_control_multicast_level` (String) storm-control multicast level.
+- `storm_control_multicast_level_1` (String) storm-control multicast level1.
+- `storm_control_multicast_level_2` (String) storm-control multicast level2.
+- `storm_control_multicast_packets_per_second` (Number) storm-control multicast PPS.
+  - Range: `0`-`4294967295`
 - `storm_control_packet_type` (String) Packet Type.
   - Choices: `bcast`, `unk-ucast`, `mcast`, `all`
 - `storm_control_rate` (String) Traffic rate.
 - `storm_control_rate_packets_per_second` (Number) Tarffic rate.
   - Range: `0`-`4294967295`
+- `storm_control_unicast_level` (String) Storm control unicast level.
+- `storm_control_unicast_level_1` (String) Storm control unicast level1.
+- `storm_control_unicast_level_2` (String) Storm control unicast level2.
+- `storm_control_unicast_packets_per_second` (Number) Storm control unicast PPS.
+  - Range: `0`-`4294967295`
+- `switchport_block` (String) Disable/enable switchport block on interface.
+  - Choices: `none`, `multicast`, `unicast`
+- `switchport_isolated` (String) Switchport Isolated.
+  - Choices: `disable`, `enable`
+- `switchport_mac_learn` (String) Disable/enable mac learning on interface.
+  - Choices: `disable`, `enable`
+- `switchport_mac_permit` (String) Switchport mac-address permit related configuration.
+  - Choices: `all`, `static-only`
+- `switchport_virtual_ethernet_bridge` (String) Disable/enable switchport virtual ethernet bridge on interface.
+  - Choices: `disable`, `enable`
 - `transparent_mode` (String) Administrative port layer1 mode.
   - Choices: `not-a-trans-port`, `trans-port`
 - `trunk_logging` (String) Administrative trunk logging enable.

@@ -9,6 +9,7 @@ description: |-
 
 ## Unreleased
 
+- Add set metric configuration to `nxos_route_policy` resource and data source
 - Add ICAM scale monitoring configuration to `nxos_system` resource and data source
 - Add terminal console exec timeout configuration to `nxos_system` resource and data source
 - Add terminal VTY exec timeout configuration to `nxos_system` resource and data source

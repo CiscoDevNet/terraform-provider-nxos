@@ -50,6 +50,12 @@ resource "nxos_route_policy" "example" {
           match_tags = {
             "12345" = {}
           }
+          set_metric_is_bgp      = false
+          set_metric             = "100"
+          set_metric_delay       = 10
+          set_metric_load        = 10
+          set_metric_mtu         = 1500
+          set_metric_reliability = 100
         }
       }
     }

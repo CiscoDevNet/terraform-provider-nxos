@@ -340,4 +340,49 @@ child_classes:
                 description: "The color of a policy label."
                 id: true
                 example: 12345
+          - class_name: rtmapSetMetric
+            doc_path: Routing%20and%20Forwarding/rtmap:SetMetric/
+            rn: smetric
+            type: single
+            tf_name: set_metric
+            description: 'A set rule based on metric.'
+            attributes:
+              - nxos_name: isBGP
+                tf_name: set_metric_is_bgp
+                type: Bool
+                description: 'is BGP config.'
+                example: false
+              - nxos_name: metric
+                tf_name: set_metric
+                type: String
+                description: 'Specifies the ISIS interface metric.'
+                example: '100'
+              - nxos_name: metricD
+                tf_name: set_metric_delay
+                type: Int64
+                description: 'Metric delay.'
+                min_int: 0
+                max_int: 4294967295
+                example: 10
+              - nxos_name: metricL
+                tf_name: set_metric_load
+                type: Int64
+                description: 'Metric load.'
+                min_int: 0
+                max_int: 255
+                example: 10
+              - nxos_name: metricM
+                tf_name: set_metric_mtu
+                type: Int64
+                description: 'Metric mtu.'
+                min_int: 0
+                max_int: 16777215
+                example: 1500
+              - nxos_name: metricR
+                tf_name: set_metric_reliability
+                type: Int64
+                description: 'Metric reliability.'
+                min_int: 0
+                max_int: 255
+                example: 100
 test_prerequisites:

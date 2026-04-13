@@ -91,6 +91,7 @@ type System struct {
 	NdProbeIntervalForSolicitNeighbor             types.Int64                           `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
 	NdSolicitNeighborAdvertisement                types.String                          `tfsdk:"nd_solicit_neighbor_advertisement"`
 	NdVrfs                                        map[string]SystemNdVrfs               `tfsdk:"nd_vrfs"`
+	NdVpcDomains                                  map[string]SystemNdVpcDomains         `tfsdk:"nd_vpc_domains"`
 	ClockAdminState                               types.String                          `tfsdk:"clock_admin_state"`
 	ClockAuthenticationState                      types.String                          `tfsdk:"clock_authentication_state"`
 	ClockFormat                                   types.String                          `tfsdk:"clock_format"`
@@ -249,6 +250,10 @@ type SystemNdVrfsInterfaces struct {
 	RouterPreference           types.String `tfsdk:"router_preference"`
 }
 
+type SystemNdVpcDomains struct {
+	NdSync types.String `tfsdk:"nd_sync"`
+}
+
 type SystemDnsProfiles struct {
 	Description       types.String `tfsdk:"description"`
 	OwnerKey          types.String `tfsdk:"owner_key"`
@@ -350,6 +355,10 @@ func (data SystemNdVrfs) getRn(key string) string {
 
 func (data SystemNdVrfsInterfaces) getRn(key string) string {
 	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data SystemNdVpcDomains) getRn(key string) string {
+	return fmt.Sprintf("dom-[%v]", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
 func (data SystemDnsProfiles) getRn(key string) string {
@@ -657,6 +666,21 @@ func (data System) toBody(config System) nxos.Body {
 						}
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ndIf.attributes", attrs)
 					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ndVpc"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				for key, child := range data.NdVpcDomains {
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "domainId", key)
+					if !child.NdSync.IsUnknown() && !child.NdSync.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ndSync", child.NdSync.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ndVpcDom.attributes", attrs)
 				}
 			}
 		}
@@ -1582,6 +1606,38 @@ func (data *System) fromBody(res gjson.Result) {
 					return true
 				},
 			)
+			{
+				var rndVpc gjson.Result
+				rndInst.Get("ndInst.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ndVpc.attributes.rn").String()
+						if rnValue == "vpc" {
+							rndVpc = v
+							return false
+						}
+						return true
+					},
+				)
+				rndVpc.Get("ndVpc.children").ForEach(
+					func(_, v gjson.Result) bool {
+						v.ForEach(
+							func(classname, value gjson.Result) bool {
+								if classname.String() == "ndVpcDom" {
+									var child SystemNdVpcDomains
+									child.NdSync = types.StringValue(value.Get("attributes.ndSync").String())
+									mapKey := value.Get("attributes.domainId").String()
+									if data.NdVpcDomains == nil {
+										data.NdVpcDomains = make(map[string]SystemNdVpcDomains)
+									}
+									data.NdVpcDomains[mapKey] = child
+								}
+								return true
+							},
+						)
+						return true
+					},
+				)
+			}
 		}
 	}
 	{
@@ -2719,6 +2775,41 @@ func (data *System) updateFromBody(res gjson.Result) {
 				item.Interfaces[nc] = ncItem
 			}
 			data.NdVrfs[key] = item
+		}
+		{
+			var rndVpc gjson.Result
+			rndInst.Get("ndInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("ndVpc.attributes.rn").String()
+					if rnValue == "vpc" {
+						rndVpc = v
+						return false
+					}
+					return true
+				},
+			)
+			for key, item := range data.NdVpcDomains {
+				var rndVpcDom gjson.Result
+				rndVpc.Get("ndVpc.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("ndVpcDom.attributes.domainId").String() == key {
+							rndVpcDom = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rndVpcDom.Exists() {
+					delete(data.NdVpcDomains, key)
+					continue
+				}
+				if !item.NdSync.IsNull() {
+					item.NdSync = types.StringValue(rndVpcDom.Get("ndVpcDom.attributes.ndSync").String())
+				} else {
+					item.NdSync = types.StringNull()
+				}
+				data.NdVpcDomains[key] = item
+			}
 		}
 	}
 	var rdatetimeClock gjson.Result
@@ -4207,6 +4298,12 @@ func (data System) toDeleteBody() nxos.Body {
 				deleteBody, _ = sjson.Set(deleteBody, "ndDom.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ndVpc.attributes.rn", "vpc")
+				deleteBody, _ = sjson.Set(deleteBody, "ndVpc.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 		}
 	}
 	{
@@ -4743,6 +4840,15 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				deleteBody, _ = sjson.Set(deleteBody, "ndIf.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 			}
+		}
+	}
+	for stateKey := range state.NdVpcDomains {
+		if _, found := data.NdVpcDomains[stateKey]; !found {
+			stateChild := state.NdVpcDomains[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "ndVpcDom.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "ndVpcDom.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.ndEntity.children"+".0.ndInst.children"+".0.ndVpc.children"+".-1", deleteBody)
 		}
 	}
 	for stateKey := range state.DnsProfiles {

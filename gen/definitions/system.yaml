@@ -628,6 +628,36 @@ child_classes:
                       - high
                     example: high
                     exclude_test: true
+          - class_name: ndVpc
+            doc_path: Discovery%20Protocols/nd%3AVpc/
+            rn: vpc
+            type: single
+            child_classes:
+              - class_name: ndVpcDom
+                doc_path: Discovery%20Protocols/nd%3AVpcDom/
+                rn: dom-[%v]
+                type: list
+                tf_name: nd_vpc_domains
+                description: 'VPC Domain.'
+                attributes:
+                  - nxos_name: domainId
+                    tf_name: domain_id
+                    type: Int64
+                    id: true
+                    min_int: 1
+                    max_int: 1000
+                    description: 'Respective VPC Domain.'
+                    example: 100
+                    exclude_test: true
+                  - nxos_name: ndSync
+                    tf_name: nd_sync
+                    type: String
+                    description: 'IPV6 ND Sync.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
   - class_name: datetimeClock
     doc_path: System/datetime:Clock/
     rn: clock

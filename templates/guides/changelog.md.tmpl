@@ -9,6 +9,7 @@ description: |-
 
 ## Unreleased
 
+- Add route redistribution configuration to `nxos_ospf` resource and data source
 - Add `nxos_icmpv6` resource and data source
 - Add IPv6 ND VPC domain synchronization configuration to `nxos_system` resource and data source
 - Add set metric configuration to `nxos_route_policy` resource and data source

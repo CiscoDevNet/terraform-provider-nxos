@@ -57,7 +57,7 @@ func (d *OSPFDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.").AddApiDocumentation("ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/", []string{"ospfInst", "ospfDom", "ospfArea", "ospfMaxMetricLsaP", "ospfIf", "ospfAuthNewP"}, []string{"Routing%20and%20Forwarding/ospf:Inst/", "Routing%20and%20Forwarding/ospf:Dom/", "Routing%20and%20Forwarding/ospf:Area/", "Routing%20and%20Forwarding/ospf:MaxMetricLsaP/", "Routing%20and%20Forwarding/ospf:If/", "Routing%20and%20Forwarding/ospf:AuthNewP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.").AddApiDocumentation("ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/", []string{"ospfInst", "ospfDom", "ospfArea", "ospfMaxMetricLsaP", "ospfIf", "ospfAuthNewP", "ospfInterLeakP"}, []string{"Routing%20and%20Forwarding/ospf:Inst/", "Routing%20and%20Forwarding/ospf:Dom/", "Routing%20and%20Forwarding/ospf:Area/", "Routing%20and%20Forwarding/ospf:MaxMetricLsaP/", "Routing%20and%20Forwarding/ospf:If/", "Routing%20and%20Forwarding/ospf:AuthNewP/", "Routing%20and%20Forwarding/ospf:InterLeakP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -342,6 +342,26 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 											},
 										},
 									},
+									"redistributions": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of OSPF route redistributions.\n  - Map key format: `<protocol>;<protocol_instance>;<asn>`\n  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.\n  - Key component `protocol_instance`: The inter protocol route leak policy instance.\n  - Key component `asn`: The autonomous system number.").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"always": schema.StringAttribute{
+													MarkdownDescription: "Always advertise default route leak.",
+													Computed:            true,
+												},
+												"route_map": schema.StringAttribute{
+													MarkdownDescription: "The name of the default route leak policy route map. This route map name is used to control distribution.",
+													Computed:            true,
+												},
+												"srv6_prefix_type": schema.StringAttribute{
+													MarkdownDescription: "SRv6 Prefix Type; Valid only when proto is srv6.",
+													Computed:            true,
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -380,7 +400,7 @@ func (d *OSPFDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ospfInst,ospfDom,ospfArea,ospfMaxMetricLsaP,ospfIf,ospfAuthNewP")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ospfInst,ospfDom,ospfArea,ospfMaxMetricLsaP,ospfIf,ospfAuthNewP,ospfInterLeakP")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

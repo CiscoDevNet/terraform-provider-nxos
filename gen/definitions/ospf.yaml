@@ -473,6 +473,70 @@ child_classes:
                       - md5
                       - unspecified
                     example: none
+          - class_name: ospfInterLeakP
+            doc_path: Routing%20and%20Forwarding/ospf:InterLeakP/
+            rn: interleak-%s-%s-%s
+            type: list
+            tf_name: redistributions
+            description: 'List of OSPF route redistributions.'
+            attributes:
+              - nxos_name: proto
+                tf_name: protocol
+                type: String
+                id: true
+                description: 'The list of protocols to match.'
+                enum_values:
+                  - unspecified
+                  - static
+                  - direct
+                  - bgp
+                  - isis
+                  - ospf
+                  - ospfv3
+                  - eigrp
+                  - host
+                  - rip
+                  - amt
+                  - lisp
+                  - hmm
+                  - am
+                  - srv6
+                  - dhcpv6
+                  - icmpv6
+                example: static
+              - nxos_name: inst
+                tf_name: protocol_instance
+                type: String
+                id: true
+                description: 'The inter protocol route leak policy instance.'
+                example: none
+              - nxos_name: asn
+                tf_name: asn
+                type: String
+                id: true
+                description: 'The autonomous system number.'
+                example: none
+              - nxos_name: always
+                tf_name: always
+                type: String
+                description: 'Always advertise default route leak.'
+                enum_values:
+                  - "no"
+                  - "yes"
+                example: "no"
+              - nxos_name: rtMap
+                tf_name: route_map
+                type: String
+                description: 'The name of the default route leak policy route map. This route map name is used to control distribution.'
+                example: route_map_ospf
+              - nxos_name: srv6PrefixType
+                tf_name: srv6_prefix_type
+                type: String
+                description: 'SRv6 Prefix Type; Valid only when proto is srv6.'
+                enum_values:
+                  - unspecified
+                  - locator
+                example: unspecified
 test_prerequisites:
   - dn: sys/fm/ospf
     class_name: fmOspf

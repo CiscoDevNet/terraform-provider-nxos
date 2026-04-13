@@ -269,6 +269,23 @@ resource "nxos_system" "example" {
       tlv_vlan             = 100
     }
   }
+  cdp_admin_state          = "enabled"
+  cdp_instance_admin_state = "enabled"
+  cdp_control              = "stateful-ha"
+  cdp_device_id_type       = "mac"
+  cdp_hold_interval        = 120
+  cdp_pnp_startup_vlan     = 2
+  cdp_transmit_frequency   = 30
+  cdp_version              = "v1"
+  cdp_interfaces = {
+    "eth1/1" = {
+      admin_state          = "enabled"
+      description          = "My Description"
+      location_description = "My Location"
+      name                 = "eth1/1"
+      port_description     = "My Port"
+    }
+  }
   copp_admin_state              = "enabled"
   copp_rate_limiter             = true
   copp_profile_type             = "strict"

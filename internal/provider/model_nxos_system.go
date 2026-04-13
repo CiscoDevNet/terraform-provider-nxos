@@ -213,6 +213,13 @@ type System struct {
 	LldpSystemDescription                         types.String                          `tfsdk:"lldp_system_description"`
 	LldpTransmitFrequency                         types.Int64                           `tfsdk:"lldp_transmit_frequency"`
 	LldpInterfaces                                map[string]SystemLldpInterfaces       `tfsdk:"lldp_interfaces"`
+	CdpAdminState                                 types.String                          `tfsdk:"cdp_admin_state"`
+	CdpDeviceIdType                               types.String                          `tfsdk:"cdp_device_id_type"`
+	CdpHoldInterval                               types.Int64                           `tfsdk:"cdp_hold_interval"`
+	CdpPnpStartupVlan                             types.Int64                           `tfsdk:"cdp_pnp_startup_vlan"`
+	CdpTransmitFrequency                          types.Int64                           `tfsdk:"cdp_transmit_frequency"`
+	CdpVersion                                    types.String                          `tfsdk:"cdp_version"`
+	CdpInterfaces                                 map[string]SystemCdpInterfaces        `tfsdk:"cdp_interfaces"`
 	CoppAdminState                                types.String                          `tfsdk:"copp_admin_state"`
 	CoppRateLimiter                               types.Bool                            `tfsdk:"copp_rate_limiter"`
 	CoppProfileType                               types.String                          `tfsdk:"copp_profile_type"`
@@ -324,6 +331,11 @@ type SystemLldpInterfaces struct {
 	TlvVlan            types.Int64  `tfsdk:"tlv_vlan"`
 }
 
+type SystemCdpInterfaces struct {
+	AdminState      types.String `tfsdk:"admin_state"`
+	PortDescription types.String `tfsdk:"port_description"`
+}
+
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -389,6 +401,10 @@ func (data SystemManagementInterfaces) getRn(key string) string {
 }
 
 func (data SystemLldpInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data SystemCdpInterfaces) getRn(key string) string {
 	return fmt.Sprintf("if-[%s]", key)
 }
 
@@ -1321,6 +1337,49 @@ func (data System) toBody(config System) nxos.Body {
 	}
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".cdpEntity"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".cdpInst"
+			attrs = "{}"
+			if !data.CdpAdminState.IsUnknown() && !data.CdpAdminState.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminSt", data.CdpAdminState.ValueString())
+			}
+			if !data.CdpDeviceIdType.IsUnknown() && !data.CdpDeviceIdType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "devIdType", data.CdpDeviceIdType.ValueString())
+			}
+			if !data.CdpHoldInterval.IsUnknown() && !data.CdpHoldInterval.IsNull() {
+				attrs, _ = sjson.Set(attrs, "holdIntvl", strconv.FormatInt(data.CdpHoldInterval.ValueInt64(), 10))
+			}
+			if !data.CdpPnpStartupVlan.IsUnknown() && !data.CdpPnpStartupVlan.IsNull() {
+				attrs, _ = sjson.Set(attrs, "pnpStartVlan", strconv.FormatInt(data.CdpPnpStartupVlan.ValueInt64(), 10))
+			}
+			if !data.CdpTransmitFrequency.IsUnknown() && !data.CdpTransmitFrequency.IsNull() {
+				attrs, _ = sjson.Set(attrs, "txFreq", strconv.FormatInt(data.CdpTransmitFrequency.ValueInt64(), 10))
+			}
+			if !data.CdpVersion.IsUnknown() && !data.CdpVersion.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ver", data.CdpVersion.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			for key, child := range data.CdpInterfaces {
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "id", key)
+				if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+					attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+				}
+				if !child.PortDescription.IsUnknown() && !child.PortDescription.IsNull() {
+					attrs, _ = sjson.Set(attrs, "portDesc", child.PortDescription.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.cdpIf.attributes", attrs)
+			}
+		}
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".coppEntity"
 		attrs = "{}"
 		if !data.CoppAdminState.IsUnknown() && !data.CoppAdminState.IsNull() {
@@ -2182,6 +2241,58 @@ func (data *System) fromBody(res gjson.Result) {
 									data.LldpInterfaces = make(map[string]SystemLldpInterfaces)
 								}
 								data.LldpInterfaces[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
+		}
+	}
+	{
+		var rcdpEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("cdpEntity.attributes.rn").String()
+				if rnValue == "cdp" {
+					rcdpEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rcdpInst gjson.Result
+			rcdpEntity.Get("cdpEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("cdpInst.attributes.rn").String()
+					if rnValue == "inst" {
+						rcdpInst = v
+						return false
+					}
+					return true
+				},
+			)
+			data.CdpAdminState = types.StringValue(rcdpInst.Get("cdpInst.attributes.adminSt").String())
+			data.CdpDeviceIdType = types.StringValue(rcdpInst.Get("cdpInst.attributes.devIdType").String())
+			data.CdpHoldInterval = types.Int64Value(rcdpInst.Get("cdpInst.attributes.holdIntvl").Int())
+			data.CdpPnpStartupVlan = types.Int64Value(rcdpInst.Get("cdpInst.attributes.pnpStartVlan").Int())
+			data.CdpTransmitFrequency = types.Int64Value(rcdpInst.Get("cdpInst.attributes.txFreq").Int())
+			data.CdpVersion = types.StringValue(rcdpInst.Get("cdpInst.attributes.ver").String())
+			rcdpInst.Get("cdpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "cdpIf" {
+								var child SystemCdpInterfaces
+								child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+								child.PortDescription = types.StringValue(value.Get("attributes.portDesc").String())
+								mapKey := value.Get("attributes.id").String()
+								if data.CdpInterfaces == nil {
+									data.CdpInterfaces = make(map[string]SystemCdpInterfaces)
+								}
+								data.CdpInterfaces[mapKey] = child
 							}
 							return true
 						},
@@ -4001,6 +4112,87 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.LldpInterfaces[key] = item
 		}
 	}
+	var rcdpEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("cdpEntity.attributes.rn").String()
+			if rnValue == "cdp" {
+				rcdpEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rcdpInst gjson.Result
+		rcdpEntity.Get("cdpEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("cdpInst.attributes.rn").String()
+				if rnValue == "inst" {
+					rcdpInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.CdpAdminState.IsNull() {
+			data.CdpAdminState = types.StringValue(rcdpInst.Get("cdpInst.attributes.adminSt").String())
+		} else {
+			data.CdpAdminState = types.StringNull()
+		}
+		if !data.CdpDeviceIdType.IsNull() {
+			data.CdpDeviceIdType = types.StringValue(rcdpInst.Get("cdpInst.attributes.devIdType").String())
+		} else {
+			data.CdpDeviceIdType = types.StringNull()
+		}
+		if !data.CdpHoldInterval.IsNull() {
+			data.CdpHoldInterval = types.Int64Value(rcdpInst.Get("cdpInst.attributes.holdIntvl").Int())
+		} else {
+			data.CdpHoldInterval = types.Int64Null()
+		}
+		if !data.CdpPnpStartupVlan.IsNull() {
+			data.CdpPnpStartupVlan = types.Int64Value(rcdpInst.Get("cdpInst.attributes.pnpStartVlan").Int())
+		} else {
+			data.CdpPnpStartupVlan = types.Int64Null()
+		}
+		if !data.CdpTransmitFrequency.IsNull() {
+			data.CdpTransmitFrequency = types.Int64Value(rcdpInst.Get("cdpInst.attributes.txFreq").Int())
+		} else {
+			data.CdpTransmitFrequency = types.Int64Null()
+		}
+		if !data.CdpVersion.IsNull() {
+			data.CdpVersion = types.StringValue(rcdpInst.Get("cdpInst.attributes.ver").String())
+		} else {
+			data.CdpVersion = types.StringNull()
+		}
+		for key, item := range data.CdpInterfaces {
+			var rcdpIf gjson.Result
+			rcdpInst.Get("cdpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("cdpIf.attributes.id").String() == key {
+						rcdpIf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rcdpIf.Exists() {
+				delete(data.CdpInterfaces, key)
+				continue
+			}
+			if !item.AdminState.IsNull() {
+				item.AdminState = types.StringValue(rcdpIf.Get("cdpIf.attributes.adminSt").String())
+			} else {
+				item.AdminState = types.StringNull()
+			}
+			if !item.PortDescription.IsNull() {
+				item.PortDescription = types.StringValue(rcdpIf.Get("cdpIf.attributes.portDesc").String())
+			} else {
+				item.PortDescription = types.StringNull()
+			}
+			data.CdpInterfaces[key] = item
+		}
+	}
 	var rcoppEntity gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -4862,6 +5054,45 @@ func (data System) toDeleteBody() nxos.Body {
 	}
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".cdpEntity"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".cdpInst"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			if !data.CdpAdminState.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CdpDeviceIdType.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"devIdType", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CdpHoldInterval.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"holdIntvl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CdpPnpStartupVlan.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"pnpStartVlan", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CdpTransmitFrequency.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"txFreq", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CdpVersion.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ver", "DME_UNSET_PROPERTY_MARKER")
+			}
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.CdpInterfaces {
+				childBody := ""
+				childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+				childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "portDesc", "DME_UNSET_PROPERTY_MARKER")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.cdpIf.attributes", childBody)
+			}
+		}
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".coppEntity"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		if !data.CoppAdminState.IsNull() {
@@ -5114,6 +5345,16 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.tlvSetMgmtIpv6", "DME_UNSET_PROPERTY_MARKER")
 			deleteBody, _ = sjson.Set(deleteBody, "lldpIf.attributes.tlvSetVlan", "DME_UNSET_PROPERTY_MARKER")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.lldpEntity.children"+".0.lldpInst.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.CdpInterfaces {
+		if _, found := data.CdpInterfaces[stateKey]; !found {
+			stateChild := state.CdpInterfaces[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "cdpIf.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "cdpIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "cdpIf.attributes.portDesc", "DME_UNSET_PROPERTY_MARKER")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.cdpEntity.children"+".0.cdpInst.children"+".-1", deleteBody)
 		}
 	}
 	return body

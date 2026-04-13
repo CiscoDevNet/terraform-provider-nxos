@@ -1,0 +1,108 @@
+---
+name: ICMPv6
+class_name: icmpv6Entity
+dn: sys/icmpv6
+no_delete: true
+ds_description: This data source can read the ICMPv6 configuration on NX-OS devices, including per-interface ICMPv6 control settings such as redirects and unreachables.
+res_description: This resource can manage the ICMPv6 configuration on NX-OS devices, including per-interface ICMPv6 control settings such as redirects and unreachables.
+doc_path: ICMP/icmpv6:Entity/
+doc_category: System
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+child_classes:
+  - class_name: icmpv6Inst
+    rn: inst
+    type: single
+    no_delete: true
+    doc_path: ICMP/icmpv6:Inst/
+    attributes:
+      - nxos_name: adjStaleTimer
+        tf_name: adjacency_stale_timer
+        type: Int64
+        min_int: 30
+        max_int: 65535
+        description: 'Adjacency stale timer.'
+        example: 500
+      - nxos_name: adjStaleTimerIcmp
+        tf_name: adjacency_stale_timer_icmp
+        type: String
+        description: 'Ipv6 adjacency stale timer with ICMP option.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        allow_non_enum_values: true
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+      - nxos_name: redirectSyslog
+        tf_name: redirect_syslog
+        type: String
+        description: 'Ipv6 redirect syslog.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+      - nxos_name: redirectSyslogInterval
+        tf_name: redirect_syslog_interval
+        type: Int64
+        min_int: 30
+        max_int: 1800
+        description: 'Redirect syslog interval.'
+        example: 120
+    child_classes:
+      - class_name: icmpv6If
+        rn: if-[%s]
+        type: list
+        tf_name: interfaces
+        description: 'List of ICMPv6 interface configurations.'
+        doc_path: ICMP/icmpv6:If/
+        attributes:
+          - nxos_name: id
+            tf_name: id
+            type: String
+            id: true
+            description: 'Must match first field in the output of `show intf brief`. Example: `vlan100`.'
+            example: vlan10
+          - nxos_name: ctrl
+            tf_name: control
+            type: String
+            enum_values:
+              - unreachables
+              - unreachables-icmp
+              - redirect
+            allow_non_enum_values: true
+            description: 'The control state. Choices: `redirect`, `unreachable`, `unreachables-icmp`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachables`\n  - Multiple values (comma-separated). Example: `redirect,unreachables`. In this case values must be in alphabetical order.'
+            example: unreachables
+test_prerequisites:
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/svi-[vlan10]
+    class_name: sviIf
+    attributes:
+      - name: id
+        value: vlan10
+    dependencies: [0]

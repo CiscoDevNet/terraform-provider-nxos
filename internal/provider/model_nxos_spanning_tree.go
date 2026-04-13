@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -50,6 +51,7 @@ type SpanningTree struct {
 	Mode                 types.String                      `tfsdk:"mode"`
 	PathcostOption       types.String                      `tfsdk:"pathcost_option"`
 	Interfaces           map[string]SpanningTreeInterfaces `tfsdk:"interfaces"`
+	Vlans                map[string]SpanningTreeVlans      `tfsdk:"vlans"`
 }
 
 type SpanningTreeInterfaces struct {
@@ -65,6 +67,18 @@ type SpanningTreeInterfaces struct {
 	LinecardIssu             types.String `tfsdk:"linecard_issu"`
 	PrestandardConfiguration types.String `tfsdk:"prestandard_configuration"`
 	SimulatePvst             types.String `tfsdk:"simulate_pvst"`
+}
+
+type SpanningTreeVlans struct {
+	AdminState        types.String `tfsdk:"admin_state"`
+	Diameter          types.Int64  `tfsdk:"diameter"`
+	EnabledInterfaces types.String `tfsdk:"enabled_interfaces"`
+	ForwardTime       types.Int64  `tfsdk:"forward_time"`
+	HelloTime         types.Int64  `tfsdk:"hello_time"`
+	MaxAge            types.Int64  `tfsdk:"max_age"`
+	Priority          types.String `tfsdk:"priority"`
+	RootMode          types.String `tfsdk:"root_mode"`
+	RootType          types.String `tfsdk:"root_type"`
 }
 
 type SpanningTreeIdentity struct {
@@ -97,6 +111,10 @@ func (data SpanningTree) getDn() string {
 
 func (data SpanningTreeInterfaces) getRn(key string) string {
 	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data SpanningTreeVlans) getRn(key string) string {
+	return fmt.Sprintf("vlan-[%v]", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
 func (data SpanningTree) getClassName() string {
@@ -189,6 +207,38 @@ func (data SpanningTree) toBody(config SpanningTree) nxos.Body {
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.stpIf.attributes", attrs)
 		}
+		for key, child := range data.Vlans {
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+			}
+			if !child.Diameter.IsUnknown() && !child.Diameter.IsNull() {
+				attrs, _ = sjson.Set(attrs, "diameter", strconv.FormatInt(child.Diameter.ValueInt64(), 10))
+			}
+			if !child.EnabledInterfaces.IsUnknown() && !child.EnabledInterfaces.IsNull() {
+				attrs, _ = sjson.Set(attrs, "enabledIntf", child.EnabledInterfaces.ValueString())
+			}
+			if !child.ForwardTime.IsUnknown() && !child.ForwardTime.IsNull() {
+				attrs, _ = sjson.Set(attrs, "fwdTime", strconv.FormatInt(child.ForwardTime.ValueInt64(), 10))
+			}
+			if !child.HelloTime.IsUnknown() && !child.HelloTime.IsNull() {
+				attrs, _ = sjson.Set(attrs, "helloTime", strconv.FormatInt(child.HelloTime.ValueInt64(), 10))
+			}
+			if !child.MaxAge.IsUnknown() && !child.MaxAge.IsNull() {
+				attrs, _ = sjson.Set(attrs, "maxAge", strconv.FormatInt(child.MaxAge.ValueInt64(), 10))
+			}
+			if !child.Priority.IsUnknown() && !child.Priority.IsNull() {
+				attrs, _ = sjson.Set(attrs, "priority", child.Priority.ValueString())
+			}
+			if !child.RootMode.IsUnknown() && !child.RootMode.IsNull() {
+				attrs, _ = sjson.Set(attrs, "rootMode", child.RootMode.ValueString())
+			}
+			if !child.RootType.IsUnknown() && !child.RootType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "rootType", child.RootType.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.stpVlan.attributes", attrs)
+		}
 	}
 
 	return nxos.Body{Str: body}
@@ -244,6 +294,33 @@ func (data *SpanningTree) fromBody(res gjson.Result) {
 								data.Interfaces = make(map[string]SpanningTreeInterfaces)
 							}
 							data.Interfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rstpInst.Get("stpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "stpVlan" {
+							var child SpanningTreeVlans
+							child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+							child.Diameter = types.Int64Value(value.Get("attributes.diameter").Int())
+							child.EnabledInterfaces = types.StringValue(value.Get("attributes.enabledIntf").String())
+							child.ForwardTime = types.Int64Value(value.Get("attributes.fwdTime").Int())
+							child.HelloTime = types.Int64Value(value.Get("attributes.helloTime").Int())
+							child.MaxAge = types.Int64Value(value.Get("attributes.maxAge").Int())
+							child.Priority = types.StringValue(value.Get("attributes.priority").String())
+							child.RootMode = types.StringValue(value.Get("attributes.rootMode").String())
+							child.RootType = types.StringValue(value.Get("attributes.rootType").String())
+							mapKey := value.Get("attributes.id").String()
+							if data.Vlans == nil {
+								data.Vlans = make(map[string]SpanningTreeVlans)
+							}
+							data.Vlans[mapKey] = child
 						}
 						return true
 					},
@@ -397,6 +474,68 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 		}
 		data.Interfaces[key] = item
 	}
+	for key, item := range data.Vlans {
+		var rstpVlan gjson.Result
+		rstpInst.Get("stpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("stpVlan.attributes.id").String() == key {
+					rstpVlan = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rstpVlan.Exists() {
+			delete(data.Vlans, key)
+			continue
+		}
+		if !item.AdminState.IsNull() {
+			item.AdminState = types.StringValue(rstpVlan.Get("stpVlan.attributes.adminSt").String())
+		} else {
+			item.AdminState = types.StringNull()
+		}
+		if !item.Diameter.IsNull() {
+			item.Diameter = types.Int64Value(rstpVlan.Get("stpVlan.attributes.diameter").Int())
+		} else {
+			item.Diameter = types.Int64Null()
+		}
+		if !item.EnabledInterfaces.IsNull() {
+			item.EnabledInterfaces = types.StringValue(rstpVlan.Get("stpVlan.attributes.enabledIntf").String())
+		} else {
+			item.EnabledInterfaces = types.StringNull()
+		}
+		if !item.ForwardTime.IsNull() {
+			item.ForwardTime = types.Int64Value(rstpVlan.Get("stpVlan.attributes.fwdTime").Int())
+		} else {
+			item.ForwardTime = types.Int64Null()
+		}
+		if !item.HelloTime.IsNull() {
+			item.HelloTime = types.Int64Value(rstpVlan.Get("stpVlan.attributes.helloTime").Int())
+		} else {
+			item.HelloTime = types.Int64Null()
+		}
+		if !item.MaxAge.IsNull() {
+			item.MaxAge = types.Int64Value(rstpVlan.Get("stpVlan.attributes.maxAge").Int())
+		} else {
+			item.MaxAge = types.Int64Null()
+		}
+		if !item.Priority.IsNull() {
+			item.Priority = types.StringValue(rstpVlan.Get("stpVlan.attributes.priority").String())
+		} else {
+			item.Priority = types.StringNull()
+		}
+		if !item.RootMode.IsNull() {
+			item.RootMode = types.StringValue(rstpVlan.Get("stpVlan.attributes.rootMode").String())
+		} else {
+			item.RootMode = types.StringNull()
+		}
+		if !item.RootType.IsNull() {
+			item.RootType = types.StringValue(rstpVlan.Get("stpVlan.attributes.rootType").String())
+		} else {
+			item.RootType = types.StringNull()
+		}
+		data.Vlans[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -462,6 +601,20 @@ func (data SpanningTree) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "simulatePvst", "DME_UNSET_PROPERTY_MARKER")
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.stpIf.attributes", childBody)
 		}
+		for key, child := range data.Vlans {
+			childBody := ""
+			childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "diameter", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "enabledIntf", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "fwdTime", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "helloTime", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "maxAge", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "priority", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "rootMode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "rootType", "DME_UNSET_PROPERTY_MARKER")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.stpVlan.attributes", childBody)
+		}
 	}
 
 	return nxos.Body{Str: body}
@@ -488,6 +641,23 @@ func (data SpanningTree) toBodyWithDeletes(ctx context.Context, state SpanningTr
 			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.lcIssu", "DME_UNSET_PROPERTY_MARKER")
 			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.prestdCfg", "DME_UNSET_PROPERTY_MARKER")
 			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.simulatePvst", "DME_UNSET_PROPERTY_MARKER")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.stpInst.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.Vlans {
+		if _, found := data.Vlans[stateKey]; !found {
+			stateChild := state.Vlans[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "stpVlan.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "stpVlan.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpVlan.attributes.diameter", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpVlan.attributes.enabledIntf", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpVlan.attributes.fwdTime", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpVlan.attributes.helloTime", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpVlan.attributes.maxAge", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpVlan.attributes.priority", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpVlan.attributes.rootMode", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "stpVlan.attributes.rootType", "DME_UNSET_PROPERTY_MARKER")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.stpInst.children"+".-1", deleteBody)
 		}
 	}

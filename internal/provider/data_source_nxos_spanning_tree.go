@@ -57,7 +57,7 @@ func (d *SpanningTreeDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.").AddApiDocumentation("stpEntity", "Discovery%20Protocols/stp:Entity/", []string{"stpInst", "stpIf"}, []string{"Discovery%20Protocols/stp:Inst/", "Discovery%20Protocols/stp:If/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.").AddApiDocumentation("stpEntity", "Discovery%20Protocols/stp:Entity/", []string{"stpInst", "stpIf", "stpVlan"}, []string{"Discovery%20Protocols/stp:Inst/", "Discovery%20Protocols/stp:If/", "Discovery%20Protocols/stp:Vlan/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -164,6 +164,50 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 					},
 				},
 			},
+			"vlans": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Per-VLAN Spanning Tree configuration.\n  - Map key: `vlan_id` - Access Encapsulation.\n  - Key range: `1`-`4096`").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "The administrative state of the object or policy.",
+							Computed:            true,
+						},
+						"diameter": schema.Int64Attribute{
+							MarkdownDescription: "network diameter.",
+							Computed:            true,
+						},
+						"enabled_interfaces": schema.StringAttribute{
+							MarkdownDescription: "Interfaces that have vlan cost/priority enabled.",
+							Computed:            true,
+						},
+						"forward_time": schema.Int64Attribute{
+							MarkdownDescription: "STP forward delay.",
+							Computed:            true,
+						},
+						"hello_time": schema.Int64Attribute{
+							MarkdownDescription: "STP Hello interval.",
+							Computed:            true,
+						},
+						"max_age": schema.Int64Attribute{
+							MarkdownDescription: "STP max age interval.",
+							Computed:            true,
+						},
+						"priority": schema.StringAttribute{
+							MarkdownDescription: "Bridge Priority.",
+							Computed:            true,
+						},
+						"root_mode": schema.StringAttribute{
+							MarkdownDescription: "Bridge Root Config mode.",
+							Computed:            true,
+						},
+						"root_type": schema.StringAttribute{
+							MarkdownDescription: "Bridge Root Type.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -196,7 +240,7 @@ func (d *SpanningTreeDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "stpInst,stpIf")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "stpInst,stpIf,stpVlan")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

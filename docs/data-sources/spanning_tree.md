@@ -5,7 +5,7 @@ subcategory: "Switching"
 description: |-
   This data source can read the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.
   API Documentation
-  stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/
+  stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/stpVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Vlan/
 ---
 
 # nxos_spanning_tree (Data Source)
@@ -17,6 +17,7 @@ This data source can read the Spanning Tree configuration on NX-OS devices, incl
 - [stpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/)
 - [stpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/)
 - [stpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/)
+- [stpVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Vlan/)
 
 ## Example Usage
 
@@ -47,6 +48,9 @@ data "nxos_spanning_tree" "example" {
 - `loopguard` (String) Enable loop guard on all ports.
 - `mode` (String) Spanning tree mode.
 - `pathcost_option` (String) Spanning tree pathcost options.
+- `vlans` (Attributes Map) Per-VLAN Spanning Tree configuration.
+  - Map key: `vlan_id` - Access Encapsulation.
+  - Key range: `1`-`4096` (see [below for nested schema](#nestedatt--vlans))
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
@@ -65,3 +69,19 @@ Read-Only:
 - `prestandard_configuration` (String) Port mst prestd.
 - `priority` (Number) Port Priority.
 - `simulate_pvst` (String) Port simulate pvst.
+
+
+<a id="nestedatt--vlans"></a>
+### Nested Schema for `vlans`
+
+Read-Only:
+
+- `admin_state` (String) The administrative state of the object or policy.
+- `diameter` (Number) network diameter.
+- `enabled_interfaces` (String) Interfaces that have vlan cost/priority enabled.
+- `forward_time` (Number) STP forward delay.
+- `hello_time` (Number) STP Hello interval.
+- `max_age` (Number) STP max age interval.
+- `priority` (String) Bridge Priority.
+- `root_mode` (String) Bridge Root Config mode.
+- `root_type` (String) Bridge Root Type.

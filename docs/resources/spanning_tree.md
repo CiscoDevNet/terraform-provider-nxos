@@ -5,7 +5,7 @@ subcategory: "Switching"
 description: |-
   This resource can manage the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.
   API Documentation
-  stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/
+  stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/stpVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Vlan/
 ---
 
 # nxos_spanning_tree (Resource)
@@ -17,6 +17,7 @@ This resource can manage the Spanning Tree configuration on NX-OS devices, inclu
 - [stpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/)
 - [stpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/)
 - [stpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/)
+- [stpVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Vlan/)
 
 ## Example Usage
 
@@ -30,7 +31,7 @@ resource "nxos_spanning_tree" "example" {
   l2_gateway_stp_domain_id = 2048
   linecard_issu            = "auto"
   loopguard                = "enabled"
-  mode                     = "mst"
+  mode                     = "pvrst"
   pathcost_option          = "long"
   interfaces = {
     "eth1/9" = {
@@ -46,6 +47,19 @@ resource "nxos_spanning_tree" "example" {
       linecard_issu             = "auto"
       prestandard_configuration = "enabled"
       simulate_pvst             = "enabled"
+    }
+  }
+  vlans = {
+    "100" = {
+      admin_state        = "disabled"
+      diameter           = 3
+      enabled_interfaces = "eth1/9"
+      forward_time       = 20
+      hello_time         = 5
+      max_age            = 25
+      priority           = "4096"
+      root_mode          = "enabled"
+      root_type          = "primary"
     }
   }
 }
@@ -79,6 +93,9 @@ resource "nxos_spanning_tree" "example" {
   - Choices: `mst`, `pvrst`
 - `pathcost_option` (String) Spanning tree pathcost options.
   - Choices: `auto`, `short`, `long`
+- `vlans` (Attributes Map) Per-VLAN Spanning Tree configuration.
+  - Map key: `vlan_id` - Access Encapsulation.
+  - Key range: `1`-`4096` (see [below for nested schema](#nestedatt--vlans))
 
 ### Read-Only
 
@@ -112,6 +129,30 @@ Optional:
   - Range: `0`-`224`
 - `simulate_pvst` (String) Port simulate pvst.
   - Choices: `default`, `enabled`, `disabled`
+
+
+<a id="nestedatt--vlans"></a>
+### Nested Schema for `vlans`
+
+Optional:
+
+- `admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `diameter` (Number) network diameter.
+  - Range: `2`-`7`
+- `enabled_interfaces` (String) Interfaces that have vlan cost/priority enabled.
+- `forward_time` (Number) STP forward delay.
+  - Range: `4`-`30`
+- `hello_time` (Number) STP Hello interval.
+  - Range: `1`-`10`
+- `max_age` (Number) STP max age interval.
+  - Range: `6`-`40`
+- `priority` (String) Bridge Priority.
+  - Choices: `0`, `4096`, `8192`, `12288`, `16384`, `20480`, `24576`, `28672`, `32768`, `36864`, `40960`, `45056`, `49152`, `53248`, `57344`, `61440`
+- `root_mode` (String) Bridge Root Config mode.
+  - Choices: `disabled`, `enabled`
+- `root_type` (String) Bridge Root Type.
+  - Choices: `none`, `primary`, `secondary`
 
 ## Import
 

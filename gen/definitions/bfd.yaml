@@ -5,7 +5,7 @@ dn: sys/bfd
 ds_description: 'This data source can read the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.'
 res_description: 'This resource can manage the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.'
 doc_path: Routing%20and%20Forwarding/bfd:Entity/
-doc_category: Routing
+doc_category: System
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

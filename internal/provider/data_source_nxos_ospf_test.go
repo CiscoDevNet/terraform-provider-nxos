@@ -80,6 +80,9 @@ func TestAccDataSourceNxosOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_keychain", "mykeychain"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_md5_key_secure_mode", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.always", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.route_map", "route_map_ospf"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.srv6_prefix_type", "unspecified"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -203,6 +206,13 @@ func testAccDataSourceNxosOSPFConfig() string {
 	config += `							authentication_md5_key_new = "0 mymd5key"` + "\n"
 	config += `							authentication_md5_key_secure_mode = false` + "\n"
 	config += `							authentication_type = "none"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					redistributions = {` + "\n"
+	config += `						"static;none;none" = {` + "\n"
+	config += `							always = "no"` + "\n"
+	config += `							route_map = "route_map_ospf"` + "\n"
+	config += `							srv6_prefix_type = "unspecified"` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
 	config += `				}` + "\n"

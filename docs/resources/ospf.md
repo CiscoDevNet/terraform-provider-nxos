@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.
   API Documentation
-  ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Entity/ospfInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Inst/ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Dom/ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Area/ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:MaxMetricLsaP/ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:If/ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:AuthNewP/
+  ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Entity/ospfInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Inst/ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Dom/ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Area/ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:MaxMetricLsaP/ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:If/ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:AuthNewP/ospfInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:InterLeakP/
 ---
 
 # nxos_ospf (Resource)
@@ -21,6 +21,7 @@ This resource can manage the OSPF configuration on NX-OS devices, including OSPF
 - [ospfMaxMetricLsaP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:MaxMetricLsaP/)
 - [ospfIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:If/)
 - [ospfAuthNewP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:AuthNewP/)
+- [ospfInterLeakP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:InterLeakP/)
 
 ## Example Usage
 
@@ -89,6 +90,13 @@ resource "nxos_ospf" "example" {
               authentication_md5_key_new         = "0 mymd5key"
               authentication_md5_key_secure_mode = false
               authentication_type                = "none"
+            }
+          }
+          redistributions = {
+            "static;none;none" = {
+              always           = "no"
+              route_map        = "route_map_ospf"
+              srv6_prefix_type = "unspecified"
             }
           }
         }
@@ -170,6 +178,11 @@ Optional:
 - `max_metric_summary_lsa` (Number) Maximum metric value for summary LSAs.
   - Range: `0`-`16777215`
 - `name_lookup_vrf` (String) Holds vrf name of dns-server for name-lookup.
+- `redistributions` (Attributes Map) List of OSPF route redistributions.
+  - Map key format: `<protocol>;<protocol_instance>;<asn>`
+  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.
+  - Key component `protocol_instance`: The inter protocol route leak policy instance.
+  - Key component `asn`: The autonomous system number. (see [below for nested schema](#nestedatt--instances--vrfs--redistributions))
 - `rfc1583_compatible` (Boolean) RFC 1583 compatibility for external path preferences.
 - `rfc1583_compatible_ios` (Boolean) RFC 1583 compatibility to IOS for external path preferences.
 - `router_id` (String) Router identifier for this domain.
@@ -247,6 +260,18 @@ Optional:
   - Range: `1`-`65535`
 - `transmit_delay` (Number) Transmit delay, estimated time needed to send an LSA update packet.
   - Range: `1`-`450`
+
+
+<a id="nestedatt--instances--vrfs--redistributions"></a>
+### Nested Schema for `instances.vrfs.redistributions`
+
+Optional:
+
+- `always` (String) Always advertise default route leak.
+  - Choices: `no`, `yes`
+- `route_map` (String) The name of the default route leak policy route map. This route map name is used to control distribution.
+- `srv6_prefix_type` (String) SRv6 Prefix Type; Valid only when proto is srv6.
+  - Choices: `unspecified`, `locator`
 
 ## Import
 

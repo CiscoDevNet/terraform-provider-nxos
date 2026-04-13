@@ -88,6 +88,9 @@ func TestAccNxosOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_md5_key_new", "0 mymd5key"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_md5_key_secure_mode", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.always", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.route_map", "route_map_ospf"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.srv6_prefix_type", "unspecified"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
@@ -272,6 +275,13 @@ func testAccNxosOSPFConfig_all(includeWriteOnly bool) string {
 	}
 	config += `							authentication_md5_key_secure_mode = false` + "\n"
 	config += `							authentication_type = "none"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					redistributions = {` + "\n"
+	config += `						"static;none;none" = {` + "\n"
+	config += `							always = "no"` + "\n"
+	config += `							route_map = "route_map_ospf"` + "\n"
+	config += `							srv6_prefix_type = "unspecified"` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
 	config += `				}` + "\n"

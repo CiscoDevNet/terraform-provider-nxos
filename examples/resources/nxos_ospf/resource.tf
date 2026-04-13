@@ -64,6 +64,13 @@ resource "nxos_ospf" "example" {
               authentication_type                = "none"
             }
           }
+          redistributions = {
+            "static;none;none" = {
+              always           = "no"
+              route_map        = "route_map_ospf"
+              srv6_prefix_type = "unspecified"
+            }
+          }
         }
       }
     }

@@ -25,6 +25,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -51,29 +52,30 @@ type OSPFInstances struct {
 }
 
 type OSPFInstancesVrfs struct {
-	LogAdjacencyChanges             types.String                           `tfsdk:"log_adjacency_changes"`
-	AdminState                      types.String                           `tfsdk:"admin_state"`
-	BandwidthReference              types.Int64                            `tfsdk:"bandwidth_reference"`
-	BandwidthReferenceUnit          types.String                           `tfsdk:"bandwidth_reference_unit"`
-	Distance                        types.Int64                            `tfsdk:"distance"`
-	RouterId                        types.String                           `tfsdk:"router_id"`
-	CapabilityVrfLite               types.String                           `tfsdk:"capability_vrf_lite"`
-	Control                         types.String                           `tfsdk:"control"`
-	DefaultMetric                   types.Int64                            `tfsdk:"default_metric"`
-	DefaultRouteNssaPbitClear       types.Bool                             `tfsdk:"default_route_nssa_pbit_clear"`
-	DiscardRoute                    types.String                           `tfsdk:"discard_route"`
-	DownBitIgnore                   types.Bool                             `tfsdk:"down_bit_ignore"`
-	MaxEcmp                         types.Int64                            `tfsdk:"max_ecmp"`
-	NameLookupVrf                   types.String                           `tfsdk:"name_lookup_vrf"`
-	Rfc1583Compatible               types.Bool                             `tfsdk:"rfc1583_compatible"`
-	Rfc1583CompatibleIos            types.Bool                             `tfsdk:"rfc1583_compatible_ios"`
-	Areas                           map[string]OSPFInstancesVrfsAreas      `tfsdk:"areas"`
-	MaxMetricAwaitConvergenceBgpAsn types.String                           `tfsdk:"max_metric_await_convergence_bgp_asn"`
-	MaxMetricControl                types.String                           `tfsdk:"max_metric_control"`
-	MaxMetricExternalLsa            types.Int64                            `tfsdk:"max_metric_external_lsa"`
-	MaxMetricSummaryLsa             types.Int64                            `tfsdk:"max_metric_summary_lsa"`
-	MaxMetricStartupInterval        types.Int64                            `tfsdk:"max_metric_startup_interval"`
-	Interfaces                      map[string]OSPFInstancesVrfsInterfaces `tfsdk:"interfaces"`
+	LogAdjacencyChanges             types.String                                `tfsdk:"log_adjacency_changes"`
+	AdminState                      types.String                                `tfsdk:"admin_state"`
+	BandwidthReference              types.Int64                                 `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit          types.String                                `tfsdk:"bandwidth_reference_unit"`
+	Distance                        types.Int64                                 `tfsdk:"distance"`
+	RouterId                        types.String                                `tfsdk:"router_id"`
+	CapabilityVrfLite               types.String                                `tfsdk:"capability_vrf_lite"`
+	Control                         types.String                                `tfsdk:"control"`
+	DefaultMetric                   types.Int64                                 `tfsdk:"default_metric"`
+	DefaultRouteNssaPbitClear       types.Bool                                  `tfsdk:"default_route_nssa_pbit_clear"`
+	DiscardRoute                    types.String                                `tfsdk:"discard_route"`
+	DownBitIgnore                   types.Bool                                  `tfsdk:"down_bit_ignore"`
+	MaxEcmp                         types.Int64                                 `tfsdk:"max_ecmp"`
+	NameLookupVrf                   types.String                                `tfsdk:"name_lookup_vrf"`
+	Rfc1583Compatible               types.Bool                                  `tfsdk:"rfc1583_compatible"`
+	Rfc1583CompatibleIos            types.Bool                                  `tfsdk:"rfc1583_compatible_ios"`
+	Areas                           map[string]OSPFInstancesVrfsAreas           `tfsdk:"areas"`
+	MaxMetricAwaitConvergenceBgpAsn types.String                                `tfsdk:"max_metric_await_convergence_bgp_asn"`
+	MaxMetricControl                types.String                                `tfsdk:"max_metric_control"`
+	MaxMetricExternalLsa            types.Int64                                 `tfsdk:"max_metric_external_lsa"`
+	MaxMetricSummaryLsa             types.Int64                                 `tfsdk:"max_metric_summary_lsa"`
+	MaxMetricStartupInterval        types.Int64                                 `tfsdk:"max_metric_startup_interval"`
+	Interfaces                      map[string]OSPFInstancesVrfsInterfaces      `tfsdk:"interfaces"`
+	Redistributions                 map[string]OSPFInstancesVrfsRedistributions `tfsdk:"redistributions"`
 }
 
 type OSPFInstancesVrfsAreas struct {
@@ -119,6 +121,12 @@ type OSPFInstancesVrfsInterfaces struct {
 	AuthenticationType               types.String `tfsdk:"authentication_type"`
 }
 
+type OSPFInstancesVrfsRedistributions struct {
+	Always         types.String `tfsdk:"always"`
+	RouteMap       types.String `tfsdk:"route_map"`
+	Srv6PrefixType types.String `tfsdk:"srv6_prefix_type"`
+}
+
 type OSPFIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -161,6 +169,11 @@ func (data OSPFInstancesVrfsAreas) getRn(key string) string {
 
 func (data OSPFInstancesVrfsInterfaces) getRn(key string) string {
 	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data OSPFInstancesVrfsRedistributions) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 3)
+	return fmt.Sprintf("interleak-%s-%s-%s", keyParts[0], keyParts[1], keyParts[2])
 }
 
 func (data OSPF) getClassName() string {
@@ -388,6 +401,23 @@ func (data OSPF) toBody(config OSPF) nxos.Body {
 							}
 						}
 					}
+					for key, child := range child.Redistributions {
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 3)
+						attrs, _ = sjson.Set(attrs, "proto", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "inst", keyParts[1])
+						attrs, _ = sjson.Set(attrs, "asn", keyParts[2])
+						if !child.Always.IsUnknown() && !child.Always.IsNull() {
+							attrs, _ = sjson.Set(attrs, "always", child.Always.ValueString())
+						}
+						if !child.RouteMap.IsUnknown() && !child.RouteMap.IsNull() {
+							attrs, _ = sjson.Set(attrs, "rtMap", child.RouteMap.ValueString())
+						}
+						if !child.Srv6PrefixType.IsUnknown() && !child.Srv6PrefixType.IsNull() {
+							attrs, _ = sjson.Set(attrs, "srv6PrefixType", child.Srv6PrefixType.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfInterLeakP.attributes", attrs)
+					}
 				}
 			}
 		}
@@ -519,6 +549,27 @@ func (data *OSPF) fromBody(res gjson.Result) {
 																	nestedChildospfDom.Interfaces = make(map[string]OSPFInstancesVrfsInterfaces)
 																}
 																nestedChildospfDom.Interfaces[nestedMapKey] = nestedChildospfIf
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "ospfInterLeakP" {
+																var nestedChildospfInterLeakP OSPFInstancesVrfsRedistributions
+																nestedChildospfInterLeakP.Always = types.StringValue(nestedValue.Get("attributes.always").String())
+																nestedChildospfInterLeakP.RouteMap = types.StringValue(nestedValue.Get("attributes.rtMap").String())
+																nestedChildospfInterLeakP.Srv6PrefixType = types.StringValue(nestedValue.Get("attributes.srv6PrefixType").String())
+																nestedMapKey := nestedValue.Get("attributes.proto").String() + ";" + nestedValue.Get("attributes.inst").String() + ";" + nestedValue.Get("attributes.asn").String()
+																if nestedChildospfDom.Redistributions == nil {
+																	nestedChildospfDom.Redistributions = make(map[string]OSPFInstancesVrfsRedistributions)
+																}
+																nestedChildospfDom.Redistributions[nestedMapKey] = nestedChildospfInterLeakP
 															}
 															return true
 														},
@@ -893,6 +944,42 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 				}
 				ncItem.Interfaces[nc_] = nc_Item
 			}
+			for nc_ := range ncItem.Redistributions {
+				nc_Item := ncItem.Redistributions[nc_]
+				keyParts := strings.SplitN(nc_, ";", 3)
+				var rospfInterLeakP gjson.Result
+				rospfDom.Get("ospfDom.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("ospfInterLeakP.attributes.proto").String() == keyParts[0] &&
+							v.Get("ospfInterLeakP.attributes.inst").String() == keyParts[1] &&
+							v.Get("ospfInterLeakP.attributes.asn").String() == keyParts[2] {
+							rospfInterLeakP = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rospfInterLeakP.Exists() {
+					delete(ncItem.Redistributions, nc_)
+					continue
+				}
+				if !nc_Item.Always.IsNull() {
+					nc_Item.Always = types.StringValue(rospfInterLeakP.Get("ospfInterLeakP.attributes.always").String())
+				} else {
+					nc_Item.Always = types.StringNull()
+				}
+				if !nc_Item.RouteMap.IsNull() {
+					nc_Item.RouteMap = types.StringValue(rospfInterLeakP.Get("ospfInterLeakP.attributes.rtMap").String())
+				} else {
+					nc_Item.RouteMap = types.StringNull()
+				}
+				if !nc_Item.Srv6PrefixType.IsNull() {
+					nc_Item.Srv6PrefixType = types.StringValue(rospfInterLeakP.Get("ospfInterLeakP.attributes.srv6PrefixType").String())
+				} else {
+					nc_Item.Srv6PrefixType = types.StringNull()
+				}
+				ncItem.Redistributions[nc_] = nc_Item
+			}
 			item.Vrfs[nc] = ncItem
 		}
 		data.Instances[key] = item
@@ -996,6 +1083,15 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF)
 				}
 				if matchBodyPathdi__ == "" {
 					continue
+				}
+			}
+			for stateChildKey := range stateItemdi_.Redistributions {
+				if _, found := planItemdi_.Redistributions[stateChildKey]; !found {
+					stateChild := stateItemdi_.Redistributions[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ospfInterLeakP.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ospfInterLeakP.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 				}
 			}
 		}

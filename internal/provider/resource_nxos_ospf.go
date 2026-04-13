@@ -63,7 +63,7 @@ func (r *OSPFResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.").AddApiDocumentation("ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/", []string{"ospfInst", "ospfDom", "ospfArea", "ospfMaxMetricLsaP", "ospfIf", "ospfAuthNewP"}, []string{"Routing%20and%20Forwarding/ospf:Inst/", "Routing%20and%20Forwarding/ospf:Dom/", "Routing%20and%20Forwarding/ospf:Area/", "Routing%20and%20Forwarding/ospf:MaxMetricLsaP/", "Routing%20and%20Forwarding/ospf:If/", "Routing%20and%20Forwarding/ospf:AuthNewP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.").AddApiDocumentation("ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/", []string{"ospfInst", "ospfDom", "ospfArea", "ospfMaxMetricLsaP", "ospfIf", "ospfAuthNewP", "ospfInterLeakP"}, []string{"Routing%20and%20Forwarding/ospf:Inst/", "Routing%20and%20Forwarding/ospf:Dom/", "Routing%20and%20Forwarding/ospf:Area/", "Routing%20and%20Forwarding/ospf:MaxMetricLsaP/", "Routing%20and%20Forwarding/ospf:If/", "Routing%20and%20Forwarding/ospf:AuthNewP/", "Routing%20and%20Forwarding/ospf:InterLeakP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -451,6 +451,32 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											},
 										},
 									},
+									"redistributions": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of OSPF route redistributions.\n  - Map key format: `<protocol>;<protocol_instance>;<asn>`\n  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.\n  - Key component `protocol_instance`: The inter protocol route leak policy instance.\n  - Key component `asn`: The autonomous system number.").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"always": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Always advertise default route leak.").AddStringEnumDescription("no", "yes").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("no", "yes"),
+													},
+												},
+												"route_map": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The name of the default route leak policy route map. This route map name is used to control distribution.").String,
+													Optional:            true,
+												},
+												"srv6_prefix_type": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("SRv6 Prefix Type; Valid only when proto is srv6.").AddStringEnumDescription("unspecified", "locator").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("unspecified", "locator"),
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -566,7 +592,7 @@ func (r *OSPFResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ospfInst,ospfDom,ospfArea,ospfMaxMetricLsaP,ospfIf,ospfAuthNewP")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ospfInst,ospfDom,ospfArea,ospfMaxMetricLsaP,ospfIf,ospfAuthNewP,ospfInterLeakP")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -1,4 +1,4 @@
-## Unreleased
+## 0.9.0
 
 - Add CDP configuration to `nxos_system` resource and data source
 - Add `nxos_bfd` resource and data source

@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add ICAM scale monitoring configuration to `nxos_system` resource and data source
 - Add terminal console exec timeout configuration to `nxos_system` resource and data source
 - Add terminal VTY exec timeout configuration to `nxos_system` resource and data source
 - Add terminal VTY session limit configuration to `nxos_system` resource and data source

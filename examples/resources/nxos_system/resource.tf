@@ -257,10 +257,16 @@ resource "nxos_system" "example" {
       tlv_vlan             = 100
     }
   }
-  copp_admin_state     = "enabled"
-  copp_rate_limiter    = true
-  copp_profile_type    = "strict"
-  console_exec_timeout = 30
-  vty_exec_timeout     = 30
-  vty_session_limit    = 16
+  copp_admin_state              = "enabled"
+  copp_rate_limiter             = true
+  copp_profile_type             = "strict"
+  console_exec_timeout          = 30
+  vty_exec_timeout              = 30
+  vty_session_limit             = 16
+  icam_monitor_interval         = 4
+  icam_number_of_intervals      = 336
+  icam_scale_critical_threshold = 95
+  icam_scale_info_threshold     = 70
+  icam_scale_configuration      = true
+  icam_scale_warning_threshold  = 85
 }

@@ -211,6 +211,12 @@ type System struct {
 	ConsoleExecTimeout                            types.Int64                           `tfsdk:"console_exec_timeout"`
 	VtyExecTimeout                                types.Int64                           `tfsdk:"vty_exec_timeout"`
 	VtySessionLimit                               types.Int64                           `tfsdk:"vty_session_limit"`
+	IcamMonitorInterval                           types.Int64                           `tfsdk:"icam_monitor_interval"`
+	IcamNumberOfIntervals                         types.Int64                           `tfsdk:"icam_number_of_intervals"`
+	IcamScaleCriticalThreshold                    types.Int64                           `tfsdk:"icam_scale_critical_threshold"`
+	IcamScaleInfoThreshold                        types.Int64                           `tfsdk:"icam_scale_info_threshold"`
+	IcamScaleConfiguration                        types.Bool                            `tfsdk:"icam_scale_configuration"`
+	IcamScaleWarningThreshold                     types.Int64                           `tfsdk:"icam_scale_warning_threshold"`
 }
 
 type SystemArpVpcDomains struct {
@@ -1319,6 +1325,42 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icamEntity"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".icamInst"
+			attrs = "{}"
+			if !data.IcamMonitorInterval.IsUnknown() && !data.IcamMonitorInterval.IsNull() {
+				attrs, _ = sjson.Set(attrs, "interval", strconv.FormatInt(data.IcamMonitorInterval.ValueInt64(), 10))
+			}
+			if !data.IcamNumberOfIntervals.IsUnknown() && !data.IcamNumberOfIntervals.IsNull() {
+				attrs, _ = sjson.Set(attrs, "numinterval", strconv.FormatInt(data.IcamNumberOfIntervals.ValueInt64(), 10))
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			attrs = "{}"
+			if !data.IcamScaleCriticalThreshold.IsUnknown() && !data.IcamScaleCriticalThreshold.IsNull() {
+				attrs, _ = sjson.Set(attrs, "critical", strconv.FormatInt(data.IcamScaleCriticalThreshold.ValueInt64(), 10))
+			}
+			if !data.IcamScaleInfoThreshold.IsUnknown() && !data.IcamScaleInfoThreshold.IsNull() {
+				attrs, _ = sjson.Set(attrs, "info", strconv.FormatInt(data.IcamScaleInfoThreshold.ValueInt64(), 10))
+			}
+			if !data.IcamScaleConfiguration.IsUnknown() && !data.IcamScaleConfiguration.IsNull() {
+				attrs, _ = sjson.Set(attrs, "scalecfg", strconv.FormatBool(data.IcamScaleConfiguration.ValueBool()))
+			}
+			if !data.IcamScaleWarningThreshold.IsUnknown() && !data.IcamScaleWarningThreshold.IsNull() {
+				attrs, _ = sjson.Set(attrs, "warning", strconv.FormatInt(data.IcamScaleWarningThreshold.ValueInt64(), 10))
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.icamScale.attributes", attrs)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -2142,6 +2184,51 @@ func (data *System) fromBody(res gjson.Result) {
 					)
 					data.VtySessionLimit = types.Int64Value(rterminalSesLmt.Get("terminalSesLmt.attributes.sesLmt").Int())
 				}
+			}
+		}
+	}
+	{
+		var ricamEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("icamEntity.attributes.rn").String()
+				if rnValue == "icam" {
+					ricamEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var ricamInst gjson.Result
+			ricamEntity.Get("icamEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("icamInst.attributes.rn").String()
+					if rnValue == "inst" {
+						ricamInst = v
+						return false
+					}
+					return true
+				},
+			)
+			data.IcamMonitorInterval = types.Int64Value(ricamInst.Get("icamInst.attributes.interval").Int())
+			data.IcamNumberOfIntervals = types.Int64Value(ricamInst.Get("icamInst.attributes.numinterval").Int())
+			{
+				var ricamScale gjson.Result
+				ricamInst.Get("icamInst.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("icamScale.attributes.rn").String()
+						if rnValue == "scale" {
+							ricamScale = v
+							return false
+						}
+						return true
+					},
+				)
+				data.IcamScaleCriticalThreshold = types.Int64Value(ricamScale.Get("icamScale.attributes.critical").Int())
+				data.IcamScaleInfoThreshold = types.Int64Value(ricamScale.Get("icamScale.attributes.info").Int())
+				data.IcamScaleConfiguration = types.BoolValue(helpers.ParseNxosBoolean(ricamScale.Get("icamScale.attributes.scalecfg").String()))
+				data.IcamScaleWarningThreshold = types.Int64Value(ricamScale.Get("icamScale.attributes.warning").Int())
 			}
 		}
 	}
@@ -3841,6 +3928,73 @@ func (data *System) updateFromBody(res gjson.Result) {
 			}
 		}
 	}
+	var ricamEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("icamEntity.attributes.rn").String()
+			if rnValue == "icam" {
+				ricamEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var ricamInst gjson.Result
+		ricamEntity.Get("icamEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("icamInst.attributes.rn").String()
+				if rnValue == "inst" {
+					ricamInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.IcamMonitorInterval.IsNull() {
+			data.IcamMonitorInterval = types.Int64Value(ricamInst.Get("icamInst.attributes.interval").Int())
+		} else {
+			data.IcamMonitorInterval = types.Int64Null()
+		}
+		if !data.IcamNumberOfIntervals.IsNull() {
+			data.IcamNumberOfIntervals = types.Int64Value(ricamInst.Get("icamInst.attributes.numinterval").Int())
+		} else {
+			data.IcamNumberOfIntervals = types.Int64Null()
+		}
+		{
+			var ricamScale gjson.Result
+			ricamInst.Get("icamInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("icamScale.attributes.rn").String()
+					if rnValue == "scale" {
+						ricamScale = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.IcamScaleCriticalThreshold.IsNull() {
+				data.IcamScaleCriticalThreshold = types.Int64Value(ricamScale.Get("icamScale.attributes.critical").Int())
+			} else {
+				data.IcamScaleCriticalThreshold = types.Int64Null()
+			}
+			if !data.IcamScaleInfoThreshold.IsNull() {
+				data.IcamScaleInfoThreshold = types.Int64Value(ricamScale.Get("icamScale.attributes.info").Int())
+			} else {
+				data.IcamScaleInfoThreshold = types.Int64Null()
+			}
+			if !data.IcamScaleConfiguration.IsNull() {
+				data.IcamScaleConfiguration = types.BoolValue(helpers.ParseNxosBoolean(ricamScale.Get("icamScale.attributes.scalecfg").String()))
+			} else {
+				data.IcamScaleConfiguration = types.BoolNull()
+			}
+			if !data.IcamScaleWarningThreshold.IsNull() {
+				data.IcamScaleWarningThreshold = types.Int64Value(ricamScale.Get("icamScale.attributes.warning").Int())
+			} else {
+				data.IcamScaleWarningThreshold = types.Int64Null()
+			}
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -4532,6 +4686,12 @@ func (data System) toDeleteBody() nxos.Body {
 				}
 			}
 		}
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "icamEntity.attributes.rn", "icam")
+		deleteBody, _ = sjson.Set(deleteBody, "icamEntity.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
 	return nxos.Body{Str: body}

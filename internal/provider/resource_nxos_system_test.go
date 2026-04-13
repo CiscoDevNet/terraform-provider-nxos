@@ -169,6 +169,12 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "console_exec_timeout", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vty_exec_timeout", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vty_session_limit", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_monitor_interval", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_number_of_intervals", "336"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_scale_critical_threshold", "95"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_scale_info_threshold", "70"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_scale_configuration", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_scale_warning_threshold", "85"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -402,6 +408,12 @@ func testAccNxosSystemConfig_all() string {
 	config += `	console_exec_timeout = 30` + "\n"
 	config += `	vty_exec_timeout = 30` + "\n"
 	config += `	vty_session_limit = 16` + "\n"
+	config += `	icam_monitor_interval = 4` + "\n"
+	config += `	icam_number_of_intervals = 336` + "\n"
+	config += `	icam_scale_critical_threshold = 95` + "\n"
+	config += `	icam_scale_info_threshold = 70` + "\n"
+	config += `	icam_scale_configuration = true` + "\n"
+	config += `	icam_scale_warning_threshold = 85` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -63,7 +63,7 @@ func (r *RoutePolicyResource) Metadata(ctx context.Context, req resource.Metadat
 func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.").AddApiDocumentation("rpmEntity", "Routing%20and%20Forwarding/rpm:Entity/", []string{"rtpfxRuleV4", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag"}, []string{"Routing%20and%20Forwarding/rtpfx:RuleV4/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtmap:Rule/", "Routing%20and%20Forwarding/rtmap:Entry/", "Routing%20and%20Forwarding/rtmap:MatchRtDst/", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/", "Routing%20and%20Forwarding/rtmap:SetRegComm/", "Routing%20and%20Forwarding/rtregcom:Item/", "Routing%20and%20Forwarding/rtmap:MatchRtTag/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.").AddApiDocumentation("rpmEntity", "Routing%20and%20Forwarding/rpm:Entity/", []string{"rtpfxRuleV4", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric"}, []string{"Routing%20and%20Forwarding/rtpfx:RuleV4/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtmap:Rule/", "Routing%20and%20Forwarding/rtmap:Entry/", "Routing%20and%20Forwarding/rtmap:MatchRtDst/", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/", "Routing%20and%20Forwarding/rtmap:SetRegComm/", "Routing%20and%20Forwarding/rtregcom:Item/", "Routing%20and%20Forwarding/rtmap:MatchRtTag/", "Routing%20and%20Forwarding/rtmap:SetMetric/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -310,6 +310,42 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 											Attributes: map[string]schema.Attribute{},
 										},
 									},
+									"set_metric_is_bgp": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("is BGP config.").String,
+										Optional:            true,
+									},
+									"set_metric": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specifies the ISIS interface metric.").String,
+										Optional:            true,
+									},
+									"set_metric_delay": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Metric delay.").AddIntegerRangeDescription(0, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+									"set_metric_load": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Metric load.").AddIntegerRangeDescription(0, 255).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 255),
+										},
+									},
+									"set_metric_mtu": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Metric mtu.").AddIntegerRangeDescription(0, 16777215).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 16777215),
+										},
+									},
+									"set_metric_reliability": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Metric reliability.").AddIntegerRangeDescription(0, 255).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 255),
+										},
+									},
 								},
 							},
 						},
@@ -425,7 +461,7 @@ func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "rtpfxRuleV4,rtpfxEntry,rtmapRule,rtmapEntry,rtmapMatchRtDst,rtmapRsRtDstAtt,rtmapSetRegComm,rtregcomItem,rtmapMatchRtTag")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "rtpfxRuleV4,rtpfxEntry,rtmapRule,rtmapEntry,rtmapMatchRtDst,rtmapRsRtDstAtt,rtmapSetRegComm,rtregcomItem,rtmapMatchRtTag,rtmapSetMetric")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

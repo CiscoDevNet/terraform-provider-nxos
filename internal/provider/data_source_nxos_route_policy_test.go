@@ -57,6 +57,12 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_additive", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_no_community", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_is_bgp", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_load", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_reliability", "100"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -128,6 +134,12 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `						"12345" = {` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
+	config += `					set_metric_is_bgp = false` + "\n"
+	config += `					set_metric = "100"` + "\n"
+	config += `					set_metric_delay = 10` + "\n"
+	config += `					set_metric_load = 10` + "\n"
+	config += `					set_metric_mtu = 1500` + "\n"
+	config += `					set_metric_reliability = 100` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

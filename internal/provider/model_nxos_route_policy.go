@@ -86,6 +86,12 @@ type RoutePolicyRouteMapsEntries struct {
 	SetRegularCommunityCriteria    types.String                                                   `tfsdk:"set_regular_community_criteria"`
 	SetRegularCommunityItems       map[string]RoutePolicyRouteMapsEntriesSetRegularCommunityItems `tfsdk:"set_regular_community_items"`
 	MatchTags                      map[string]RoutePolicyRouteMapsEntriesMatchTags                `tfsdk:"match_tags"`
+	SetMetricIsBgp                 types.Bool                                                     `tfsdk:"set_metric_is_bgp"`
+	SetMetric                      types.String                                                   `tfsdk:"set_metric"`
+	SetMetricDelay                 types.Int64                                                    `tfsdk:"set_metric_delay"`
+	SetMetricLoad                  types.Int64                                                    `tfsdk:"set_metric_load"`
+	SetMetricMtu                   types.Int64                                                    `tfsdk:"set_metric_mtu"`
+	SetMetricReliability           types.Int64                                                    `tfsdk:"set_metric_reliability"`
 }
 
 type RoutePolicyRouteMapsEntriesMatchRoutePrefixLists struct {
@@ -312,6 +318,28 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						attrs, _ = sjson.Set(attrs, "tag", key)
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapMatchRtTag.attributes", attrs)
 					}
+					attrs = "{}"
+					if !child.SetMetricIsBgp.IsUnknown() && !child.SetMetricIsBgp.IsNull() {
+						attrs, _ = sjson.Set(attrs, "isBGP", strconv.FormatBool(child.SetMetricIsBgp.ValueBool()))
+					}
+					if !child.SetMetric.IsUnknown() && !child.SetMetric.IsNull() {
+						attrs, _ = sjson.Set(attrs, "metric", child.SetMetric.ValueString())
+					}
+					if !child.SetMetricDelay.IsUnknown() && !child.SetMetricDelay.IsNull() {
+						attrs, _ = sjson.Set(attrs, "metricD", strconv.FormatInt(child.SetMetricDelay.ValueInt64(), 10))
+					}
+					if !child.SetMetricLoad.IsUnknown() && !child.SetMetricLoad.IsNull() {
+						attrs, _ = sjson.Set(attrs, "metricL", strconv.FormatInt(child.SetMetricLoad.ValueInt64(), 10))
+					}
+					if !child.SetMetricMtu.IsUnknown() && !child.SetMetricMtu.IsNull() {
+						attrs, _ = sjson.Set(attrs, "metricM", strconv.FormatInt(child.SetMetricMtu.ValueInt64(), 10))
+					}
+					if !child.SetMetricReliability.IsUnknown() && !child.SetMetricReliability.IsNull() {
+						attrs, _ = sjson.Set(attrs, "metricR", strconv.FormatInt(child.SetMetricReliability.ValueInt64(), 10))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetMetric.attributes", attrs)
+					}
 				}
 			}
 		}
@@ -484,6 +512,25 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 													return true
 												},
 											)
+											{
+												var rrtmapSetMetric gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetMetric.attributes.rn").String()
+														if rnValue == "smetric" {
+															rrtmapSetMetric = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetMetricIsBgp = types.BoolValue(helpers.ParseNxosBoolean(rrtmapSetMetric.Get("rtmapSetMetric.attributes.isBGP").String()))
+												nestedChildrtmapEntry.SetMetric = types.StringValue(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metric").String())
+												nestedChildrtmapEntry.SetMetricDelay = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricD").Int())
+												nestedChildrtmapEntry.SetMetricLoad = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricL").Int())
+												nestedChildrtmapEntry.SetMetricMtu = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricM").Int())
+												nestedChildrtmapEntry.SetMetricReliability = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricR").Int())
+											}
 											if child.Entries == nil {
 												child.Entries = make(map[string]RoutePolicyRouteMapsEntries)
 											}
@@ -803,6 +850,49 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					continue
 				}
 				ncItem.MatchTags[nc_] = nc_Item
+			}
+			{
+				var rrtmapSetMetric gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetMetric.attributes.rn").String()
+						if rnValue == "smetric" {
+							rrtmapSetMetric = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetMetricIsBgp.IsNull() {
+					ncItem.SetMetricIsBgp = types.BoolValue(helpers.ParseNxosBoolean(rrtmapSetMetric.Get("rtmapSetMetric.attributes.isBGP").String()))
+				} else {
+					ncItem.SetMetricIsBgp = types.BoolNull()
+				}
+				if !ncItem.SetMetric.IsNull() {
+					ncItem.SetMetric = types.StringValue(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metric").String())
+				} else {
+					ncItem.SetMetric = types.StringNull()
+				}
+				if !ncItem.SetMetricDelay.IsNull() {
+					ncItem.SetMetricDelay = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricD").Int())
+				} else {
+					ncItem.SetMetricDelay = types.Int64Null()
+				}
+				if !ncItem.SetMetricLoad.IsNull() {
+					ncItem.SetMetricLoad = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricL").Int())
+				} else {
+					ncItem.SetMetricLoad = types.Int64Null()
+				}
+				if !ncItem.SetMetricMtu.IsNull() {
+					ncItem.SetMetricMtu = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricM").Int())
+				} else {
+					ncItem.SetMetricMtu = types.Int64Null()
+				}
+				if !ncItem.SetMetricReliability.IsNull() {
+					ncItem.SetMetricReliability = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricR").Int())
+				} else {
+					ncItem.SetMetricReliability = types.Int64Null()
+				}
 			}
 			item.Entries[nc] = ncItem
 		}

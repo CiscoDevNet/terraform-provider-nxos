@@ -395,6 +395,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewSaveConfigResource,
 		NewCliResource,
 		NewAccessListResource,
+		NewBFDResource,
 		NewBGPResource,
 		NewBridgeDomainResource,
 		NewDefaultQoSResource,
@@ -435,6 +436,7 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 	return []func() datasource.DataSource{
 		NewDmeDataSource,
 		NewAccessListDataSource,
+		NewBFDDataSource,
 		NewBGPDataSource,
 		NewBridgeDomainDataSource,
 		NewDefaultQoSDataSource,

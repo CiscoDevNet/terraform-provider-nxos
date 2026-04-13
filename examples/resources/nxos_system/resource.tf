@@ -152,6 +152,13 @@ resource "nxos_system" "example" {
   boot_image_verification            = "enable"
   boot_image_supervisor_1            = "bootflash:nxos64.10.5.3.F.bin"
   boot_image_supervisor_2            = "bootflash:nxos64.10.5.3.F.bin"
+  cfs_admin_state                    = "enabled"
+  cfs_distribute                     = "enabled"
+  cfs_ethernet_distribution          = "disabled"
+  cfs_ipv4_distribution              = "enabled"
+  cfs_ipv4_multicast_address         = "239.255.1.1"
+  cfs_ipv6_distribution              = "disabled"
+  cfs_ipv6_multicast_address         = "ff15::1"
   udld_admin_state                   = "enabled"
   udld_aggressive                    = "enabled"
   udld_message_interval              = 20

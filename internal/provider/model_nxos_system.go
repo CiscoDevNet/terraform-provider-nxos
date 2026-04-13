@@ -128,6 +128,13 @@ type System struct {
 	BootImageVerification                         types.String                          `tfsdk:"boot_image_verification"`
 	BootImageSupervisor1                          types.String                          `tfsdk:"boot_image_supervisor_1"`
 	BootImageSupervisor2                          types.String                          `tfsdk:"boot_image_supervisor_2"`
+	CfsAdminState                                 types.String                          `tfsdk:"cfs_admin_state"`
+	CfsDistribute                                 types.String                          `tfsdk:"cfs_distribute"`
+	CfsEthernetDistribution                       types.String                          `tfsdk:"cfs_ethernet_distribution"`
+	CfsIpv4Distribution                           types.String                          `tfsdk:"cfs_ipv4_distribution"`
+	CfsIpv4MulticastAddress                       types.String                          `tfsdk:"cfs_ipv4_multicast_address"`
+	CfsIpv6Distribution                           types.String                          `tfsdk:"cfs_ipv6_distribution"`
+	CfsIpv6MulticastAddress                       types.String                          `tfsdk:"cfs_ipv6_multicast_address"`
 	UdldAdminState                                types.String                          `tfsdk:"udld_admin_state"`
 	UdldAggressive                                types.String                          `tfsdk:"udld_aggressive"`
 	UdldMessageInterval                           types.Int64                           `tfsdk:"udld_message_interval"`
@@ -937,6 +944,38 @@ func (data System) toBody(config System) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bootImage.attributes", attrs)
+		}
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".cfsEntity"
+		attrs = "{}"
+		if !data.CfsAdminState.IsUnknown() && !data.CfsAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.CfsAdminState.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		attrs = "{}"
+		if !data.CfsDistribute.IsUnknown() && !data.CfsDistribute.IsNull() {
+			attrs, _ = sjson.Set(attrs, "distribute", data.CfsDistribute.ValueString())
+		}
+		if !data.CfsEthernetDistribution.IsUnknown() && !data.CfsEthernetDistribution.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ethDist", data.CfsEthernetDistribution.ValueString())
+		}
+		if !data.CfsIpv4Distribution.IsUnknown() && !data.CfsIpv4Distribution.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ipv4Dist", data.CfsIpv4Distribution.ValueString())
+		}
+		if !data.CfsIpv4MulticastAddress.IsUnknown() && !data.CfsIpv4MulticastAddress.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ipv4Mcast", data.CfsIpv4MulticastAddress.ValueString())
+		}
+		if !data.CfsIpv6Distribution.IsUnknown() && !data.CfsIpv6Distribution.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ipv6Dist", data.CfsIpv6Distribution.ValueString())
+		}
+		if !data.CfsIpv6MulticastAddress.IsUnknown() && !data.CfsIpv6MulticastAddress.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ipv6Mcast", data.CfsIpv6MulticastAddress.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.cfsInst.attributes", attrs)
 		}
 	}
 	{
@@ -1903,6 +1942,38 @@ func (data *System) fromBody(res gjson.Result) {
 			data.BootImageVerification = types.StringValue(rbootImage.Get("bootImage.attributes.imageverification").String())
 			data.BootImageSupervisor1 = types.StringValue(rbootImage.Get("bootImage.attributes.sup1").String())
 			data.BootImageSupervisor2 = types.StringValue(rbootImage.Get("bootImage.attributes.sup2").String())
+		}
+	}
+	{
+		var rcfsEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("cfsEntity.attributes.rn").String()
+				if rnValue == "cfs" {
+					rcfsEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rcfsInst gjson.Result
+			rcfsEntity.Get("cfsEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("cfsInst.attributes.rn").String()
+					if rnValue == "inst" {
+						rcfsInst = v
+						return false
+					}
+					return true
+				},
+			)
+			data.CfsDistribute = types.StringValue(rcfsInst.Get("cfsInst.attributes.distribute").String())
+			data.CfsEthernetDistribution = types.StringValue(rcfsInst.Get("cfsInst.attributes.ethDist").String())
+			data.CfsIpv4Distribution = types.StringValue(rcfsInst.Get("cfsInst.attributes.ipv4Dist").String())
+			data.CfsIpv4MulticastAddress = types.StringValue(rcfsInst.Get("cfsInst.attributes.ipv4Mcast").String())
+			data.CfsIpv6Distribution = types.StringValue(rcfsInst.Get("cfsInst.attributes.ipv6Dist").String())
+			data.CfsIpv6MulticastAddress = types.StringValue(rcfsInst.Get("cfsInst.attributes.ipv6Mcast").String())
 		}
 	}
 	{
@@ -3286,6 +3357,60 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.BootImageSupervisor2 = types.StringNull()
 		}
 	}
+	var rcfsEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("cfsEntity.attributes.rn").String()
+			if rnValue == "cfs" {
+				rcfsEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rcfsInst gjson.Result
+		rcfsEntity.Get("cfsEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("cfsInst.attributes.rn").String()
+				if rnValue == "inst" {
+					rcfsInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.CfsDistribute.IsNull() {
+			data.CfsDistribute = types.StringValue(rcfsInst.Get("cfsInst.attributes.distribute").String())
+		} else {
+			data.CfsDistribute = types.StringNull()
+		}
+		if !data.CfsEthernetDistribution.IsNull() {
+			data.CfsEthernetDistribution = types.StringValue(rcfsInst.Get("cfsInst.attributes.ethDist").String())
+		} else {
+			data.CfsEthernetDistribution = types.StringNull()
+		}
+		if !data.CfsIpv4Distribution.IsNull() {
+			data.CfsIpv4Distribution = types.StringValue(rcfsInst.Get("cfsInst.attributes.ipv4Dist").String())
+		} else {
+			data.CfsIpv4Distribution = types.StringNull()
+		}
+		if !data.CfsIpv4MulticastAddress.IsNull() {
+			data.CfsIpv4MulticastAddress = types.StringValue(rcfsInst.Get("cfsInst.attributes.ipv4Mcast").String())
+		} else {
+			data.CfsIpv4MulticastAddress = types.StringNull()
+		}
+		if !data.CfsIpv6Distribution.IsNull() {
+			data.CfsIpv6Distribution = types.StringValue(rcfsInst.Get("cfsInst.attributes.ipv6Dist").String())
+		} else {
+			data.CfsIpv6Distribution = types.StringNull()
+		}
+		if !data.CfsIpv6MulticastAddress.IsNull() {
+			data.CfsIpv6MulticastAddress = types.StringValue(rcfsInst.Get("cfsInst.attributes.ipv6Mcast").String())
+		} else {
+			data.CfsIpv6MulticastAddress = types.StringNull()
+		}
+	}
 	var rudldEntity gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -4401,6 +4526,42 @@ func (data System) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "bootBoot.attributes.rn", "boot")
 		deleteBody, _ = sjson.Set(deleteBody, "bootBoot.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".cfsEntity"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.CfsAdminState.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.CfsDistribute.IsNull() {
+				childBody, _ = sjson.Set(childBody, "distribute", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CfsEthernetDistribution.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ethDist", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CfsIpv4Distribution.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ipv4Dist", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CfsIpv4MulticastAddress.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ipv4Mcast", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CfsIpv6Distribution.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ipv6Dist", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CfsIpv6MulticastAddress.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ipv6Mcast", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".cfsInst"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
 	}
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())

@@ -39,7 +39,7 @@ func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "l2_gateway_stp_domain_id", "2048"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "linecard_issu", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "loopguard", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mode", "mst"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mode", "pvrst"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "pathcost_option", "long"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.bpdu_filter", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.bpdu_guard", "enable"))
@@ -53,6 +53,12 @@ func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.linecard_issu", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.prestandard_configuration", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.simulate_pvst", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.admin_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.diameter", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.forward_time", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.hello_time", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.max_age", "25"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.priority", "4096"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -92,7 +98,7 @@ func testAccDataSourceNxosSpanningTreeConfig() string {
 	config += `	l2_gateway_stp_domain_id = 2048` + "\n"
 	config += `	linecard_issu = "auto"` + "\n"
 	config += `	loopguard = "enabled"` + "\n"
-	config += `	mode = "mst"` + "\n"
+	config += `	mode = "pvrst"` + "\n"
 	config += `	pathcost_option = "long"` + "\n"
 	config += `	interfaces = {` + "\n"
 	config += `		"eth1/9" = {` + "\n"
@@ -108,6 +114,16 @@ func testAccDataSourceNxosSpanningTreeConfig() string {
 	config += `			linecard_issu = "auto"` + "\n"
 	config += `			prestandard_configuration = "enabled"` + "\n"
 	config += `			simulate_pvst = "enabled"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	vlans = {` + "\n"
+	config += `		"100" = {` + "\n"
+	config += `			admin_state = "disabled"` + "\n"
+	config += `			diameter = 3` + "\n"
+	config += `			forward_time = 20` + "\n"
+	config += `			hello_time = 5` + "\n"
+	config += `			max_age = 25` + "\n"
+	config += `			priority = "4096"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"

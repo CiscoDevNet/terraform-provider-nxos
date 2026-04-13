@@ -63,7 +63,7 @@ func (r *SpanningTreeResource) Metadata(ctx context.Context, req resource.Metada
 func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.").AddApiDocumentation("stpEntity", "Discovery%20Protocols/stp:Entity/", []string{"stpInst", "stpIf"}, []string{"Discovery%20Protocols/stp:Inst/", "Discovery%20Protocols/stp:If/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.").AddApiDocumentation("stpEntity", "Discovery%20Protocols/stp:Entity/", []string{"stpInst", "stpIf", "stpVlan"}, []string{"Discovery%20Protocols/stp:Inst/", "Discovery%20Protocols/stp:If/", "Discovery%20Protocols/stp:Vlan/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -230,6 +230,74 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 					},
 				},
 			},
+			"vlans": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Per-VLAN Spanning Tree configuration.\n  - Map key: `vlan_id` - Access Encapsulation.\n  - Key range: `1`-`4096`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"diameter": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("network diameter.").AddIntegerRangeDescription(2, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(2, 7),
+							},
+						},
+						"enabled_interfaces": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interfaces that have vlan cost/priority enabled.").String,
+							Optional:            true,
+						},
+						"forward_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("STP forward delay.").AddIntegerRangeDescription(4, 30).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(4, 30),
+							},
+						},
+						"hello_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("STP Hello interval.").AddIntegerRangeDescription(1, 10).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 10),
+							},
+						},
+						"max_age": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("STP max age interval.").AddIntegerRangeDescription(6, 40).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(6, 40),
+							},
+						},
+						"priority": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bridge Priority.").AddStringEnumDescription("0", "4096", "8192", "12288", "16384", "20480", "24576", "28672", "32768", "36864", "40960", "45056", "49152", "53248", "57344", "61440").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("0", "4096", "8192", "12288", "16384", "20480", "24576", "28672", "32768", "36864", "40960", "45056", "49152", "53248", "57344", "61440"),
+							},
+						},
+						"root_mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bridge Root Config mode.").AddStringEnumDescription("disabled", "enabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disabled", "enabled"),
+							},
+						},
+						"root_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bridge Root Type.").AddStringEnumDescription("none", "primary", "secondary").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("none", "primary", "secondary"),
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -339,7 +407,7 @@ func (r *SpanningTreeResource) Read(ctx context.Context, req resource.ReadReques
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "stpInst,stpIf")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "stpInst,stpIf,stpVlan")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -93,7 +93,7 @@ child_classes:
           - mst
           - pvrst
         description: "Spanning tree mode."
-        example: mst
+        example: pvrst
       - nxos_name: pathcostOp
         tf_name: pathcost_option
         type: String
@@ -222,6 +222,105 @@ child_classes:
               - disabled
             description: "Port simulate pvst."
             example: enabled
+      - class_name: stpVlan
+        rn: vlan-[%v]
+        type: list
+        no_delete: true
+        tf_name: vlans
+        description: 'Per-VLAN Spanning Tree configuration.'
+        doc_path: Discovery%20Protocols/stp:Vlan/
+        attributes:
+          - nxos_name: id
+            tf_name: vlan_id
+            type: Int64
+            id: true
+            min_int: 1
+            max_int: 4096
+            description: "Access Encapsulation."
+            example: 100
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            enum_values:
+              - enabled
+              - disabled
+            description: "The administrative state of the object or policy."
+            example: disabled
+          - nxos_name: diameter
+            tf_name: diameter
+            type: Int64
+            min_int: 2
+            max_int: 7
+            description: "network diameter."
+            example: 3
+          - nxos_name: enabledIntf
+            tf_name: enabled_interfaces
+            type: String
+            exclude_test: true
+            description: "Interfaces that have vlan cost/priority enabled."
+            example: "eth1/9"
+          - nxos_name: fwdTime
+            tf_name: forward_time
+            type: Int64
+            min_int: 4
+            max_int: 30
+            description: "STP forward delay."
+            example: 20
+          - nxos_name: helloTime
+            tf_name: hello_time
+            type: Int64
+            min_int: 1
+            max_int: 10
+            description: "STP Hello interval."
+            example: 5
+          - nxos_name: maxAge
+            tf_name: max_age
+            type: Int64
+            min_int: 6
+            max_int: 40
+            description: "STP max age interval."
+            example: 25
+          - nxos_name: priority
+            tf_name: priority
+            type: String
+            enum_values:
+              - "0"
+              - "4096"
+              - "8192"
+              - "12288"
+              - "16384"
+              - "20480"
+              - "24576"
+              - "28672"
+              - "32768"
+              - "36864"
+              - "40960"
+              - "45056"
+              - "49152"
+              - "53248"
+              - "57344"
+              - "61440"
+            description: "Bridge Priority."
+            example: "4096"
+          - nxos_name: rootMode
+            tf_name: root_mode
+            type: String
+            exclude_test: true
+            enum_values:
+              - disabled
+              - enabled
+            description: "Bridge Root Config mode."
+            example: enabled
+          - nxos_name: rootType
+            tf_name: root_type
+            type: String
+            exclude_test: true
+            enum_values:
+              - none
+              - primary
+              - secondary
+            description: "Bridge Root Type."
+            example: primary
 test_prerequisites:
   - dn: sys/intf/phys-[eth1/9]
     class_name: l1PhysIf

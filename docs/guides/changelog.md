@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.9.1
+
+- Add `l1PhysIfExtended` child class to `nxos_physical_interface` resource and data source (storm control, switchport, flow control, chassis, and extended interface attributes)
+
 ## 0.9.0
 
 - Add CDP configuration to `nxos_system` resource and data source

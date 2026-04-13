@@ -47,3 +47,16 @@ gen:
 	terraform fmt -recursive ./examples/
 	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
 	go run gen/doc_category.go
+
+# Preview unreleased changelog entries from .changelog/ fragments
+.PHONY: changelog-preview
+changelog-preview:
+	go run ./gen/changelog.go preview
+
+# Finalize a release: collect changelog fragments into CHANGELOG.md and regenerate
+# Usage: make release VERSION=X.Y.Z
+.PHONY: release
+release:
+	@if [ -z "$(VERSION)" ]; then echo "Usage: make release VERSION=X.Y.Z"; exit 1; fi
+	go run ./gen/changelog.go release $(VERSION)
+	$(MAKE) gen

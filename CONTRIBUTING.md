@@ -18,6 +18,7 @@ any real-time space e.g., Slack, Discord, etc.
   - [Building the Provider](#building-the-provider)
   - [Code Generation](#code-generation)
   - [Acceptance Tests](#acceptance-tests)
+  - [Changelog Entries](#changelog-entries)
 - [Sending Pull Requests](#sending-pull-requests)
 - [Other Ways to Contribute](#other-ways-to-contribute)
 
@@ -90,6 +91,22 @@ make test
 # Run tests for a specific definition (by name from gen/definitions/*.yaml)
 make test NAME="BGP"
 make test NAME="Loopback Interface"
+```
+
+### Changelog Entries
+
+For pull requests with user-facing changes (new resources, bug fixes, breaking changes, etc.), add a changelog entry. Instead of editing `CHANGELOG.md` directly, create a new markdown file in the `.changelog/` directory with a descriptive filename (e.g., `.changelog/add-bfd-resource.md`). The file should contain one or more lines describing the change:
+
+```
+- Add `nxos_bfd` resource and data source
+```
+
+Multiple entries per file are allowed if the PR covers several changes. The filename is for human identification only (lowercase, hyphens) and does not affect the output.
+
+At release time, all fragment files are collected into `CHANGELOG.md` under the new version header and the fragment files are deleted. To preview unreleased entries locally, run:
+
+```shell
+make changelog-preview
 ```
 
 ## Sending Pull Requests

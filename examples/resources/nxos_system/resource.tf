@@ -80,6 +80,11 @@ resource "nxos_system" "example" {
       }
     }
   }
+  nd_vpc_domains = {
+    "100" = {
+      nd_sync = "enabled"
+    }
+  }
   clock_admin_state                = "enabled"
   clock_authentication_state       = "disabled"
   clock_format                     = "24hours"

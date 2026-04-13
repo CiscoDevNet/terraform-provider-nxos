@@ -158,6 +158,14 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.tlv_management_ipv4", "10.0.0.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.tlv_management_ipv6", "2001:db8::1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.tlv_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_device_id_type", "mac"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_hold_interval", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_pnp_startup_vlan", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_transmit_frequency", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_version", "v1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_interfaces.eth1/1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_interfaces.eth1/1.port_description", "My Port"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_rate_limiter", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "console_exec_timeout", "30"))
@@ -360,6 +368,18 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `			tlv_management_ipv4 = "10.0.0.1"` + "\n"
 	config += `			tlv_management_ipv6 = "2001:db8::1"` + "\n"
 	config += `			tlv_vlan = 100` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	cdp_admin_state = "enabled"` + "\n"
+	config += `	cdp_device_id_type = "mac"` + "\n"
+	config += `	cdp_hold_interval = 120` + "\n"
+	config += `	cdp_pnp_startup_vlan = 2` + "\n"
+	config += `	cdp_transmit_frequency = 30` + "\n"
+	config += `	cdp_version = "v1"` + "\n"
+	config += `	cdp_interfaces = {` + "\n"
+	config += `		"eth1/1" = {` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			port_description = "My Port"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	copp_admin_state = "enabled"` + "\n"

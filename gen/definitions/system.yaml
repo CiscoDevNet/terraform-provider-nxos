@@ -2222,16 +2222,6 @@ child_classes:
     rn: cdp
     type: single
     no_delete: true
-    attributes:
-      - nxos_name: adminSt
-        tf_name: cdp_admin_state
-        type: String
-        description: 'The administrative state of the object or policy.'
-        enum_values:
-          - enabled
-          - disabled
-        example: enabled
-        exclude_test: true
     child_classes:
       - class_name: cdpInst
         doc_path: Discovery%20Protocols/cdp%3AInst/
@@ -2240,22 +2230,13 @@ child_classes:
         no_delete: true
         attributes:
           - nxos_name: adminSt
-            tf_name: cdp_instance_admin_state
+            tf_name: cdp_admin_state
             type: String
             description: 'The administrative state of the object or policy.'
             enum_values:
               - enabled
               - disabled
             example: enabled
-            exclude_test: true
-          - nxos_name: ctrl
-            tf_name: cdp_control
-            type: String
-            description: 'The control state.'
-            enum_values:
-              - stateful-ha
-            example: stateful-ha
-            exclude_test: true
           - nxos_name: devIdType
             tf_name: cdp_device_id_type
             type: String
@@ -2266,7 +2247,6 @@ child_classes:
               - serialNum
               - sysName
             example: mac
-            exclude_test: true
           - nxos_name: holdIntvl
             tf_name: cdp_hold_interval
             type: Int64
@@ -2274,7 +2254,6 @@ child_classes:
             min_int: 10
             max_int: 255
             example: 120
-            exclude_test: true
           - nxos_name: pnpStartVlan
             tf_name: cdp_pnp_startup_vlan
             type: Int64
@@ -2282,7 +2261,6 @@ child_classes:
             min_int: 1
             max_int: 4094
             example: 2
-            exclude_test: true
           - nxos_name: txFreq
             tf_name: cdp_transmit_frequency
             type: Int64
@@ -2290,7 +2268,6 @@ child_classes:
             min_int: 5
             max_int: 254
             example: 30
-            exclude_test: true
           - nxos_name: ver
             tf_name: cdp_version
             type: String
@@ -2299,12 +2276,12 @@ child_classes:
               - v1
               - v2
             example: v1
-            exclude_test: true
         child_classes:
           - class_name: cdpIf
             doc_path: Discovery%20Protocols/cdp%3AIf/
             rn: if-[%s]
             type: list
+            no_delete: true
             tf_name: cdp_interfaces
             description: 'CDP interface configuration.'
             attributes:
@@ -2314,7 +2291,6 @@ child_classes:
                 id: true
                 description: 'An identifier.'
                 example: eth1/1
-                exclude_test: true
               - nxos_name: adminSt
                 tf_name: admin_state
                 type: String
@@ -2323,31 +2299,11 @@ child_classes:
                   - enabled
                   - disabled
                 example: enabled
-                exclude_test: true
-              - nxos_name: descr
-                tf_name: description
-                type: String
-                description: 'Description.'
-                example: My Description
-                exclude_test: true
-              - nxos_name: locDesc
-                tf_name: location_description
-                type: String
-                description: 'Location Description.'
-                example: My Location
-                exclude_test: true
-              - nxos_name: name
-                tf_name: name
-                type: String
-                description: 'The name of the object.'
-                example: eth1/1
-                exclude_test: true
               - nxos_name: portDesc
                 tf_name: port_description
                 type: String
                 description: 'A neighbor port description.'
                 example: My Port
-                exclude_test: true
   - class_name: coppEntity
     doc_path: Security%20and%20Policing/copp:Entity/
     rn: copp

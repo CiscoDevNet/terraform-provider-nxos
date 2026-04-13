@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add `nxos_bfd` resource and data source
 - Add CFS distribution configuration to `nxos_system` resource and data source
 - Add per-VLAN STP configuration to `nxos_spanning_tree` resource and data source
 - Add route redistribution configuration to `nxos_ospf` resource and data source

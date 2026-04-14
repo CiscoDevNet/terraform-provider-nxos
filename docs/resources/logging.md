@@ -41,6 +41,7 @@ resource "nxos_logging" "example" {
   file_description          = "syslog file"
   file_name                 = "messages"
   file_persistent_threshold = 90
+  file_severity             = "warnings"
   file_size                 = 4194304
   remote_destinations = {
     "10.0.0.1" = {
@@ -88,6 +89,8 @@ resource "nxos_logging" "example" {
 - `file_name` (String) Object name.
 - `file_persistent_threshold` (Number) Set persistent logging utilization alert threshold in percentage.
   - Range: `0`-`99`
+- `file_severity` (String) The severity of the event, alert, or issue that caused the syslog entry to be generated.
+  - Choices: `emergencies`, `alerts`, `critical`, `errors`, `warnings`, `notifications`, `information`, `debugging`
 - `file_size` (Number) Specifies the maximum file size.
   - Range: `4096`-`4194304`
 - `level` (String) Logging severity level for all the facilites.

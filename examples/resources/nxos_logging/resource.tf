@@ -10,6 +10,7 @@ resource "nxos_logging" "example" {
   file_description          = "syslog file"
   file_name                 = "messages"
   file_persistent_threshold = 90
+  file_severity             = "warnings"
   file_size                 = 4194304
   remote_destinations = {
     "10.0.0.1" = {

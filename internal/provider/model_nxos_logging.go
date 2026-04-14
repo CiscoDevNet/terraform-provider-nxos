@@ -46,6 +46,7 @@ type Logging struct {
 	FileDescription           types.String                         `tfsdk:"file_description"`
 	FileName                  types.String                         `tfsdk:"file_name"`
 	FilePersistentThreshold   types.Int64                          `tfsdk:"file_persistent_threshold"`
+	FileSeverity              types.String                         `tfsdk:"file_severity"`
 	FileSize                  types.Int64                          `tfsdk:"file_size"`
 	RemoteDestinations        map[string]LoggingRemoteDestinations `tfsdk:"remote_destinations"`
 	SourceInterfaceAdminState types.String                         `tfsdk:"source_interface_admin_state"`
@@ -170,6 +171,9 @@ func (data Logging) toBody(config Logging) nxos.Body {
 		}
 		if !data.FilePersistentThreshold.IsUnknown() && !data.FilePersistentThreshold.IsNull() {
 			attrs, _ = sjson.Set(attrs, "persistentThreshold", strconv.FormatInt(data.FilePersistentThreshold.ValueInt64(), 10))
+		}
+		if !data.FileSeverity.IsUnknown() && !data.FileSeverity.IsNull() {
+			attrs, _ = sjson.Set(attrs, "severity", data.FileSeverity.ValueString())
 		}
 		if !data.FileSize.IsUnknown() && !data.FileSize.IsNull() {
 			attrs, _ = sjson.Set(attrs, "size", strconv.FormatInt(data.FileSize.ValueInt64(), 10))
@@ -339,6 +343,7 @@ func (data *Logging) fromBody(res gjson.Result) {
 			data.FileDescription = types.StringValue(rsyslogFile.Get("syslogFile.attributes.descr").String())
 			data.FileName = types.StringValue(rsyslogFile.Get("syslogFile.attributes.name").String())
 			data.FilePersistentThreshold = types.Int64Value(rsyslogFile.Get("syslogFile.attributes.persistentThreshold").Int())
+			data.FileSeverity = types.StringValue(rsyslogFile.Get("syslogFile.attributes.severity").String())
 			data.FileSize = types.Int64Value(rsyslogFile.Get("syslogFile.attributes.size").Int())
 		}
 		rsyslogSyslog.Get("syslogSyslog.children").ForEach(
@@ -538,6 +543,11 @@ func (data *Logging) updateFromBody(res gjson.Result) {
 			data.FilePersistentThreshold = types.Int64Value(rsyslogFile.Get("syslogFile.attributes.persistentThreshold").Int())
 		} else {
 			data.FilePersistentThreshold = types.Int64Null()
+		}
+		if !data.FileSeverity.IsNull() {
+			data.FileSeverity = types.StringValue(rsyslogFile.Get("syslogFile.attributes.severity").String())
+		} else {
+			data.FileSeverity = types.StringNull()
 		}
 		if !data.FileSize.IsNull() {
 			data.FileSize = types.Int64Value(rsyslogFile.Get("syslogFile.attributes.size").Int())

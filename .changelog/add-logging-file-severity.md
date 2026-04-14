@@ -1,1 +1,0 @@
-- Add `file_severity` attribute to `nxos_logging` resource and data source

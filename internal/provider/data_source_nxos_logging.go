@@ -104,6 +104,10 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Set persistent logging utilization alert threshold in percentage.",
 				Computed:            true,
 			},
+			"file_severity": schema.StringAttribute{
+				MarkdownDescription: "The severity of the event, alert, or issue that caused the syslog entry to be generated.",
+				Computed:            true,
+			},
 			"file_size": schema.Int64Attribute{
 				MarkdownDescription: "Specifies the maximum file size.",
 				Computed:            true,

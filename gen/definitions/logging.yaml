@@ -130,6 +130,20 @@ child_classes:
             min_int: 0
             max_int: 99
             example: 90
+          - nxos_name: severity
+            tf_name: file_severity
+            type: String
+            description: 'The severity of the event, alert, or issue that caused the syslog entry to be generated.'
+            enum_values:
+              - "emergencies"
+              - "alerts"
+              - "critical"
+              - "errors"
+              - "warnings"
+              - "notifications"
+              - "information"
+              - "debugging"
+            example: "warnings"
           - nxos_name: size
             tf_name: file_size
             type: Int64

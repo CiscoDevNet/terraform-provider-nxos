@@ -36,6 +36,7 @@ func TestAccDataSourceNxosLogging(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_description", "syslog file"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_name", "messages"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_persistent_threshold", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_severity", "warnings"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_size", "4194304"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.description", "remote syslog server"))
@@ -87,6 +88,7 @@ func testAccDataSourceNxosLoggingConfig() string {
 	config += `	file_description = "syslog file"` + "\n"
 	config += `	file_name = "messages"` + "\n"
 	config += `	file_persistent_threshold = 90` + "\n"
+	config += `	file_severity = "warnings"` + "\n"
 	config += `	file_size = 4194304` + "\n"
 	config += `	remote_destinations = {` + "\n"
 	config += `		"10.0.0.1" = {` + "\n"

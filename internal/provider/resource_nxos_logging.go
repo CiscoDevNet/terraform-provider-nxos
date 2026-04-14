@@ -128,6 +128,13 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 					int64validator.Between(0, 99),
 				},
 			},
+			"file_severity": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The severity of the event, alert, or issue that caused the syslog entry to be generated.").AddStringEnumDescription("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging"),
+				},
+			},
 			"file_size": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies the maximum file size.").AddIntegerRangeDescription(4096, 4194304).String,
 				Optional:            true,

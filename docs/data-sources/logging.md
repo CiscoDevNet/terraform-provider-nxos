@@ -52,6 +52,7 @@ data "nxos_logging" "example" {
 - `file_description` (String) Description of the specified attribute.
 - `file_name` (String) Object name.
 - `file_persistent_threshold` (Number) Set persistent logging utilization alert threshold in percentage.
+- `file_severity` (String) The severity of the event, alert, or issue that caused the syslog entry to be generated.
 - `file_size` (Number) Specifies the maximum file size.
 - `id` (String) The distinguished name of the object.
 - `level` (String) Logging severity level for all the facilites.

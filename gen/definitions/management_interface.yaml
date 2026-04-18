@@ -1,0 +1,105 @@
+---
+name: Management Interface
+class_name: topSystem
+dn: sys
+no_delete: true
+ds_description: This data source can read the management interface configuration on NX-OS devices, including administrative state, description, speed, duplex, and VRF membership.
+res_description: This resource can manage the management interface configuration on NX-OS devices, including administrative state, description, speed, duplex, and VRF membership.
+doc_category: Interface
+child_classes:
+  - class_name: mgmtMgmtIf
+    doc_path: System/mgmt:MgmtIf/
+    rn: mgmt-[%s]
+    type: list
+    no_delete: true
+    tf_name: management_interfaces
+    description: 'List of management interfaces.'
+    attributes:
+      - nxos_name: id
+        tf_name: interface_id
+        type: String
+        id: true
+        description: 'Must match first field in the output of `show intf brief`. Example: `mgmt0`.'
+        example: mgmt0
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'Administrative port state.'
+        enum_values:
+          - down
+          - up
+        example: up
+      - nxos_name: autoNeg
+        tf_name: auto_negotiation
+        type: String
+        description: 'Administrative port auto-negotiation.'
+        enum_values:
+          - 'on'
+          - 'off'
+          - 25G
+        example: 'on'
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: 'Interface description.'
+        example: My Description
+      - nxos_name: duplex
+        tf_name: duplex
+        type: String
+        description: 'Duplex.'
+        enum_values:
+          - auto
+          - full
+          - half
+        example: auto
+      - nxos_name: mtu
+        tf_name: mtu
+        type: Int64
+        description: 'Administrative port mtu.'
+        min_int: 576
+        max_int: 9216
+        example: 1500
+      - nxos_name: snmpTrapSt
+        tf_name: snmp_trap_state
+        type: String
+        description: 'Administrative port snmp trap state.'
+        enum_values:
+          - enable
+          - disable
+        example: enable
+      - nxos_name: speed
+        tf_name: speed
+        type: String
+        description: 'Administrative port speed.'
+        enum_values:
+          - unknown
+          - 100M
+          - 1G
+          - 10G
+          - 40G
+          - auto
+          - auto 100M
+          - auto 100M 1G
+          - 100G
+          - 25G
+          - 10M
+          - 50G
+          - 200G
+          - 400G
+          - 2.5G
+          - 5G
+          - auto 2.5G 5G 10G
+          - auto 100M 1G 2.5G 5G
+          - 800G
+        example: auto
+    child_classes:
+      - class_name: nwRtVrfMbr
+        rn: rtvrfMbr
+        type: single
+        doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+        attributes:
+          - nxos_name: tDn
+            tf_name: vrf_dn
+            type: String
+            description: 'DN of VRF. For example: `sys/inst-management`.'
+            example: sys/inst-management

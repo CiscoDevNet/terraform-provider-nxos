@@ -1,0 +1,1 @@
+- Add `nxos_management_interface` resource and data source

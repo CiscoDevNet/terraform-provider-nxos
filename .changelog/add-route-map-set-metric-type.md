@@ -1,0 +1,1 @@
+- Add set metric type configuration to `nxos_route_policy` resource and data source

@@ -1851,6 +1851,22 @@ child_classes:
             description: 'VTP traps.'
             no_delete: true
             child_classes:
+              - class_name: snmpNotifs
+                doc_path: System/snmp:Notifs/
+                rn: notifs
+                type: single
+                tf_name: vtp_notifs
+                description: 'VTP notifs traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: vtp_notifs_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
               - class_name: snmpVlancreate
                 doc_path: System/snmp:Vlancreate/
                 rn: vlancreate

@@ -116,6 +116,7 @@ func TestAccNxosSNMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "system_clock_change_notification_trap_status", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "upgrade_job_status_notify_trap_status", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "upgrade_op_notify_on_completion_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "vtp_notifs_trap_status", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "vtp_vlan_create_trap_status", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "vtp_vlan_delete_trap_status", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "rmon_events.1.description", "Test event"))
@@ -288,6 +289,7 @@ func testAccNxosSNMPConfig_all(includeWriteOnly bool) string {
 	config += `	system_clock_change_notification_trap_status = "enable"` + "\n"
 	config += `	upgrade_job_status_notify_trap_status = "enable"` + "\n"
 	config += `	upgrade_op_notify_on_completion_trap_status = "enable"` + "\n"
+	config += `	vtp_notifs_trap_status = "enable"` + "\n"
 	config += `	vtp_vlan_create_trap_status = "enable"` + "\n"
 	config += `	vtp_vlan_delete_trap_status = "enable"` + "\n"
 	config += `	rmon_events = {` + "\n"

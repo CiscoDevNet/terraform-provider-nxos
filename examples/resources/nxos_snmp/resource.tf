@@ -120,6 +120,7 @@ resource "nxos_snmp" "example" {
   system_clock_change_notification_trap_status          = "enable"
   upgrade_job_status_notify_trap_status                 = "enable"
   upgrade_op_notify_on_completion_trap_status           = "enable"
+  vtp_notifs_trap_status                                = "enable"
   vtp_vlan_create_trap_status                           = "enable"
   vtp_vlan_delete_trap_status                           = "enable"
   rmon_events = {

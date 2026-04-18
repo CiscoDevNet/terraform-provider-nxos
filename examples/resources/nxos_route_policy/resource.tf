@@ -56,6 +56,7 @@ resource "nxos_route_policy" "example" {
           set_metric_load        = 10
           set_metric_mtu         = 1500
           set_metric_reliability = 100
+          set_metric_type        = "type-1"
         }
       }
     }

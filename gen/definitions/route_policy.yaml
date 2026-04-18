@@ -385,4 +385,21 @@ child_classes:
                 min_int: 0
                 max_int: 255
                 example: 100
+          - class_name: rtmapSetMetricType
+            doc_path: Routing%20and%20Forwarding/rtmap:SetMetricType/
+            rn: smetrict
+            type: single
+            tf_name: set_metric_type
+            description: 'Set Metric Type.'
+            attributes:
+              - nxos_name: metricT
+                tf_name: set_metric_type
+                type: String
+                description: 'Metric Type.'
+                enum_values:
+                  - type-1
+                  - type-2
+                  - internal
+                  - external
+                example: type-1
 test_prerequisites:

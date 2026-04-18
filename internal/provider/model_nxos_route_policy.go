@@ -92,6 +92,7 @@ type RoutePolicyRouteMapsEntries struct {
 	SetMetricLoad                  types.Int64                                                    `tfsdk:"set_metric_load"`
 	SetMetricMtu                   types.Int64                                                    `tfsdk:"set_metric_mtu"`
 	SetMetricReliability           types.Int64                                                    `tfsdk:"set_metric_reliability"`
+	SetMetricType                  types.String                                                   `tfsdk:"set_metric_type"`
 }
 
 type RoutePolicyRouteMapsEntriesMatchRoutePrefixLists struct {
@@ -340,6 +341,13 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 					if attrs != "{}" {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetMetric.attributes", attrs)
 					}
+					attrs = "{}"
+					if !child.SetMetricType.IsUnknown() && !child.SetMetricType.IsNull() {
+						attrs, _ = sjson.Set(attrs, "metricT", child.SetMetricType.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetMetricType.attributes", attrs)
+					}
 				}
 			}
 		}
@@ -530,6 +538,20 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 												nestedChildrtmapEntry.SetMetricLoad = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricL").Int())
 												nestedChildrtmapEntry.SetMetricMtu = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricM").Int())
 												nestedChildrtmapEntry.SetMetricReliability = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricR").Int())
+											}
+											{
+												var rrtmapSetMetricType gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetMetricType.attributes.rn").String()
+														if rnValue == "smetrict" {
+															rrtmapSetMetricType = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetMetricType = types.StringValue(rrtmapSetMetricType.Get("rtmapSetMetricType.attributes.metricT").String())
 											}
 											if child.Entries == nil {
 												child.Entries = make(map[string]RoutePolicyRouteMapsEntries)
@@ -892,6 +914,24 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					ncItem.SetMetricReliability = types.Int64Value(rrtmapSetMetric.Get("rtmapSetMetric.attributes.metricR").Int())
 				} else {
 					ncItem.SetMetricReliability = types.Int64Null()
+				}
+			}
+			{
+				var rrtmapSetMetricType gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetMetricType.attributes.rn").String()
+						if rnValue == "smetrict" {
+							rrtmapSetMetricType = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetMetricType.IsNull() {
+					ncItem.SetMetricType = types.StringValue(rrtmapSetMetricType.Get("rtmapSetMetricType.attributes.metricT").String())
+				} else {
+					ncItem.SetMetricType = types.StringNull()
 				}
 			}
 			item.Entries[nc] = ncItem

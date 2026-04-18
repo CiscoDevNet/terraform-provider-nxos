@@ -63,6 +63,7 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_load", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_mtu", "1500"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_reliability", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_type", "type-1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -140,6 +141,7 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `					set_metric_load = 10` + "\n"
 	config += `					set_metric_mtu = 1500` + "\n"
 	config += `					set_metric_reliability = 100` + "\n"
+	config += `					set_metric_type = "type-1"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

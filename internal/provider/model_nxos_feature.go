@@ -54,6 +54,7 @@ type Feature struct {
 	Ngmvpn        types.String `tfsdk:"ngmvpn"`
 	Ngoam         types.String `tfsdk:"ngoam"`
 	NvOverlay     types.String `tfsdk:"nv_overlay"`
+	Nxapi         types.String `tfsdk:"nxapi"`
 	Ospf          types.String `tfsdk:"ospf"`
 	Ospfv3        types.String `tfsdk:"ospfv3"`
 	Pim           types.String `tfsdk:"pim"`
@@ -220,6 +221,13 @@ func (data Feature) toBody(config Feature) nxos.Body {
 	}
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmNvo.attributes", attrs)
+	}
+	attrs = "{}"
+	if !data.Nxapi.IsUnknown() && !data.Nxapi.IsNull() {
+		attrs, _ = sjson.Set(attrs, "adminSt", data.Nxapi.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmNxapi.attributes", attrs)
 	}
 	attrs = "{}"
 	if !data.Ospf.IsUnknown() && !data.Ospf.IsNull() {
@@ -537,6 +545,20 @@ func (data *Feature) fromBody(res gjson.Result) {
 			},
 		)
 		data.NvOverlay = types.StringValue(rfmNvo.Get("fmNvo.attributes.adminSt").String())
+	}
+	{
+		var rfmNxapi gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmNxapi.attributes.rn").String()
+				if rnValue == "nxapi" {
+					rfmNxapi = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Nxapi = types.StringValue(rfmNxapi.Get("fmNxapi.attributes.adminSt").String())
 	}
 	{
 		var rfmOspf gjson.Result
@@ -969,6 +991,22 @@ func (data *Feature) updateFromBody(res gjson.Result) {
 	} else {
 		data.NvOverlay = types.StringNull()
 	}
+	var rfmNxapi gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("fmNxapi.attributes.rn").String()
+			if rnValue == "nxapi" {
+				rfmNxapi = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.Nxapi.IsNull() {
+		data.Nxapi = types.StringValue(rfmNxapi.Get("fmNxapi.attributes.adminSt").String())
+	} else {
+		data.Nxapi = types.StringNull()
+	}
 	var rfmOspf gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -1346,6 +1384,17 @@ func (data Feature) toDeleteBody() nxos.Body {
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".fmNvo"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		}
+	}
+	{
+		childBody := ""
+		if !data.Nxapi.IsNull() {
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".fmNxapi"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}

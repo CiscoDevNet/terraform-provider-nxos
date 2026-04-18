@@ -1,0 +1,1 @@
+- Add NXAPI feature configuration to `nxos_feature` resource and data source

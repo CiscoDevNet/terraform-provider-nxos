@@ -15,6 +15,7 @@ resource "nxos_feature" "example" {
   ngmvpn         = "enabled"
   ngoam          = "enabled"
   nv_overlay     = "enabled"
+  nxapi          = "enabled"
   ospf           = "enabled"
   ospfv3         = "enabled"
   pim            = "enabled"

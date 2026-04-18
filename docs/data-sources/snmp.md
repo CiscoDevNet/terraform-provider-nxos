@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.
   API Documentation
-  snmpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Entity/snmpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Inst/snmpSysInfo https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SysInfo/snmpGlobals https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Globals/snmpSourceInterfaceTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SourceInterfaceTraps/snmpLocalUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LocalUser/snmpUserGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/snmpHost https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/snmpUseVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UseVrf/snmpTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/snmpRmon https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/snmpEvent https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/
+  snmpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Entity/snmpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Inst/snmpSysInfo https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SysInfo/snmpGlobals https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Globals/snmpSourceInterfaceTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SourceInterfaceTraps/snmpLocalUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LocalUser/snmpUserGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/snmpHost https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/snmpUseVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UseVrf/snmpTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/snmpTaaa https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Taaa/snmpServerStateChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:ServerStateChange/snmpTbfd https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tbfd/snmpSessionDown https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SessionDown/snmpSessionUp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SessionUp/snmpTbridge https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tbridge/snmpNewRoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:NewRoot/snmpTopologyChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:TopologyChange/snmpTcallhome https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tcallhome/snmpEventNotify https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EventNotify/snmpSmtpSendFail https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SmtpSendFail/snmpTcfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tcfs/snmpStateChangeNotif https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:StateChangeNotif/snmpMergeFailure https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:MergeFailure/snmpTconfig https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tconfig/snmpCLIRunningConfigChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CLIRunningConfigChange/snmpTentity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tentity/snmpEntityMIBChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityMIBChange/snmpEntityMIBEnableStatusNotification https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityMIBEnableStatusNotification/snmpEntityFanStatusChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityFanStatusChange/snmpEntityModuleInserted https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityModuleInserted/snmpEntityModuleRemoved https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityModuleRemoved/snmpEntityModuleStatusChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityModuleStatusChange/snmpEntityPowerOutChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityPowerOutChange/snmpEntityPowerStatusChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityPowerStatusChange/snmpEntitySensor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntitySensor/snmpEntityUnrecognisedModule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityUnrecognisedModule/snmpTfcdomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfcdomain/snmpDmDomainIdNotAssignedNotify https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:DmDomainIdNotAssignedNotify/snmpDmFabricChangeNotify https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:DmFabricChangeNotify/snmpDmNewPrincipalSwitchNotify https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:DmNewPrincipalSwitchNotify/snmpTfcns https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfcns/snmpTfcs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfcs/snmpTfctrace https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfctrace/snmpTfdmi https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfdmi/snmpTfeaturecontrol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfeaturecontrol/snmpFeatureOpStatusChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:FeatureOpStatusChange/snmpCiscoFeatOpStatusChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CiscoFeatOpStatusChange/snmpTfspf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfspf/snmpTgeneric https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tgeneric/snmpColdStart https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:ColdStart/snmpWarmStart https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:WarmStart/snmpThsrp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Thsrp/snmpStateChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:StateChange/snmpTip https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tip/snmpTlicense https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tlicense/snmpNotifyLicenseExpiry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:NotifyLicenseExpiry/snmpNotifyLicenseExpiryWarning https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:NotifyLicenseExpiryWarning/snmpNotifyLicenseFileMissing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:NotifyLicenseFileMissing/snmpNotifyNoLicenceForFeature https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:NotifyNoLicenceForFeature/snmpTlink https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tlink/snmpCieLinkDown https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CieLinkDown/snmpCieLinkUp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CieLinkUp/snmpCiscoXcvrMonStatusChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CiscoXcvrMonStatusChange/snmpCmnMacMoveNotification https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CmnMacMoveNotification/snmpDelayedLinkStateChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:DelayedLinkStateChange/snmpExtendedLinkDown https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:ExtendedLinkDown/snmpExtendedLinkUp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:ExtendedLinkUp/snmpLinkDown https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LinkDown/snmpLinkUp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LinkUp/snmpCErrDisableInterfaceEventRev1 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CErrDisableInterfaceEventRev1/snmpTlldp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tlldp/snmpLldpRemTablesChange https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LldpRemTablesChange/snmpTmmode https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tmmode/snmpCseMaintModeChangeNotify https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CseMaintModeChangeNotify/snmpCseNormalModeChangeNotify https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CseNormalModeChangeNotify/snmpTmpls https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tmpls/snmpLdp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Ldp/snmpLdpSessiondown https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LdpSessiondown/snmpLdpSessionup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LdpSessionup/snmpVpn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Vpn/snmpVpnMaxThreshcleared https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:VpnMaxThreshcleared/snmpVpnMaxThreshexceeded https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:VpnMaxThreshexceeded/snmpVpnMidThreshexceeded https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:VpnMidThreshexceeded/snmpVpnVrfdown https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:VpnVrfdown/snmpVpnVrfup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:VpnVrfup/snmpTmsdp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tmsdp/snmpMsdpBackwardTransition https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:MsdpBackwardTransition/snmpTpim https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tpim/snmpPimNeighborLoss https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:PimNeighborLoss/snmpTpoe https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tpoe/snmpTportsecurity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tportsecurity/snmpAccessSecureMacViolation https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:AccessSecureMacViolation/snmpTrunkSecureMacViolation https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:TrunkSecureMacViolation/snmpTrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Trf/snmpRedundancyFramework https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:RedundancyFramework/snmpTrmon https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Trmon/snmpRisingAlarm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:RisingAlarm/snmpFallingAlarm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:FallingAlarm/snmpHcRisingAlarm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:HcRisingAlarm/snmpHcFallingAlarm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:HcFallingAlarm/snmpTrscn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Trscn/snmpTscsi https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tscsi/snmpTsnmp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tsnmp/snmpAuthentication https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Authentication/snmpTstormControl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:TstormControl/snmpCpscEventRev1 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CpscEventRev1/snmpTstpx https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tstpx/snmpInconsistency https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Inconsistency/snmpLoopInconsistency https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LoopInconsistency/snmpRootInconsistency https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:RootInconsistency/snmpTsyslog https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tsyslog/snmpMessageGenerated https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:MessageGenerated/snmpTsysmgr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tsysmgr/snmpCseFailSwCoreNotifyExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CseFailSwCoreNotifyExtended/snmpTsystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tsystem/snmpClockChangeNotification https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:ClockChangeNotification/snmpTupgrade https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tupgrade/snmpUpgradeJobStatusNotify https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UpgradeJobStatusNotify/snmpUpgradeOpNotifyOnCompletion https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UpgradeOpNotifyOnCompletion/snmpTvsan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tvsan/snmpTvtp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tvtp/snmpNotifs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Notifs/snmpVlancreate https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Vlancreate/snmpVlandelete https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Vlandelete/snmpTzone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tzone/snmpRmon https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/snmpEvent https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/
 ---
 
 # nxos_snmp (Data Source)
@@ -24,6 +24,122 @@ This data source can read the SNMP configuration on NX-OS devices, including sys
 - [snmpHost](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/)
 - [snmpUseVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UseVrf/)
 - [snmpTraps](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/)
+- [snmpTaaa](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Taaa/)
+- [snmpServerStateChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:ServerStateChange/)
+- [snmpTbfd](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tbfd/)
+- [snmpSessionDown](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SessionDown/)
+- [snmpSessionUp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SessionUp/)
+- [snmpTbridge](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tbridge/)
+- [snmpNewRoot](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:NewRoot/)
+- [snmpTopologyChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:TopologyChange/)
+- [snmpTcallhome](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tcallhome/)
+- [snmpEventNotify](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EventNotify/)
+- [snmpSmtpSendFail](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SmtpSendFail/)
+- [snmpTcfs](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tcfs/)
+- [snmpStateChangeNotif](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:StateChangeNotif/)
+- [snmpMergeFailure](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:MergeFailure/)
+- [snmpTconfig](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tconfig/)
+- [snmpCLIRunningConfigChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CLIRunningConfigChange/)
+- [snmpTentity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tentity/)
+- [snmpEntityMIBChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityMIBChange/)
+- [snmpEntityMIBEnableStatusNotification](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityMIBEnableStatusNotification/)
+- [snmpEntityFanStatusChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityFanStatusChange/)
+- [snmpEntityModuleInserted](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityModuleInserted/)
+- [snmpEntityModuleRemoved](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityModuleRemoved/)
+- [snmpEntityModuleStatusChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityModuleStatusChange/)
+- [snmpEntityPowerOutChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityPowerOutChange/)
+- [snmpEntityPowerStatusChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityPowerStatusChange/)
+- [snmpEntitySensor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntitySensor/)
+- [snmpEntityUnrecognisedModule](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:EntityUnrecognisedModule/)
+- [snmpTfcdomain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfcdomain/)
+- [snmpDmDomainIdNotAssignedNotify](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:DmDomainIdNotAssignedNotify/)
+- [snmpDmFabricChangeNotify](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:DmFabricChangeNotify/)
+- [snmpDmNewPrincipalSwitchNotify](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:DmNewPrincipalSwitchNotify/)
+- [snmpTfcns](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfcns/)
+- [snmpTfcs](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfcs/)
+- [snmpTfctrace](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfctrace/)
+- [snmpTfdmi](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfdmi/)
+- [snmpTfeaturecontrol](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfeaturecontrol/)
+- [snmpFeatureOpStatusChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:FeatureOpStatusChange/)
+- [snmpCiscoFeatOpStatusChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CiscoFeatOpStatusChange/)
+- [snmpTfspf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tfspf/)
+- [snmpTgeneric](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tgeneric/)
+- [snmpColdStart](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:ColdStart/)
+- [snmpWarmStart](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:WarmStart/)
+- [snmpThsrp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Thsrp/)
+- [snmpStateChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:StateChange/)
+- [snmpTip](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tip/)
+- [snmpTlicense](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tlicense/)
+- [snmpNotifyLicenseExpiry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:NotifyLicenseExpiry/)
+- [snmpNotifyLicenseExpiryWarning](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:NotifyLicenseExpiryWarning/)
+- [snmpNotifyLicenseFileMissing](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:NotifyLicenseFileMissing/)
+- [snmpNotifyNoLicenceForFeature](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:NotifyNoLicenceForFeature/)
+- [snmpTlink](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tlink/)
+- [snmpCieLinkDown](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CieLinkDown/)
+- [snmpCieLinkUp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CieLinkUp/)
+- [snmpCiscoXcvrMonStatusChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CiscoXcvrMonStatusChange/)
+- [snmpCmnMacMoveNotification](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CmnMacMoveNotification/)
+- [snmpDelayedLinkStateChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:DelayedLinkStateChange/)
+- [snmpExtendedLinkDown](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:ExtendedLinkDown/)
+- [snmpExtendedLinkUp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:ExtendedLinkUp/)
+- [snmpLinkDown](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LinkDown/)
+- [snmpLinkUp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LinkUp/)
+- [snmpCErrDisableInterfaceEventRev1](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CErrDisableInterfaceEventRev1/)
+- [snmpTlldp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tlldp/)
+- [snmpLldpRemTablesChange](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LldpRemTablesChange/)
+- [snmpTmmode](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tmmode/)
+- [snmpCseMaintModeChangeNotify](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CseMaintModeChangeNotify/)
+- [snmpCseNormalModeChangeNotify](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CseNormalModeChangeNotify/)
+- [snmpTmpls](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tmpls/)
+- [snmpLdp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Ldp/)
+- [snmpLdpSessiondown](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LdpSessiondown/)
+- [snmpLdpSessionup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LdpSessionup/)
+- [snmpVpn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Vpn/)
+- [snmpVpnMaxThreshcleared](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:VpnMaxThreshcleared/)
+- [snmpVpnMaxThreshexceeded](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:VpnMaxThreshexceeded/)
+- [snmpVpnMidThreshexceeded](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:VpnMidThreshexceeded/)
+- [snmpVpnVrfdown](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:VpnVrfdown/)
+- [snmpVpnVrfup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:VpnVrfup/)
+- [snmpTmsdp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tmsdp/)
+- [snmpMsdpBackwardTransition](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:MsdpBackwardTransition/)
+- [snmpTpim](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tpim/)
+- [snmpPimNeighborLoss](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:PimNeighborLoss/)
+- [snmpTpoe](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tpoe/)
+- [snmpTportsecurity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tportsecurity/)
+- [snmpAccessSecureMacViolation](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:AccessSecureMacViolation/)
+- [snmpTrunkSecureMacViolation](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:TrunkSecureMacViolation/)
+- [snmpTrf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Trf/)
+- [snmpRedundancyFramework](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:RedundancyFramework/)
+- [snmpTrmon](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Trmon/)
+- [snmpRisingAlarm](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:RisingAlarm/)
+- [snmpFallingAlarm](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:FallingAlarm/)
+- [snmpHcRisingAlarm](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:HcRisingAlarm/)
+- [snmpHcFallingAlarm](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:HcFallingAlarm/)
+- [snmpTrscn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Trscn/)
+- [snmpTscsi](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tscsi/)
+- [snmpTsnmp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tsnmp/)
+- [snmpAuthentication](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Authentication/)
+- [snmpTstormControl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:TstormControl/)
+- [snmpCpscEventRev1](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CpscEventRev1/)
+- [snmpTstpx](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tstpx/)
+- [snmpInconsistency](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Inconsistency/)
+- [snmpLoopInconsistency](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LoopInconsistency/)
+- [snmpRootInconsistency](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:RootInconsistency/)
+- [snmpTsyslog](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tsyslog/)
+- [snmpMessageGenerated](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:MessageGenerated/)
+- [snmpTsysmgr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tsysmgr/)
+- [snmpCseFailSwCoreNotifyExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:CseFailSwCoreNotifyExtended/)
+- [snmpTsystem](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tsystem/)
+- [snmpClockChangeNotification](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:ClockChangeNotification/)
+- [snmpTupgrade](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tupgrade/)
+- [snmpUpgradeJobStatusNotify](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UpgradeJobStatusNotify/)
+- [snmpUpgradeOpNotifyOnCompletion](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UpgradeOpNotifyOnCompletion/)
+- [snmpTvsan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tvsan/)
+- [snmpTvtp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tvtp/)
+- [snmpNotifs](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Notifs/)
+- [snmpVlancreate](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Vlancreate/)
+- [snmpVlandelete](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Vlandelete/)
+- [snmpTzone](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Tzone/)
 - [snmpRmon](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/)
 - [snmpEvent](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/)
 
@@ -43,34 +159,110 @@ data "nxos_snmp" "example" {
 
 ### Read-Only
 
+- `aaa_server_state_change_trap_status` (String) Status to show enabled/disable trap.
 - `admin_state` (String) The administrative state of the object or policy.
+- `bfd_session_down_trap_status` (String) Status to show enabled/disable trap.
+- `bfd_session_up_trap_status` (String) Status to show enabled/disable trap.
+- `bridge_new_root_trap_status` (String) Status to show enabled/disable trap.
+- `bridge_topology_change_trap_status` (String) Status to show enabled/disable trap.
+- `callhome_event_notify_trap_status` (String) Status to show enabled/disable trap.
+- `callhome_smtp_send_fail_trap_status` (String) Status to show enabled/disable trap.
+- `cfs_merge_failure_trap_status` (String) Status to show enabled/disable trap.
+- `cfs_state_change_notif_trap_status` (String) Status to show enabled/disable trap.
+- `config_cli_running_config_change_trap_status` (String) Status to show enabled/disable trap.
 - `contact` (String) System Contact.
 - `description` (String) Description of the specified attribute.
 - `disable_aaa_sync` (String) Disable sync of user creation/updation between SNMP and AAA.
 - `enable_all` (String) Enable/Disable all traps.
 - `enforce_privacy` (String) Globally enforce privacy for all the users.
 - `engine_id` (String) Engine Id.
+- `entity_fan_status_change_trap_status` (String) Status to show enabled/disable trap.
+- `entity_mib_change_trap_status` (String) Status to show enabled/disable trap.
+- `entity_mib_enable_status_notification_trap_status` (String) Status to show enabled/disable trap.
+- `entity_module_inserted_trap_status` (String) Status to show enabled/disable trap.
+- `entity_module_removed_trap_status` (String) Status to show enabled/disable trap.
+- `entity_module_status_change_trap_status` (String) Status to show enabled/disable trap.
+- `entity_power_out_change_trap_status` (String) Status to show enabled/disable trap.
+- `entity_power_status_change_trap_status` (String) Status to show enabled/disable trap.
+- `entity_sensor_trap_status` (String) Status to show enabled/disable trap.
+- `entity_unrecognised_module_trap_status` (String) Status to show enabled/disable trap.
+- `fcdomain_domain_id_not_assigned_trap_status` (String) Status to show enabled/disable trap.
+- `fcdomain_fabric_change_trap_status` (String) Status to show enabled/disable trap.
+- `fcdomain_new_principal_switch_trap_status` (String) Status to show enabled/disable trap.
+- `feature_control_cisco_op_status_change_trap_status` (String) Status to show enabled/disable trap.
+- `feature_control_op_status_change_trap_status` (String) Status to show enabled/disable trap.
+- `generic_cold_start_trap_status` (String) Status to show enabled/disable trap.
+- `generic_warm_start_trap_status` (String) Status to show enabled/disable trap.
 - `hosts` (Attributes Map) List of SNMP host configurations.
   - Map key format: `<name>;<udp_port>`
   - Key component `name`: snmp-server host name.
   - Key component `udp_port`: snmp-server host udp-port. Range: `0`-`65535`. (see [below for nested schema](#nestedatt--hosts))
+- `hsrp_state_change_trap_status` (String) Status to show enabled/disable trap.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) Indicates the administrative state of the SNMP policy.
+- `license_expiry_trap_status` (String) Status to show enabled/disable trap.
+- `license_expiry_warning_trap_status` (String) Status to show enabled/disable trap.
+- `license_file_missing_trap_status` (String) Status to show enabled/disable trap.
+- `license_no_license_for_feature_trap_status` (String) Status to show enabled/disable trap.
+- `link_cie_link_down_trap_status` (String) Status to show enabled/disable trap.
+- `link_cie_link_up_trap_status` (String) Status to show enabled/disable trap.
+- `link_cisco_xcvr_mon_status_change_trap_status` (String) Status to show enabled/disable trap.
+- `link_cmn_mac_move_notification_trap_status` (String) Status to show enabled/disable trap.
+- `link_delayed_link_state_change_trap_status` (String) Status to show enabled/disable trap.
+- `link_err_disable_interface_event_trap_status` (String) Status to show enabled/disable trap.
+- `link_extended_link_down_trap_status` (String) Status to show enabled/disable trap.
+- `link_extended_link_up_trap_status` (String) Status to show enabled/disable trap.
+- `link_link_down_trap_status` (String) Status to show enabled/disable trap.
+- `link_link_up_trap_status` (String) Status to show enabled/disable trap.
+- `lldp_rem_tables_change_trap_status` (String) Status to show enabled/disable trap.
 - `local_users` (Attributes Map) List of SNMP local users.
   - Map key: `name` - snmp-server user name. (see [below for nested schema](#nestedatt--local_users))
 - `location` (String) System Location.
 - `logging_level` (String) Set level for SNMP syslog messages.
+- `mmode_maint_mode_change_trap_status` (String) Status to show enabled/disable trap.
+- `mmode_normal_mode_change_trap_status` (String) Status to show enabled/disable trap.
+- `mpls_ldp_session_down_trap_status` (String) Status to show enabled/disable trap.
+- `mpls_ldp_session_up_trap_status` (String) Status to show enabled/disable trap.
+- `mpls_ldp_trap_status` (String) Status to show enabled/disable trap.
+- `mpls_vpn_max_thresh_cleared_trap_status` (String) Status to show enabled/disable trap.
+- `mpls_vpn_max_thresh_exceeded_trap_status` (String) Status to show enabled/disable trap.
+- `mpls_vpn_mid_thresh_exceeded_trap_status` (String) Status to show enabled/disable trap.
+- `mpls_vpn_trap_status` (String) Status to show enabled/disable trap.
+- `mpls_vpn_vrf_down_trap_status` (String) Status to show enabled/disable trap.
+- `mpls_vpn_vrf_up_trap_status` (String) Status to show enabled/disable trap.
+- `msdp_backward_transition_trap_status` (String) Status to show enabled/disable trap.
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `packet_size` (Number) Packet size config.
+- `pim_neighbor_loss_trap_status` (String) Status to show enabled/disable trap.
+- `port_security_access_secure_mac_violation_trap_status` (String) Status to show enabled/disable trap.
+- `port_security_trunk_secure_mac_violation_trap_status` (String) Status to show enabled/disable trap.
+- `rf_redundancy_framework_trap_status` (String) Status to show enabled/disable trap.
 - `rmon_events` (Attributes Map) List of SNMP RMON event configurations.
   - Map key: `number` - rmon event number.
   - Key range: `1`-`65535` (see [below for nested schema](#nestedatt--rmon_events))
+- `rmon_falling_alarm_trap_status` (String) Status to show enabled/disable trap.
+- `rmon_hc_falling_alarm_trap_status` (String) Status to show enabled/disable trap.
+- `rmon_hc_rising_alarm_trap_status` (String) Status to show enabled/disable trap.
+- `rmon_rising_alarm_trap_status` (String) Status to show enabled/disable trap.
+- `snmp_authentication_trap_status` (String) Status to show enabled/disable trap.
 - `source_interface_traps` (String) Source interface name for Traps.
+- `storm_control_cpsc_event_trap_status` (String) Status to show enabled/disable trap.
+- `stpx_inconsistency_trap_status` (String) Status to show enabled/disable trap.
+- `stpx_loop_inconsistency_trap_status` (String) Status to show enabled/disable trap.
+- `stpx_root_inconsistency_trap_status` (String) Status to show enabled/disable trap.
+- `syslog_message_generated_trap_status` (String) Status to show enabled/disable trap.
+- `sysmgr_fail_sw_core_notify_trap_status` (String) Status to show enabled/disable trap.
+- `system_clock_change_notification_trap_status` (String) Status to show enabled/disable trap.
 - `system_info_description` (String) System Description.
 - `tcp_session_authentication` (String) tcp-session auth config.
 - `unknown_engine_id` (String) Indicates the Unknown Engine Id MO thats needs to be created.
 - `unknown_user` (String) Indicates the Unknown User MO thats needs to be created.
+- `upgrade_job_status_notify_trap_status` (String) Status to show enabled/disable trap.
+- `upgrade_op_notify_on_completion_trap_status` (String) Status to show enabled/disable trap.
+- `vtp_notifs_trap_status` (String) Status to show enabled/disable trap.
+- `vtp_vlan_create_trap_status` (String) Status to show enabled/disable trap.
+- `vtp_vlan_delete_trap_status` (String) Status to show enabled/disable trap.
 
 <a id="nestedatt--hosts"></a>
 ### Nested Schema for `hosts`

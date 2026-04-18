@@ -39,29 +39,105 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type SNMP struct {
-	Device                   types.String              `tfsdk:"device"`
-	Dn                       types.String              `tfsdk:"id"`
-	AdminState               types.String              `tfsdk:"admin_state"`
-	InstanceAdminState       types.String              `tfsdk:"instance_admin_state"`
-	Description              types.String              `tfsdk:"description"`
-	EngineId                 types.String              `tfsdk:"engine_id"`
-	LoggingLevel             types.String              `tfsdk:"logging_level"`
-	OwnerKey                 types.String              `tfsdk:"owner_key"`
-	OwnerTag                 types.String              `tfsdk:"owner_tag"`
-	UnknownEngineId          types.String              `tfsdk:"unknown_engine_id"`
-	UnknownUser              types.String              `tfsdk:"unknown_user"`
-	Contact                  types.String              `tfsdk:"contact"`
-	SystemInfoDescription    types.String              `tfsdk:"system_info_description"`
-	Location                 types.String              `tfsdk:"location"`
-	PacketSize               types.Int64               `tfsdk:"packet_size"`
-	DisableAaaSync           types.String              `tfsdk:"disable_aaa_sync"`
-	EnforcePrivacy           types.String              `tfsdk:"enforce_privacy"`
-	TcpSessionAuthentication types.String              `tfsdk:"tcp_session_authentication"`
-	SourceInterfaceTraps     types.String              `tfsdk:"source_interface_traps"`
-	LocalUsers               map[string]SNMPLocalUsers `tfsdk:"local_users"`
-	Hosts                    map[string]SNMPHosts      `tfsdk:"hosts"`
-	EnableAll                types.String              `tfsdk:"enable_all"`
-	RmonEvents               map[string]SNMPRmonEvents `tfsdk:"rmon_events"`
+	Device                                         types.String              `tfsdk:"device"`
+	Dn                                             types.String              `tfsdk:"id"`
+	AdminState                                     types.String              `tfsdk:"admin_state"`
+	InstanceAdminState                             types.String              `tfsdk:"instance_admin_state"`
+	Description                                    types.String              `tfsdk:"description"`
+	EngineId                                       types.String              `tfsdk:"engine_id"`
+	LoggingLevel                                   types.String              `tfsdk:"logging_level"`
+	OwnerKey                                       types.String              `tfsdk:"owner_key"`
+	OwnerTag                                       types.String              `tfsdk:"owner_tag"`
+	UnknownEngineId                                types.String              `tfsdk:"unknown_engine_id"`
+	UnknownUser                                    types.String              `tfsdk:"unknown_user"`
+	Contact                                        types.String              `tfsdk:"contact"`
+	SystemInfoDescription                          types.String              `tfsdk:"system_info_description"`
+	Location                                       types.String              `tfsdk:"location"`
+	PacketSize                                     types.Int64               `tfsdk:"packet_size"`
+	DisableAaaSync                                 types.String              `tfsdk:"disable_aaa_sync"`
+	EnforcePrivacy                                 types.String              `tfsdk:"enforce_privacy"`
+	TcpSessionAuthentication                       types.String              `tfsdk:"tcp_session_authentication"`
+	SourceInterfaceTraps                           types.String              `tfsdk:"source_interface_traps"`
+	LocalUsers                                     map[string]SNMPLocalUsers `tfsdk:"local_users"`
+	Hosts                                          map[string]SNMPHosts      `tfsdk:"hosts"`
+	EnableAll                                      types.String              `tfsdk:"enable_all"`
+	AaaServerStateChangeTrapStatus                 types.String              `tfsdk:"aaa_server_state_change_trap_status"`
+	BfdSessionDownTrapStatus                       types.String              `tfsdk:"bfd_session_down_trap_status"`
+	BfdSessionUpTrapStatus                         types.String              `tfsdk:"bfd_session_up_trap_status"`
+	BridgeNewRootTrapStatus                        types.String              `tfsdk:"bridge_new_root_trap_status"`
+	BridgeTopologyChangeTrapStatus                 types.String              `tfsdk:"bridge_topology_change_trap_status"`
+	CallhomeEventNotifyTrapStatus                  types.String              `tfsdk:"callhome_event_notify_trap_status"`
+	CallhomeSmtpSendFailTrapStatus                 types.String              `tfsdk:"callhome_smtp_send_fail_trap_status"`
+	CfsStateChangeNotifTrapStatus                  types.String              `tfsdk:"cfs_state_change_notif_trap_status"`
+	CfsMergeFailureTrapStatus                      types.String              `tfsdk:"cfs_merge_failure_trap_status"`
+	ConfigCliRunningConfigChangeTrapStatus         types.String              `tfsdk:"config_cli_running_config_change_trap_status"`
+	EntityMibChangeTrapStatus                      types.String              `tfsdk:"entity_mib_change_trap_status"`
+	EntityMibEnableStatusNotificationTrapStatus    types.String              `tfsdk:"entity_mib_enable_status_notification_trap_status"`
+	EntityFanStatusChangeTrapStatus                types.String              `tfsdk:"entity_fan_status_change_trap_status"`
+	EntityModuleInsertedTrapStatus                 types.String              `tfsdk:"entity_module_inserted_trap_status"`
+	EntityModuleRemovedTrapStatus                  types.String              `tfsdk:"entity_module_removed_trap_status"`
+	EntityModuleStatusChangeTrapStatus             types.String              `tfsdk:"entity_module_status_change_trap_status"`
+	EntityPowerOutChangeTrapStatus                 types.String              `tfsdk:"entity_power_out_change_trap_status"`
+	EntityPowerStatusChangeTrapStatus              types.String              `tfsdk:"entity_power_status_change_trap_status"`
+	EntitySensorTrapStatus                         types.String              `tfsdk:"entity_sensor_trap_status"`
+	EntityUnrecognisedModuleTrapStatus             types.String              `tfsdk:"entity_unrecognised_module_trap_status"`
+	FcdomainDomainIdNotAssignedTrapStatus          types.String              `tfsdk:"fcdomain_domain_id_not_assigned_trap_status"`
+	FcdomainFabricChangeTrapStatus                 types.String              `tfsdk:"fcdomain_fabric_change_trap_status"`
+	FcdomainNewPrincipalSwitchTrapStatus           types.String              `tfsdk:"fcdomain_new_principal_switch_trap_status"`
+	FeatureControlOpStatusChangeTrapStatus         types.String              `tfsdk:"feature_control_op_status_change_trap_status"`
+	FeatureControlCiscoOpStatusChangeTrapStatus    types.String              `tfsdk:"feature_control_cisco_op_status_change_trap_status"`
+	GenericColdStartTrapStatus                     types.String              `tfsdk:"generic_cold_start_trap_status"`
+	GenericWarmStartTrapStatus                     types.String              `tfsdk:"generic_warm_start_trap_status"`
+	HsrpStateChangeTrapStatus                      types.String              `tfsdk:"hsrp_state_change_trap_status"`
+	LicenseExpiryTrapStatus                        types.String              `tfsdk:"license_expiry_trap_status"`
+	LicenseExpiryWarningTrapStatus                 types.String              `tfsdk:"license_expiry_warning_trap_status"`
+	LicenseFileMissingTrapStatus                   types.String              `tfsdk:"license_file_missing_trap_status"`
+	LicenseNoLicenseForFeatureTrapStatus           types.String              `tfsdk:"license_no_license_for_feature_trap_status"`
+	LinkCieLinkDownTrapStatus                      types.String              `tfsdk:"link_cie_link_down_trap_status"`
+	LinkCieLinkUpTrapStatus                        types.String              `tfsdk:"link_cie_link_up_trap_status"`
+	LinkCiscoXcvrMonStatusChangeTrapStatus         types.String              `tfsdk:"link_cisco_xcvr_mon_status_change_trap_status"`
+	LinkCmnMacMoveNotificationTrapStatus           types.String              `tfsdk:"link_cmn_mac_move_notification_trap_status"`
+	LinkDelayedLinkStateChangeTrapStatus           types.String              `tfsdk:"link_delayed_link_state_change_trap_status"`
+	LinkExtendedLinkDownTrapStatus                 types.String              `tfsdk:"link_extended_link_down_trap_status"`
+	LinkExtendedLinkUpTrapStatus                   types.String              `tfsdk:"link_extended_link_up_trap_status"`
+	LinkLinkDownTrapStatus                         types.String              `tfsdk:"link_link_down_trap_status"`
+	LinkLinkUpTrapStatus                           types.String              `tfsdk:"link_link_up_trap_status"`
+	LinkErrDisableInterfaceEventTrapStatus         types.String              `tfsdk:"link_err_disable_interface_event_trap_status"`
+	LldpRemTablesChangeTrapStatus                  types.String              `tfsdk:"lldp_rem_tables_change_trap_status"`
+	MmodeMaintModeChangeTrapStatus                 types.String              `tfsdk:"mmode_maint_mode_change_trap_status"`
+	MmodeNormalModeChangeTrapStatus                types.String              `tfsdk:"mmode_normal_mode_change_trap_status"`
+	MplsLdpTrapStatus                              types.String              `tfsdk:"mpls_ldp_trap_status"`
+	MplsLdpSessionDownTrapStatus                   types.String              `tfsdk:"mpls_ldp_session_down_trap_status"`
+	MplsLdpSessionUpTrapStatus                     types.String              `tfsdk:"mpls_ldp_session_up_trap_status"`
+	MplsVpnTrapStatus                              types.String              `tfsdk:"mpls_vpn_trap_status"`
+	MplsVpnMaxThreshClearedTrapStatus              types.String              `tfsdk:"mpls_vpn_max_thresh_cleared_trap_status"`
+	MplsVpnMaxThreshExceededTrapStatus             types.String              `tfsdk:"mpls_vpn_max_thresh_exceeded_trap_status"`
+	MplsVpnMidThreshExceededTrapStatus             types.String              `tfsdk:"mpls_vpn_mid_thresh_exceeded_trap_status"`
+	MplsVpnVrfDownTrapStatus                       types.String              `tfsdk:"mpls_vpn_vrf_down_trap_status"`
+	MplsVpnVrfUpTrapStatus                         types.String              `tfsdk:"mpls_vpn_vrf_up_trap_status"`
+	MsdpBackwardTransitionTrapStatus               types.String              `tfsdk:"msdp_backward_transition_trap_status"`
+	PimNeighborLossTrapStatus                      types.String              `tfsdk:"pim_neighbor_loss_trap_status"`
+	PortSecurityAccessSecureMacViolationTrapStatus types.String              `tfsdk:"port_security_access_secure_mac_violation_trap_status"`
+	PortSecurityTrunkSecureMacViolationTrapStatus  types.String              `tfsdk:"port_security_trunk_secure_mac_violation_trap_status"`
+	RfRedundancyFrameworkTrapStatus                types.String              `tfsdk:"rf_redundancy_framework_trap_status"`
+	RmonRisingAlarmTrapStatus                      types.String              `tfsdk:"rmon_rising_alarm_trap_status"`
+	RmonFallingAlarmTrapStatus                     types.String              `tfsdk:"rmon_falling_alarm_trap_status"`
+	RmonHcRisingAlarmTrapStatus                    types.String              `tfsdk:"rmon_hc_rising_alarm_trap_status"`
+	RmonHcFallingAlarmTrapStatus                   types.String              `tfsdk:"rmon_hc_falling_alarm_trap_status"`
+	SnmpAuthenticationTrapStatus                   types.String              `tfsdk:"snmp_authentication_trap_status"`
+	StormControlCpscEventTrapStatus                types.String              `tfsdk:"storm_control_cpsc_event_trap_status"`
+	StpxInconsistencyTrapStatus                    types.String              `tfsdk:"stpx_inconsistency_trap_status"`
+	StpxLoopInconsistencyTrapStatus                types.String              `tfsdk:"stpx_loop_inconsistency_trap_status"`
+	StpxRootInconsistencyTrapStatus                types.String              `tfsdk:"stpx_root_inconsistency_trap_status"`
+	SyslogMessageGeneratedTrapStatus               types.String              `tfsdk:"syslog_message_generated_trap_status"`
+	SysmgrFailSwCoreNotifyTrapStatus               types.String              `tfsdk:"sysmgr_fail_sw_core_notify_trap_status"`
+	SystemClockChangeNotificationTrapStatus        types.String              `tfsdk:"system_clock_change_notification_trap_status"`
+	UpgradeJobStatusNotifyTrapStatus               types.String              `tfsdk:"upgrade_job_status_notify_trap_status"`
+	UpgradeOpNotifyOnCompletionTrapStatus          types.String              `tfsdk:"upgrade_op_notify_on_completion_trap_status"`
+	VtpNotifsTrapStatus                            types.String              `tfsdk:"vtp_notifs_trap_status"`
+	VtpVlanCreateTrapStatus                        types.String              `tfsdk:"vtp_vlan_create_trap_status"`
+	VtpVlanDeleteTrapStatus                        types.String              `tfsdk:"vtp_vlan_delete_trap_status"`
+	RmonEvents                                     map[string]SNMPRmonEvents `tfsdk:"rmon_events"`
 }
 
 type SNMPLocalUsers struct {
@@ -324,12 +400,800 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 		}
-		attrs = "{}"
-		if !data.EnableAll.IsUnknown() && !data.EnableAll.IsNull() {
-			attrs, _ = sjson.Set(attrs, "enableAllViaCLI", data.EnableAll.ValueString())
-		}
-		if attrs != "{}" {
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTraps.attributes", attrs)
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTraps"
+			attrs = "{}"
+			if !data.EnableAll.IsUnknown() && !data.EnableAll.IsNull() {
+				attrs, _ = sjson.Set(attrs, "enableAllViaCLI", data.EnableAll.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTaaa"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.AaaServerStateChangeTrapStatus.IsUnknown() && !data.AaaServerStateChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.AaaServerStateChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpServerStateChange.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTbfd"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.BfdSessionDownTrapStatus.IsUnknown() && !data.BfdSessionDownTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.BfdSessionDownTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpSessionDown.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.BfdSessionUpTrapStatus.IsUnknown() && !data.BfdSessionUpTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.BfdSessionUpTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpSessionUp.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTbridge"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.BridgeNewRootTrapStatus.IsUnknown() && !data.BridgeNewRootTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.BridgeNewRootTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpNewRoot.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.BridgeTopologyChangeTrapStatus.IsUnknown() && !data.BridgeTopologyChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.BridgeTopologyChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTopologyChange.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTcallhome"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.CallhomeEventNotifyTrapStatus.IsUnknown() && !data.CallhomeEventNotifyTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.CallhomeEventNotifyTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEventNotify.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.CallhomeSmtpSendFailTrapStatus.IsUnknown() && !data.CallhomeSmtpSendFailTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.CallhomeSmtpSendFailTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpSmtpSendFail.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTcfs"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.CfsStateChangeNotifTrapStatus.IsUnknown() && !data.CfsStateChangeNotifTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.CfsStateChangeNotifTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpStateChangeNotif.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.CfsMergeFailureTrapStatus.IsUnknown() && !data.CfsMergeFailureTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.CfsMergeFailureTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpMergeFailure.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTconfig"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.ConfigCliRunningConfigChangeTrapStatus.IsUnknown() && !data.ConfigCliRunningConfigChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.ConfigCliRunningConfigChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCLIRunningConfigChange.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTentity"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.EntityMibChangeTrapStatus.IsUnknown() && !data.EntityMibChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.EntityMibChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEntityMIBChange.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.EntityMibEnableStatusNotificationTrapStatus.IsUnknown() && !data.EntityMibEnableStatusNotificationTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.EntityMibEnableStatusNotificationTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEntityMIBEnableStatusNotification.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.EntityFanStatusChangeTrapStatus.IsUnknown() && !data.EntityFanStatusChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.EntityFanStatusChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEntityFanStatusChange.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.EntityModuleInsertedTrapStatus.IsUnknown() && !data.EntityModuleInsertedTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.EntityModuleInsertedTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEntityModuleInserted.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.EntityModuleRemovedTrapStatus.IsUnknown() && !data.EntityModuleRemovedTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.EntityModuleRemovedTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEntityModuleRemoved.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.EntityModuleStatusChangeTrapStatus.IsUnknown() && !data.EntityModuleStatusChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.EntityModuleStatusChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEntityModuleStatusChange.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.EntityPowerOutChangeTrapStatus.IsUnknown() && !data.EntityPowerOutChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.EntityPowerOutChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEntityPowerOutChange.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.EntityPowerStatusChangeTrapStatus.IsUnknown() && !data.EntityPowerStatusChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.EntityPowerStatusChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEntityPowerStatusChange.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.EntitySensorTrapStatus.IsUnknown() && !data.EntitySensorTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.EntitySensorTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEntitySensor.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.EntityUnrecognisedModuleTrapStatus.IsUnknown() && !data.EntityUnrecognisedModuleTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.EntityUnrecognisedModuleTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEntityUnrecognisedModule.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfcdomain"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.FcdomainDomainIdNotAssignedTrapStatus.IsUnknown() && !data.FcdomainDomainIdNotAssignedTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.FcdomainDomainIdNotAssignedTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpDmDomainIdNotAssignedNotify.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.FcdomainFabricChangeTrapStatus.IsUnknown() && !data.FcdomainFabricChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.FcdomainFabricChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpDmFabricChangeNotify.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.FcdomainNewPrincipalSwitchTrapStatus.IsUnknown() && !data.FcdomainNewPrincipalSwitchTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.FcdomainNewPrincipalSwitchTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpDmNewPrincipalSwitchNotify.attributes", attrs)
+				}
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTfcns.attributes", attrs)
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTfcs.attributes", attrs)
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTfctrace.attributes", attrs)
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTfdmi.attributes", attrs)
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfeaturecontrol"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.FeatureControlOpStatusChangeTrapStatus.IsUnknown() && !data.FeatureControlOpStatusChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.FeatureControlOpStatusChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpFeatureOpStatusChange.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.FeatureControlCiscoOpStatusChangeTrapStatus.IsUnknown() && !data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.FeatureControlCiscoOpStatusChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCiscoFeatOpStatusChange.attributes", attrs)
+				}
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTfspf.attributes", attrs)
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTgeneric"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.GenericColdStartTrapStatus.IsUnknown() && !data.GenericColdStartTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.GenericColdStartTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpColdStart.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.GenericWarmStartTrapStatus.IsUnknown() && !data.GenericWarmStartTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.GenericWarmStartTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpWarmStart.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpThsrp"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.HsrpStateChangeTrapStatus.IsUnknown() && !data.HsrpStateChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.HsrpStateChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpStateChange.attributes", attrs)
+				}
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTip.attributes", attrs)
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlicense"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.LicenseExpiryTrapStatus.IsUnknown() && !data.LicenseExpiryTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LicenseExpiryTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpNotifyLicenseExpiry.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LicenseExpiryWarningTrapStatus.IsUnknown() && !data.LicenseExpiryWarningTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LicenseExpiryWarningTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpNotifyLicenseExpiryWarning.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LicenseFileMissingTrapStatus.IsUnknown() && !data.LicenseFileMissingTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LicenseFileMissingTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpNotifyLicenseFileMissing.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LicenseNoLicenseForFeatureTrapStatus.IsUnknown() && !data.LicenseNoLicenseForFeatureTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LicenseNoLicenseForFeatureTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpNotifyNoLicenceForFeature.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlink"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.LinkCieLinkDownTrapStatus.IsUnknown() && !data.LinkCieLinkDownTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LinkCieLinkDownTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCieLinkDown.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LinkCieLinkUpTrapStatus.IsUnknown() && !data.LinkCieLinkUpTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LinkCieLinkUpTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCieLinkUp.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsUnknown() && !data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LinkCiscoXcvrMonStatusChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCiscoXcvrMonStatusChange.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LinkCmnMacMoveNotificationTrapStatus.IsUnknown() && !data.LinkCmnMacMoveNotificationTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LinkCmnMacMoveNotificationTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCmnMacMoveNotification.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LinkDelayedLinkStateChangeTrapStatus.IsUnknown() && !data.LinkDelayedLinkStateChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LinkDelayedLinkStateChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpDelayedLinkStateChange.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LinkExtendedLinkDownTrapStatus.IsUnknown() && !data.LinkExtendedLinkDownTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LinkExtendedLinkDownTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpExtendedLinkDown.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LinkExtendedLinkUpTrapStatus.IsUnknown() && !data.LinkExtendedLinkUpTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LinkExtendedLinkUpTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpExtendedLinkUp.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LinkLinkDownTrapStatus.IsUnknown() && !data.LinkLinkDownTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LinkLinkDownTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpLinkDown.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LinkLinkUpTrapStatus.IsUnknown() && !data.LinkLinkUpTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LinkLinkUpTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpLinkUp.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.LinkErrDisableInterfaceEventTrapStatus.IsUnknown() && !data.LinkErrDisableInterfaceEventTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LinkErrDisableInterfaceEventTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCErrDisableInterfaceEventRev1.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlldp"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.LldpRemTablesChangeTrapStatus.IsUnknown() && !data.LldpRemTablesChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.LldpRemTablesChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpLldpRemTablesChange.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmmode"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.MmodeMaintModeChangeTrapStatus.IsUnknown() && !data.MmodeMaintModeChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.MmodeMaintModeChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCseMaintModeChangeNotify.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.MmodeNormalModeChangeTrapStatus.IsUnknown() && !data.MmodeNormalModeChangeTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.MmodeNormalModeChangeTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCseNormalModeChangeNotify.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmpls"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdp"
+					attrs = "{}"
+					if !data.MplsLdpTrapStatus.IsUnknown() && !data.MplsLdpTrapStatus.IsNull() {
+						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsLdpTrapStatus.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+					nestedChildrenPath := childBodyPath + ".children"
+					attrs = "{}"
+					if !data.MplsLdpSessionDownTrapStatus.IsUnknown() && !data.MplsLdpSessionDownTrapStatus.IsNull() {
+						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsLdpSessionDownTrapStatus.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpLdpSessiondown.attributes", attrs)
+					}
+					attrs = "{}"
+					if !data.MplsLdpSessionUpTrapStatus.IsUnknown() && !data.MplsLdpSessionUpTrapStatus.IsNull() {
+						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsLdpSessionUpTrapStatus.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpLdpSessionup.attributes", attrs)
+					}
+				}
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpn"
+					attrs = "{}"
+					if !data.MplsVpnTrapStatus.IsUnknown() && !data.MplsVpnTrapStatus.IsNull() {
+						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsVpnTrapStatus.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+					nestedChildrenPath := childBodyPath + ".children"
+					attrs = "{}"
+					if !data.MplsVpnMaxThreshClearedTrapStatus.IsUnknown() && !data.MplsVpnMaxThreshClearedTrapStatus.IsNull() {
+						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsVpnMaxThreshClearedTrapStatus.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpVpnMaxThreshcleared.attributes", attrs)
+					}
+					attrs = "{}"
+					if !data.MplsVpnMaxThreshExceededTrapStatus.IsUnknown() && !data.MplsVpnMaxThreshExceededTrapStatus.IsNull() {
+						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsVpnMaxThreshExceededTrapStatus.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpVpnMaxThreshexceeded.attributes", attrs)
+					}
+					attrs = "{}"
+					if !data.MplsVpnMidThreshExceededTrapStatus.IsUnknown() && !data.MplsVpnMidThreshExceededTrapStatus.IsNull() {
+						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsVpnMidThreshExceededTrapStatus.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpVpnMidThreshexceeded.attributes", attrs)
+					}
+					attrs = "{}"
+					if !data.MplsVpnVrfDownTrapStatus.IsUnknown() && !data.MplsVpnVrfDownTrapStatus.IsNull() {
+						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsVpnVrfDownTrapStatus.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpVpnVrfdown.attributes", attrs)
+					}
+					attrs = "{}"
+					if !data.MplsVpnVrfUpTrapStatus.IsUnknown() && !data.MplsVpnVrfUpTrapStatus.IsNull() {
+						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsVpnVrfUpTrapStatus.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpVpnVrfup.attributes", attrs)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmsdp"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.MsdpBackwardTransitionTrapStatus.IsUnknown() && !data.MsdpBackwardTransitionTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.MsdpBackwardTransitionTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpMsdpBackwardTransition.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTpim"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.PimNeighborLossTrapStatus.IsUnknown() && !data.PimNeighborLossTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.PimNeighborLossTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpPimNeighborLoss.attributes", attrs)
+				}
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTpoe.attributes", attrs)
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTportsecurity"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.PortSecurityAccessSecureMacViolationTrapStatus.IsUnknown() && !data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.PortSecurityAccessSecureMacViolationTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpAccessSecureMacViolation.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.PortSecurityTrunkSecureMacViolationTrapStatus.IsUnknown() && !data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.PortSecurityTrunkSecureMacViolationTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTrunkSecureMacViolation.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrf"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.RfRedundancyFrameworkTrapStatus.IsUnknown() && !data.RfRedundancyFrameworkTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.RfRedundancyFrameworkTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpRedundancyFramework.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrmon"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.RmonRisingAlarmTrapStatus.IsUnknown() && !data.RmonRisingAlarmTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.RmonRisingAlarmTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpRisingAlarm.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.RmonFallingAlarmTrapStatus.IsUnknown() && !data.RmonFallingAlarmTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.RmonFallingAlarmTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpFallingAlarm.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.RmonHcRisingAlarmTrapStatus.IsUnknown() && !data.RmonHcRisingAlarmTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.RmonHcRisingAlarmTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpHcRisingAlarm.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.RmonHcFallingAlarmTrapStatus.IsUnknown() && !data.RmonHcFallingAlarmTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.RmonHcFallingAlarmTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpHcFallingAlarm.attributes", attrs)
+				}
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTrscn.attributes", attrs)
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTscsi.attributes", attrs)
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsnmp"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.SnmpAuthenticationTrapStatus.IsUnknown() && !data.SnmpAuthenticationTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.SnmpAuthenticationTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpAuthentication.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTstormControl"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.StormControlCpscEventTrapStatus.IsUnknown() && !data.StormControlCpscEventTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.StormControlCpscEventTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCpscEventRev1.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTstpx"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.StpxInconsistencyTrapStatus.IsUnknown() && !data.StpxInconsistencyTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.StpxInconsistencyTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpInconsistency.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.StpxLoopInconsistencyTrapStatus.IsUnknown() && !data.StpxLoopInconsistencyTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.StpxLoopInconsistencyTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpLoopInconsistency.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.StpxRootInconsistencyTrapStatus.IsUnknown() && !data.StpxRootInconsistencyTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.StpxRootInconsistencyTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpRootInconsistency.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsyslog"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.SyslogMessageGeneratedTrapStatus.IsUnknown() && !data.SyslogMessageGeneratedTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.SyslogMessageGeneratedTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpMessageGenerated.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsysmgr"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.SysmgrFailSwCoreNotifyTrapStatus.IsUnknown() && !data.SysmgrFailSwCoreNotifyTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.SysmgrFailSwCoreNotifyTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCseFailSwCoreNotifyExtended.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsystem"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.SystemClockChangeNotificationTrapStatus.IsUnknown() && !data.SystemClockChangeNotificationTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.SystemClockChangeNotificationTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpClockChangeNotification.attributes", attrs)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTupgrade"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.UpgradeJobStatusNotifyTrapStatus.IsUnknown() && !data.UpgradeJobStatusNotifyTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.UpgradeJobStatusNotifyTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpUpgradeJobStatusNotify.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.UpgradeOpNotifyOnCompletionTrapStatus.IsUnknown() && !data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.UpgradeOpNotifyOnCompletionTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpUpgradeOpNotifyOnCompletion.attributes", attrs)
+				}
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTvsan.attributes", attrs)
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTvtp"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				attrs = "{}"
+				if !data.VtpNotifsTrapStatus.IsUnknown() && !data.VtpNotifsTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.VtpNotifsTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpNotifs.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.VtpVlanCreateTrapStatus.IsUnknown() && !data.VtpVlanCreateTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.VtpVlanCreateTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpVlancreate.attributes", attrs)
+				}
+				attrs = "{}"
+				if !data.VtpVlanDeleteTrapStatus.IsUnknown() && !data.VtpVlanDeleteTrapStatus.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trapstatus", data.VtpVlanDeleteTrapStatus.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpVlandelete.attributes", attrs)
+				}
+			}
+			attrs = "{}"
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTzone.attributes", attrs)
+			}
 		}
 		{
 			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
@@ -532,6 +1396,1447 @@ func (data *SNMP) fromBody(res gjson.Result) {
 				},
 			)
 			data.EnableAll = types.StringValue(rsnmpTraps.Get("snmpTraps.attributes.enableAllViaCLI").String())
+			{
+				var rsnmpTaaa gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTaaa.attributes.rn").String()
+						if rnValue == "aaa" {
+							rsnmpTaaa = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpServerStateChange gjson.Result
+					rsnmpTaaa.Get("snmpTaaa.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpServerStateChange.attributes.rn").String()
+							if rnValue == "serverstatechange" {
+								rsnmpServerStateChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.AaaServerStateChangeTrapStatus = types.StringValue(rsnmpServerStateChange.Get("snmpServerStateChange.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTbfd gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTbfd.attributes.rn").String()
+						if rnValue == "bfd" {
+							rsnmpTbfd = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpSessionDown gjson.Result
+					rsnmpTbfd.Get("snmpTbfd.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpSessionDown.attributes.rn").String()
+							if rnValue == "sessiondown" {
+								rsnmpSessionDown = v
+								return false
+							}
+							return true
+						},
+					)
+					data.BfdSessionDownTrapStatus = types.StringValue(rsnmpSessionDown.Get("snmpSessionDown.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpSessionUp gjson.Result
+					rsnmpTbfd.Get("snmpTbfd.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpSessionUp.attributes.rn").String()
+							if rnValue == "sessionup" {
+								rsnmpSessionUp = v
+								return false
+							}
+							return true
+						},
+					)
+					data.BfdSessionUpTrapStatus = types.StringValue(rsnmpSessionUp.Get("snmpSessionUp.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTbridge gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTbridge.attributes.rn").String()
+						if rnValue == "bridge" {
+							rsnmpTbridge = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpNewRoot gjson.Result
+					rsnmpTbridge.Get("snmpTbridge.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpNewRoot.attributes.rn").String()
+							if rnValue == "newroot" {
+								rsnmpNewRoot = v
+								return false
+							}
+							return true
+						},
+					)
+					data.BridgeNewRootTrapStatus = types.StringValue(rsnmpNewRoot.Get("snmpNewRoot.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpTopologyChange gjson.Result
+					rsnmpTbridge.Get("snmpTbridge.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpTopologyChange.attributes.rn").String()
+							if rnValue == "topologychange" {
+								rsnmpTopologyChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.BridgeTopologyChangeTrapStatus = types.StringValue(rsnmpTopologyChange.Get("snmpTopologyChange.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTcallhome gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTcallhome.attributes.rn").String()
+						if rnValue == "callhome" {
+							rsnmpTcallhome = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpEventNotify gjson.Result
+					rsnmpTcallhome.Get("snmpTcallhome.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEventNotify.attributes.rn").String()
+							if rnValue == "eventnotify" {
+								rsnmpEventNotify = v
+								return false
+							}
+							return true
+						},
+					)
+					data.CallhomeEventNotifyTrapStatus = types.StringValue(rsnmpEventNotify.Get("snmpEventNotify.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpSmtpSendFail gjson.Result
+					rsnmpTcallhome.Get("snmpTcallhome.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpSmtpSendFail.attributes.rn").String()
+							if rnValue == "smtpsendfail" {
+								rsnmpSmtpSendFail = v
+								return false
+							}
+							return true
+						},
+					)
+					data.CallhomeSmtpSendFailTrapStatus = types.StringValue(rsnmpSmtpSendFail.Get("snmpSmtpSendFail.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTcfs gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTcfs.attributes.rn").String()
+						if rnValue == "cfs" {
+							rsnmpTcfs = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpStateChangeNotif gjson.Result
+					rsnmpTcfs.Get("snmpTcfs.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpStateChangeNotif.attributes.rn").String()
+							if rnValue == "statechangenotif" {
+								rsnmpStateChangeNotif = v
+								return false
+							}
+							return true
+						},
+					)
+					data.CfsStateChangeNotifTrapStatus = types.StringValue(rsnmpStateChangeNotif.Get("snmpStateChangeNotif.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpMergeFailure gjson.Result
+					rsnmpTcfs.Get("snmpTcfs.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpMergeFailure.attributes.rn").String()
+							if rnValue == "mergefailure" {
+								rsnmpMergeFailure = v
+								return false
+							}
+							return true
+						},
+					)
+					data.CfsMergeFailureTrapStatus = types.StringValue(rsnmpMergeFailure.Get("snmpMergeFailure.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTconfig gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTconfig.attributes.rn").String()
+						if rnValue == "config" {
+							rsnmpTconfig = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpCLIRunningConfigChange gjson.Result
+					rsnmpTconfig.Get("snmpTconfig.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCLIRunningConfigChange.attributes.rn").String()
+							if rnValue == "ccmCLIRunningConfigChanged" {
+								rsnmpCLIRunningConfigChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.ConfigCliRunningConfigChangeTrapStatus = types.StringValue(rsnmpCLIRunningConfigChange.Get("snmpCLIRunningConfigChange.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTentity gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTentity.attributes.rn").String()
+						if rnValue == "entity" {
+							rsnmpTentity = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpEntityMIBChange gjson.Result
+					rsnmpTentity.Get("snmpTentity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEntityMIBChange.attributes.rn").String()
+							if rnValue == "entitymibchange" {
+								rsnmpEntityMIBChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.EntityMibChangeTrapStatus = types.StringValue(rsnmpEntityMIBChange.Get("snmpEntityMIBChange.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpEntityMIBEnableStatusNotification gjson.Result
+					rsnmpTentity.Get("snmpTentity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEntityMIBEnableStatusNotification.attributes.rn").String()
+							if rnValue == "cefcMIBEnableStatusNotification" {
+								rsnmpEntityMIBEnableStatusNotification = v
+								return false
+							}
+							return true
+						},
+					)
+					data.EntityMibEnableStatusNotificationTrapStatus = types.StringValue(rsnmpEntityMIBEnableStatusNotification.Get("snmpEntityMIBEnableStatusNotification.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpEntityFanStatusChange gjson.Result
+					rsnmpTentity.Get("snmpTentity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEntityFanStatusChange.attributes.rn").String()
+							if rnValue == "entityfanstatuschange" {
+								rsnmpEntityFanStatusChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.EntityFanStatusChangeTrapStatus = types.StringValue(rsnmpEntityFanStatusChange.Get("snmpEntityFanStatusChange.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpEntityModuleInserted gjson.Result
+					rsnmpTentity.Get("snmpTentity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEntityModuleInserted.attributes.rn").String()
+							if rnValue == "entitymoduleinserted" {
+								rsnmpEntityModuleInserted = v
+								return false
+							}
+							return true
+						},
+					)
+					data.EntityModuleInsertedTrapStatus = types.StringValue(rsnmpEntityModuleInserted.Get("snmpEntityModuleInserted.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpEntityModuleRemoved gjson.Result
+					rsnmpTentity.Get("snmpTentity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEntityModuleRemoved.attributes.rn").String()
+							if rnValue == "entitymoduleremoved" {
+								rsnmpEntityModuleRemoved = v
+								return false
+							}
+							return true
+						},
+					)
+					data.EntityModuleRemovedTrapStatus = types.StringValue(rsnmpEntityModuleRemoved.Get("snmpEntityModuleRemoved.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpEntityModuleStatusChange gjson.Result
+					rsnmpTentity.Get("snmpTentity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEntityModuleStatusChange.attributes.rn").String()
+							if rnValue == "entitymodulestatuschange" {
+								rsnmpEntityModuleStatusChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.EntityModuleStatusChangeTrapStatus = types.StringValue(rsnmpEntityModuleStatusChange.Get("snmpEntityModuleStatusChange.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpEntityPowerOutChange gjson.Result
+					rsnmpTentity.Get("snmpTentity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEntityPowerOutChange.attributes.rn").String()
+							if rnValue == "entitypoweroutchange" {
+								rsnmpEntityPowerOutChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.EntityPowerOutChangeTrapStatus = types.StringValue(rsnmpEntityPowerOutChange.Get("snmpEntityPowerOutChange.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpEntityPowerStatusChange gjson.Result
+					rsnmpTentity.Get("snmpTentity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEntityPowerStatusChange.attributes.rn").String()
+							if rnValue == "entitypowerstatuschange" {
+								rsnmpEntityPowerStatusChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.EntityPowerStatusChangeTrapStatus = types.StringValue(rsnmpEntityPowerStatusChange.Get("snmpEntityPowerStatusChange.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpEntitySensor gjson.Result
+					rsnmpTentity.Get("snmpTentity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEntitySensor.attributes.rn").String()
+							if rnValue == "entitysensor" {
+								rsnmpEntitySensor = v
+								return false
+							}
+							return true
+						},
+					)
+					data.EntitySensorTrapStatus = types.StringValue(rsnmpEntitySensor.Get("snmpEntitySensor.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpEntityUnrecognisedModule gjson.Result
+					rsnmpTentity.Get("snmpTentity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpEntityUnrecognisedModule.attributes.rn").String()
+							if rnValue == "entityunrecognisedmodule" {
+								rsnmpEntityUnrecognisedModule = v
+								return false
+							}
+							return true
+						},
+					)
+					data.EntityUnrecognisedModuleTrapStatus = types.StringValue(rsnmpEntityUnrecognisedModule.Get("snmpEntityUnrecognisedModule.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTfcdomain gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTfcdomain.attributes.rn").String()
+						if rnValue == "fcdomain" {
+							rsnmpTfcdomain = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpDmDomainIdNotAssignedNotify gjson.Result
+					rsnmpTfcdomain.Get("snmpTfcdomain.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpDmDomainIdNotAssignedNotify.attributes.rn").String()
+							if rnValue == "dmdomainidnotassignednotify" {
+								rsnmpDmDomainIdNotAssignedNotify = v
+								return false
+							}
+							return true
+						},
+					)
+					data.FcdomainDomainIdNotAssignedTrapStatus = types.StringValue(rsnmpDmDomainIdNotAssignedNotify.Get("snmpDmDomainIdNotAssignedNotify.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpDmFabricChangeNotify gjson.Result
+					rsnmpTfcdomain.Get("snmpTfcdomain.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpDmFabricChangeNotify.attributes.rn").String()
+							if rnValue == "dmfabricchangenotify" {
+								rsnmpDmFabricChangeNotify = v
+								return false
+							}
+							return true
+						},
+					)
+					data.FcdomainFabricChangeTrapStatus = types.StringValue(rsnmpDmFabricChangeNotify.Get("snmpDmFabricChangeNotify.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpDmNewPrincipalSwitchNotify gjson.Result
+					rsnmpTfcdomain.Get("snmpTfcdomain.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpDmNewPrincipalSwitchNotify.attributes.rn").String()
+							if rnValue == "dmnewprincipalswitchnotify" {
+								rsnmpDmNewPrincipalSwitchNotify = v
+								return false
+							}
+							return true
+						},
+					)
+					data.FcdomainNewPrincipalSwitchTrapStatus = types.StringValue(rsnmpDmNewPrincipalSwitchNotify.Get("snmpDmNewPrincipalSwitchNotify.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTfeaturecontrol gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTfeaturecontrol.attributes.rn").String()
+						if rnValue == "featurecontrol" {
+							rsnmpTfeaturecontrol = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpFeatureOpStatusChange gjson.Result
+					rsnmpTfeaturecontrol.Get("snmpTfeaturecontrol.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpFeatureOpStatusChange.attributes.rn").String()
+							if rnValue == "FeatureOpStatusChange" {
+								rsnmpFeatureOpStatusChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.FeatureControlOpStatusChangeTrapStatus = types.StringValue(rsnmpFeatureOpStatusChange.Get("snmpFeatureOpStatusChange.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpCiscoFeatOpStatusChange gjson.Result
+					rsnmpTfeaturecontrol.Get("snmpTfeaturecontrol.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCiscoFeatOpStatusChange.attributes.rn").String()
+							if rnValue == "ciscoFeatOpStatusChange" {
+								rsnmpCiscoFeatOpStatusChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.FeatureControlCiscoOpStatusChangeTrapStatus = types.StringValue(rsnmpCiscoFeatOpStatusChange.Get("snmpCiscoFeatOpStatusChange.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTgeneric gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTgeneric.attributes.rn").String()
+						if rnValue == "generic" {
+							rsnmpTgeneric = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpColdStart gjson.Result
+					rsnmpTgeneric.Get("snmpTgeneric.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpColdStart.attributes.rn").String()
+							if rnValue == "coldStart" {
+								rsnmpColdStart = v
+								return false
+							}
+							return true
+						},
+					)
+					data.GenericColdStartTrapStatus = types.StringValue(rsnmpColdStart.Get("snmpColdStart.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpWarmStart gjson.Result
+					rsnmpTgeneric.Get("snmpTgeneric.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpWarmStart.attributes.rn").String()
+							if rnValue == "warmStart" {
+								rsnmpWarmStart = v
+								return false
+							}
+							return true
+						},
+					)
+					data.GenericWarmStartTrapStatus = types.StringValue(rsnmpWarmStart.Get("snmpWarmStart.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpThsrp gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpThsrp.attributes.rn").String()
+						if rnValue == "hsrp" {
+							rsnmpThsrp = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpStateChange gjson.Result
+					rsnmpThsrp.Get("snmpThsrp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpStateChange.attributes.rn").String()
+							if rnValue == "statechange" {
+								rsnmpStateChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.HsrpStateChangeTrapStatus = types.StringValue(rsnmpStateChange.Get("snmpStateChange.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTlicense gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTlicense.attributes.rn").String()
+						if rnValue == "license" {
+							rsnmpTlicense = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpNotifyLicenseExpiry gjson.Result
+					rsnmpTlicense.Get("snmpTlicense.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpNotifyLicenseExpiry.attributes.rn").String()
+							if rnValue == "notifylicenseexpiry" {
+								rsnmpNotifyLicenseExpiry = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LicenseExpiryTrapStatus = types.StringValue(rsnmpNotifyLicenseExpiry.Get("snmpNotifyLicenseExpiry.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpNotifyLicenseExpiryWarning gjson.Result
+					rsnmpTlicense.Get("snmpTlicense.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpNotifyLicenseExpiryWarning.attributes.rn").String()
+							if rnValue == "notifylicenseexpirywarning" {
+								rsnmpNotifyLicenseExpiryWarning = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LicenseExpiryWarningTrapStatus = types.StringValue(rsnmpNotifyLicenseExpiryWarning.Get("snmpNotifyLicenseExpiryWarning.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpNotifyLicenseFileMissing gjson.Result
+					rsnmpTlicense.Get("snmpTlicense.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpNotifyLicenseFileMissing.attributes.rn").String()
+							if rnValue == "notifylicensefilemissing" {
+								rsnmpNotifyLicenseFileMissing = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LicenseFileMissingTrapStatus = types.StringValue(rsnmpNotifyLicenseFileMissing.Get("snmpNotifyLicenseFileMissing.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpNotifyNoLicenceForFeature gjson.Result
+					rsnmpTlicense.Get("snmpTlicense.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpNotifyNoLicenceForFeature.attributes.rn").String()
+							if rnValue == "notifynolicenseforfeature" {
+								rsnmpNotifyNoLicenceForFeature = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LicenseNoLicenseForFeatureTrapStatus = types.StringValue(rsnmpNotifyNoLicenceForFeature.Get("snmpNotifyNoLicenceForFeature.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTlink gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTlink.attributes.rn").String()
+						if rnValue == "link" {
+							rsnmpTlink = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpCieLinkDown gjson.Result
+					rsnmpTlink.Get("snmpTlink.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCieLinkDown.attributes.rn").String()
+							if rnValue == "cieLinkDown" {
+								rsnmpCieLinkDown = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LinkCieLinkDownTrapStatus = types.StringValue(rsnmpCieLinkDown.Get("snmpCieLinkDown.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpCieLinkUp gjson.Result
+					rsnmpTlink.Get("snmpTlink.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCieLinkUp.attributes.rn").String()
+							if rnValue == "cieLinkUp" {
+								rsnmpCieLinkUp = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LinkCieLinkUpTrapStatus = types.StringValue(rsnmpCieLinkUp.Get("snmpCieLinkUp.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpCiscoXcvrMonStatusChange gjson.Result
+					rsnmpTlink.Get("snmpTlink.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCiscoXcvrMonStatusChange.attributes.rn").String()
+							if rnValue == "ciscoxcvrmonstatuschg" {
+								rsnmpCiscoXcvrMonStatusChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LinkCiscoXcvrMonStatusChangeTrapStatus = types.StringValue(rsnmpCiscoXcvrMonStatusChange.Get("snmpCiscoXcvrMonStatusChange.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpCmnMacMoveNotification gjson.Result
+					rsnmpTlink.Get("snmpTlink.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCmnMacMoveNotification.attributes.rn").String()
+							if rnValue == "cmnmacmovenotification" {
+								rsnmpCmnMacMoveNotification = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LinkCmnMacMoveNotificationTrapStatus = types.StringValue(rsnmpCmnMacMoveNotification.Get("snmpCmnMacMoveNotification.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpDelayedLinkStateChange gjson.Result
+					rsnmpTlink.Get("snmpTlink.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpDelayedLinkStateChange.attributes.rn").String()
+							if rnValue == "delayedlinkstatechange" {
+								rsnmpDelayedLinkStateChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LinkDelayedLinkStateChangeTrapStatus = types.StringValue(rsnmpDelayedLinkStateChange.Get("snmpDelayedLinkStateChange.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpExtendedLinkDown gjson.Result
+					rsnmpTlink.Get("snmpTlink.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpExtendedLinkDown.attributes.rn").String()
+							if rnValue == "extendedlinkDown" {
+								rsnmpExtendedLinkDown = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LinkExtendedLinkDownTrapStatus = types.StringValue(rsnmpExtendedLinkDown.Get("snmpExtendedLinkDown.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpExtendedLinkUp gjson.Result
+					rsnmpTlink.Get("snmpTlink.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpExtendedLinkUp.attributes.rn").String()
+							if rnValue == "extendedlinkUp" {
+								rsnmpExtendedLinkUp = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LinkExtendedLinkUpTrapStatus = types.StringValue(rsnmpExtendedLinkUp.Get("snmpExtendedLinkUp.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpLinkDown gjson.Result
+					rsnmpTlink.Get("snmpTlink.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpLinkDown.attributes.rn").String()
+							if rnValue == "linkDown" {
+								rsnmpLinkDown = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LinkLinkDownTrapStatus = types.StringValue(rsnmpLinkDown.Get("snmpLinkDown.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpLinkUp gjson.Result
+					rsnmpTlink.Get("snmpTlink.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpLinkUp.attributes.rn").String()
+							if rnValue == "linkUp" {
+								rsnmpLinkUp = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LinkLinkUpTrapStatus = types.StringValue(rsnmpLinkUp.Get("snmpLinkUp.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpCErrDisableInterfaceEventRev1 gjson.Result
+					rsnmpTlink.Get("snmpTlink.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCErrDisableInterfaceEventRev1.attributes.rn").String()
+							if rnValue == "cerrdisableinterfaceeventrev1" {
+								rsnmpCErrDisableInterfaceEventRev1 = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LinkErrDisableInterfaceEventTrapStatus = types.StringValue(rsnmpCErrDisableInterfaceEventRev1.Get("snmpCErrDisableInterfaceEventRev1.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTlldp gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTlldp.attributes.rn").String()
+						if rnValue == "lldp" {
+							rsnmpTlldp = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpLldpRemTablesChange gjson.Result
+					rsnmpTlldp.Get("snmpTlldp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpLldpRemTablesChange.attributes.rn").String()
+							if rnValue == "lldpRemTablesChange" {
+								rsnmpLldpRemTablesChange = v
+								return false
+							}
+							return true
+						},
+					)
+					data.LldpRemTablesChangeTrapStatus = types.StringValue(rsnmpLldpRemTablesChange.Get("snmpLldpRemTablesChange.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTmmode gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTmmode.attributes.rn").String()
+						if rnValue == "mmode" {
+							rsnmpTmmode = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpCseMaintModeChangeNotify gjson.Result
+					rsnmpTmmode.Get("snmpTmmode.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCseMaintModeChangeNotify.attributes.rn").String()
+							if rnValue == "cseMaintModeChangeNotify" {
+								rsnmpCseMaintModeChangeNotify = v
+								return false
+							}
+							return true
+						},
+					)
+					data.MmodeMaintModeChangeTrapStatus = types.StringValue(rsnmpCseMaintModeChangeNotify.Get("snmpCseMaintModeChangeNotify.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpCseNormalModeChangeNotify gjson.Result
+					rsnmpTmmode.Get("snmpTmmode.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCseNormalModeChangeNotify.attributes.rn").String()
+							if rnValue == "cseNormalModeChangeNotify" {
+								rsnmpCseNormalModeChangeNotify = v
+								return false
+							}
+							return true
+						},
+					)
+					data.MmodeNormalModeChangeTrapStatus = types.StringValue(rsnmpCseNormalModeChangeNotify.Get("snmpCseNormalModeChangeNotify.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTmpls gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTmpls.attributes.rn").String()
+						if rnValue == "mpls" {
+							rsnmpTmpls = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpLdp gjson.Result
+					rsnmpTmpls.Get("snmpTmpls.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpLdp.attributes.rn").String()
+							if rnValue == "ldp" {
+								rsnmpLdp = v
+								return false
+							}
+							return true
+						},
+					)
+					data.MplsLdpTrapStatus = types.StringValue(rsnmpLdp.Get("snmpLdp.attributes.trapstatus").String())
+					{
+						var rsnmpLdpSessiondown gjson.Result
+						rsnmpLdp.Get("snmpLdp.children").ForEach(
+							func(_, v gjson.Result) bool {
+								rnValue := v.Get("snmpLdpSessiondown.attributes.rn").String()
+								if rnValue == "ldpsessiondown" {
+									rsnmpLdpSessiondown = v
+									return false
+								}
+								return true
+							},
+						)
+						data.MplsLdpSessionDownTrapStatus = types.StringValue(rsnmpLdpSessiondown.Get("snmpLdpSessiondown.attributes.trapstatus").String())
+					}
+					{
+						var rsnmpLdpSessionup gjson.Result
+						rsnmpLdp.Get("snmpLdp.children").ForEach(
+							func(_, v gjson.Result) bool {
+								rnValue := v.Get("snmpLdpSessionup.attributes.rn").String()
+								if rnValue == "ldpsessionup" {
+									rsnmpLdpSessionup = v
+									return false
+								}
+								return true
+							},
+						)
+						data.MplsLdpSessionUpTrapStatus = types.StringValue(rsnmpLdpSessionup.Get("snmpLdpSessionup.attributes.trapstatus").String())
+					}
+				}
+				{
+					var rsnmpVpn gjson.Result
+					rsnmpTmpls.Get("snmpTmpls.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpVpn.attributes.rn").String()
+							if rnValue == "vpn" {
+								rsnmpVpn = v
+								return false
+							}
+							return true
+						},
+					)
+					data.MplsVpnTrapStatus = types.StringValue(rsnmpVpn.Get("snmpVpn.attributes.trapstatus").String())
+					{
+						var rsnmpVpnMaxThreshcleared gjson.Result
+						rsnmpVpn.Get("snmpVpn.children").ForEach(
+							func(_, v gjson.Result) bool {
+								rnValue := v.Get("snmpVpnMaxThreshcleared.attributes.rn").String()
+								if rnValue == "vpnmaxthreshcleared" {
+									rsnmpVpnMaxThreshcleared = v
+									return false
+								}
+								return true
+							},
+						)
+						data.MplsVpnMaxThreshClearedTrapStatus = types.StringValue(rsnmpVpnMaxThreshcleared.Get("snmpVpnMaxThreshcleared.attributes.trapstatus").String())
+					}
+					{
+						var rsnmpVpnMaxThreshexceeded gjson.Result
+						rsnmpVpn.Get("snmpVpn.children").ForEach(
+							func(_, v gjson.Result) bool {
+								rnValue := v.Get("snmpVpnMaxThreshexceeded.attributes.rn").String()
+								if rnValue == "vpnmaxthreshexceeded" {
+									rsnmpVpnMaxThreshexceeded = v
+									return false
+								}
+								return true
+							},
+						)
+						data.MplsVpnMaxThreshExceededTrapStatus = types.StringValue(rsnmpVpnMaxThreshexceeded.Get("snmpVpnMaxThreshexceeded.attributes.trapstatus").String())
+					}
+					{
+						var rsnmpVpnMidThreshexceeded gjson.Result
+						rsnmpVpn.Get("snmpVpn.children").ForEach(
+							func(_, v gjson.Result) bool {
+								rnValue := v.Get("snmpVpnMidThreshexceeded.attributes.rn").String()
+								if rnValue == "vpnmidthreshexceeded" {
+									rsnmpVpnMidThreshexceeded = v
+									return false
+								}
+								return true
+							},
+						)
+						data.MplsVpnMidThreshExceededTrapStatus = types.StringValue(rsnmpVpnMidThreshexceeded.Get("snmpVpnMidThreshexceeded.attributes.trapstatus").String())
+					}
+					{
+						var rsnmpVpnVrfdown gjson.Result
+						rsnmpVpn.Get("snmpVpn.children").ForEach(
+							func(_, v gjson.Result) bool {
+								rnValue := v.Get("snmpVpnVrfdown.attributes.rn").String()
+								if rnValue == "vpnvrfdown" {
+									rsnmpVpnVrfdown = v
+									return false
+								}
+								return true
+							},
+						)
+						data.MplsVpnVrfDownTrapStatus = types.StringValue(rsnmpVpnVrfdown.Get("snmpVpnVrfdown.attributes.trapstatus").String())
+					}
+					{
+						var rsnmpVpnVrfup gjson.Result
+						rsnmpVpn.Get("snmpVpn.children").ForEach(
+							func(_, v gjson.Result) bool {
+								rnValue := v.Get("snmpVpnVrfup.attributes.rn").String()
+								if rnValue == "vpnvrfup" {
+									rsnmpVpnVrfup = v
+									return false
+								}
+								return true
+							},
+						)
+						data.MplsVpnVrfUpTrapStatus = types.StringValue(rsnmpVpnVrfup.Get("snmpVpnVrfup.attributes.trapstatus").String())
+					}
+				}
+			}
+			{
+				var rsnmpTmsdp gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTmsdp.attributes.rn").String()
+						if rnValue == "msdp" {
+							rsnmpTmsdp = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpMsdpBackwardTransition gjson.Result
+					rsnmpTmsdp.Get("snmpTmsdp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpMsdpBackwardTransition.attributes.rn").String()
+							if rnValue == "msdpBackwardTransition" {
+								rsnmpMsdpBackwardTransition = v
+								return false
+							}
+							return true
+						},
+					)
+					data.MsdpBackwardTransitionTrapStatus = types.StringValue(rsnmpMsdpBackwardTransition.Get("snmpMsdpBackwardTransition.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTpim gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTpim.attributes.rn").String()
+						if rnValue == "pim" {
+							rsnmpTpim = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpPimNeighborLoss gjson.Result
+					rsnmpTpim.Get("snmpTpim.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpPimNeighborLoss.attributes.rn").String()
+							if rnValue == "pimNeighborLoss" {
+								rsnmpPimNeighborLoss = v
+								return false
+							}
+							return true
+						},
+					)
+					data.PimNeighborLossTrapStatus = types.StringValue(rsnmpPimNeighborLoss.Get("snmpPimNeighborLoss.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTportsecurity gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTportsecurity.attributes.rn").String()
+						if rnValue == "portsecurity" {
+							rsnmpTportsecurity = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpAccessSecureMacViolation gjson.Result
+					rsnmpTportsecurity.Get("snmpTportsecurity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpAccessSecureMacViolation.attributes.rn").String()
+							if rnValue == "accesssecuremacviolation" {
+								rsnmpAccessSecureMacViolation = v
+								return false
+							}
+							return true
+						},
+					)
+					data.PortSecurityAccessSecureMacViolationTrapStatus = types.StringValue(rsnmpAccessSecureMacViolation.Get("snmpAccessSecureMacViolation.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpTrunkSecureMacViolation gjson.Result
+					rsnmpTportsecurity.Get("snmpTportsecurity.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpTrunkSecureMacViolation.attributes.rn").String()
+							if rnValue == "trunksecuremacviolation" {
+								rsnmpTrunkSecureMacViolation = v
+								return false
+							}
+							return true
+						},
+					)
+					data.PortSecurityTrunkSecureMacViolationTrapStatus = types.StringValue(rsnmpTrunkSecureMacViolation.Get("snmpTrunkSecureMacViolation.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTrf gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTrf.attributes.rn").String()
+						if rnValue == "rf" {
+							rsnmpTrf = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpRedundancyFramework gjson.Result
+					rsnmpTrf.Get("snmpTrf.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpRedundancyFramework.attributes.rn").String()
+							if rnValue == "redundancyframework" {
+								rsnmpRedundancyFramework = v
+								return false
+							}
+							return true
+						},
+					)
+					data.RfRedundancyFrameworkTrapStatus = types.StringValue(rsnmpRedundancyFramework.Get("snmpRedundancyFramework.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTrmon gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTrmon.attributes.rn").String()
+						if rnValue == "rmon" {
+							rsnmpTrmon = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpRisingAlarm gjson.Result
+					rsnmpTrmon.Get("snmpTrmon.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpRisingAlarm.attributes.rn").String()
+							if rnValue == "risingAlarm" {
+								rsnmpRisingAlarm = v
+								return false
+							}
+							return true
+						},
+					)
+					data.RmonRisingAlarmTrapStatus = types.StringValue(rsnmpRisingAlarm.Get("snmpRisingAlarm.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpFallingAlarm gjson.Result
+					rsnmpTrmon.Get("snmpTrmon.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpFallingAlarm.attributes.rn").String()
+							if rnValue == "fallingAlarm" {
+								rsnmpFallingAlarm = v
+								return false
+							}
+							return true
+						},
+					)
+					data.RmonFallingAlarmTrapStatus = types.StringValue(rsnmpFallingAlarm.Get("snmpFallingAlarm.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpHcRisingAlarm gjson.Result
+					rsnmpTrmon.Get("snmpTrmon.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpHcRisingAlarm.attributes.rn").String()
+							if rnValue == "hcRisingAlarm" {
+								rsnmpHcRisingAlarm = v
+								return false
+							}
+							return true
+						},
+					)
+					data.RmonHcRisingAlarmTrapStatus = types.StringValue(rsnmpHcRisingAlarm.Get("snmpHcRisingAlarm.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpHcFallingAlarm gjson.Result
+					rsnmpTrmon.Get("snmpTrmon.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpHcFallingAlarm.attributes.rn").String()
+							if rnValue == "hcFallingAlarm" {
+								rsnmpHcFallingAlarm = v
+								return false
+							}
+							return true
+						},
+					)
+					data.RmonHcFallingAlarmTrapStatus = types.StringValue(rsnmpHcFallingAlarm.Get("snmpHcFallingAlarm.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTsnmp gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTsnmp.attributes.rn").String()
+						if rnValue == "snmp" {
+							rsnmpTsnmp = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpAuthentication gjson.Result
+					rsnmpTsnmp.Get("snmpTsnmp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpAuthentication.attributes.rn").String()
+							if rnValue == "authentication" {
+								rsnmpAuthentication = v
+								return false
+							}
+							return true
+						},
+					)
+					data.SnmpAuthenticationTrapStatus = types.StringValue(rsnmpAuthentication.Get("snmpAuthentication.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTstormControl gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTstormControl.attributes.rn").String()
+						if rnValue == "stormcontrol" {
+							rsnmpTstormControl = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpCpscEventRev1 gjson.Result
+					rsnmpTstormControl.Get("snmpTstormControl.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCpscEventRev1.attributes.rn").String()
+							if rnValue == "cpscEventRev1" {
+								rsnmpCpscEventRev1 = v
+								return false
+							}
+							return true
+						},
+					)
+					data.StormControlCpscEventTrapStatus = types.StringValue(rsnmpCpscEventRev1.Get("snmpCpscEventRev1.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTstpx gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTstpx.attributes.rn").String()
+						if rnValue == "stpx" {
+							rsnmpTstpx = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpInconsistency gjson.Result
+					rsnmpTstpx.Get("snmpTstpx.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpInconsistency.attributes.rn").String()
+							if rnValue == "inconsistency" {
+								rsnmpInconsistency = v
+								return false
+							}
+							return true
+						},
+					)
+					data.StpxInconsistencyTrapStatus = types.StringValue(rsnmpInconsistency.Get("snmpInconsistency.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpLoopInconsistency gjson.Result
+					rsnmpTstpx.Get("snmpTstpx.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpLoopInconsistency.attributes.rn").String()
+							if rnValue == "loopinconsistency" {
+								rsnmpLoopInconsistency = v
+								return false
+							}
+							return true
+						},
+					)
+					data.StpxLoopInconsistencyTrapStatus = types.StringValue(rsnmpLoopInconsistency.Get("snmpLoopInconsistency.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpRootInconsistency gjson.Result
+					rsnmpTstpx.Get("snmpTstpx.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpRootInconsistency.attributes.rn").String()
+							if rnValue == "rootinconsistency" {
+								rsnmpRootInconsistency = v
+								return false
+							}
+							return true
+						},
+					)
+					data.StpxRootInconsistencyTrapStatus = types.StringValue(rsnmpRootInconsistency.Get("snmpRootInconsistency.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTsyslog gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTsyslog.attributes.rn").String()
+						if rnValue == "syslog" {
+							rsnmpTsyslog = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpMessageGenerated gjson.Result
+					rsnmpTsyslog.Get("snmpTsyslog.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpMessageGenerated.attributes.rn").String()
+							if rnValue == "messagegenerated" {
+								rsnmpMessageGenerated = v
+								return false
+							}
+							return true
+						},
+					)
+					data.SyslogMessageGeneratedTrapStatus = types.StringValue(rsnmpMessageGenerated.Get("snmpMessageGenerated.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTsysmgr gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTsysmgr.attributes.rn").String()
+						if rnValue == "sysmgr" {
+							rsnmpTsysmgr = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpCseFailSwCoreNotifyExtended gjson.Result
+					rsnmpTsysmgr.Get("snmpTsysmgr.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpCseFailSwCoreNotifyExtended.attributes.rn").String()
+							if rnValue == "cseFailSwCoreNotifyExtended" {
+								rsnmpCseFailSwCoreNotifyExtended = v
+								return false
+							}
+							return true
+						},
+					)
+					data.SysmgrFailSwCoreNotifyTrapStatus = types.StringValue(rsnmpCseFailSwCoreNotifyExtended.Get("snmpCseFailSwCoreNotifyExtended.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTsystem gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTsystem.attributes.rn").String()
+						if rnValue == "system" {
+							rsnmpTsystem = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpClockChangeNotification gjson.Result
+					rsnmpTsystem.Get("snmpTsystem.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpClockChangeNotification.attributes.rn").String()
+							if rnValue == "Clockchangenotification" {
+								rsnmpClockChangeNotification = v
+								return false
+							}
+							return true
+						},
+					)
+					data.SystemClockChangeNotificationTrapStatus = types.StringValue(rsnmpClockChangeNotification.Get("snmpClockChangeNotification.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTupgrade gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTupgrade.attributes.rn").String()
+						if rnValue == "upgrade" {
+							rsnmpTupgrade = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpUpgradeJobStatusNotify gjson.Result
+					rsnmpTupgrade.Get("snmpTupgrade.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpUpgradeJobStatusNotify.attributes.rn").String()
+							if rnValue == "UpgradeJobStatusNotify" {
+								rsnmpUpgradeJobStatusNotify = v
+								return false
+							}
+							return true
+						},
+					)
+					data.UpgradeJobStatusNotifyTrapStatus = types.StringValue(rsnmpUpgradeJobStatusNotify.Get("snmpUpgradeJobStatusNotify.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpUpgradeOpNotifyOnCompletion gjson.Result
+					rsnmpTupgrade.Get("snmpTupgrade.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpUpgradeOpNotifyOnCompletion.attributes.rn").String()
+							if rnValue == "UpgradeOpNotifyOnCompletion" {
+								rsnmpUpgradeOpNotifyOnCompletion = v
+								return false
+							}
+							return true
+						},
+					)
+					data.UpgradeOpNotifyOnCompletionTrapStatus = types.StringValue(rsnmpUpgradeOpNotifyOnCompletion.Get("snmpUpgradeOpNotifyOnCompletion.attributes.trapstatus").String())
+				}
+			}
+			{
+				var rsnmpTvtp gjson.Result
+				rsnmpTraps.Get("snmpTraps.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTvtp.attributes.rn").String()
+						if rnValue == "vtp" {
+							rsnmpTvtp = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var rsnmpNotifs gjson.Result
+					rsnmpTvtp.Get("snmpTvtp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpNotifs.attributes.rn").String()
+							if rnValue == "notifs" {
+								rsnmpNotifs = v
+								return false
+							}
+							return true
+						},
+					)
+					data.VtpNotifsTrapStatus = types.StringValue(rsnmpNotifs.Get("snmpNotifs.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpVlancreate gjson.Result
+					rsnmpTvtp.Get("snmpTvtp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpVlancreate.attributes.rn").String()
+							if rnValue == "vlancreate" {
+								rsnmpVlancreate = v
+								return false
+							}
+							return true
+						},
+					)
+					data.VtpVlanCreateTrapStatus = types.StringValue(rsnmpVlancreate.Get("snmpVlancreate.attributes.trapstatus").String())
+				}
+				{
+					var rsnmpVlandelete gjson.Result
+					rsnmpTvtp.Get("snmpTvtp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpVlandelete.attributes.rn").String()
+							if rnValue == "vlandelete" {
+								rsnmpVlandelete = v
+								return false
+							}
+							return true
+						},
+					)
+					data.VtpVlanDeleteTrapStatus = types.StringValue(rsnmpVlandelete.Get("snmpVlandelete.attributes.trapstatus").String())
+				}
+			}
 		}
 		{
 			var rsnmpRmon gjson.Result
@@ -870,6 +3175,1751 @@ func (data *SNMP) updateFromBody(res gjson.Result) {
 		} else {
 			data.EnableAll = types.StringNull()
 		}
+		{
+			var rsnmpTaaa gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTaaa.attributes.rn").String()
+					if rnValue == "aaa" {
+						rsnmpTaaa = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpServerStateChange gjson.Result
+				rsnmpTaaa.Get("snmpTaaa.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpServerStateChange.attributes.rn").String()
+						if rnValue == "serverstatechange" {
+							rsnmpServerStateChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.AaaServerStateChangeTrapStatus.IsNull() {
+					data.AaaServerStateChangeTrapStatus = types.StringValue(rsnmpServerStateChange.Get("snmpServerStateChange.attributes.trapstatus").String())
+				} else {
+					data.AaaServerStateChangeTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTbfd gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTbfd.attributes.rn").String()
+					if rnValue == "bfd" {
+						rsnmpTbfd = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpSessionDown gjson.Result
+				rsnmpTbfd.Get("snmpTbfd.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpSessionDown.attributes.rn").String()
+						if rnValue == "sessiondown" {
+							rsnmpSessionDown = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.BfdSessionDownTrapStatus.IsNull() {
+					data.BfdSessionDownTrapStatus = types.StringValue(rsnmpSessionDown.Get("snmpSessionDown.attributes.trapstatus").String())
+				} else {
+					data.BfdSessionDownTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpSessionUp gjson.Result
+				rsnmpTbfd.Get("snmpTbfd.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpSessionUp.attributes.rn").String()
+						if rnValue == "sessionup" {
+							rsnmpSessionUp = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.BfdSessionUpTrapStatus.IsNull() {
+					data.BfdSessionUpTrapStatus = types.StringValue(rsnmpSessionUp.Get("snmpSessionUp.attributes.trapstatus").String())
+				} else {
+					data.BfdSessionUpTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTbridge gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTbridge.attributes.rn").String()
+					if rnValue == "bridge" {
+						rsnmpTbridge = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpNewRoot gjson.Result
+				rsnmpTbridge.Get("snmpTbridge.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpNewRoot.attributes.rn").String()
+						if rnValue == "newroot" {
+							rsnmpNewRoot = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.BridgeNewRootTrapStatus.IsNull() {
+					data.BridgeNewRootTrapStatus = types.StringValue(rsnmpNewRoot.Get("snmpNewRoot.attributes.trapstatus").String())
+				} else {
+					data.BridgeNewRootTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpTopologyChange gjson.Result
+				rsnmpTbridge.Get("snmpTbridge.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTopologyChange.attributes.rn").String()
+						if rnValue == "topologychange" {
+							rsnmpTopologyChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.BridgeTopologyChangeTrapStatus.IsNull() {
+					data.BridgeTopologyChangeTrapStatus = types.StringValue(rsnmpTopologyChange.Get("snmpTopologyChange.attributes.trapstatus").String())
+				} else {
+					data.BridgeTopologyChangeTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTcallhome gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTcallhome.attributes.rn").String()
+					if rnValue == "callhome" {
+						rsnmpTcallhome = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpEventNotify gjson.Result
+				rsnmpTcallhome.Get("snmpTcallhome.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEventNotify.attributes.rn").String()
+						if rnValue == "eventnotify" {
+							rsnmpEventNotify = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.CallhomeEventNotifyTrapStatus.IsNull() {
+					data.CallhomeEventNotifyTrapStatus = types.StringValue(rsnmpEventNotify.Get("snmpEventNotify.attributes.trapstatus").String())
+				} else {
+					data.CallhomeEventNotifyTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpSmtpSendFail gjson.Result
+				rsnmpTcallhome.Get("snmpTcallhome.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpSmtpSendFail.attributes.rn").String()
+						if rnValue == "smtpsendfail" {
+							rsnmpSmtpSendFail = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.CallhomeSmtpSendFailTrapStatus.IsNull() {
+					data.CallhomeSmtpSendFailTrapStatus = types.StringValue(rsnmpSmtpSendFail.Get("snmpSmtpSendFail.attributes.trapstatus").String())
+				} else {
+					data.CallhomeSmtpSendFailTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTcfs gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTcfs.attributes.rn").String()
+					if rnValue == "cfs" {
+						rsnmpTcfs = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpStateChangeNotif gjson.Result
+				rsnmpTcfs.Get("snmpTcfs.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpStateChangeNotif.attributes.rn").String()
+						if rnValue == "statechangenotif" {
+							rsnmpStateChangeNotif = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.CfsStateChangeNotifTrapStatus.IsNull() {
+					data.CfsStateChangeNotifTrapStatus = types.StringValue(rsnmpStateChangeNotif.Get("snmpStateChangeNotif.attributes.trapstatus").String())
+				} else {
+					data.CfsStateChangeNotifTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpMergeFailure gjson.Result
+				rsnmpTcfs.Get("snmpTcfs.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpMergeFailure.attributes.rn").String()
+						if rnValue == "mergefailure" {
+							rsnmpMergeFailure = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.CfsMergeFailureTrapStatus.IsNull() {
+					data.CfsMergeFailureTrapStatus = types.StringValue(rsnmpMergeFailure.Get("snmpMergeFailure.attributes.trapstatus").String())
+				} else {
+					data.CfsMergeFailureTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTconfig gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTconfig.attributes.rn").String()
+					if rnValue == "config" {
+						rsnmpTconfig = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpCLIRunningConfigChange gjson.Result
+				rsnmpTconfig.Get("snmpTconfig.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCLIRunningConfigChange.attributes.rn").String()
+						if rnValue == "ccmCLIRunningConfigChanged" {
+							rsnmpCLIRunningConfigChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.ConfigCliRunningConfigChangeTrapStatus.IsNull() {
+					data.ConfigCliRunningConfigChangeTrapStatus = types.StringValue(rsnmpCLIRunningConfigChange.Get("snmpCLIRunningConfigChange.attributes.trapstatus").String())
+				} else {
+					data.ConfigCliRunningConfigChangeTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTentity gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTentity.attributes.rn").String()
+					if rnValue == "entity" {
+						rsnmpTentity = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpEntityMIBChange gjson.Result
+				rsnmpTentity.Get("snmpTentity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEntityMIBChange.attributes.rn").String()
+						if rnValue == "entitymibchange" {
+							rsnmpEntityMIBChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.EntityMibChangeTrapStatus.IsNull() {
+					data.EntityMibChangeTrapStatus = types.StringValue(rsnmpEntityMIBChange.Get("snmpEntityMIBChange.attributes.trapstatus").String())
+				} else {
+					data.EntityMibChangeTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpEntityMIBEnableStatusNotification gjson.Result
+				rsnmpTentity.Get("snmpTentity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEntityMIBEnableStatusNotification.attributes.rn").String()
+						if rnValue == "cefcMIBEnableStatusNotification" {
+							rsnmpEntityMIBEnableStatusNotification = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.EntityMibEnableStatusNotificationTrapStatus.IsNull() {
+					data.EntityMibEnableStatusNotificationTrapStatus = types.StringValue(rsnmpEntityMIBEnableStatusNotification.Get("snmpEntityMIBEnableStatusNotification.attributes.trapstatus").String())
+				} else {
+					data.EntityMibEnableStatusNotificationTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpEntityFanStatusChange gjson.Result
+				rsnmpTentity.Get("snmpTentity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEntityFanStatusChange.attributes.rn").String()
+						if rnValue == "entityfanstatuschange" {
+							rsnmpEntityFanStatusChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.EntityFanStatusChangeTrapStatus.IsNull() {
+					data.EntityFanStatusChangeTrapStatus = types.StringValue(rsnmpEntityFanStatusChange.Get("snmpEntityFanStatusChange.attributes.trapstatus").String())
+				} else {
+					data.EntityFanStatusChangeTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpEntityModuleInserted gjson.Result
+				rsnmpTentity.Get("snmpTentity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEntityModuleInserted.attributes.rn").String()
+						if rnValue == "entitymoduleinserted" {
+							rsnmpEntityModuleInserted = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.EntityModuleInsertedTrapStatus.IsNull() {
+					data.EntityModuleInsertedTrapStatus = types.StringValue(rsnmpEntityModuleInserted.Get("snmpEntityModuleInserted.attributes.trapstatus").String())
+				} else {
+					data.EntityModuleInsertedTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpEntityModuleRemoved gjson.Result
+				rsnmpTentity.Get("snmpTentity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEntityModuleRemoved.attributes.rn").String()
+						if rnValue == "entitymoduleremoved" {
+							rsnmpEntityModuleRemoved = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.EntityModuleRemovedTrapStatus.IsNull() {
+					data.EntityModuleRemovedTrapStatus = types.StringValue(rsnmpEntityModuleRemoved.Get("snmpEntityModuleRemoved.attributes.trapstatus").String())
+				} else {
+					data.EntityModuleRemovedTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpEntityModuleStatusChange gjson.Result
+				rsnmpTentity.Get("snmpTentity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEntityModuleStatusChange.attributes.rn").String()
+						if rnValue == "entitymodulestatuschange" {
+							rsnmpEntityModuleStatusChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.EntityModuleStatusChangeTrapStatus.IsNull() {
+					data.EntityModuleStatusChangeTrapStatus = types.StringValue(rsnmpEntityModuleStatusChange.Get("snmpEntityModuleStatusChange.attributes.trapstatus").String())
+				} else {
+					data.EntityModuleStatusChangeTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpEntityPowerOutChange gjson.Result
+				rsnmpTentity.Get("snmpTentity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEntityPowerOutChange.attributes.rn").String()
+						if rnValue == "entitypoweroutchange" {
+							rsnmpEntityPowerOutChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.EntityPowerOutChangeTrapStatus.IsNull() {
+					data.EntityPowerOutChangeTrapStatus = types.StringValue(rsnmpEntityPowerOutChange.Get("snmpEntityPowerOutChange.attributes.trapstatus").String())
+				} else {
+					data.EntityPowerOutChangeTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpEntityPowerStatusChange gjson.Result
+				rsnmpTentity.Get("snmpTentity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEntityPowerStatusChange.attributes.rn").String()
+						if rnValue == "entitypowerstatuschange" {
+							rsnmpEntityPowerStatusChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.EntityPowerStatusChangeTrapStatus.IsNull() {
+					data.EntityPowerStatusChangeTrapStatus = types.StringValue(rsnmpEntityPowerStatusChange.Get("snmpEntityPowerStatusChange.attributes.trapstatus").String())
+				} else {
+					data.EntityPowerStatusChangeTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpEntitySensor gjson.Result
+				rsnmpTentity.Get("snmpTentity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEntitySensor.attributes.rn").String()
+						if rnValue == "entitysensor" {
+							rsnmpEntitySensor = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.EntitySensorTrapStatus.IsNull() {
+					data.EntitySensorTrapStatus = types.StringValue(rsnmpEntitySensor.Get("snmpEntitySensor.attributes.trapstatus").String())
+				} else {
+					data.EntitySensorTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpEntityUnrecognisedModule gjson.Result
+				rsnmpTentity.Get("snmpTentity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpEntityUnrecognisedModule.attributes.rn").String()
+						if rnValue == "entityunrecognisedmodule" {
+							rsnmpEntityUnrecognisedModule = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.EntityUnrecognisedModuleTrapStatus.IsNull() {
+					data.EntityUnrecognisedModuleTrapStatus = types.StringValue(rsnmpEntityUnrecognisedModule.Get("snmpEntityUnrecognisedModule.attributes.trapstatus").String())
+				} else {
+					data.EntityUnrecognisedModuleTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTfcdomain gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTfcdomain.attributes.rn").String()
+					if rnValue == "fcdomain" {
+						rsnmpTfcdomain = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpDmDomainIdNotAssignedNotify gjson.Result
+				rsnmpTfcdomain.Get("snmpTfcdomain.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpDmDomainIdNotAssignedNotify.attributes.rn").String()
+						if rnValue == "dmdomainidnotassignednotify" {
+							rsnmpDmDomainIdNotAssignedNotify = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.FcdomainDomainIdNotAssignedTrapStatus.IsNull() {
+					data.FcdomainDomainIdNotAssignedTrapStatus = types.StringValue(rsnmpDmDomainIdNotAssignedNotify.Get("snmpDmDomainIdNotAssignedNotify.attributes.trapstatus").String())
+				} else {
+					data.FcdomainDomainIdNotAssignedTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpDmFabricChangeNotify gjson.Result
+				rsnmpTfcdomain.Get("snmpTfcdomain.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpDmFabricChangeNotify.attributes.rn").String()
+						if rnValue == "dmfabricchangenotify" {
+							rsnmpDmFabricChangeNotify = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.FcdomainFabricChangeTrapStatus.IsNull() {
+					data.FcdomainFabricChangeTrapStatus = types.StringValue(rsnmpDmFabricChangeNotify.Get("snmpDmFabricChangeNotify.attributes.trapstatus").String())
+				} else {
+					data.FcdomainFabricChangeTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpDmNewPrincipalSwitchNotify gjson.Result
+				rsnmpTfcdomain.Get("snmpTfcdomain.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpDmNewPrincipalSwitchNotify.attributes.rn").String()
+						if rnValue == "dmnewprincipalswitchnotify" {
+							rsnmpDmNewPrincipalSwitchNotify = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.FcdomainNewPrincipalSwitchTrapStatus.IsNull() {
+					data.FcdomainNewPrincipalSwitchTrapStatus = types.StringValue(rsnmpDmNewPrincipalSwitchNotify.Get("snmpDmNewPrincipalSwitchNotify.attributes.trapstatus").String())
+				} else {
+					data.FcdomainNewPrincipalSwitchTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTfeaturecontrol gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTfeaturecontrol.attributes.rn").String()
+					if rnValue == "featurecontrol" {
+						rsnmpTfeaturecontrol = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpFeatureOpStatusChange gjson.Result
+				rsnmpTfeaturecontrol.Get("snmpTfeaturecontrol.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpFeatureOpStatusChange.attributes.rn").String()
+						if rnValue == "FeatureOpStatusChange" {
+							rsnmpFeatureOpStatusChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.FeatureControlOpStatusChangeTrapStatus.IsNull() {
+					data.FeatureControlOpStatusChangeTrapStatus = types.StringValue(rsnmpFeatureOpStatusChange.Get("snmpFeatureOpStatusChange.attributes.trapstatus").String())
+				} else {
+					data.FeatureControlOpStatusChangeTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpCiscoFeatOpStatusChange gjson.Result
+				rsnmpTfeaturecontrol.Get("snmpTfeaturecontrol.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCiscoFeatOpStatusChange.attributes.rn").String()
+						if rnValue == "ciscoFeatOpStatusChange" {
+							rsnmpCiscoFeatOpStatusChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull() {
+					data.FeatureControlCiscoOpStatusChangeTrapStatus = types.StringValue(rsnmpCiscoFeatOpStatusChange.Get("snmpCiscoFeatOpStatusChange.attributes.trapstatus").String())
+				} else {
+					data.FeatureControlCiscoOpStatusChangeTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTgeneric gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTgeneric.attributes.rn").String()
+					if rnValue == "generic" {
+						rsnmpTgeneric = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpColdStart gjson.Result
+				rsnmpTgeneric.Get("snmpTgeneric.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpColdStart.attributes.rn").String()
+						if rnValue == "coldStart" {
+							rsnmpColdStart = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.GenericColdStartTrapStatus.IsNull() {
+					data.GenericColdStartTrapStatus = types.StringValue(rsnmpColdStart.Get("snmpColdStart.attributes.trapstatus").String())
+				} else {
+					data.GenericColdStartTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpWarmStart gjson.Result
+				rsnmpTgeneric.Get("snmpTgeneric.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpWarmStart.attributes.rn").String()
+						if rnValue == "warmStart" {
+							rsnmpWarmStart = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.GenericWarmStartTrapStatus.IsNull() {
+					data.GenericWarmStartTrapStatus = types.StringValue(rsnmpWarmStart.Get("snmpWarmStart.attributes.trapstatus").String())
+				} else {
+					data.GenericWarmStartTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpThsrp gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpThsrp.attributes.rn").String()
+					if rnValue == "hsrp" {
+						rsnmpThsrp = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpStateChange gjson.Result
+				rsnmpThsrp.Get("snmpThsrp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpStateChange.attributes.rn").String()
+						if rnValue == "statechange" {
+							rsnmpStateChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.HsrpStateChangeTrapStatus.IsNull() {
+					data.HsrpStateChangeTrapStatus = types.StringValue(rsnmpStateChange.Get("snmpStateChange.attributes.trapstatus").String())
+				} else {
+					data.HsrpStateChangeTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTlicense gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTlicense.attributes.rn").String()
+					if rnValue == "license" {
+						rsnmpTlicense = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpNotifyLicenseExpiry gjson.Result
+				rsnmpTlicense.Get("snmpTlicense.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpNotifyLicenseExpiry.attributes.rn").String()
+						if rnValue == "notifylicenseexpiry" {
+							rsnmpNotifyLicenseExpiry = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LicenseExpiryTrapStatus.IsNull() {
+					data.LicenseExpiryTrapStatus = types.StringValue(rsnmpNotifyLicenseExpiry.Get("snmpNotifyLicenseExpiry.attributes.trapstatus").String())
+				} else {
+					data.LicenseExpiryTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpNotifyLicenseExpiryWarning gjson.Result
+				rsnmpTlicense.Get("snmpTlicense.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpNotifyLicenseExpiryWarning.attributes.rn").String()
+						if rnValue == "notifylicenseexpirywarning" {
+							rsnmpNotifyLicenseExpiryWarning = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LicenseExpiryWarningTrapStatus.IsNull() {
+					data.LicenseExpiryWarningTrapStatus = types.StringValue(rsnmpNotifyLicenseExpiryWarning.Get("snmpNotifyLicenseExpiryWarning.attributes.trapstatus").String())
+				} else {
+					data.LicenseExpiryWarningTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpNotifyLicenseFileMissing gjson.Result
+				rsnmpTlicense.Get("snmpTlicense.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpNotifyLicenseFileMissing.attributes.rn").String()
+						if rnValue == "notifylicensefilemissing" {
+							rsnmpNotifyLicenseFileMissing = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LicenseFileMissingTrapStatus.IsNull() {
+					data.LicenseFileMissingTrapStatus = types.StringValue(rsnmpNotifyLicenseFileMissing.Get("snmpNotifyLicenseFileMissing.attributes.trapstatus").String())
+				} else {
+					data.LicenseFileMissingTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpNotifyNoLicenceForFeature gjson.Result
+				rsnmpTlicense.Get("snmpTlicense.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpNotifyNoLicenceForFeature.attributes.rn").String()
+						if rnValue == "notifynolicenseforfeature" {
+							rsnmpNotifyNoLicenceForFeature = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LicenseNoLicenseForFeatureTrapStatus.IsNull() {
+					data.LicenseNoLicenseForFeatureTrapStatus = types.StringValue(rsnmpNotifyNoLicenceForFeature.Get("snmpNotifyNoLicenceForFeature.attributes.trapstatus").String())
+				} else {
+					data.LicenseNoLicenseForFeatureTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTlink gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTlink.attributes.rn").String()
+					if rnValue == "link" {
+						rsnmpTlink = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpCieLinkDown gjson.Result
+				rsnmpTlink.Get("snmpTlink.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCieLinkDown.attributes.rn").String()
+						if rnValue == "cieLinkDown" {
+							rsnmpCieLinkDown = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LinkCieLinkDownTrapStatus.IsNull() {
+					data.LinkCieLinkDownTrapStatus = types.StringValue(rsnmpCieLinkDown.Get("snmpCieLinkDown.attributes.trapstatus").String())
+				} else {
+					data.LinkCieLinkDownTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpCieLinkUp gjson.Result
+				rsnmpTlink.Get("snmpTlink.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCieLinkUp.attributes.rn").String()
+						if rnValue == "cieLinkUp" {
+							rsnmpCieLinkUp = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LinkCieLinkUpTrapStatus.IsNull() {
+					data.LinkCieLinkUpTrapStatus = types.StringValue(rsnmpCieLinkUp.Get("snmpCieLinkUp.attributes.trapstatus").String())
+				} else {
+					data.LinkCieLinkUpTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpCiscoXcvrMonStatusChange gjson.Result
+				rsnmpTlink.Get("snmpTlink.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCiscoXcvrMonStatusChange.attributes.rn").String()
+						if rnValue == "ciscoxcvrmonstatuschg" {
+							rsnmpCiscoXcvrMonStatusChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull() {
+					data.LinkCiscoXcvrMonStatusChangeTrapStatus = types.StringValue(rsnmpCiscoXcvrMonStatusChange.Get("snmpCiscoXcvrMonStatusChange.attributes.trapstatus").String())
+				} else {
+					data.LinkCiscoXcvrMonStatusChangeTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpCmnMacMoveNotification gjson.Result
+				rsnmpTlink.Get("snmpTlink.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCmnMacMoveNotification.attributes.rn").String()
+						if rnValue == "cmnmacmovenotification" {
+							rsnmpCmnMacMoveNotification = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LinkCmnMacMoveNotificationTrapStatus.IsNull() {
+					data.LinkCmnMacMoveNotificationTrapStatus = types.StringValue(rsnmpCmnMacMoveNotification.Get("snmpCmnMacMoveNotification.attributes.trapstatus").String())
+				} else {
+					data.LinkCmnMacMoveNotificationTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpDelayedLinkStateChange gjson.Result
+				rsnmpTlink.Get("snmpTlink.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpDelayedLinkStateChange.attributes.rn").String()
+						if rnValue == "delayedlinkstatechange" {
+							rsnmpDelayedLinkStateChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LinkDelayedLinkStateChangeTrapStatus.IsNull() {
+					data.LinkDelayedLinkStateChangeTrapStatus = types.StringValue(rsnmpDelayedLinkStateChange.Get("snmpDelayedLinkStateChange.attributes.trapstatus").String())
+				} else {
+					data.LinkDelayedLinkStateChangeTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpExtendedLinkDown gjson.Result
+				rsnmpTlink.Get("snmpTlink.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpExtendedLinkDown.attributes.rn").String()
+						if rnValue == "extendedlinkDown" {
+							rsnmpExtendedLinkDown = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LinkExtendedLinkDownTrapStatus.IsNull() {
+					data.LinkExtendedLinkDownTrapStatus = types.StringValue(rsnmpExtendedLinkDown.Get("snmpExtendedLinkDown.attributes.trapstatus").String())
+				} else {
+					data.LinkExtendedLinkDownTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpExtendedLinkUp gjson.Result
+				rsnmpTlink.Get("snmpTlink.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpExtendedLinkUp.attributes.rn").String()
+						if rnValue == "extendedlinkUp" {
+							rsnmpExtendedLinkUp = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LinkExtendedLinkUpTrapStatus.IsNull() {
+					data.LinkExtendedLinkUpTrapStatus = types.StringValue(rsnmpExtendedLinkUp.Get("snmpExtendedLinkUp.attributes.trapstatus").String())
+				} else {
+					data.LinkExtendedLinkUpTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpLinkDown gjson.Result
+				rsnmpTlink.Get("snmpTlink.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpLinkDown.attributes.rn").String()
+						if rnValue == "linkDown" {
+							rsnmpLinkDown = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LinkLinkDownTrapStatus.IsNull() {
+					data.LinkLinkDownTrapStatus = types.StringValue(rsnmpLinkDown.Get("snmpLinkDown.attributes.trapstatus").String())
+				} else {
+					data.LinkLinkDownTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpLinkUp gjson.Result
+				rsnmpTlink.Get("snmpTlink.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpLinkUp.attributes.rn").String()
+						if rnValue == "linkUp" {
+							rsnmpLinkUp = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LinkLinkUpTrapStatus.IsNull() {
+					data.LinkLinkUpTrapStatus = types.StringValue(rsnmpLinkUp.Get("snmpLinkUp.attributes.trapstatus").String())
+				} else {
+					data.LinkLinkUpTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpCErrDisableInterfaceEventRev1 gjson.Result
+				rsnmpTlink.Get("snmpTlink.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCErrDisableInterfaceEventRev1.attributes.rn").String()
+						if rnValue == "cerrdisableinterfaceeventrev1" {
+							rsnmpCErrDisableInterfaceEventRev1 = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LinkErrDisableInterfaceEventTrapStatus.IsNull() {
+					data.LinkErrDisableInterfaceEventTrapStatus = types.StringValue(rsnmpCErrDisableInterfaceEventRev1.Get("snmpCErrDisableInterfaceEventRev1.attributes.trapstatus").String())
+				} else {
+					data.LinkErrDisableInterfaceEventTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTlldp gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTlldp.attributes.rn").String()
+					if rnValue == "lldp" {
+						rsnmpTlldp = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpLldpRemTablesChange gjson.Result
+				rsnmpTlldp.Get("snmpTlldp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpLldpRemTablesChange.attributes.rn").String()
+						if rnValue == "lldpRemTablesChange" {
+							rsnmpLldpRemTablesChange = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.LldpRemTablesChangeTrapStatus.IsNull() {
+					data.LldpRemTablesChangeTrapStatus = types.StringValue(rsnmpLldpRemTablesChange.Get("snmpLldpRemTablesChange.attributes.trapstatus").String())
+				} else {
+					data.LldpRemTablesChangeTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTmmode gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTmmode.attributes.rn").String()
+					if rnValue == "mmode" {
+						rsnmpTmmode = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpCseMaintModeChangeNotify gjson.Result
+				rsnmpTmmode.Get("snmpTmmode.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCseMaintModeChangeNotify.attributes.rn").String()
+						if rnValue == "cseMaintModeChangeNotify" {
+							rsnmpCseMaintModeChangeNotify = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.MmodeMaintModeChangeTrapStatus.IsNull() {
+					data.MmodeMaintModeChangeTrapStatus = types.StringValue(rsnmpCseMaintModeChangeNotify.Get("snmpCseMaintModeChangeNotify.attributes.trapstatus").String())
+				} else {
+					data.MmodeMaintModeChangeTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpCseNormalModeChangeNotify gjson.Result
+				rsnmpTmmode.Get("snmpTmmode.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCseNormalModeChangeNotify.attributes.rn").String()
+						if rnValue == "cseNormalModeChangeNotify" {
+							rsnmpCseNormalModeChangeNotify = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.MmodeNormalModeChangeTrapStatus.IsNull() {
+					data.MmodeNormalModeChangeTrapStatus = types.StringValue(rsnmpCseNormalModeChangeNotify.Get("snmpCseNormalModeChangeNotify.attributes.trapstatus").String())
+				} else {
+					data.MmodeNormalModeChangeTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTmpls gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTmpls.attributes.rn").String()
+					if rnValue == "mpls" {
+						rsnmpTmpls = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpLdp gjson.Result
+				rsnmpTmpls.Get("snmpTmpls.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpLdp.attributes.rn").String()
+						if rnValue == "ldp" {
+							rsnmpLdp = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.MplsLdpTrapStatus.IsNull() {
+					data.MplsLdpTrapStatus = types.StringValue(rsnmpLdp.Get("snmpLdp.attributes.trapstatus").String())
+				} else {
+					data.MplsLdpTrapStatus = types.StringNull()
+				}
+				{
+					var rsnmpLdpSessiondown gjson.Result
+					rsnmpLdp.Get("snmpLdp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpLdpSessiondown.attributes.rn").String()
+							if rnValue == "ldpsessiondown" {
+								rsnmpLdpSessiondown = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.MplsLdpSessionDownTrapStatus.IsNull() {
+						data.MplsLdpSessionDownTrapStatus = types.StringValue(rsnmpLdpSessiondown.Get("snmpLdpSessiondown.attributes.trapstatus").String())
+					} else {
+						data.MplsLdpSessionDownTrapStatus = types.StringNull()
+					}
+				}
+				{
+					var rsnmpLdpSessionup gjson.Result
+					rsnmpLdp.Get("snmpLdp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpLdpSessionup.attributes.rn").String()
+							if rnValue == "ldpsessionup" {
+								rsnmpLdpSessionup = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.MplsLdpSessionUpTrapStatus.IsNull() {
+						data.MplsLdpSessionUpTrapStatus = types.StringValue(rsnmpLdpSessionup.Get("snmpLdpSessionup.attributes.trapstatus").String())
+					} else {
+						data.MplsLdpSessionUpTrapStatus = types.StringNull()
+					}
+				}
+			}
+			{
+				var rsnmpVpn gjson.Result
+				rsnmpTmpls.Get("snmpTmpls.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpVpn.attributes.rn").String()
+						if rnValue == "vpn" {
+							rsnmpVpn = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.MplsVpnTrapStatus.IsNull() {
+					data.MplsVpnTrapStatus = types.StringValue(rsnmpVpn.Get("snmpVpn.attributes.trapstatus").String())
+				} else {
+					data.MplsVpnTrapStatus = types.StringNull()
+				}
+				{
+					var rsnmpVpnMaxThreshcleared gjson.Result
+					rsnmpVpn.Get("snmpVpn.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpVpnMaxThreshcleared.attributes.rn").String()
+							if rnValue == "vpnmaxthreshcleared" {
+								rsnmpVpnMaxThreshcleared = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.MplsVpnMaxThreshClearedTrapStatus.IsNull() {
+						data.MplsVpnMaxThreshClearedTrapStatus = types.StringValue(rsnmpVpnMaxThreshcleared.Get("snmpVpnMaxThreshcleared.attributes.trapstatus").String())
+					} else {
+						data.MplsVpnMaxThreshClearedTrapStatus = types.StringNull()
+					}
+				}
+				{
+					var rsnmpVpnMaxThreshexceeded gjson.Result
+					rsnmpVpn.Get("snmpVpn.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpVpnMaxThreshexceeded.attributes.rn").String()
+							if rnValue == "vpnmaxthreshexceeded" {
+								rsnmpVpnMaxThreshexceeded = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.MplsVpnMaxThreshExceededTrapStatus.IsNull() {
+						data.MplsVpnMaxThreshExceededTrapStatus = types.StringValue(rsnmpVpnMaxThreshexceeded.Get("snmpVpnMaxThreshexceeded.attributes.trapstatus").String())
+					} else {
+						data.MplsVpnMaxThreshExceededTrapStatus = types.StringNull()
+					}
+				}
+				{
+					var rsnmpVpnMidThreshexceeded gjson.Result
+					rsnmpVpn.Get("snmpVpn.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpVpnMidThreshexceeded.attributes.rn").String()
+							if rnValue == "vpnmidthreshexceeded" {
+								rsnmpVpnMidThreshexceeded = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.MplsVpnMidThreshExceededTrapStatus.IsNull() {
+						data.MplsVpnMidThreshExceededTrapStatus = types.StringValue(rsnmpVpnMidThreshexceeded.Get("snmpVpnMidThreshexceeded.attributes.trapstatus").String())
+					} else {
+						data.MplsVpnMidThreshExceededTrapStatus = types.StringNull()
+					}
+				}
+				{
+					var rsnmpVpnVrfdown gjson.Result
+					rsnmpVpn.Get("snmpVpn.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpVpnVrfdown.attributes.rn").String()
+							if rnValue == "vpnvrfdown" {
+								rsnmpVpnVrfdown = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.MplsVpnVrfDownTrapStatus.IsNull() {
+						data.MplsVpnVrfDownTrapStatus = types.StringValue(rsnmpVpnVrfdown.Get("snmpVpnVrfdown.attributes.trapstatus").String())
+					} else {
+						data.MplsVpnVrfDownTrapStatus = types.StringNull()
+					}
+				}
+				{
+					var rsnmpVpnVrfup gjson.Result
+					rsnmpVpn.Get("snmpVpn.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("snmpVpnVrfup.attributes.rn").String()
+							if rnValue == "vpnvrfup" {
+								rsnmpVpnVrfup = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.MplsVpnVrfUpTrapStatus.IsNull() {
+						data.MplsVpnVrfUpTrapStatus = types.StringValue(rsnmpVpnVrfup.Get("snmpVpnVrfup.attributes.trapstatus").String())
+					} else {
+						data.MplsVpnVrfUpTrapStatus = types.StringNull()
+					}
+				}
+			}
+		}
+		{
+			var rsnmpTmsdp gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTmsdp.attributes.rn").String()
+					if rnValue == "msdp" {
+						rsnmpTmsdp = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpMsdpBackwardTransition gjson.Result
+				rsnmpTmsdp.Get("snmpTmsdp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpMsdpBackwardTransition.attributes.rn").String()
+						if rnValue == "msdpBackwardTransition" {
+							rsnmpMsdpBackwardTransition = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.MsdpBackwardTransitionTrapStatus.IsNull() {
+					data.MsdpBackwardTransitionTrapStatus = types.StringValue(rsnmpMsdpBackwardTransition.Get("snmpMsdpBackwardTransition.attributes.trapstatus").String())
+				} else {
+					data.MsdpBackwardTransitionTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTpim gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTpim.attributes.rn").String()
+					if rnValue == "pim" {
+						rsnmpTpim = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpPimNeighborLoss gjson.Result
+				rsnmpTpim.Get("snmpTpim.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpPimNeighborLoss.attributes.rn").String()
+						if rnValue == "pimNeighborLoss" {
+							rsnmpPimNeighborLoss = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.PimNeighborLossTrapStatus.IsNull() {
+					data.PimNeighborLossTrapStatus = types.StringValue(rsnmpPimNeighborLoss.Get("snmpPimNeighborLoss.attributes.trapstatus").String())
+				} else {
+					data.PimNeighborLossTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTportsecurity gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTportsecurity.attributes.rn").String()
+					if rnValue == "portsecurity" {
+						rsnmpTportsecurity = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpAccessSecureMacViolation gjson.Result
+				rsnmpTportsecurity.Get("snmpTportsecurity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpAccessSecureMacViolation.attributes.rn").String()
+						if rnValue == "accesssecuremacviolation" {
+							rsnmpAccessSecureMacViolation = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull() {
+					data.PortSecurityAccessSecureMacViolationTrapStatus = types.StringValue(rsnmpAccessSecureMacViolation.Get("snmpAccessSecureMacViolation.attributes.trapstatus").String())
+				} else {
+					data.PortSecurityAccessSecureMacViolationTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpTrunkSecureMacViolation gjson.Result
+				rsnmpTportsecurity.Get("snmpTportsecurity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpTrunkSecureMacViolation.attributes.rn").String()
+						if rnValue == "trunksecuremacviolation" {
+							rsnmpTrunkSecureMacViolation = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull() {
+					data.PortSecurityTrunkSecureMacViolationTrapStatus = types.StringValue(rsnmpTrunkSecureMacViolation.Get("snmpTrunkSecureMacViolation.attributes.trapstatus").String())
+				} else {
+					data.PortSecurityTrunkSecureMacViolationTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTrf gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTrf.attributes.rn").String()
+					if rnValue == "rf" {
+						rsnmpTrf = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpRedundancyFramework gjson.Result
+				rsnmpTrf.Get("snmpTrf.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpRedundancyFramework.attributes.rn").String()
+						if rnValue == "redundancyframework" {
+							rsnmpRedundancyFramework = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.RfRedundancyFrameworkTrapStatus.IsNull() {
+					data.RfRedundancyFrameworkTrapStatus = types.StringValue(rsnmpRedundancyFramework.Get("snmpRedundancyFramework.attributes.trapstatus").String())
+				} else {
+					data.RfRedundancyFrameworkTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTrmon gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTrmon.attributes.rn").String()
+					if rnValue == "rmon" {
+						rsnmpTrmon = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpRisingAlarm gjson.Result
+				rsnmpTrmon.Get("snmpTrmon.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpRisingAlarm.attributes.rn").String()
+						if rnValue == "risingAlarm" {
+							rsnmpRisingAlarm = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.RmonRisingAlarmTrapStatus.IsNull() {
+					data.RmonRisingAlarmTrapStatus = types.StringValue(rsnmpRisingAlarm.Get("snmpRisingAlarm.attributes.trapstatus").String())
+				} else {
+					data.RmonRisingAlarmTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpFallingAlarm gjson.Result
+				rsnmpTrmon.Get("snmpTrmon.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpFallingAlarm.attributes.rn").String()
+						if rnValue == "fallingAlarm" {
+							rsnmpFallingAlarm = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.RmonFallingAlarmTrapStatus.IsNull() {
+					data.RmonFallingAlarmTrapStatus = types.StringValue(rsnmpFallingAlarm.Get("snmpFallingAlarm.attributes.trapstatus").String())
+				} else {
+					data.RmonFallingAlarmTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpHcRisingAlarm gjson.Result
+				rsnmpTrmon.Get("snmpTrmon.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpHcRisingAlarm.attributes.rn").String()
+						if rnValue == "hcRisingAlarm" {
+							rsnmpHcRisingAlarm = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.RmonHcRisingAlarmTrapStatus.IsNull() {
+					data.RmonHcRisingAlarmTrapStatus = types.StringValue(rsnmpHcRisingAlarm.Get("snmpHcRisingAlarm.attributes.trapstatus").String())
+				} else {
+					data.RmonHcRisingAlarmTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpHcFallingAlarm gjson.Result
+				rsnmpTrmon.Get("snmpTrmon.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpHcFallingAlarm.attributes.rn").String()
+						if rnValue == "hcFallingAlarm" {
+							rsnmpHcFallingAlarm = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.RmonHcFallingAlarmTrapStatus.IsNull() {
+					data.RmonHcFallingAlarmTrapStatus = types.StringValue(rsnmpHcFallingAlarm.Get("snmpHcFallingAlarm.attributes.trapstatus").String())
+				} else {
+					data.RmonHcFallingAlarmTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTsnmp gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTsnmp.attributes.rn").String()
+					if rnValue == "snmp" {
+						rsnmpTsnmp = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpAuthentication gjson.Result
+				rsnmpTsnmp.Get("snmpTsnmp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpAuthentication.attributes.rn").String()
+						if rnValue == "authentication" {
+							rsnmpAuthentication = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.SnmpAuthenticationTrapStatus.IsNull() {
+					data.SnmpAuthenticationTrapStatus = types.StringValue(rsnmpAuthentication.Get("snmpAuthentication.attributes.trapstatus").String())
+				} else {
+					data.SnmpAuthenticationTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTstormControl gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTstormControl.attributes.rn").String()
+					if rnValue == "stormcontrol" {
+						rsnmpTstormControl = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpCpscEventRev1 gjson.Result
+				rsnmpTstormControl.Get("snmpTstormControl.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCpscEventRev1.attributes.rn").String()
+						if rnValue == "cpscEventRev1" {
+							rsnmpCpscEventRev1 = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.StormControlCpscEventTrapStatus.IsNull() {
+					data.StormControlCpscEventTrapStatus = types.StringValue(rsnmpCpscEventRev1.Get("snmpCpscEventRev1.attributes.trapstatus").String())
+				} else {
+					data.StormControlCpscEventTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTstpx gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTstpx.attributes.rn").String()
+					if rnValue == "stpx" {
+						rsnmpTstpx = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpInconsistency gjson.Result
+				rsnmpTstpx.Get("snmpTstpx.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpInconsistency.attributes.rn").String()
+						if rnValue == "inconsistency" {
+							rsnmpInconsistency = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.StpxInconsistencyTrapStatus.IsNull() {
+					data.StpxInconsistencyTrapStatus = types.StringValue(rsnmpInconsistency.Get("snmpInconsistency.attributes.trapstatus").String())
+				} else {
+					data.StpxInconsistencyTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpLoopInconsistency gjson.Result
+				rsnmpTstpx.Get("snmpTstpx.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpLoopInconsistency.attributes.rn").String()
+						if rnValue == "loopinconsistency" {
+							rsnmpLoopInconsistency = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.StpxLoopInconsistencyTrapStatus.IsNull() {
+					data.StpxLoopInconsistencyTrapStatus = types.StringValue(rsnmpLoopInconsistency.Get("snmpLoopInconsistency.attributes.trapstatus").String())
+				} else {
+					data.StpxLoopInconsistencyTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpRootInconsistency gjson.Result
+				rsnmpTstpx.Get("snmpTstpx.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpRootInconsistency.attributes.rn").String()
+						if rnValue == "rootinconsistency" {
+							rsnmpRootInconsistency = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.StpxRootInconsistencyTrapStatus.IsNull() {
+					data.StpxRootInconsistencyTrapStatus = types.StringValue(rsnmpRootInconsistency.Get("snmpRootInconsistency.attributes.trapstatus").String())
+				} else {
+					data.StpxRootInconsistencyTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTsyslog gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTsyslog.attributes.rn").String()
+					if rnValue == "syslog" {
+						rsnmpTsyslog = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpMessageGenerated gjson.Result
+				rsnmpTsyslog.Get("snmpTsyslog.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpMessageGenerated.attributes.rn").String()
+						if rnValue == "messagegenerated" {
+							rsnmpMessageGenerated = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.SyslogMessageGeneratedTrapStatus.IsNull() {
+					data.SyslogMessageGeneratedTrapStatus = types.StringValue(rsnmpMessageGenerated.Get("snmpMessageGenerated.attributes.trapstatus").String())
+				} else {
+					data.SyslogMessageGeneratedTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTsysmgr gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTsysmgr.attributes.rn").String()
+					if rnValue == "sysmgr" {
+						rsnmpTsysmgr = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpCseFailSwCoreNotifyExtended gjson.Result
+				rsnmpTsysmgr.Get("snmpTsysmgr.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpCseFailSwCoreNotifyExtended.attributes.rn").String()
+						if rnValue == "cseFailSwCoreNotifyExtended" {
+							rsnmpCseFailSwCoreNotifyExtended = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.SysmgrFailSwCoreNotifyTrapStatus.IsNull() {
+					data.SysmgrFailSwCoreNotifyTrapStatus = types.StringValue(rsnmpCseFailSwCoreNotifyExtended.Get("snmpCseFailSwCoreNotifyExtended.attributes.trapstatus").String())
+				} else {
+					data.SysmgrFailSwCoreNotifyTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTsystem gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTsystem.attributes.rn").String()
+					if rnValue == "system" {
+						rsnmpTsystem = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpClockChangeNotification gjson.Result
+				rsnmpTsystem.Get("snmpTsystem.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpClockChangeNotification.attributes.rn").String()
+						if rnValue == "Clockchangenotification" {
+							rsnmpClockChangeNotification = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.SystemClockChangeNotificationTrapStatus.IsNull() {
+					data.SystemClockChangeNotificationTrapStatus = types.StringValue(rsnmpClockChangeNotification.Get("snmpClockChangeNotification.attributes.trapstatus").String())
+				} else {
+					data.SystemClockChangeNotificationTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTupgrade gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTupgrade.attributes.rn").String()
+					if rnValue == "upgrade" {
+						rsnmpTupgrade = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpUpgradeJobStatusNotify gjson.Result
+				rsnmpTupgrade.Get("snmpTupgrade.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpUpgradeJobStatusNotify.attributes.rn").String()
+						if rnValue == "UpgradeJobStatusNotify" {
+							rsnmpUpgradeJobStatusNotify = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.UpgradeJobStatusNotifyTrapStatus.IsNull() {
+					data.UpgradeJobStatusNotifyTrapStatus = types.StringValue(rsnmpUpgradeJobStatusNotify.Get("snmpUpgradeJobStatusNotify.attributes.trapstatus").String())
+				} else {
+					data.UpgradeJobStatusNotifyTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpUpgradeOpNotifyOnCompletion gjson.Result
+				rsnmpTupgrade.Get("snmpTupgrade.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpUpgradeOpNotifyOnCompletion.attributes.rn").String()
+						if rnValue == "UpgradeOpNotifyOnCompletion" {
+							rsnmpUpgradeOpNotifyOnCompletion = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull() {
+					data.UpgradeOpNotifyOnCompletionTrapStatus = types.StringValue(rsnmpUpgradeOpNotifyOnCompletion.Get("snmpUpgradeOpNotifyOnCompletion.attributes.trapstatus").String())
+				} else {
+					data.UpgradeOpNotifyOnCompletionTrapStatus = types.StringNull()
+				}
+			}
+		}
+		{
+			var rsnmpTvtp gjson.Result
+			rsnmpTraps.Get("snmpTraps.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpTvtp.attributes.rn").String()
+					if rnValue == "vtp" {
+						rsnmpTvtp = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rsnmpNotifs gjson.Result
+				rsnmpTvtp.Get("snmpTvtp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpNotifs.attributes.rn").String()
+						if rnValue == "notifs" {
+							rsnmpNotifs = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.VtpNotifsTrapStatus.IsNull() {
+					data.VtpNotifsTrapStatus = types.StringValue(rsnmpNotifs.Get("snmpNotifs.attributes.trapstatus").String())
+				} else {
+					data.VtpNotifsTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpVlancreate gjson.Result
+				rsnmpTvtp.Get("snmpTvtp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpVlancreate.attributes.rn").String()
+						if rnValue == "vlancreate" {
+							rsnmpVlancreate = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.VtpVlanCreateTrapStatus.IsNull() {
+					data.VtpVlanCreateTrapStatus = types.StringValue(rsnmpVlancreate.Get("snmpVlancreate.attributes.trapstatus").String())
+				} else {
+					data.VtpVlanCreateTrapStatus = types.StringNull()
+				}
+			}
+			{
+				var rsnmpVlandelete gjson.Result
+				rsnmpTvtp.Get("snmpTvtp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpVlandelete.attributes.rn").String()
+						if rnValue == "vlandelete" {
+							rsnmpVlandelete = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.VtpVlanDeleteTrapStatus.IsNull() {
+					data.VtpVlanDeleteTrapStatus = types.StringValue(rsnmpVlandelete.Get("snmpVlandelete.attributes.trapstatus").String())
+				} else {
+					data.VtpVlanDeleteTrapStatus = types.StringNull()
+				}
+			}
+		}
 	}
 	{
 		var rsnmpRmon gjson.Result
@@ -1026,21 +5076,1155 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
 		{
-			childBody := ""
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTraps"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 			if !data.EnableAll.IsNull() {
-				childBody, _ = sjson.Set(childBody, "enableAllViaCLI", "DME_UNSET_PROPERTY_MARKER")
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"enableAllViaCLI", "DME_UNSET_PROPERTY_MARKER")
 			}
-			if childBody != "" {
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTraps"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTaaa"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.AaaServerStateChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpServerStateChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTbfd"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.BfdSessionDownTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSessionDown"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.BfdSessionUpTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSessionUp"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTbridge"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.BridgeNewRootTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNewRoot"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.BridgeTopologyChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTopologyChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTcallhome"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.CallhomeEventNotifyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEventNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.CallhomeSmtpSendFailTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSmtpSendFail"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTcfs"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.CfsStateChangeNotifTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpStateChangeNotif"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.CfsMergeFailureTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpMergeFailure"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTconfig"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.ConfigCliRunningConfigChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCLIRunningConfigChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTentity"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.EntityMibChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityMIBChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityMibEnableStatusNotificationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityMIBEnableStatusNotification"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityFanStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityFanStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityModuleInsertedTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityModuleInserted"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityModuleRemovedTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityModuleRemoved"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityModuleStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityModuleStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityPowerOutChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityPowerOutChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityPowerStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityPowerStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntitySensorTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntitySensor"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityUnrecognisedModuleTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityUnrecognisedModule"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfcdomain"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.FcdomainDomainIdNotAssignedTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDmDomainIdNotAssignedNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.FcdomainFabricChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDmFabricChangeNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.FcdomainNewPrincipalSwitchTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDmNewPrincipalSwitchNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfcns"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfcs"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfctrace"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfdmi"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfeaturecontrol"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.FeatureControlOpStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpFeatureOpStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCiscoFeatOpStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfspf"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTgeneric"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.GenericColdStartTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpColdStart"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.GenericWarmStartTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpWarmStart"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpThsrp"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.HsrpStateChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpStateChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTip"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlicense"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.LicenseExpiryTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyLicenseExpiry"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LicenseExpiryWarningTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyLicenseExpiryWarning"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LicenseFileMissingTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyLicenseFileMissing"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LicenseNoLicenseForFeatureTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyNoLicenceForFeature"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlink"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.LinkCieLinkDownTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCieLinkDown"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkCieLinkUpTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCieLinkUp"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCiscoXcvrMonStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkCmnMacMoveNotificationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCmnMacMoveNotification"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkDelayedLinkStateChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDelayedLinkStateChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkExtendedLinkDownTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpExtendedLinkDown"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkExtendedLinkUpTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpExtendedLinkUp"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkLinkDownTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLinkDown"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkLinkUpTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLinkUp"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkErrDisableInterfaceEventTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCErrDisableInterfaceEventRev1"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlldp"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.LldpRemTablesChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLldpRemTablesChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmmode"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.MmodeMaintModeChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCseMaintModeChangeNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.MmodeNormalModeChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCseNormalModeChangeNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmpls"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdp"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+					if !data.MplsLdpTrapStatus.IsNull() {
+						body, _ = sjson.Set(body, childBodyPath+".attributes."+"trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					nestedChildrenPath := childBodyPath + ".children"
+					_ = nestedChildrenPath
+					{
+						childBody := ""
+						if !data.MplsLdpSessionDownTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdpSessiondown"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+					{
+						childBody := ""
+						if !data.MplsLdpSessionUpTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdpSessionup"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+				}
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpn"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+					if !data.MplsVpnTrapStatus.IsNull() {
+						body, _ = sjson.Set(body, childBodyPath+".attributes."+"trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					nestedChildrenPath := childBodyPath + ".children"
+					_ = nestedChildrenPath
+					{
+						childBody := ""
+						if !data.MplsVpnMaxThreshClearedTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnMaxThreshcleared"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+					{
+						childBody := ""
+						if !data.MplsVpnMaxThreshExceededTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnMaxThreshexceeded"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+					{
+						childBody := ""
+						if !data.MplsVpnMidThreshExceededTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnMidThreshexceeded"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+					{
+						childBody := ""
+						if !data.MplsVpnVrfDownTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnVrfdown"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+					{
+						childBody := ""
+						if !data.MplsVpnVrfUpTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnVrfup"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmsdp"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.MsdpBackwardTransitionTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpMsdpBackwardTransition"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTpim"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.PimNeighborLossTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpPimNeighborLoss"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTpoe"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTportsecurity"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpAccessSecureMacViolation"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrunkSecureMacViolation"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrf"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.RfRedundancyFrameworkTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRedundancyFramework"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrmon"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.RmonRisingAlarmTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRisingAlarm"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.RmonFallingAlarmTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpFallingAlarm"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.RmonHcRisingAlarmTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpHcRisingAlarm"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.RmonHcFallingAlarmTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpHcFallingAlarm"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrscn"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTscsi"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsnmp"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.SnmpAuthenticationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpAuthentication"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTstormControl"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.StormControlCpscEventTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCpscEventRev1"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTstpx"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.StpxInconsistencyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpInconsistency"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.StpxLoopInconsistencyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLoopInconsistency"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.StpxRootInconsistencyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRootInconsistency"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsyslog"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.SyslogMessageGeneratedTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpMessageGenerated"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsysmgr"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.SysmgrFailSwCoreNotifyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCseFailSwCoreNotifyExtended"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsystem"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.SystemClockChangeNotificationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpClockChangeNotification"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTupgrade"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.UpgradeJobStatusNotifyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpUpgradeJobStatusNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpUpgradeOpNotifyOnCompletion"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTvsan"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTvtp"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.VtpNotifsTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifs"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.VtpVlanCreateTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVlancreate"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.VtpVlanDeleteTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVlandelete"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+			}
+			{
+				childBody := ""
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTzone"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
 			}
 		}
 		{
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "snmpRmon.attributes.rn", "rmon")
-			deleteBody, _ = sjson.Set(deleteBody, "snmpRmon.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRmon"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.RmonEvents {
+				childBody := ""
+				childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+				childBody, _ = sjson.Set(childBody, "description", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "log", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "owner", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "trap", "DME_UNSET_PROPERTY_MARKER")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpEvent.attributes", childBody)
+			}
 		}
 	}
 
@@ -1126,7 +6310,10 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP)
 			stateChild := state.RmonEvents[stateKey]
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "snmpEvent.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "snmpEvent.attributes.status", "deleted")
+			deleteBody, _ = sjson.Set(deleteBody, "snmpEvent.attributes.description", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "snmpEvent.attributes.log", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "snmpEvent.attributes.owner", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "snmpEvent.attributes.trap", "DME_UNSET_PROPERTY_MARKER")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.snmpInst.children"+".0.snmpRmon.children"+".-1", deleteBody)
 		}
 	}

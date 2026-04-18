@@ -252,6 +252,22 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+  - class_name: fmNxapi
+    rn: nxapi
+    type: single
+    no_delete: true
+    description: 'NXAPI feature configuration.'
+    doc_path: Feature%20Management/fm:Nxapi/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: nxapi
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
   - class_name: fmOspf
     rn: ospf
     type: single

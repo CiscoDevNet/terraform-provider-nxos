@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.
   API Documentation
-  snmpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Entity/snmpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Inst/snmpSysInfo https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SysInfo/snmpGlobals https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Globals/snmpSourceInterfaceTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SourceInterfaceTraps/snmpLocalUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LocalUser/snmpUserGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/snmpHost https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/snmpTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/snmpRmon https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/snmpEvent https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/
+  snmpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Entity/snmpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Inst/snmpSysInfo https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SysInfo/snmpGlobals https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Globals/snmpSourceInterfaceTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SourceInterfaceTraps/snmpLocalUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LocalUser/snmpUserGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/snmpHost https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/snmpUseVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UseVrf/snmpTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/snmpRmon https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/snmpEvent https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/
 ---
 
 # nxos_snmp (Resource)
@@ -22,6 +22,7 @@ This resource can manage the SNMP configuration on NX-OS devices, including syst
 - [snmpLocalUser](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LocalUser/)
 - [snmpUserGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/)
 - [snmpHost](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/)
+- [snmpUseVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UseVrf/)
 - [snmpTraps](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/)
 - [snmpRmon](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/)
 - [snmpEvent](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/)
@@ -43,6 +44,8 @@ resource "nxos_snmp" "example" {
   system_info_description    = "My NX-OS device"
   location                   = "DC1-Room42"
   packet_size                = 8192
+  disable_aaa_sync           = "yes"
+  enforce_privacy            = "yes"
   tcp_session_authentication = "tcpSessAuth"
   source_interface_traps     = "eth1/1"
   local_users = {
@@ -70,6 +73,9 @@ resource "nxos_snmp" "example" {
       notification_type = "traps"
       security_level    = "auth"
       version           = "v3"
+      vrfs = {
+        "management" = {}
+      }
     }
   }
   enable_all = "yes"
@@ -94,8 +100,12 @@ resource "nxos_snmp" "example" {
 - `contact` (String) System Contact.
 - `description` (String) Description of the specified attribute.
 - `device` (String) A device name from the provider configuration.
+- `disable_aaa_sync` (String) Disable sync of user creation/updation between SNMP and AAA.
+  - Choices: `no`, `yes`
 - `enable_all` (String) Enable/Disable all traps.
   - Choices: `no`, `yes`, `unspecified`
+- `enforce_privacy` (String) Globally enforce privacy for all the users.
+  - Choices: `no`, `yes`
 - `engine_id` (String) Engine Id.
 - `hosts` (Attributes Map) List of SNMP host configurations.
   - Map key format: `<name>;<udp_port>`
@@ -140,6 +150,12 @@ Optional:
   - Choices: `unspecified`, `noauth`, `auth`, `priv`
 - `version` (String) Ctrl bits indicating version.
   - Choices: `v1`, `v2c`, `v3`
+- `vrfs` (Attributes Map) List of SNMP VRF configurations for host.
+  - Map key: `name` - vrfname to be used by host. (see [below for nested schema](#nestedatt--hosts--vrfs))
+
+<a id="nestedatt--hosts--vrfs"></a>
+### Nested Schema for `hosts.vrfs`
+
 
 
 <a id="nestedatt--local_users"></a>

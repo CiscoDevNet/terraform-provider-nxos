@@ -1,0 +1,2 @@
+- Add SNMP host VRF configuration to `nxos_snmp` resource and data source
+- Add SNMP AAA sync disable and global enforce privacy attributes to `nxos_snmp` resource and data source

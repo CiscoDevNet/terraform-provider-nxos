@@ -63,7 +63,7 @@ func (r *SNMPResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.").AddApiDocumentation("snmpEntity", "System/snmp:Entity/", []string{"snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpTraps", "snmpRmon", "snmpEvent"}, []string{"System/snmp:Inst/", "System/snmp:SysInfo/", "System/snmp:Globals/", "System/snmp:SourceInterfaceTraps/", "System/snmp:LocalUser/", "System/snmp:UserGroup/", "System/snmp:Host/", "System/snmp:Traps/", "System/snmp:Rmon/", "System/snmp:Event/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.").AddApiDocumentation("snmpEntity", "System/snmp:Entity/", []string{"snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpUseVrf", "snmpTraps", "snmpRmon", "snmpEvent"}, []string{"System/snmp:Inst/", "System/snmp:SysInfo/", "System/snmp:Globals/", "System/snmp:SourceInterfaceTraps/", "System/snmp:LocalUser/", "System/snmp:UserGroup/", "System/snmp:Host/", "System/snmp:UseVrf/", "System/snmp:Traps/", "System/snmp:Rmon/", "System/snmp:Event/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -145,6 +145,20 @@ func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(484, 17382),
+				},
+			},
+			"disable_aaa_sync": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable sync of user creation/updation between SNMP and AAA.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"enforce_privacy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Globally enforce privacy for all the users.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
 				},
 			},
 			"tcp_session_authentication": schema.StringAttribute{
@@ -281,6 +295,13 @@ func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("v1", "v2c", "v3"),
+							},
+						},
+						"vrfs": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of SNMP VRF configurations for host.\n  - Map key: `name` - vrfname to be used by host.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
 							},
 						},
 					},
@@ -429,7 +450,7 @@ func (r *SNMPResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "snmpInst,snmpSysInfo,snmpGlobals,snmpSourceInterfaceTraps,snmpLocalUser,snmpUserGroup,snmpHost,snmpTraps,snmpRmon,snmpEvent")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "snmpInst,snmpSysInfo,snmpGlobals,snmpSourceInterfaceTraps,snmpLocalUser,snmpUserGroup,snmpHost,snmpUseVrf,snmpTraps,snmpRmon,snmpEvent")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

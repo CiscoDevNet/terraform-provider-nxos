@@ -54,6 +54,8 @@ type SNMP struct {
 	SystemInfoDescription    types.String              `tfsdk:"system_info_description"`
 	Location                 types.String              `tfsdk:"location"`
 	PacketSize               types.Int64               `tfsdk:"packet_size"`
+	DisableAaaSync           types.String              `tfsdk:"disable_aaa_sync"`
+	EnforcePrivacy           types.String              `tfsdk:"enforce_privacy"`
 	TcpSessionAuthentication types.String              `tfsdk:"tcp_session_authentication"`
 	SourceInterfaceTraps     types.String              `tfsdk:"source_interface_traps"`
 	LocalUsers               map[string]SNMPLocalUsers `tfsdk:"local_users"`
@@ -86,10 +88,14 @@ type SNMPLocalUsersGroups struct {
 }
 
 type SNMPHosts struct {
-	CommunityName    types.String `tfsdk:"community_name"`
-	NotificationType types.String `tfsdk:"notification_type"`
-	SecurityLevel    types.String `tfsdk:"security_level"`
-	Version          types.String `tfsdk:"version"`
+	CommunityName    types.String             `tfsdk:"community_name"`
+	NotificationType types.String             `tfsdk:"notification_type"`
+	SecurityLevel    types.String             `tfsdk:"security_level"`
+	Version          types.String             `tfsdk:"version"`
+	Vrfs             map[string]SNMPHostsVrfs `tfsdk:"vrfs"`
+}
+
+type SNMPHostsVrfs struct {
 }
 
 type SNMPRmonEvents struct {
@@ -138,6 +144,10 @@ func (data SNMPLocalUsersGroups) getRn(key string) string {
 func (data SNMPHosts) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("host-[%s]-udp-[%d]", keyParts[0], helpers.Must(strconv.ParseInt(keyParts[1], 10, 64)))
+}
+
+func (data SNMPHostsVrfs) getRn(key string) string {
+	return fmt.Sprintf("usevrf-[%s]", key)
 }
 
 func (data SNMPRmonEvents) getRn(key string) string {
@@ -209,6 +219,12 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 			attrs = "{}"
 			if !data.PacketSize.IsUnknown() && !data.PacketSize.IsNull() {
 				attrs, _ = sjson.Set(attrs, "pktSize", strconv.FormatInt(data.PacketSize.ValueInt64(), 10))
+			}
+			if !data.DisableAaaSync.IsUnknown() && !data.DisableAaaSync.IsNull() {
+				attrs, _ = sjson.Set(attrs, "disableSnmpAaaSync", data.DisableAaaSync.ValueString())
+			}
+			if !data.EnforcePrivacy.IsUnknown() && !data.EnforcePrivacy.IsNull() {
+				attrs, _ = sjson.Set(attrs, "enforcePrivacy", data.EnforcePrivacy.ValueString())
 			}
 			if !data.TcpSessionAuthentication.IsUnknown() && !data.TcpSessionAuthentication.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tcpSessionAuth", data.TcpSessionAuthentication.ValueString())
@@ -298,6 +314,15 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				attrs, _ = sjson.Set(attrs, "version", child.Version.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpHost.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".snmpHost.children"
+				for key := range child.Vrfs {
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "vrfname", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpUseVrf.attributes", attrs)
+				}
+			}
 		}
 		attrs = "{}"
 		if !data.EnableAll.IsUnknown() && !data.EnableAll.IsNull() {
@@ -390,6 +415,8 @@ func (data *SNMP) fromBody(res gjson.Result) {
 				},
 			)
 			data.PacketSize = types.Int64Value(rsnmpGlobals.Get("snmpGlobals.attributes.pktSize").Int())
+			data.DisableAaaSync = types.StringValue(rsnmpGlobals.Get("snmpGlobals.attributes.disableSnmpAaaSync").String())
+			data.EnforcePrivacy = types.StringValue(rsnmpGlobals.Get("snmpGlobals.attributes.enforcePrivacy").String())
 			data.TcpSessionAuthentication = types.StringValue(rsnmpGlobals.Get("snmpGlobals.attributes.tcpSessionAuth").String())
 			{
 				var rsnmpSourceInterfaceTraps gjson.Result
@@ -463,6 +490,24 @@ func (data *SNMP) fromBody(res gjson.Result) {
 							child.SecurityLevel = types.StringValue(value.Get("attributes.secLevel").String())
 							child.Version = types.StringValue(value.Get("attributes.version").String())
 							mapKey := value.Get("attributes.hostName").String() + ";" + value.Get("attributes.udpPortID").String()
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "snmpUseVrf" {
+												var nestedChildsnmpUseVrf SNMPHostsVrfs
+												nestedMapKey := nestedValue.Get("attributes.vrfname").String()
+												if child.Vrfs == nil {
+													child.Vrfs = make(map[string]SNMPHostsVrfs)
+												}
+												child.Vrfs[nestedMapKey] = nestedChildsnmpUseVrf
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
 							if data.Hosts == nil {
 								data.Hosts = make(map[string]SNMPHosts)
 							}
@@ -632,6 +677,16 @@ func (data *SNMP) updateFromBody(res gjson.Result) {
 		} else {
 			data.PacketSize = types.Int64Null()
 		}
+		if !data.DisableAaaSync.IsNull() {
+			data.DisableAaaSync = types.StringValue(rsnmpGlobals.Get("snmpGlobals.attributes.disableSnmpAaaSync").String())
+		} else {
+			data.DisableAaaSync = types.StringNull()
+		}
+		if !data.EnforcePrivacy.IsNull() {
+			data.EnforcePrivacy = types.StringValue(rsnmpGlobals.Get("snmpGlobals.attributes.enforcePrivacy").String())
+		} else {
+			data.EnforcePrivacy = types.StringNull()
+		}
 		if !data.TcpSessionAuthentication.IsNull() {
 			data.TcpSessionAuthentication = types.StringValue(rsnmpGlobals.Get("snmpGlobals.attributes.tcpSessionAuth").String())
 		} else {
@@ -778,6 +833,24 @@ func (data *SNMP) updateFromBody(res gjson.Result) {
 		} else {
 			item.Version = types.StringNull()
 		}
+		for nc := range item.Vrfs {
+			ncItem := item.Vrfs[nc]
+			var rsnmpUseVrf gjson.Result
+			rsnmpHost.Get("snmpHost.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("snmpUseVrf.attributes.vrfname").String() == nc {
+						rsnmpUseVrf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rsnmpUseVrf.Exists() {
+				delete(item.Vrfs, nc)
+				continue
+			}
+			item.Vrfs[nc] = ncItem
+		}
 		data.Hosts[key] = item
 	}
 	{
@@ -917,6 +990,12 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			if !data.PacketSize.IsNull() {
 				body, _ = sjson.Set(body, childBodyPath+".attributes."+"pktSize", "DME_UNSET_PROPERTY_MARKER")
 			}
+			if !data.DisableAaaSync.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"disableSnmpAaaSync", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EnforcePrivacy.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"enforcePrivacy", "DME_UNSET_PROPERTY_MARKER")
+			}
 			if !data.TcpSessionAuthentication.IsNull() {
 				body, _ = sjson.Set(body, childBodyPath+".attributes."+"tcpSessionAuth", "DME_UNSET_PROPERTY_MARKER")
 			}
@@ -1014,6 +1093,32 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP)
 			deleteBody, _ = sjson.Set(deleteBody, "snmpHost.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "snmpHost.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.snmpInst.children"+".-1", deleteBody)
+		}
+	}
+	for di := range state.Hosts {
+		if _, found := data.Hosts[di]; !found {
+			continue
+		}
+		stateItemdi := state.Hosts[di]
+		planItemdi := data.Hosts[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.snmpInst.children").Array() {
+			if mv.Get("snmpHost.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.snmpInst.children" + "." + strconv.Itoa(mi) + ".snmpHost.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.Vrfs {
+			if _, found := planItemdi.Vrfs[stateChildKey]; !found {
+				stateChild := stateItemdi.Vrfs[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "snmpUseVrf.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "snmpUseVrf.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
 		}
 	}
 	for stateKey := range state.RmonEvents {

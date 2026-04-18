@@ -57,7 +57,7 @@ func (d *SNMPDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *SNMPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.").AddApiDocumentation("snmpEntity", "System/snmp:Entity/", []string{"snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpTraps", "snmpRmon", "snmpEvent"}, []string{"System/snmp:Inst/", "System/snmp:SysInfo/", "System/snmp:Globals/", "System/snmp:SourceInterfaceTraps/", "System/snmp:LocalUser/", "System/snmp:UserGroup/", "System/snmp:Host/", "System/snmp:Traps/", "System/snmp:Rmon/", "System/snmp:Event/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.").AddApiDocumentation("snmpEntity", "System/snmp:Entity/", []string{"snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpUseVrf", "snmpTraps", "snmpRmon", "snmpEvent"}, []string{"System/snmp:Inst/", "System/snmp:SysInfo/", "System/snmp:Globals/", "System/snmp:SourceInterfaceTraps/", "System/snmp:LocalUser/", "System/snmp:UserGroup/", "System/snmp:Host/", "System/snmp:UseVrf/", "System/snmp:Traps/", "System/snmp:Rmon/", "System/snmp:Event/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -118,6 +118,14 @@ func (d *SNMPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			},
 			"packet_size": schema.Int64Attribute{
 				MarkdownDescription: "Packet size config.",
+				Computed:            true,
+			},
+			"disable_aaa_sync": schema.StringAttribute{
+				MarkdownDescription: "Disable sync of user creation/updation between SNMP and AAA.",
+				Computed:            true,
+			},
+			"enforce_privacy": schema.StringAttribute{
+				MarkdownDescription: "Globally enforce privacy for all the users.",
 				Computed:            true,
 			},
 			"tcp_session_authentication": schema.StringAttribute{
@@ -230,6 +238,13 @@ func (d *SNMPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "Ctrl bits indicating version.",
 							Computed:            true,
 						},
+						"vrfs": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of SNMP VRF configurations for host.\n  - Map key: `name` - vrfname to be used by host.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
 					},
 				},
 			},
@@ -293,7 +308,7 @@ func (d *SNMPDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "snmpInst,snmpSysInfo,snmpGlobals,snmpSourceInterfaceTraps,snmpLocalUser,snmpUserGroup,snmpHost,snmpTraps,snmpRmon,snmpEvent")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "snmpInst,snmpSysInfo,snmpGlobals,snmpSourceInterfaceTraps,snmpLocalUser,snmpUserGroup,snmpHost,snmpUseVrf,snmpTraps,snmpRmon,snmpEvent")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

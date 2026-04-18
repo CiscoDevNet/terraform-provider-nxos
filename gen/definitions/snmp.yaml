@@ -122,6 +122,22 @@ child_classes:
             max_int: 17382
             description: 'Packet size config.'
             example: 8192
+          - nxos_name: disableSnmpAaaSync
+            tf_name: disable_aaa_sync
+            type: String
+            description: 'Disable sync of user creation/updation between SNMP and AAA.'
+            enum_values:
+              - "no"
+              - "yes"
+            example: "yes"
+          - nxos_name: enforcePrivacy
+            tf_name: enforce_privacy
+            type: String
+            description: 'Globally enforce privacy for all the users.'
+            enum_values:
+              - "no"
+              - "yes"
+            example: "yes"
           - nxos_name: tcpSessionAuth
             tf_name: tcp_session_authentication
             type: String
@@ -309,6 +325,20 @@ child_classes:
               - v2c
               - v3
             example: v3
+        child_classes:
+          - class_name: snmpUseVrf
+            doc_path: System/snmp:UseVrf/
+            rn: usevrf-[%s]
+            type: list
+            tf_name: vrfs
+            description: 'List of SNMP VRF configurations for host.'
+            attributes:
+              - nxos_name: vrfname
+                tf_name: name
+                type: String
+                id: true
+                description: 'vrfname to be used by host.'
+                example: management
       - class_name: snmpTraps
         doc_path: System/snmp:Traps/
         rn: traps

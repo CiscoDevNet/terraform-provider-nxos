@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.
   API Documentation
-  snmpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Entity/snmpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Inst/snmpSysInfo https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SysInfo/snmpGlobals https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Globals/snmpSourceInterfaceTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SourceInterfaceTraps/snmpLocalUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LocalUser/snmpUserGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/snmpHost https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/snmpTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/snmpRmon https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/snmpEvent https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/
+  snmpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Entity/snmpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Inst/snmpSysInfo https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SysInfo/snmpGlobals https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Globals/snmpSourceInterfaceTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:SourceInterfaceTraps/snmpLocalUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LocalUser/snmpUserGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/snmpHost https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/snmpUseVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UseVrf/snmpTraps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/snmpRmon https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/snmpEvent https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/
 ---
 
 # nxos_snmp (Data Source)
@@ -22,6 +22,7 @@ This data source can read the SNMP configuration on NX-OS devices, including sys
 - [snmpLocalUser](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:LocalUser/)
 - [snmpUserGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UserGroup/)
 - [snmpHost](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Host/)
+- [snmpUseVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:UseVrf/)
 - [snmpTraps](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Traps/)
 - [snmpRmon](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Rmon/)
 - [snmpEvent](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/snmp:Event/)
@@ -45,7 +46,9 @@ data "nxos_snmp" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
 - `contact` (String) System Contact.
 - `description` (String) Description of the specified attribute.
+- `disable_aaa_sync` (String) Disable sync of user creation/updation between SNMP and AAA.
 - `enable_all` (String) Enable/Disable all traps.
+- `enforce_privacy` (String) Globally enforce privacy for all the users.
 - `engine_id` (String) Engine Id.
 - `hosts` (Attributes Map) List of SNMP host configurations.
   - Map key format: `<name>;<udp_port>`
@@ -78,6 +81,12 @@ Read-Only:
 - `notification_type` (String) Ctrl bits indicating traps/informs config.
 - `security_level` (String) Ctrl bits indicating auth/ priv/ noauth for v3.
 - `version` (String) Ctrl bits indicating version.
+- `vrfs` (Attributes Map) List of SNMP VRF configurations for host.
+  - Map key: `name` - vrfname to be used by host. (see [below for nested schema](#nestedatt--hosts--vrfs))
+
+<a id="nestedatt--hosts--vrfs"></a>
+### Nested Schema for `hosts.vrfs`
+
 
 
 <a id="nestedatt--local_users"></a>

@@ -48,6 +48,8 @@ func TestAccNxosSNMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "system_info_description", "My NX-OS device"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "location", "DC1-Room42"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "packet_size", "8192"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "disable_aaa_sync", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "enforce_privacy", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "tcp_session_authentication", "tcpSessAuth"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "source_interface_traps", "eth1/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "local_users.user1.authentication_password", "Xe9$mK2v!pQr"))
@@ -137,6 +139,8 @@ func testAccNxosSNMPConfig_all(includeWriteOnly bool) string {
 	config += `	system_info_description = "My NX-OS device"` + "\n"
 	config += `	location = "DC1-Room42"` + "\n"
 	config += `	packet_size = 8192` + "\n"
+	config += `	disable_aaa_sync = "yes"` + "\n"
+	config += `	enforce_privacy = "yes"` + "\n"
 	config += `	tcp_session_authentication = "tcpSessAuth"` + "\n"
 	config += `	source_interface_traps = "eth1/1"` + "\n"
 	config += `	local_users = {` + "\n"
@@ -173,6 +177,10 @@ func testAccNxosSNMPConfig_all(includeWriteOnly bool) string {
 	config += `			notification_type = "traps"` + "\n"
 	config += `			security_level = "auth"` + "\n"
 	config += `			version = "v3"` + "\n"
+	config += `			vrfs = {` + "\n"
+	config += `				"management" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	enable_all = "yes"` + "\n"

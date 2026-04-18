@@ -12,6 +12,8 @@ resource "nxos_snmp" "example" {
   system_info_description    = "My NX-OS device"
   location                   = "DC1-Room42"
   packet_size                = 8192
+  disable_aaa_sync           = "yes"
+  enforce_privacy            = "yes"
   tcp_session_authentication = "tcpSessAuth"
   source_interface_traps     = "eth1/1"
   local_users = {
@@ -39,6 +41,9 @@ resource "nxos_snmp" "example" {
       notification_type = "traps"
       security_level    = "auth"
       version           = "v3"
+      vrfs = {
+        "management" = {}
+      }
     }
   }
   enable_all = "yes"

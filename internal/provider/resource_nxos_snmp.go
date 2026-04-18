@@ -63,7 +63,7 @@ func (r *SNMPResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.").AddApiDocumentation("snmpEntity", "System/snmp:Entity/", []string{"snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpUseVrf", "snmpTraps", "snmpRmon", "snmpEvent"}, []string{"System/snmp:Inst/", "System/snmp:SysInfo/", "System/snmp:Globals/", "System/snmp:SourceInterfaceTraps/", "System/snmp:LocalUser/", "System/snmp:UserGroup/", "System/snmp:Host/", "System/snmp:UseVrf/", "System/snmp:Traps/", "System/snmp:Rmon/", "System/snmp:Event/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.").AddApiDocumentation("snmpEntity", "System/snmp:Entity/", []string{"snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpTraps", "snmpTaaa", "snmpServerStateChange", "snmpTbfd", "snmpSessionDown", "snmpSessionUp", "snmpTbridge", "snmpNewRoot", "snmpTopologyChange", "snmpTcallhome", "snmpEventNotify", "snmpSmtpSendFail", "snmpTcfs", "snmpStateChangeNotif", "snmpMergeFailure", "snmpTconfig", "snmpCLIRunningConfigChange", "snmpTentity", "snmpEntityMIBChange", "snmpEntityMIBEnableStatusNotification", "snmpEntityFanStatusChange", "snmpEntityModuleInserted", "snmpEntityModuleRemoved", "snmpEntityModuleStatusChange", "snmpEntityPowerOutChange", "snmpEntityPowerStatusChange", "snmpEntitySensor", "snmpEntityUnrecognisedModule", "snmpTfcdomain", "snmpDmDomainIdNotAssignedNotify", "snmpDmFabricChangeNotify", "snmpDmNewPrincipalSwitchNotify", "snmpTfcns", "snmpTfcs", "snmpTfctrace", "snmpTfdmi", "snmpTfeaturecontrol", "snmpFeatureOpStatusChange", "snmpCiscoFeatOpStatusChange", "snmpTfspf", "snmpTgeneric", "snmpColdStart", "snmpWarmStart", "snmpThsrp", "snmpStateChange", "snmpTip", "snmpTlicense", "snmpNotifyLicenseExpiry", "snmpNotifyLicenseExpiryWarning", "snmpNotifyLicenseFileMissing", "snmpNotifyNoLicenceForFeature", "snmpTlink", "snmpCieLinkDown", "snmpCieLinkUp", "snmpCiscoXcvrMonStatusChange", "snmpCmnMacMoveNotification", "snmpDelayedLinkStateChange", "snmpExtendedLinkDown", "snmpExtendedLinkUp", "snmpLinkDown", "snmpLinkUp", "snmpCErrDisableInterfaceEventRev1", "snmpTlldp", "snmpLldpRemTablesChange", "snmpTmmode", "snmpCseMaintModeChangeNotify", "snmpCseNormalModeChangeNotify", "snmpTmpls", "snmpLdp", "snmpLdpSessiondown", "snmpLdpSessionup", "snmpVpn", "snmpVpnMaxThreshcleared", "snmpVpnMaxThreshexceeded", "snmpVpnMidThreshexceeded", "snmpVpnVrfdown", "snmpVpnVrfup", "snmpTmsdp", "snmpMsdpBackwardTransition", "snmpTpim", "snmpPimNeighborLoss", "snmpTpoe", "snmpTportsecurity", "snmpAccessSecureMacViolation", "snmpTrunkSecureMacViolation", "snmpTrf", "snmpRedundancyFramework", "snmpTrmon", "snmpRisingAlarm", "snmpFallingAlarm", "snmpHcRisingAlarm", "snmpHcFallingAlarm", "snmpTrscn", "snmpTscsi", "snmpTsnmp", "snmpAuthentication", "snmpTstormControl", "snmpCpscEventRev1", "snmpTstpx", "snmpInconsistency", "snmpLoopInconsistency", "snmpRootInconsistency", "snmpTsyslog", "snmpMessageGenerated", "snmpTsysmgr", "snmpCseFailSwCoreNotifyExtended", "snmpTsystem", "snmpClockChangeNotification", "snmpTupgrade", "snmpUpgradeJobStatusNotify", "snmpUpgradeOpNotifyOnCompletion", "snmpTvsan", "snmpTvtp", "snmpVlancreate", "snmpVlandelete", "snmpTzone", "snmpRmon", "snmpEvent"}, []string{"System/snmp:Inst/", "System/snmp:SysInfo/", "System/snmp:Globals/", "System/snmp:SourceInterfaceTraps/", "System/snmp:LocalUser/", "System/snmp:UserGroup/", "System/snmp:Host/", "System/snmp:Traps/", "System/snmp:Taaa/", "System/snmp:ServerStateChange/", "System/snmp:Tbfd/", "System/snmp:SessionDown/", "System/snmp:SessionUp/", "System/snmp:Tbridge/", "System/snmp:NewRoot/", "System/snmp:TopologyChange/", "System/snmp:Tcallhome/", "System/snmp:EventNotify/", "System/snmp:SmtpSendFail/", "System/snmp:Tcfs/", "System/snmp:StateChangeNotif/", "System/snmp:MergeFailure/", "System/snmp:Tconfig/", "System/snmp:CLIRunningConfigChange/", "System/snmp:Tentity/", "System/snmp:EntityMIBChange/", "System/snmp:EntityMIBEnableStatusNotification/", "System/snmp:EntityFanStatusChange/", "System/snmp:EntityModuleInserted/", "System/snmp:EntityModuleRemoved/", "System/snmp:EntityModuleStatusChange/", "System/snmp:EntityPowerOutChange/", "System/snmp:EntityPowerStatusChange/", "System/snmp:EntitySensor/", "System/snmp:EntityUnrecognisedModule/", "System/snmp:Tfcdomain/", "System/snmp:DmDomainIdNotAssignedNotify/", "System/snmp:DmFabricChangeNotify/", "System/snmp:DmNewPrincipalSwitchNotify/", "System/snmp:Tfcns/", "System/snmp:Tfcs/", "System/snmp:Tfctrace/", "System/snmp:Tfdmi/", "System/snmp:Tfeaturecontrol/", "System/snmp:FeatureOpStatusChange/", "System/snmp:CiscoFeatOpStatusChange/", "System/snmp:Tfspf/", "System/snmp:Tgeneric/", "System/snmp:ColdStart/", "System/snmp:WarmStart/", "System/snmp:Thsrp/", "System/snmp:StateChange/", "System/snmp:Tip/", "System/snmp:Tlicense/", "System/snmp:NotifyLicenseExpiry/", "System/snmp:NotifyLicenseExpiryWarning/", "System/snmp:NotifyLicenseFileMissing/", "System/snmp:NotifyNoLicenceForFeature/", "System/snmp:Tlink/", "System/snmp:CieLinkDown/", "System/snmp:CieLinkUp/", "System/snmp:CiscoXcvrMonStatusChange/", "System/snmp:CmnMacMoveNotification/", "System/snmp:DelayedLinkStateChange/", "System/snmp:ExtendedLinkDown/", "System/snmp:ExtendedLinkUp/", "System/snmp:LinkDown/", "System/snmp:LinkUp/", "System/snmp:CErrDisableInterfaceEventRev1/", "System/snmp:Tlldp/", "System/snmp:LldpRemTablesChange/", "System/snmp:Tmmode/", "System/snmp:CseMaintModeChangeNotify/", "System/snmp:CseNormalModeChangeNotify/", "System/snmp:Tmpls/", "System/snmp:Ldp/", "System/snmp:LdpSessiondown/", "System/snmp:LdpSessionup/", "System/snmp:Vpn/", "System/snmp:VpnMaxThreshcleared/", "System/snmp:VpnMaxThreshexceeded/", "System/snmp:VpnMidThreshexceeded/", "System/snmp:VpnVrfdown/", "System/snmp:VpnVrfup/", "System/snmp:Tmsdp/", "System/snmp:MsdpBackwardTransition/", "System/snmp:Tpim/", "System/snmp:PimNeighborLoss/", "System/snmp:Tpoe/", "System/snmp:Tportsecurity/", "System/snmp:AccessSecureMacViolation/", "System/snmp:TrunkSecureMacViolation/", "System/snmp:Trf/", "System/snmp:RedundancyFramework/", "System/snmp:Trmon/", "System/snmp:RisingAlarm/", "System/snmp:FallingAlarm/", "System/snmp:HcRisingAlarm/", "System/snmp:HcFallingAlarm/", "System/snmp:Trscn/", "System/snmp:Tscsi/", "System/snmp:Tsnmp/", "System/snmp:Authentication/", "System/snmp:TstormControl/", "System/snmp:CpscEventRev1/", "System/snmp:Tstpx/", "System/snmp:Inconsistency/", "System/snmp:LoopInconsistency/", "System/snmp:RootInconsistency/", "System/snmp:Tsyslog/", "System/snmp:MessageGenerated/", "System/snmp:Tsysmgr/", "System/snmp:CseFailSwCoreNotifyExtended/", "System/snmp:Tsystem/", "System/snmp:ClockChangeNotification/", "System/snmp:Tupgrade/", "System/snmp:UpgradeJobStatusNotify/", "System/snmp:UpgradeOpNotifyOnCompletion/", "System/snmp:Tvsan/", "System/snmp:Tvtp/", "System/snmp:Vlancreate/", "System/snmp:Vlandelete/", "System/snmp:Tzone/", "System/snmp:Rmon/", "System/snmp:Event/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -145,20 +145,6 @@ func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(484, 17382),
-				},
-			},
-			"disable_aaa_sync": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable sync of user creation/updation between SNMP and AAA.").AddStringEnumDescription("no", "yes").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("no", "yes"),
-				},
-			},
-			"enforce_privacy": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Globally enforce privacy for all the users.").AddStringEnumDescription("no", "yes").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("no", "yes"),
 				},
 			},
 			"tcp_session_authentication": schema.StringAttribute{
@@ -297,13 +283,6 @@ func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								stringvalidator.OneOf("v1", "v2c", "v3"),
 							},
 						},
-						"vrfs": schema.MapNestedAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("List of SNMP VRF configurations for host.\n  - Map key: `name` - vrfname to be used by host.").String,
-							Optional:            true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{},
-							},
-						},
 					},
 				},
 			},
@@ -312,6 +291,531 @@ func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("no", "yes", "unspecified"),
+				},
+			},
+			"aaa_server_state_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"bfd_session_down_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"bfd_session_up_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"bridge_new_root_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"bridge_topology_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"callhome_event_notify_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"callhome_smtp_send_fail_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"cfs_state_change_notif_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"cfs_merge_failure_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"config_cli_running_config_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"entity_mib_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"entity_mib_enable_status_notification_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"entity_fan_status_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"entity_module_inserted_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"entity_module_removed_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"entity_module_status_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"entity_power_out_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"entity_power_status_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"entity_sensor_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"entity_unrecognised_module_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"fcdomain_domain_id_not_assigned_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"fcdomain_fabric_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"fcdomain_new_principal_switch_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"feature_control_op_status_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"feature_control_cisco_op_status_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"generic_cold_start_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"generic_warm_start_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"hsrp_state_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"license_expiry_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"license_expiry_warning_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"license_file_missing_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"license_no_license_for_feature_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"link_cie_link_down_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"link_cie_link_up_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"link_cisco_xcvr_mon_status_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"link_cmn_mac_move_notification_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"link_delayed_link_state_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"link_extended_link_down_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"link_extended_link_up_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"link_link_down_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"link_link_up_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"link_err_disable_interface_event_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"lldp_rem_tables_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mmode_maint_mode_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mmode_normal_mode_change_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mpls_ldp_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mpls_ldp_session_down_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mpls_ldp_session_up_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mpls_vpn_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mpls_vpn_max_thresh_cleared_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mpls_vpn_max_thresh_exceeded_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mpls_vpn_mid_thresh_exceeded_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mpls_vpn_vrf_down_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"mpls_vpn_vrf_up_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"msdp_backward_transition_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"pim_neighbor_loss_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"port_security_access_secure_mac_violation_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"port_security_trunk_secure_mac_violation_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"rf_redundancy_framework_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"rmon_rising_alarm_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"rmon_falling_alarm_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"rmon_hc_rising_alarm_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"rmon_hc_falling_alarm_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"snmp_authentication_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"storm_control_cpsc_event_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"stpx_inconsistency_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"stpx_loop_inconsistency_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"stpx_root_inconsistency_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"syslog_message_generated_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"sysmgr_fail_sw_core_notify_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"system_clock_change_notification_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"upgrade_job_status_notify_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"upgrade_op_notify_on_completion_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"vtp_vlan_create_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"vtp_vlan_delete_trap_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Status to show enabled/disable trap.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
 				},
 			},
 			"rmon_events": schema.MapNestedAttribute{
@@ -450,7 +954,7 @@ func (r *SNMPResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "snmpInst,snmpSysInfo,snmpGlobals,snmpSourceInterfaceTraps,snmpLocalUser,snmpUserGroup,snmpHost,snmpUseVrf,snmpTraps,snmpRmon,snmpEvent")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "snmpInst,snmpSysInfo,snmpGlobals,snmpSourceInterfaceTraps,snmpLocalUser,snmpUserGroup,snmpHost,snmpTraps,snmpTaaa,snmpServerStateChange,snmpTbfd,snmpSessionDown,snmpSessionUp,snmpTbridge,snmpNewRoot,snmpTopologyChange,snmpTcallhome,snmpEventNotify,snmpSmtpSendFail,snmpTcfs,snmpStateChangeNotif,snmpMergeFailure,snmpTconfig,snmpCLIRunningConfigChange,snmpTentity,snmpEntityMIBChange,snmpEntityMIBEnableStatusNotification,snmpEntityFanStatusChange,snmpEntityModuleInserted,snmpEntityModuleRemoved,snmpEntityModuleStatusChange,snmpEntityPowerOutChange,snmpEntityPowerStatusChange,snmpEntitySensor,snmpEntityUnrecognisedModule,snmpTfcdomain,snmpDmDomainIdNotAssignedNotify,snmpDmFabricChangeNotify,snmpDmNewPrincipalSwitchNotify,snmpTfcns,snmpTfcs,snmpTfctrace,snmpTfdmi,snmpTfeaturecontrol,snmpFeatureOpStatusChange,snmpCiscoFeatOpStatusChange,snmpTfspf,snmpTgeneric,snmpColdStart,snmpWarmStart,snmpThsrp,snmpStateChange,snmpTip,snmpTlicense,snmpNotifyLicenseExpiry,snmpNotifyLicenseExpiryWarning,snmpNotifyLicenseFileMissing,snmpNotifyNoLicenceForFeature,snmpTlink,snmpCieLinkDown,snmpCieLinkUp,snmpCiscoXcvrMonStatusChange,snmpCmnMacMoveNotification,snmpDelayedLinkStateChange,snmpExtendedLinkDown,snmpExtendedLinkUp,snmpLinkDown,snmpLinkUp,snmpCErrDisableInterfaceEventRev1,snmpTlldp,snmpLldpRemTablesChange,snmpTmmode,snmpCseMaintModeChangeNotify,snmpCseNormalModeChangeNotify,snmpTmpls,snmpLdp,snmpLdpSessiondown,snmpLdpSessionup,snmpVpn,snmpVpnMaxThreshcleared,snmpVpnMaxThreshexceeded,snmpVpnMidThreshexceeded,snmpVpnVrfdown,snmpVpnVrfup,snmpTmsdp,snmpMsdpBackwardTransition,snmpTpim,snmpPimNeighborLoss,snmpTpoe,snmpTportsecurity,snmpAccessSecureMacViolation,snmpTrunkSecureMacViolation,snmpTrf,snmpRedundancyFramework,snmpTrmon,snmpRisingAlarm,snmpFallingAlarm,snmpHcRisingAlarm,snmpHcFallingAlarm,snmpTrscn,snmpTscsi,snmpTsnmp,snmpAuthentication,snmpTstormControl,snmpCpscEventRev1,snmpTstpx,snmpInconsistency,snmpLoopInconsistency,snmpRootInconsistency,snmpTsyslog,snmpMessageGenerated,snmpTsysmgr,snmpCseFailSwCoreNotifyExtended,snmpTsystem,snmpClockChangeNotification,snmpTupgrade,snmpUpgradeJobStatusNotify,snmpUpgradeOpNotifyOnCompletion,snmpTvsan,snmpTvtp,snmpVlancreate,snmpVlandelete,snmpTzone,snmpRmon,snmpEvent")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

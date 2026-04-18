@@ -59,6 +59,59 @@ func TestAccDataSourceNxosSNMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.security_level", "auth"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.version", "v3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "enable_all", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "aaa_server_state_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "bridge_new_root_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "bridge_topology_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "callhome_event_notify_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "callhome_smtp_send_fail_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "cfs_state_change_notif_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "cfs_merge_failure_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "config_cli_running_config_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_mib_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_mib_enable_status_notification_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_fan_status_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_module_inserted_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_module_removed_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_module_status_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_power_out_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_power_status_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_sensor_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_unrecognised_module_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "generic_cold_start_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "generic_warm_start_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "license_expiry_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "license_expiry_warning_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "license_file_missing_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "license_no_license_for_feature_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_cie_link_down_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_cie_link_up_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_cisco_xcvr_mon_status_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_cmn_mac_move_notification_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_delayed_link_state_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_extended_link_down_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_extended_link_up_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_link_down_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_link_up_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_err_disable_interface_event_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "mmode_maint_mode_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "mmode_normal_mode_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rf_redundancy_framework_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_rising_alarm_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_falling_alarm_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_hc_rising_alarm_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_hc_falling_alarm_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "snmp_authentication_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "storm_control_cpsc_event_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "stpx_inconsistency_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "stpx_loop_inconsistency_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "stpx_root_inconsistency_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "syslog_message_generated_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "sysmgr_fail_sw_core_notify_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "system_clock_change_notification_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "upgrade_job_status_notify_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "upgrade_op_notify_on_completion_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "vtp_vlan_create_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "vtp_vlan_delete_trap_status", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.description", "Test event"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.log", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.owner", "admin"))
@@ -130,6 +183,59 @@ func testAccDataSourceNxosSNMPConfig() string {
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	enable_all = "yes"` + "\n"
+	config += `	aaa_server_state_change_trap_status = "enable"` + "\n"
+	config += `	bridge_new_root_trap_status = "enable"` + "\n"
+	config += `	bridge_topology_change_trap_status = "enable"` + "\n"
+	config += `	callhome_event_notify_trap_status = "enable"` + "\n"
+	config += `	callhome_smtp_send_fail_trap_status = "enable"` + "\n"
+	config += `	cfs_state_change_notif_trap_status = "enable"` + "\n"
+	config += `	cfs_merge_failure_trap_status = "enable"` + "\n"
+	config += `	config_cli_running_config_change_trap_status = "enable"` + "\n"
+	config += `	entity_mib_change_trap_status = "enable"` + "\n"
+	config += `	entity_mib_enable_status_notification_trap_status = "enable"` + "\n"
+	config += `	entity_fan_status_change_trap_status = "enable"` + "\n"
+	config += `	entity_module_inserted_trap_status = "enable"` + "\n"
+	config += `	entity_module_removed_trap_status = "enable"` + "\n"
+	config += `	entity_module_status_change_trap_status = "enable"` + "\n"
+	config += `	entity_power_out_change_trap_status = "enable"` + "\n"
+	config += `	entity_power_status_change_trap_status = "enable"` + "\n"
+	config += `	entity_sensor_trap_status = "enable"` + "\n"
+	config += `	entity_unrecognised_module_trap_status = "enable"` + "\n"
+	config += `	generic_cold_start_trap_status = "enable"` + "\n"
+	config += `	generic_warm_start_trap_status = "enable"` + "\n"
+	config += `	license_expiry_trap_status = "enable"` + "\n"
+	config += `	license_expiry_warning_trap_status = "enable"` + "\n"
+	config += `	license_file_missing_trap_status = "enable"` + "\n"
+	config += `	license_no_license_for_feature_trap_status = "enable"` + "\n"
+	config += `	link_cie_link_down_trap_status = "enable"` + "\n"
+	config += `	link_cie_link_up_trap_status = "enable"` + "\n"
+	config += `	link_cisco_xcvr_mon_status_change_trap_status = "enable"` + "\n"
+	config += `	link_cmn_mac_move_notification_trap_status = "enable"` + "\n"
+	config += `	link_delayed_link_state_change_trap_status = "enable"` + "\n"
+	config += `	link_extended_link_down_trap_status = "enable"` + "\n"
+	config += `	link_extended_link_up_trap_status = "enable"` + "\n"
+	config += `	link_link_down_trap_status = "enable"` + "\n"
+	config += `	link_link_up_trap_status = "enable"` + "\n"
+	config += `	link_err_disable_interface_event_trap_status = "enable"` + "\n"
+	config += `	mmode_maint_mode_change_trap_status = "enable"` + "\n"
+	config += `	mmode_normal_mode_change_trap_status = "enable"` + "\n"
+	config += `	rf_redundancy_framework_trap_status = "enable"` + "\n"
+	config += `	rmon_rising_alarm_trap_status = "enable"` + "\n"
+	config += `	rmon_falling_alarm_trap_status = "enable"` + "\n"
+	config += `	rmon_hc_rising_alarm_trap_status = "enable"` + "\n"
+	config += `	rmon_hc_falling_alarm_trap_status = "enable"` + "\n"
+	config += `	snmp_authentication_trap_status = "enable"` + "\n"
+	config += `	storm_control_cpsc_event_trap_status = "enable"` + "\n"
+	config += `	stpx_inconsistency_trap_status = "enable"` + "\n"
+	config += `	stpx_loop_inconsistency_trap_status = "enable"` + "\n"
+	config += `	stpx_root_inconsistency_trap_status = "enable"` + "\n"
+	config += `	syslog_message_generated_trap_status = "enable"` + "\n"
+	config += `	sysmgr_fail_sw_core_notify_trap_status = "enable"` + "\n"
+	config += `	system_clock_change_notification_trap_status = "enable"` + "\n"
+	config += `	upgrade_job_status_notify_trap_status = "enable"` + "\n"
+	config += `	upgrade_op_notify_on_completion_trap_status = "enable"` + "\n"
+	config += `	vtp_vlan_create_trap_status = "enable"` + "\n"
+	config += `	vtp_vlan_delete_trap_status = "enable"` + "\n"
 	config += `	rmon_events = {` + "\n"
 	config += `		"1" = {` + "\n"
 	config += `			description = "Test event"` + "\n"

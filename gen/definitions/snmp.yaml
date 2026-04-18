@@ -356,12 +356,1547 @@ child_classes:
               - "yes"
               - unspecified
             example: "yes"
+        child_classes:
+          - class_name: snmpTaaa
+            doc_path: System/snmp:Taaa/
+            rn: aaa
+            type: single
+            tf_name: aaa
+            description: 'AAA traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpServerStateChange
+                doc_path: System/snmp:ServerStateChange/
+                rn: serverstatechange
+                type: single
+                tf_name: aaa_server_state_change
+                description: 'AAA server-state-change traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: aaa_server_state_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTbfd
+            doc_path: System/snmp:Tbfd/
+            rn: bfd
+            type: single
+            tf_name: bfd
+            description: 'BFD traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpSessionDown
+                doc_path: System/snmp:SessionDown/
+                rn: sessiondown
+                type: single
+                tf_name: bfd_session_down
+                description: 'BFD session-down traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: bfd_session_down_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpSessionUp
+                doc_path: System/snmp:SessionUp/
+                rn: sessionup
+                type: single
+                tf_name: bfd_session_up
+                description: 'BFD session-up traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: bfd_session_up_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTbridge
+            doc_path: System/snmp:Tbridge/
+            rn: bridge
+            type: single
+            tf_name: bridge
+            description: 'Bridge traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpNewRoot
+                doc_path: System/snmp:NewRoot/
+                rn: newroot
+                type: single
+                tf_name: bridge_new_root
+                description: 'Bridge newroot traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: bridge_new_root_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpTopologyChange
+                doc_path: System/snmp:TopologyChange/
+                rn: topologychange
+                type: single
+                tf_name: bridge_topology_change
+                description: 'Bridge topology change traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: bridge_topology_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTcallhome
+            doc_path: System/snmp:Tcallhome/
+            rn: callhome
+            type: single
+            tf_name: callhome
+            description: 'Callhome traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpEventNotify
+                doc_path: System/snmp:EventNotify/
+                rn: eventnotify
+                type: single
+                tf_name: callhome_event_notify
+                description: 'Callhome event-notify traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: callhome_event_notify_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpSmtpSendFail
+                doc_path: System/snmp:SmtpSendFail/
+                rn: smtpsendfail
+                type: single
+                tf_name: callhome_smtp_send_fail
+                description: 'Callhome smtp-send-fail traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: callhome_smtp_send_fail_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTcfs
+            doc_path: System/snmp:Tcfs/
+            rn: cfs
+            type: single
+            tf_name: cfs
+            description: 'CFS traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpStateChangeNotif
+                doc_path: System/snmp:StateChangeNotif/
+                rn: statechangenotif
+                type: single
+                tf_name: cfs_state_change_notif
+                description: 'CFS state-change-notif traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: cfs_state_change_notif_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpMergeFailure
+                doc_path: System/snmp:MergeFailure/
+                rn: mergefailure
+                type: single
+                tf_name: cfs_merge_failure
+                description: 'CFS merge-failure traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: cfs_merge_failure_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTconfig
+            doc_path: System/snmp:Tconfig/
+            rn: config
+            type: single
+            tf_name: config
+            description: 'Config traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpCLIRunningConfigChange
+                doc_path: System/snmp:CLIRunningConfigChange/
+                rn: ccmCLIRunningConfigChanged
+                type: single
+                tf_name: config_cli_running_config_change
+                description: 'Config CLIRunningConfigChange traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: config_cli_running_config_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTentity
+            doc_path: System/snmp:Tentity/
+            rn: entity
+            type: single
+            tf_name: entity
+            description: 'Entity traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpEntityMIBChange
+                doc_path: System/snmp:EntityMIBChange/
+                rn: entitymibchange
+                type: single
+                tf_name: entity_mib_change
+                description: 'Entity entitymibchange traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: entity_mib_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpEntityMIBEnableStatusNotification
+                doc_path: System/snmp:EntityMIBEnableStatusNotification/
+                rn: cefcMIBEnableStatusNotification
+                type: single
+                tf_name: entity_mib_enable_status_notification
+                description: 'Entity entitymibenablestatusnotification traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: entity_mib_enable_status_notification_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpEntityFanStatusChange
+                doc_path: System/snmp:EntityFanStatusChange/
+                rn: entityfanstatuschange
+                type: single
+                tf_name: entity_fan_status_change
+                description: 'Entity entityfanstatuschange traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: entity_fan_status_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpEntityModuleInserted
+                doc_path: System/snmp:EntityModuleInserted/
+                rn: entitymoduleinserted
+                type: single
+                tf_name: entity_module_inserted
+                description: 'Entity entitymoduleinserted traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: entity_module_inserted_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpEntityModuleRemoved
+                doc_path: System/snmp:EntityModuleRemoved/
+                rn: entitymoduleremoved
+                type: single
+                tf_name: entity_module_removed
+                description: 'Entity entitymoduleremoved traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: entity_module_removed_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpEntityModuleStatusChange
+                doc_path: System/snmp:EntityModuleStatusChange/
+                rn: entitymodulestatuschange
+                type: single
+                tf_name: entity_module_status_change
+                description: 'Entity entitymodulestatuschange traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: entity_module_status_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpEntityPowerOutChange
+                doc_path: System/snmp:EntityPowerOutChange/
+                rn: entitypoweroutchange
+                type: single
+                tf_name: entity_power_out_change
+                description: 'Entity entitypoweroutchange traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: entity_power_out_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpEntityPowerStatusChange
+                doc_path: System/snmp:EntityPowerStatusChange/
+                rn: entitypowerstatuschange
+                type: single
+                tf_name: entity_power_status_change
+                description: 'Entity entitypowerstatuschange traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: entity_power_status_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpEntitySensor
+                doc_path: System/snmp:EntitySensor/
+                rn: entitysensor
+                type: single
+                tf_name: entity_sensor
+                description: 'Entity entitysensor traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: entity_sensor_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpEntityUnrecognisedModule
+                doc_path: System/snmp:EntityUnrecognisedModule/
+                rn: entityunrecognisedmodule
+                type: single
+                tf_name: entity_unrecognised_module
+                description: 'Entity entityunrecognisedmodule traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: entity_unrecognised_module_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTfcdomain
+            doc_path: System/snmp:Tfcdomain/
+            rn: fcdomain
+            type: single
+            tf_name: fcdomain
+            description: 'FC domain traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpDmDomainIdNotAssignedNotify
+                doc_path: System/snmp:DmDomainIdNotAssignedNotify/
+                rn: dmdomainidnotassignednotify
+                type: single
+                tf_name: fcdomain_domain_id_not_assigned
+                description: 'FC domain domain-id-not-assigned traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: fcdomain_domain_id_not_assigned_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpDmFabricChangeNotify
+                doc_path: System/snmp:DmFabricChangeNotify/
+                rn: dmfabricchangenotify
+                type: single
+                tf_name: fcdomain_fabric_change
+                description: 'FC domain fabric-change traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: fcdomain_fabric_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpDmNewPrincipalSwitchNotify
+                doc_path: System/snmp:DmNewPrincipalSwitchNotify/
+                rn: dmnewprincipalswitchnotify
+                type: single
+                tf_name: fcdomain_new_principal_switch
+                description: 'FC domain new-principal-switch traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: fcdomain_new_principal_switch_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTfcns
+            doc_path: System/snmp:Tfcns/
+            rn: fcns
+            type: single
+            tf_name: fcns
+            description: 'FCNS traps.'
+            no_delete: true
+          - class_name: snmpTfcs
+            doc_path: System/snmp:Tfcs/
+            rn: fcs
+            type: single
+            tf_name: fcs
+            description: 'FCS traps.'
+            no_delete: true
+          - class_name: snmpTfctrace
+            doc_path: System/snmp:Tfctrace/
+            rn: fctrace
+            type: single
+            tf_name: fctrace
+            description: 'FC trace traps.'
+            no_delete: true
+          - class_name: snmpTfdmi
+            doc_path: System/snmp:Tfdmi/
+            rn: fdmi
+            type: single
+            tf_name: fdmi
+            description: 'FDMI traps.'
+            no_delete: true
+          - class_name: snmpTfeaturecontrol
+            doc_path: System/snmp:Tfeaturecontrol/
+            rn: featurecontrol
+            type: single
+            tf_name: feature_control
+            description: 'Feature-control traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpFeatureOpStatusChange
+                doc_path: System/snmp:FeatureOpStatusChange/
+                rn: FeatureOpStatusChange
+                type: single
+                tf_name: feature_control_op_status_change
+                description: 'Feature-control FeatureOpStatusChange traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: feature_control_op_status_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpCiscoFeatOpStatusChange
+                doc_path: System/snmp:CiscoFeatOpStatusChange/
+                rn: ciscoFeatOpStatusChange
+                type: single
+                tf_name: feature_control_cisco_op_status_change
+                description: 'Feature-control ciscoFeatOpStatusChange traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: feature_control_cisco_op_status_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTfspf
+            doc_path: System/snmp:Tfspf/
+            rn: fspf
+            type: single
+            tf_name: fspf
+            description: 'FSPF traps.'
+            no_delete: true
+          - class_name: snmpTgeneric
+            doc_path: System/snmp:Tgeneric/
+            rn: generic
+            type: single
+            tf_name: generic
+            description: 'Generic traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpColdStart
+                doc_path: System/snmp:ColdStart/
+                rn: coldStart
+                type: single
+                tf_name: generic_cold_start
+                description: 'Generic coldstart traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: generic_cold_start_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpWarmStart
+                doc_path: System/snmp:WarmStart/
+                rn: warmStart
+                type: single
+                tf_name: generic_warm_start
+                description: 'Generic warmstart traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: generic_warm_start_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpThsrp
+            doc_path: System/snmp:Thsrp/
+            rn: hsrp
+            type: single
+            tf_name: hsrp
+            description: 'HSRP traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpStateChange
+                doc_path: System/snmp:StateChange/
+                rn: statechange
+                type: single
+                tf_name: hsrp_state_change
+                description: 'HSRP statechange traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: hsrp_state_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTip
+            doc_path: System/snmp:Tip/
+            rn: ip
+            type: single
+            tf_name: ip
+            description: 'IP traps.'
+            no_delete: true
+          - class_name: snmpTlicense
+            doc_path: System/snmp:Tlicense/
+            rn: license
+            type: single
+            tf_name: license
+            description: 'License traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpNotifyLicenseExpiry
+                doc_path: System/snmp:NotifyLicenseExpiry/
+                rn: notifylicenseexpiry
+                type: single
+                tf_name: license_expiry
+                description: 'License expiry traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: license_expiry_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpNotifyLicenseExpiryWarning
+                doc_path: System/snmp:NotifyLicenseExpiryWarning/
+                rn: notifylicenseexpirywarning
+                type: single
+                tf_name: license_expiry_warning
+                description: 'License expiry warning traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: license_expiry_warning_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpNotifyLicenseFileMissing
+                doc_path: System/snmp:NotifyLicenseFileMissing/
+                rn: notifylicensefilemissing
+                type: single
+                tf_name: license_file_missing
+                description: 'License file missing traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: license_file_missing_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpNotifyNoLicenceForFeature
+                doc_path: System/snmp:NotifyNoLicenceForFeature/
+                rn: notifynolicenseforfeature
+                type: single
+                tf_name: license_no_license_for_feature
+                description: 'License no-license-for-feature traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: license_no_license_for_feature_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTlink
+            doc_path: System/snmp:Tlink/
+            rn: link
+            type: single
+            tf_name: link
+            description: 'Link traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpCieLinkDown
+                doc_path: System/snmp:CieLinkDown/
+                rn: cieLinkDown
+                type: single
+                tf_name: link_cie_link_down
+                description: 'Link CIE link-down traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: link_cie_link_down_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpCieLinkUp
+                doc_path: System/snmp:CieLinkUp/
+                rn: cieLinkUp
+                type: single
+                tf_name: link_cie_link_up
+                description: 'Link CIE link-up traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: link_cie_link_up_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpCiscoXcvrMonStatusChange
+                doc_path: System/snmp:CiscoXcvrMonStatusChange/
+                rn: ciscoxcvrmonstatuschg
+                type: single
+                tf_name: link_cisco_xcvr_mon_status_change
+                description: 'Link cisco-xcvr-mon-status-change traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: link_cisco_xcvr_mon_status_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpCmnMacMoveNotification
+                doc_path: System/snmp:CmnMacMoveNotification/
+                rn: cmnmacmovenotification
+                type: single
+                tf_name: link_cmn_mac_move_notification
+                description: 'Link cmnMacMoveNotification traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: link_cmn_mac_move_notification_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpDelayedLinkStateChange
+                doc_path: System/snmp:DelayedLinkStateChange/
+                rn: delayedlinkstatechange
+                type: single
+                tf_name: link_delayed_link_state_change
+                description: 'Link delayed-link-state-change traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: link_delayed_link_state_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpExtendedLinkDown
+                doc_path: System/snmp:ExtendedLinkDown/
+                rn: extendedlinkDown
+                type: single
+                tf_name: link_extended_link_down
+                description: 'Link extended link-down traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: link_extended_link_down_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpExtendedLinkUp
+                doc_path: System/snmp:ExtendedLinkUp/
+                rn: extendedlinkUp
+                type: single
+                tf_name: link_extended_link_up
+                description: 'Link extended link-up traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: link_extended_link_up_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpLinkDown
+                doc_path: System/snmp:LinkDown/
+                rn: linkDown
+                type: single
+                tf_name: link_link_down
+                description: 'Link link-down traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: link_link_down_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpLinkUp
+                doc_path: System/snmp:LinkUp/
+                rn: linkUp
+                type: single
+                tf_name: link_link_up
+                description: 'Link link-up traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: link_link_up_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpCErrDisableInterfaceEventRev1
+                doc_path: System/snmp:CErrDisableInterfaceEventRev1/
+                rn: cerrdisableinterfaceeventrev1
+                type: single
+                tf_name: link_err_disable_interface_event
+                description: 'Link cErrDisableInterfaceEventRev1 traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: link_err_disable_interface_event_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTlldp
+            doc_path: System/snmp:Tlldp/
+            rn: lldp
+            type: single
+            tf_name: lldp
+            description: 'LLDP traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpLldpRemTablesChange
+                doc_path: System/snmp:LldpRemTablesChange/
+                rn: lldpRemTablesChange
+                type: single
+                tf_name: lldp_rem_tables_change
+                description: 'LLDP lldpRemTablesChange traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: lldp_rem_tables_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTmmode
+            doc_path: System/snmp:Tmmode/
+            rn: mmode
+            type: single
+            tf_name: mmode
+            description: 'Maintenance mode traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpCseMaintModeChangeNotify
+                doc_path: System/snmp:CseMaintModeChangeNotify/
+                rn: cseMaintModeChangeNotify
+                type: single
+                tf_name: mmode_maint_mode_change
+                description: 'Maintenance mode cseMaintModeChangeNotify traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: mmode_maint_mode_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpCseNormalModeChangeNotify
+                doc_path: System/snmp:CseNormalModeChangeNotify/
+                rn: cseNormalModeChangeNotify
+                type: single
+                tf_name: mmode_normal_mode_change
+                description: 'Maintenance mode cseNormalModeChangeNotify traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: mmode_normal_mode_change_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTmpls
+            doc_path: System/snmp:Tmpls/
+            rn: mpls
+            type: single
+            tf_name: mpls
+            description: 'MPLS traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpLdp
+                doc_path: System/snmp:Ldp/
+                rn: ldp
+                type: single
+                tf_name: mpls_ldp
+                description: 'MPLS LDP traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: mpls_ldp_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+                child_classes:
+                  - class_name: snmpLdpSessiondown
+                    doc_path: System/snmp:LdpSessiondown/
+                    rn: ldpsessiondown
+                    type: single
+                    tf_name: mpls_ldp_session_down
+                    description: 'MPLS LDP session-down traps.'
+                    no_delete: true
+                    attributes:
+                      - nxos_name: trapstatus
+                        tf_name: mpls_ldp_session_down_trap_status
+                        type: String
+                        description: 'Status to show enabled/disable trap.'
+                        exclude_test: true
+                        enum_values:
+                          - enable
+                          - disable
+                        example: enable
+                  - class_name: snmpLdpSessionup
+                    doc_path: System/snmp:LdpSessionup/
+                    rn: ldpsessionup
+                    type: single
+                    tf_name: mpls_ldp_session_up
+                    description: 'MPLS LDP session-up traps.'
+                    no_delete: true
+                    attributes:
+                      - nxos_name: trapstatus
+                        tf_name: mpls_ldp_session_up_trap_status
+                        type: String
+                        description: 'Status to show enabled/disable trap.'
+                        exclude_test: true
+                        enum_values:
+                          - enable
+                          - disable
+                        example: enable
+              - class_name: snmpVpn
+                doc_path: System/snmp:Vpn/
+                rn: vpn
+                type: single
+                tf_name: mpls_vpn
+                description: 'MPLS VPN traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: mpls_vpn_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+                child_classes:
+                  - class_name: snmpVpnMaxThreshcleared
+                    doc_path: System/snmp:VpnMaxThreshcleared/
+                    rn: vpnmaxthreshcleared
+                    type: single
+                    tf_name: mpls_vpn_max_thresh_cleared
+                    description: 'MPLS VPN max-thresh-cleared traps.'
+                    no_delete: true
+                    attributes:
+                      - nxos_name: trapstatus
+                        tf_name: mpls_vpn_max_thresh_cleared_trap_status
+                        type: String
+                        description: 'Status to show enabled/disable trap.'
+                        exclude_test: true
+                        enum_values:
+                          - enable
+                          - disable
+                        example: enable
+                  - class_name: snmpVpnMaxThreshexceeded
+                    doc_path: System/snmp:VpnMaxThreshexceeded/
+                    rn: vpnmaxthreshexceeded
+                    type: single
+                    tf_name: mpls_vpn_max_thresh_exceeded
+                    description: 'MPLS VPN max-thresh-exceeded traps.'
+                    no_delete: true
+                    attributes:
+                      - nxos_name: trapstatus
+                        tf_name: mpls_vpn_max_thresh_exceeded_trap_status
+                        type: String
+                        description: 'Status to show enabled/disable trap.'
+                        exclude_test: true
+                        enum_values:
+                          - enable
+                          - disable
+                        example: enable
+                  - class_name: snmpVpnMidThreshexceeded
+                    doc_path: System/snmp:VpnMidThreshexceeded/
+                    rn: vpnmidthreshexceeded
+                    type: single
+                    tf_name: mpls_vpn_mid_thresh_exceeded
+                    description: 'MPLS VPN mid-thresh-exceeded traps.'
+                    no_delete: true
+                    attributes:
+                      - nxos_name: trapstatus
+                        tf_name: mpls_vpn_mid_thresh_exceeded_trap_status
+                        type: String
+                        description: 'Status to show enabled/disable trap.'
+                        exclude_test: true
+                        enum_values:
+                          - enable
+                          - disable
+                        example: enable
+                  - class_name: snmpVpnVrfdown
+                    doc_path: System/snmp:VpnVrfdown/
+                    rn: vpnvrfdown
+                    type: single
+                    tf_name: mpls_vpn_vrf_down
+                    description: 'MPLS VPN VRF down traps.'
+                    no_delete: true
+                    attributes:
+                      - nxos_name: trapstatus
+                        tf_name: mpls_vpn_vrf_down_trap_status
+                        type: String
+                        description: 'Status to show enabled/disable trap.'
+                        exclude_test: true
+                        enum_values:
+                          - enable
+                          - disable
+                        example: enable
+                  - class_name: snmpVpnVrfup
+                    doc_path: System/snmp:VpnVrfup/
+                    rn: vpnvrfup
+                    type: single
+                    tf_name: mpls_vpn_vrf_up
+                    description: 'MPLS VPN VRF up traps.'
+                    no_delete: true
+                    attributes:
+                      - nxos_name: trapstatus
+                        tf_name: mpls_vpn_vrf_up_trap_status
+                        type: String
+                        description: 'Status to show enabled/disable trap.'
+                        exclude_test: true
+                        enum_values:
+                          - enable
+                          - disable
+                        example: enable
+          - class_name: snmpTmsdp
+            doc_path: System/snmp:Tmsdp/
+            rn: msdp
+            type: single
+            tf_name: msdp
+            description: 'MSDP traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpMsdpBackwardTransition
+                doc_path: System/snmp:MsdpBackwardTransition/
+                rn: msdpBackwardTransition
+                type: single
+                tf_name: msdp_backward_transition
+                description: 'MSDP backward-transition traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: msdp_backward_transition_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTpim
+            doc_path: System/snmp:Tpim/
+            rn: pim
+            type: single
+            tf_name: pim
+            description: 'PIM traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpPimNeighborLoss
+                doc_path: System/snmp:PimNeighborLoss/
+                rn: pimNeighborLoss
+                type: single
+                tf_name: pim_neighbor_loss
+                description: 'PIM neighbor-loss traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: pim_neighbor_loss_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTpoe
+            doc_path: System/snmp:Tpoe/
+            rn: poe
+            type: single
+            tf_name: poe
+            description: 'PoE traps.'
+            no_delete: true
+          - class_name: snmpTportsecurity
+            doc_path: System/snmp:Tportsecurity/
+            rn: portsecurity
+            type: single
+            tf_name: port_security
+            description: 'Port-security traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpAccessSecureMacViolation
+                doc_path: System/snmp:AccessSecureMacViolation/
+                rn: accesssecuremacviolation
+                type: single
+                tf_name: port_security_access_secure_mac_violation
+                description: 'Port-security access-secure-mac-violation traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: port_security_access_secure_mac_violation_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpTrunkSecureMacViolation
+                doc_path: System/snmp:TrunkSecureMacViolation/
+                rn: trunksecuremacviolation
+                type: single
+                tf_name: port_security_trunk_secure_mac_violation
+                description: 'Port-security trunk-secure-mac-violation traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: port_security_trunk_secure_mac_violation_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    exclude_test: true
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTrf
+            doc_path: System/snmp:Trf/
+            rn: rf
+            type: single
+            tf_name: rf
+            description: 'Redundancy framework traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpRedundancyFramework
+                doc_path: System/snmp:RedundancyFramework/
+                rn: redundancyframework
+                type: single
+                tf_name: rf_redundancy_framework
+                description: 'Redundancy framework traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: rf_redundancy_framework_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTrmon
+            doc_path: System/snmp:Trmon/
+            rn: rmon
+            type: single
+            tf_name: rmon_traps
+            description: 'RMON traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpRisingAlarm
+                doc_path: System/snmp:RisingAlarm/
+                rn: risingAlarm
+                type: single
+                tf_name: rmon_rising_alarm
+                description: 'RMON rising-alarm traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: rmon_rising_alarm_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpFallingAlarm
+                doc_path: System/snmp:FallingAlarm/
+                rn: fallingAlarm
+                type: single
+                tf_name: rmon_falling_alarm
+                description: 'RMON falling-alarm traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: rmon_falling_alarm_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpHcRisingAlarm
+                doc_path: System/snmp:HcRisingAlarm/
+                rn: hcRisingAlarm
+                type: single
+                tf_name: rmon_hc_rising_alarm
+                description: 'RMON hcRisingAlarm traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: rmon_hc_rising_alarm_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpHcFallingAlarm
+                doc_path: System/snmp:HcFallingAlarm/
+                rn: hcFallingAlarm
+                type: single
+                tf_name: rmon_hc_falling_alarm
+                description: 'RMON hcFallingAlarm traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: rmon_hc_falling_alarm_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTrscn
+            doc_path: System/snmp:Trscn/
+            rn: rscn
+            type: single
+            tf_name: rscn
+            description: 'RSCN traps.'
+            no_delete: true
+          - class_name: snmpTscsi
+            doc_path: System/snmp:Tscsi/
+            rn: scsi
+            type: single
+            tf_name: scsi
+            description: 'SCSI traps.'
+            no_delete: true
+          - class_name: snmpTsnmp
+            doc_path: System/snmp:Tsnmp/
+            rn: snmp
+            type: single
+            tf_name: snmp_traps
+            description: 'SNMP traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpAuthentication
+                doc_path: System/snmp:Authentication/
+                rn: authentication
+                type: single
+                tf_name: snmp_authentication
+                description: 'SNMP authentication traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: snmp_authentication_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTstormControl
+            doc_path: System/snmp:TstormControl/
+            rn: stormcontrol
+            type: single
+            tf_name: storm_control
+            description: 'Storm-control traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpCpscEventRev1
+                doc_path: System/snmp:CpscEventRev1/
+                rn: cpscEventRev1
+                type: single
+                tf_name: storm_control_cpsc_event
+                description: 'Storm-control cpscEventRev1 traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: storm_control_cpsc_event_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTstpx
+            doc_path: System/snmp:Tstpx/
+            rn: stpx
+            type: single
+            tf_name: stpx
+            description: 'STPX traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpInconsistency
+                doc_path: System/snmp:Inconsistency/
+                rn: inconsistency
+                type: single
+                tf_name: stpx_inconsistency
+                description: 'STPX inconsistency traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: stpx_inconsistency_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpLoopInconsistency
+                doc_path: System/snmp:LoopInconsistency/
+                rn: loopinconsistency
+                type: single
+                tf_name: stpx_loop_inconsistency
+                description: 'STPX loop-inconsistency traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: stpx_loop_inconsistency_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpRootInconsistency
+                doc_path: System/snmp:RootInconsistency/
+                rn: rootinconsistency
+                type: single
+                tf_name: stpx_root_inconsistency
+                description: 'STPX root-inconsistency traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: stpx_root_inconsistency_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTsyslog
+            doc_path: System/snmp:Tsyslog/
+            rn: syslog
+            type: single
+            tf_name: syslog
+            description: 'Syslog traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpMessageGenerated
+                doc_path: System/snmp:MessageGenerated/
+                rn: messagegenerated
+                type: single
+                tf_name: syslog_message_generated
+                description: 'Syslog message-generated traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: syslog_message_generated_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTsysmgr
+            doc_path: System/snmp:Tsysmgr/
+            rn: sysmgr
+            type: single
+            tf_name: sysmgr
+            description: 'System manager traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpCseFailSwCoreNotifyExtended
+                doc_path: System/snmp:CseFailSwCoreNotifyExtended/
+                rn: cseFailSwCoreNotifyExtended
+                type: single
+                tf_name: sysmgr_fail_sw_core_notify
+                description: 'System manager cseFailSwCoreNotifyExtended traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: sysmgr_fail_sw_core_notify_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTsystem
+            doc_path: System/snmp:Tsystem/
+            rn: system
+            type: single
+            tf_name: system_traps
+            description: 'System traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpClockChangeNotification
+                doc_path: System/snmp:ClockChangeNotification/
+                rn: Clockchangenotification
+                type: single
+                tf_name: system_clock_change_notification
+                description: 'System ClockChangeNotification traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: system_clock_change_notification_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTupgrade
+            doc_path: System/snmp:Tupgrade/
+            rn: upgrade
+            type: single
+            tf_name: upgrade
+            description: 'Upgrade traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpUpgradeJobStatusNotify
+                doc_path: System/snmp:UpgradeJobStatusNotify/
+                rn: UpgradeJobStatusNotify
+                type: single
+                tf_name: upgrade_job_status_notify
+                description: 'Upgrade UpgradeJobStatusNotify traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: upgrade_job_status_notify_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpUpgradeOpNotifyOnCompletion
+                doc_path: System/snmp:UpgradeOpNotifyOnCompletion/
+                rn: UpgradeOpNotifyOnCompletion
+                type: single
+                tf_name: upgrade_op_notify_on_completion
+                description: 'Upgrade UpgradeOpNotifyOnCompletion traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: upgrade_op_notify_on_completion_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTvsan
+            doc_path: System/snmp:Tvsan/
+            rn: vsan
+            type: single
+            tf_name: vsan
+            description: 'VSAN traps.'
+            no_delete: true
+          - class_name: snmpTvtp
+            doc_path: System/snmp:Tvtp/
+            rn: vtp
+            type: single
+            tf_name: vtp
+            description: 'VTP traps.'
+            no_delete: true
+            child_classes:
+              - class_name: snmpVlancreate
+                doc_path: System/snmp:Vlancreate/
+                rn: vlancreate
+                type: single
+                tf_name: vtp_vlan_create
+                description: 'VTP vlan-create traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: vtp_vlan_create_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+              - class_name: snmpVlandelete
+                doc_path: System/snmp:Vlandelete/
+                rn: vlandelete
+                type: single
+                tf_name: vtp_vlan_delete
+                description: 'VTP vlan-delete traps.'
+                no_delete: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: vtp_vlan_delete_trap_status
+                    type: String
+                    description: 'Status to show enabled/disable trap.'
+                    enum_values:
+                      - enable
+                      - disable
+                    example: enable
+          - class_name: snmpTzone
+            doc_path: System/snmp:Tzone/
+            rn: zone
+            type: single
+            tf_name: zone
+            description: 'Zone traps.'
+            no_delete: true
       - class_name: snmpRmon
         doc_path: System/snmp:Rmon/
         rn: rmon
         type: single
         tf_name: rmon
         description: 'SNMP RMON configurations.'
+        no_delete: true
         child_classes:
           - class_name: snmpEvent
             doc_path: System/snmp:Event/
@@ -369,6 +1904,7 @@ child_classes:
             type: list
             tf_name: rmon_events
             description: 'List of SNMP RMON event configurations.'
+            no_delete: true
             attributes:
               - nxos_name: num
                 tf_name: number

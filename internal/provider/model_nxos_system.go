@@ -232,6 +232,21 @@ type System struct {
 	IcamScaleInfoThreshold                        types.Int64                           `tfsdk:"icam_scale_info_threshold"`
 	IcamScaleConfiguration                        types.Bool                            `tfsdk:"icam_scale_configuration"`
 	IcamScaleWarningThreshold                     types.Int64                           `tfsdk:"icam_scale_warning_threshold"`
+	NxapiVrf                                      types.String                          `tfsdk:"nxapi_vrf"`
+	NxapiHttpPort                                 types.Int64                           `tfsdk:"nxapi_http_port"`
+	NxapiHttpsPort                                types.Int64                           `tfsdk:"nxapi_https_port"`
+	NxapiIdleTimeout                              types.Int64                           `tfsdk:"nxapi_idle_timeout"`
+	NxapiCertificateEnable                        types.Bool                            `tfsdk:"nxapi_certificate_enable"`
+	NxapiCertificateFile                          types.String                          `tfsdk:"nxapi_certificate_file"`
+	NxapiKeyFile                                  types.String                          `tfsdk:"nxapi_key_file"`
+	NxapiEncryptedKeyPassphrase                   types.String                          `tfsdk:"nxapi_encrypted_key_passphrase"`
+	NxapiEncryptedKeyPassphraseWo                 types.String                          `tfsdk:"nxapi_encrypted_key_passphrase_wo"`
+	NxapiEncryptedKeyPassphraseWoVersion          types.Int64                           `tfsdk:"nxapi_encrypted_key_passphrase_wo_version"`
+	NxapiTrustpoint                               types.String                          `tfsdk:"nxapi_trustpoint"`
+	NxapiSslProtocols                             types.String                          `tfsdk:"nxapi_ssl_protocols"`
+	NxapiSslCiphersWeak                           types.Bool                            `tfsdk:"nxapi_ssl_ciphers_weak"`
+	NxapiClientCertificateAuthentication          types.String                          `tfsdk:"nxapi_client_certificate_authentication"`
+	NxapiSudi                                     types.Bool                            `tfsdk:"nxapi_sudi"`
 }
 
 type SystemArpVpcDomains struct {
@@ -1483,6 +1498,51 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	attrs = "{}"
+	if !data.NxapiVrf.IsUnknown() && !data.NxapiVrf.IsNull() {
+		attrs, _ = sjson.Set(attrs, "useVrf", data.NxapiVrf.ValueString())
+	}
+	if !data.NxapiHttpPort.IsUnknown() && !data.NxapiHttpPort.IsNull() {
+		attrs, _ = sjson.Set(attrs, "httpPort", strconv.FormatInt(data.NxapiHttpPort.ValueInt64(), 10))
+	}
+	if !data.NxapiHttpsPort.IsUnknown() && !data.NxapiHttpsPort.IsNull() {
+		attrs, _ = sjson.Set(attrs, "httpsPort", strconv.FormatInt(data.NxapiHttpsPort.ValueInt64(), 10))
+	}
+	if !data.NxapiIdleTimeout.IsUnknown() && !data.NxapiIdleTimeout.IsNull() {
+		attrs, _ = sjson.Set(attrs, "idleTimeout", strconv.FormatInt(data.NxapiIdleTimeout.ValueInt64(), 10))
+	}
+	if !data.NxapiCertificateEnable.IsUnknown() && !data.NxapiCertificateEnable.IsNull() {
+		attrs, _ = sjson.Set(attrs, "certEnable", strconv.FormatBool(data.NxapiCertificateEnable.ValueBool()))
+	}
+	if !data.NxapiCertificateFile.IsUnknown() && !data.NxapiCertificateFile.IsNull() {
+		attrs, _ = sjson.Set(attrs, "certFile", data.NxapiCertificateFile.ValueString())
+	}
+	if !data.NxapiKeyFile.IsUnknown() && !data.NxapiKeyFile.IsNull() {
+		attrs, _ = sjson.Set(attrs, "keyFile", data.NxapiKeyFile.ValueString())
+	}
+	if !config.NxapiEncryptedKeyPassphraseWo.IsNull() {
+		attrs, _ = sjson.Set(attrs, "encrKeyPassphrase", config.NxapiEncryptedKeyPassphraseWo.ValueString())
+	} else if !data.NxapiEncryptedKeyPassphrase.IsUnknown() && !data.NxapiEncryptedKeyPassphrase.IsNull() {
+		attrs, _ = sjson.Set(attrs, "encrKeyPassphrase", data.NxapiEncryptedKeyPassphrase.ValueString())
+	}
+	if !data.NxapiTrustpoint.IsUnknown() && !data.NxapiTrustpoint.IsNull() {
+		attrs, _ = sjson.Set(attrs, "trustpoint", data.NxapiTrustpoint.ValueString())
+	}
+	if !data.NxapiSslProtocols.IsUnknown() && !data.NxapiSslProtocols.IsNull() {
+		attrs, _ = sjson.Set(attrs, "sslProtocols", data.NxapiSslProtocols.ValueString())
+	}
+	if !data.NxapiSslCiphersWeak.IsUnknown() && !data.NxapiSslCiphersWeak.IsNull() {
+		attrs, _ = sjson.Set(attrs, "sslCiphersWeak", strconv.FormatBool(data.NxapiSslCiphersWeak.ValueBool()))
+	}
+	if !data.NxapiClientCertificateAuthentication.IsUnknown() && !data.NxapiClientCertificateAuthentication.IsNull() {
+		attrs, _ = sjson.Set(attrs, "clientCertAuth", data.NxapiClientCertificateAuthentication.ValueString())
+	}
+	if !data.NxapiSudi.IsUnknown() && !data.NxapiSudi.IsNull() {
+		attrs, _ = sjson.Set(attrs, "sudi", strconv.FormatBool(data.NxapiSudi.ValueBool()))
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nxapiInst.attributes", attrs)
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -2469,6 +2529,31 @@ func (data *System) fromBody(res gjson.Result) {
 				data.IcamScaleWarningThreshold = types.Int64Value(ricamScale.Get("icamScale.attributes.warning").Int())
 			}
 		}
+	}
+	{
+		var rnxapiInst gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("nxapiInst.attributes.rn").String()
+				if rnValue == "nxapi" {
+					rnxapiInst = v
+					return false
+				}
+				return true
+			},
+		)
+		data.NxapiVrf = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.useVrf").String())
+		data.NxapiHttpPort = types.Int64Value(rnxapiInst.Get("nxapiInst.attributes.httpPort").Int())
+		data.NxapiHttpsPort = types.Int64Value(rnxapiInst.Get("nxapiInst.attributes.httpsPort").Int())
+		data.NxapiIdleTimeout = types.Int64Value(rnxapiInst.Get("nxapiInst.attributes.idleTimeout").Int())
+		data.NxapiCertificateEnable = types.BoolValue(helpers.ParseNxosBoolean(rnxapiInst.Get("nxapiInst.attributes.certEnable").String()))
+		data.NxapiCertificateFile = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.certFile").String())
+		data.NxapiKeyFile = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.keyFile").String())
+		data.NxapiTrustpoint = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.trustpoint").String())
+		data.NxapiSslProtocols = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.sslProtocols").String())
+		data.NxapiSslCiphersWeak = types.BoolValue(helpers.ParseNxosBoolean(rnxapiInst.Get("nxapiInst.attributes.sslCiphersWeak").String()))
+		data.NxapiClientCertificateAuthentication = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.clientCertAuth").String())
+		data.NxapiSudi = types.BoolValue(helpers.ParseNxosBoolean(rnxapiInst.Get("nxapiInst.attributes.sudi").String()))
 	}
 }
 
@@ -4403,6 +4488,77 @@ func (data *System) updateFromBody(res gjson.Result) {
 			}
 		}
 	}
+	var rnxapiInst gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("nxapiInst.attributes.rn").String()
+			if rnValue == "nxapi" {
+				rnxapiInst = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.NxapiVrf.IsNull() {
+		data.NxapiVrf = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.useVrf").String())
+	} else {
+		data.NxapiVrf = types.StringNull()
+	}
+	if !data.NxapiHttpPort.IsNull() {
+		data.NxapiHttpPort = types.Int64Value(rnxapiInst.Get("nxapiInst.attributes.httpPort").Int())
+	} else {
+		data.NxapiHttpPort = types.Int64Null()
+	}
+	if !data.NxapiHttpsPort.IsNull() {
+		data.NxapiHttpsPort = types.Int64Value(rnxapiInst.Get("nxapiInst.attributes.httpsPort").Int())
+	} else {
+		data.NxapiHttpsPort = types.Int64Null()
+	}
+	if !data.NxapiIdleTimeout.IsNull() {
+		data.NxapiIdleTimeout = types.Int64Value(rnxapiInst.Get("nxapiInst.attributes.idleTimeout").Int())
+	} else {
+		data.NxapiIdleTimeout = types.Int64Null()
+	}
+	if !data.NxapiCertificateEnable.IsNull() {
+		data.NxapiCertificateEnable = types.BoolValue(helpers.ParseNxosBoolean(rnxapiInst.Get("nxapiInst.attributes.certEnable").String()))
+	} else {
+		data.NxapiCertificateEnable = types.BoolNull()
+	}
+	if !data.NxapiCertificateFile.IsNull() {
+		data.NxapiCertificateFile = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.certFile").String())
+	} else {
+		data.NxapiCertificateFile = types.StringNull()
+	}
+	if !data.NxapiKeyFile.IsNull() {
+		data.NxapiKeyFile = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.keyFile").String())
+	} else {
+		data.NxapiKeyFile = types.StringNull()
+	}
+	if !data.NxapiTrustpoint.IsNull() {
+		data.NxapiTrustpoint = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.trustpoint").String())
+	} else {
+		data.NxapiTrustpoint = types.StringNull()
+	}
+	if !data.NxapiSslProtocols.IsNull() {
+		data.NxapiSslProtocols = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.sslProtocols").String())
+	} else {
+		data.NxapiSslProtocols = types.StringNull()
+	}
+	if !data.NxapiSslCiphersWeak.IsNull() {
+		data.NxapiSslCiphersWeak = types.BoolValue(helpers.ParseNxosBoolean(rnxapiInst.Get("nxapiInst.attributes.sslCiphersWeak").String()))
+	} else {
+		data.NxapiSslCiphersWeak = types.BoolNull()
+	}
+	if !data.NxapiClientCertificateAuthentication.IsNull() {
+		data.NxapiClientCertificateAuthentication = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.clientCertAuth").String())
+	} else {
+		data.NxapiClientCertificateAuthentication = types.StringNull()
+	}
+	if !data.NxapiSudi.IsNull() {
+		data.NxapiSudi = types.BoolValue(helpers.ParseNxosBoolean(rnxapiInst.Get("nxapiInst.attributes.sudi").String()))
+	} else {
+		data.NxapiSudi = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -5181,6 +5337,53 @@ func (data System) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "icamEntity.attributes.rn", "icam")
 		deleteBody, _ = sjson.Set(deleteBody, "icamEntity.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		childBody := ""
+		if !data.NxapiVrf.IsNull() {
+			childBody, _ = sjson.Set(childBody, "useVrf", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiHttpPort.IsNull() {
+			childBody, _ = sjson.Set(childBody, "httpPort", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiHttpsPort.IsNull() {
+			childBody, _ = sjson.Set(childBody, "httpsPort", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiIdleTimeout.IsNull() {
+			childBody, _ = sjson.Set(childBody, "idleTimeout", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiCertificateEnable.IsNull() {
+			childBody, _ = sjson.Set(childBody, "certEnable", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiCertificateFile.IsNull() {
+			childBody, _ = sjson.Set(childBody, "certFile", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiKeyFile.IsNull() {
+			childBody, _ = sjson.Set(childBody, "keyFile", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiEncryptedKeyPassphrase.IsNull() {
+			childBody, _ = sjson.Set(childBody, "encrKeyPassphrase", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiTrustpoint.IsNull() {
+			childBody, _ = sjson.Set(childBody, "trustpoint", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiSslProtocols.IsNull() {
+			childBody, _ = sjson.Set(childBody, "sslProtocols", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiSslCiphersWeak.IsNull() {
+			childBody, _ = sjson.Set(childBody, "sslCiphersWeak", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiClientCertificateAuthentication.IsNull() {
+			childBody, _ = sjson.Set(childBody, "clientCertAuth", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.NxapiSudi.IsNull() {
+			childBody, _ = sjson.Set(childBody, "sudi", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".nxapiInst"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		}
 	}
 
 	return nxos.Body{Str: body}

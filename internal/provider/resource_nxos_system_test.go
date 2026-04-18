@@ -185,6 +185,7 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_scale_configuration", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_scale_warning_threshold", "85"))
 	var tfVersion *goversion.Version
+	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -193,7 +194,7 @@ func TestAccNxosSystem(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosSystemPrerequisitesConfig + testAccNxosSystemConfig_all(),
+				Config: testAccNxosSystemPrerequisitesConfig + testAccNxosSystemConfig_all(includeWriteOnly),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -257,7 +258,7 @@ func testAccNxosSystemConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosSystemConfig_all() string {
+func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_system" "test" {` + "\n"
 	config += `	name = "LEAF1"` + "\n"
 	config += `	ethernet_mtu = 9216` + "\n"

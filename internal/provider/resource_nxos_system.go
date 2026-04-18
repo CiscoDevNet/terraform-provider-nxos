@@ -63,7 +63,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, and UDLD configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1759,6 +1759,80 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					int64validator.Between(1, 100),
 				},
 			},
+			"nxapi_vrf": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Vrf for NX-API.").String,
+				Optional:            true,
+			},
+			"nxapi_http_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("HTTP Port.").AddIntegerRangeDescription(-1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 65535),
+				},
+			},
+			"nxapi_https_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("HTTPS Port.").AddIntegerRangeDescription(-1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 65535),
+				},
+			},
+			"nxapi_idle_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies the idle timeout (in minutes) before a session expires.").AddIntegerRangeDescription(1, 1440).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1440),
+				},
+			},
+			"nxapi_certificate_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Certificate status of NX-API.").String,
+				Optional:            true,
+			},
+			"nxapi_certificate_file": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Certificate file for NX-API.").String,
+				Optional:            true,
+			},
+			"nxapi_key_file": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Key file for NX-API.").String,
+				Optional:            true,
+			},
+			"nxapi_encrypted_key_passphrase": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Passphrase to decrypt the encrypted key file for NX-API.").String,
+				Optional:            true,
+				Sensitive:           true,
+			},
+			"nxapi_encrypted_key_passphrase_wo": schema.StringAttribute{
+				MarkdownDescription: "The write-only value of the attribute.",
+				WriteOnly:           true,
+				Optional:            true,
+			},
+			"nxapi_encrypted_key_passphrase_wo_version": schema.Int64Attribute{
+				MarkdownDescription: "The write-only version of the attribute.",
+				Optional:            true,
+			},
+			"nxapi_trustpoint": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Trustpoint label for NX-API.").String,
+				Optional:            true,
+			},
+			"nxapi_ssl_protocols": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("String of space separated SSL protocols to be supported.").String,
+				Optional:            true,
+			},
+			"nxapi_ssl_ciphers_weak": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Weak Ciphers for SSL.").String,
+				Optional:            true,
+			},
+			"nxapi_client_certificate_authentication": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Mutual SSL Certificate Authentication for NXAPI between client and server and set verficiation restriction level.").AddStringEnumDescription("off", "optional", "strict", "two-step").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("off", "optional", "strict", "two-step"),
+				},
+			},
+			"nxapi_sudi": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SUDI support for nginx.").String,
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -1868,7 +1942,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,ndVpc,ndVpcDom,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,cfsEntity,cfsInst,udldEntity,udldInst,udldPhysIf,platformEntity,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,cdpEntity,cdpInst,cdpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt,icamEntity,icamInst,icamScale")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,ndVpc,ndVpcDom,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,cfsEntity,cfsInst,udldEntity,udldInst,udldPhysIf,platformEntity,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,cdpEntity,cdpInst,cdpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt,icamEntity,icamInst,icamScale,nxapiInst")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

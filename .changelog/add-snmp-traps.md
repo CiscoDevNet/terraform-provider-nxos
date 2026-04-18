@@ -1,1 +1,0 @@
-- Add SNMP trap enable configuration to `nxos_snmp` resource and data source

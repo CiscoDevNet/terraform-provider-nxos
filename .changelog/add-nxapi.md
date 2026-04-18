@@ -1,1 +1,0 @@
-- Add NX-API configuration to `nxos_system` resource and data source

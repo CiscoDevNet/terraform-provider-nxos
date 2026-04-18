@@ -1,3 +1,12 @@
+## 0.9.3
+
+- Add `nxos_management_interface` resource and data source
+- Add NX-API configuration to `nxos_system` resource and data source
+- Add set metric type configuration to `nxos_route_policy` resource and data source
+- Add SNMP host VRF configuration to `nxos_snmp` resource and data source
+- Add SNMP AAA sync disable and global enforce privacy attributes to `nxos_snmp` resource and data source
+- Add SNMP trap enable configuration to `nxos_snmp` resource and data source
+
 ## 0.9.2
 
 - Add `file_severity` attribute to `nxos_logging` resource and data source

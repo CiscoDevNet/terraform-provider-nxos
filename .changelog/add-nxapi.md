@@ -1,1 +1,0 @@
-- Add `nxos_nxapi` resource and data source

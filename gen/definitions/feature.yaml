@@ -358,6 +358,22 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+  - class_name: fmServiceAcceleration
+    rn: serviceacceleration
+    type: single
+    no_delete: true
+    description: 'Service Acceleration feature configuration.'
+    doc_path: Feature%20Management/fm:ServiceAcceleration/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: service_acceleration
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        test_tags: [HYPERSHIELD]
   - class_name: fmSsh
     rn: ssh
     type: single

@@ -248,6 +248,7 @@ type System struct {
 	NxapiClientCertificateAuthentication          types.String                          `tfsdk:"nxapi_client_certificate_authentication"`
 	NxapiSudi                                     types.Bool                            `tfsdk:"nxapi_sudi"`
 	BreakoutModules                               map[string]SystemBreakoutModules      `tfsdk:"breakout_modules"`
+	ServiceInstances                              map[string]SystemServiceInstances     `tfsdk:"service_instances"`
 }
 
 type SystemArpVpcDomains struct {
@@ -360,6 +361,21 @@ type SystemBreakoutModulesFrontPanelPorts struct {
 	BreakoutMap types.String `tfsdk:"breakout_map"`
 }
 
+type SystemServiceInstances struct {
+	SourceInterface            types.String                          `tfsdk:"source_interface"`
+	ControllerHttpsProxyPort   types.Int64                           `tfsdk:"controller_https_proxy_port"`
+	ControllerHttpsProxyServer types.String                          `tfsdk:"controller_https_proxy_server"`
+	ControllerIp1              types.String                          `tfsdk:"controller_ip1"`
+	ControllerIp2              types.String                          `tfsdk:"controller_ip2"`
+	ControllerIp3              types.String                          `tfsdk:"controller_ip3"`
+	FirewallPolicyAdminState   types.String                          `tfsdk:"firewall_policy_admin_state"`
+	Vrfs                       map[string]SystemServiceInstancesVrfs `tfsdk:"vrfs"`
+}
+
+type SystemServiceInstancesVrfs struct {
+	Affinity types.Int64 `tfsdk:"affinity"`
+}
+
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -438,6 +454,14 @@ func (data SystemBreakoutModules) getRn(key string) string {
 
 func (data SystemBreakoutModulesFrontPanelPorts) getRn(key string) string {
 	return fmt.Sprintf("fport-%d", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data SystemServiceInstances) getRn(key string) string {
+	return fmt.Sprintf("svcinst-%s", key)
+}
+
+func (data SystemServiceInstancesVrfs) getRn(key string) string {
+	return fmt.Sprintf("dom-[%s]", key)
 }
 
 func (data System) getClassName() string {
@@ -1584,6 +1608,76 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".sasSas"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sasSvc"
+			attrs = "{}"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			for key, child := range data.ServiceInstances {
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "name", key)
+				if !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() {
+					attrs, _ = sjson.Set(attrs, "cpSrcInterface", child.SourceInterface.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.sasSvcInstance.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".sasSvcInstance.children"
+					attrs = "{}"
+					if !child.ControllerHttpsProxyPort.IsUnknown() && !child.ControllerHttpsProxyPort.IsNull() {
+						attrs, _ = sjson.Set(attrs, "httpsProxyPort", strconv.FormatInt(child.ControllerHttpsProxyPort.ValueInt64(), 10))
+					}
+					if !child.ControllerHttpsProxyServer.IsUnknown() && !child.ControllerHttpsProxyServer.IsNull() {
+						attrs, _ = sjson.Set(attrs, "httpsProxySvr", child.ControllerHttpsProxyServer.ValueString())
+					}
+					if !child.ControllerIp1.IsUnknown() && !child.ControllerIp1.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ip1", child.ControllerIp1.ValueString())
+					}
+					if !child.ControllerIp2.IsUnknown() && !child.ControllerIp2.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ip2", child.ControllerIp2.ValueString())
+					}
+					if !child.ControllerIp3.IsUnknown() && !child.ControllerIp3.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ip3", child.ControllerIp3.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.sasSController.attributes", attrs)
+					}
+					{
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sasFwSvcPolicy"
+						attrs = "{}"
+						if !child.FirewallPolicyAdminState.IsUnknown() && !child.FirewallPolicyAdminState.IsNull() {
+							attrs, _ = sjson.Set(attrs, "adminState", child.FirewallPolicyAdminState.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+						nestedChildrenPath := childBodyPath + ".children"
+						{
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sasIpVrf"
+							attrs = "{}"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+							nestedChildrenPath := childBodyPath + ".children"
+							for key, child := range child.Vrfs {
+								attrs = "{}"
+								attrs, _ = sjson.Set(attrs, "name", key)
+								if !child.Affinity.IsUnknown() && !child.Affinity.IsNull() {
+									attrs, _ = sjson.Set(attrs, "affinity", strconv.FormatInt(child.Affinity.ValueInt64(), 10))
+								}
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.sasDom.attributes", attrs)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -2645,6 +2739,115 @@ func (data *System) fromBody(res gjson.Result) {
 				return true
 			},
 		)
+	}
+	{
+		var rsasSas gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("sasSas.attributes.rn").String()
+				if rnValue == "sas" {
+					rsasSas = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rsasSvc gjson.Result
+			rsasSas.Get("sasSas.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("sasSvc.attributes.rn").String()
+					if rnValue == "svc" {
+						rsasSvc = v
+						return false
+					}
+					return true
+				},
+			)
+			rsasSvc.Get("sasSvc.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "sasSvcInstance" {
+								var child SystemServiceInstances
+								child.SourceInterface = types.StringValue(value.Get("attributes.cpSrcInterface").String())
+								mapKey := value.Get("attributes.name").String()
+								{
+									var rsasSController gjson.Result
+									value.Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("sasSController.attributes.rn").String()
+											if rnValue == "scontroller" {
+												rsasSController = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.ControllerHttpsProxyPort = types.Int64Value(rsasSController.Get("sasSController.attributes.httpsProxyPort").Int())
+									child.ControllerHttpsProxyServer = types.StringValue(rsasSController.Get("sasSController.attributes.httpsProxySvr").String())
+									child.ControllerIp1 = types.StringValue(rsasSController.Get("sasSController.attributes.ip1").String())
+									child.ControllerIp2 = types.StringValue(rsasSController.Get("sasSController.attributes.ip2").String())
+									child.ControllerIp3 = types.StringValue(rsasSController.Get("sasSController.attributes.ip3").String())
+								}
+								{
+									var rsasFwSvcPolicy gjson.Result
+									value.Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("sasFwSvcPolicy.attributes.rn").String()
+											if rnValue == "fwpolicy" {
+												rsasFwSvcPolicy = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.FirewallPolicyAdminState = types.StringValue(rsasFwSvcPolicy.Get("sasFwSvcPolicy.attributes.adminState").String())
+									{
+										var rsasIpVrf gjson.Result
+										rsasFwSvcPolicy.Get("sasFwSvcPolicy").Get("children").ForEach(
+											func(_, nestedV gjson.Result) bool {
+												rnValue := nestedV.Get("sasIpVrf.attributes.rn").String()
+												if rnValue == "ipvrf" {
+													rsasIpVrf = nestedV
+													return false
+												}
+												return true
+											},
+										)
+										rsasIpVrf.Get("sasIpVrf").Get("children").ForEach(
+											func(_, nestedV gjson.Result) bool {
+												nestedV.ForEach(
+													func(nestedClassname, nestedValue gjson.Result) bool {
+														if nestedClassname.String() == "sasDom" {
+															var nestedChildsasDom SystemServiceInstancesVrfs
+															nestedChildsasDom.Affinity = types.Int64Value(nestedValue.Get("attributes.affinity").Int())
+															nestedMapKey := nestedValue.Get("attributes.name").String()
+															if child.Vrfs == nil {
+																child.Vrfs = make(map[string]SystemServiceInstancesVrfs)
+															}
+															child.Vrfs[nestedMapKey] = nestedChildsasDom
+														}
+														return true
+													},
+												)
+												return true
+											},
+										)
+									}
+								}
+								if data.ServiceInstances == nil {
+									data.ServiceInstances = make(map[string]SystemServiceInstances)
+								}
+								data.ServiceInstances[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
+		}
 	}
 }
 
@@ -4701,6 +4904,144 @@ func (data *System) updateFromBody(res gjson.Result) {
 		}
 		data.BreakoutModules[key] = item
 	}
+	var rsasSas gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("sasSas.attributes.rn").String()
+			if rnValue == "sas" {
+				rsasSas = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rsasSvc gjson.Result
+		rsasSas.Get("sasSas.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("sasSvc.attributes.rn").String()
+				if rnValue == "svc" {
+					rsasSvc = v
+					return false
+				}
+				return true
+			},
+		)
+		for key, item := range data.ServiceInstances {
+			var rsasSvcInstance gjson.Result
+			rsasSvc.Get("sasSvc.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("sasSvcInstance.attributes.name").String() == key {
+						rsasSvcInstance = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rsasSvcInstance.Exists() {
+				delete(data.ServiceInstances, key)
+				continue
+			}
+			if !item.SourceInterface.IsNull() {
+				item.SourceInterface = types.StringValue(rsasSvcInstance.Get("sasSvcInstance.attributes.cpSrcInterface").String())
+			} else {
+				item.SourceInterface = types.StringNull()
+			}
+			{
+				var rsasSController gjson.Result
+				rsasSvcInstance.Get("sasSvcInstance.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("sasSController.attributes.rn").String()
+						if rnValue == "scontroller" {
+							rsasSController = v
+							return false
+						}
+						return true
+					},
+				)
+				if !item.ControllerHttpsProxyPort.IsNull() {
+					item.ControllerHttpsProxyPort = types.Int64Value(rsasSController.Get("sasSController.attributes.httpsProxyPort").Int())
+				} else {
+					item.ControllerHttpsProxyPort = types.Int64Null()
+				}
+				if !item.ControllerHttpsProxyServer.IsNull() {
+					item.ControllerHttpsProxyServer = types.StringValue(rsasSController.Get("sasSController.attributes.httpsProxySvr").String())
+				} else {
+					item.ControllerHttpsProxyServer = types.StringNull()
+				}
+				if !item.ControllerIp1.IsNull() {
+					item.ControllerIp1 = types.StringValue(rsasSController.Get("sasSController.attributes.ip1").String())
+				} else {
+					item.ControllerIp1 = types.StringNull()
+				}
+				if !item.ControllerIp2.IsNull() {
+					item.ControllerIp2 = types.StringValue(rsasSController.Get("sasSController.attributes.ip2").String())
+				} else {
+					item.ControllerIp2 = types.StringNull()
+				}
+				if !item.ControllerIp3.IsNull() {
+					item.ControllerIp3 = types.StringValue(rsasSController.Get("sasSController.attributes.ip3").String())
+				} else {
+					item.ControllerIp3 = types.StringNull()
+				}
+			}
+			{
+				var rsasFwSvcPolicy gjson.Result
+				rsasSvcInstance.Get("sasSvcInstance.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("sasFwSvcPolicy.attributes.rn").String()
+						if rnValue == "fwpolicy" {
+							rsasFwSvcPolicy = v
+							return false
+						}
+						return true
+					},
+				)
+				if !item.FirewallPolicyAdminState.IsNull() {
+					item.FirewallPolicyAdminState = types.StringValue(rsasFwSvcPolicy.Get("sasFwSvcPolicy.attributes.adminState").String())
+				} else {
+					item.FirewallPolicyAdminState = types.StringNull()
+				}
+				{
+					var rsasIpVrf gjson.Result
+					rsasFwSvcPolicy.Get("sasFwSvcPolicy.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("sasIpVrf.attributes.rn").String()
+							if rnValue == "ipvrf" {
+								rsasIpVrf = v
+								return false
+							}
+							return true
+						},
+					)
+					for nc := range item.Vrfs {
+						ncItem := item.Vrfs[nc]
+						var rsasDom gjson.Result
+						rsasIpVrf.Get("sasIpVrf.children").ForEach(
+							func(_, v gjson.Result) bool {
+								if v.Get("sasDom.attributes.name").String() == nc {
+									rsasDom = v
+									return false
+								}
+								return true
+							},
+						)
+						if !rsasDom.Exists() {
+							delete(item.Vrfs, nc)
+							continue
+						}
+						if !ncItem.Affinity.IsNull() {
+							ncItem.Affinity = types.Int64Value(rsasDom.Get("sasDom.attributes.affinity").Int())
+						} else {
+							ncItem.Affinity = types.Int64Null()
+						}
+						item.Vrfs[nc] = ncItem
+					}
+				}
+			}
+			data.ServiceInstances[key] = item
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -5540,6 +5881,19 @@ func (data System) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".sasSas"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "sasSvc.attributes.rn", "svc")
+			deleteBody, _ = sjson.Set(deleteBody, "sasSvc.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -5747,6 +6101,41 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				deleteBody, _ = sjson.Set(deleteBody, "imFpP.attributes.rn", stateChild.getRn(stateChildKey))
 				deleteBody, _ = sjson.Set(deleteBody, "imFpP.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+	}
+	for stateKey := range state.ServiceInstances {
+		if _, found := data.ServiceInstances[stateKey]; !found {
+			stateChild := state.ServiceInstances[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "sasSvcInstance.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "sasSvcInstance.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.sasSas.children"+".0.sasSvc.children"+".-1", deleteBody)
+		}
+	}
+	for di := range state.ServiceInstances {
+		if _, found := data.ServiceInstances[di]; !found {
+			continue
+		}
+		stateItemdi := state.ServiceInstances[di]
+		planItemdi := data.ServiceInstances[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.sasSas.children"+".0.sasSvc.children").Array() {
+			if mv.Get("sasSvcInstance.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.sasSas.children" + ".0.sasSvc.children" + "." + strconv.Itoa(mi) + ".sasSvcInstance.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateKey := range stateItemdi.Vrfs {
+			if _, found := planItemdi.Vrfs[stateKey]; !found {
+				stateChild := stateItemdi.Vrfs[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "sasDom.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "sasDom.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.sasFwSvcPolicy.children"+".0.sasIpVrf.children"+".-1", deleteBody)
 			}
 		}
 	}

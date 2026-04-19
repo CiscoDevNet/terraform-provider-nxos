@@ -315,4 +315,20 @@ resource "nxos_system" "example" {
       }
     }
   }
+  service_instances = {
+    "hypershield" = {
+      source_interface              = "lo100"
+      controller_https_proxy_port   = 8080
+      controller_https_proxy_server = "proxy.example.com"
+      controller_ip1                = "10.0.0.1"
+      controller_ip2                = "10.0.0.2"
+      controller_ip3                = "10.0.0.3"
+      firewall_policy_admin_state   = "in-service"
+      vrfs = {
+        "vrf1" = {
+          affinity = 1
+        }
+      }
+    }
+  }
 }

@@ -1,0 +1,2 @@
+- Add Hypershield (Service Acceleration) support to `nxos_system` resource and data source
+- Add Service Acceleration feature to `nxos_feature` resource and data source

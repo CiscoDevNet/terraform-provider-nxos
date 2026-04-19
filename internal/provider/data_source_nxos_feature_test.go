@@ -63,6 +63,9 @@ func TestAccDataSourceNxosFeature(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ptp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "pvlan", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "sflow", "enabled"))
+	if os.Getenv("HYPERSHIELD") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "service_acceleration", "enabled"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ssh", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "tacacs", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "telnet", "enabled"))
@@ -118,6 +121,9 @@ func testAccDataSourceNxosFeatureConfig() string {
 	config += `	ptp = "enabled"` + "\n"
 	config += `	pvlan = "enabled"` + "\n"
 	config += `	sflow = "enabled"` + "\n"
+	if os.Getenv("HYPERSHIELD") != "" {
+		config += `	service_acceleration = "enabled"` + "\n"
+	}
 	config += `	ssh = "enabled"` + "\n"
 	config += `	tacacs = "enabled"` + "\n"
 	config += `	telnet = "enabled"` + "\n"

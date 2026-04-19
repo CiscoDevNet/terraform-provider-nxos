@@ -43,6 +43,9 @@ import (
 {{- $inList := .InList}}
 {{- range .Children}}
 {{- $list := .TfName}}
+{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+{{- end}}
 {{- if eq .Type "single"}}
 {{- if $inList}}
 {{- range .Attributes}}
@@ -85,6 +88,9 @@ import (
 {{- if .TfChildClasses}}
 {{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" (printf "%s%s.%s." $pathPrefix $list $mapKey) "InList" true)}}
 {{- end}}
+{{- end}}
+{{- if len .TestTags}}
+	}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -161,6 +167,9 @@ resource "nxos_dme" "PreReq{{$index}}" {
 {{- define "testConfigChildrenTemplate"}}
 {{- $indent := .Indent}}
 {{- range .Children}}
+{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+{{- end}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}
@@ -198,6 +207,9 @@ resource "nxos_dme" "PreReq{{$index}}" {
 	config += `{{$indent}}	}` + "\n"
 	config += `{{$indent}}}` + "\n"
 {{- end}}
+{{- end}}
+{{- if len .TestTags}}
+	}
 {{- end}}
 {{- end}}
 {{- end}}

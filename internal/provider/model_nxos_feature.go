@@ -36,37 +36,38 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type Feature struct {
-	Device        types.String `tfsdk:"device"`
-	Dn            types.String `tfsdk:"id"`
-	BashShell     types.String `tfsdk:"bash_shell"`
-	Bfd           types.String `tfsdk:"bfd"`
-	Bgp           types.String `tfsdk:"bgp"`
-	Dhcp          types.String `tfsdk:"dhcp"`
-	Evpn          types.String `tfsdk:"evpn"`
-	Hmm           types.String `tfsdk:"hmm"`
-	Hsrp          types.String `tfsdk:"hsrp"`
-	InterfaceVlan types.String `tfsdk:"interface_vlan"`
-	Isis          types.String `tfsdk:"isis"`
-	Lacp          types.String `tfsdk:"lacp"`
-	Lldp          types.String `tfsdk:"lldp"`
-	Macsec        types.String `tfsdk:"macsec"`
-	Netflow       types.String `tfsdk:"netflow"`
-	Ngmvpn        types.String `tfsdk:"ngmvpn"`
-	Ngoam         types.String `tfsdk:"ngoam"`
-	NvOverlay     types.String `tfsdk:"nv_overlay"`
-	Nxapi         types.String `tfsdk:"nxapi"`
-	Ospf          types.String `tfsdk:"ospf"`
-	Ospfv3        types.String `tfsdk:"ospfv3"`
-	Pim           types.String `tfsdk:"pim"`
-	Ptp           types.String `tfsdk:"ptp"`
-	Pvlan         types.String `tfsdk:"pvlan"`
-	Sflow         types.String `tfsdk:"sflow"`
-	Ssh           types.String `tfsdk:"ssh"`
-	Tacacs        types.String `tfsdk:"tacacs"`
-	Telnet        types.String `tfsdk:"telnet"`
-	Udld          types.String `tfsdk:"udld"`
-	VnSegment     types.String `tfsdk:"vn_segment"`
-	Vpc           types.String `tfsdk:"vpc"`
+	Device              types.String `tfsdk:"device"`
+	Dn                  types.String `tfsdk:"id"`
+	BashShell           types.String `tfsdk:"bash_shell"`
+	Bfd                 types.String `tfsdk:"bfd"`
+	Bgp                 types.String `tfsdk:"bgp"`
+	Dhcp                types.String `tfsdk:"dhcp"`
+	Evpn                types.String `tfsdk:"evpn"`
+	Hmm                 types.String `tfsdk:"hmm"`
+	Hsrp                types.String `tfsdk:"hsrp"`
+	InterfaceVlan       types.String `tfsdk:"interface_vlan"`
+	Isis                types.String `tfsdk:"isis"`
+	Lacp                types.String `tfsdk:"lacp"`
+	Lldp                types.String `tfsdk:"lldp"`
+	Macsec              types.String `tfsdk:"macsec"`
+	Netflow             types.String `tfsdk:"netflow"`
+	Ngmvpn              types.String `tfsdk:"ngmvpn"`
+	Ngoam               types.String `tfsdk:"ngoam"`
+	NvOverlay           types.String `tfsdk:"nv_overlay"`
+	Nxapi               types.String `tfsdk:"nxapi"`
+	Ospf                types.String `tfsdk:"ospf"`
+	Ospfv3              types.String `tfsdk:"ospfv3"`
+	Pim                 types.String `tfsdk:"pim"`
+	Ptp                 types.String `tfsdk:"ptp"`
+	Pvlan               types.String `tfsdk:"pvlan"`
+	Sflow               types.String `tfsdk:"sflow"`
+	ServiceAcceleration types.String `tfsdk:"service_acceleration"`
+	Ssh                 types.String `tfsdk:"ssh"`
+	Tacacs              types.String `tfsdk:"tacacs"`
+	Telnet              types.String `tfsdk:"telnet"`
+	Udld                types.String `tfsdk:"udld"`
+	VnSegment           types.String `tfsdk:"vn_segment"`
+	Vpc                 types.String `tfsdk:"vpc"`
 }
 
 type FeatureIdentity struct {
@@ -270,6 +271,13 @@ func (data Feature) toBody(config Feature) nxos.Body {
 	}
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmSflow.attributes", attrs)
+	}
+	attrs = "{}"
+	if !data.ServiceAcceleration.IsUnknown() && !data.ServiceAcceleration.IsNull() {
+		attrs, _ = sjson.Set(attrs, "adminSt", data.ServiceAcceleration.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.fmServiceAcceleration.attributes", attrs)
 	}
 	attrs = "{}"
 	if !data.Ssh.IsUnknown() && !data.Ssh.IsNull() {
@@ -643,6 +651,20 @@ func (data *Feature) fromBody(res gjson.Result) {
 			},
 		)
 		data.Sflow = types.StringValue(rfmSflow.Get("fmSflow.attributes.adminSt").String())
+	}
+	{
+		var rfmServiceAcceleration gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmServiceAcceleration.attributes.rn").String()
+				if rnValue == "serviceacceleration" {
+					rfmServiceAcceleration = v
+					return false
+				}
+				return true
+			},
+		)
+		data.ServiceAcceleration = types.StringValue(rfmServiceAcceleration.Get("fmServiceAcceleration.attributes.adminSt").String())
 	}
 	{
 		var rfmSsh gjson.Result
@@ -1103,6 +1125,22 @@ func (data *Feature) updateFromBody(res gjson.Result) {
 	} else {
 		data.Sflow = types.StringNull()
 	}
+	var rfmServiceAcceleration gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("fmServiceAcceleration.attributes.rn").String()
+			if rnValue == "serviceacceleration" {
+				rfmServiceAcceleration = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.ServiceAcceleration.IsNull() {
+		data.ServiceAcceleration = types.StringValue(rfmServiceAcceleration.Get("fmServiceAcceleration.attributes.adminSt").String())
+	} else {
+		data.ServiceAcceleration = types.StringNull()
+	}
 	var rfmSsh gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -1461,6 +1499,17 @@ func (data Feature) toDeleteBody() nxos.Body {
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".fmSflow"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		}
+	}
+	{
+		childBody := ""
+		if !data.ServiceAcceleration.IsNull() {
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".fmServiceAcceleration"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}

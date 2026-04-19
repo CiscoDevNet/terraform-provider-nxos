@@ -7,6 +7,12 @@ description: |-
 
 # Changelog
 
+## 0.9.5
+
+- Add interface breakout configuration to `nxos_system` resource and data source
+- Add Hypershield (Service Acceleration) support to `nxos_system` resource and data source
+- Add Service Acceleration feature to `nxos_feature` resource and data source
+
 ## 0.9.4
 
 - Add NXAPI feature configuration to `nxos_feature` resource and data source

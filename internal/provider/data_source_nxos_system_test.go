@@ -177,6 +177,7 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_info_threshold", "70"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_configuration", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_warning_threshold", "85"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "breakout_modules.1.front_panel_ports.49.breakout_map", "10g-4x"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -393,6 +394,15 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `	icam_scale_info_threshold = 70` + "\n"
 	config += `	icam_scale_configuration = true` + "\n"
 	config += `	icam_scale_warning_threshold = 85` + "\n"
+	config += `	breakout_modules = {` + "\n"
+	config += `		"1" = {` + "\n"
+	config += `			front_panel_ports = {` + "\n"
+	config += `				"49" = {` + "\n"
+	config += `					breakout_map = "10g-4x"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

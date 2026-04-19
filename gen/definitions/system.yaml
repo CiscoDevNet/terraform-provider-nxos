@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, and interface breakout settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, and interface breakout settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, and Hypershield (Service Acceleration) settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, and Hypershield (Service Acceleration) settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -2629,6 +2629,128 @@ child_classes:
                   - 800g-1x
                   - 100g-2x-pam4
                 example: 10g-4x
+  - class_name: sasSas
+    doc_path: Service%20Acceleration/sas:Sas/
+    rn: sas
+    type: single
+    no_delete: true
+    tf_name: hypershield
+    description: 'Hypershield (Service Acceleration) configuration.'
+    child_classes:
+      - class_name: sasSvc
+        doc_path: Service%20Acceleration/sas:Svc/
+        rn: svc
+        type: single
+        tf_name: service
+        description: 'Collection of service instances.'
+        child_classes:
+          - class_name: sasSvcInstance
+            doc_path: Service%20Acceleration/sas:SvcInstance/
+            rn: svcinst-%s
+            type: list
+            tf_name: service_instances
+            description: 'SAS service instances.'
+            test_tags: [HYPERSHIELD]
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Name of service policy.'
+                example: hypershield
+                test_tags: [HYPERSHIELD]
+              - nxos_name: cpSrcInterface
+                tf_name: source_interface
+                type: String
+                description: 'Source interface for Service Acceleration.'
+                example: lo100
+                test_tags: [HYPERSHIELD]
+            child_classes:
+              - class_name: sasSController
+                doc_path: Service%20Acceleration/sas:SController/
+                rn: scontroller
+                type: single
+                tf_name: controller
+                description: 'SAS controller properties.'
+                attributes:
+                  - nxos_name: httpsProxyPort
+                    tf_name: controller_https_proxy_port
+                    type: Int64
+                    min_int: 1
+                    max_int: 65535
+                    description: 'Listening port of https proxy server.'
+                    example: 8080
+                    test_tags: [HYPERSHIELD]
+                  - nxos_name: httpsProxySvr
+                    tf_name: controller_https_proxy_server
+                    type: String
+                    description: 'Hostname or IPv4/v6 address of https proxy server.'
+                    example: proxy.example.com
+                    test_tags: [HYPERSHIELD]
+                  - nxos_name: ip1
+                    tf_name: controller_ip1
+                    type: String
+                    description: 'Controller IP address 1.'
+                    example: 10.0.0.1
+                    test_tags: [HYPERSHIELD]
+                  - nxos_name: ip2
+                    tf_name: controller_ip2
+                    type: String
+                    description: 'Controller IP address 2.'
+                    example: 10.0.0.2
+                    test_tags: [HYPERSHIELD]
+                  - nxos_name: ip3
+                    tf_name: controller_ip3
+                    type: String
+                    description: 'Controller IP address 3.'
+                    example: 10.0.0.3
+                    test_tags: [HYPERSHIELD]
+              - class_name: sasFwSvcPolicy
+                doc_path: Service%20Acceleration/sas:FwSvcPolicy/
+                rn: fwpolicy
+                type: single
+                tf_name: firewall_policy
+                description: 'Collection of policies for Firewall service.'
+                attributes:
+                  - nxos_name: adminState
+                    tf_name: firewall_policy_admin_state
+                    type: String
+                    description: 'Instance in-service state.'
+                    enum_values:
+                      - out-of-service
+                      - in-service
+                    example: in-service
+                    test_tags: [HYPERSHIELD]
+                child_classes:
+                  - class_name: sasIpVrf
+                    doc_path: Service%20Acceleration/sas:IpVrf/
+                    rn: ipvrf
+                    type: single
+                    tf_name: ip_vrf
+                    description: 'Collection of VRF to service-module pinning policies for IP traffic.'
+                    child_classes:
+                      - class_name: sasDom
+                        doc_path: Service%20Acceleration/sas:Dom/
+                        rn: dom-[%s]
+                        type: list
+                        tf_name: vrfs
+                        description: 'VRF to service-module pinning.'
+                        attributes:
+                          - nxos_name: name
+                            tf_name: name
+                            type: String
+                            id: true
+                            description: 'VRF name for traffic redirection.'
+                            example: vrf1
+                            test_tags: [HYPERSHIELD]
+                          - nxos_name: affinity
+                            tf_name: affinity
+                            type: Int64
+                            min_int: 0
+                            max_int: 16
+                            description: 'Service module number for traffic pinning - use 0 for dynamic pinning.'
+                            example: 1
+                            test_tags: [HYPERSHIELD]
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld

@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -178,6 +179,20 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_configuration", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_warning_threshold", "85"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "breakout_modules.1.front_panel_ports.49.breakout_map", "10g-4x"))
+	if os.Getenv("HYPERSHIELD") != "" {
+		if os.Getenv("HYPERSHIELD") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.source_interface", "lo100"))
+		}
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.controller_https_proxy_port", "8080"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.controller_https_proxy_server", "proxy.example.com"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.controller_ip1", "10.0.0.1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.controller_ip2", "10.0.0.2"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.controller_ip3", "10.0.0.3"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.firewall_policy_admin_state", "in-service"))
+		if os.Getenv("HYPERSHIELD") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.vrfs.vrf1.affinity", "1"))
+		}
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -403,6 +418,40 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	if os.Getenv("HYPERSHIELD") != "" {
+		config += `	service_instances = {` + "\n"
+		config += `		"hypershield" = {` + "\n"
+		if os.Getenv("HYPERSHIELD") != "" {
+			config += `			source_interface = "lo100"` + "\n"
+		}
+		if os.Getenv("HYPERSHIELD") != "" {
+			config += `			controller_https_proxy_port = 8080` + "\n"
+		}
+		if os.Getenv("HYPERSHIELD") != "" {
+			config += `			controller_https_proxy_server = "proxy.example.com"` + "\n"
+		}
+		if os.Getenv("HYPERSHIELD") != "" {
+			config += `			controller_ip1 = "10.0.0.1"` + "\n"
+		}
+		if os.Getenv("HYPERSHIELD") != "" {
+			config += `			controller_ip2 = "10.0.0.2"` + "\n"
+		}
+		if os.Getenv("HYPERSHIELD") != "" {
+			config += `			controller_ip3 = "10.0.0.3"` + "\n"
+		}
+		if os.Getenv("HYPERSHIELD") != "" {
+			config += `			firewall_policy_admin_state = "in-service"` + "\n"
+		}
+		config += `			vrfs = {` + "\n"
+		config += `				"vrf1" = {` + "\n"
+		if os.Getenv("HYPERSHIELD") != "" {
+			config += `					affinity = 1` + "\n"
+		}
+		config += `				}` + "\n"
+		config += `			}` + "\n"
+		config += `		}` + "\n"
+		config += `	}` + "\n"
+	}
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

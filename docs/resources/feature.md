@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the feature configuration on NX-OS devices, including the administrative state of features such as BGP, OSPF, PIM, EVPN, LACP, vPC, and others.
   API Documentation
-  fmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Entity/fmBashShell https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:BashShell/fmBfd https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Bfd/fmBgp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Bgp/fmDhcp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Dhcp/fmEvpn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Evpn/fmHmm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Hmm/fmHsrp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Hsrp/fmInterfaceVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:InterfaceVlan/fmIsis https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Isis/fmLacp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Lacp/fmLldp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Lldp/fmMacsec https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Macsec/fmNetflow https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Netflow/fmNgmvpn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ngmvpn/fmNgoam https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ngoam/fmNvo https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Nvo/fmNxapi https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Nxapi/fmOspf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ospf/fmOspfv3 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ospfv3/fmPim https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Pim/fmPtp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ptp/fmPvlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Pvlan/fmSflow https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Sflow/fmSsh https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ssh/fmTacacsplus https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Tacacsplus/fmTelnet https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Telnet/fmUdld https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Udld/fmVnSegment https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:VnSegment/fmVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Vpc/
+  fmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Entity/fmBashShell https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:BashShell/fmBfd https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Bfd/fmBgp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Bgp/fmDhcp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Dhcp/fmEvpn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Evpn/fmHmm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Hmm/fmHsrp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Hsrp/fmInterfaceVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:InterfaceVlan/fmIsis https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Isis/fmLacp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Lacp/fmLldp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Lldp/fmMacsec https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Macsec/fmNetflow https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Netflow/fmNgmvpn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ngmvpn/fmNgoam https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ngoam/fmNvo https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Nvo/fmNxapi https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Nxapi/fmOspf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ospf/fmOspfv3 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ospfv3/fmPim https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Pim/fmPtp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ptp/fmPvlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Pvlan/fmSflow https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Sflow/fmServiceAcceleration https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:ServiceAcceleration/fmSsh https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ssh/fmTacacsplus https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Tacacsplus/fmTelnet https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Telnet/fmUdld https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Udld/fmVnSegment https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:VnSegment/fmVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Vpc/
 ---
 
 # nxos_feature (Resource)
@@ -38,6 +38,7 @@ This resource can manage the feature configuration on NX-OS devices, including t
 - [fmPtp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ptp/)
 - [fmPvlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Pvlan/)
 - [fmSflow](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Sflow/)
+- [fmServiceAcceleration](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:ServiceAcceleration/)
 - [fmSsh](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Ssh/)
 - [fmTacacsplus](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Tacacsplus/)
 - [fmTelnet](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Feature%20Management/fm:Telnet/)
@@ -49,35 +50,36 @@ This resource can manage the feature configuration on NX-OS devices, including t
 
 ```terraform
 resource "nxos_feature" "example" {
-  bash_shell     = "enabled"
-  bfd            = "enabled"
-  bgp            = "enabled"
-  dhcp           = "enabled"
-  evpn           = "enabled"
-  hmm            = "enabled"
-  hsrp           = "enabled"
-  interface_vlan = "enabled"
-  isis           = "enabled"
-  lacp           = "enabled"
-  lldp           = "enabled"
-  macsec         = "enabled"
-  netflow        = "enabled"
-  ngmvpn         = "enabled"
-  ngoam          = "enabled"
-  nv_overlay     = "enabled"
-  nxapi          = "enabled"
-  ospf           = "enabled"
-  ospfv3         = "enabled"
-  pim            = "enabled"
-  ptp            = "enabled"
-  pvlan          = "enabled"
-  sflow          = "enabled"
-  ssh            = "enabled"
-  tacacs         = "enabled"
-  telnet         = "enabled"
-  udld           = "enabled"
-  vn_segment     = "enabled"
-  vpc            = "enabled"
+  bash_shell           = "enabled"
+  bfd                  = "enabled"
+  bgp                  = "enabled"
+  dhcp                 = "enabled"
+  evpn                 = "enabled"
+  hmm                  = "enabled"
+  hsrp                 = "enabled"
+  interface_vlan       = "enabled"
+  isis                 = "enabled"
+  lacp                 = "enabled"
+  lldp                 = "enabled"
+  macsec               = "enabled"
+  netflow              = "enabled"
+  ngmvpn               = "enabled"
+  ngoam                = "enabled"
+  nv_overlay           = "enabled"
+  nxapi                = "enabled"
+  ospf                 = "enabled"
+  ospfv3               = "enabled"
+  pim                  = "enabled"
+  ptp                  = "enabled"
+  pvlan                = "enabled"
+  sflow                = "enabled"
+  service_acceleration = "enabled"
+  ssh                  = "enabled"
+  tacacs               = "enabled"
+  telnet               = "enabled"
+  udld                 = "enabled"
+  vn_segment           = "enabled"
+  vpc                  = "enabled"
 }
 ```
 
@@ -130,6 +132,8 @@ resource "nxos_feature" "example" {
 - `ptp` (String) Administrative state.
   - Choices: `enabled`, `disabled`
 - `pvlan` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+- `service_acceleration` (String) Administrative state.
   - Choices: `enabled`, `disabled`
 - `sflow` (String) Administrative state.
   - Choices: `enabled`, `disabled`

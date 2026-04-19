@@ -45,6 +45,9 @@ import (
 {{- $prefix := .Prefix}}
 {{- range .Children}}
 {{- $list := .TfName}}
+{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+{{- end}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}
@@ -76,6 +79,9 @@ import (
 {{- if .TfChildClasses}}
 {{- template "resourceTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "Prefix" (printf "%s%s.%s." $prefix $list $mapKey))}}
 {{- end}}
+{{- end}}
+{{- if len .TestTags}}
+	}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -217,6 +223,9 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- define "testConfigChildrenTemplate"}}
 {{- $indent := .Indent}}
 {{- range .Children}}
+{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+{{- end}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}
@@ -286,6 +295,9 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	config += `{{$indent}}	}` + "\n"
 	config += `{{$indent}}}` + "\n"
 {{- end}}
+{{- end}}
+{{- if len .TestTags}}
+	}
 {{- end}}
 {{- end}}
 {{- end}}

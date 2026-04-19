@@ -148,6 +148,7 @@ type YamlConfigChildClass struct {
 	DocPath        string                 `yaml:"doc_path"`
 	Mandatory      bool                   `yaml:"mandatory"`
 	NoDelete       bool                   `yaml:"no_delete"`
+	TestTags       []string               `yaml:"test_tags"`
 	Attributes     []YamlConfigAttribute  `yaml:"attributes"`
 	ChildClasses   []YamlConfigChildClass `yaml:"child_classes"`
 	TfChildClasses []YamlConfigChildClass `yaml:"-"`

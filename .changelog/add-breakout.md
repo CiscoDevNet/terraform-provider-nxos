@@ -1,0 +1,1 @@
+- Add `nxos_breakout` resource and data source

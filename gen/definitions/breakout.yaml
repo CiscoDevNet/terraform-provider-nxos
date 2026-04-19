@@ -1,0 +1,62 @@
+---
+name: Breakout
+class_name: imBreakout
+dn: sys/breakout
+no_delete: true
+ds_description: This data source can read the interface breakout configuration.
+res_description: This resource can manage the interface breakout configuration.
+doc_path: Interfaces/im:Breakout/
+doc_category: Interfaces
+child_classes:
+  - class_name: imMod
+    rn: module-%d
+    type: list
+    tf_name: modules
+    description: 'Module configuration.'
+    doc_path: Interfaces/im:Mod/
+    attributes:
+      - nxos_name: id
+        tf_name: id
+        type: Int64
+        id: true
+        description: 'Module Id.'
+        min_int: 1
+        max_int: 32
+        example: 1
+    child_classes:
+      - class_name: imFpP
+        rn: fport-%d
+        type: list
+        tf_name: front_panel_ports
+        description: 'Front Panel Port configuration.'
+        doc_path: Interfaces/im:FpP/
+        attributes:
+          - nxos_name: id
+            tf_name: id
+            type: Int64
+            id: true
+            description: 'Front Panel port id.'
+            min_int: 1
+            max_int: 108
+            example: 49
+          - nxos_name: breakoutMap
+            tf_name: breakout_map
+            type: String
+            description: 'Breakout Map.'
+            enum_values:
+              - no-breakout
+              - 10g-4x
+              - 50g-2x
+              - 25g-4x
+              - 10g-2x
+              - 100g-4x
+              - 50g-4x
+              - 200g-1x
+              - 100g-2x
+              - 200g-2x
+              - 40g-1x
+              - 400g-2x
+              - 100g-8x
+              - 800g-1x
+              - 100g-2x-pam4
+            example: 10g-4x

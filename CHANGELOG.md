@@ -1,3 +1,7 @@
+## 0.9.4
+
+- Add NXAPI feature configuration to `nxos_feature` resource and data source
+
 ## 0.9.3
 
 - Add `nxos_management_interface` resource and data source

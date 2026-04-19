@@ -247,6 +247,7 @@ type System struct {
 	NxapiSslCiphersWeak                           types.Bool                            `tfsdk:"nxapi_ssl_ciphers_weak"`
 	NxapiClientCertificateAuthentication          types.String                          `tfsdk:"nxapi_client_certificate_authentication"`
 	NxapiSudi                                     types.Bool                            `tfsdk:"nxapi_sudi"`
+	BreakoutModules                               map[string]SystemBreakoutModules      `tfsdk:"breakout_modules"`
 }
 
 type SystemArpVpcDomains struct {
@@ -351,6 +352,14 @@ type SystemCdpInterfaces struct {
 	PortDescription types.String `tfsdk:"port_description"`
 }
 
+type SystemBreakoutModules struct {
+	FrontPanelPorts map[string]SystemBreakoutModulesFrontPanelPorts `tfsdk:"front_panel_ports"`
+}
+
+type SystemBreakoutModulesFrontPanelPorts struct {
+	BreakoutMap types.String `tfsdk:"breakout_map"`
+}
+
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -421,6 +430,14 @@ func (data SystemLldpInterfaces) getRn(key string) string {
 
 func (data SystemCdpInterfaces) getRn(key string) string {
 	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data SystemBreakoutModules) getRn(key string) string {
+	return fmt.Sprintf("module-%d", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data SystemBreakoutModulesFrontPanelPorts) getRn(key string) string {
+	return fmt.Sprintf("fport-%d", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
 func (data System) getClassName() string {
@@ -1543,6 +1560,30 @@ func (data System) toBody(config System) nxos.Body {
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.nxapiInst.attributes", attrs)
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".imBreakout"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		for key, child := range data.BreakoutModules {
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.imMod.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".imMod.children"
+				for key, child := range child.FrontPanelPorts {
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "id", key)
+					if !child.BreakoutMap.IsUnknown() && !child.BreakoutMap.IsNull() {
+						attrs, _ = sjson.Set(attrs, "breakoutMap", child.BreakoutMap.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.imFpP.attributes", attrs)
+				}
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -2554,6 +2595,56 @@ func (data *System) fromBody(res gjson.Result) {
 		data.NxapiSslCiphersWeak = types.BoolValue(helpers.ParseNxosBoolean(rnxapiInst.Get("nxapiInst.attributes.sslCiphersWeak").String()))
 		data.NxapiClientCertificateAuthentication = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.clientCertAuth").String())
 		data.NxapiSudi = types.BoolValue(helpers.ParseNxosBoolean(rnxapiInst.Get("nxapiInst.attributes.sudi").String()))
+	}
+	{
+		var rimBreakout gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("imBreakout.attributes.rn").String()
+				if rnValue == "breakout" {
+					rimBreakout = v
+					return false
+				}
+				return true
+			},
+		)
+		rimBreakout.Get("imBreakout.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "imMod" {
+							var child SystemBreakoutModules
+							mapKey := value.Get("attributes.id").String()
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "imFpP" {
+												var nestedChildimFpP SystemBreakoutModulesFrontPanelPorts
+												nestedChildimFpP.BreakoutMap = types.StringValue(nestedValue.Get("attributes.breakoutMap").String())
+												nestedMapKey := nestedValue.Get("attributes.id").String()
+												if child.FrontPanelPorts == nil {
+													child.FrontPanelPorts = make(map[string]SystemBreakoutModulesFrontPanelPorts)
+												}
+												child.FrontPanelPorts[nestedMapKey] = nestedChildimFpP
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							if data.BreakoutModules == nil {
+								data.BreakoutModules = make(map[string]SystemBreakoutModules)
+							}
+							data.BreakoutModules[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
 	}
 }
 
@@ -4559,6 +4650,57 @@ func (data *System) updateFromBody(res gjson.Result) {
 	} else {
 		data.NxapiSudi = types.BoolNull()
 	}
+	var rimBreakout gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("imBreakout.attributes.rn").String()
+			if rnValue == "breakout" {
+				rimBreakout = v
+				return false
+			}
+			return true
+		},
+	)
+	for key, item := range data.BreakoutModules {
+		var rimMod gjson.Result
+		rimBreakout.Get("imBreakout.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("imMod.attributes.id").String() == key {
+					rimMod = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rimMod.Exists() {
+			delete(data.BreakoutModules, key)
+			continue
+		}
+		for nc := range item.FrontPanelPorts {
+			ncItem := item.FrontPanelPorts[nc]
+			var rimFpP gjson.Result
+			rimMod.Get("imMod.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("imFpP.attributes.id").String() == nc {
+						rimFpP = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rimFpP.Exists() {
+				delete(item.FrontPanelPorts, nc)
+				continue
+			}
+			if !ncItem.BreakoutMap.IsNull() {
+				ncItem.BreakoutMap = types.StringValue(rimFpP.Get("imFpP.attributes.breakoutMap").String())
+			} else {
+				ncItem.BreakoutMap = types.StringNull()
+			}
+			item.FrontPanelPorts[nc] = ncItem
+		}
+		data.BreakoutModules[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -5385,6 +5527,19 @@ func (data System) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".imBreakout"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		for key, child := range data.BreakoutModules {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "imMod.attributes.rn", child.getRn(key))
+			deleteBody, _ = sjson.Set(deleteBody, "imMod.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -5558,6 +5713,41 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			deleteBody, _ = sjson.Set(deleteBody, "cdpIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
 			deleteBody, _ = sjson.Set(deleteBody, "cdpIf.attributes.portDesc", "DME_UNSET_PROPERTY_MARKER")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.cdpEntity.children"+".0.cdpInst.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.BreakoutModules {
+		if _, found := data.BreakoutModules[stateKey]; !found {
+			stateChild := state.BreakoutModules[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "imMod.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "imMod.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.imBreakout.children"+".-1", deleteBody)
+		}
+	}
+	for di := range state.BreakoutModules {
+		if _, found := data.BreakoutModules[di]; !found {
+			continue
+		}
+		stateItemdi := state.BreakoutModules[di]
+		planItemdi := data.BreakoutModules[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.imBreakout.children").Array() {
+			if mv.Get("imMod.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.imBreakout.children" + "." + strconv.Itoa(mi) + ".imMod.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.FrontPanelPorts {
+			if _, found := planItemdi.FrontPanelPorts[stateChildKey]; !found {
+				stateChild := stateItemdi.FrontPanelPorts[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "imFpP.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "imFpP.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
 		}
 	}
 	return body

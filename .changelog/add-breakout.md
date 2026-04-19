@@ -1,0 +1,1 @@
+- Add interface breakout configuration to `nxos_system` resource and data source

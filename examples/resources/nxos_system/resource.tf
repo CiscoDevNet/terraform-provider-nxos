@@ -306,4 +306,13 @@ resource "nxos_system" "example" {
   nxapi_ssl_ciphers_weak                  = false
   nxapi_client_certificate_authentication = "optional"
   nxapi_sudi                              = false
+  breakout_modules = {
+    "1" = {
+      front_panel_ports = {
+        "49" = {
+          breakout_map = "10g-4x"
+        }
+      }
+    }
+  }
 }

@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.9.6
+
+- Fix `nxos_access_list`: updating an existing access list entry no longer fails with `Duplicate sequence number`/duplicate object errors (regression of #204, re-reported in #453)
+
 ## 0.9.5
 
 - Add interface breakout configuration to `nxos_system` resource and data source

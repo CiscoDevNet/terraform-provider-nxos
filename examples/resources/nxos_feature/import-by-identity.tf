@@ -1,4 +1,4 @@
 import {
-  to       = nxos_feature.example
+  to = nxos_feature.example
   identity = {}
 }

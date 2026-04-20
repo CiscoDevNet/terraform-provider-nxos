@@ -1,4 +1,4 @@
 import {
-  to       = nxos_snmp.example
+  to = nxos_snmp.example
   identity = {}
 }

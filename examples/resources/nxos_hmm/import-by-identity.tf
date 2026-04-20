@@ -1,4 +1,4 @@
 import {
-  to       = nxos_hmm.example
+  to = nxos_hmm.example
   identity = {}
 }

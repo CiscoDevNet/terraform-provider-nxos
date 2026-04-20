@@ -1,4 +1,4 @@
 import {
-  to       = nxos_vrf.example
+  to = nxos_vrf.example
   identity = {}
 }

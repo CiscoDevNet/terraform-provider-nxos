@@ -1,4 +1,4 @@
 import {
-  to       = nxos_bfd.example
+  to = nxos_bfd.example
   identity = {}
 }

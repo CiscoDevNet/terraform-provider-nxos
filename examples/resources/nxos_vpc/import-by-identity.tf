@@ -1,4 +1,4 @@
 import {
-  to       = nxos_vpc.example
+  to = nxos_vpc.example
   identity = {}
 }

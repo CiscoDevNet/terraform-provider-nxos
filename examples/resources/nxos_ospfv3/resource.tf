@@ -2,36 +2,36 @@ resource "nxos_ospfv3" "example" {
   admin_state = "enabled"
   instances = {
     "OSPFv3" = {
-      admin_state  = "enabled"
+      admin_state = "enabled"
       flush_routes = false
-      isolate      = false
+      isolate = false
       vrfs = {
         "VRF1" = {
-          admin_state               = "enabled"
-          bandwidth_reference       = 400000
-          bandwidth_reference_unit  = "mbps"
-          router_id                 = "34.56.78.90"
-          bfd_control               = false
-          log_adjacency_changes     = "brief"
-          discard_route_external    = false
-          discard_route_internal    = false
-          name_lookup               = true
+          admin_state = "enabled"
+          bandwidth_reference = 400000
+          bandwidth_reference_unit = "mbps"
+          router_id = "34.56.78.90"
+          bfd_control = false
+          log_adjacency_changes = "brief"
+          discard_route_external = false
+          discard_route_internal = false
+          name_lookup = true
           passive_interface_default = false
           areas = {
             "0.0.0.10" = {
-              redistribute             = false
-              nssa_translator_role     = "always"
-              summary                  = false
+              redistribute = false
+              nssa_translator_role = "always"
+              summary = false
               suppress_forward_address = false
-              type                     = "regular"
+              type = "regular"
             }
           }
           address_families = {
             "ipv6-ucast" = {
-              administrative_distance       = "10"
-              default_metric                = "1024"
+              administrative_distance = "10"
+              default_metric = "1024"
               default_route_nssa_pbit_clear = true
-              max_ecmp_cost                 = 16
+              max_ecmp_cost = 16
             }
           }
         }
@@ -41,20 +41,20 @@ resource "nxos_ospfv3" "example" {
   interfaces = {
     "eth1/4" = {
       advertise_secondaries = false
-      area                  = "0.0.0.10"
-      bfd_control           = "disabled"
-      cost                  = 1000
-      dead_interval         = 60
-      hello_interval        = 15
-      network_type          = "p2p"
-      passive               = "enabled"
-      priority              = 10
-      admin_state           = "enabled"
-      instance_name         = "OSPFv3"
-      instance_id           = 1
-      mtu_ignore            = true
-      retransmit_interval   = 10
-      transmit_delay        = 5
+      area = "0.0.0.10"
+      bfd_control = "disabled"
+      cost = 1000
+      dead_interval = 60
+      hello_interval = 15
+      network_type = "p2p"
+      passive = "enabled"
+      priority = 10
+      admin_state = "enabled"
+      instance_name = "OSPFv3"
+      instance_id = 1
+      mtu_ignore = true
+      retransmit_interval = 10
+      transmit_delay = 5
     }
   }
 }

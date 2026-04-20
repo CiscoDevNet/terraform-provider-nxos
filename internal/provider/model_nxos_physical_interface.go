@@ -191,7 +191,6 @@ func (data PhysicalInterface) toBody(config PhysicalInterface) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.PhysicalInterfaces {
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "id", key)
 		if !child.FecMode.IsUnknown() && !child.FecMode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "FECMode", child.FecMode.ValueString())

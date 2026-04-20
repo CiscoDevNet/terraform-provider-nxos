@@ -367,7 +367,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		_ = configChild
 		_ = configChildOk
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if !child.AccountStatus.IsUnknown() && !child.AccountStatus.IsNull() {
 			attrs, _ = sjson.Set(attrs, "accountStatus", child.AccountStatus.ValueString())
@@ -432,7 +431,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range child.Roles {
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "name", key)
 					if !child.Description.IsUnknown() && !child.Description.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
@@ -491,7 +489,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 			_ = configChild
 			_ = configChildOk
 			attrs = "{}"
-			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if !child.AuthenticationProtocol.IsUnknown() && !child.AuthenticationProtocol.IsNull() {
 				attrs, _ = sjson.Set(attrs, "authProtocol", child.AuthenticationProtocol.ValueString())
@@ -543,7 +540,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		}
 		for key, child := range data.TacacsProviderGroups {
 			attrs = "{}"
-			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if !child.Deadtime.IsUnknown() && !child.Deadtime.IsNull() {
 				attrs, _ = sjson.Set(attrs, "deadtime", strconv.FormatInt(child.Deadtime.ValueInt64(), 10))
@@ -569,7 +565,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".aaaTacacsPlusProviderGroup.children"
 				for key, child := range child.Servers {
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "name", key)
 					if !child.Description.IsUnknown() && !child.Description.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
@@ -733,7 +728,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		}
 		for key, child := range data.DefaultAuthorizations {
 			attrs = "{}"
-			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "cmdType", key)
 			if !child.AuthorizationMethodNone.IsUnknown() && !child.AuthorizationMethodNone.IsNull() {
 				attrs, _ = sjson.Set(attrs, "authorMethodNone", strconv.FormatBool(child.AuthorizationMethodNone.ValueBool()))

@@ -61,6 +61,7 @@ child_classes:
             type: list
             tf_name: entries
             description: 'Access list entries.'
+            status_replace: true
             attributes:
               - nxos_name: seqNum
                 tf_name: sequence_number

@@ -197,7 +197,6 @@ func (data OSPF) toBody(config OSPF) nxos.Body {
 		_ = configChild
 		_ = configChildOk
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -214,7 +213,6 @@ func (data OSPF) toBody(config OSPF) nxos.Body {
 				_ = configChild
 				_ = configChildOk
 				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "name", key)
 				if !child.LogAdjacencyChanges.IsUnknown() && !child.LogAdjacencyChanges.IsNull() {
 					attrs, _ = sjson.Set(attrs, "adjChangeLogLevel", child.LogAdjacencyChanges.ValueString())
@@ -270,7 +268,6 @@ func (data OSPF) toBody(config OSPF) nxos.Body {
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfDom.children"
 					for key, child := range child.Areas {
 						attrs = "{}"
-						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						attrs, _ = sjson.Set(attrs, "id", key)
 						if !child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull() {
 							attrs, _ = sjson.Set(attrs, "authType", child.AuthenticationType.ValueString())
@@ -316,7 +313,6 @@ func (data OSPF) toBody(config OSPF) nxos.Body {
 						_ = configChild
 						_ = configChildOk
 						attrs = "{}"
-						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						attrs, _ = sjson.Set(attrs, "id", key)
 						if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 							attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -407,7 +403,6 @@ func (data OSPF) toBody(config OSPF) nxos.Body {
 					}
 					for key, child := range child.Redistributions {
 						attrs = "{}"
-						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						keyParts := strings.SplitN(key, ";", 3)
 						attrs, _ = sjson.Set(attrs, "proto", keyParts[0])
 						attrs, _ = sjson.Set(attrs, "inst", keyParts[1])

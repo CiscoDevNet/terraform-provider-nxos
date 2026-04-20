@@ -116,7 +116,6 @@ func (data EVPN) toBody(config EVPN) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.Vnis {
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "encap", key)
 		if !child.RouteDistinguisher.IsUnknown() && !child.RouteDistinguisher.IsNull() {
 			attrs, _ = sjson.Set(attrs, "rd", child.RouteDistinguisher.ValueString())
@@ -133,7 +132,6 @@ func (data EVPN) toBody(config EVPN) nxos.Body {
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlBDEvi.children"
 			for key, child := range child.RouteTargetDirections {
 				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "type", key)
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlRttP.attributes", attrs)
 				{
@@ -141,7 +139,6 @@ func (data EVPN) toBody(config EVPN) nxos.Body {
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlRttP.children"
 					for key := range child.RouteTargets {
 						attrs = "{}"
-						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						attrs, _ = sjson.Set(attrs, "rtt", key)
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlRttEntry.attributes", attrs)
 					}

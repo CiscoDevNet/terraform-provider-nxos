@@ -301,7 +301,9 @@ func (data {{camelCase .Name}}) getClassName() string {
 		_ = configChildOk
 		{{- end}}
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
+		{{- if .StatusReplace}}
+		attrs, _ = sjson.Set(attrs, "status", "replaced")
+		{{- end}}
 		{{- if gt (idCount .Attributes) 1}}
 		{{mapKeyParse "key" .Attributes}}
 		{{- end}}

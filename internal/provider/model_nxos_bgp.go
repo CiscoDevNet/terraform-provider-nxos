@@ -415,7 +415,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 			_ = configChild
 			_ = configChildOk
 			attrs = "{}"
-			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if !child.RouterId.IsUnknown() && !child.RouterId.IsNull() {
 				attrs, _ = sjson.Set(attrs, "rtrId", child.RouterId.ValueString())
@@ -500,7 +499,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 				}
 				for key, child := range child.AddressFamilies {
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "type", key)
 					if !child.CriticalNexthopTimeout.IsUnknown() && !child.CriticalNexthopTimeout.IsNull() {
 						attrs, _ = sjson.Set(attrs, "critNhTimeout", child.CriticalNexthopTimeout.ValueString())
@@ -619,7 +617,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bgpDomAf.children"
 						for key, child := range child.AdvertisedPrefixes {
 							attrs = "{}"
-							attrs, _ = sjson.Set(attrs, "status", "created,modified")
 							attrs, _ = sjson.Set(attrs, "addr", key)
 							if !child.RouteMap.IsUnknown() && !child.RouteMap.IsNull() {
 								attrs, _ = sjson.Set(attrs, "rtMap", child.RouteMap.ValueString())
@@ -631,7 +628,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 						}
 						for key, child := range child.Redistributions {
 							attrs = "{}"
-							attrs, _ = sjson.Set(attrs, "status", "created,modified")
 							keyParts := strings.SplitN(key, ";", 2)
 							attrs, _ = sjson.Set(attrs, "proto", keyParts[0])
 							attrs, _ = sjson.Set(attrs, "inst", keyParts[1])
@@ -656,7 +652,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 					_ = configChild
 					_ = configChildOk
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "name", key)
 					if !child.RemoteAsn.IsUnknown() && !child.RemoteAsn.IsNull() {
 						attrs, _ = sjson.Set(attrs, "asn", child.RemoteAsn.ValueString())
@@ -738,7 +733,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bgpPeerCont.children"
 						for key, child := range child.PeerTemplateAddressFamilies {
 							attrs = "{}"
-							attrs, _ = sjson.Set(attrs, "status", "created,modified")
 							attrs, _ = sjson.Set(attrs, "type", key)
 							if !child.Control.IsUnknown() && !child.Control.IsNull() {
 								attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
@@ -829,7 +823,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 					_ = configChild
 					_ = configChildOk
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "addr", key)
 					if !child.RemoteAsn.IsUnknown() && !child.RemoteAsn.IsNull() {
 						attrs, _ = sjson.Set(attrs, "asn", child.RemoteAsn.ValueString())
@@ -924,7 +917,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 						}
 						for key, child := range child.PeerAddressFamilies {
 							attrs = "{}"
-							attrs, _ = sjson.Set(attrs, "status", "created,modified")
 							attrs, _ = sjson.Set(attrs, "type", key)
 							if !child.Control.IsUnknown() && !child.Control.IsNull() {
 								attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
@@ -1008,7 +1000,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 								}
 								for key, child := range child.RouteControls {
 									attrs = "{}"
-									attrs, _ = sjson.Set(attrs, "status", "created,modified")
 									attrs, _ = sjson.Set(attrs, "direction", key)
 									if !child.RouteMapName.IsUnknown() && !child.RouteMapName.IsNull() {
 										attrs, _ = sjson.Set(attrs, "rtMap", child.RouteMapName.ValueString())
@@ -1017,7 +1008,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 								}
 								for key, child := range child.PrefixListControls {
 									attrs = "{}"
-									attrs, _ = sjson.Set(attrs, "status", "created,modified")
 									attrs, _ = sjson.Set(attrs, "direction", key)
 									if !child.List.IsUnknown() && !child.List.IsNull() {
 										attrs, _ = sjson.Set(attrs, "list", child.List.ValueString())

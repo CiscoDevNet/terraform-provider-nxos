@@ -138,7 +138,6 @@ func (data NVO) toBody(config NVO) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.NveInterfaces {
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "epId", key)
 		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -215,7 +214,6 @@ func (data NVO) toBody(config NVO) nxos.Body {
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range child.Vnis {
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "vni", key)
 					if !child.AssociateVrf.IsUnknown() && !child.AssociateVrf.IsNull() {
 						attrs, _ = sjson.Set(attrs, "associateVrfFlag", strconv.FormatBool(child.AssociateVrf.ValueBool()))

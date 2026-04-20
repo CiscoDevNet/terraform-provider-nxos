@@ -96,7 +96,6 @@ func (data LoopbackInterface) toBody(config LoopbackInterface) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.LoopbackInterfaces {
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "id", key)
 		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())

@@ -145,7 +145,6 @@ func (data NTP) toBody(config NTP) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.Servers {
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if !child.Vrf.IsUnknown() && !child.Vrf.IsNull() {
 			attrs, _ = sjson.Set(attrs, "vrf", child.Vrf.ValueString())

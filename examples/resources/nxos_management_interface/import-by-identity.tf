@@ -1,4 +1,4 @@
 import {
-  to = nxos_management_interface.example
+  to       = nxos_management_interface.example
   identity = {}
 }

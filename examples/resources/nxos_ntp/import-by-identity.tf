@@ -1,4 +1,4 @@
 import {
-  to = nxos_ntp.example
+  to       = nxos_ntp.example
   identity = {}
 }

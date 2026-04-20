@@ -1,4 +1,4 @@
 import {
-  to = nxos_nvo.example
+  to       = nxos_nvo.example
   identity = {}
 }

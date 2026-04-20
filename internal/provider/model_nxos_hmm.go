@@ -129,6 +129,7 @@ func (data HMM) toBody(config HMM) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Interfaces {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "id", key)
 			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())

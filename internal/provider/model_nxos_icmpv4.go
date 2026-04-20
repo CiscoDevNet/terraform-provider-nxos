@@ -119,6 +119,7 @@ func (data ICMPv4) toBody(config ICMPv4) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Vrfs {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.icmpv4Dom.attributes", attrs)
 			{
@@ -126,6 +127,7 @@ func (data ICMPv4) toBody(config ICMPv4) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".icmpv4Dom.children"
 				for key, child := range child.Interfaces {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "id", key)
 					if !child.Control.IsUnknown() && !child.Control.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())

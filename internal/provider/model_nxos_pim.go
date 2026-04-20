@@ -213,6 +213,7 @@ func (data PIM) toBody(config PIM) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Vrfs {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -253,6 +254,7 @@ func (data PIM) toBody(config PIM) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".pimDom.children"
 				for key, child := range child.Interfaces {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "id", key)
 					if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 						attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -356,6 +358,7 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					nestedChildrenPath := childBodyPath + ".children"
 					for key, child := range child.StaticRps {
 						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						attrs, _ = sjson.Set(attrs, "addr", key)
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimStaticRP.attributes", attrs)
 						{
@@ -363,6 +366,7 @@ func (data PIM) toBody(config PIM) nxos.Body {
 							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".pimStaticRP.children"
 							for key, child := range child.GroupLists {
 								attrs = "{}"
+								attrs, _ = sjson.Set(attrs, "status", "created,modified")
 								attrs, _ = sjson.Set(attrs, "grpListName", key)
 								if !child.Bidir.IsUnknown() && !child.Bidir.IsNull() {
 									attrs, _ = sjson.Set(attrs, "bidir", strconv.FormatBool(child.Bidir.ValueBool()))
@@ -395,6 +399,7 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					nestedChildrenPath := childBodyPath + ".children"
 					for key := range child.AnycastRpPeers {
 						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						keyParts := strings.SplitN(key, ";", 2)
 						attrs, _ = sjson.Set(attrs, "addr", keyParts[0])
 						attrs, _ = sjson.Set(attrs, "rpSetAddr", keyParts[1])

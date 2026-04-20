@@ -151,6 +151,7 @@ func (data BFD) toBody(config BFD) nxos.Body {
 			_ = configChild
 			_ = configChildOk
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "id", key)
 			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())

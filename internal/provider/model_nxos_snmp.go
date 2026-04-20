@@ -320,6 +320,7 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 			_ = configChild
 			_ = configChildOk
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "userName", key)
 			if configChildOk && !configChild.AuthenticationPasswordWo.IsNull() {
 				attrs, _ = sjson.Set(attrs, "authpwd", configChild.AuthenticationPasswordWo.ValueString())
@@ -367,6 +368,7 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".snmpLocalUser.children"
 				for key := range child.Groups {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "groupName", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpUserGroup.attributes", attrs)
 				}
@@ -374,6 +376,7 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 		}
 		for key, child := range data.Hosts {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			keyParts := strings.SplitN(key, ";", 2)
 			attrs, _ = sjson.Set(attrs, "hostName", keyParts[0])
 			attrs, _ = sjson.Set(attrs, "udpPortID", keyParts[1])
@@ -395,6 +398,7 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".snmpHost.children"
 				for key := range child.Vrfs {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "vrfname", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpUseVrf.attributes", attrs)
 				}
@@ -1203,6 +1207,7 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.RmonEvents {
 				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "num", key)
 				if !child.Description.IsUnknown() && !child.Description.IsNull() {
 					attrs, _ = sjson.Set(attrs, "description", child.Description.ValueString())

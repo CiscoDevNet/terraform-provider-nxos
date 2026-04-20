@@ -145,6 +145,7 @@ func (data Logging) toBody(config Logging) nxos.Body {
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.Facilities {
 				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "facilityName", key)
 				if !child.Level.IsUnknown() && !child.Level.IsNull() {
 					attrs, _ = sjson.Set(attrs, "severityLevel", child.Level.ValueString())
@@ -183,6 +184,7 @@ func (data Logging) toBody(config Logging) nxos.Body {
 		}
 		for key, child := range data.RemoteDestinations {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "host", key)
 			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminState", child.AdminState.ValueString())

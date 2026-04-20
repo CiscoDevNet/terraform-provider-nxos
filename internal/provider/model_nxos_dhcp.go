@@ -236,6 +236,7 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.RelayInterfaces {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "id", key)
 			if !child.InformationTrusted.IsUnknown() && !child.InformationTrusted.IsNull() {
 				attrs, _ = sjson.Set(attrs, "InformationTrustedEnabled", strconv.FormatBool(child.InformationTrusted.ValueBool()))
@@ -261,6 +262,7 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".dhcpRelayIf.children"
 				for key, child := range child.Addresses {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					keyParts := strings.SplitN(key, ";", 2)
 					attrs, _ = sjson.Set(attrs, "vrf", keyParts[0])
 					attrs, _ = sjson.Set(attrs, "address", keyParts[1])

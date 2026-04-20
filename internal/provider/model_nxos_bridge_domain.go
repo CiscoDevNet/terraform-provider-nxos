@@ -110,6 +110,7 @@ func (data BridgeDomain) toBody(config BridgeDomain) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.BridgeDomains {
 		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "fabEncap", key)
 		if !child.AccessEncap.IsUnknown() && !child.AccessEncap.IsNull() {
 			attrs, _ = sjson.Set(attrs, "accEncap", child.AccessEncap.ValueString())

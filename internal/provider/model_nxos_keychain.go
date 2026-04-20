@@ -119,6 +119,7 @@ func (data Keychain) toBody(config Keychain) nxos.Body {
 			_ = configChild
 			_ = configChildOk
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "keychainName", key)
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.kcmgrClassicKeychain.attributes", attrs)
 			{
@@ -129,6 +130,7 @@ func (data Keychain) toBody(config Keychain) nxos.Body {
 					_ = configChild
 					_ = configChildOk
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "keyId", key)
 					if !child.CryptographicAlgorithm.IsUnknown() && !child.CryptographicAlgorithm.IsNull() {
 						attrs, _ = sjson.Set(attrs, "cryptoAlgo", child.CryptographicAlgorithm.ValueString())

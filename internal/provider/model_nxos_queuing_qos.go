@@ -114,6 +114,7 @@ func (data QueuingQoS) toBody(config QueuingQoS) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.PolicyMaps {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if !child.MatchType.IsUnknown() && !child.MatchType.IsNull() {
 				attrs, _ = sjson.Set(attrs, "matchType", child.MatchType.ValueString())
@@ -124,6 +125,7 @@ func (data QueuingQoS) toBody(config QueuingQoS) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosPMapInst.children"
 				for key, child := range child.MatchClassMaps {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "name", key)
 					if !child.NextClassMap.IsUnknown() && !child.NextClassMap.IsNull() {
 						attrs, _ = sjson.Set(attrs, "nextCMap", child.NextClassMap.ValueString())

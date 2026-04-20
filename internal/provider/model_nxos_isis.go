@@ -220,6 +220,7 @@ func (data ISIS) toBody(config ISIS) nxos.Body {
 		_ = configChild
 		_ = configChildOk
 		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -242,6 +243,7 @@ func (data ISIS) toBody(config ISIS) nxos.Body {
 				_ = configChild
 				_ = configChildOk
 				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "name", key)
 				if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 					attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -304,6 +306,7 @@ func (data ISIS) toBody(config ISIS) nxos.Body {
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".isisDom.children"
 					for key, child := range child.AddressFamilies {
 						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						attrs, _ = sjson.Set(attrs, "type", key)
 						if !child.SegmentRoutingMpls.IsUnknown() && !child.SegmentRoutingMpls.IsNull() {
 							attrs, _ = sjson.Set(attrs, "srMpls", strconv.FormatBool(child.SegmentRoutingMpls.ValueBool()))
@@ -377,6 +380,7 @@ func (data ISIS) toBody(config ISIS) nxos.Body {
 		_ = configChild
 		_ = configChildOk
 		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "id", key)
 		if !child.AuthenticationCheck.IsUnknown() && !child.AuthenticationCheck.IsNull() {
 			attrs, _ = sjson.Set(attrs, "authCheck", strconv.FormatBool(child.AuthenticationCheck.ValueBool()))

@@ -170,6 +170,7 @@ func (data HSRP) toBody(config HSRP) nxos.Body {
 			_ = configChild
 			_ = configChildOk
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "id", key)
 			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -213,6 +214,7 @@ func (data HSRP) toBody(config HSRP) nxos.Body {
 					_ = configChild
 					_ = configChildOk
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					keyParts := strings.SplitN(key, ";", 2)
 					attrs, _ = sjson.Set(attrs, "id", keyParts[0])
 					attrs, _ = sjson.Set(attrs, "af", keyParts[1])

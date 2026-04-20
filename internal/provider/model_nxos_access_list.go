@@ -188,6 +188,7 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.AccessLists {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if !child.Fragments.IsUnknown() && !child.Fragments.IsNull() {
 				attrs, _ = sjson.Set(attrs, "fragments", child.Fragments.ValueString())
@@ -207,6 +208,7 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv4aclACL.children"
 				for key, child := range child.Entries {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "seqNum", key)
 					if !child.Ack.IsUnknown() && !child.Ack.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ack", strconv.FormatBool(child.Ack.ValueBool()))
@@ -397,6 +399,7 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range data.IngressInterfaces {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "name", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aclIf.attributes", attrs)
 					{
@@ -434,6 +437,7 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range data.EgressInterfaces {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "name", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aclIf.attributes", attrs)
 					{

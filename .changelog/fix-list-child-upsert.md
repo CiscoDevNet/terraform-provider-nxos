@@ -1,1 +1,1 @@
-- Fix update of `nxos_access_list` entries returning `Duplicate sequence number`/duplicate object errors by emitting DME `status: "replaced"` on `ipv4aclACE` children; opt-in via new `status_replace` flag on child class definitions
+- Fix `nxos_access_list`: updating an existing access list entry no longer fails with `Duplicate sequence number`/duplicate object errors (regression of #204, re-reported in #453)

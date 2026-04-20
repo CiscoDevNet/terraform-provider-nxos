@@ -134,7 +134,6 @@ func (data VRF) toBody(config VRF) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.Vrfs {
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if !child.Description.IsUnknown() && !child.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
@@ -176,7 +175,6 @@ func (data VRF) toBody(config VRF) nxos.Body {
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range child.AddressFamilies {
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "type", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlDomAf.attributes", attrs)
 					{
@@ -184,7 +182,6 @@ func (data VRF) toBody(config VRF) nxos.Body {
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlDomAf.children"
 						for key, child := range child.RouteTargetAddressFamilies {
 							attrs = "{}"
-							attrs, _ = sjson.Set(attrs, "status", "created,modified")
 							attrs, _ = sjson.Set(attrs, "type", key)
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlAfCtrl.attributes", attrs)
 							{
@@ -192,7 +189,6 @@ func (data VRF) toBody(config VRF) nxos.Body {
 								nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlAfCtrl.children"
 								for key, child := range child.RouteTargetDirections {
 									attrs = "{}"
-									attrs, _ = sjson.Set(attrs, "status", "created,modified")
 									attrs, _ = sjson.Set(attrs, "type", key)
 									body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlRttP.attributes", attrs)
 									{
@@ -200,7 +196,6 @@ func (data VRF) toBody(config VRF) nxos.Body {
 										nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlRttP.children"
 										for key := range child.RouteTargets {
 											attrs = "{}"
-											attrs, _ = sjson.Set(attrs, "status", "created,modified")
 											attrs, _ = sjson.Set(attrs, "rtt", key)
 											body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlRttEntry.attributes", attrs)
 										}

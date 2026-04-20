@@ -622,7 +622,6 @@ func (data System) toBody(config System) nxos.Body {
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range data.ArpVpcDomains {
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "domainId", key)
 					if !child.ArpSync.IsUnknown() && !child.ArpSync.IsNull() {
 						attrs, _ = sjson.Set(attrs, "arpSync", child.ArpSync.ValueString())
@@ -679,7 +678,6 @@ func (data System) toBody(config System) nxos.Body {
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.NdVrfs {
 				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "name", key)
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ndDom.attributes", attrs)
 				{
@@ -687,7 +685,6 @@ func (data System) toBody(config System) nxos.Body {
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ndDom.children"
 					for key, child := range child.Interfaces {
 						attrs = "{}"
-						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						attrs, _ = sjson.Set(attrs, "id", key)
 						if !child.BootFileUrl.IsUnknown() && !child.BootFileUrl.IsNull() {
 							attrs, _ = sjson.Set(attrs, "bootFileUrl", child.BootFileUrl.ValueString())
@@ -758,7 +755,6 @@ func (data System) toBody(config System) nxos.Body {
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range data.NdVpcDomains {
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "domainId", key)
 					if !child.NdSync.IsUnknown() && !child.NdSync.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ndSync", child.NdSync.ValueString())
@@ -851,7 +847,6 @@ func (data System) toBody(config System) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.DnsProfiles {
 			attrs = "{}"
-			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if !child.Description.IsUnknown() && !child.Description.IsNull() {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
@@ -884,7 +879,6 @@ func (data System) toBody(config System) nxos.Body {
 	}
 	for key, child := range data.Vdcs {
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "id", key)
 		if !child.Name.IsUnknown() && !child.Name.IsNull() {
 			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
@@ -943,7 +937,6 @@ func (data System) toBody(config System) nxos.Body {
 	}
 	for key, child := range data.CliAliases {
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "aliasName", key)
 		if !child.Command.IsUnknown() && !child.Command.IsNull() {
 			attrs, _ = sjson.Set(attrs, "aliasCmd", child.Command.ValueString())
@@ -1080,7 +1073,6 @@ func (data System) toBody(config System) nxos.Body {
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.UdldInterfaces {
 				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "id", key)
 				if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 					attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -1275,7 +1267,6 @@ func (data System) toBody(config System) nxos.Body {
 	}
 	for key, child := range data.ManagementInterfaces {
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "id", key)
 		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -1365,7 +1356,6 @@ func (data System) toBody(config System) nxos.Body {
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.LldpInterfaces {
 				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "id", key)
 				if !child.AdminReceiveState.IsUnknown() && !child.AdminReceiveState.IsNull() {
 					attrs, _ = sjson.Set(attrs, "adminRxSt", child.AdminReceiveState.ValueString())
@@ -1433,7 +1423,6 @@ func (data System) toBody(config System) nxos.Body {
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.CdpInterfaces {
 				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "id", key)
 				if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 					attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -1603,7 +1592,6 @@ func (data System) toBody(config System) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.BreakoutModules {
 			attrs = "{}"
-			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "id", key)
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.imMod.attributes", attrs)
 			{
@@ -1611,7 +1599,6 @@ func (data System) toBody(config System) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".imMod.children"
 				for key, child := range child.FrontPanelPorts {
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "id", key)
 					if !child.BreakoutMap.IsUnknown() && !child.BreakoutMap.IsNull() {
 						attrs, _ = sjson.Set(attrs, "breakoutMap", child.BreakoutMap.ValueString())
@@ -1635,7 +1622,6 @@ func (data System) toBody(config System) nxos.Body {
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.ServiceInstances {
 				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "name", key)
 				if !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() {
 					attrs, _ = sjson.Set(attrs, "cpSrcInterface", child.SourceInterface.ValueString())
@@ -1680,7 +1666,6 @@ func (data System) toBody(config System) nxos.Body {
 							nestedChildrenPath := childBodyPath + ".children"
 							for key, child := range child.Vrfs {
 								attrs = "{}"
-								attrs, _ = sjson.Set(attrs, "status", "created,modified")
 								attrs, _ = sjson.Set(attrs, "name", key)
 								if !child.Affinity.IsUnknown() && !child.Affinity.IsNull() {
 									attrs, _ = sjson.Set(attrs, "affinity", strconv.FormatInt(child.Affinity.ValueInt64(), 10))

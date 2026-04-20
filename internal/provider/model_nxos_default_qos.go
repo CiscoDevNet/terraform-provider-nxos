@@ -161,7 +161,6 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.ClassMaps {
 			attrs = "{}"
-			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if !child.MatchType.IsUnknown() && !child.MatchType.IsNull() {
 				attrs, _ = sjson.Set(attrs, "matchType", child.MatchType.ValueString())
@@ -172,7 +171,6 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosCMapInst.children"
 				for key := range child.DscpValues {
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "val", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosDscp.attributes", attrs)
 				}
@@ -187,7 +185,6 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.PolicyMaps {
 			attrs = "{}"
-			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			if !child.MatchType.IsUnknown() && !child.MatchType.IsNull() {
 				attrs, _ = sjson.Set(attrs, "matchType", child.MatchType.ValueString())
@@ -198,7 +195,6 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosPMapInst.children"
 				for key, child := range child.MatchClassMaps {
 					attrs = "{}"
-					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "name", key)
 					if !child.NextClassMap.IsUnknown() && !child.NextClassMap.IsNull() {
 						attrs, _ = sjson.Set(attrs, "nextCMap", child.NextClassMap.ValueString())
@@ -309,7 +305,6 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.PolicyInterfaceIn {
 				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "name", key)
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosIf.attributes", attrs)
 				{

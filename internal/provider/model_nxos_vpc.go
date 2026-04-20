@@ -293,7 +293,6 @@ func (data VPC) toBody(config VPC) nxos.Body {
 			}
 			for key, child := range data.Interfaces {
 				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "id", key)
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.vpcIf.attributes", attrs)
 				{

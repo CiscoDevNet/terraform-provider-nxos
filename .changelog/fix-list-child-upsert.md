@@ -1,1 +1,1 @@
-- Fix update of list children (e.g. ACL entries) returning `Duplicate sequence number`/duplicate object errors by emitting `status: "created,modified"` in the DME request body
+- Fix update of `nxos_access_list` entries returning `Duplicate sequence number`/duplicate object errors by emitting DME `status: "replaced"` on `ipv4aclACE` children; opt-in via new `status_replace` flag on child class definitions

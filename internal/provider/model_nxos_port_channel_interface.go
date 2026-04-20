@@ -149,7 +149,6 @@ func (data PortChannelInterface) toBody(config PortChannelInterface) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.PortChannelInterfaces {
 		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "id", key)
 		if !child.PortChannelMode.IsUnknown() && !child.PortChannelMode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "pcMode", child.PortChannelMode.ValueString())
@@ -306,7 +305,6 @@ func (data PortChannelInterface) toBody(config PortChannelInterface) nxos.Body {
 			}
 			for key, child := range child.Members {
 				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "tDn", key)
 				if !child.Force.IsUnknown() && !child.Force.IsNull() {
 					attrs, _ = sjson.Set(attrs, "isMbrForce", strconv.FormatBool(child.Force.ValueBool()))

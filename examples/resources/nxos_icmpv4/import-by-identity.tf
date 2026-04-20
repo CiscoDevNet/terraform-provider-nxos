@@ -1,4 +1,4 @@
 import {
-  to = nxos_icmpv4.example
+  to       = nxos_icmpv4.example
   identity = {}
 }

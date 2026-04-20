@@ -1,4 +1,4 @@
 import {
-  to = nxos_access_list.example
+  to       = nxos_access_list.example
   identity = {}
 }

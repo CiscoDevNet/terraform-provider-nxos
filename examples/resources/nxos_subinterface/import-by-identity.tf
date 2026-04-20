@@ -1,4 +1,4 @@
 import {
-  to = nxos_subinterface.example
+  to       = nxos_subinterface.example
   identity = {}
 }

@@ -1,4 +1,4 @@
 import {
-  to = nxos_route_policy.example
+  to       = nxos_route_policy.example
   identity = {}
 }

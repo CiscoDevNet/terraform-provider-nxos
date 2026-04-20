@@ -1,4 +1,4 @@
 import {
-  to = nxos_bridge_domain.example
+  to       = nxos_bridge_domain.example
   identity = {}
 }

@@ -1,4 +1,4 @@
 import {
-  to = nxos_dhcp.example
+  to       = nxos_dhcp.example
   identity = {}
 }

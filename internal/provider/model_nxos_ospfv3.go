@@ -166,6 +166,7 @@ func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.Instances {
 		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -182,6 +183,7 @@ func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfv3Inst.children"
 			for key, child := range child.Vrfs {
 				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "name", key)
 				if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 					attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
@@ -219,6 +221,7 @@ func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfv3Dom.children"
 					for key, child := range child.Areas {
 						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						attrs, _ = sjson.Set(attrs, "id", key)
 						if !child.Redistribute.IsUnknown() && !child.Redistribute.IsNull() {
 							attrs, _ = sjson.Set(attrs, "redistribute", strconv.FormatBool(child.Redistribute.ValueBool()))
@@ -239,6 +242,7 @@ func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 					}
 					for key, child := range child.AddressFamilies {
 						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						attrs, _ = sjson.Set(attrs, "type", key)
 						if !child.AdministrativeDistance.IsUnknown() && !child.AdministrativeDistance.IsNull() {
 							attrs, _ = sjson.Set(attrs, "adminDistance", child.AdministrativeDistance.ValueString())
@@ -260,6 +264,7 @@ func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 	}
 	for key, child := range data.Interfaces {
 		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "id", key)
 		if !child.AdvertiseSecondaries.IsUnknown() && !child.AdvertiseSecondaries.IsNull() {
 			attrs, _ = sjson.Set(attrs, "advSecondary", strconv.FormatBool(child.AdvertiseSecondaries.ValueBool()))

@@ -1,4 +1,4 @@
 import {
-  to       = nxos_queuing_qos.example
+  to = nxos_queuing_qos.example
   identity = {}
 }

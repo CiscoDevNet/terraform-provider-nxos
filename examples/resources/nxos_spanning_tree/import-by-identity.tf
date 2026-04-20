@@ -1,4 +1,4 @@
 import {
-  to       = nxos_spanning_tree.example
+  to = nxos_spanning_tree.example
   identity = {}
 }

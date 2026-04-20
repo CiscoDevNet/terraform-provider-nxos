@@ -1,0 +1,1 @@
+- Fix update of list children (e.g. ACL entries) returning `Duplicate sequence number`/duplicate object errors by emitting `status: "created,modified"` in the DME request body

@@ -180,6 +180,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.Ipv4PrefixLists {
 		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if !child.Description.IsUnknown() && !child.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
@@ -193,6 +194,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtpfxRuleV4.children"
 			for key, child := range child.Entries {
 				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "order", key)
 				if !child.Action.IsUnknown() && !child.Action.IsNull() {
 					attrs, _ = sjson.Set(attrs, "action", child.Action.ValueString())
@@ -218,6 +220,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 	}
 	for key, child := range data.RouteMaps {
 		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "status", "created,modified")
 		attrs, _ = sjson.Set(attrs, "name", key)
 		if !child.PbrStatistics.IsUnknown() && !child.PbrStatistics.IsNull() {
 			attrs, _ = sjson.Set(attrs, "pbrStatistics", child.PbrStatistics.ValueString())
@@ -228,6 +231,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtmapRule.children"
 			for key, child := range child.Entries {
 				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "status", "created,modified")
 				attrs, _ = sjson.Set(attrs, "order", key)
 				if !child.Action.IsUnknown() && !child.Action.IsNull() {
 					attrs, _ = sjson.Set(attrs, "action", child.Action.ValueString())
@@ -283,6 +287,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						nestedChildrenPath := childBodyPath + ".children"
 						for key := range child.MatchRoutePrefixLists {
 							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "status", "created,modified")
 							attrs, _ = sjson.Set(attrs, "tDn", key)
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapRsRtDstAtt.attributes", attrs)
 						}
@@ -304,6 +309,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						nestedChildrenPath := childBodyPath + ".children"
 						for key, child := range child.SetRegularCommunityItems {
 							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "status", "created,modified")
 							attrs, _ = sjson.Set(attrs, "community", key)
 							if !child.Description.IsUnknown() && !child.Description.IsNull() {
 								attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
@@ -316,6 +322,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 					}
 					for key := range child.MatchTags {
 						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "status", "created,modified")
 						attrs, _ = sjson.Set(attrs, "tag", key)
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapMatchRtTag.attributes", attrs)
 					}

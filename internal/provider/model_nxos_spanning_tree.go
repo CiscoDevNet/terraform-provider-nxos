@@ -168,6 +168,7 @@ func (data SpanningTree) toBody(config SpanningTree) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Interfaces {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "id", key)
 			if !child.BpduFilter.IsUnknown() && !child.BpduFilter.IsNull() {
 				attrs, _ = sjson.Set(attrs, "bpdufilter", child.BpduFilter.ValueString())
@@ -209,6 +210,7 @@ func (data SpanningTree) toBody(config SpanningTree) nxos.Body {
 		}
 		for key, child := range data.Vlans {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "id", key)
 			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())

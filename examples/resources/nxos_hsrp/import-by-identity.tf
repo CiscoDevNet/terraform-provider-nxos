@@ -1,4 +1,4 @@
 import {
-  to       = nxos_hsrp.example
+  to = nxos_hsrp.example
   identity = {}
 }

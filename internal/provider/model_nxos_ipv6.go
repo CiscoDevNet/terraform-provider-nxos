@@ -184,6 +184,7 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Vrfs {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "name", key)
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv6Dom.attributes", attrs)
 			{
@@ -191,6 +192,7 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv6Dom.children"
 				for key, child := range child.StaticRoutes {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "prefix", key)
 					if !child.Control.IsUnknown() && !child.Control.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
@@ -210,6 +212,7 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv6Route.children"
 						for key, child := range child.NextHops {
 							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "status", "created,modified")
 							keyParts := strings.SplitN(key, ";", 3)
 							attrs, _ = sjson.Set(attrs, "nhIf", keyParts[0])
 							attrs, _ = sjson.Set(attrs, "nhAddr", keyParts[1])
@@ -238,6 +241,7 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 				}
 				for key, child := range child.Interfaces {
 					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "status", "created,modified")
 					attrs, _ = sjson.Set(attrs, "id", key)
 					if !child.AutoConfiguration.IsUnknown() && !child.AutoConfiguration.IsNull() {
 						attrs, _ = sjson.Set(attrs, "autoconfig", child.AutoConfiguration.ValueString())
@@ -266,6 +270,7 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv6If.children"
 						for key, child := range child.Addresses {
 							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "status", "created,modified")
 							attrs, _ = sjson.Set(attrs, "addr", key)
 							if !child.Type.IsUnknown() && !child.Type.IsNull() {
 								attrs, _ = sjson.Set(attrs, "type", child.Type.ValueString())

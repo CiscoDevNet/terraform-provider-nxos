@@ -127,6 +127,7 @@ func (data ICMPv6) toBody(config ICMPv6) nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Interfaces {
 			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "status", "created,modified")
 			attrs, _ = sjson.Set(attrs, "id", key)
 			if !child.Control.IsUnknown() && !child.Control.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())

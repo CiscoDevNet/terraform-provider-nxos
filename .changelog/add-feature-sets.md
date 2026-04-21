@@ -1,0 +1,1 @@
+- Add feature-sets (`fex`, `mpls`, `virtualization`) configuration to `nxos_feature` resource and data source

@@ -72,6 +72,7 @@ func TestAccDataSourceNxosFeature(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "udld", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "vn_segment", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "vpc", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "feature_sets.fex.admin_state", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -130,6 +131,11 @@ func testAccDataSourceNxosFeatureConfig() string {
 	config += `	udld = "enabled"` + "\n"
 	config += `	vn_segment = "enabled"` + "\n"
 	config += `	vpc = "enabled"` + "\n"
+	config += `	feature_sets = {` + "\n"
+	config += `		"fex" = {` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 
 	config += `

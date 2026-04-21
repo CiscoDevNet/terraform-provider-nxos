@@ -29,4 +29,9 @@ resource "nxos_feature" "example" {
   udld                 = "enabled"
   vn_segment           = "enabled"
   vpc                  = "enabled"
+  feature_sets = {
+    "fex" = {
+      admin_state = "enabled"
+    }
+  }
 }

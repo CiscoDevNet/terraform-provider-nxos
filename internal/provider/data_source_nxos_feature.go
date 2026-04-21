@@ -57,7 +57,7 @@ func (d *FeatureDataSource) Metadata(_ context.Context, req datasource.MetadataR
 func (d *FeatureDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the feature configuration on NX-OS devices, including the administrative state of features such as BGP, OSPF, PIM, EVPN, LACP, vPC, and others.").AddApiDocumentation("fmEntity", "Feature%20Management/fm:Entity/", []string{"fmBashShell", "fmBfd", "fmBgp", "fmDhcp", "fmEvpn", "fmHmm", "fmHsrp", "fmInterfaceVlan", "fmIsis", "fmLacp", "fmLldp", "fmMacsec", "fmNetflow", "fmNgmvpn", "fmNgoam", "fmNvo", "fmNxapi", "fmOspf", "fmOspfv3", "fmPim", "fmPtp", "fmPvlan", "fmSflow", "fmServiceAcceleration", "fmSsh", "fmTacacsplus", "fmTelnet", "fmUdld", "fmVnSegment", "fmVpc"}, []string{"Feature%20Management/fm:BashShell/", "Feature%20Management/fm:Bfd/", "Feature%20Management/fm:Bgp/", "Feature%20Management/fm:Dhcp/", "Feature%20Management/fm:Evpn/", "Feature%20Management/fm:Hmm/", "Feature%20Management/fm:Hsrp/", "Feature%20Management/fm:InterfaceVlan/", "Feature%20Management/fm:Isis/", "Feature%20Management/fm:Lacp/", "Feature%20Management/fm:Lldp/", "Feature%20Management/fm:Macsec/", "Feature%20Management/fm:Netflow/", "Feature%20Management/fm:Ngmvpn/", "Feature%20Management/fm:Ngoam/", "Feature%20Management/fm:Nvo/", "Feature%20Management/fm:Nxapi/", "Feature%20Management/fm:Ospf/", "Feature%20Management/fm:Ospfv3/", "Feature%20Management/fm:Pim/", "Feature%20Management/fm:Ptp/", "Feature%20Management/fm:Pvlan/", "Feature%20Management/fm:Sflow/", "Feature%20Management/fm:ServiceAcceleration/", "Feature%20Management/fm:Ssh/", "Feature%20Management/fm:Tacacsplus/", "Feature%20Management/fm:Telnet/", "Feature%20Management/fm:Udld/", "Feature%20Management/fm:VnSegment/", "Feature%20Management/fm:Vpc/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the feature configuration on NX-OS devices, including the administrative state of features such as BGP, OSPF, PIM, EVPN, LACP, vPC, and others, and feature-sets such as FEX, MPLS, and virtualization.").AddApiDocumentation("topSystem", "System/top:System/", []string{"fmEntity", "fmBashShell", "fmBfd", "fmBgp", "fmDhcp", "fmEvpn", "fmHmm", "fmHsrp", "fmInterfaceVlan", "fmIsis", "fmLacp", "fmLldp", "fmMacsec", "fmNetflow", "fmNgmvpn", "fmNgoam", "fmNvo", "fmNxapi", "fmOspf", "fmOspfv3", "fmPim", "fmPtp", "fmPvlan", "fmSflow", "fmServiceAcceleration", "fmSsh", "fmTacacsplus", "fmTelnet", "fmUdld", "fmVnSegment", "fmVpc", "fsetFeatureSet"}, []string{"Feature%20Management/fm:Entity/", "Feature%20Management/fm:BashShell/", "Feature%20Management/fm:Bfd/", "Feature%20Management/fm:Bgp/", "Feature%20Management/fm:Dhcp/", "Feature%20Management/fm:Evpn/", "Feature%20Management/fm:Hmm/", "Feature%20Management/fm:Hsrp/", "Feature%20Management/fm:InterfaceVlan/", "Feature%20Management/fm:Isis/", "Feature%20Management/fm:Lacp/", "Feature%20Management/fm:Lldp/", "Feature%20Management/fm:Macsec/", "Feature%20Management/fm:Netflow/", "Feature%20Management/fm:Ngmvpn/", "Feature%20Management/fm:Ngoam/", "Feature%20Management/fm:Nvo/", "Feature%20Management/fm:Nxapi/", "Feature%20Management/fm:Ospf/", "Feature%20Management/fm:Ospfv3/", "Feature%20Management/fm:Pim/", "Feature%20Management/fm:Ptp/", "Feature%20Management/fm:Pvlan/", "Feature%20Management/fm:Sflow/", "Feature%20Management/fm:ServiceAcceleration/", "Feature%20Management/fm:Ssh/", "Feature%20Management/fm:Tacacsplus/", "Feature%20Management/fm:Telnet/", "Feature%20Management/fm:Udld/", "Feature%20Management/fm:VnSegment/", "Feature%20Management/fm:Vpc/", "Feature%20Management/fset:FeatureSet/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -188,6 +188,18 @@ func (d *FeatureDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Administrative state.",
 				Computed:            true,
 			},
+			"feature_sets": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of feature-sets (e.g. `fex`, `mpls`, `virtualization`).\n  - Map key: `name` - Feature-set name.\n  - Key choices: `fex`, `mpls`, `virtualization`").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "Administrative state.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -220,7 +232,7 @@ func (d *FeatureDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "fmBashShell,fmBfd,fmBgp,fmDhcp,fmEvpn,fmHmm,fmHsrp,fmInterfaceVlan,fmIsis,fmLacp,fmLldp,fmMacsec,fmNetflow,fmNgmvpn,fmNgoam,fmNvo,fmNxapi,fmOspf,fmOspfv3,fmPim,fmPtp,fmPvlan,fmSflow,fmServiceAcceleration,fmSsh,fmTacacsplus,fmTelnet,fmUdld,fmVnSegment,fmVpc")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "fmEntity,fmBashShell,fmBfd,fmBgp,fmDhcp,fmEvpn,fmHmm,fmHsrp,fmInterfaceVlan,fmIsis,fmLacp,fmLldp,fmMacsec,fmNetflow,fmNgmvpn,fmNgoam,fmNvo,fmNxapi,fmOspf,fmOspfv3,fmPim,fmPtp,fmPvlan,fmSflow,fmServiceAcceleration,fmSsh,fmTacacsplus,fmTelnet,fmUdld,fmVnSegment,fmVpc,fsetFeatureSet")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -63,7 +63,7 @@ func (r *PortChannelInterfaceResource) Metadata(ctx context.Context, req resourc
 func (r *PortChannelInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Interfaces/pc:RsMbrIfs/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -381,6 +381,216 @@ func (r *PortChannelInterfaceResource) Schema(ctx context.Context, req resource.
 								stringvalidator.OneOf("bcast", "unk-ucast", "mcast", "all"),
 							},
 						},
+						"allow_multi_tag": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Allow Multitag.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+						"auto_exclude_vlans": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Switchport Autostate Exclude vlans.").String,
+							Optional:            true,
+						},
+						"buffer_boost": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable/enable buffer boost on interface.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+						"chassis_module_serial": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Module serial number information.").String,
+							Optional:            true,
+						},
+						"chassis_module_side": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Module Side information.").AddStringEnumDescription("UnknownSlot", "LeftIoModuleSlot", "RightIoModuleSlot").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("UnknownSlot", "LeftIoModuleSlot", "RightIoModuleSlot"),
+							},
+						},
+						"chassis_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Chassis number information.").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"chassis_profile_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Profile name information.").String,
+							Optional:            true,
+						},
+						"chassis_serial": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Serial number information.").String,
+							Optional:            true,
+						},
+						"extended_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+							Optional:            true,
+						},
+						"flow_control_receive": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable/enable rx flowcontrol block on interface.").String,
+							Optional:            true,
+						},
+						"flow_control_send": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable/enable tx flowcontrol block on interface.").String,
+							Optional:            true,
+						},
+						"flow_redirect": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable/enable flowredirect on interface.").String,
+							Optional:            true,
+						},
+						"gtp_hash_mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Gtp hash mode ipv4 or ipv6 on interface.").AddStringEnumDescription("disable", "v4", "v6").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "v4", "v6"),
+							},
+						},
+						"layer3_multicast_receiver_vlan": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set vlan ID used for L3 multicast on this interface.").AddIntegerRangeDescription(0, 4094).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4094),
+							},
+						},
+						"port_channel_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port-channel type.").AddStringEnumDescription("none", "hif-pc", "non-hif-pc").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("none", "hif-pc", "non-hif-pc"),
+							},
+						},
+						"port_type_external": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Identifies if or not the port is a external-facing port.").AddStringEnumDescription("no", "yes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("no", "yes"),
+							},
+						},
+						"port_type_fabric": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Identifies if or not the port is a fabric-facing port.").AddStringEnumDescription("no", "yes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("no", "yes"),
+							},
+						},
+						"router_mac_ipv6_extract": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable/enable switchport ipv6 extract.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+						"shut_down_lan": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Shut/Unshut all LAN VLANs on interface.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+						"storm_control_action": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Storm control action.").AddStringEnumDescription("none", "shutdown", "trap").String,
+							Optional:            true,
+						},
+						"storm_control_action_1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Storm control action1.").AddStringEnumDescription("none", "shutdown", "trap").String,
+							Optional:            true,
+						},
+						"storm_control_action_2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Storm control action2.").AddStringEnumDescription("none", "shutdown", "trap").String,
+							Optional:            true,
+						},
+						"storm_control_broadcast_level": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("storm-control broadcast level.").String,
+							Optional:            true,
+						},
+						"storm_control_broadcast_level_1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("storm-control broadcast level1.").String,
+							Optional:            true,
+						},
+						"storm_control_broadcast_level_2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("storm-control broadcast level2.").String,
+							Optional:            true,
+						},
+						"storm_control_broadcast_packets_per_second": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("storm-control broadcast PPS.").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"storm_control_multicast_level": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("storm-control multicast level.").String,
+							Optional:            true,
+						},
+						"storm_control_multicast_level_1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("storm-control multicast level1.").String,
+							Optional:            true,
+						},
+						"storm_control_multicast_level_2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("storm-control multicast level2.").String,
+							Optional:            true,
+						},
+						"storm_control_multicast_packets_per_second": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("storm-control multicast PPS.").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"storm_control_unicast_level": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Storm control unicast level.").String,
+							Optional:            true,
+						},
+						"storm_control_unicast_level_1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Storm control unicast level1.").String,
+							Optional:            true,
+						},
+						"storm_control_unicast_level_2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Storm control unicast level2.").String,
+							Optional:            true,
+						},
+						"storm_control_unicast_packets_per_second": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Storm control unicast PPS.").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"switchport_block": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable/enable switchport block on interface.").AddStringEnumDescription("none", "multicast", "unicast").String,
+							Optional:            true,
+						},
+						"switchport_isolated": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Switchport Isolated.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+						"switchport_mac_learn": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable/enable mac learning on interface.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+						"switchport_mac_permit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Switchport mac-address permit related configuration.").AddStringEnumDescription("all", "static-only").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("all", "static-only"),
+							},
+						},
+						"switchport_virtual_ethernet_bridge": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable/enable switchport virtual ethernet bridge on interface.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
 						"members": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("List of port-channel member interfaces.\n  - Map key: `interface_dn` - DN of interface. For example: `sys/intf/phys-[eth1/1]`.").String,
 							Optional:            true,
@@ -505,7 +715,7 @@ func (r *PortChannelInterfaceResource) Read(ctx context.Context, req resource.Re
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "pcAggrIf,nwRtVrfMbr,l1StormCtrlP,pcRsMbrIfs")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "pcAggrIf,nwRtVrfMbr,l1StormCtrlP,pcAggrIfExtended,pcRsMbrIfs")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

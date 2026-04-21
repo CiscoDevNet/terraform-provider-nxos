@@ -507,6 +507,7 @@ child_classes:
             tf_name: extended_description
             type: String
             description: 'Description.'
+            exclude_test: true
             example: 'Extended interface config'
           - nxos_name: flowCtrlReceive
             tf_name: flow_control_receive

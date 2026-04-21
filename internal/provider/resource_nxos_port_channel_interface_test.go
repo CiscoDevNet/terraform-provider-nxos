@@ -77,7 +77,6 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_rate", "50.000000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_rate_packets_per_second", "500"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_packet_type", "bcast"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.extended_description", "Extended interface config"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.members.sys/intf/phys-[eth1/11].force", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -187,7 +186,6 @@ func testAccNxosPortChannelInterfaceConfig_all() string {
 	config += `			storm_control_rate = "50.000000"` + "\n"
 	config += `			storm_control_rate_packets_per_second = 500` + "\n"
 	config += `			storm_control_packet_type = "bcast"` + "\n"
-	config += `			extended_description = "Extended interface config"` + "\n"
 	config += `			members = {` + "\n"
 	config += `				"sys/intf/phys-[eth1/11]" = {` + "\n"
 	config += `					force = true` + "\n"

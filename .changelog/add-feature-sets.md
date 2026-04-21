@@ -1,0 +1,2 @@
+- Add feature-sets (`fex`, `mpls`, `virtualization`) configuration to `nxos_feature` resource and data source
+- BREAKING CHANGE: The `nxos_feature` resource is now rooted at `sys` instead of `sys/fm`. Existing state must be removed and re-imported (`terraform state rm nxos_feature.<name>` followed by `terraform import nxos_feature.<name> sys`). The Terraform attribute surface (e.g. `bgp`, `ospf`, `vpc`) is unchanged.

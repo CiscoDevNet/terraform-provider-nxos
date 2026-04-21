@@ -487,7 +487,6 @@ child_classes:
           - fex
           - mpls
           - virtualization
-        allow_non_enum_values: true
         example: fex
       - nxos_name: adminSt
         tf_name: admin_state

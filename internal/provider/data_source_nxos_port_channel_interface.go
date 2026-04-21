@@ -57,7 +57,7 @@ func (d *PortChannelInterfaceDataSource) Metadata(_ context.Context, req datasou
 func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Interfaces/pc:RsMbrIfs/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -261,6 +261,162 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 							MarkdownDescription: "Packet Type.",
 							Computed:            true,
 						},
+						"allow_multi_tag": schema.StringAttribute{
+							MarkdownDescription: "Allow Multitag.",
+							Computed:            true,
+						},
+						"auto_exclude_vlans": schema.StringAttribute{
+							MarkdownDescription: "Switchport Autostate Exclude vlans.",
+							Computed:            true,
+						},
+						"buffer_boost": schema.StringAttribute{
+							MarkdownDescription: "Disable/enable buffer boost on interface.",
+							Computed:            true,
+						},
+						"chassis_module_serial": schema.StringAttribute{
+							MarkdownDescription: "Module serial number information.",
+							Computed:            true,
+						},
+						"chassis_module_side": schema.StringAttribute{
+							MarkdownDescription: "Module Side information.",
+							Computed:            true,
+						},
+						"chassis_number": schema.Int64Attribute{
+							MarkdownDescription: "Chassis number information.",
+							Computed:            true,
+						},
+						"chassis_profile_name": schema.StringAttribute{
+							MarkdownDescription: "Profile name information.",
+							Computed:            true,
+						},
+						"chassis_serial": schema.StringAttribute{
+							MarkdownDescription: "Serial number information.",
+							Computed:            true,
+						},
+						"extended_description": schema.StringAttribute{
+							MarkdownDescription: "Description.",
+							Computed:            true,
+						},
+						"flow_control_receive": schema.BoolAttribute{
+							MarkdownDescription: "Disable/enable rx flowcontrol block on interface.",
+							Computed:            true,
+						},
+						"flow_control_send": schema.BoolAttribute{
+							MarkdownDescription: "Disable/enable tx flowcontrol block on interface.",
+							Computed:            true,
+						},
+						"flow_redirect": schema.BoolAttribute{
+							MarkdownDescription: "Disable/enable flowredirect on interface.",
+							Computed:            true,
+						},
+						"gtp_hash_mode": schema.StringAttribute{
+							MarkdownDescription: "Gtp hash mode ipv4 or ipv6 on interface.",
+							Computed:            true,
+						},
+						"layer3_multicast_receiver_vlan": schema.Int64Attribute{
+							MarkdownDescription: "Set vlan ID used for L3 multicast on this interface.",
+							Computed:            true,
+						},
+						"port_channel_type": schema.StringAttribute{
+							MarkdownDescription: "Port-channel type.",
+							Computed:            true,
+						},
+						"port_type_external": schema.StringAttribute{
+							MarkdownDescription: "Identifies if or not the port is a external-facing port.",
+							Computed:            true,
+						},
+						"port_type_fabric": schema.StringAttribute{
+							MarkdownDescription: "Identifies if or not the port is a fabric-facing port.",
+							Computed:            true,
+						},
+						"router_mac_ipv6_extract": schema.StringAttribute{
+							MarkdownDescription: "Disable/enable switchport ipv6 extract.",
+							Computed:            true,
+						},
+						"shut_down_lan": schema.StringAttribute{
+							MarkdownDescription: "Shut/Unshut all LAN VLANs on interface.",
+							Computed:            true,
+						},
+						"storm_control_action": schema.StringAttribute{
+							MarkdownDescription: "Storm control action.",
+							Computed:            true,
+						},
+						"storm_control_action_1": schema.StringAttribute{
+							MarkdownDescription: "Storm control action1.",
+							Computed:            true,
+						},
+						"storm_control_action_2": schema.StringAttribute{
+							MarkdownDescription: "Storm control action2.",
+							Computed:            true,
+						},
+						"storm_control_broadcast_level": schema.StringAttribute{
+							MarkdownDescription: "storm-control broadcast level.",
+							Computed:            true,
+						},
+						"storm_control_broadcast_level_1": schema.StringAttribute{
+							MarkdownDescription: "storm-control broadcast level1.",
+							Computed:            true,
+						},
+						"storm_control_broadcast_level_2": schema.StringAttribute{
+							MarkdownDescription: "storm-control broadcast level2.",
+							Computed:            true,
+						},
+						"storm_control_broadcast_packets_per_second": schema.Int64Attribute{
+							MarkdownDescription: "storm-control broadcast PPS.",
+							Computed:            true,
+						},
+						"storm_control_multicast_level": schema.StringAttribute{
+							MarkdownDescription: "storm-control multicast level.",
+							Computed:            true,
+						},
+						"storm_control_multicast_level_1": schema.StringAttribute{
+							MarkdownDescription: "storm-control multicast level1.",
+							Computed:            true,
+						},
+						"storm_control_multicast_level_2": schema.StringAttribute{
+							MarkdownDescription: "storm-control multicast level2.",
+							Computed:            true,
+						},
+						"storm_control_multicast_packets_per_second": schema.Int64Attribute{
+							MarkdownDescription: "storm-control multicast PPS.",
+							Computed:            true,
+						},
+						"storm_control_unicast_level": schema.StringAttribute{
+							MarkdownDescription: "Storm control unicast level.",
+							Computed:            true,
+						},
+						"storm_control_unicast_level_1": schema.StringAttribute{
+							MarkdownDescription: "Storm control unicast level1.",
+							Computed:            true,
+						},
+						"storm_control_unicast_level_2": schema.StringAttribute{
+							MarkdownDescription: "Storm control unicast level2.",
+							Computed:            true,
+						},
+						"storm_control_unicast_packets_per_second": schema.Int64Attribute{
+							MarkdownDescription: "Storm control unicast PPS.",
+							Computed:            true,
+						},
+						"switchport_block": schema.StringAttribute{
+							MarkdownDescription: "Disable/enable switchport block on interface.",
+							Computed:            true,
+						},
+						"switchport_isolated": schema.StringAttribute{
+							MarkdownDescription: "Switchport Isolated.",
+							Computed:            true,
+						},
+						"switchport_mac_learn": schema.StringAttribute{
+							MarkdownDescription: "Disable/enable mac learning on interface.",
+							Computed:            true,
+						},
+						"switchport_mac_permit": schema.StringAttribute{
+							MarkdownDescription: "Switchport mac-address permit related configuration.",
+							Computed:            true,
+						},
+						"switchport_virtual_ethernet_bridge": schema.StringAttribute{
+							MarkdownDescription: "Disable/enable switchport virtual ethernet bridge on interface.",
+							Computed:            true,
+						},
 						"members": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("List of port-channel member interfaces.\n  - Map key: `interface_dn` - DN of interface. For example: `sys/intf/phys-[eth1/1]`.").String,
 							Computed:            true,
@@ -308,7 +464,7 @@ func (d *PortChannelInterfaceDataSource) Read(ctx context.Context, req datasourc
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "pcAggrIf,nwRtVrfMbr,l1StormCtrlP,pcRsMbrIfs")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "pcAggrIf,nwRtVrfMbr,l1StormCtrlP,pcAggrIfExtended,pcRsMbrIfs")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

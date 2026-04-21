@@ -1,0 +1,1 @@
+- Add extended configuration to `nxos_port_channel_interface` resource and data source

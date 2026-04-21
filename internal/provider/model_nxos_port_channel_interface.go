@@ -44,54 +44,93 @@ type PortChannelInterface struct {
 }
 
 type PortChannelInterfacePortChannelInterfaces struct {
-	PortChannelMode                   types.String                                                `tfsdk:"port_channel_mode"`
-	MinimumLinks                      types.Int64                                                 `tfsdk:"minimum_links"`
-	MaximumLinks                      types.Int64                                                 `tfsdk:"maximum_links"`
-	SuspendIndividual                 types.String                                                `tfsdk:"suspend_individual"`
-	AccessVlan                        types.String                                                `tfsdk:"access_vlan"`
-	AdminState                        types.String                                                `tfsdk:"admin_state"`
-	AutoNegotiation                   types.String                                                `tfsdk:"auto_negotiation"`
-	Bandwidth                         types.Int64                                                 `tfsdk:"bandwidth"`
-	Delay                             types.Int64                                                 `tfsdk:"delay"`
-	Description                       types.String                                                `tfsdk:"description"`
-	Duplex                            types.String                                                `tfsdk:"duplex"`
-	Layer                             types.String                                                `tfsdk:"layer"`
-	LinkLogging                       types.String                                                `tfsdk:"link_logging"`
-	Medium                            types.String                                                `tfsdk:"medium"`
-	Mode                              types.String                                                `tfsdk:"mode"`
-	Mtu                               types.Int64                                                 `tfsdk:"mtu"`
-	NativeVlan                        types.String                                                `tfsdk:"native_vlan"`
-	Speed                             types.String                                                `tfsdk:"speed"`
-	TrunkVlans                        types.String                                                `tfsdk:"trunk_vlans"`
-	Dot1qEtherType                    types.Int64                                                 `tfsdk:"dot1q_ether_type"`
-	EqualizationDelay                 types.Int64                                                 `tfsdk:"equalization_delay"`
-	GracefulConvergence               types.String                                                `tfsdk:"graceful_convergence"`
-	HashDistribution                  types.String                                                `tfsdk:"hash_distribution"`
-	InheritBandwidth                  types.Int64                                                 `tfsdk:"inherit_bandwidth"`
-	ItuChannel                        types.Int64                                                 `tfsdk:"itu_channel"`
-	LacpDelayMode                     types.String                                                `tfsdk:"lacp_delay_mode"`
-	LacpVpcConvergence                types.String                                                `tfsdk:"lacp_vpc_convergence"`
-	LinkDebounceDown                  types.Int64                                                 `tfsdk:"link_debounce_down"`
-	LoadDefer                         types.String                                                `tfsdk:"load_defer"`
-	Mdix                              types.String                                                `tfsdk:"mdix"`
-	OpticsLoopback                    types.String                                                `tfsdk:"optics_loopback"`
-	PortType                          types.String                                                `tfsdk:"port_type"`
-	PxeTransitionTimeout              types.Int64                                                 `tfsdk:"pxe_transition_timeout"`
-	RouterMac                         types.String                                                `tfsdk:"router_mac"`
-	SnmpTrapState                     types.String                                                `tfsdk:"snmp_trap_state"`
-	SpanMode                          types.String                                                `tfsdk:"span_mode"`
-	Squelch                           types.String                                                `tfsdk:"squelch"`
-	TransmissionMode                  types.String                                                `tfsdk:"transmission_mode"`
-	TrunkLogging                      types.String                                                `tfsdk:"trunk_logging"`
-	Usage                             types.String                                                `tfsdk:"usage"`
-	UserConfiguredFlags               types.String                                                `tfsdk:"user_configured_flags"`
-	VrfDn                             types.String                                                `tfsdk:"vrf_dn"`
-	StormControlBurstPacketsPerSecond types.Int64                                                 `tfsdk:"storm_control_burst_packets_per_second"`
-	StormControlBurstRate             types.String                                                `tfsdk:"storm_control_burst_rate"`
-	StormControlRate                  types.String                                                `tfsdk:"storm_control_rate"`
-	StormControlRatePacketsPerSecond  types.Int64                                                 `tfsdk:"storm_control_rate_packets_per_second"`
-	StormControlPacketType            types.String                                                `tfsdk:"storm_control_packet_type"`
-	Members                           map[string]PortChannelInterfacePortChannelInterfacesMembers `tfsdk:"members"`
+	PortChannelMode                       types.String                                                `tfsdk:"port_channel_mode"`
+	MinimumLinks                          types.Int64                                                 `tfsdk:"minimum_links"`
+	MaximumLinks                          types.Int64                                                 `tfsdk:"maximum_links"`
+	SuspendIndividual                     types.String                                                `tfsdk:"suspend_individual"`
+	AccessVlan                            types.String                                                `tfsdk:"access_vlan"`
+	AdminState                            types.String                                                `tfsdk:"admin_state"`
+	AutoNegotiation                       types.String                                                `tfsdk:"auto_negotiation"`
+	Bandwidth                             types.Int64                                                 `tfsdk:"bandwidth"`
+	Delay                                 types.Int64                                                 `tfsdk:"delay"`
+	Description                           types.String                                                `tfsdk:"description"`
+	Duplex                                types.String                                                `tfsdk:"duplex"`
+	Layer                                 types.String                                                `tfsdk:"layer"`
+	LinkLogging                           types.String                                                `tfsdk:"link_logging"`
+	Medium                                types.String                                                `tfsdk:"medium"`
+	Mode                                  types.String                                                `tfsdk:"mode"`
+	Mtu                                   types.Int64                                                 `tfsdk:"mtu"`
+	NativeVlan                            types.String                                                `tfsdk:"native_vlan"`
+	Speed                                 types.String                                                `tfsdk:"speed"`
+	TrunkVlans                            types.String                                                `tfsdk:"trunk_vlans"`
+	Dot1qEtherType                        types.Int64                                                 `tfsdk:"dot1q_ether_type"`
+	EqualizationDelay                     types.Int64                                                 `tfsdk:"equalization_delay"`
+	GracefulConvergence                   types.String                                                `tfsdk:"graceful_convergence"`
+	HashDistribution                      types.String                                                `tfsdk:"hash_distribution"`
+	InheritBandwidth                      types.Int64                                                 `tfsdk:"inherit_bandwidth"`
+	ItuChannel                            types.Int64                                                 `tfsdk:"itu_channel"`
+	LacpDelayMode                         types.String                                                `tfsdk:"lacp_delay_mode"`
+	LacpVpcConvergence                    types.String                                                `tfsdk:"lacp_vpc_convergence"`
+	LinkDebounceDown                      types.Int64                                                 `tfsdk:"link_debounce_down"`
+	LoadDefer                             types.String                                                `tfsdk:"load_defer"`
+	Mdix                                  types.String                                                `tfsdk:"mdix"`
+	OpticsLoopback                        types.String                                                `tfsdk:"optics_loopback"`
+	PortType                              types.String                                                `tfsdk:"port_type"`
+	PxeTransitionTimeout                  types.Int64                                                 `tfsdk:"pxe_transition_timeout"`
+	RouterMac                             types.String                                                `tfsdk:"router_mac"`
+	SnmpTrapState                         types.String                                                `tfsdk:"snmp_trap_state"`
+	SpanMode                              types.String                                                `tfsdk:"span_mode"`
+	Squelch                               types.String                                                `tfsdk:"squelch"`
+	TransmissionMode                      types.String                                                `tfsdk:"transmission_mode"`
+	TrunkLogging                          types.String                                                `tfsdk:"trunk_logging"`
+	Usage                                 types.String                                                `tfsdk:"usage"`
+	UserConfiguredFlags                   types.String                                                `tfsdk:"user_configured_flags"`
+	VrfDn                                 types.String                                                `tfsdk:"vrf_dn"`
+	StormControlBurstPacketsPerSecond     types.Int64                                                 `tfsdk:"storm_control_burst_packets_per_second"`
+	StormControlBurstRate                 types.String                                                `tfsdk:"storm_control_burst_rate"`
+	StormControlRate                      types.String                                                `tfsdk:"storm_control_rate"`
+	StormControlRatePacketsPerSecond      types.Int64                                                 `tfsdk:"storm_control_rate_packets_per_second"`
+	StormControlPacketType                types.String                                                `tfsdk:"storm_control_packet_type"`
+	AllowMultiTag                         types.String                                                `tfsdk:"allow_multi_tag"`
+	AutoExcludeVlans                      types.String                                                `tfsdk:"auto_exclude_vlans"`
+	BufferBoost                           types.String                                                `tfsdk:"buffer_boost"`
+	ChassisModuleSerial                   types.String                                                `tfsdk:"chassis_module_serial"`
+	ChassisModuleSide                     types.String                                                `tfsdk:"chassis_module_side"`
+	ChassisNumber                         types.Int64                                                 `tfsdk:"chassis_number"`
+	ChassisProfileName                    types.String                                                `tfsdk:"chassis_profile_name"`
+	ChassisSerial                         types.String                                                `tfsdk:"chassis_serial"`
+	ExtendedDescription                   types.String                                                `tfsdk:"extended_description"`
+	FlowControlReceive                    types.Bool                                                  `tfsdk:"flow_control_receive"`
+	FlowControlSend                       types.Bool                                                  `tfsdk:"flow_control_send"`
+	FlowRedirect                          types.Bool                                                  `tfsdk:"flow_redirect"`
+	GtpHashMode                           types.String                                                `tfsdk:"gtp_hash_mode"`
+	Layer3MulticastReceiverVlan           types.Int64                                                 `tfsdk:"layer3_multicast_receiver_vlan"`
+	PortChannelType                       types.String                                                `tfsdk:"port_channel_type"`
+	PortTypeExternal                      types.String                                                `tfsdk:"port_type_external"`
+	PortTypeFabric                        types.String                                                `tfsdk:"port_type_fabric"`
+	RouterMacIpv6Extract                  types.String                                                `tfsdk:"router_mac_ipv6_extract"`
+	ShutDownLan                           types.String                                                `tfsdk:"shut_down_lan"`
+	StormControlAction                    types.String                                                `tfsdk:"storm_control_action"`
+	StormControlAction1                   types.String                                                `tfsdk:"storm_control_action_1"`
+	StormControlAction2                   types.String                                                `tfsdk:"storm_control_action_2"`
+	StormControlBroadcastLevel            types.String                                                `tfsdk:"storm_control_broadcast_level"`
+	StormControlBroadcastLevel1           types.String                                                `tfsdk:"storm_control_broadcast_level_1"`
+	StormControlBroadcastLevel2           types.String                                                `tfsdk:"storm_control_broadcast_level_2"`
+	StormControlBroadcastPacketsPerSecond types.Int64                                                 `tfsdk:"storm_control_broadcast_packets_per_second"`
+	StormControlMulticastLevel            types.String                                                `tfsdk:"storm_control_multicast_level"`
+	StormControlMulticastLevel1           types.String                                                `tfsdk:"storm_control_multicast_level_1"`
+	StormControlMulticastLevel2           types.String                                                `tfsdk:"storm_control_multicast_level_2"`
+	StormControlMulticastPacketsPerSecond types.Int64                                                 `tfsdk:"storm_control_multicast_packets_per_second"`
+	StormControlUnicastLevel              types.String                                                `tfsdk:"storm_control_unicast_level"`
+	StormControlUnicastLevel1             types.String                                                `tfsdk:"storm_control_unicast_level_1"`
+	StormControlUnicastLevel2             types.String                                                `tfsdk:"storm_control_unicast_level_2"`
+	StormControlUnicastPacketsPerSecond   types.Int64                                                 `tfsdk:"storm_control_unicast_packets_per_second"`
+	SwitchportBlock                       types.String                                                `tfsdk:"switchport_block"`
+	SwitchportIsolated                    types.String                                                `tfsdk:"switchport_isolated"`
+	SwitchportMacLearn                    types.String                                                `tfsdk:"switchport_mac_learn"`
+	SwitchportMacPermit                   types.String                                                `tfsdk:"switchport_mac_permit"`
+	SwitchportVirtualEthernetBridge       types.String                                                `tfsdk:"switchport_virtual_ethernet_bridge"`
+	Members                               map[string]PortChannelInterfacePortChannelInterfacesMembers `tfsdk:"members"`
 }
 
 type PortChannelInterfacePortChannelInterfacesMembers struct {
@@ -303,6 +342,127 @@ func (data PortChannelInterface) toBody(config PortChannelInterface) nxos.Body {
 			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.l1StormCtrlP.attributes", attrs)
 			}
+			attrs = "{}"
+			if !child.AllowMultiTag.IsUnknown() && !child.AllowMultiTag.IsNull() {
+				attrs, _ = sjson.Set(attrs, "allowMultiTag", child.AllowMultiTag.ValueString())
+			}
+			if !child.AutoExcludeVlans.IsUnknown() && !child.AutoExcludeVlans.IsNull() {
+				attrs, _ = sjson.Set(attrs, "autoExcludeVlans", child.AutoExcludeVlans.ValueString())
+			}
+			if !child.BufferBoost.IsUnknown() && !child.BufferBoost.IsNull() {
+				attrs, _ = sjson.Set(attrs, "bufferBoost", child.BufferBoost.ValueString())
+			}
+			if !child.ChassisModuleSerial.IsUnknown() && !child.ChassisModuleSerial.IsNull() {
+				attrs, _ = sjson.Set(attrs, "chassisModuleSerial", child.ChassisModuleSerial.ValueString())
+			}
+			if !child.ChassisModuleSide.IsUnknown() && !child.ChassisModuleSide.IsNull() {
+				attrs, _ = sjson.Set(attrs, "chassisModuleSide", child.ChassisModuleSide.ValueString())
+			}
+			if !child.ChassisNumber.IsUnknown() && !child.ChassisNumber.IsNull() {
+				attrs, _ = sjson.Set(attrs, "chassisNumber", strconv.FormatInt(child.ChassisNumber.ValueInt64(), 10))
+			}
+			if !child.ChassisProfileName.IsUnknown() && !child.ChassisProfileName.IsNull() {
+				attrs, _ = sjson.Set(attrs, "chassisProfileName", child.ChassisProfileName.ValueString())
+			}
+			if !child.ChassisSerial.IsUnknown() && !child.ChassisSerial.IsNull() {
+				attrs, _ = sjson.Set(attrs, "chassisSerial", child.ChassisSerial.ValueString())
+			}
+			if !child.ExtendedDescription.IsUnknown() && !child.ExtendedDescription.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.ExtendedDescription.ValueString())
+			}
+			if !child.FlowControlReceive.IsUnknown() && !child.FlowControlReceive.IsNull() {
+				attrs, _ = sjson.Set(attrs, "flowCtrlReceive", strconv.FormatBool(child.FlowControlReceive.ValueBool()))
+			}
+			if !child.FlowControlSend.IsUnknown() && !child.FlowControlSend.IsNull() {
+				attrs, _ = sjson.Set(attrs, "flowCtrlSend", strconv.FormatBool(child.FlowControlSend.ValueBool()))
+			}
+			if !child.FlowRedirect.IsUnknown() && !child.FlowRedirect.IsNull() {
+				attrs, _ = sjson.Set(attrs, "flowRedirect", strconv.FormatBool(child.FlowRedirect.ValueBool()))
+			}
+			if !child.GtpHashMode.IsUnknown() && !child.GtpHashMode.IsNull() {
+				attrs, _ = sjson.Set(attrs, "gtpHashMode", child.GtpHashMode.ValueString())
+			}
+			if !child.Layer3MulticastReceiverVlan.IsUnknown() && !child.Layer3MulticastReceiverVlan.IsNull() {
+				attrs, _ = sjson.Set(attrs, "l3McastReceiverVlan", strconv.FormatInt(child.Layer3MulticastReceiverVlan.ValueInt64(), 10))
+			}
+			if !child.PortChannelType.IsUnknown() && !child.PortChannelType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "poType", child.PortChannelType.ValueString())
+			}
+			if !child.PortTypeExternal.IsUnknown() && !child.PortTypeExternal.IsNull() {
+				attrs, _ = sjson.Set(attrs, "portTypeExternal", child.PortTypeExternal.ValueString())
+			}
+			if !child.PortTypeFabric.IsUnknown() && !child.PortTypeFabric.IsNull() {
+				attrs, _ = sjson.Set(attrs, "portTypeFabric", child.PortTypeFabric.ValueString())
+			}
+			if !child.RouterMacIpv6Extract.IsUnknown() && !child.RouterMacIpv6Extract.IsNull() {
+				attrs, _ = sjson.Set(attrs, "routerMacIpv6Extract", child.RouterMacIpv6Extract.ValueString())
+			}
+			if !child.ShutDownLan.IsUnknown() && !child.ShutDownLan.IsNull() {
+				attrs, _ = sjson.Set(attrs, "shutDownLan", child.ShutDownLan.ValueString())
+			}
+			if !child.StormControlAction.IsUnknown() && !child.StormControlAction.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlAct", child.StormControlAction.ValueString())
+			}
+			if !child.StormControlAction1.IsUnknown() && !child.StormControlAction1.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlAct1", child.StormControlAction1.ValueString())
+			}
+			if !child.StormControlAction2.IsUnknown() && !child.StormControlAction2.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlAct2", child.StormControlAction2.ValueString())
+			}
+			if !child.StormControlBroadcastLevel.IsUnknown() && !child.StormControlBroadcastLevel.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlBCastLevel", child.StormControlBroadcastLevel.ValueString())
+			}
+			if !child.StormControlBroadcastLevel1.IsUnknown() && !child.StormControlBroadcastLevel1.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlBCastLevel1", child.StormControlBroadcastLevel1.ValueString())
+			}
+			if !child.StormControlBroadcastLevel2.IsUnknown() && !child.StormControlBroadcastLevel2.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlBCastLevel2", child.StormControlBroadcastLevel2.ValueString())
+			}
+			if !child.StormControlBroadcastPacketsPerSecond.IsUnknown() && !child.StormControlBroadcastPacketsPerSecond.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlBCastPPS", strconv.FormatInt(child.StormControlBroadcastPacketsPerSecond.ValueInt64(), 10))
+			}
+			if !child.StormControlMulticastLevel.IsUnknown() && !child.StormControlMulticastLevel.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlMCastLevel", child.StormControlMulticastLevel.ValueString())
+			}
+			if !child.StormControlMulticastLevel1.IsUnknown() && !child.StormControlMulticastLevel1.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlMCastLevel1", child.StormControlMulticastLevel1.ValueString())
+			}
+			if !child.StormControlMulticastLevel2.IsUnknown() && !child.StormControlMulticastLevel2.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlMCastLevel2", child.StormControlMulticastLevel2.ValueString())
+			}
+			if !child.StormControlMulticastPacketsPerSecond.IsUnknown() && !child.StormControlMulticastPacketsPerSecond.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlMCastPPS", strconv.FormatInt(child.StormControlMulticastPacketsPerSecond.ValueInt64(), 10))
+			}
+			if !child.StormControlUnicastLevel.IsUnknown() && !child.StormControlUnicastLevel.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlUCastLevel", child.StormControlUnicastLevel.ValueString())
+			}
+			if !child.StormControlUnicastLevel1.IsUnknown() && !child.StormControlUnicastLevel1.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlUCastLevel1", child.StormControlUnicastLevel1.ValueString())
+			}
+			if !child.StormControlUnicastLevel2.IsUnknown() && !child.StormControlUnicastLevel2.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlUCastLevel2", child.StormControlUnicastLevel2.ValueString())
+			}
+			if !child.StormControlUnicastPacketsPerSecond.IsUnknown() && !child.StormControlUnicastPacketsPerSecond.IsNull() {
+				attrs, _ = sjson.Set(attrs, "stormCtrlUCastPPS", strconv.FormatInt(child.StormControlUnicastPacketsPerSecond.ValueInt64(), 10))
+			}
+			if !child.SwitchportBlock.IsUnknown() && !child.SwitchportBlock.IsNull() {
+				attrs, _ = sjson.Set(attrs, "switchportBlock", child.SwitchportBlock.ValueString())
+			}
+			if !child.SwitchportIsolated.IsUnknown() && !child.SwitchportIsolated.IsNull() {
+				attrs, _ = sjson.Set(attrs, "switchportIsolated", child.SwitchportIsolated.ValueString())
+			}
+			if !child.SwitchportMacLearn.IsUnknown() && !child.SwitchportMacLearn.IsNull() {
+				attrs, _ = sjson.Set(attrs, "switchportMacLearn", child.SwitchportMacLearn.ValueString())
+			}
+			if !child.SwitchportMacPermit.IsUnknown() && !child.SwitchportMacPermit.IsNull() {
+				attrs, _ = sjson.Set(attrs, "switchportMacPermit", child.SwitchportMacPermit.ValueString())
+			}
+			if !child.SwitchportVirtualEthernetBridge.IsUnknown() && !child.SwitchportVirtualEthernetBridge.IsNull() {
+				attrs, _ = sjson.Set(attrs, "switchportVirtualEthernetBridge", child.SwitchportVirtualEthernetBridge.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pcAggrIfExtended.attributes", attrs)
+			}
 			for key, child := range child.Members {
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "tDn", key)
@@ -401,6 +561,58 @@ func (data *PortChannelInterface) fromBody(res gjson.Result) {
 							child.StormControlRate = types.StringValue(rl1StormCtrlP.Get("l1StormCtrlP.attributes.rate").String())
 							child.StormControlRatePacketsPerSecond = types.Int64Value(rl1StormCtrlP.Get("l1StormCtrlP.attributes.ratePps").Int())
 							child.StormControlPacketType = types.StringValue(rl1StormCtrlP.Get("l1StormCtrlP.attributes.type").String())
+						}
+						{
+							var rpcAggrIfExtended gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("pcAggrIfExtended.attributes.rn").String()
+									if rnValue == "physExtd" {
+										rpcAggrIfExtended = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.AllowMultiTag = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.allowMultiTag").String())
+							child.AutoExcludeVlans = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.autoExcludeVlans").String())
+							child.BufferBoost = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.bufferBoost").String())
+							child.ChassisModuleSerial = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.chassisModuleSerial").String())
+							child.ChassisModuleSide = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.chassisModuleSide").String())
+							child.ChassisNumber = types.Int64Value(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.chassisNumber").Int())
+							child.ChassisProfileName = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.chassisProfileName").String())
+							child.ChassisSerial = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.chassisSerial").String())
+							child.ExtendedDescription = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.descr").String())
+							child.FlowControlReceive = types.BoolValue(helpers.ParseNxosBoolean(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.flowCtrlReceive").String()))
+							child.FlowControlSend = types.BoolValue(helpers.ParseNxosBoolean(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.flowCtrlSend").String()))
+							child.FlowRedirect = types.BoolValue(helpers.ParseNxosBoolean(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.flowRedirect").String()))
+							child.GtpHashMode = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.gtpHashMode").String())
+							child.Layer3MulticastReceiverVlan = types.Int64Value(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.l3McastReceiverVlan").Int())
+							child.PortChannelType = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.poType").String())
+							child.PortTypeExternal = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.portTypeExternal").String())
+							child.PortTypeFabric = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.portTypeFabric").String())
+							child.RouterMacIpv6Extract = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.routerMacIpv6Extract").String())
+							child.ShutDownLan = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.shutDownLan").String())
+							child.StormControlAction = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlAct").String())
+							child.StormControlAction1 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlAct1").String())
+							child.StormControlAction2 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlAct2").String())
+							child.StormControlBroadcastLevel = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlBCastLevel").String())
+							child.StormControlBroadcastLevel1 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlBCastLevel1").String())
+							child.StormControlBroadcastLevel2 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlBCastLevel2").String())
+							child.StormControlBroadcastPacketsPerSecond = types.Int64Value(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlBCastPPS").Int())
+							child.StormControlMulticastLevel = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlMCastLevel").String())
+							child.StormControlMulticastLevel1 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlMCastLevel1").String())
+							child.StormControlMulticastLevel2 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlMCastLevel2").String())
+							child.StormControlMulticastPacketsPerSecond = types.Int64Value(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlMCastPPS").Int())
+							child.StormControlUnicastLevel = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlUCastLevel").String())
+							child.StormControlUnicastLevel1 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlUCastLevel1").String())
+							child.StormControlUnicastLevel2 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlUCastLevel2").String())
+							child.StormControlUnicastPacketsPerSecond = types.Int64Value(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlUCastPPS").Int())
+							child.SwitchportBlock = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.switchportBlock").String())
+							child.SwitchportIsolated = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.switchportIsolated").String())
+							child.SwitchportMacLearn = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.switchportMacLearn").String())
+							child.SwitchportMacPermit = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.switchportMacPermit").String())
+							child.SwitchportVirtualEthernetBridge = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.switchportVirtualEthernetBridge").String())
 						}
 						value.Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
@@ -713,6 +925,214 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 				item.StormControlPacketType = types.StringValue(rl1StormCtrlP.Get("l1StormCtrlP.attributes.type").String())
 			} else {
 				item.StormControlPacketType = types.StringNull()
+			}
+		}
+		{
+			var rpcAggrIfExtended gjson.Result
+			rpcAggrIf.Get("pcAggrIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("pcAggrIfExtended.attributes.rn").String()
+					if rnValue == "physExtd" {
+						rpcAggrIfExtended = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.AllowMultiTag.IsNull() {
+				item.AllowMultiTag = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.allowMultiTag").String())
+			} else {
+				item.AllowMultiTag = types.StringNull()
+			}
+			if !item.AutoExcludeVlans.IsNull() {
+				item.AutoExcludeVlans = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.autoExcludeVlans").String())
+			} else {
+				item.AutoExcludeVlans = types.StringNull()
+			}
+			if !item.BufferBoost.IsNull() {
+				item.BufferBoost = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.bufferBoost").String())
+			} else {
+				item.BufferBoost = types.StringNull()
+			}
+			if !item.ChassisModuleSerial.IsNull() {
+				item.ChassisModuleSerial = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.chassisModuleSerial").String())
+			} else {
+				item.ChassisModuleSerial = types.StringNull()
+			}
+			if !item.ChassisModuleSide.IsNull() {
+				item.ChassisModuleSide = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.chassisModuleSide").String())
+			} else {
+				item.ChassisModuleSide = types.StringNull()
+			}
+			if !item.ChassisNumber.IsNull() {
+				item.ChassisNumber = types.Int64Value(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.chassisNumber").Int())
+			} else {
+				item.ChassisNumber = types.Int64Null()
+			}
+			if !item.ChassisProfileName.IsNull() {
+				item.ChassisProfileName = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.chassisProfileName").String())
+			} else {
+				item.ChassisProfileName = types.StringNull()
+			}
+			if !item.ChassisSerial.IsNull() {
+				item.ChassisSerial = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.chassisSerial").String())
+			} else {
+				item.ChassisSerial = types.StringNull()
+			}
+			if !item.ExtendedDescription.IsNull() {
+				item.ExtendedDescription = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.descr").String())
+			} else {
+				item.ExtendedDescription = types.StringNull()
+			}
+			if !item.FlowControlReceive.IsNull() {
+				item.FlowControlReceive = types.BoolValue(helpers.ParseNxosBoolean(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.flowCtrlReceive").String()))
+			} else {
+				item.FlowControlReceive = types.BoolNull()
+			}
+			if !item.FlowControlSend.IsNull() {
+				item.FlowControlSend = types.BoolValue(helpers.ParseNxosBoolean(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.flowCtrlSend").String()))
+			} else {
+				item.FlowControlSend = types.BoolNull()
+			}
+			if !item.FlowRedirect.IsNull() {
+				item.FlowRedirect = types.BoolValue(helpers.ParseNxosBoolean(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.flowRedirect").String()))
+			} else {
+				item.FlowRedirect = types.BoolNull()
+			}
+			if !item.GtpHashMode.IsNull() {
+				item.GtpHashMode = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.gtpHashMode").String())
+			} else {
+				item.GtpHashMode = types.StringNull()
+			}
+			if !item.Layer3MulticastReceiverVlan.IsNull() {
+				item.Layer3MulticastReceiverVlan = types.Int64Value(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.l3McastReceiverVlan").Int())
+			} else {
+				item.Layer3MulticastReceiverVlan = types.Int64Null()
+			}
+			if !item.PortChannelType.IsNull() {
+				item.PortChannelType = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.poType").String())
+			} else {
+				item.PortChannelType = types.StringNull()
+			}
+			if !item.PortTypeExternal.IsNull() {
+				item.PortTypeExternal = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.portTypeExternal").String())
+			} else {
+				item.PortTypeExternal = types.StringNull()
+			}
+			if !item.PortTypeFabric.IsNull() {
+				item.PortTypeFabric = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.portTypeFabric").String())
+			} else {
+				item.PortTypeFabric = types.StringNull()
+			}
+			if !item.RouterMacIpv6Extract.IsNull() {
+				item.RouterMacIpv6Extract = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.routerMacIpv6Extract").String())
+			} else {
+				item.RouterMacIpv6Extract = types.StringNull()
+			}
+			if !item.ShutDownLan.IsNull() {
+				item.ShutDownLan = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.shutDownLan").String())
+			} else {
+				item.ShutDownLan = types.StringNull()
+			}
+			if !item.StormControlAction.IsNull() {
+				item.StormControlAction = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlAct").String())
+			} else {
+				item.StormControlAction = types.StringNull()
+			}
+			if !item.StormControlAction1.IsNull() {
+				item.StormControlAction1 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlAct1").String())
+			} else {
+				item.StormControlAction1 = types.StringNull()
+			}
+			if !item.StormControlAction2.IsNull() {
+				item.StormControlAction2 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlAct2").String())
+			} else {
+				item.StormControlAction2 = types.StringNull()
+			}
+			if !item.StormControlBroadcastLevel.IsNull() {
+				item.StormControlBroadcastLevel = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlBCastLevel").String())
+			} else {
+				item.StormControlBroadcastLevel = types.StringNull()
+			}
+			if !item.StormControlBroadcastLevel1.IsNull() {
+				item.StormControlBroadcastLevel1 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlBCastLevel1").String())
+			} else {
+				item.StormControlBroadcastLevel1 = types.StringNull()
+			}
+			if !item.StormControlBroadcastLevel2.IsNull() {
+				item.StormControlBroadcastLevel2 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlBCastLevel2").String())
+			} else {
+				item.StormControlBroadcastLevel2 = types.StringNull()
+			}
+			if !item.StormControlBroadcastPacketsPerSecond.IsNull() {
+				item.StormControlBroadcastPacketsPerSecond = types.Int64Value(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlBCastPPS").Int())
+			} else {
+				item.StormControlBroadcastPacketsPerSecond = types.Int64Null()
+			}
+			if !item.StormControlMulticastLevel.IsNull() {
+				item.StormControlMulticastLevel = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlMCastLevel").String())
+			} else {
+				item.StormControlMulticastLevel = types.StringNull()
+			}
+			if !item.StormControlMulticastLevel1.IsNull() {
+				item.StormControlMulticastLevel1 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlMCastLevel1").String())
+			} else {
+				item.StormControlMulticastLevel1 = types.StringNull()
+			}
+			if !item.StormControlMulticastLevel2.IsNull() {
+				item.StormControlMulticastLevel2 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlMCastLevel2").String())
+			} else {
+				item.StormControlMulticastLevel2 = types.StringNull()
+			}
+			if !item.StormControlMulticastPacketsPerSecond.IsNull() {
+				item.StormControlMulticastPacketsPerSecond = types.Int64Value(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlMCastPPS").Int())
+			} else {
+				item.StormControlMulticastPacketsPerSecond = types.Int64Null()
+			}
+			if !item.StormControlUnicastLevel.IsNull() {
+				item.StormControlUnicastLevel = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlUCastLevel").String())
+			} else {
+				item.StormControlUnicastLevel = types.StringNull()
+			}
+			if !item.StormControlUnicastLevel1.IsNull() {
+				item.StormControlUnicastLevel1 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlUCastLevel1").String())
+			} else {
+				item.StormControlUnicastLevel1 = types.StringNull()
+			}
+			if !item.StormControlUnicastLevel2.IsNull() {
+				item.StormControlUnicastLevel2 = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlUCastLevel2").String())
+			} else {
+				item.StormControlUnicastLevel2 = types.StringNull()
+			}
+			if !item.StormControlUnicastPacketsPerSecond.IsNull() {
+				item.StormControlUnicastPacketsPerSecond = types.Int64Value(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.stormCtrlUCastPPS").Int())
+			} else {
+				item.StormControlUnicastPacketsPerSecond = types.Int64Null()
+			}
+			if !item.SwitchportBlock.IsNull() {
+				item.SwitchportBlock = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.switchportBlock").String())
+			} else {
+				item.SwitchportBlock = types.StringNull()
+			}
+			if !item.SwitchportIsolated.IsNull() {
+				item.SwitchportIsolated = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.switchportIsolated").String())
+			} else {
+				item.SwitchportIsolated = types.StringNull()
+			}
+			if !item.SwitchportMacLearn.IsNull() {
+				item.SwitchportMacLearn = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.switchportMacLearn").String())
+			} else {
+				item.SwitchportMacLearn = types.StringNull()
+			}
+			if !item.SwitchportMacPermit.IsNull() {
+				item.SwitchportMacPermit = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.switchportMacPermit").String())
+			} else {
+				item.SwitchportMacPermit = types.StringNull()
+			}
+			if !item.SwitchportVirtualEthernetBridge.IsNull() {
+				item.SwitchportVirtualEthernetBridge = types.StringValue(rpcAggrIfExtended.Get("pcAggrIfExtended.attributes.switchportVirtualEthernetBridge").String())
+			} else {
+				item.SwitchportVirtualEthernetBridge = types.StringNull()
 			}
 		}
 		for nc := range item.Members {

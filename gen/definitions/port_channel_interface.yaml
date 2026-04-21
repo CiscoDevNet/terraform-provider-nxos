@@ -436,6 +436,318 @@ child_classes:
               - mcast
               - all
             example: bcast
+      - class_name: pcAggrIfExtended
+        rn: physExtd
+        type: single
+        tf_name: extended
+        description: 'Port-channel interface extended configuration.'
+        doc_path: Interfaces/pc:AggrIfExtended/
+        attributes:
+          - nxos_name: allowMultiTag
+            tf_name: allow_multi_tag
+            type: String
+            description: 'Allow Multitag.'
+            enum_values:
+              - disable
+              - enable
+            exclude_test: true
+            example: enable
+          - nxos_name: autoExcludeVlans
+            tf_name: auto_exclude_vlans
+            type: String
+            description: 'Switchport Autostate Exclude vlans.'
+            exclude_test: true
+            example: '1-2'
+          - nxos_name: bufferBoost
+            tf_name: buffer_boost
+            type: String
+            description: 'Disable/enable buffer boost on interface.'
+            enum_values:
+              - disable
+              - enable
+            exclude_test: true
+            example: disable
+          - nxos_name: chassisModuleSerial
+            tf_name: chassis_module_serial
+            type: String
+            description: 'Module serial number information.'
+            exclude_test: true
+            example: 'FDO12345678'
+          - nxos_name: chassisModuleSide
+            tf_name: chassis_module_side
+            type: String
+            description: 'Module Side information.'
+            enum_values:
+              - UnknownSlot
+              - LeftIoModuleSlot
+              - RightIoModuleSlot
+            exclude_test: true
+            example: LeftIoModuleSlot
+          - nxos_name: chassisNumber
+            tf_name: chassis_number
+            type: Int64
+            description: 'Chassis number information.'
+            min_int: 0
+            max_int: 255
+            exclude_test: true
+            example: 1
+          - nxos_name: chassisProfileName
+            tf_name: chassis_profile_name
+            type: String
+            description: 'Profile name information.'
+            exclude_test: true
+            example: 'profile1'
+          - nxos_name: chassisSerial
+            tf_name: chassis_serial
+            type: String
+            description: 'Serial number information.'
+            exclude_test: true
+            example: 'FDO12345678'
+          - nxos_name: descr
+            tf_name: extended_description
+            type: String
+            description: 'Description.'
+            example: 'Extended interface config'
+          - nxos_name: flowCtrlReceive
+            tf_name: flow_control_receive
+            type: Bool
+            description: 'Disable/enable rx flowcontrol block on interface.'
+            exclude_test: true
+            example: true
+          - nxos_name: flowCtrlSend
+            tf_name: flow_control_send
+            type: Bool
+            description: 'Disable/enable tx flowcontrol block on interface.'
+            exclude_test: true
+            example: true
+          - nxos_name: flowRedirect
+            tf_name: flow_redirect
+            type: Bool
+            description: 'Disable/enable flowredirect on interface.'
+            exclude_test: true
+            example: true
+          - nxos_name: gtpHashMode
+            tf_name: gtp_hash_mode
+            type: String
+            description: 'Gtp hash mode ipv4 or ipv6 on interface.'
+            enum_values:
+              - disable
+              - v4
+              - v6
+            exclude_test: true
+            example: v4
+          - nxos_name: l3McastReceiverVlan
+            tf_name: layer3_multicast_receiver_vlan
+            type: Int64
+            description: 'Set vlan ID used for L3 multicast on this interface.'
+            min_int: 0
+            max_int: 4094
+            exclude_test: true
+            example: 100
+          - nxos_name: poType
+            tf_name: port_channel_type
+            type: String
+            description: 'Port-channel type.'
+            enum_values:
+              - none
+              - hif-pc
+              - non-hif-pc
+            exclude_test: true
+            example: hif-pc
+          - nxos_name: portTypeExternal
+            tf_name: port_type_external
+            type: String
+            description: 'Identifies if or not the port is a external-facing port.'
+            enum_values:
+              - "no"
+              - "yes"
+            exclude_test: true
+            example: "yes"
+          - nxos_name: portTypeFabric
+            tf_name: port_type_fabric
+            type: String
+            description: 'Identifies if or not the port is a fabric-facing port.'
+            enum_values:
+              - "no"
+              - "yes"
+            exclude_test: true
+            example: "yes"
+          - nxos_name: routerMacIpv6Extract
+            tf_name: router_mac_ipv6_extract
+            type: String
+            description: 'Disable/enable switchport ipv6 extract.'
+            enum_values:
+              - disable
+              - enable
+            exclude_test: true
+            example: enable
+          - nxos_name: shutDownLan
+            tf_name: shut_down_lan
+            type: String
+            description: 'Shut/Unshut all LAN VLANs on interface.'
+            enum_values:
+              - disable
+              - enable
+            exclude_test: true
+            example: enable
+          - nxos_name: stormCtrlAct
+            tf_name: storm_control_action
+            type: String
+            description: 'Storm control action.'
+            enum_values:
+              - none
+              - shutdown
+              - trap
+            allow_non_enum_values: true
+            exclude_test: true
+            example: shutdown
+          - nxos_name: stormCtrlAct1
+            tf_name: storm_control_action_1
+            type: String
+            description: 'Storm control action1.'
+            enum_values:
+              - none
+              - shutdown
+              - trap
+            allow_non_enum_values: true
+            exclude_test: true
+            example: shutdown
+          - nxos_name: stormCtrlAct2
+            tf_name: storm_control_action_2
+            type: String
+            description: 'Storm control action2.'
+            enum_values:
+              - none
+              - shutdown
+              - trap
+            allow_non_enum_values: true
+            exclude_test: true
+            example: shutdown
+          - nxos_name: stormCtrlBCastLevel
+            tf_name: storm_control_broadcast_level
+            type: String
+            description: 'storm-control broadcast level.'
+            exclude_test: true
+            example: '50.000000'
+          - nxos_name: stormCtrlBCastLevel1
+            tf_name: storm_control_broadcast_level_1
+            type: String
+            description: 'storm-control broadcast level1.'
+            exclude_test: true
+            example: '40.000000'
+          - nxos_name: stormCtrlBCastLevel2
+            tf_name: storm_control_broadcast_level_2
+            type: String
+            description: 'storm-control broadcast level2.'
+            exclude_test: true
+            example: '40.000000'
+          - nxos_name: stormCtrlBCastPPS
+            tf_name: storm_control_broadcast_packets_per_second
+            type: Int64
+            description: 'storm-control broadcast PPS.'
+            min_int: 0
+            max_int: 4294967295
+            exclude_test: true
+            example: 1000
+          - nxos_name: stormCtrlMCastLevel
+            tf_name: storm_control_multicast_level
+            type: String
+            description: 'storm-control multicast level.'
+            exclude_test: true
+            example: '50.000000'
+          - nxos_name: stormCtrlMCastLevel1
+            tf_name: storm_control_multicast_level_1
+            type: String
+            description: 'storm-control multicast level1.'
+            exclude_test: true
+            example: '40.000000'
+          - nxos_name: stormCtrlMCastLevel2
+            tf_name: storm_control_multicast_level_2
+            type: String
+            description: 'storm-control multicast level2.'
+            exclude_test: true
+            example: '40.000000'
+          - nxos_name: stormCtrlMCastPPS
+            tf_name: storm_control_multicast_packets_per_second
+            type: Int64
+            description: 'storm-control multicast PPS.'
+            min_int: 0
+            max_int: 4294967295
+            exclude_test: true
+            example: 1000
+          - nxos_name: stormCtrlUCastLevel
+            tf_name: storm_control_unicast_level
+            type: String
+            description: 'Storm control unicast level.'
+            exclude_test: true
+            example: '50.000000'
+          - nxos_name: stormCtrlUCastLevel1
+            tf_name: storm_control_unicast_level_1
+            type: String
+            description: 'Storm control unicast level1.'
+            exclude_test: true
+            example: '40.000000'
+          - nxos_name: stormCtrlUCastLevel2
+            tf_name: storm_control_unicast_level_2
+            type: String
+            description: 'Storm control unicast level2.'
+            exclude_test: true
+            example: '40.000000'
+          - nxos_name: stormCtrlUCastPPS
+            tf_name: storm_control_unicast_packets_per_second
+            type: Int64
+            description: 'Storm control unicast PPS.'
+            min_int: 0
+            max_int: 4294967295
+            exclude_test: true
+            example: 1000
+          - nxos_name: switchportBlock
+            tf_name: switchport_block
+            type: String
+            description: 'Disable/enable switchport block on interface.'
+            enum_values:
+              - none
+              - multicast
+              - unicast
+            allow_non_enum_values: true
+            exclude_test: true
+            example: multicast
+          - nxos_name: switchportIsolated
+            tf_name: switchport_isolated
+            type: String
+            description: 'Switchport Isolated.'
+            enum_values:
+              - disable
+              - enable
+            exclude_test: true
+            example: enable
+          - nxos_name: switchportMacLearn
+            tf_name: switchport_mac_learn
+            type: String
+            description: 'Disable/enable mac learning on interface.'
+            enum_values:
+              - disable
+              - enable
+            exclude_test: true
+            example: disable
+          - nxos_name: switchportMacPermit
+            tf_name: switchport_mac_permit
+            type: String
+            description: 'Switchport mac-address permit related configuration.'
+            enum_values:
+              - all
+              - static-only
+            exclude_test: true
+            example: static-only
+          - nxos_name: switchportVirtualEthernetBridge
+            tf_name: switchport_virtual_ethernet_bridge
+            type: String
+            description: 'Disable/enable switchport virtual ethernet bridge on interface.'
+            enum_values:
+              - disable
+              - enable
+            exclude_test: true
+            example: enable
       - class_name: pcRsMbrIfs
         rn: rsmbrIfs-[%s]
         type: list

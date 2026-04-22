@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the sFlow configuration on NX-OS devices.
   API Documentation
-  sflowSflow https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Sflow/sflowInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Inst/
+  analyticsHwTelemetry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:HwTelemetry/sflowSflow https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Sflow/sflowInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Inst/
 ---
 
 # nxos_sflow (Resource)
@@ -14,6 +14,7 @@ This resource can manage the sFlow configuration on NX-OS devices.
 
 ### API Documentation
 
+- [analyticsHwTelemetry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:HwTelemetry/)
 - [sflowSflow](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Sflow/)
 - [sflowInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Inst/)
 

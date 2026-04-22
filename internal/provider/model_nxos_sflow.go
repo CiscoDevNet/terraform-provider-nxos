@@ -79,11 +79,11 @@ func (data *SFlow) fromIdentity(ctx context.Context, identity *SFlowIdentity) {
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
 func (data SFlow) getDn() string {
-	return "sys/hwtelemetry/sflow"
+	return "sys/hwtelemetry"
 }
 
 func (data SFlow) getClassName() string {
-	return "sflowSflow"
+	return "analyticsHwTelemetry"
 }
 
 // End of section. //template:end getPath
@@ -95,48 +95,55 @@ func (data SFlow) toBody(config SFlow) nxos.Body {
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
-	attrs = "{}"
-	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
-		attrs, _ = sjson.Set(attrs, "adminSt", data.AdminState.ValueString())
-	}
-	if !data.AgentAddress.IsUnknown() && !data.AgentAddress.IsNull() {
-		attrs, _ = sjson.Set(attrs, "agentAddress", data.AgentAddress.ValueString())
-	}
-	if !data.CounterPollInterval.IsUnknown() && !data.CounterPollInterval.IsNull() {
-		attrs, _ = sjson.Set(attrs, "counterPollInterval", strconv.FormatInt(data.CounterPollInterval.ValueInt64(), 10))
-	}
-	if !data.Control.IsUnknown() && !data.Control.IsNull() {
-		attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
-	}
-	if !data.ExtendedBgp.IsUnknown() && !data.ExtendedBgp.IsNull() {
-		attrs, _ = sjson.Set(attrs, "isExtendedBgp", strconv.FormatBool(data.ExtendedBgp.ValueBool()))
-	}
-	if !data.ExtendedSwitch.IsUnknown() && !data.ExtendedSwitch.IsNull() {
-		attrs, _ = sjson.Set(attrs, "isExtendedSwitch", strconv.FormatBool(data.ExtendedSwitch.ValueBool()))
-	}
-	if !data.MaxHeaderSize.IsUnknown() && !data.MaxHeaderSize.IsNull() {
-		attrs, _ = sjson.Set(attrs, "maxHeaderSize", strconv.FormatInt(data.MaxHeaderSize.ValueInt64(), 10))
-	}
-	if !data.PacketSamplingRate.IsUnknown() && !data.PacketSamplingRate.IsNull() {
-		attrs, _ = sjson.Set(attrs, "pktSamplingRate", strconv.FormatInt(data.PacketSamplingRate.ValueInt64(), 10))
-	}
-	if !data.ReceiverAddress.IsUnknown() && !data.ReceiverAddress.IsNull() {
-		attrs, _ = sjson.Set(attrs, "rcvrAddress", data.ReceiverAddress.ValueString())
-	}
-	if !data.ReceiverMaxDatagramSize.IsUnknown() && !data.ReceiverMaxDatagramSize.IsNull() {
-		attrs, _ = sjson.Set(attrs, "rcvrMaxDatagramSize", strconv.FormatInt(data.ReceiverMaxDatagramSize.ValueInt64(), 10))
-	}
-	if !data.ReceiverPort.IsUnknown() && !data.ReceiverPort.IsNull() {
-		attrs, _ = sjson.Set(attrs, "rcvrPort", strconv.FormatInt(data.ReceiverPort.ValueInt64(), 10))
-	}
-	if !data.ReceiverSourceAddress.IsUnknown() && !data.ReceiverSourceAddress.IsNull() {
-		attrs, _ = sjson.Set(attrs, "rcvrSrcAddress", data.ReceiverSourceAddress.ValueString())
-	}
-	if !data.ReceiverVrfName.IsUnknown() && !data.ReceiverVrfName.IsNull() {
-		attrs, _ = sjson.Set(attrs, "rcvrVrfName", data.ReceiverVrfName.ValueString())
-	}
-	if attrs != "{}" {
-		body, _ = sjson.SetRaw(body, childrenPath+".-1.sflowInst.attributes", attrs)
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".sflowSflow"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		attrs = "{}"
+		if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.AdminState.ValueString())
+		}
+		if !data.AgentAddress.IsUnknown() && !data.AgentAddress.IsNull() {
+			attrs, _ = sjson.Set(attrs, "agentAddress", data.AgentAddress.ValueString())
+		}
+		if !data.CounterPollInterval.IsUnknown() && !data.CounterPollInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterPollInterval", strconv.FormatInt(data.CounterPollInterval.ValueInt64(), 10))
+		}
+		if !data.Control.IsUnknown() && !data.Control.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
+		}
+		if !data.ExtendedBgp.IsUnknown() && !data.ExtendedBgp.IsNull() {
+			attrs, _ = sjson.Set(attrs, "isExtendedBgp", strconv.FormatBool(data.ExtendedBgp.ValueBool()))
+		}
+		if !data.ExtendedSwitch.IsUnknown() && !data.ExtendedSwitch.IsNull() {
+			attrs, _ = sjson.Set(attrs, "isExtendedSwitch", strconv.FormatBool(data.ExtendedSwitch.ValueBool()))
+		}
+		if !data.MaxHeaderSize.IsUnknown() && !data.MaxHeaderSize.IsNull() {
+			attrs, _ = sjson.Set(attrs, "maxHeaderSize", strconv.FormatInt(data.MaxHeaderSize.ValueInt64(), 10))
+		}
+		if !data.PacketSamplingRate.IsUnknown() && !data.PacketSamplingRate.IsNull() {
+			attrs, _ = sjson.Set(attrs, "pktSamplingRate", strconv.FormatInt(data.PacketSamplingRate.ValueInt64(), 10))
+		}
+		if !data.ReceiverAddress.IsUnknown() && !data.ReceiverAddress.IsNull() {
+			attrs, _ = sjson.Set(attrs, "rcvrAddress", data.ReceiverAddress.ValueString())
+		}
+		if !data.ReceiverMaxDatagramSize.IsUnknown() && !data.ReceiverMaxDatagramSize.IsNull() {
+			attrs, _ = sjson.Set(attrs, "rcvrMaxDatagramSize", strconv.FormatInt(data.ReceiverMaxDatagramSize.ValueInt64(), 10))
+		}
+		if !data.ReceiverPort.IsUnknown() && !data.ReceiverPort.IsNull() {
+			attrs, _ = sjson.Set(attrs, "rcvrPort", strconv.FormatInt(data.ReceiverPort.ValueInt64(), 10))
+		}
+		if !data.ReceiverSourceAddress.IsUnknown() && !data.ReceiverSourceAddress.IsNull() {
+			attrs, _ = sjson.Set(attrs, "rcvrSrcAddress", data.ReceiverSourceAddress.ValueString())
+		}
+		if !data.ReceiverVrfName.IsUnknown() && !data.ReceiverVrfName.IsNull() {
+			attrs, _ = sjson.Set(attrs, "rcvrVrfName", data.ReceiverVrfName.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.sflowInst.attributes", attrs)
+		}
 	}
 
 	return nxos.Body{Str: body}
@@ -148,8 +155,62 @@ func (data SFlow) toBody(config SFlow) nxos.Body {
 
 func (data *SFlow) fromBody(res gjson.Result) {
 	{
-		var rsflowInst gjson.Result
+		var rsflowSflow gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("sflowSflow.attributes.rn").String()
+				if rnValue == "sflow" {
+					rsflowSflow = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rsflowInst gjson.Result
+			rsflowSflow.Get("sflowSflow.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("sflowInst.attributes.rn").String()
+					if rnValue == "inst" {
+						rsflowInst = v
+						return false
+					}
+					return true
+				},
+			)
+			data.AdminState = types.StringValue(rsflowInst.Get("sflowInst.attributes.adminSt").String())
+			data.AgentAddress = types.StringValue(rsflowInst.Get("sflowInst.attributes.agentAddress").String())
+			data.CounterPollInterval = types.Int64Value(rsflowInst.Get("sflowInst.attributes.counterPollInterval").Int())
+			data.Control = types.StringValue(rsflowInst.Get("sflowInst.attributes.ctrl").String())
+			data.ExtendedBgp = types.BoolValue(helpers.ParseNxosBoolean(rsflowInst.Get("sflowInst.attributes.isExtendedBgp").String()))
+			data.ExtendedSwitch = types.BoolValue(helpers.ParseNxosBoolean(rsflowInst.Get("sflowInst.attributes.isExtendedSwitch").String()))
+			data.MaxHeaderSize = types.Int64Value(rsflowInst.Get("sflowInst.attributes.maxHeaderSize").Int())
+			data.PacketSamplingRate = types.Int64Value(rsflowInst.Get("sflowInst.attributes.pktSamplingRate").Int())
+			data.ReceiverMaxDatagramSize = types.Int64Value(rsflowInst.Get("sflowInst.attributes.rcvrMaxDatagramSize").Int())
+			data.ReceiverPort = types.Int64Value(rsflowInst.Get("sflowInst.attributes.rcvrPort").Int())
+		}
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
+func (data *SFlow) updateFromBody(res gjson.Result) {
+	var rsflowSflow gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("sflowSflow.attributes.rn").String()
+			if rnValue == "sflow" {
+				rsflowSflow = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rsflowInst gjson.Result
+		rsflowSflow.Get("sflowSflow.children").ForEach(
 			func(_, v gjson.Result) bool {
 				rnValue := v.Get("sflowInst.attributes.rn").String()
 				if rnValue == "inst" {
@@ -159,84 +220,56 @@ func (data *SFlow) fromBody(res gjson.Result) {
 				return true
 			},
 		)
-		data.AdminState = types.StringValue(rsflowInst.Get("sflowInst.attributes.adminSt").String())
-		data.AgentAddress = types.StringValue(rsflowInst.Get("sflowInst.attributes.agentAddress").String())
-		data.CounterPollInterval = types.Int64Value(rsflowInst.Get("sflowInst.attributes.counterPollInterval").Int())
-		data.Control = types.StringValue(rsflowInst.Get("sflowInst.attributes.ctrl").String())
-		data.ExtendedBgp = types.BoolValue(helpers.ParseNxosBoolean(rsflowInst.Get("sflowInst.attributes.isExtendedBgp").String()))
-		data.ExtendedSwitch = types.BoolValue(helpers.ParseNxosBoolean(rsflowInst.Get("sflowInst.attributes.isExtendedSwitch").String()))
-		data.MaxHeaderSize = types.Int64Value(rsflowInst.Get("sflowInst.attributes.maxHeaderSize").Int())
-		data.PacketSamplingRate = types.Int64Value(rsflowInst.Get("sflowInst.attributes.pktSamplingRate").Int())
-		data.ReceiverMaxDatagramSize = types.Int64Value(rsflowInst.Get("sflowInst.attributes.rcvrMaxDatagramSize").Int())
-		data.ReceiverPort = types.Int64Value(rsflowInst.Get("sflowInst.attributes.rcvrPort").Int())
-	}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *SFlow) updateFromBody(res gjson.Result) {
-	var rsflowInst gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			rnValue := v.Get("sflowInst.attributes.rn").String()
-			if rnValue == "inst" {
-				rsflowInst = v
-				return false
-			}
-			return true
-		},
-	)
-	if !data.AdminState.IsNull() {
-		data.AdminState = types.StringValue(rsflowInst.Get("sflowInst.attributes.adminSt").String())
-	} else {
-		data.AdminState = types.StringNull()
-	}
-	if !data.AgentAddress.IsNull() {
-		data.AgentAddress = types.StringValue(rsflowInst.Get("sflowInst.attributes.agentAddress").String())
-	} else {
-		data.AgentAddress = types.StringNull()
-	}
-	if !data.CounterPollInterval.IsNull() {
-		data.CounterPollInterval = types.Int64Value(rsflowInst.Get("sflowInst.attributes.counterPollInterval").Int())
-	} else {
-		data.CounterPollInterval = types.Int64Null()
-	}
-	if !data.Control.IsNull() {
-		data.Control = types.StringValue(rsflowInst.Get("sflowInst.attributes.ctrl").String())
-	} else {
-		data.Control = types.StringNull()
-	}
-	if !data.ExtendedBgp.IsNull() {
-		data.ExtendedBgp = types.BoolValue(helpers.ParseNxosBoolean(rsflowInst.Get("sflowInst.attributes.isExtendedBgp").String()))
-	} else {
-		data.ExtendedBgp = types.BoolNull()
-	}
-	if !data.ExtendedSwitch.IsNull() {
-		data.ExtendedSwitch = types.BoolValue(helpers.ParseNxosBoolean(rsflowInst.Get("sflowInst.attributes.isExtendedSwitch").String()))
-	} else {
-		data.ExtendedSwitch = types.BoolNull()
-	}
-	if !data.MaxHeaderSize.IsNull() {
-		data.MaxHeaderSize = types.Int64Value(rsflowInst.Get("sflowInst.attributes.maxHeaderSize").Int())
-	} else {
-		data.MaxHeaderSize = types.Int64Null()
-	}
-	if !data.PacketSamplingRate.IsNull() {
-		data.PacketSamplingRate = types.Int64Value(rsflowInst.Get("sflowInst.attributes.pktSamplingRate").Int())
-	} else {
-		data.PacketSamplingRate = types.Int64Null()
-	}
-	if !data.ReceiverMaxDatagramSize.IsNull() {
-		data.ReceiverMaxDatagramSize = types.Int64Value(rsflowInst.Get("sflowInst.attributes.rcvrMaxDatagramSize").Int())
-	} else {
-		data.ReceiverMaxDatagramSize = types.Int64Null()
-	}
-	if !data.ReceiverPort.IsNull() {
-		data.ReceiverPort = types.Int64Value(rsflowInst.Get("sflowInst.attributes.rcvrPort").Int())
-	} else {
-		data.ReceiverPort = types.Int64Null()
+		if !data.AdminState.IsNull() {
+			data.AdminState = types.StringValue(rsflowInst.Get("sflowInst.attributes.adminSt").String())
+		} else {
+			data.AdminState = types.StringNull()
+		}
+		if !data.AgentAddress.IsNull() {
+			data.AgentAddress = types.StringValue(rsflowInst.Get("sflowInst.attributes.agentAddress").String())
+		} else {
+			data.AgentAddress = types.StringNull()
+		}
+		if !data.CounterPollInterval.IsNull() {
+			data.CounterPollInterval = types.Int64Value(rsflowInst.Get("sflowInst.attributes.counterPollInterval").Int())
+		} else {
+			data.CounterPollInterval = types.Int64Null()
+		}
+		if !data.Control.IsNull() {
+			data.Control = types.StringValue(rsflowInst.Get("sflowInst.attributes.ctrl").String())
+		} else {
+			data.Control = types.StringNull()
+		}
+		if !data.ExtendedBgp.IsNull() {
+			data.ExtendedBgp = types.BoolValue(helpers.ParseNxosBoolean(rsflowInst.Get("sflowInst.attributes.isExtendedBgp").String()))
+		} else {
+			data.ExtendedBgp = types.BoolNull()
+		}
+		if !data.ExtendedSwitch.IsNull() {
+			data.ExtendedSwitch = types.BoolValue(helpers.ParseNxosBoolean(rsflowInst.Get("sflowInst.attributes.isExtendedSwitch").String()))
+		} else {
+			data.ExtendedSwitch = types.BoolNull()
+		}
+		if !data.MaxHeaderSize.IsNull() {
+			data.MaxHeaderSize = types.Int64Value(rsflowInst.Get("sflowInst.attributes.maxHeaderSize").Int())
+		} else {
+			data.MaxHeaderSize = types.Int64Null()
+		}
+		if !data.PacketSamplingRate.IsNull() {
+			data.PacketSamplingRate = types.Int64Value(rsflowInst.Get("sflowInst.attributes.pktSamplingRate").Int())
+		} else {
+			data.PacketSamplingRate = types.Int64Null()
+		}
+		if !data.ReceiverMaxDatagramSize.IsNull() {
+			data.ReceiverMaxDatagramSize = types.Int64Value(rsflowInst.Get("sflowInst.attributes.rcvrMaxDatagramSize").Int())
+		} else {
+			data.ReceiverMaxDatagramSize = types.Int64Null()
+		}
+		if !data.ReceiverPort.IsNull() {
+			data.ReceiverPort = types.Int64Value(rsflowInst.Get("sflowInst.attributes.rcvrPort").Int())
+		} else {
+			data.ReceiverPort = types.Int64Null()
+		}
 	}
 }
 
@@ -251,50 +284,57 @@ func (data SFlow) toDeleteBody() nxos.Body {
 	}
 	childrenPath := data.getClassName() + ".children"
 	{
-		childBody := ""
-		if !data.AdminState.IsNull() {
-			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.AgentAddress.IsNull() {
-			childBody, _ = sjson.Set(childBody, "agentAddress", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.CounterPollInterval.IsNull() {
-			childBody, _ = sjson.Set(childBody, "counterPollInterval", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.Control.IsNull() {
-			childBody, _ = sjson.Set(childBody, "ctrl", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.ExtendedBgp.IsNull() {
-			childBody, _ = sjson.Set(childBody, "isExtendedBgp", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.ExtendedSwitch.IsNull() {
-			childBody, _ = sjson.Set(childBody, "isExtendedSwitch", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.MaxHeaderSize.IsNull() {
-			childBody, _ = sjson.Set(childBody, "maxHeaderSize", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.PacketSamplingRate.IsNull() {
-			childBody, _ = sjson.Set(childBody, "pktSamplingRate", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.ReceiverAddress.IsNull() {
-			childBody, _ = sjson.Set(childBody, "rcvrAddress", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.ReceiverMaxDatagramSize.IsNull() {
-			childBody, _ = sjson.Set(childBody, "rcvrMaxDatagramSize", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.ReceiverPort.IsNull() {
-			childBody, _ = sjson.Set(childBody, "rcvrPort", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.ReceiverSourceAddress.IsNull() {
-			childBody, _ = sjson.Set(childBody, "rcvrSrcAddress", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !data.ReceiverVrfName.IsNull() {
-			childBody, _ = sjson.Set(childBody, "rcvrVrfName", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if childBody != "" {
-			childIndex := len(gjson.Get(body, childrenPath).Array())
-			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".sflowInst"
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".sflowSflow"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.AdminState.IsNull() {
+				childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AgentAddress.IsNull() {
+				childBody, _ = sjson.Set(childBody, "agentAddress", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CounterPollInterval.IsNull() {
+				childBody, _ = sjson.Set(childBody, "counterPollInterval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Control.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedBgp.IsNull() {
+				childBody, _ = sjson.Set(childBody, "isExtendedBgp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedSwitch.IsNull() {
+				childBody, _ = sjson.Set(childBody, "isExtendedSwitch", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.MaxHeaderSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "maxHeaderSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PacketSamplingRate.IsNull() {
+				childBody, _ = sjson.Set(childBody, "pktSamplingRate", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ReceiverAddress.IsNull() {
+				childBody, _ = sjson.Set(childBody, "rcvrAddress", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ReceiverMaxDatagramSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "rcvrMaxDatagramSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ReceiverPort.IsNull() {
+				childBody, _ = sjson.Set(childBody, "rcvrPort", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ReceiverSourceAddress.IsNull() {
+				childBody, _ = sjson.Set(childBody, "rcvrSrcAddress", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ReceiverVrfName.IsNull() {
+				childBody, _ = sjson.Set(childBody, "rcvrVrfName", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sflowInst"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
 		}
 	}
 

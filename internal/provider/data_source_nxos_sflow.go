@@ -57,7 +57,7 @@ func (d *SFlowDataSource) Metadata(_ context.Context, req datasource.MetadataReq
 func (d *SFlowDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the sFlow configuration on NX-OS devices.").AddApiDocumentation("sflowSflow", "Flow/sflow:Sflow/", []string{"sflowInst"}, []string{"Flow/sflow:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the sFlow configuration on NX-OS devices.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -152,7 +152,7 @@ func (d *SFlowDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "sflowInst")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "sflowSflow,sflowInst")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

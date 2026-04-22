@@ -117,7 +117,7 @@ func (data BFD) getClassName() string {
 func (data BFD) toBody(config BFD) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() && !config.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
@@ -126,22 +126,22 @@ func (data BFD) toBody(config BFD) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".bfdInst"
 		attrs = "{}"
-		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() {
+		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
-		if !data.InstanceControl.IsUnknown() && !data.InstanceControl.IsNull() {
+		if !data.InstanceControl.IsUnknown() && !data.InstanceControl.IsNull() && !config.InstanceControl.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.InstanceControl.ValueString())
 		}
-		if !data.EchoInterface.IsUnknown() && !data.EchoInterface.IsNull() {
+		if !data.EchoInterface.IsUnknown() && !data.EchoInterface.IsNull() && !config.EchoInterface.IsNull() {
 			attrs, _ = sjson.Set(attrs, "echoIf", data.EchoInterface.ValueString())
 		}
-		if !data.HardwareOffload.IsUnknown() && !data.HardwareOffload.IsNull() {
+		if !data.HardwareOffload.IsUnknown() && !data.HardwareOffload.IsNull() && !config.HardwareOffload.IsNull() {
 			attrs, _ = sjson.Set(attrs, "hwOffload", data.HardwareOffload.ValueString())
 		}
-		if !data.SlowInterval.IsUnknown() && !data.SlowInterval.IsNull() {
+		if !data.SlowInterval.IsUnknown() && !data.SlowInterval.IsNull() && !config.SlowInterval.IsNull() {
 			attrs, _ = sjson.Set(attrs, "slowIntvl", strconv.FormatInt(data.SlowInterval.ValueInt64(), 10))
 		}
-		if !data.StartupInterval.IsUnknown() && !data.StartupInterval.IsNull() {
+		if !data.StartupInterval.IsUnknown() && !data.StartupInterval.IsNull() && !config.StartupInterval.IsNull() {
 			attrs, _ = sjson.Set(attrs, "startupIntvl", strconv.FormatInt(data.StartupInterval.ValueInt64(), 10))
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -152,28 +152,28 @@ func (data BFD) toBody(config BFD) nxos.Body {
 			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "id", key)
-			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+			if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 			}
-			if !child.Control.IsUnknown() && !child.Control.IsNull() {
+			if configChildOk && !child.Control.IsUnknown() && !child.Control.IsNull() && !configChild.Control.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 			}
-			if !child.Destination.IsUnknown() && !child.Destination.IsNull() {
+			if configChildOk && !child.Destination.IsUnknown() && !child.Destination.IsNull() && !configChild.Destination.IsNull() {
 				attrs, _ = sjson.Set(attrs, "dst", child.Destination.ValueString())
 			}
-			if !child.EchoAdminState.IsUnknown() && !child.EchoAdminState.IsNull() {
+			if configChildOk && !child.EchoAdminState.IsUnknown() && !child.EchoAdminState.IsNull() && !configChild.EchoAdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "echoAdminSt", child.EchoAdminState.ValueString())
 			}
-			if !child.SourceIp.IsUnknown() && !child.SourceIp.IsNull() {
+			if configChildOk && !child.SourceIp.IsUnknown() && !child.SourceIp.IsNull() && !configChild.SourceIp.IsNull() {
 				attrs, _ = sjson.Set(attrs, "srcIp", child.SourceIp.ValueString())
 			}
-			if !child.StartTimeout.IsUnknown() && !child.StartTimeout.IsNull() {
+			if configChildOk && !child.StartTimeout.IsUnknown() && !child.StartTimeout.IsNull() && !configChild.StartTimeout.IsNull() {
 				attrs, _ = sjson.Set(attrs, "stTm", strconv.FormatInt(child.StartTimeout.ValueInt64(), 10))
 			}
-			if !child.TrackMemberLink.IsUnknown() && !child.TrackMemberLink.IsNull() {
+			if configChildOk && !child.TrackMemberLink.IsUnknown() && !child.TrackMemberLink.IsNull() && !configChild.TrackMemberLink.IsNull() {
 				attrs, _ = sjson.Set(attrs, "trkMbrLnk", child.TrackMemberLink.ValueString())
 			}
-			if !child.VpcWatch.IsUnknown() && !child.VpcWatch.IsNull() {
+			if configChildOk && !child.VpcWatch.IsUnknown() && !child.VpcWatch.IsNull() && !configChild.VpcWatch.IsNull() {
 				attrs, _ = sjson.Set(attrs, "vpcWatch", child.VpcWatch.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bfdIf.attributes", attrs)
@@ -181,23 +181,23 @@ func (data BFD) toBody(config BFD) nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bfdIf.children"
 				attrs = "{}"
-				if !child.DetectMultiplier.IsUnknown() && !child.DetectMultiplier.IsNull() {
+				if !child.DetectMultiplier.IsUnknown() && !child.DetectMultiplier.IsNull() && !configChild.DetectMultiplier.IsNull() {
 					attrs, _ = sjson.Set(attrs, "detectMult", strconv.FormatInt(child.DetectMultiplier.ValueInt64(), 10))
 				}
-				if !child.EchoReceiveInterval.IsUnknown() && !child.EchoReceiveInterval.IsNull() {
+				if !child.EchoReceiveInterval.IsUnknown() && !child.EchoReceiveInterval.IsNull() && !configChild.EchoReceiveInterval.IsNull() {
 					attrs, _ = sjson.Set(attrs, "echoRxIntvl", strconv.FormatInt(child.EchoReceiveInterval.ValueInt64(), 10))
 				}
-				if !child.MinReceiveInterval.IsUnknown() && !child.MinReceiveInterval.IsNull() {
+				if !child.MinReceiveInterval.IsUnknown() && !child.MinReceiveInterval.IsNull() && !configChild.MinReceiveInterval.IsNull() {
 					attrs, _ = sjson.Set(attrs, "minRxIntvl", strconv.FormatInt(child.MinReceiveInterval.ValueInt64(), 10))
 				}
-				if !child.MinTransmitInterval.IsUnknown() && !child.MinTransmitInterval.IsNull() {
+				if !child.MinTransmitInterval.IsUnknown() && !child.MinTransmitInterval.IsNull() && !configChild.MinTransmitInterval.IsNull() {
 					attrs, _ = sjson.Set(attrs, "minTxIntvl", strconv.FormatInt(child.MinTransmitInterval.ValueInt64(), 10))
 				}
 				if attrs != "{}" {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bfdIfKaP.attributes", attrs)
 				}
 				attrs = "{}"
-				if !child.AuthenticationInterop.IsUnknown() && !child.AuthenticationInterop.IsNull() {
+				if !child.AuthenticationInterop.IsUnknown() && !child.AuthenticationInterop.IsNull() && !configChild.AuthenticationInterop.IsNull() {
 					attrs, _ = sjson.Set(attrs, "authInterop", child.AuthenticationInterop.ValueString())
 				}
 				if !configChild.AuthenticationHexKeyWo.IsNull() {
@@ -205,7 +205,7 @@ func (data BFD) toBody(config BFD) nxos.Body {
 				} else if !child.AuthenticationHexKey.IsUnknown() && !child.AuthenticationHexKey.IsNull() {
 					attrs, _ = sjson.Set(attrs, "hexKey", child.AuthenticationHexKey.ValueString())
 				}
-				if !child.AuthenticationHexKeySize.IsUnknown() && !child.AuthenticationHexKeySize.IsNull() {
+				if !child.AuthenticationHexKeySize.IsUnknown() && !child.AuthenticationHexKeySize.IsNull() && !configChild.AuthenticationHexKeySize.IsNull() {
 					attrs, _ = sjson.Set(attrs, "hexKeySize", strconv.FormatInt(child.AuthenticationHexKeySize.ValueInt64(), 10))
 				}
 				if !configChild.AuthenticationKeyWo.IsNull() {
@@ -213,10 +213,10 @@ func (data BFD) toBody(config BFD) nxos.Body {
 				} else if !child.AuthenticationKey.IsUnknown() && !child.AuthenticationKey.IsNull() {
 					attrs, _ = sjson.Set(attrs, "key", child.AuthenticationKey.ValueString())
 				}
-				if !child.AuthenticationKeyId.IsUnknown() && !child.AuthenticationKeyId.IsNull() {
+				if !child.AuthenticationKeyId.IsUnknown() && !child.AuthenticationKeyId.IsNull() && !configChild.AuthenticationKeyId.IsNull() {
 					attrs, _ = sjson.Set(attrs, "keyId", strconv.FormatInt(child.AuthenticationKeyId.ValueInt64(), 10))
 				}
-				if !child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull() {
+				if !child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull() && !configChild.AuthenticationType.IsNull() {
 					attrs, _ = sjson.Set(attrs, "type", child.AuthenticationType.ValueString())
 				}
 				if attrs != "{}" {

@@ -103,7 +103,7 @@ func (data Keychain) getClassName() string {
 func (data Keychain) toBody(config Keychain) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() && !config.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
@@ -130,10 +130,10 @@ func (data Keychain) toBody(config Keychain) nxos.Body {
 					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "keyId", key)
-					if !child.CryptographicAlgorithm.IsUnknown() && !child.CryptographicAlgorithm.IsNull() {
+					if configChildOk && !child.CryptographicAlgorithm.IsUnknown() && !child.CryptographicAlgorithm.IsNull() && !configChild.CryptographicAlgorithm.IsNull() {
 						attrs, _ = sjson.Set(attrs, "cryptoAlgo", child.CryptographicAlgorithm.ValueString())
 					}
-					if !child.EncryptionType.IsUnknown() && !child.EncryptionType.IsNull() {
+					if configChildOk && !child.EncryptionType.IsUnknown() && !child.EncryptionType.IsNull() && !configChild.EncryptionType.IsNull() {
 						attrs, _ = sjson.Set(attrs, "encryptType", child.EncryptionType.ValueString())
 					}
 					if configChildOk && !configChild.KeyStringWo.IsNull() {

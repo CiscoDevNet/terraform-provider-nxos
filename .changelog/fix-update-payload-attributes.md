@@ -1,0 +1,1 @@
+- Fix resource updates sending attributes not present in the Terraform configuration, causing failures on certain NX-OS versions (#460)

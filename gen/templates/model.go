@@ -241,7 +241,7 @@ func (data {{camelCase .Name}}) getClassName() string {
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$dataVar}}.{{toGoName .TfName}}.ValueString())
 	}
 	{{- else}}
-	if !{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull() {
+	if !{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull() && !{{$configVar}}.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt({{$dataVar}}.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -273,7 +273,7 @@ func (data {{camelCase .Name}}) getClassName() string {
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$dataVar}}.{{toGoName .TfName}}.ValueString())
 	}
 	{{- else}}
-	if !{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull() {
+	if !{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull() && !{{$configVar}}.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt({{$dataVar}}.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -295,11 +295,9 @@ func (data {{camelCase .Name}}) getClassName() string {
 	{{- else}}
 	for key := range {{$dataVar}}.{{toGoName .TfName}} {
 	{{- end}}
-		{{- if or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .ChildClasses)}}
 		configChild, configChildOk := {{$configVar}}.{{toGoName .TfName}}[key]
 		_ = configChild
 		_ = configChildOk
-		{{- end}}
 		attrs = "{}"
 		{{- if .StatusReplace}}
 		attrs, _ = sjson.Set(attrs, "status", "replaced")
@@ -317,7 +315,7 @@ func (data {{camelCase .Name}}) getClassName() string {
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", child.{{toGoName .TfName}}.ValueString())
 		}
 		{{- else}}
-		if !child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull() {
+		if configChildOk && !child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull() && !configChild.{{toGoName .TfName}}.IsNull() {
 			{{- if eq .Type "Int64"}}
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
 			{{- else if eq .Type "Bool"}}
@@ -334,11 +332,7 @@ func (data {{camelCase .Name}}) getClassName() string {
 		{
 		nestedIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array()) - 1
 		nestedChildrenPath := {{$childrenPathVar}} + "." + strconv.Itoa(nestedIndex) + ".{{$childClassName}}.children"
-		{{- if or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .ChildClasses)}}
 		{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "child" "ConfigVar" "configChild" "ChildrenPathVar" "nestedChildrenPath" "RnArgs" (mapKeyRnFormatArgs "key" .Attributes))}}
-		{{- else}}
-		{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "child" "ConfigVar" $configVar "ChildrenPathVar" "nestedChildrenPath" "RnArgs" (mapKeyRnFormatArgs "key" .Attributes))}}
-		{{- end}}
 		}
 		{{- end}}
 	}
@@ -358,7 +352,7 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
 	}
 	{{- else}}
-	if !data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull() {
+	if !data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull() && !config.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}

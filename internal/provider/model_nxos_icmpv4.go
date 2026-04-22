@@ -100,7 +100,7 @@ func (data ICMPv4) getClassName() string {
 func (data ICMPv4) toBody(config ICMPv4) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() && !config.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
@@ -109,15 +109,18 @@ func (data ICMPv4) toBody(config ICMPv4) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icmpv4Inst"
 		attrs = "{}"
-		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() {
+		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
-		if !data.Control.IsUnknown() && !data.Control.IsNull() {
+		if !data.Control.IsUnknown() && !data.Control.IsNull() && !config.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Vrfs {
+			configChild, configChildOk := config.Vrfs[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "name", key)
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.icmpv4Dom.attributes", attrs)
@@ -125,9 +128,12 @@ func (data ICMPv4) toBody(config ICMPv4) nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".icmpv4Dom.children"
 				for key, child := range child.Interfaces {
+					configChild, configChildOk := configChild.Interfaces[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "id", key)
-					if !child.Control.IsUnknown() && !child.Control.IsNull() {
+					if configChildOk && !child.Control.IsUnknown() && !child.Control.IsNull() && !configChild.Control.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.icmpv4If.attributes", attrs)

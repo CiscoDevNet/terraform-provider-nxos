@@ -176,7 +176,7 @@ func (data PIM) getClassName() string {
 func (data PIM) toBody(config PIM) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() && !config.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
@@ -185,66 +185,69 @@ func (data PIM) toBody(config PIM) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
 		attrs = "{}"
-		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() {
+		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
-		if !data.Control.IsUnknown() && !data.Control.IsNull() {
+		if !data.Control.IsUnknown() && !data.Control.IsNull() && !config.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		if !data.EvpnBorderLeaf.IsUnknown() && !data.EvpnBorderLeaf.IsNull() {
+		if !data.EvpnBorderLeaf.IsUnknown() && !data.EvpnBorderLeaf.IsNull() && !config.EvpnBorderLeaf.IsNull() {
 			attrs, _ = sjson.Set(attrs, "evpnBorderLeaf", strconv.FormatBool(data.EvpnBorderLeaf.ValueBool()))
 		}
-		if !data.ExtraNet.IsUnknown() && !data.ExtraNet.IsNull() {
+		if !data.ExtraNet.IsUnknown() && !data.ExtraNet.IsNull() && !config.ExtraNet.IsNull() {
 			attrs, _ = sjson.Set(attrs, "extraNet", strconv.FormatBool(data.ExtraNet.ValueBool()))
 		}
-		if !data.JoinPruneDelay.IsUnknown() && !data.JoinPruneDelay.IsNull() {
+		if !data.JoinPruneDelay.IsUnknown() && !data.JoinPruneDelay.IsNull() && !config.JoinPruneDelay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "jpDelay", strconv.FormatInt(data.JoinPruneDelay.ValueInt64(), 10))
 		}
-		if !data.NullRegisterDelay.IsUnknown() && !data.NullRegisterDelay.IsNull() {
+		if !data.NullRegisterDelay.IsUnknown() && !data.NullRegisterDelay.IsNull() && !config.NullRegisterDelay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "nrDelay", strconv.FormatInt(data.NullRegisterDelay.ValueInt64(), 10))
 		}
-		if !data.NullRegisterNumberOfRoutes.IsUnknown() && !data.NullRegisterNumberOfRoutes.IsNull() {
+		if !data.NullRegisterNumberOfRoutes.IsUnknown() && !data.NullRegisterNumberOfRoutes.IsNull() && !config.NullRegisterNumberOfRoutes.IsNull() {
 			attrs, _ = sjson.Set(attrs, "nrNumRt", strconv.FormatInt(data.NullRegisterNumberOfRoutes.ValueInt64(), 10))
 		}
-		if !data.RegisterStop.IsUnknown() && !data.RegisterStop.IsNull() {
+		if !data.RegisterStop.IsUnknown() && !data.RegisterStop.IsNull() && !config.RegisterStop.IsNull() {
 			attrs, _ = sjson.Set(attrs, "regStop", strconv.FormatBool(data.RegisterStop.ValueBool()))
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Vrfs {
+			configChild, configChildOk := config.Vrfs[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "name", key)
-			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+			if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 			}
-			if !child.Bfd.IsUnknown() && !child.Bfd.IsNull() {
+			if configChildOk && !child.Bfd.IsUnknown() && !child.Bfd.IsNull() && !configChild.Bfd.IsNull() {
 				attrs, _ = sjson.Set(attrs, "bfd", strconv.FormatBool(child.Bfd.ValueBool()))
 			}
-			if !child.AutoEnable.IsUnknown() && !child.AutoEnable.IsNull() {
+			if configChildOk && !child.AutoEnable.IsUnknown() && !child.AutoEnable.IsNull() && !configChild.AutoEnable.IsNull() {
 				attrs, _ = sjson.Set(attrs, "autoEnable", strconv.FormatBool(child.AutoEnable.ValueBool()))
 			}
-			if !child.Control.IsUnknown() && !child.Control.IsNull() {
+			if configChildOk && !child.Control.IsUnknown() && !child.Control.IsNull() && !configChild.Control.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 			}
-			if !child.FlushRoutes.IsUnknown() && !child.FlushRoutes.IsNull() {
+			if configChildOk && !child.FlushRoutes.IsUnknown() && !child.FlushRoutes.IsNull() && !configChild.FlushRoutes.IsNull() {
 				attrs, _ = sjson.Set(attrs, "flushRoutes", strconv.FormatBool(child.FlushRoutes.ValueBool()))
 			}
-			if !child.JoinPruneDelay.IsUnknown() && !child.JoinPruneDelay.IsNull() {
+			if configChildOk && !child.JoinPruneDelay.IsUnknown() && !child.JoinPruneDelay.IsNull() && !configChild.JoinPruneDelay.IsNull() {
 				attrs, _ = sjson.Set(attrs, "jpDelay", strconv.FormatInt(child.JoinPruneDelay.ValueInt64(), 10))
 			}
-			if !child.LogNeighborChanges.IsUnknown() && !child.LogNeighborChanges.IsNull() {
+			if configChildOk && !child.LogNeighborChanges.IsUnknown() && !child.LogNeighborChanges.IsNull() && !configChild.LogNeighborChanges.IsNull() {
 				attrs, _ = sjson.Set(attrs, "logNbhChng", strconv.FormatBool(child.LogNeighborChanges.ValueBool()))
 			}
-			if !child.Mtu.IsUnknown() && !child.Mtu.IsNull() {
+			if configChildOk && !child.Mtu.IsUnknown() && !child.Mtu.IsNull() && !configChild.Mtu.IsNull() {
 				attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
 			}
-			if !child.RegisterRateLimit.IsUnknown() && !child.RegisterRateLimit.IsNull() {
+			if configChildOk && !child.RegisterRateLimit.IsUnknown() && !child.RegisterRateLimit.IsNull() && !configChild.RegisterRateLimit.IsNull() {
 				attrs, _ = sjson.Set(attrs, "regRateLmt", strconv.FormatInt(child.RegisterRateLimit.ValueInt64(), 10))
 			}
-			if !child.RfcStrict.IsUnknown() && !child.RfcStrict.IsNull() {
+			if configChildOk && !child.RfcStrict.IsUnknown() && !child.RfcStrict.IsNull() && !configChild.RfcStrict.IsNull() {
 				attrs, _ = sjson.Set(attrs, "rfcStrict", strconv.FormatBool(child.RfcStrict.ValueBool()))
 			}
-			if !child.SptSwitchGraceful.IsUnknown() && !child.SptSwitchGraceful.IsNull() {
+			if configChildOk && !child.SptSwitchGraceful.IsUnknown() && !child.SptSwitchGraceful.IsNull() && !configChild.SptSwitchGraceful.IsNull() {
 				attrs, _ = sjson.Set(attrs, "sptSwitchGraceful", strconv.FormatBool(child.SptSwitchGraceful.ValueBool()))
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimDom.attributes", attrs)
@@ -252,54 +255,57 @@ func (data PIM) toBody(config PIM) nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".pimDom.children"
 				for key, child := range child.Interfaces {
+					configChild, configChildOk := configChild.Interfaces[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "id", key)
-					if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+					if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
 						attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 					}
-					if !child.Bfd.IsUnknown() && !child.Bfd.IsNull() {
+					if configChildOk && !child.Bfd.IsUnknown() && !child.Bfd.IsNull() && !configChild.Bfd.IsNull() {
 						attrs, _ = sjson.Set(attrs, "bfdInst", child.Bfd.ValueString())
 					}
-					if !child.DrPriority.IsUnknown() && !child.DrPriority.IsNull() {
+					if configChildOk && !child.DrPriority.IsUnknown() && !child.DrPriority.IsNull() && !configChild.DrPriority.IsNull() {
 						attrs, _ = sjson.Set(attrs, "drPrio", strconv.FormatInt(child.DrPriority.ValueInt64(), 10))
 					}
-					if !child.Passive.IsUnknown() && !child.Passive.IsNull() {
+					if configChildOk && !child.Passive.IsUnknown() && !child.Passive.IsNull() && !configChild.Passive.IsNull() {
 						attrs, _ = sjson.Set(attrs, "passive", strconv.FormatBool(child.Passive.ValueBool()))
 					}
-					if !child.SparseMode.IsUnknown() && !child.SparseMode.IsNull() {
+					if configChildOk && !child.SparseMode.IsUnknown() && !child.SparseMode.IsNull() && !configChild.SparseMode.IsNull() {
 						attrs, _ = sjson.Set(attrs, "pimSparseMode", strconv.FormatBool(child.SparseMode.ValueBool()))
 					}
-					if !child.Border.IsUnknown() && !child.Border.IsNull() {
+					if configChildOk && !child.Border.IsUnknown() && !child.Border.IsNull() && !configChild.Border.IsNull() {
 						attrs, _ = sjson.Set(attrs, "border", strconv.FormatBool(child.Border.ValueBool()))
 					}
-					if !child.BorderRouter.IsUnknown() && !child.BorderRouter.IsNull() {
+					if configChildOk && !child.BorderRouter.IsUnknown() && !child.BorderRouter.IsNull() && !configChild.BorderRouter.IsNull() {
 						attrs, _ = sjson.Set(attrs, "borderRouter", strconv.FormatBool(child.BorderRouter.ValueBool()))
 					}
-					if !child.Control.IsUnknown() && !child.Control.IsNull() {
+					if configChildOk && !child.Control.IsUnknown() && !child.Control.IsNull() && !configChild.Control.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 					}
-					if !child.Description.IsUnknown() && !child.Description.IsNull() {
+					if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 					}
-					if !child.DrDelay.IsUnknown() && !child.DrDelay.IsNull() {
+					if configChildOk && !child.DrDelay.IsUnknown() && !child.DrDelay.IsNull() && !configChild.DrDelay.IsNull() {
 						attrs, _ = sjson.Set(attrs, "drDelay", strconv.FormatInt(child.DrDelay.ValueInt64(), 10))
 					}
-					if !child.JoinPruneRouteMap.IsUnknown() && !child.JoinPruneRouteMap.IsNull() {
+					if configChildOk && !child.JoinPruneRouteMap.IsUnknown() && !child.JoinPruneRouteMap.IsNull() && !configChild.JoinPruneRouteMap.IsNull() {
 						attrs, _ = sjson.Set(attrs, "jpRtMap", child.JoinPruneRouteMap.ValueString())
 					}
-					if !child.Name.IsUnknown() && !child.Name.IsNull() {
+					if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 					}
-					if !child.NeighborRouteMap.IsUnknown() && !child.NeighborRouteMap.IsNull() {
+					if configChildOk && !child.NeighborRouteMap.IsUnknown() && !child.NeighborRouteMap.IsNull() && !configChild.NeighborRouteMap.IsNull() {
 						attrs, _ = sjson.Set(attrs, "neighRtMap", child.NeighborRouteMap.ValueString())
 					}
-					if !child.NeighborPrefixList.IsUnknown() && !child.NeighborPrefixList.IsNull() {
+					if configChildOk && !child.NeighborPrefixList.IsUnknown() && !child.NeighborPrefixList.IsNull() && !configChild.NeighborPrefixList.IsNull() {
 						attrs, _ = sjson.Set(attrs, "neighpfxList", child.NeighborPrefixList.ValueString())
 					}
-					if !child.PfmSdBoundary.IsUnknown() && !child.PfmSdBoundary.IsNull() {
+					if configChildOk && !child.PfmSdBoundary.IsUnknown() && !child.PfmSdBoundary.IsNull() && !configChild.PfmSdBoundary.IsNull() {
 						attrs, _ = sjson.Set(attrs, "pfmSdBoundary", strconv.FormatInt(child.PfmSdBoundary.ValueInt64(), 10))
 					}
-					if !child.RfcStrict.IsUnknown() && !child.RfcStrict.IsNull() {
+					if configChildOk && !child.RfcStrict.IsUnknown() && !child.RfcStrict.IsNull() && !configChild.RfcStrict.IsNull() {
 						attrs, _ = sjson.Set(attrs, "rfcStrict", strconv.FormatBool(child.RfcStrict.ValueBool()))
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimIf.attributes", attrs)
@@ -308,34 +314,34 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimSSMPatP"
 					attrs = "{}"
-					if !child.SsmPolicyName.IsUnknown() && !child.SsmPolicyName.IsNull() {
+					if !child.SsmPolicyName.IsUnknown() && !child.SsmPolicyName.IsNull() && !configChild.SsmPolicyName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.SsmPolicyName.ValueString())
 					}
-					if !child.SsmPolicyDescription.IsUnknown() && !child.SsmPolicyDescription.IsNull() {
+					if !child.SsmPolicyDescription.IsUnknown() && !child.SsmPolicyDescription.IsNull() && !configChild.SsmPolicyDescription.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.SsmPolicyDescription.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
 					attrs = "{}"
-					if !child.SsmRangeGroupList1.IsUnknown() && !child.SsmRangeGroupList1.IsNull() {
+					if !child.SsmRangeGroupList1.IsUnknown() && !child.SsmRangeGroupList1.IsNull() && !configChild.SsmRangeGroupList1.IsNull() {
 						attrs, _ = sjson.Set(attrs, "grpList", child.SsmRangeGroupList1.ValueString())
 					}
-					if !child.SsmRangeGroupList2.IsUnknown() && !child.SsmRangeGroupList2.IsNull() {
+					if !child.SsmRangeGroupList2.IsUnknown() && !child.SsmRangeGroupList2.IsNull() && !configChild.SsmRangeGroupList2.IsNull() {
 						attrs, _ = sjson.Set(attrs, "grpList1", child.SsmRangeGroupList2.ValueString())
 					}
-					if !child.SsmRangeGroupList3.IsUnknown() && !child.SsmRangeGroupList3.IsNull() {
+					if !child.SsmRangeGroupList3.IsUnknown() && !child.SsmRangeGroupList3.IsNull() && !configChild.SsmRangeGroupList3.IsNull() {
 						attrs, _ = sjson.Set(attrs, "grpList2", child.SsmRangeGroupList3.ValueString())
 					}
-					if !child.SsmRangeGroupList4.IsUnknown() && !child.SsmRangeGroupList4.IsNull() {
+					if !child.SsmRangeGroupList4.IsUnknown() && !child.SsmRangeGroupList4.IsNull() && !configChild.SsmRangeGroupList4.IsNull() {
 						attrs, _ = sjson.Set(attrs, "grpList3", child.SsmRangeGroupList4.ValueString())
 					}
-					if !child.SsmRangePrefixList.IsUnknown() && !child.SsmRangePrefixList.IsNull() {
+					if !child.SsmRangePrefixList.IsUnknown() && !child.SsmRangePrefixList.IsNull() && !configChild.SsmRangePrefixList.IsNull() {
 						attrs, _ = sjson.Set(attrs, "pfxList", child.SsmRangePrefixList.ValueString())
 					}
-					if !child.SsmRangeRouteMap.IsUnknown() && !child.SsmRangeRouteMap.IsNull() {
+					if !child.SsmRangeRouteMap.IsUnknown() && !child.SsmRangeRouteMap.IsNull() && !configChild.SsmRangeRouteMap.IsNull() {
 						attrs, _ = sjson.Set(attrs, "rtMap", child.SsmRangeRouteMap.ValueString())
 					}
-					if !child.SsmRangeNone.IsUnknown() && !child.SsmRangeNone.IsNull() {
+					if !child.SsmRangeNone.IsUnknown() && !child.SsmRangeNone.IsNull() && !configChild.SsmRangeNone.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ssmNone", strconv.FormatBool(child.SsmRangeNone.ValueBool()))
 					}
 					if attrs != "{}" {
@@ -346,15 +352,18 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimStaticRPP"
 					attrs = "{}"
-					if !child.StaticRpPolicyName.IsUnknown() && !child.StaticRpPolicyName.IsNull() {
+					if !child.StaticRpPolicyName.IsUnknown() && !child.StaticRpPolicyName.IsNull() && !configChild.StaticRpPolicyName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.StaticRpPolicyName.ValueString())
 					}
-					if !child.StaticRpPolicyDescription.IsUnknown() && !child.StaticRpPolicyDescription.IsNull() {
+					if !child.StaticRpPolicyDescription.IsUnknown() && !child.StaticRpPolicyDescription.IsNull() && !configChild.StaticRpPolicyDescription.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.StaticRpPolicyDescription.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
 					for key, child := range child.StaticRps {
+						configChild, configChildOk := configChild.StaticRps[key]
+						_ = configChild
+						_ = configChildOk
 						attrs = "{}"
 						attrs, _ = sjson.Set(attrs, "addr", key)
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimStaticRP.attributes", attrs)
@@ -362,12 +371,15 @@ func (data PIM) toBody(config PIM) nxos.Body {
 							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".pimStaticRP.children"
 							for key, child := range child.GroupLists {
+								configChild, configChildOk := configChild.GroupLists[key]
+								_ = configChild
+								_ = configChildOk
 								attrs = "{}"
 								attrs, _ = sjson.Set(attrs, "grpListName", key)
-								if !child.Bidir.IsUnknown() && !child.Bidir.IsNull() {
+								if configChildOk && !child.Bidir.IsUnknown() && !child.Bidir.IsNull() && !configChild.Bidir.IsNull() {
 									attrs, _ = sjson.Set(attrs, "bidir", strconv.FormatBool(child.Bidir.ValueBool()))
 								}
-								if !child.Override.IsUnknown() && !child.Override.IsNull() {
+								if configChildOk && !child.Override.IsUnknown() && !child.Override.IsNull() && !configChild.Override.IsNull() {
 									attrs, _ = sjson.Set(attrs, "override", strconv.FormatBool(child.Override.ValueBool()))
 								}
 								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimRPGrpList.attributes", attrs)
@@ -379,21 +391,24 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimAcastRPFuncP"
 					attrs = "{}"
-					if !child.AnycastRpLocalInterface.IsUnknown() && !child.AnycastRpLocalInterface.IsNull() {
+					if !child.AnycastRpLocalInterface.IsUnknown() && !child.AnycastRpLocalInterface.IsNull() && !configChild.AnycastRpLocalInterface.IsNull() {
 						attrs, _ = sjson.Set(attrs, "localIf", child.AnycastRpLocalInterface.ValueString())
 					}
-					if !child.AnycastRpSourceInterface.IsUnknown() && !child.AnycastRpSourceInterface.IsNull() {
+					if !child.AnycastRpSourceInterface.IsUnknown() && !child.AnycastRpSourceInterface.IsNull() && !configChild.AnycastRpSourceInterface.IsNull() {
 						attrs, _ = sjson.Set(attrs, "srcIf", child.AnycastRpSourceInterface.ValueString())
 					}
-					if !child.AnycastRpDescription.IsUnknown() && !child.AnycastRpDescription.IsNull() {
+					if !child.AnycastRpDescription.IsUnknown() && !child.AnycastRpDescription.IsNull() && !configChild.AnycastRpDescription.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.AnycastRpDescription.ValueString())
 					}
-					if !child.AnycastRpName.IsUnknown() && !child.AnycastRpName.IsNull() {
+					if !child.AnycastRpName.IsUnknown() && !child.AnycastRpName.IsNull() && !configChild.AnycastRpName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.AnycastRpName.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
 					for key := range child.AnycastRpPeers {
+						configChild, configChildOk := configChild.AnycastRpPeers[key]
+						_ = configChild
+						_ = configChildOk
 						attrs = "{}"
 						keyParts := strings.SplitN(key, ";", 2)
 						attrs, _ = sjson.Set(attrs, "addr", keyParts[0])

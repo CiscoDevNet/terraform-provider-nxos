@@ -136,7 +136,7 @@ func (data DHCP) getClassName() string {
 func (data DHCP) toBody(config DHCP) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() && !config.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
@@ -145,114 +145,117 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".dhcpInst"
 		attrs = "{}"
-		if !data.Ipv6RelayInformationOptionVpn.IsUnknown() && !data.Ipv6RelayInformationOptionVpn.IsNull() {
+		if !data.Ipv6RelayInformationOptionVpn.IsUnknown() && !data.Ipv6RelayInformationOptionVpn.IsNull() && !config.Ipv6RelayInformationOptionVpn.IsNull() {
 			attrs, _ = sjson.Set(attrs, "Ipv6RelayInformationOptionVpnEnabled", strconv.FormatBool(data.Ipv6RelayInformationOptionVpn.ValueBool()))
 		}
-		if !data.Ipv6RelayOptionTypeCisco.IsUnknown() && !data.Ipv6RelayOptionTypeCisco.IsNull() {
+		if !data.Ipv6RelayOptionTypeCisco.IsUnknown() && !data.Ipv6RelayOptionTypeCisco.IsNull() && !config.Ipv6RelayOptionTypeCisco.IsNull() {
 			attrs, _ = sjson.Set(attrs, "Ipv6RelayOptionTypeCiscoEnabled", strconv.FormatBool(data.Ipv6RelayOptionTypeCisco.ValueBool()))
 		}
-		if !data.RelayInformationOption.IsUnknown() && !data.RelayInformationOption.IsNull() {
+		if !data.RelayInformationOption.IsUnknown() && !data.RelayInformationOption.IsNull() && !config.RelayInformationOption.IsNull() {
 			attrs, _ = sjson.Set(attrs, "RelayInformationOptionEnabled", strconv.FormatBool(data.RelayInformationOption.ValueBool()))
 		}
-		if !data.RelayInformationOptionTrust.IsUnknown() && !data.RelayInformationOptionTrust.IsNull() {
+		if !data.RelayInformationOptionTrust.IsUnknown() && !data.RelayInformationOptionTrust.IsNull() && !config.RelayInformationOptionTrust.IsNull() {
 			attrs, _ = sjson.Set(attrs, "RelayInformationOptionTrustEnabled", strconv.FormatBool(data.RelayInformationOptionTrust.ValueBool()))
 		}
-		if !data.RelayInformationOptionVpn.IsUnknown() && !data.RelayInformationOptionVpn.IsNull() {
+		if !data.RelayInformationOptionVpn.IsUnknown() && !data.RelayInformationOptionVpn.IsNull() && !config.RelayInformationOptionVpn.IsNull() {
 			attrs, _ = sjson.Set(attrs, "RelayInformationOptionVpnEnabled", strconv.FormatBool(data.RelayInformationOptionVpn.ValueBool()))
 		}
-		if !data.RelayInformationTrustAll.IsUnknown() && !data.RelayInformationTrustAll.IsNull() {
+		if !data.RelayInformationTrustAll.IsUnknown() && !data.RelayInformationTrustAll.IsNull() && !config.RelayInformationTrustAll.IsNull() {
 			attrs, _ = sjson.Set(attrs, "RelayInformationTrustAllEnabled", strconv.FormatBool(data.RelayInformationTrustAll.ValueBool()))
 		}
-		if !data.RelaySubOptionCircuitIdCustomized.IsUnknown() && !data.RelaySubOptionCircuitIdCustomized.IsNull() {
+		if !data.RelaySubOptionCircuitIdCustomized.IsUnknown() && !data.RelaySubOptionCircuitIdCustomized.IsNull() && !config.RelaySubOptionCircuitIdCustomized.IsNull() {
 			attrs, _ = sjson.Set(attrs, "RelaySubOptionCircuitIdCustomizedEnabled", strconv.FormatBool(data.RelaySubOptionCircuitIdCustomized.ValueBool()))
 		}
-		if !data.RelaySubOptionCircuitIdFormatString.IsUnknown() && !data.RelaySubOptionCircuitIdFormatString.IsNull() {
+		if !data.RelaySubOptionCircuitIdFormatString.IsUnknown() && !data.RelaySubOptionCircuitIdFormatString.IsNull() && !config.RelaySubOptionCircuitIdFormatString.IsNull() {
 			attrs, _ = sjson.Set(attrs, "RelaySubOptionCircuitIdFormatString", data.RelaySubOptionCircuitIdFormatString.ValueString())
 		}
-		if !data.RelaySubOptionTypeCisco.IsUnknown() && !data.RelaySubOptionTypeCisco.IsNull() {
+		if !data.RelaySubOptionTypeCisco.IsUnknown() && !data.RelaySubOptionTypeCisco.IsNull() && !config.RelaySubOptionTypeCisco.IsNull() {
 			attrs, _ = sjson.Set(attrs, "RelaySubOptionTypeCiscoEnabled", strconv.FormatBool(data.RelaySubOptionTypeCisco.ValueBool()))
 		}
-		if !data.SmartRelayGlobal.IsUnknown() && !data.SmartRelayGlobal.IsNull() {
+		if !data.SmartRelayGlobal.IsUnknown() && !data.SmartRelayGlobal.IsNull() && !config.SmartRelayGlobal.IsNull() {
 			attrs, _ = sjson.Set(attrs, "SmartRelayGlobalEnabled", strconv.FormatBool(data.SmartRelayGlobal.ValueBool()))
 		}
-		if !data.Snooping.IsUnknown() && !data.Snooping.IsNull() {
+		if !data.Snooping.IsUnknown() && !data.Snooping.IsNull() && !config.Snooping.IsNull() {
 			attrs, _ = sjson.Set(attrs, "SnoopingEnabled", strconv.FormatBool(data.Snooping.ValueBool()))
 		}
-		if !data.SnoopingInformationOption.IsUnknown() && !data.SnoopingInformationOption.IsNull() {
+		if !data.SnoopingInformationOption.IsUnknown() && !data.SnoopingInformationOption.IsNull() && !config.SnoopingInformationOption.IsNull() {
 			attrs, _ = sjson.Set(attrs, "SnoopingInformationOptionEnabled", strconv.FormatBool(data.SnoopingInformationOption.ValueBool()))
 		}
-		if !data.SnoopingVerifyMacAddress.IsUnknown() && !data.SnoopingVerifyMacAddress.IsNull() {
+		if !data.SnoopingVerifyMacAddress.IsUnknown() && !data.SnoopingVerifyMacAddress.IsNull() && !config.SnoopingVerifyMacAddress.IsNull() {
 			attrs, _ = sjson.Set(attrs, "SnoopingVerifyMacAddressEnabled", strconv.FormatBool(data.SnoopingVerifyMacAddress.ValueBool()))
 		}
-		if !data.DaiLogBufferEntries.IsUnknown() && !data.DaiLogBufferEntries.IsNull() {
+		if !data.DaiLogBufferEntries.IsUnknown() && !data.DaiLogBufferEntries.IsNull() && !config.DaiLogBufferEntries.IsNull() {
 			attrs, _ = sjson.Set(attrs, "daiLogBufEntries", strconv.FormatInt(data.DaiLogBufferEntries.ValueInt64(), 10))
 		}
-		if !data.DaiValidateDestination.IsUnknown() && !data.DaiValidateDestination.IsNull() {
+		if !data.DaiValidateDestination.IsUnknown() && !data.DaiValidateDestination.IsNull() && !config.DaiValidateDestination.IsNull() {
 			attrs, _ = sjson.Set(attrs, "daiValidateDst", strconv.FormatBool(data.DaiValidateDestination.ValueBool()))
 		}
-		if !data.DaiValidateIp.IsUnknown() && !data.DaiValidateIp.IsNull() {
+		if !data.DaiValidateIp.IsUnknown() && !data.DaiValidateIp.IsNull() && !config.DaiValidateIp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "daiValidateIp", strconv.FormatBool(data.DaiValidateIp.ValueBool()))
 		}
-		if !data.DaiValidateSource.IsUnknown() && !data.DaiValidateSource.IsNull() {
+		if !data.DaiValidateSource.IsUnknown() && !data.DaiValidateSource.IsNull() && !config.DaiValidateSource.IsNull() {
 			attrs, _ = sjson.Set(attrs, "daiValidateSrc", strconv.FormatBool(data.DaiValidateSource.ValueBool()))
 		}
-		if !data.Ipv6RelayOption79.IsUnknown() && !data.Ipv6RelayOption79.IsNull() {
+		if !data.Ipv6RelayOption79.IsUnknown() && !data.Ipv6RelayOption79.IsNull() && !config.Ipv6RelayOption79.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ipv6RelayOption79Enabled", strconv.FormatBool(data.Ipv6RelayOption79.ValueBool()))
 		}
-		if !data.PacketStrictValidation.IsUnknown() && !data.PacketStrictValidation.IsNull() {
+		if !data.PacketStrictValidation.IsUnknown() && !data.PacketStrictValidation.IsNull() && !config.PacketStrictValidation.IsNull() {
 			attrs, _ = sjson.Set(attrs, "pktStrictVal", strconv.FormatBool(data.PacketStrictValidation.ValueBool()))
 		}
-		if !data.RelayDai.IsUnknown() && !data.RelayDai.IsNull() {
+		if !data.RelayDai.IsUnknown() && !data.RelayDai.IsNull() && !config.RelayDai.IsNull() {
 			attrs, _ = sjson.Set(attrs, "relayDAIEnabled", strconv.FormatBool(data.RelayDai.ValueBool()))
 		}
-		if !data.RelayInformationOptionServerIdOverride.IsUnknown() && !data.RelayInformationOptionServerIdOverride.IsNull() {
+		if !data.RelayInformationOptionServerIdOverride.IsUnknown() && !data.RelayInformationOptionServerIdOverride.IsNull() && !config.RelayInformationOptionServerIdOverride.IsNull() {
 			attrs, _ = sjson.Set(attrs, "relayInformationOptionServerIdOverrideDisableEnabled", strconv.FormatInt(data.RelayInformationOptionServerIdOverride.ValueInt64(), 10))
 		}
-		if !data.RelaySubOptionFormatNonTlv.IsUnknown() && !data.RelaySubOptionFormatNonTlv.IsNull() {
+		if !data.RelaySubOptionFormatNonTlv.IsUnknown() && !data.RelaySubOptionFormatNonTlv.IsNull() && !config.RelaySubOptionFormatNonTlv.IsNull() {
 			attrs, _ = sjson.Set(attrs, "relaySubOptionFormatNonTLVEnabled", strconv.FormatBool(data.RelaySubOptionFormatNonTlv.ValueBool()))
 		}
-		if !data.RelayV4OverV6.IsUnknown() && !data.RelayV4OverV6.IsNull() {
+		if !data.RelayV4OverV6.IsUnknown() && !data.RelayV4OverV6.IsNull() && !config.RelayV4OverV6.IsNull() {
 			attrs, _ = sjson.Set(attrs, "relayV4overV6Enabled", strconv.FormatBool(data.RelayV4OverV6.ValueBool()))
 		}
-		if !data.RelayV6IapdRouteAdd.IsUnknown() && !data.RelayV6IapdRouteAdd.IsNull() {
+		if !data.RelayV6IapdRouteAdd.IsUnknown() && !data.RelayV6IapdRouteAdd.IsNull() && !config.RelayV6IapdRouteAdd.IsNull() {
 			attrs, _ = sjson.Set(attrs, "relayV6IAPDRouteAddEnabled", strconv.FormatBool(data.RelayV6IapdRouteAdd.ValueBool()))
 		}
-		if !data.SnoopSubOptionCircuitIdFormatString.IsUnknown() && !data.SnoopSubOptionCircuitIdFormatString.IsNull() {
+		if !data.SnoopSubOptionCircuitIdFormatString.IsUnknown() && !data.SnoopSubOptionCircuitIdFormatString.IsNull() && !config.SnoopSubOptionCircuitIdFormatString.IsNull() {
 			attrs, _ = sjson.Set(attrs, "snoopSubOptionCircuitIdFormatString", data.SnoopSubOptionCircuitIdFormatString.ValueString())
 		}
-		if !data.SnoopingSubOptionFormatNonTlv.IsUnknown() && !data.SnoopingSubOptionFormatNonTlv.IsNull() {
+		if !data.SnoopingSubOptionFormatNonTlv.IsUnknown() && !data.SnoopingSubOptionFormatNonTlv.IsNull() && !config.SnoopingSubOptionFormatNonTlv.IsNull() {
 			attrs, _ = sjson.Set(attrs, "snoopingSubOptionFormatNonTLVEnabled", strconv.FormatBool(data.SnoopingSubOptionFormatNonTlv.ValueBool()))
 		}
-		if !data.V4Relay.IsUnknown() && !data.V4Relay.IsNull() {
+		if !data.V4Relay.IsUnknown() && !data.V4Relay.IsNull() && !config.V4Relay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "v4RelayEnabled", strconv.FormatBool(data.V4Relay.ValueBool()))
 		}
-		if !data.V6Relay.IsUnknown() && !data.V6Relay.IsNull() {
+		if !data.V6Relay.IsUnknown() && !data.V6Relay.IsNull() && !config.V6Relay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "v6RelayEnabled", strconv.FormatBool(data.V6Relay.ValueBool()))
 		}
-		if !data.V6SmartRelayGlobal.IsUnknown() && !data.V6SmartRelayGlobal.IsNull() {
+		if !data.V6SmartRelayGlobal.IsUnknown() && !data.V6SmartRelayGlobal.IsNull() && !config.V6SmartRelayGlobal.IsNull() {
 			attrs, _ = sjson.Set(attrs, "v6SmartRelayGlobalEnabled", strconv.FormatBool(data.V6SmartRelayGlobal.ValueBool()))
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.RelayInterfaces {
+			configChild, configChildOk := config.RelayInterfaces[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "id", key)
-			if !child.InformationTrusted.IsUnknown() && !child.InformationTrusted.IsNull() {
+			if configChildOk && !child.InformationTrusted.IsUnknown() && !child.InformationTrusted.IsNull() && !configChild.InformationTrusted.IsNull() {
 				attrs, _ = sjson.Set(attrs, "InformationTrustedEnabled", strconv.FormatBool(child.InformationTrusted.ValueBool()))
 			}
-			if !child.SmartRelay.IsUnknown() && !child.SmartRelay.IsNull() {
+			if configChildOk && !child.SmartRelay.IsUnknown() && !child.SmartRelay.IsNull() && !configChild.SmartRelay.IsNull() {
 				attrs, _ = sjson.Set(attrs, "SmartRelayEnabled", strconv.FormatBool(child.SmartRelay.ValueBool()))
 			}
-			if !child.SubnetBroadcast.IsUnknown() && !child.SubnetBroadcast.IsNull() {
+			if configChildOk && !child.SubnetBroadcast.IsUnknown() && !child.SubnetBroadcast.IsNull() && !configChild.SubnetBroadcast.IsNull() {
 				attrs, _ = sjson.Set(attrs, "SubnetBroadcastEnabled", strconv.FormatBool(child.SubnetBroadcast.ValueBool()))
 			}
-			if !child.Options.IsUnknown() && !child.Options.IsNull() {
+			if configChildOk && !child.Options.IsUnknown() && !child.Options.IsNull() && !configChild.Options.IsNull() {
 				attrs, _ = sjson.Set(attrs, "options", child.Options.ValueString())
 			}
-			if !child.SubnetSelection.IsUnknown() && !child.SubnetSelection.IsNull() {
+			if configChildOk && !child.SubnetSelection.IsUnknown() && !child.SubnetSelection.IsNull() && !configChild.SubnetSelection.IsNull() {
 				attrs, _ = sjson.Set(attrs, "subnetSelection", child.SubnetSelection.ValueString())
 			}
-			if !child.V6SmartRelay.IsUnknown() && !child.V6SmartRelay.IsNull() {
+			if configChildOk && !child.V6SmartRelay.IsUnknown() && !child.V6SmartRelay.IsNull() && !configChild.V6SmartRelay.IsNull() {
 				attrs, _ = sjson.Set(attrs, "v6SmartRelayEnabled", strconv.FormatBool(child.V6SmartRelay.ValueBool()))
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpRelayIf.attributes", attrs)
@@ -260,11 +263,14 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".dhcpRelayIf.children"
 				for key, child := range child.Addresses {
+					configChild, configChildOk := configChild.Addresses[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					keyParts := strings.SplitN(key, ";", 2)
 					attrs, _ = sjson.Set(attrs, "vrf", keyParts[0])
 					attrs, _ = sjson.Set(attrs, "address", keyParts[1])
-					if !child.Counter.IsUnknown() && !child.Counter.IsNull() {
+					if configChildOk && !child.Counter.IsUnknown() && !child.Counter.IsNull() && !configChild.Counter.IsNull() {
 						attrs, _ = sjson.Set(attrs, "counter", strconv.FormatInt(child.Counter.ValueInt64(), 10))
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpRelayAddr.attributes", attrs)

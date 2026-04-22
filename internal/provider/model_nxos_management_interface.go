@@ -99,27 +99,30 @@ func (data ManagementInterface) toBody(config ManagementInterface) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.ManagementInterfaces {
+		configChild, configChildOk := config.ManagementInterfaces[key]
+		_ = configChild
+		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "id", key)
-		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+		if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
-		if !child.AutoNegotiation.IsUnknown() && !child.AutoNegotiation.IsNull() {
+		if configChildOk && !child.AutoNegotiation.IsUnknown() && !child.AutoNegotiation.IsNull() && !configChild.AutoNegotiation.IsNull() {
 			attrs, _ = sjson.Set(attrs, "autoNeg", child.AutoNegotiation.ValueString())
 		}
-		if !child.Description.IsUnknown() && !child.Description.IsNull() {
+		if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 		}
-		if !child.Duplex.IsUnknown() && !child.Duplex.IsNull() {
+		if configChildOk && !child.Duplex.IsUnknown() && !child.Duplex.IsNull() && !configChild.Duplex.IsNull() {
 			attrs, _ = sjson.Set(attrs, "duplex", child.Duplex.ValueString())
 		}
-		if !child.Mtu.IsUnknown() && !child.Mtu.IsNull() {
+		if configChildOk && !child.Mtu.IsUnknown() && !child.Mtu.IsNull() && !configChild.Mtu.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
 		}
-		if !child.SnmpTrapState.IsUnknown() && !child.SnmpTrapState.IsNull() {
+		if configChildOk && !child.SnmpTrapState.IsUnknown() && !child.SnmpTrapState.IsNull() && !configChild.SnmpTrapState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "snmpTrapSt", child.SnmpTrapState.ValueString())
 		}
-		if !child.Speed.IsUnknown() && !child.Speed.IsNull() {
+		if configChildOk && !child.Speed.IsUnknown() && !child.Speed.IsNull() && !configChild.Speed.IsNull() {
 			attrs, _ = sjson.Set(attrs, "speed", child.Speed.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.mgmtMgmtIf.attributes", attrs)
@@ -127,7 +130,7 @@ func (data ManagementInterface) toBody(config ManagementInterface) nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".mgmtMgmtIf.children"
 			attrs = "{}"
-			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() {
+			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() && !configChild.VrfDn.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())
 			}
 			if attrs != "{}" {

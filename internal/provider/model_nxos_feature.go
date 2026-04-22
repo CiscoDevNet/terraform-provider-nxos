@@ -128,210 +128,210 @@ func (data Feature) toBody(config Feature) nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
-		if !data.BashShell.IsUnknown() && !data.BashShell.IsNull() {
+		if !data.BashShell.IsUnknown() && !data.BashShell.IsNull() && !config.BashShell.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.BashShell.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmBashShell.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Bfd.IsUnknown() && !data.Bfd.IsNull() {
+		if !data.Bfd.IsUnknown() && !data.Bfd.IsNull() && !config.Bfd.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Bfd.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmBfd.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Bgp.IsUnknown() && !data.Bgp.IsNull() {
+		if !data.Bgp.IsUnknown() && !data.Bgp.IsNull() && !config.Bgp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Bgp.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmBgp.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Dhcp.IsUnknown() && !data.Dhcp.IsNull() {
+		if !data.Dhcp.IsUnknown() && !data.Dhcp.IsNull() && !config.Dhcp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Dhcp.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmDhcp.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Evpn.IsUnknown() && !data.Evpn.IsNull() {
+		if !data.Evpn.IsUnknown() && !data.Evpn.IsNull() && !config.Evpn.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Evpn.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmEvpn.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Hmm.IsUnknown() && !data.Hmm.IsNull() {
+		if !data.Hmm.IsUnknown() && !data.Hmm.IsNull() && !config.Hmm.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Hmm.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmHmm.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Hsrp.IsUnknown() && !data.Hsrp.IsNull() {
+		if !data.Hsrp.IsUnknown() && !data.Hsrp.IsNull() && !config.Hsrp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Hsrp.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmHsrp.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.InterfaceVlan.IsUnknown() && !data.InterfaceVlan.IsNull() {
+		if !data.InterfaceVlan.IsUnknown() && !data.InterfaceVlan.IsNull() && !config.InterfaceVlan.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InterfaceVlan.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmInterfaceVlan.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Isis.IsUnknown() && !data.Isis.IsNull() {
+		if !data.Isis.IsUnknown() && !data.Isis.IsNull() && !config.Isis.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Isis.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmIsis.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Lacp.IsUnknown() && !data.Lacp.IsNull() {
+		if !data.Lacp.IsUnknown() && !data.Lacp.IsNull() && !config.Lacp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Lacp.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmLacp.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Lldp.IsUnknown() && !data.Lldp.IsNull() {
+		if !data.Lldp.IsUnknown() && !data.Lldp.IsNull() && !config.Lldp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Lldp.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmLldp.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Macsec.IsUnknown() && !data.Macsec.IsNull() {
+		if !data.Macsec.IsUnknown() && !data.Macsec.IsNull() && !config.Macsec.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Macsec.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmMacsec.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Netflow.IsUnknown() && !data.Netflow.IsNull() {
+		if !data.Netflow.IsUnknown() && !data.Netflow.IsNull() && !config.Netflow.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Netflow.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmNetflow.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Ngmvpn.IsUnknown() && !data.Ngmvpn.IsNull() {
+		if !data.Ngmvpn.IsUnknown() && !data.Ngmvpn.IsNull() && !config.Ngmvpn.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Ngmvpn.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmNgmvpn.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Ngoam.IsUnknown() && !data.Ngoam.IsNull() {
+		if !data.Ngoam.IsUnknown() && !data.Ngoam.IsNull() && !config.Ngoam.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Ngoam.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmNgoam.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.NvOverlay.IsUnknown() && !data.NvOverlay.IsNull() {
+		if !data.NvOverlay.IsUnknown() && !data.NvOverlay.IsNull() && !config.NvOverlay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.NvOverlay.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmNvo.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Nxapi.IsUnknown() && !data.Nxapi.IsNull() {
+		if !data.Nxapi.IsUnknown() && !data.Nxapi.IsNull() && !config.Nxapi.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Nxapi.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmNxapi.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Ospf.IsUnknown() && !data.Ospf.IsNull() {
+		if !data.Ospf.IsUnknown() && !data.Ospf.IsNull() && !config.Ospf.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Ospf.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmOspf.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Ospfv3.IsUnknown() && !data.Ospfv3.IsNull() {
+		if !data.Ospfv3.IsUnknown() && !data.Ospfv3.IsNull() && !config.Ospfv3.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Ospfv3.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmOspfv3.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Pim.IsUnknown() && !data.Pim.IsNull() {
+		if !data.Pim.IsUnknown() && !data.Pim.IsNull() && !config.Pim.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Pim.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmPim.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Ptp.IsUnknown() && !data.Ptp.IsNull() {
+		if !data.Ptp.IsUnknown() && !data.Ptp.IsNull() && !config.Ptp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Ptp.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmPtp.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Pvlan.IsUnknown() && !data.Pvlan.IsNull() {
+		if !data.Pvlan.IsUnknown() && !data.Pvlan.IsNull() && !config.Pvlan.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Pvlan.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmPvlan.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Sflow.IsUnknown() && !data.Sflow.IsNull() {
+		if !data.Sflow.IsUnknown() && !data.Sflow.IsNull() && !config.Sflow.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Sflow.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmSflow.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.ServiceAcceleration.IsUnknown() && !data.ServiceAcceleration.IsNull() {
+		if !data.ServiceAcceleration.IsUnknown() && !data.ServiceAcceleration.IsNull() && !config.ServiceAcceleration.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.ServiceAcceleration.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmServiceAcceleration.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Ssh.IsUnknown() && !data.Ssh.IsNull() {
+		if !data.Ssh.IsUnknown() && !data.Ssh.IsNull() && !config.Ssh.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Ssh.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmSsh.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Tacacs.IsUnknown() && !data.Tacacs.IsNull() {
+		if !data.Tacacs.IsUnknown() && !data.Tacacs.IsNull() && !config.Tacacs.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Tacacs.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmTacacsplus.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Telnet.IsUnknown() && !data.Telnet.IsNull() {
+		if !data.Telnet.IsUnknown() && !data.Telnet.IsNull() && !config.Telnet.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Telnet.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmTelnet.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Udld.IsUnknown() && !data.Udld.IsNull() {
+		if !data.Udld.IsUnknown() && !data.Udld.IsNull() && !config.Udld.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Udld.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmUdld.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.VnSegment.IsUnknown() && !data.VnSegment.IsNull() {
+		if !data.VnSegment.IsUnknown() && !data.VnSegment.IsNull() && !config.VnSegment.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.VnSegment.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmVnSegment.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.Vpc.IsUnknown() && !data.Vpc.IsNull() {
+		if !data.Vpc.IsUnknown() && !data.Vpc.IsNull() && !config.Vpc.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Vpc.ValueString())
 		}
 		if attrs != "{}" {
@@ -339,9 +339,12 @@ func (data Feature) toBody(config Feature) nxos.Body {
 		}
 	}
 	for key, child := range data.FeatureSets {
+		configChild, configChildOk := config.FeatureSets[key]
+		_ = configChild
+		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "name", key)
-		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+		if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.fsetFeatureSet.attributes", attrs)

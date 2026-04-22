@@ -113,9 +113,12 @@ func (data QueuingQoS) toBody(config QueuingQoS) nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.PolicyMaps {
+			configChild, configChildOk := config.PolicyMaps[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "name", key)
-			if !child.MatchType.IsUnknown() && !child.MatchType.IsNull() {
+			if configChildOk && !child.MatchType.IsUnknown() && !child.MatchType.IsNull() && !configChild.MatchType.IsNull() {
 				attrs, _ = sjson.Set(attrs, "matchType", child.MatchType.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosPMapInst.attributes", attrs)
@@ -123,12 +126,15 @@ func (data QueuingQoS) toBody(config QueuingQoS) nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosPMapInst.children"
 				for key, child := range child.MatchClassMaps {
+					configChild, configChildOk := configChild.MatchClassMaps[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "name", key)
-					if !child.NextClassMap.IsUnknown() && !child.NextClassMap.IsNull() {
+					if configChildOk && !child.NextClassMap.IsUnknown() && !child.NextClassMap.IsNull() && !configChild.NextClassMap.IsNull() {
 						attrs, _ = sjson.Set(attrs, "nextCMap", child.NextClassMap.ValueString())
 					}
-					if !child.PreviousClassMap.IsUnknown() && !child.PreviousClassMap.IsNull() {
+					if configChildOk && !child.PreviousClassMap.IsUnknown() && !child.PreviousClassMap.IsNull() && !configChild.PreviousClassMap.IsNull() {
 						attrs, _ = sjson.Set(attrs, "prevCMap", child.PreviousClassMap.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosMatchCMap.attributes", attrs)
@@ -136,14 +142,14 @@ func (data QueuingQoS) toBody(config QueuingQoS) nxos.Body {
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosMatchCMap.children"
 						attrs = "{}"
-						if !child.Priority.IsUnknown() && !child.Priority.IsNull() {
+						if !child.Priority.IsUnknown() && !child.Priority.IsNull() && !configChild.Priority.IsNull() {
 							attrs, _ = sjson.Set(attrs, "level", strconv.FormatInt(child.Priority.ValueInt64(), 10))
 						}
 						if attrs != "{}" {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosPriority.attributes", attrs)
 						}
 						attrs = "{}"
-						if !child.RemainingBandwidth.IsUnknown() && !child.RemainingBandwidth.IsNull() {
+						if !child.RemainingBandwidth.IsUnknown() && !child.RemainingBandwidth.IsNull() && !configChild.RemainingBandwidth.IsNull() {
 							attrs, _ = sjson.Set(attrs, "val", strconv.FormatInt(child.RemainingBandwidth.ValueInt64(), 10))
 						}
 						if attrs != "{}" {
@@ -173,10 +179,10 @@ func (data QueuingQoS) toBody(config QueuingQoS) nxos.Body {
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
-				if !data.SystemOutPolicyMapName.IsUnknown() && !data.SystemOutPolicyMapName.IsNull() {
+				if !data.SystemOutPolicyMapName.IsUnknown() && !data.SystemOutPolicyMapName.IsNull() && !config.SystemOutPolicyMapName.IsNull() {
 					attrs, _ = sjson.Set(attrs, "name", data.SystemOutPolicyMapName.ValueString())
 				}
-				if !data.PolicyMapStatistics.IsUnknown() && !data.PolicyMapStatistics.IsNull() {
+				if !data.PolicyMapStatistics.IsUnknown() && !data.PolicyMapStatistics.IsNull() && !config.PolicyMapStatistics.IsNull() {
 					attrs, _ = sjson.Set(attrs, "stats", strconv.FormatBool(data.PolicyMapStatistics.ValueBool()))
 				}
 				if attrs != "{}" {

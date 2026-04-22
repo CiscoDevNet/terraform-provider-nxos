@@ -160,9 +160,12 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.ClassMaps {
+			configChild, configChildOk := config.ClassMaps[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "name", key)
-			if !child.MatchType.IsUnknown() && !child.MatchType.IsNull() {
+			if configChildOk && !child.MatchType.IsUnknown() && !child.MatchType.IsNull() && !configChild.MatchType.IsNull() {
 				attrs, _ = sjson.Set(attrs, "matchType", child.MatchType.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosCMapInst.attributes", attrs)
@@ -170,6 +173,9 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosCMapInst.children"
 				for key := range child.DscpValues {
+					configChild, configChildOk := configChild.DscpValues[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "val", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosDscp.attributes", attrs)
@@ -184,9 +190,12 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.PolicyMaps {
+			configChild, configChildOk := config.PolicyMaps[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "name", key)
-			if !child.MatchType.IsUnknown() && !child.MatchType.IsNull() {
+			if configChildOk && !child.MatchType.IsUnknown() && !child.MatchType.IsNull() && !configChild.MatchType.IsNull() {
 				attrs, _ = sjson.Set(attrs, "matchType", child.MatchType.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosPMapInst.attributes", attrs)
@@ -194,12 +203,15 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosPMapInst.children"
 				for key, child := range child.MatchClassMaps {
+					configChild, configChildOk := configChild.MatchClassMaps[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "name", key)
-					if !child.NextClassMap.IsUnknown() && !child.NextClassMap.IsNull() {
+					if configChildOk && !child.NextClassMap.IsUnknown() && !child.NextClassMap.IsNull() && !configChild.NextClassMap.IsNull() {
 						attrs, _ = sjson.Set(attrs, "nextCMap", child.NextClassMap.ValueString())
 					}
-					if !child.PreviousClassMap.IsUnknown() && !child.PreviousClassMap.IsNull() {
+					if configChildOk && !child.PreviousClassMap.IsUnknown() && !child.PreviousClassMap.IsNull() && !configChild.PreviousClassMap.IsNull() {
 						attrs, _ = sjson.Set(attrs, "prevCMap", child.PreviousClassMap.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosMatchCMap.attributes", attrs)
@@ -207,80 +219,80 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosMatchCMap.children"
 						attrs = "{}"
-						if !child.SetQosGroupId.IsUnknown() && !child.SetQosGroupId.IsNull() {
+						if !child.SetQosGroupId.IsUnknown() && !child.SetQosGroupId.IsNull() && !configChild.SetQosGroupId.IsNull() {
 							attrs, _ = sjson.Set(attrs, "id", strconv.FormatInt(child.SetQosGroupId.ValueInt64(), 10))
 						}
 						if attrs != "{}" {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosSetQoSGrp.attributes", attrs)
 						}
 						attrs = "{}"
-						if !child.PoliceBcRate.IsUnknown() && !child.PoliceBcRate.IsNull() {
+						if !child.PoliceBcRate.IsUnknown() && !child.PoliceBcRate.IsNull() && !configChild.PoliceBcRate.IsNull() {
 							attrs, _ = sjson.Set(attrs, "bcRate", strconv.FormatInt(child.PoliceBcRate.ValueInt64(), 10))
 						}
-						if !child.PoliceBcUnit.IsUnknown() && !child.PoliceBcUnit.IsNull() {
+						if !child.PoliceBcUnit.IsUnknown() && !child.PoliceBcUnit.IsNull() && !configChild.PoliceBcUnit.IsNull() {
 							attrs, _ = sjson.Set(attrs, "bcUnit", child.PoliceBcUnit.ValueString())
 						}
-						if !child.PoliceBeRate.IsUnknown() && !child.PoliceBeRate.IsNull() {
+						if !child.PoliceBeRate.IsUnknown() && !child.PoliceBeRate.IsNull() && !configChild.PoliceBeRate.IsNull() {
 							attrs, _ = sjson.Set(attrs, "beRate", strconv.FormatInt(child.PoliceBeRate.ValueInt64(), 10))
 						}
-						if !child.PoliceBeUnit.IsUnknown() && !child.PoliceBeUnit.IsNull() {
+						if !child.PoliceBeUnit.IsUnknown() && !child.PoliceBeUnit.IsNull() && !configChild.PoliceBeUnit.IsNull() {
 							attrs, _ = sjson.Set(attrs, "beUnit", child.PoliceBeUnit.ValueString())
 						}
-						if !child.PoliceCirRate.IsUnknown() && !child.PoliceCirRate.IsNull() {
+						if !child.PoliceCirRate.IsUnknown() && !child.PoliceCirRate.IsNull() && !configChild.PoliceCirRate.IsNull() {
 							attrs, _ = sjson.Set(attrs, "cirRate", strconv.FormatInt(child.PoliceCirRate.ValueInt64(), 10))
 						}
-						if !child.PoliceCirUnit.IsUnknown() && !child.PoliceCirUnit.IsNull() {
+						if !child.PoliceCirUnit.IsUnknown() && !child.PoliceCirUnit.IsNull() && !configChild.PoliceCirUnit.IsNull() {
 							attrs, _ = sjson.Set(attrs, "cirUnit", child.PoliceCirUnit.ValueString())
 						}
-						if !child.PoliceConformAction.IsUnknown() && !child.PoliceConformAction.IsNull() {
+						if !child.PoliceConformAction.IsUnknown() && !child.PoliceConformAction.IsNull() && !configChild.PoliceConformAction.IsNull() {
 							attrs, _ = sjson.Set(attrs, "conformAction", child.PoliceConformAction.ValueString())
 						}
-						if !child.PoliceConformSetCos.IsUnknown() && !child.PoliceConformSetCos.IsNull() {
+						if !child.PoliceConformSetCos.IsUnknown() && !child.PoliceConformSetCos.IsNull() && !configChild.PoliceConformSetCos.IsNull() {
 							attrs, _ = sjson.Set(attrs, "conformSetCosTransmit", strconv.FormatInt(child.PoliceConformSetCos.ValueInt64(), 10))
 						}
-						if !child.PoliceConformSetDscp.IsUnknown() && !child.PoliceConformSetDscp.IsNull() {
+						if !child.PoliceConformSetDscp.IsUnknown() && !child.PoliceConformSetDscp.IsNull() && !configChild.PoliceConformSetDscp.IsNull() {
 							attrs, _ = sjson.Set(attrs, "conformSetDscpTransmit", child.PoliceConformSetDscp.ValueString())
 						}
-						if !child.PoliceConformSetPrecedence.IsUnknown() && !child.PoliceConformSetPrecedence.IsNull() {
+						if !child.PoliceConformSetPrecedence.IsUnknown() && !child.PoliceConformSetPrecedence.IsNull() && !configChild.PoliceConformSetPrecedence.IsNull() {
 							attrs, _ = sjson.Set(attrs, "conformSetPrecTransmit", child.PoliceConformSetPrecedence.ValueString())
 						}
-						if !child.PoliceConformSetQosGroup.IsUnknown() && !child.PoliceConformSetQosGroup.IsNull() {
+						if !child.PoliceConformSetQosGroup.IsUnknown() && !child.PoliceConformSetQosGroup.IsNull() && !configChild.PoliceConformSetQosGroup.IsNull() {
 							attrs, _ = sjson.Set(attrs, "conformSetQosGrpTransmit", strconv.FormatInt(child.PoliceConformSetQosGroup.ValueInt64(), 10))
 						}
-						if !child.PoliceExceedAction.IsUnknown() && !child.PoliceExceedAction.IsNull() {
+						if !child.PoliceExceedAction.IsUnknown() && !child.PoliceExceedAction.IsNull() && !configChild.PoliceExceedAction.IsNull() {
 							attrs, _ = sjson.Set(attrs, "exceedAction", child.PoliceExceedAction.ValueString())
 						}
-						if !child.PoliceExceedSetCos.IsUnknown() && !child.PoliceExceedSetCos.IsNull() {
+						if !child.PoliceExceedSetCos.IsUnknown() && !child.PoliceExceedSetCos.IsNull() && !configChild.PoliceExceedSetCos.IsNull() {
 							attrs, _ = sjson.Set(attrs, "exceedSetCosTransmit", strconv.FormatInt(child.PoliceExceedSetCos.ValueInt64(), 10))
 						}
-						if !child.PoliceExceedSetDscp.IsUnknown() && !child.PoliceExceedSetDscp.IsNull() {
+						if !child.PoliceExceedSetDscp.IsUnknown() && !child.PoliceExceedSetDscp.IsNull() && !configChild.PoliceExceedSetDscp.IsNull() {
 							attrs, _ = sjson.Set(attrs, "exceedSetDscpTransmit", child.PoliceExceedSetDscp.ValueString())
 						}
-						if !child.PoliceExceedSetPrecedence.IsUnknown() && !child.PoliceExceedSetPrecedence.IsNull() {
+						if !child.PoliceExceedSetPrecedence.IsUnknown() && !child.PoliceExceedSetPrecedence.IsNull() && !configChild.PoliceExceedSetPrecedence.IsNull() {
 							attrs, _ = sjson.Set(attrs, "exceedSetPrecTransmit", child.PoliceExceedSetPrecedence.ValueString())
 						}
-						if !child.PoliceExceedSetQosGroup.IsUnknown() && !child.PoliceExceedSetQosGroup.IsNull() {
+						if !child.PoliceExceedSetQosGroup.IsUnknown() && !child.PoliceExceedSetQosGroup.IsNull() && !configChild.PoliceExceedSetQosGroup.IsNull() {
 							attrs, _ = sjson.Set(attrs, "exceedSetQosGrpTransmit", strconv.FormatInt(child.PoliceExceedSetQosGroup.ValueInt64(), 10))
 						}
-						if !child.PolicePirRate.IsUnknown() && !child.PolicePirRate.IsNull() {
+						if !child.PolicePirRate.IsUnknown() && !child.PolicePirRate.IsNull() && !configChild.PolicePirRate.IsNull() {
 							attrs, _ = sjson.Set(attrs, "pirRate", strconv.FormatInt(child.PolicePirRate.ValueInt64(), 10))
 						}
-						if !child.PolicePirUnit.IsUnknown() && !child.PolicePirUnit.IsNull() {
+						if !child.PolicePirUnit.IsUnknown() && !child.PolicePirUnit.IsNull() && !configChild.PolicePirUnit.IsNull() {
 							attrs, _ = sjson.Set(attrs, "pirUnit", child.PolicePirUnit.ValueString())
 						}
-						if !child.PoliceViolateAction.IsUnknown() && !child.PoliceViolateAction.IsNull() {
+						if !child.PoliceViolateAction.IsUnknown() && !child.PoliceViolateAction.IsNull() && !configChild.PoliceViolateAction.IsNull() {
 							attrs, _ = sjson.Set(attrs, "violateAction", child.PoliceViolateAction.ValueString())
 						}
-						if !child.PoliceViolateSetCos.IsUnknown() && !child.PoliceViolateSetCos.IsNull() {
+						if !child.PoliceViolateSetCos.IsUnknown() && !child.PoliceViolateSetCos.IsNull() && !configChild.PoliceViolateSetCos.IsNull() {
 							attrs, _ = sjson.Set(attrs, "violateSetCosTransmit", strconv.FormatInt(child.PoliceViolateSetCos.ValueInt64(), 10))
 						}
-						if !child.PoliceViolateSetDscp.IsUnknown() && !child.PoliceViolateSetDscp.IsNull() {
+						if !child.PoliceViolateSetDscp.IsUnknown() && !child.PoliceViolateSetDscp.IsNull() && !configChild.PoliceViolateSetDscp.IsNull() {
 							attrs, _ = sjson.Set(attrs, "violateSetDscpTransmit", child.PoliceViolateSetDscp.ValueString())
 						}
-						if !child.PoliceViolateSetPrecedence.IsUnknown() && !child.PoliceViolateSetPrecedence.IsNull() {
+						if !child.PoliceViolateSetPrecedence.IsUnknown() && !child.PoliceViolateSetPrecedence.IsNull() && !configChild.PoliceViolateSetPrecedence.IsNull() {
 							attrs, _ = sjson.Set(attrs, "violateSetPrecTransmit", child.PoliceViolateSetPrecedence.ValueString())
 						}
-						if !child.PoliceViolateSetQosGroup.IsUnknown() && !child.PoliceViolateSetQosGroup.IsNull() {
+						if !child.PoliceViolateSetQosGroup.IsUnknown() && !child.PoliceViolateSetQosGroup.IsNull() && !configChild.PoliceViolateSetQosGroup.IsNull() {
 							attrs, _ = sjson.Set(attrs, "violateSetQosGrpTransmit", strconv.FormatInt(child.PoliceViolateSetQosGroup.ValueInt64(), 10))
 						}
 						if attrs != "{}" {
@@ -304,6 +316,9 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.PolicyInterfaceIn {
+				configChild, configChildOk := config.PolicyInterfaceIn[key]
+				_ = configChild
+				_ = configChildOk
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "name", key)
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosIf.attributes", attrs)
@@ -311,10 +326,10 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosIf.children"
 					attrs = "{}"
-					if !child.PolicyMapName.IsUnknown() && !child.PolicyMapName.IsNull() {
+					if !child.PolicyMapName.IsUnknown() && !child.PolicyMapName.IsNull() && !configChild.PolicyMapName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.PolicyMapName.ValueString())
 					}
-					if !child.PolicyMapStatistics.IsUnknown() && !child.PolicyMapStatistics.IsNull() {
+					if !child.PolicyMapStatistics.IsUnknown() && !child.PolicyMapStatistics.IsNull() && !configChild.PolicyMapStatistics.IsNull() {
 						attrs, _ = sjson.Set(attrs, "stats", strconv.FormatBool(child.PolicyMapStatistics.ValueBool()))
 					}
 					if attrs != "{}" {

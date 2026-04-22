@@ -105,42 +105,45 @@ func (data Subinterface) toBody(config Subinterface) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.Subinterfaces {
+		configChild, configChildOk := config.Subinterfaces[key]
+		_ = configChild
+		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "id", key)
-		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+		if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
-		if !child.Bandwidth.IsUnknown() && !child.Bandwidth.IsNull() {
+		if configChildOk && !child.Bandwidth.IsUnknown() && !child.Bandwidth.IsNull() && !configChild.Bandwidth.IsNull() {
 			attrs, _ = sjson.Set(attrs, "bw", strconv.FormatInt(child.Bandwidth.ValueInt64(), 10))
 		}
-		if !child.Delay.IsUnknown() && !child.Delay.IsNull() {
+		if configChildOk && !child.Delay.IsUnknown() && !child.Delay.IsNull() && !configChild.Delay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "delay", strconv.FormatInt(child.Delay.ValueInt64(), 10))
 		}
-		if !child.Description.IsUnknown() && !child.Description.IsNull() {
+		if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 		}
-		if !child.Encap.IsUnknown() && !child.Encap.IsNull() {
+		if configChildOk && !child.Encap.IsUnknown() && !child.Encap.IsNull() && !configChild.Encap.IsNull() {
 			attrs, _ = sjson.Set(attrs, "encap", child.Encap.ValueString())
 		}
-		if !child.LinkLogging.IsUnknown() && !child.LinkLogging.IsNull() {
+		if configChildOk && !child.LinkLogging.IsUnknown() && !child.LinkLogging.IsNull() && !configChild.LinkLogging.IsNull() {
 			attrs, _ = sjson.Set(attrs, "linkLog", child.LinkLogging.ValueString())
 		}
-		if !child.Medium.IsUnknown() && !child.Medium.IsNull() {
+		if configChildOk && !child.Medium.IsUnknown() && !child.Medium.IsNull() && !configChild.Medium.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mediumType", child.Medium.ValueString())
 		}
-		if !child.Mtu.IsUnknown() && !child.Mtu.IsNull() {
+		if configChildOk && !child.Mtu.IsUnknown() && !child.Mtu.IsNull() && !configChild.Mtu.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
 		}
-		if !child.MtuInherit.IsUnknown() && !child.MtuInherit.IsNull() {
+		if configChildOk && !child.MtuInherit.IsUnknown() && !child.MtuInherit.IsNull() && !configChild.MtuInherit.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mtuInherit", strconv.FormatBool(child.MtuInherit.ValueBool()))
 		}
-		if !child.RouterMac.IsUnknown() && !child.RouterMac.IsNull() {
+		if configChildOk && !child.RouterMac.IsUnknown() && !child.RouterMac.IsNull() && !configChild.RouterMac.IsNull() {
 			attrs, _ = sjson.Set(attrs, "routerMac", child.RouterMac.ValueString())
 		}
-		if !child.RouterMacIpv6Extract.IsUnknown() && !child.RouterMacIpv6Extract.IsNull() {
+		if configChildOk && !child.RouterMacIpv6Extract.IsUnknown() && !child.RouterMacIpv6Extract.IsNull() && !configChild.RouterMacIpv6Extract.IsNull() {
 			attrs, _ = sjson.Set(attrs, "routerMacIpv6Extract", child.RouterMacIpv6Extract.ValueString())
 		}
-		if !child.SnmpTrap.IsUnknown() && !child.SnmpTrap.IsNull() {
+		if configChildOk && !child.SnmpTrap.IsUnknown() && !child.SnmpTrap.IsNull() && !configChild.SnmpTrap.IsNull() {
 			attrs, _ = sjson.Set(attrs, "snmpTrap", child.SnmpTrap.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.l3EncRtdIf.attributes", attrs)
@@ -148,7 +151,7 @@ func (data Subinterface) toBody(config Subinterface) nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".l3EncRtdIf.children"
 			attrs = "{}"
-			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() {
+			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() && !configChild.VrfDn.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())
 			}
 			if attrs != "{}" {

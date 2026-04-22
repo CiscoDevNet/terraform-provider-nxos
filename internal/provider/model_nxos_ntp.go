@@ -111,82 +111,85 @@ func (data NTP) getClassName() string {
 func (data NTP) toBody(config NTP) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() && !config.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if !data.AllowControl.IsUnknown() && !data.AllowControl.IsNull() {
+	if !data.AllowControl.IsUnknown() && !data.AllowControl.IsNull() && !config.AllowControl.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowControl", data.AllowControl.ValueString())
 	}
-	if !data.AllowPrivate.IsUnknown() && !data.AllowPrivate.IsNull() {
+	if !data.AllowPrivate.IsUnknown() && !data.AllowPrivate.IsNull() && !config.AllowPrivate.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowPrivate", data.AllowPrivate.ValueString())
 	}
-	if !data.AuthenticationState.IsUnknown() && !data.AuthenticationState.IsNull() {
+	if !data.AuthenticationState.IsUnknown() && !data.AuthenticationState.IsNull() && !config.AuthenticationState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authSt", data.AuthenticationState.ValueString())
 	}
-	if !data.Logging.IsUnknown() && !data.Logging.IsNull() {
+	if !data.Logging.IsUnknown() && !data.Logging.IsNull() && !config.Logging.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"logging", data.Logging.ValueString())
 	}
-	if !data.LoggingLevel.IsUnknown() && !data.LoggingLevel.IsNull() {
+	if !data.LoggingLevel.IsUnknown() && !data.LoggingLevel.IsNull() && !config.LoggingLevel.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"loggingLevel", data.LoggingLevel.ValueString())
 	}
-	if !data.Master.IsUnknown() && !data.Master.IsNull() {
+	if !data.Master.IsUnknown() && !data.Master.IsNull() && !config.Master.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"master", data.Master.ValueString())
 	}
-	if !data.MasterStratum.IsUnknown() && !data.MasterStratum.IsNull() {
+	if !data.MasterStratum.IsUnknown() && !data.MasterStratum.IsNull() && !config.MasterStratum.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"masterStratum", strconv.FormatInt(data.MasterStratum.ValueInt64(), 10))
 	}
-	if !data.Passive.IsUnknown() && !data.Passive.IsNull() {
+	if !data.Passive.IsUnknown() && !data.Passive.IsNull() && !config.Passive.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passive", data.Passive.ValueString())
 	}
-	if !data.RateLimit.IsUnknown() && !data.RateLimit.IsNull() {
+	if !data.RateLimit.IsUnknown() && !data.RateLimit.IsNull() && !config.RateLimit.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rateLimit", strconv.FormatInt(data.RateLimit.ValueInt64(), 10))
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.Servers {
+		configChild, configChildOk := config.Servers[key]
+		_ = configChild
+		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "name", key)
-		if !child.Vrf.IsUnknown() && !child.Vrf.IsNull() {
+		if configChildOk && !child.Vrf.IsUnknown() && !child.Vrf.IsNull() && !configChild.Vrf.IsNull() {
 			attrs, _ = sjson.Set(attrs, "vrf", child.Vrf.ValueString())
 		}
-		if !child.Type.IsUnknown() && !child.Type.IsNull() {
+		if configChildOk && !child.Type.IsUnknown() && !child.Type.IsNull() && !configChild.Type.IsNull() {
 			attrs, _ = sjson.Set(attrs, "provT", child.Type.ValueString())
 		}
-		if !child.KeyId.IsUnknown() && !child.KeyId.IsNull() {
+		if configChildOk && !child.KeyId.IsUnknown() && !child.KeyId.IsNull() && !configChild.KeyId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "keyId", strconv.FormatInt(child.KeyId.ValueInt64(), 10))
 		}
-		if !child.MinPoll.IsUnknown() && !child.MinPoll.IsNull() {
+		if configChildOk && !child.MinPoll.IsUnknown() && !child.MinPoll.IsNull() && !configChild.MinPoll.IsNull() {
 			attrs, _ = sjson.Set(attrs, "minPoll", strconv.FormatInt(child.MinPoll.ValueInt64(), 10))
 		}
-		if !child.MaxPoll.IsUnknown() && !child.MaxPoll.IsNull() {
+		if configChildOk && !child.MaxPoll.IsUnknown() && !child.MaxPoll.IsNull() && !configChild.MaxPoll.IsNull() {
 			attrs, _ = sjson.Set(attrs, "maxPoll", strconv.FormatInt(child.MaxPoll.ValueInt64(), 10))
 		}
-		if !child.Preferred.IsUnknown() && !child.Preferred.IsNull() {
+		if configChildOk && !child.Preferred.IsUnknown() && !child.Preferred.IsNull() && !configChild.Preferred.IsNull() {
 			attrs, _ = sjson.Set(attrs, "preferred", strconv.FormatBool(child.Preferred.ValueBool()))
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.datetimeNtpProvider.attributes", attrs)
 	}
 	attrs = "{}"
-	if !data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull() {
+	if !data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull() && !config.SourceInterface.IsNull() {
 		attrs, _ = sjson.Set(attrs, "srcIf", data.SourceInterface.ValueString())
 	}
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.datetimeNtpSrcIf.attributes", attrs)
 	}
 	attrs = "{}"
-	if !data.AccessGroupMatchAll.IsUnknown() && !data.AccessGroupMatchAll.IsNull() {
+	if !data.AccessGroupMatchAll.IsUnknown() && !data.AccessGroupMatchAll.IsNull() && !config.AccessGroupMatchAll.IsNull() {
 		attrs, _ = sjson.Set(attrs, "matchAll", data.AccessGroupMatchAll.ValueString())
 	}
-	if !data.AccessGroupPeer.IsUnknown() && !data.AccessGroupPeer.IsNull() {
+	if !data.AccessGroupPeer.IsUnknown() && !data.AccessGroupPeer.IsNull() && !config.AccessGroupPeer.IsNull() {
 		attrs, _ = sjson.Set(attrs, "peer", data.AccessGroupPeer.ValueString())
 	}
-	if !data.AccessGroupQueryOnly.IsUnknown() && !data.AccessGroupQueryOnly.IsNull() {
+	if !data.AccessGroupQueryOnly.IsUnknown() && !data.AccessGroupQueryOnly.IsNull() && !config.AccessGroupQueryOnly.IsNull() {
 		attrs, _ = sjson.Set(attrs, "queryOnly", data.AccessGroupQueryOnly.ValueString())
 	}
-	if !data.AccessGroupServe.IsUnknown() && !data.AccessGroupServe.IsNull() {
+	if !data.AccessGroupServe.IsUnknown() && !data.AccessGroupServe.IsNull() && !config.AccessGroupServe.IsNull() {
 		attrs, _ = sjson.Set(attrs, "serve", data.AccessGroupServe.ValueString())
 	}
-	if !data.AccessGroupServeOnly.IsUnknown() && !data.AccessGroupServeOnly.IsNull() {
+	if !data.AccessGroupServeOnly.IsUnknown() && !data.AccessGroupServeOnly.IsNull() && !config.AccessGroupServeOnly.IsNull() {
 		attrs, _ = sjson.Set(attrs, "serveOnly", data.AccessGroupServeOnly.ValueString())
 	}
 	if attrs != "{}" {

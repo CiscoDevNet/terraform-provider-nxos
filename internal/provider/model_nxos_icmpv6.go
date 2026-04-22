@@ -96,7 +96,7 @@ func (data ICMPv6) getClassName() string {
 func (data ICMPv6) toBody(config ICMPv6) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
+	if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() && !config.AdminState.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
@@ -105,30 +105,33 @@ func (data ICMPv6) toBody(config ICMPv6) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icmpv6Inst"
 		attrs = "{}"
-		if !data.AdjacencyStaleTimer.IsUnknown() && !data.AdjacencyStaleTimer.IsNull() {
+		if !data.AdjacencyStaleTimer.IsUnknown() && !data.AdjacencyStaleTimer.IsNull() && !config.AdjacencyStaleTimer.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adjStaleTimer", strconv.FormatInt(data.AdjacencyStaleTimer.ValueInt64(), 10))
 		}
-		if !data.AdjacencyStaleTimerIcmp.IsUnknown() && !data.AdjacencyStaleTimerIcmp.IsNull() {
+		if !data.AdjacencyStaleTimerIcmp.IsUnknown() && !data.AdjacencyStaleTimerIcmp.IsNull() && !config.AdjacencyStaleTimerIcmp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adjStaleTimerIcmp", data.AdjacencyStaleTimerIcmp.ValueString())
 		}
-		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() {
+		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
-		if !data.Control.IsUnknown() && !data.Control.IsNull() {
+		if !data.Control.IsUnknown() && !data.Control.IsNull() && !config.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		if !data.RedirectSyslog.IsUnknown() && !data.RedirectSyslog.IsNull() {
+		if !data.RedirectSyslog.IsUnknown() && !data.RedirectSyslog.IsNull() && !config.RedirectSyslog.IsNull() {
 			attrs, _ = sjson.Set(attrs, "redirectSyslog", data.RedirectSyslog.ValueString())
 		}
-		if !data.RedirectSyslogInterval.IsUnknown() && !data.RedirectSyslogInterval.IsNull() {
+		if !data.RedirectSyslogInterval.IsUnknown() && !data.RedirectSyslogInterval.IsNull() && !config.RedirectSyslogInterval.IsNull() {
 			attrs, _ = sjson.Set(attrs, "redirectSyslogInterval", strconv.FormatInt(data.RedirectSyslogInterval.ValueInt64(), 10))
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Interfaces {
+			configChild, configChildOk := config.Interfaces[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "id", key)
-			if !child.Control.IsUnknown() && !child.Control.IsNull() {
+			if configChildOk && !child.Control.IsUnknown() && !child.Control.IsNull() && !configChild.Control.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.icmpv6If.attributes", attrs)

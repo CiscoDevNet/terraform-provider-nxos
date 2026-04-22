@@ -135,18 +135,21 @@ func (data Logging) toBody(config Logging) nxos.Body {
 			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
 			attrs = "{}"
-			if !data.All.IsUnknown() && !data.All.IsNull() {
+			if !data.All.IsUnknown() && !data.All.IsNull() && !config.All.IsNull() {
 				attrs, _ = sjson.Set(attrs, "all", data.All.ValueString())
 			}
-			if !data.Level.IsUnknown() && !data.Level.IsNull() {
+			if !data.Level.IsUnknown() && !data.Level.IsNull() && !config.Level.IsNull() {
 				attrs, _ = sjson.Set(attrs, "severityLevel", data.Level.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.Facilities {
+				configChild, configChildOk := config.Facilities[key]
+				_ = configChild
+				_ = configChildOk
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "facilityName", key)
-				if !child.Level.IsUnknown() && !child.Level.IsNull() {
+				if configChildOk && !child.Level.IsUnknown() && !child.Level.IsNull() && !configChild.Level.IsNull() {
 					attrs, _ = sjson.Set(attrs, "severityLevel", child.Level.ValueString())
 				}
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", attrs)
@@ -160,101 +163,104 @@ func (data Logging) toBody(config Logging) nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
-		if !data.FileAdminState.IsUnknown() && !data.FileAdminState.IsNull() {
+		if !data.FileAdminState.IsUnknown() && !data.FileAdminState.IsNull() && !config.FileAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminState", data.FileAdminState.ValueString())
 		}
-		if !data.FileDescription.IsUnknown() && !data.FileDescription.IsNull() {
+		if !data.FileDescription.IsUnknown() && !data.FileDescription.IsNull() && !config.FileDescription.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", data.FileDescription.ValueString())
 		}
-		if !data.FileName.IsUnknown() && !data.FileName.IsNull() {
+		if !data.FileName.IsUnknown() && !data.FileName.IsNull() && !config.FileName.IsNull() {
 			attrs, _ = sjson.Set(attrs, "name", data.FileName.ValueString())
 		}
-		if !data.FilePersistentThreshold.IsUnknown() && !data.FilePersistentThreshold.IsNull() {
+		if !data.FilePersistentThreshold.IsUnknown() && !data.FilePersistentThreshold.IsNull() && !config.FilePersistentThreshold.IsNull() {
 			attrs, _ = sjson.Set(attrs, "persistentThreshold", strconv.FormatInt(data.FilePersistentThreshold.ValueInt64(), 10))
 		}
-		if !data.FileSeverity.IsUnknown() && !data.FileSeverity.IsNull() {
+		if !data.FileSeverity.IsUnknown() && !data.FileSeverity.IsNull() && !config.FileSeverity.IsNull() {
 			attrs, _ = sjson.Set(attrs, "severity", data.FileSeverity.ValueString())
 		}
-		if !data.FileSize.IsUnknown() && !data.FileSize.IsNull() {
+		if !data.FileSize.IsUnknown() && !data.FileSize.IsNull() && !config.FileSize.IsNull() {
 			attrs, _ = sjson.Set(attrs, "size", strconv.FormatInt(data.FileSize.ValueInt64(), 10))
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogFile.attributes", attrs)
 		}
 		for key, child := range data.RemoteDestinations {
+			configChild, configChildOk := config.RemoteDestinations[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "host", key)
-			if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+			if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminState", child.AdminState.ValueString())
 			}
-			if !child.Description.IsUnknown() && !child.Description.IsNull() {
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
-			if !child.Name.IsUnknown() && !child.Name.IsNull() {
+			if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
 				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 			}
-			if !child.Port.IsUnknown() && !child.Port.IsNull() {
+			if configChildOk && !child.Port.IsUnknown() && !child.Port.IsNull() && !configChild.Port.IsNull() {
 				attrs, _ = sjson.Set(attrs, "port", strconv.FormatInt(child.Port.ValueInt64(), 10))
 			}
-			if !child.Transport.IsUnknown() && !child.Transport.IsNull() {
+			if configChildOk && !child.Transport.IsUnknown() && !child.Transport.IsNull() && !configChild.Transport.IsNull() {
 				attrs, _ = sjson.Set(attrs, "transport", child.Transport.ValueString())
 			}
-			if !child.TrustpointClientIdentity.IsUnknown() && !child.TrustpointClientIdentity.IsNull() {
+			if configChildOk && !child.TrustpointClientIdentity.IsUnknown() && !child.TrustpointClientIdentity.IsNull() && !configChild.TrustpointClientIdentity.IsNull() {
 				attrs, _ = sjson.Set(attrs, "trustpointClientIdentity", child.TrustpointClientIdentity.ValueString())
 			}
-			if !child.VrfName.IsUnknown() && !child.VrfName.IsNull() {
+			if configChildOk && !child.VrfName.IsUnknown() && !child.VrfName.IsNull() && !configChild.VrfName.IsNull() {
 				attrs, _ = sjson.Set(attrs, "vrfName", child.VrfName.ValueString())
 			}
-			if !child.Severity.IsUnknown() && !child.Severity.IsNull() {
+			if configChildOk && !child.Severity.IsUnknown() && !child.Severity.IsNull() && !configChild.Severity.IsNull() {
 				attrs, _ = sjson.Set(attrs, "severity", child.Severity.ValueString())
 			}
-			if !child.ForwardingFacility.IsUnknown() && !child.ForwardingFacility.IsNull() {
+			if configChildOk && !child.ForwardingFacility.IsUnknown() && !child.ForwardingFacility.IsNull() && !configChild.ForwardingFacility.IsNull() {
 				attrs, _ = sjson.Set(attrs, "forwardingFacility", child.ForwardingFacility.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogRemoteDest.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.SourceInterfaceAdminState.IsUnknown() && !data.SourceInterfaceAdminState.IsNull() {
+		if !data.SourceInterfaceAdminState.IsUnknown() && !data.SourceInterfaceAdminState.IsNull() && !config.SourceInterfaceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminState", data.SourceInterfaceAdminState.ValueString())
 		}
-		if !data.SourceInterfaceName.IsUnknown() && !data.SourceInterfaceName.IsNull() {
+		if !data.SourceInterfaceName.IsUnknown() && !data.SourceInterfaceName.IsNull() && !config.SourceInterfaceName.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ifName", data.SourceInterfaceName.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogSourceInterface.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.TimestampFormat.IsUnknown() && !data.TimestampFormat.IsNull() {
+		if !data.TimestampFormat.IsUnknown() && !data.TimestampFormat.IsNull() && !config.TimestampFormat.IsNull() {
 			attrs, _ = sjson.Set(attrs, "format", data.TimestampFormat.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogTimeStamp.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.MonitorAdminState.IsUnknown() && !data.MonitorAdminState.IsNull() {
+		if !data.MonitorAdminState.IsUnknown() && !data.MonitorAdminState.IsNull() && !config.MonitorAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminState", data.MonitorAdminState.ValueString())
 		}
-		if !data.MonitorSeverity.IsUnknown() && !data.MonitorSeverity.IsNull() {
+		if !data.MonitorSeverity.IsUnknown() && !data.MonitorSeverity.IsNull() && !config.MonitorSeverity.IsNull() {
 			attrs, _ = sjson.Set(attrs, "severity", data.MonitorSeverity.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogTermMonitor.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.ConsoleAdminState.IsUnknown() && !data.ConsoleAdminState.IsNull() {
+		if !data.ConsoleAdminState.IsUnknown() && !data.ConsoleAdminState.IsNull() && !config.ConsoleAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminState", data.ConsoleAdminState.ValueString())
 		}
-		if !data.ConsoleSeverity.IsUnknown() && !data.ConsoleSeverity.IsNull() {
+		if !data.ConsoleSeverity.IsUnknown() && !data.ConsoleSeverity.IsNull() && !config.ConsoleSeverity.IsNull() {
 			attrs, _ = sjson.Set(attrs, "severity", data.ConsoleSeverity.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogConsole.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.OriginIdType.IsUnknown() && !data.OriginIdType.IsNull() {
+		if !data.OriginIdType.IsUnknown() && !data.OriginIdType.IsNull() && !config.OriginIdType.IsNull() {
 			attrs, _ = sjson.Set(attrs, "idtype", data.OriginIdType.ValueString())
 		}
-		if !data.OriginIdValue.IsUnknown() && !data.OriginIdValue.IsNull() {
+		if !data.OriginIdValue.IsUnknown() && !data.OriginIdValue.IsNull() && !config.OriginIdValue.IsNull() {
 			attrs, _ = sjson.Set(attrs, "idvalue", data.OriginIdValue.ValueString())
 		}
 		if attrs != "{}" {

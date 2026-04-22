@@ -109,54 +109,57 @@ func (data SVIInterface) toBody(config SVIInterface) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	for key, child := range data.SviInterfaces {
+		configChild, configChildOk := config.SviInterfaces[key]
+		_ = configChild
+		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "id", key)
-		if !child.AdminState.IsUnknown() && !child.AdminState.IsNull() {
+		if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
-		if !child.Autostate.IsUnknown() && !child.Autostate.IsNull() {
+		if configChildOk && !child.Autostate.IsUnknown() && !child.Autostate.IsNull() && !configChild.Autostate.IsNull() {
 			attrs, _ = sjson.Set(attrs, "autostate", strconv.FormatBool(child.Autostate.ValueBool()))
 		}
-		if !child.Bandwidth.IsUnknown() && !child.Bandwidth.IsNull() {
+		if configChildOk && !child.Bandwidth.IsUnknown() && !child.Bandwidth.IsNull() && !configChild.Bandwidth.IsNull() {
 			attrs, _ = sjson.Set(attrs, "bw", strconv.FormatInt(child.Bandwidth.ValueInt64(), 10))
 		}
-		if !child.CarrierDelay.IsUnknown() && !child.CarrierDelay.IsNull() {
+		if configChildOk && !child.CarrierDelay.IsUnknown() && !child.CarrierDelay.IsNull() && !configChild.CarrierDelay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "carDel", strconv.FormatInt(child.CarrierDelay.ValueInt64(), 10))
 		}
-		if !child.Delay.IsUnknown() && !child.Delay.IsNull() {
+		if configChildOk && !child.Delay.IsUnknown() && !child.Delay.IsNull() && !configChild.Delay.IsNull() {
 			attrs, _ = sjson.Set(attrs, "delay", strconv.FormatInt(child.Delay.ValueInt64(), 10))
 		}
-		if !child.Description.IsUnknown() && !child.Description.IsNull() {
+		if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 		}
-		if !child.InbandManagement.IsUnknown() && !child.InbandManagement.IsNull() {
+		if configChildOk && !child.InbandManagement.IsUnknown() && !child.InbandManagement.IsNull() && !configChild.InbandManagement.IsNull() {
 			attrs, _ = sjson.Set(attrs, "inbMgmt", strconv.FormatBool(child.InbandManagement.ValueBool()))
 		}
-		if !child.LoadIntervalCounter1.IsUnknown() && !child.LoadIntervalCounter1.IsNull() {
+		if configChildOk && !child.LoadIntervalCounter1.IsUnknown() && !child.LoadIntervalCounter1.IsNull() && !configChild.LoadIntervalCounter1.IsNull() {
 			attrs, _ = sjson.Set(attrs, "loadIntvl1", strconv.FormatInt(child.LoadIntervalCounter1.ValueInt64(), 10))
 		}
-		if !child.LoadIntervalCounter2.IsUnknown() && !child.LoadIntervalCounter2.IsNull() {
+		if configChildOk && !child.LoadIntervalCounter2.IsUnknown() && !child.LoadIntervalCounter2.IsNull() && !configChild.LoadIntervalCounter2.IsNull() {
 			attrs, _ = sjson.Set(attrs, "loadIntvl2", strconv.FormatInt(child.LoadIntervalCounter2.ValueInt64(), 10))
 		}
-		if !child.LoadIntervalCounter3.IsUnknown() && !child.LoadIntervalCounter3.IsNull() {
+		if configChildOk && !child.LoadIntervalCounter3.IsUnknown() && !child.LoadIntervalCounter3.IsNull() && !configChild.LoadIntervalCounter3.IsNull() {
 			attrs, _ = sjson.Set(attrs, "loadIntvl3", strconv.FormatInt(child.LoadIntervalCounter3.ValueInt64(), 10))
 		}
-		if !child.MacAddress.IsUnknown() && !child.MacAddress.IsNull() {
+		if configChildOk && !child.MacAddress.IsUnknown() && !child.MacAddress.IsNull() && !configChild.MacAddress.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mac", child.MacAddress.ValueString())
 		}
-		if !child.Medium.IsUnknown() && !child.Medium.IsNull() {
+		if configChildOk && !child.Medium.IsUnknown() && !child.Medium.IsNull() && !configChild.Medium.IsNull() {
 			attrs, _ = sjson.Set(attrs, "medium", child.Medium.ValueString())
 		}
-		if !child.Mtu.IsUnknown() && !child.Mtu.IsNull() {
+		if configChildOk && !child.Mtu.IsUnknown() && !child.Mtu.IsNull() && !configChild.Mtu.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
 		}
-		if !child.MtuInherit.IsUnknown() && !child.MtuInherit.IsNull() {
+		if configChildOk && !child.MtuInherit.IsUnknown() && !child.MtuInherit.IsNull() && !configChild.MtuInherit.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mtuInherit", strconv.FormatBool(child.MtuInherit.ValueBool()))
 		}
-		if !child.SnmpTrapLinkStatus.IsUnknown() && !child.SnmpTrapLinkStatus.IsNull() {
+		if configChildOk && !child.SnmpTrapLinkStatus.IsUnknown() && !child.SnmpTrapLinkStatus.IsNull() && !configChild.SnmpTrapLinkStatus.IsNull() {
 			attrs, _ = sjson.Set(attrs, "snmpTrap", strconv.FormatBool(child.SnmpTrapLinkStatus.ValueBool()))
 		}
-		if !child.VlanId.IsUnknown() && !child.VlanId.IsNull() {
+		if configChildOk && !child.VlanId.IsUnknown() && !child.VlanId.IsNull() && !configChild.VlanId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "vlanId", strconv.FormatInt(child.VlanId.ValueInt64(), 10))
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.sviIf.attributes", attrs)
@@ -164,7 +167,7 @@ func (data SVIInterface) toBody(config SVIInterface) nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".sviIf.children"
 			attrs = "{}"
-			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() {
+			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() && !configChild.VrfDn.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())
 			}
 			if attrs != "{}" {

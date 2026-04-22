@@ -283,80 +283,80 @@ func (data UserManagement) getClassName() string {
 func (data UserManagement) toBody(config UserManagement) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if !data.AlphabetSequence.IsUnknown() && !data.AlphabetSequence.IsNull() {
+	if !data.AlphabetSequence.IsUnknown() && !data.AlphabetSequence.IsNull() && !config.AlphabetSequence.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"alphabetSequence", strconv.FormatInt(data.AlphabetSequence.ValueInt64(), 10))
 	}
-	if !data.Description.IsUnknown() && !data.Description.IsNull() {
+	if !data.Description.IsUnknown() && !data.Description.IsNull() && !config.Description.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", data.Description.ValueString())
 	}
-	if !data.KeyboardSequence.IsUnknown() && !data.KeyboardSequence.IsNull() {
+	if !data.KeyboardSequence.IsUnknown() && !data.KeyboardSequence.IsNull() && !config.KeyboardSequence.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyBoardSequence", strconv.FormatInt(data.KeyboardSequence.ValueInt64(), 10))
 	}
-	if !data.MaxLogins.IsUnknown() && !data.MaxLogins.IsNull() {
+	if !data.MaxLogins.IsUnknown() && !data.MaxLogins.IsNull() && !config.MaxLogins.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxLogins", strconv.FormatInt(data.MaxLogins.ValueInt64(), 10))
 	}
-	if !data.MinUnique.IsUnknown() && !data.MinUnique.IsNull() {
+	if !data.MinUnique.IsUnknown() && !data.MinUnique.IsNull() && !config.MinUnique.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"minUnique", strconv.FormatInt(data.MinUnique.ValueInt64(), 10))
 	}
-	if !data.PasswordGraceTime.IsUnknown() && !data.PasswordGraceTime.IsNull() {
+	if !data.PasswordGraceTime.IsUnknown() && !data.PasswordGraceTime.IsNull() && !config.PasswordGraceTime.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdGraceTime", strconv.FormatInt(data.PasswordGraceTime.ValueInt64(), 10))
 	}
-	if !data.PasswordLifeTime.IsUnknown() && !data.PasswordLifeTime.IsNull() {
+	if !data.PasswordLifeTime.IsUnknown() && !data.PasswordLifeTime.IsNull() && !config.PasswordLifeTime.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdLifeTime", strconv.FormatInt(data.PasswordLifeTime.ValueInt64(), 10))
 	}
-	if !data.PasswordMaxLength.IsUnknown() && !data.PasswordMaxLength.IsNull() {
+	if !data.PasswordMaxLength.IsUnknown() && !data.PasswordMaxLength.IsNull() && !config.PasswordMaxLength.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdMaxLength", strconv.FormatInt(data.PasswordMaxLength.ValueInt64(), 10))
 	}
-	if !data.PasswordMinLength.IsUnknown() && !data.PasswordMinLength.IsNull() {
+	if !data.PasswordMinLength.IsUnknown() && !data.PasswordMinLength.IsNull() && !config.PasswordMinLength.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdMinLength", strconv.FormatInt(data.PasswordMinLength.ValueInt64(), 10))
 	}
-	if !data.PasswordSecureMode.IsUnknown() && !data.PasswordSecureMode.IsNull() {
+	if !data.PasswordSecureMode.IsUnknown() && !data.PasswordSecureMode.IsNull() && !config.PasswordSecureMode.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdSecureMode", data.PasswordSecureMode.ValueString())
 	}
-	if !data.PasswordStrengthCheck.IsUnknown() && !data.PasswordStrengthCheck.IsNull() {
+	if !data.PasswordStrengthCheck.IsUnknown() && !data.PasswordStrengthCheck.IsNull() && !config.PasswordStrengthCheck.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdStrengthCheck", data.PasswordStrengthCheck.ValueString())
 	}
-	if !data.PasswordWarningTime.IsUnknown() && !data.PasswordWarningTime.IsNull() {
+	if !data.PasswordWarningTime.IsUnknown() && !data.PasswordWarningTime.IsNull() && !config.PasswordWarningTime.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdWarningTime", strconv.FormatInt(data.PasswordWarningTime.ValueInt64(), 10))
 	}
-	if !data.ServicePasswordRecovery.IsUnknown() && !data.ServicePasswordRecovery.IsNull() {
+	if !data.ServicePasswordRecovery.IsUnknown() && !data.ServicePasswordRecovery.IsNull() && !config.ServicePasswordRecovery.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"svcPwdRecovery", data.ServicePasswordRecovery.ValueString())
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	attrs = "{}"
-	if !data.PreLoginBannerDescription.IsUnknown() && !data.PreLoginBannerDescription.IsNull() {
+	if !data.PreLoginBannerDescription.IsUnknown() && !data.PreLoginBannerDescription.IsNull() && !config.PreLoginBannerDescription.IsNull() {
 		attrs, _ = sjson.Set(attrs, "descr", data.PreLoginBannerDescription.ValueString())
 	}
-	if !data.PreLoginBannerName.IsUnknown() && !data.PreLoginBannerName.IsNull() {
+	if !data.PreLoginBannerName.IsUnknown() && !data.PreLoginBannerName.IsNull() && !config.PreLoginBannerName.IsNull() {
 		attrs, _ = sjson.Set(attrs, "name", data.PreLoginBannerName.ValueString())
 	}
-	if !data.PreLoginBannerOwnerKey.IsUnknown() && !data.PreLoginBannerOwnerKey.IsNull() {
+	if !data.PreLoginBannerOwnerKey.IsUnknown() && !data.PreLoginBannerOwnerKey.IsNull() && !config.PreLoginBannerOwnerKey.IsNull() {
 		attrs, _ = sjson.Set(attrs, "ownerKey", data.PreLoginBannerOwnerKey.ValueString())
 	}
-	if !data.PreLoginBannerMessage.IsUnknown() && !data.PreLoginBannerMessage.IsNull() {
+	if !data.PreLoginBannerMessage.IsUnknown() && !data.PreLoginBannerMessage.IsNull() && !config.PreLoginBannerMessage.IsNull() {
 		attrs, _ = sjson.Set(attrs, "message", data.PreLoginBannerMessage.ValueString())
 	}
-	if !data.PreLoginBannerOwnerTag.IsUnknown() && !data.PreLoginBannerOwnerTag.IsNull() {
+	if !data.PreLoginBannerOwnerTag.IsUnknown() && !data.PreLoginBannerOwnerTag.IsNull() && !config.PreLoginBannerOwnerTag.IsNull() {
 		attrs, _ = sjson.Set(attrs, "ownerTag", data.PreLoginBannerOwnerTag.ValueString())
 	}
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaPreLoginBanner.attributes", attrs)
 	}
 	attrs = "{}"
-	if !data.PostLoginBannerDescription.IsUnknown() && !data.PostLoginBannerDescription.IsNull() {
+	if !data.PostLoginBannerDescription.IsUnknown() && !data.PostLoginBannerDescription.IsNull() && !config.PostLoginBannerDescription.IsNull() {
 		attrs, _ = sjson.Set(attrs, "descr", data.PostLoginBannerDescription.ValueString())
 	}
-	if !data.PostLoginBannerName.IsUnknown() && !data.PostLoginBannerName.IsNull() {
+	if !data.PostLoginBannerName.IsUnknown() && !data.PostLoginBannerName.IsNull() && !config.PostLoginBannerName.IsNull() {
 		attrs, _ = sjson.Set(attrs, "name", data.PostLoginBannerName.ValueString())
 	}
-	if !data.PostLoginBannerOwnerKey.IsUnknown() && !data.PostLoginBannerOwnerKey.IsNull() {
+	if !data.PostLoginBannerOwnerKey.IsUnknown() && !data.PostLoginBannerOwnerKey.IsNull() && !config.PostLoginBannerOwnerKey.IsNull() {
 		attrs, _ = sjson.Set(attrs, "ownerKey", data.PostLoginBannerOwnerKey.ValueString())
 	}
-	if !data.PostLoginBannerMessage.IsUnknown() && !data.PostLoginBannerMessage.IsNull() {
+	if !data.PostLoginBannerMessage.IsUnknown() && !data.PostLoginBannerMessage.IsNull() && !config.PostLoginBannerMessage.IsNull() {
 		attrs, _ = sjson.Set(attrs, "message", data.PostLoginBannerMessage.ValueString())
 	}
-	if !data.PostLoginBannerOwnerTag.IsUnknown() && !data.PostLoginBannerOwnerTag.IsNull() {
+	if !data.PostLoginBannerOwnerTag.IsUnknown() && !data.PostLoginBannerOwnerTag.IsNull() && !config.PostLoginBannerOwnerTag.IsNull() {
 		attrs, _ = sjson.Set(attrs, "ownerTag", data.PostLoginBannerOwnerTag.ValueString())
 	}
 	if attrs != "{}" {
@@ -368,40 +368,40 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "name", key)
-		if !child.AccountStatus.IsUnknown() && !child.AccountStatus.IsNull() {
+		if configChildOk && !child.AccountStatus.IsUnknown() && !child.AccountStatus.IsNull() && !configChild.AccountStatus.IsNull() {
 			attrs, _ = sjson.Set(attrs, "accountStatus", child.AccountStatus.ValueString())
 		}
-		if !child.AllowExpired.IsUnknown() && !child.AllowExpired.IsNull() {
+		if configChildOk && !child.AllowExpired.IsUnknown() && !child.AllowExpired.IsNull() && !configChild.AllowExpired.IsNull() {
 			attrs, _ = sjson.Set(attrs, "allowExpired", child.AllowExpired.ValueString())
 		}
-		if !child.ClearPasswordHistory.IsUnknown() && !child.ClearPasswordHistory.IsNull() {
+		if configChildOk && !child.ClearPasswordHistory.IsUnknown() && !child.ClearPasswordHistory.IsNull() && !configChild.ClearPasswordHistory.IsNull() {
 			attrs, _ = sjson.Set(attrs, "clearPwdHistory", child.ClearPasswordHistory.ValueString())
 		}
-		if !child.Description.IsUnknown() && !child.Description.IsNull() {
+		if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 		}
-		if !child.Email.IsUnknown() && !child.Email.IsNull() {
+		if configChildOk && !child.Email.IsUnknown() && !child.Email.IsNull() && !configChild.Email.IsNull() {
 			attrs, _ = sjson.Set(attrs, "email", child.Email.ValueString())
 		}
-		if !child.Expiration.IsUnknown() && !child.Expiration.IsNull() {
+		if configChildOk && !child.Expiration.IsUnknown() && !child.Expiration.IsNull() && !configChild.Expiration.IsNull() {
 			attrs, _ = sjson.Set(attrs, "expiration", child.Expiration.ValueString())
 		}
-		if !child.Expires.IsUnknown() && !child.Expires.IsNull() {
+		if configChildOk && !child.Expires.IsUnknown() && !child.Expires.IsNull() && !configChild.Expires.IsNull() {
 			attrs, _ = sjson.Set(attrs, "expires", child.Expires.ValueString())
 		}
-		if !child.FirstName.IsUnknown() && !child.FirstName.IsNull() {
+		if configChildOk && !child.FirstName.IsUnknown() && !child.FirstName.IsNull() && !configChild.FirstName.IsNull() {
 			attrs, _ = sjson.Set(attrs, "firstName", child.FirstName.ValueString())
 		}
-		if !child.Force.IsUnknown() && !child.Force.IsNull() {
+		if configChildOk && !child.Force.IsUnknown() && !child.Force.IsNull() && !configChild.Force.IsNull() {
 			attrs, _ = sjson.Set(attrs, "force", child.Force.ValueString())
 		}
-		if !child.LastName.IsUnknown() && !child.LastName.IsNull() {
+		if configChildOk && !child.LastName.IsUnknown() && !child.LastName.IsNull() && !configChild.LastName.IsNull() {
 			attrs, _ = sjson.Set(attrs, "lastName", child.LastName.ValueString())
 		}
-		if !child.PasswordHash.IsUnknown() && !child.PasswordHash.IsNull() {
+		if configChildOk && !child.PasswordHash.IsUnknown() && !child.PasswordHash.IsNull() && !configChild.PasswordHash.IsNull() {
 			attrs, _ = sjson.Set(attrs, "passwordHash", child.PasswordHash.ValueString())
 		}
-		if !child.Phone.IsUnknown() && !child.Phone.IsNull() {
+		if configChildOk && !child.Phone.IsUnknown() && !child.Phone.IsNull() && !configChild.Phone.IsNull() {
 			attrs, _ = sjson.Set(attrs, "phone", child.Phone.ValueString())
 		}
 		if configChildOk && !configChild.PasswordWo.IsNull() {
@@ -409,13 +409,13 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		} else if !child.Password.IsUnknown() && !child.Password.IsNull() {
 			attrs, _ = sjson.Set(attrs, "pwd", child.Password.ValueString())
 		}
-		if !child.PasswordEncryptionType.IsUnknown() && !child.PasswordEncryptionType.IsNull() {
+		if configChildOk && !child.PasswordEncryptionType.IsUnknown() && !child.PasswordEncryptionType.IsNull() && !configChild.PasswordEncryptionType.IsNull() {
 			attrs, _ = sjson.Set(attrs, "pwdEncryptType", child.PasswordEncryptionType.ValueString())
 		}
-		if !child.ShellType.IsUnknown() && !child.ShellType.IsNull() {
+		if configChildOk && !child.ShellType.IsUnknown() && !child.ShellType.IsNull() && !configChild.ShellType.IsNull() {
 			attrs, _ = sjson.Set(attrs, "shelltype", child.ShellType.ValueString())
 		}
-		if !child.UnixUserId.IsUnknown() && !child.UnixUserId.IsNull() {
+		if configChildOk && !child.UnixUserId.IsUnknown() && !child.UnixUserId.IsNull() && !configChild.UnixUserId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "unixUserId", strconv.FormatInt(child.UnixUserId.ValueInt64(), 10))
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaUser.attributes", attrs)
@@ -430,12 +430,15 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range child.Roles {
+					configChild, configChildOk := configChild.Roles[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "name", key)
-					if !child.Description.IsUnknown() && !child.Description.IsNull() {
+					if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 					}
-					if !child.PrivilegeType.IsUnknown() && !child.PrivilegeType.IsNull() {
+					if configChildOk && !child.PrivilegeType.IsUnknown() && !child.PrivilegeType.IsNull() && !configChild.PrivilegeType.IsNull() {
 						attrs, _ = sjson.Set(attrs, "privType", child.PrivilegeType.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaUserRole.attributes", attrs)
@@ -447,10 +450,10 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaTacacsPlusEp"
 		attrs = "{}"
-		if !data.TacacsDeadtime.IsUnknown() && !data.TacacsDeadtime.IsNull() {
+		if !data.TacacsDeadtime.IsUnknown() && !data.TacacsDeadtime.IsNull() && !config.TacacsDeadtime.IsNull() {
 			attrs, _ = sjson.Set(attrs, "deadtime", strconv.FormatInt(data.TacacsDeadtime.ValueInt64(), 10))
 		}
-		if !data.TacacsDescription.IsUnknown() && !data.TacacsDescription.IsNull() {
+		if !data.TacacsDescription.IsUnknown() && !data.TacacsDescription.IsNull() && !config.TacacsDescription.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", data.TacacsDescription.ValueString())
 		}
 		if !config.TacacsKeyWo.IsNull() {
@@ -458,28 +461,28 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		} else if !data.TacacsKey.IsUnknown() && !data.TacacsKey.IsNull() {
 			attrs, _ = sjson.Set(attrs, "key", data.TacacsKey.ValueString())
 		}
-		if !data.TacacsKeyEncryption.IsUnknown() && !data.TacacsKeyEncryption.IsNull() {
+		if !data.TacacsKeyEncryption.IsUnknown() && !data.TacacsKeyEncryption.IsNull() && !config.TacacsKeyEncryption.IsNull() {
 			attrs, _ = sjson.Set(attrs, "keyEnc", data.TacacsKeyEncryption.ValueString())
 		}
-		if !data.TacacsLoggingLevel.IsUnknown() && !data.TacacsLoggingLevel.IsNull() {
+		if !data.TacacsLoggingLevel.IsUnknown() && !data.TacacsLoggingLevel.IsNull() && !config.TacacsLoggingLevel.IsNull() {
 			attrs, _ = sjson.Set(attrs, "loggingLevel", strconv.FormatInt(data.TacacsLoggingLevel.ValueInt64(), 10))
 		}
-		if !data.TacacsName.IsUnknown() && !data.TacacsName.IsNull() {
+		if !data.TacacsName.IsUnknown() && !data.TacacsName.IsNull() && !config.TacacsName.IsNull() {
 			attrs, _ = sjson.Set(attrs, "name", data.TacacsName.ValueString())
 		}
-		if !data.TacacsOwnerKey.IsUnknown() && !data.TacacsOwnerKey.IsNull() {
+		if !data.TacacsOwnerKey.IsUnknown() && !data.TacacsOwnerKey.IsNull() && !config.TacacsOwnerKey.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerKey", data.TacacsOwnerKey.ValueString())
 		}
-		if !data.TacacsOwnerTag.IsUnknown() && !data.TacacsOwnerTag.IsNull() {
+		if !data.TacacsOwnerTag.IsUnknown() && !data.TacacsOwnerTag.IsNull() && !config.TacacsOwnerTag.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerTag", data.TacacsOwnerTag.ValueString())
 		}
-		if !data.TacacsRetries.IsUnknown() && !data.TacacsRetries.IsNull() {
+		if !data.TacacsRetries.IsUnknown() && !data.TacacsRetries.IsNull() && !config.TacacsRetries.IsNull() {
 			attrs, _ = sjson.Set(attrs, "retries", strconv.FormatInt(data.TacacsRetries.ValueInt64(), 10))
 		}
-		if !data.TacacsSourceInterface.IsUnknown() && !data.TacacsSourceInterface.IsNull() {
+		if !data.TacacsSourceInterface.IsUnknown() && !data.TacacsSourceInterface.IsNull() && !config.TacacsSourceInterface.IsNull() {
 			attrs, _ = sjson.Set(attrs, "srcIf", data.TacacsSourceInterface.ValueString())
 		}
-		if !data.TacacsTimeout.IsUnknown() && !data.TacacsTimeout.IsNull() {
+		if !data.TacacsTimeout.IsUnknown() && !data.TacacsTimeout.IsNull() && !config.TacacsTimeout.IsNull() {
 			attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(data.TacacsTimeout.ValueInt64(), 10))
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -490,10 +493,10 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "name", key)
-			if !child.AuthenticationProtocol.IsUnknown() && !child.AuthenticationProtocol.IsNull() {
+			if configChildOk && !child.AuthenticationProtocol.IsUnknown() && !child.AuthenticationProtocol.IsNull() && !configChild.AuthenticationProtocol.IsNull() {
 				attrs, _ = sjson.Set(attrs, "authProtocol", child.AuthenticationProtocol.ValueString())
 			}
-			if !child.Description.IsUnknown() && !child.Description.IsNull() {
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
 			if configChildOk && !configChild.KeyWo.IsNull() {
@@ -501,10 +504,10 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 			} else if !child.Key.IsUnknown() && !child.Key.IsNull() {
 				attrs, _ = sjson.Set(attrs, "key", child.Key.ValueString())
 			}
-			if !child.KeyEncryption.IsUnknown() && !child.KeyEncryption.IsNull() {
+			if configChildOk && !child.KeyEncryption.IsUnknown() && !child.KeyEncryption.IsNull() && !configChild.KeyEncryption.IsNull() {
 				attrs, _ = sjson.Set(attrs, "keyEnc", child.KeyEncryption.ValueString())
 			}
-			if !child.MonitoringIdleTime.IsUnknown() && !child.MonitoringIdleTime.IsNull() {
+			if configChildOk && !child.MonitoringIdleTime.IsUnknown() && !child.MonitoringIdleTime.IsNull() && !configChild.MonitoringIdleTime.IsNull() {
 				attrs, _ = sjson.Set(attrs, "monitoringIdleTime", strconv.FormatInt(child.MonitoringIdleTime.ValueInt64(), 10))
 			}
 			if configChildOk && !configChild.MonitoringPasswordWo.IsNull() {
@@ -512,51 +515,54 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 			} else if !child.MonitoringPassword.IsUnknown() && !child.MonitoringPassword.IsNull() {
 				attrs, _ = sjson.Set(attrs, "monitoringPassword", child.MonitoringPassword.ValueString())
 			}
-			if !child.MonitoringPasswordType.IsUnknown() && !child.MonitoringPasswordType.IsNull() {
+			if configChildOk && !child.MonitoringPasswordType.IsUnknown() && !child.MonitoringPasswordType.IsNull() && !configChild.MonitoringPasswordType.IsNull() {
 				attrs, _ = sjson.Set(attrs, "monitoringPasswordType", child.MonitoringPasswordType.ValueString())
 			}
-			if !child.MonitoringUser.IsUnknown() && !child.MonitoringUser.IsNull() {
+			if configChildOk && !child.MonitoringUser.IsUnknown() && !child.MonitoringUser.IsNull() && !configChild.MonitoringUser.IsNull() {
 				attrs, _ = sjson.Set(attrs, "monitoringUser", child.MonitoringUser.ValueString())
 			}
-			if !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() {
+			if configChildOk && !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() && !configChild.OwnerKey.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ownerKey", child.OwnerKey.ValueString())
 			}
-			if !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() {
+			if configChildOk && !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() && !configChild.OwnerTag.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ownerTag", child.OwnerTag.ValueString())
 			}
-			if !child.Port.IsUnknown() && !child.Port.IsNull() {
+			if configChildOk && !child.Port.IsUnknown() && !child.Port.IsNull() && !configChild.Port.IsNull() {
 				attrs, _ = sjson.Set(attrs, "port", strconv.FormatInt(child.Port.ValueInt64(), 10))
 			}
-			if !child.Retries.IsUnknown() && !child.Retries.IsNull() {
+			if configChildOk && !child.Retries.IsUnknown() && !child.Retries.IsNull() && !configChild.Retries.IsNull() {
 				attrs, _ = sjson.Set(attrs, "retries", strconv.FormatInt(child.Retries.ValueInt64(), 10))
 			}
-			if !child.SingleConnection.IsUnknown() && !child.SingleConnection.IsNull() {
+			if configChildOk && !child.SingleConnection.IsUnknown() && !child.SingleConnection.IsNull() && !configChild.SingleConnection.IsNull() {
 				attrs, _ = sjson.Set(attrs, "singleConnection", child.SingleConnection.ValueString())
 			}
-			if !child.Timeout.IsUnknown() && !child.Timeout.IsNull() {
+			if configChildOk && !child.Timeout.IsUnknown() && !child.Timeout.IsNull() && !configChild.Timeout.IsNull() {
 				attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(child.Timeout.ValueInt64(), 10))
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaTacacsPlusProvider.attributes", attrs)
 		}
 		for key, child := range data.TacacsProviderGroups {
+			configChild, configChildOk := config.TacacsProviderGroups[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "name", key)
-			if !child.Deadtime.IsUnknown() && !child.Deadtime.IsNull() {
+			if configChildOk && !child.Deadtime.IsUnknown() && !child.Deadtime.IsNull() && !configChild.Deadtime.IsNull() {
 				attrs, _ = sjson.Set(attrs, "deadtime", strconv.FormatInt(child.Deadtime.ValueInt64(), 10))
 			}
-			if !child.Description.IsUnknown() && !child.Description.IsNull() {
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
-			if !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() {
+			if configChildOk && !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() && !configChild.OwnerKey.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ownerKey", child.OwnerKey.ValueString())
 			}
-			if !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() {
+			if configChildOk && !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() && !configChild.OwnerTag.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ownerTag", child.OwnerTag.ValueString())
 			}
-			if !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() {
+			if configChildOk && !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
 				attrs, _ = sjson.Set(attrs, "srcIf", child.SourceInterface.ValueString())
 			}
-			if !child.Vrf.IsUnknown() && !child.Vrf.IsNull() {
+			if configChildOk && !child.Vrf.IsUnknown() && !child.Vrf.IsNull() && !configChild.Vrf.IsNull() {
 				attrs, _ = sjson.Set(attrs, "vrf", child.Vrf.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaTacacsPlusProviderGroup.attributes", attrs)
@@ -564,18 +570,21 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".aaaTacacsPlusProviderGroup.children"
 				for key, child := range child.Servers {
+					configChild, configChildOk := configChild.Servers[key]
+					_ = configChild
+					_ = configChildOk
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "name", key)
-					if !child.Description.IsUnknown() && !child.Description.IsNull() {
+					if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 					}
-					if !child.Order.IsUnknown() && !child.Order.IsNull() {
+					if configChildOk && !child.Order.IsUnknown() && !child.Order.IsNull() && !configChild.Order.IsNull() {
 						attrs, _ = sjson.Set(attrs, "order", strconv.FormatInt(child.Order.ValueInt64(), 10))
 					}
-					if !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() {
+					if configChildOk && !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() && !configChild.OwnerKey.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ownerKey", child.OwnerKey.ValueString())
 					}
-					if !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() {
+					if configChildOk && !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() && !configChild.OwnerTag.IsNull() {
 						attrs, _ = sjson.Set(attrs, "ownerTag", child.OwnerTag.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaProviderRef.attributes", attrs)
@@ -587,230 +596,233 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaAuthRealm"
 		attrs = "{}"
-		if !data.AuthenticationRealmDefaultRolePolicy.IsUnknown() && !data.AuthenticationRealmDefaultRolePolicy.IsNull() {
+		if !data.AuthenticationRealmDefaultRolePolicy.IsUnknown() && !data.AuthenticationRealmDefaultRolePolicy.IsNull() && !config.AuthenticationRealmDefaultRolePolicy.IsNull() {
 			attrs, _ = sjson.Set(attrs, "defRolePolicy", data.AuthenticationRealmDefaultRolePolicy.ValueString())
 		}
-		if !data.AuthenticationRealmDescription.IsUnknown() && !data.AuthenticationRealmDescription.IsNull() {
+		if !data.AuthenticationRealmDescription.IsUnknown() && !data.AuthenticationRealmDescription.IsNull() && !config.AuthenticationRealmDescription.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", data.AuthenticationRealmDescription.ValueString())
 		}
-		if !data.AuthenticationRealmLoggingLevel.IsUnknown() && !data.AuthenticationRealmLoggingLevel.IsNull() {
+		if !data.AuthenticationRealmLoggingLevel.IsUnknown() && !data.AuthenticationRealmLoggingLevel.IsNull() && !config.AuthenticationRealmLoggingLevel.IsNull() {
 			attrs, _ = sjson.Set(attrs, "loggingLevel", strconv.FormatInt(data.AuthenticationRealmLoggingLevel.ValueInt64(), 10))
 		}
-		if !data.AuthenticationRealmOwnerKey.IsUnknown() && !data.AuthenticationRealmOwnerKey.IsNull() {
+		if !data.AuthenticationRealmOwnerKey.IsUnknown() && !data.AuthenticationRealmOwnerKey.IsNull() && !config.AuthenticationRealmOwnerKey.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerKey", data.AuthenticationRealmOwnerKey.ValueString())
 		}
-		if !data.AuthenticationRealmOwnerTag.IsUnknown() && !data.AuthenticationRealmOwnerTag.IsNull() {
+		if !data.AuthenticationRealmOwnerTag.IsUnknown() && !data.AuthenticationRealmOwnerTag.IsNull() && !config.AuthenticationRealmOwnerTag.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerTag", data.AuthenticationRealmOwnerTag.ValueString())
 		}
-		if !data.AuthenticationRealmRadiusDirectedRequest.IsUnknown() && !data.AuthenticationRealmRadiusDirectedRequest.IsNull() {
+		if !data.AuthenticationRealmRadiusDirectedRequest.IsUnknown() && !data.AuthenticationRealmRadiusDirectedRequest.IsNull() && !config.AuthenticationRealmRadiusDirectedRequest.IsNull() {
 			attrs, _ = sjson.Set(attrs, "radDirectedReq", data.AuthenticationRealmRadiusDirectedRequest.ValueString())
 		}
-		if !data.AuthenticationRealmTacacsDirectedRequest.IsUnknown() && !data.AuthenticationRealmTacacsDirectedRequest.IsNull() {
+		if !data.AuthenticationRealmTacacsDirectedRequest.IsUnknown() && !data.AuthenticationRealmTacacsDirectedRequest.IsNull() && !config.AuthenticationRealmTacacsDirectedRequest.IsNull() {
 			attrs, _ = sjson.Set(attrs, "tacDirectedReq", data.AuthenticationRealmTacacsDirectedRequest.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
-		if !data.DefaultAuthenticationProtocol.IsUnknown() && !data.DefaultAuthenticationProtocol.IsNull() {
+		if !data.DefaultAuthenticationProtocol.IsUnknown() && !data.DefaultAuthenticationProtocol.IsNull() && !config.DefaultAuthenticationProtocol.IsNull() {
 			attrs, _ = sjson.Set(attrs, "authProtocol", data.DefaultAuthenticationProtocol.ValueString())
 		}
-		if !data.DefaultAuthenticationDescription.IsUnknown() && !data.DefaultAuthenticationDescription.IsNull() {
+		if !data.DefaultAuthenticationDescription.IsUnknown() && !data.DefaultAuthenticationDescription.IsNull() && !config.DefaultAuthenticationDescription.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", data.DefaultAuthenticationDescription.ValueString())
 		}
-		if !data.DefaultAuthenticationErrorEnable.IsUnknown() && !data.DefaultAuthenticationErrorEnable.IsNull() {
+		if !data.DefaultAuthenticationErrorEnable.IsUnknown() && !data.DefaultAuthenticationErrorEnable.IsNull() && !config.DefaultAuthenticationErrorEnable.IsNull() {
 			attrs, _ = sjson.Set(attrs, "errEn", strconv.FormatBool(data.DefaultAuthenticationErrorEnable.ValueBool()))
 		}
-		if !data.DefaultAuthenticationFallback.IsUnknown() && !data.DefaultAuthenticationFallback.IsNull() {
+		if !data.DefaultAuthenticationFallback.IsUnknown() && !data.DefaultAuthenticationFallback.IsNull() && !config.DefaultAuthenticationFallback.IsNull() {
 			attrs, _ = sjson.Set(attrs, "fallback", data.DefaultAuthenticationFallback.ValueString())
 		}
-		if !data.DefaultAuthenticationInvalidUserLog.IsUnknown() && !data.DefaultAuthenticationInvalidUserLog.IsNull() {
+		if !data.DefaultAuthenticationInvalidUserLog.IsUnknown() && !data.DefaultAuthenticationInvalidUserLog.IsNull() && !config.DefaultAuthenticationInvalidUserLog.IsNull() {
 			attrs, _ = sjson.Set(attrs, "invalidUserLog", strconv.FormatBool(data.DefaultAuthenticationInvalidUserLog.ValueBool()))
 		}
-		if !data.DefaultAuthenticationLocal.IsUnknown() && !data.DefaultAuthenticationLocal.IsNull() {
+		if !data.DefaultAuthenticationLocal.IsUnknown() && !data.DefaultAuthenticationLocal.IsNull() && !config.DefaultAuthenticationLocal.IsNull() {
 			attrs, _ = sjson.Set(attrs, "local", data.DefaultAuthenticationLocal.ValueString())
 		}
-		if !data.DefaultAuthenticationNone.IsUnknown() && !data.DefaultAuthenticationNone.IsNull() {
+		if !data.DefaultAuthenticationNone.IsUnknown() && !data.DefaultAuthenticationNone.IsNull() && !config.DefaultAuthenticationNone.IsNull() {
 			attrs, _ = sjson.Set(attrs, "none", data.DefaultAuthenticationNone.ValueString())
 		}
-		if !data.DefaultAuthenticationOwnerKey.IsUnknown() && !data.DefaultAuthenticationOwnerKey.IsNull() {
+		if !data.DefaultAuthenticationOwnerKey.IsUnknown() && !data.DefaultAuthenticationOwnerKey.IsNull() && !config.DefaultAuthenticationOwnerKey.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerKey", data.DefaultAuthenticationOwnerKey.ValueString())
 		}
-		if !data.DefaultAuthenticationOwnerTag.IsUnknown() && !data.DefaultAuthenticationOwnerTag.IsNull() {
+		if !data.DefaultAuthenticationOwnerTag.IsUnknown() && !data.DefaultAuthenticationOwnerTag.IsNull() && !config.DefaultAuthenticationOwnerTag.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerTag", data.DefaultAuthenticationOwnerTag.ValueString())
 		}
-		if !data.DefaultAuthenticationProviderGroup.IsUnknown() && !data.DefaultAuthenticationProviderGroup.IsNull() {
+		if !data.DefaultAuthenticationProviderGroup.IsUnknown() && !data.DefaultAuthenticationProviderGroup.IsNull() && !config.DefaultAuthenticationProviderGroup.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup", data.DefaultAuthenticationProviderGroup.ValueString())
 		}
-		if !data.DefaultAuthenticationProviderGroup2.IsUnknown() && !data.DefaultAuthenticationProviderGroup2.IsNull() {
+		if !data.DefaultAuthenticationProviderGroup2.IsUnknown() && !data.DefaultAuthenticationProviderGroup2.IsNull() && !config.DefaultAuthenticationProviderGroup2.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup2", data.DefaultAuthenticationProviderGroup2.ValueString())
 		}
-		if !data.DefaultAuthenticationProviderGroup3.IsUnknown() && !data.DefaultAuthenticationProviderGroup3.IsNull() {
+		if !data.DefaultAuthenticationProviderGroup3.IsUnknown() && !data.DefaultAuthenticationProviderGroup3.IsNull() && !config.DefaultAuthenticationProviderGroup3.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup3", data.DefaultAuthenticationProviderGroup3.ValueString())
 		}
-		if !data.DefaultAuthenticationProviderGroup4.IsUnknown() && !data.DefaultAuthenticationProviderGroup4.IsNull() {
+		if !data.DefaultAuthenticationProviderGroup4.IsUnknown() && !data.DefaultAuthenticationProviderGroup4.IsNull() && !config.DefaultAuthenticationProviderGroup4.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup4", data.DefaultAuthenticationProviderGroup4.ValueString())
 		}
-		if !data.DefaultAuthenticationProviderGroup5.IsUnknown() && !data.DefaultAuthenticationProviderGroup5.IsNull() {
+		if !data.DefaultAuthenticationProviderGroup5.IsUnknown() && !data.DefaultAuthenticationProviderGroup5.IsNull() && !config.DefaultAuthenticationProviderGroup5.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup5", data.DefaultAuthenticationProviderGroup5.ValueString())
 		}
-		if !data.DefaultAuthenticationProviderGroup6.IsUnknown() && !data.DefaultAuthenticationProviderGroup6.IsNull() {
+		if !data.DefaultAuthenticationProviderGroup6.IsUnknown() && !data.DefaultAuthenticationProviderGroup6.IsNull() && !config.DefaultAuthenticationProviderGroup6.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup6", data.DefaultAuthenticationProviderGroup6.ValueString())
 		}
-		if !data.DefaultAuthenticationProviderGroup7.IsUnknown() && !data.DefaultAuthenticationProviderGroup7.IsNull() {
+		if !data.DefaultAuthenticationProviderGroup7.IsUnknown() && !data.DefaultAuthenticationProviderGroup7.IsNull() && !config.DefaultAuthenticationProviderGroup7.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup7", data.DefaultAuthenticationProviderGroup7.ValueString())
 		}
-		if !data.DefaultAuthenticationProviderGroup8.IsUnknown() && !data.DefaultAuthenticationProviderGroup8.IsNull() {
+		if !data.DefaultAuthenticationProviderGroup8.IsUnknown() && !data.DefaultAuthenticationProviderGroup8.IsNull() && !config.DefaultAuthenticationProviderGroup8.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup8", data.DefaultAuthenticationProviderGroup8.ValueString())
 		}
-		if !data.DefaultAuthenticationRealm.IsUnknown() && !data.DefaultAuthenticationRealm.IsNull() {
+		if !data.DefaultAuthenticationRealm.IsUnknown() && !data.DefaultAuthenticationRealm.IsNull() && !config.DefaultAuthenticationRealm.IsNull() {
 			attrs, _ = sjson.Set(attrs, "realm", data.DefaultAuthenticationRealm.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaDefaultAuth.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.ConsoleAuthenticationProtocol.IsUnknown() && !data.ConsoleAuthenticationProtocol.IsNull() {
+		if !data.ConsoleAuthenticationProtocol.IsUnknown() && !data.ConsoleAuthenticationProtocol.IsNull() && !config.ConsoleAuthenticationProtocol.IsNull() {
 			attrs, _ = sjson.Set(attrs, "authProtocol", data.ConsoleAuthenticationProtocol.ValueString())
 		}
-		if !data.ConsoleAuthenticationDescription.IsUnknown() && !data.ConsoleAuthenticationDescription.IsNull() {
+		if !data.ConsoleAuthenticationDescription.IsUnknown() && !data.ConsoleAuthenticationDescription.IsNull() && !config.ConsoleAuthenticationDescription.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", data.ConsoleAuthenticationDescription.ValueString())
 		}
-		if !data.ConsoleAuthenticationErrorEnable.IsUnknown() && !data.ConsoleAuthenticationErrorEnable.IsNull() {
+		if !data.ConsoleAuthenticationErrorEnable.IsUnknown() && !data.ConsoleAuthenticationErrorEnable.IsNull() && !config.ConsoleAuthenticationErrorEnable.IsNull() {
 			attrs, _ = sjson.Set(attrs, "errEn", strconv.FormatBool(data.ConsoleAuthenticationErrorEnable.ValueBool()))
 		}
-		if !data.ConsoleAuthenticationFallback.IsUnknown() && !data.ConsoleAuthenticationFallback.IsNull() {
+		if !data.ConsoleAuthenticationFallback.IsUnknown() && !data.ConsoleAuthenticationFallback.IsNull() && !config.ConsoleAuthenticationFallback.IsNull() {
 			attrs, _ = sjson.Set(attrs, "fallback", data.ConsoleAuthenticationFallback.ValueString())
 		}
-		if !data.ConsoleAuthenticationInvalidUserLog.IsUnknown() && !data.ConsoleAuthenticationInvalidUserLog.IsNull() {
+		if !data.ConsoleAuthenticationInvalidUserLog.IsUnknown() && !data.ConsoleAuthenticationInvalidUserLog.IsNull() && !config.ConsoleAuthenticationInvalidUserLog.IsNull() {
 			attrs, _ = sjson.Set(attrs, "invalidUserLog", strconv.FormatBool(data.ConsoleAuthenticationInvalidUserLog.ValueBool()))
 		}
-		if !data.ConsoleAuthenticationLocal.IsUnknown() && !data.ConsoleAuthenticationLocal.IsNull() {
+		if !data.ConsoleAuthenticationLocal.IsUnknown() && !data.ConsoleAuthenticationLocal.IsNull() && !config.ConsoleAuthenticationLocal.IsNull() {
 			attrs, _ = sjson.Set(attrs, "local", data.ConsoleAuthenticationLocal.ValueString())
 		}
-		if !data.ConsoleAuthenticationNone.IsUnknown() && !data.ConsoleAuthenticationNone.IsNull() {
+		if !data.ConsoleAuthenticationNone.IsUnknown() && !data.ConsoleAuthenticationNone.IsNull() && !config.ConsoleAuthenticationNone.IsNull() {
 			attrs, _ = sjson.Set(attrs, "none", data.ConsoleAuthenticationNone.ValueString())
 		}
-		if !data.ConsoleAuthenticationOwnerKey.IsUnknown() && !data.ConsoleAuthenticationOwnerKey.IsNull() {
+		if !data.ConsoleAuthenticationOwnerKey.IsUnknown() && !data.ConsoleAuthenticationOwnerKey.IsNull() && !config.ConsoleAuthenticationOwnerKey.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerKey", data.ConsoleAuthenticationOwnerKey.ValueString())
 		}
-		if !data.ConsoleAuthenticationOwnerTag.IsUnknown() && !data.ConsoleAuthenticationOwnerTag.IsNull() {
+		if !data.ConsoleAuthenticationOwnerTag.IsUnknown() && !data.ConsoleAuthenticationOwnerTag.IsNull() && !config.ConsoleAuthenticationOwnerTag.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerTag", data.ConsoleAuthenticationOwnerTag.ValueString())
 		}
-		if !data.ConsoleAuthenticationProviderGroup.IsUnknown() && !data.ConsoleAuthenticationProviderGroup.IsNull() {
+		if !data.ConsoleAuthenticationProviderGroup.IsUnknown() && !data.ConsoleAuthenticationProviderGroup.IsNull() && !config.ConsoleAuthenticationProviderGroup.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup", data.ConsoleAuthenticationProviderGroup.ValueString())
 		}
-		if !data.ConsoleAuthenticationProviderGroup2.IsUnknown() && !data.ConsoleAuthenticationProviderGroup2.IsNull() {
+		if !data.ConsoleAuthenticationProviderGroup2.IsUnknown() && !data.ConsoleAuthenticationProviderGroup2.IsNull() && !config.ConsoleAuthenticationProviderGroup2.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup2", data.ConsoleAuthenticationProviderGroup2.ValueString())
 		}
-		if !data.ConsoleAuthenticationProviderGroup3.IsUnknown() && !data.ConsoleAuthenticationProviderGroup3.IsNull() {
+		if !data.ConsoleAuthenticationProviderGroup3.IsUnknown() && !data.ConsoleAuthenticationProviderGroup3.IsNull() && !config.ConsoleAuthenticationProviderGroup3.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup3", data.ConsoleAuthenticationProviderGroup3.ValueString())
 		}
-		if !data.ConsoleAuthenticationProviderGroup4.IsUnknown() && !data.ConsoleAuthenticationProviderGroup4.IsNull() {
+		if !data.ConsoleAuthenticationProviderGroup4.IsUnknown() && !data.ConsoleAuthenticationProviderGroup4.IsNull() && !config.ConsoleAuthenticationProviderGroup4.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup4", data.ConsoleAuthenticationProviderGroup4.ValueString())
 		}
-		if !data.ConsoleAuthenticationProviderGroup5.IsUnknown() && !data.ConsoleAuthenticationProviderGroup5.IsNull() {
+		if !data.ConsoleAuthenticationProviderGroup5.IsUnknown() && !data.ConsoleAuthenticationProviderGroup5.IsNull() && !config.ConsoleAuthenticationProviderGroup5.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup5", data.ConsoleAuthenticationProviderGroup5.ValueString())
 		}
-		if !data.ConsoleAuthenticationProviderGroup6.IsUnknown() && !data.ConsoleAuthenticationProviderGroup6.IsNull() {
+		if !data.ConsoleAuthenticationProviderGroup6.IsUnknown() && !data.ConsoleAuthenticationProviderGroup6.IsNull() && !config.ConsoleAuthenticationProviderGroup6.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup6", data.ConsoleAuthenticationProviderGroup6.ValueString())
 		}
-		if !data.ConsoleAuthenticationProviderGroup7.IsUnknown() && !data.ConsoleAuthenticationProviderGroup7.IsNull() {
+		if !data.ConsoleAuthenticationProviderGroup7.IsUnknown() && !data.ConsoleAuthenticationProviderGroup7.IsNull() && !config.ConsoleAuthenticationProviderGroup7.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup7", data.ConsoleAuthenticationProviderGroup7.ValueString())
 		}
-		if !data.ConsoleAuthenticationProviderGroup8.IsUnknown() && !data.ConsoleAuthenticationProviderGroup8.IsNull() {
+		if !data.ConsoleAuthenticationProviderGroup8.IsUnknown() && !data.ConsoleAuthenticationProviderGroup8.IsNull() && !config.ConsoleAuthenticationProviderGroup8.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup8", data.ConsoleAuthenticationProviderGroup8.ValueString())
 		}
-		if !data.ConsoleAuthenticationRealm.IsUnknown() && !data.ConsoleAuthenticationRealm.IsNull() {
+		if !data.ConsoleAuthenticationRealm.IsUnknown() && !data.ConsoleAuthenticationRealm.IsNull() && !config.ConsoleAuthenticationRealm.IsNull() {
 			attrs, _ = sjson.Set(attrs, "realm", data.ConsoleAuthenticationRealm.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaConsoleAuth.attributes", attrs)
 		}
 		for key, child := range data.DefaultAuthorizations {
+			configChild, configChildOk := config.DefaultAuthorizations[key]
+			_ = configChild
+			_ = configChildOk
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "cmdType", key)
-			if !child.AuthorizationMethodNone.IsUnknown() && !child.AuthorizationMethodNone.IsNull() {
+			if configChildOk && !child.AuthorizationMethodNone.IsUnknown() && !child.AuthorizationMethodNone.IsNull() && !configChild.AuthorizationMethodNone.IsNull() {
 				attrs, _ = sjson.Set(attrs, "authorMethodNone", strconv.FormatBool(child.AuthorizationMethodNone.ValueBool()))
 			}
-			if !child.Description.IsUnknown() && !child.Description.IsNull() {
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
-			if !child.LocalRbac.IsUnknown() && !child.LocalRbac.IsNull() {
+			if configChildOk && !child.LocalRbac.IsUnknown() && !child.LocalRbac.IsNull() && !configChild.LocalRbac.IsNull() {
 				attrs, _ = sjson.Set(attrs, "localRbac", strconv.FormatBool(child.LocalRbac.ValueBool()))
 			}
-			if !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() {
+			if configChildOk && !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() && !configChild.OwnerKey.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ownerKey", child.OwnerKey.ValueString())
 			}
-			if !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() {
+			if configChildOk && !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() && !configChild.OwnerTag.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ownerTag", child.OwnerTag.ValueString())
 			}
-			if !child.ProviderGroup.IsUnknown() && !child.ProviderGroup.IsNull() {
+			if configChildOk && !child.ProviderGroup.IsUnknown() && !child.ProviderGroup.IsNull() && !configChild.ProviderGroup.IsNull() {
 				attrs, _ = sjson.Set(attrs, "providerGroup", child.ProviderGroup.ValueString())
 			}
-			if !child.ProviderGroup2.IsUnknown() && !child.ProviderGroup2.IsNull() {
+			if configChildOk && !child.ProviderGroup2.IsUnknown() && !child.ProviderGroup2.IsNull() && !configChild.ProviderGroup2.IsNull() {
 				attrs, _ = sjson.Set(attrs, "providerGroup2", child.ProviderGroup2.ValueString())
 			}
-			if !child.ProviderGroup3.IsUnknown() && !child.ProviderGroup3.IsNull() {
+			if configChildOk && !child.ProviderGroup3.IsUnknown() && !child.ProviderGroup3.IsNull() && !configChild.ProviderGroup3.IsNull() {
 				attrs, _ = sjson.Set(attrs, "providerGroup3", child.ProviderGroup3.ValueString())
 			}
-			if !child.ProviderGroup4.IsUnknown() && !child.ProviderGroup4.IsNull() {
+			if configChildOk && !child.ProviderGroup4.IsUnknown() && !child.ProviderGroup4.IsNull() && !configChild.ProviderGroup4.IsNull() {
 				attrs, _ = sjson.Set(attrs, "providerGroup4", child.ProviderGroup4.ValueString())
 			}
-			if !child.ProviderGroup5.IsUnknown() && !child.ProviderGroup5.IsNull() {
+			if configChildOk && !child.ProviderGroup5.IsUnknown() && !child.ProviderGroup5.IsNull() && !configChild.ProviderGroup5.IsNull() {
 				attrs, _ = sjson.Set(attrs, "providerGroup5", child.ProviderGroup5.ValueString())
 			}
-			if !child.ProviderGroup6.IsUnknown() && !child.ProviderGroup6.IsNull() {
+			if configChildOk && !child.ProviderGroup6.IsUnknown() && !child.ProviderGroup6.IsNull() && !configChild.ProviderGroup6.IsNull() {
 				attrs, _ = sjson.Set(attrs, "providerGroup6", child.ProviderGroup6.ValueString())
 			}
-			if !child.ProviderGroup7.IsUnknown() && !child.ProviderGroup7.IsNull() {
+			if configChildOk && !child.ProviderGroup7.IsUnknown() && !child.ProviderGroup7.IsNull() && !configChild.ProviderGroup7.IsNull() {
 				attrs, _ = sjson.Set(attrs, "providerGroup7", child.ProviderGroup7.ValueString())
 			}
-			if !child.ProviderGroup8.IsUnknown() && !child.ProviderGroup8.IsNull() {
+			if configChildOk && !child.ProviderGroup8.IsUnknown() && !child.ProviderGroup8.IsNull() && !configChild.ProviderGroup8.IsNull() {
 				attrs, _ = sjson.Set(attrs, "providerGroup8", child.ProviderGroup8.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaDefaultAuthor.attributes", attrs)
 		}
 		attrs = "{}"
-		if !data.DefaultAccountingMethodNone.IsUnknown() && !data.DefaultAccountingMethodNone.IsNull() {
+		if !data.DefaultAccountingMethodNone.IsUnknown() && !data.DefaultAccountingMethodNone.IsNull() && !config.DefaultAccountingMethodNone.IsNull() {
 			attrs, _ = sjson.Set(attrs, "accMethodNone", strconv.FormatBool(data.DefaultAccountingMethodNone.ValueBool()))
 		}
-		if !data.DefaultAccountingDescription.IsUnknown() && !data.DefaultAccountingDescription.IsNull() {
+		if !data.DefaultAccountingDescription.IsUnknown() && !data.DefaultAccountingDescription.IsNull() && !config.DefaultAccountingDescription.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", data.DefaultAccountingDescription.ValueString())
 		}
-		if !data.DefaultAccountingLocalRbac.IsUnknown() && !data.DefaultAccountingLocalRbac.IsNull() {
+		if !data.DefaultAccountingLocalRbac.IsUnknown() && !data.DefaultAccountingLocalRbac.IsNull() && !config.DefaultAccountingLocalRbac.IsNull() {
 			attrs, _ = sjson.Set(attrs, "localRbac", strconv.FormatBool(data.DefaultAccountingLocalRbac.ValueBool()))
 		}
-		if !data.DefaultAccountingOwnerKey.IsUnknown() && !data.DefaultAccountingOwnerKey.IsNull() {
+		if !data.DefaultAccountingOwnerKey.IsUnknown() && !data.DefaultAccountingOwnerKey.IsNull() && !config.DefaultAccountingOwnerKey.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerKey", data.DefaultAccountingOwnerKey.ValueString())
 		}
-		if !data.DefaultAccountingOwnerTag.IsUnknown() && !data.DefaultAccountingOwnerTag.IsNull() {
+		if !data.DefaultAccountingOwnerTag.IsUnknown() && !data.DefaultAccountingOwnerTag.IsNull() && !config.DefaultAccountingOwnerTag.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ownerTag", data.DefaultAccountingOwnerTag.ValueString())
 		}
-		if !data.DefaultAccountingProviderGroup.IsUnknown() && !data.DefaultAccountingProviderGroup.IsNull() {
+		if !data.DefaultAccountingProviderGroup.IsUnknown() && !data.DefaultAccountingProviderGroup.IsNull() && !config.DefaultAccountingProviderGroup.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup", data.DefaultAccountingProviderGroup.ValueString())
 		}
-		if !data.DefaultAccountingProviderGroup2.IsUnknown() && !data.DefaultAccountingProviderGroup2.IsNull() {
+		if !data.DefaultAccountingProviderGroup2.IsUnknown() && !data.DefaultAccountingProviderGroup2.IsNull() && !config.DefaultAccountingProviderGroup2.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup2", data.DefaultAccountingProviderGroup2.ValueString())
 		}
-		if !data.DefaultAccountingProviderGroup3.IsUnknown() && !data.DefaultAccountingProviderGroup3.IsNull() {
+		if !data.DefaultAccountingProviderGroup3.IsUnknown() && !data.DefaultAccountingProviderGroup3.IsNull() && !config.DefaultAccountingProviderGroup3.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup3", data.DefaultAccountingProviderGroup3.ValueString())
 		}
-		if !data.DefaultAccountingProviderGroup4.IsUnknown() && !data.DefaultAccountingProviderGroup4.IsNull() {
+		if !data.DefaultAccountingProviderGroup4.IsUnknown() && !data.DefaultAccountingProviderGroup4.IsNull() && !config.DefaultAccountingProviderGroup4.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup4", data.DefaultAccountingProviderGroup4.ValueString())
 		}
-		if !data.DefaultAccountingProviderGroup5.IsUnknown() && !data.DefaultAccountingProviderGroup5.IsNull() {
+		if !data.DefaultAccountingProviderGroup5.IsUnknown() && !data.DefaultAccountingProviderGroup5.IsNull() && !config.DefaultAccountingProviderGroup5.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup5", data.DefaultAccountingProviderGroup5.ValueString())
 		}
-		if !data.DefaultAccountingProviderGroup6.IsUnknown() && !data.DefaultAccountingProviderGroup6.IsNull() {
+		if !data.DefaultAccountingProviderGroup6.IsUnknown() && !data.DefaultAccountingProviderGroup6.IsNull() && !config.DefaultAccountingProviderGroup6.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup6", data.DefaultAccountingProviderGroup6.ValueString())
 		}
-		if !data.DefaultAccountingProviderGroup7.IsUnknown() && !data.DefaultAccountingProviderGroup7.IsNull() {
+		if !data.DefaultAccountingProviderGroup7.IsUnknown() && !data.DefaultAccountingProviderGroup7.IsNull() && !config.DefaultAccountingProviderGroup7.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup7", data.DefaultAccountingProviderGroup7.ValueString())
 		}
-		if !data.DefaultAccountingProviderGroup8.IsUnknown() && !data.DefaultAccountingProviderGroup8.IsNull() {
+		if !data.DefaultAccountingProviderGroup8.IsUnknown() && !data.DefaultAccountingProviderGroup8.IsNull() && !config.DefaultAccountingProviderGroup8.IsNull() {
 			attrs, _ = sjson.Set(attrs, "providerGroup8", data.DefaultAccountingProviderGroup8.ValueString())
 		}
-		if !data.DefaultAccountingRealm.IsUnknown() && !data.DefaultAccountingRealm.IsNull() {
+		if !data.DefaultAccountingRealm.IsUnknown() && !data.DefaultAccountingRealm.IsNull() && !config.DefaultAccountingRealm.IsNull() {
 			attrs, _ = sjson.Set(attrs, "realm", data.DefaultAccountingRealm.ValueString())
 		}
 		if attrs != "{}" {

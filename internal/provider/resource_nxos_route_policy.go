@@ -63,7 +63,7 @@ func (r *RoutePolicyResource) Metadata(ctx context.Context, req resource.Metadat
 func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.").AddApiDocumentation("rpmEntity", "Routing%20and%20Forwarding/rpm:Entity/", []string{"rtpfxRuleV4", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr"}, []string{"Routing%20and%20Forwarding/rtpfx:RuleV4/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtmap:Rule/", "Routing%20and%20Forwarding/rtmap:Entry/", "Routing%20and%20Forwarding/rtmap:MatchRtDst/", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/", "Routing%20and%20Forwarding/rtmap:SetRegComm/", "Routing%20and%20Forwarding/rtregcom:Item/", "Routing%20and%20Forwarding/rtmap:MatchRtTag/", "Routing%20and%20Forwarding/rtmap:SetMetric/", "Routing%20and%20Forwarding/rtmap:SetMetricType/", "Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.").AddApiDocumentation("rpmEntity", "Routing%20and%20Forwarding/rpm:Entity/", []string{"rtpfxRuleV4", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtregcomRule", "rtregcomEntry", "rtregcomItem"}, []string{"Routing%20and%20Forwarding/rtpfx:RuleV4/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtmap:Rule/", "Routing%20and%20Forwarding/rtmap:Entry/", "Routing%20and%20Forwarding/rtmap:MatchRtDst/", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/", "Routing%20and%20Forwarding/rtmap:SetRegComm/", "Routing%20and%20Forwarding/rtregcom:Item/", "Routing%20and%20Forwarding/rtmap:MatchRtTag/", "Routing%20and%20Forwarding/rtmap:SetMetric/", "Routing%20and%20Forwarding/rtmap:SetMetricType/", "Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/", "Routing%20and%20Forwarding/rtregcom:Rule/", "Routing%20and%20Forwarding/rtregcom:Entry/", "Routing%20and%20Forwarding/rtregcom:Item/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -401,6 +401,75 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 				},
 			},
+			"community_lists": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of Community Lists.\n  - Map key: `name` - Object name.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Mode.").AddStringEnumDescription("standard", "regex").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("standard", "regex"),
+							},
+						},
+						"type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("regular", "extended", "large").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("regular", "extended", "large"),
+							},
+						},
+						"entries": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of Community List entries.\n  - Map key: `order` - Order.\n  - Key range: `1`-`4294967294`").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"action": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Action.").AddStringEnumDescription("deny", "permit").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("deny", "permit"),
+										},
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+										Optional:            true,
+									},
+									"name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+										Optional:            true,
+									},
+									"regex": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Regular Expression.").String,
+										Optional:            true,
+									},
+									"items": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of Community List items.\n  - Map key: `community` - Community.").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"description": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+													Optional:            true,
+												},
+												"name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -510,7 +579,7 @@ func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "rtpfxRuleV4,rtpfxEntry,rtmapRule,rtmapEntry,rtmapMatchRtDst,rtmapRsRtDstAtt,rtmapSetRegComm,rtregcomItem,rtmapMatchRtTag,rtmapSetMetric,rtmapSetMetricType,rtmapSetNhPeerAddr")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "rtpfxRuleV4,rtpfxEntry,rtmapRule,rtmapEntry,rtmapMatchRtDst,rtmapRsRtDstAtt,rtmapSetRegComm,rtregcomItem,rtmapMatchRtTag,rtmapSetMetric,rtmapSetMetricType,rtmapSetNhPeerAddr,rtregcomRule,rtregcomEntry,rtregcomItem")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

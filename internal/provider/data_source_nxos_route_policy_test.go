@@ -70,6 +70,8 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v6_peer_address", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v6_redist_unchanged", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v6_unchanged", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.mode", "standard"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.entries.10.action", "permit"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -154,6 +156,20 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `					set_next_hop_v6_peer_address = "disabled"` + "\n"
 	config += `					set_next_hop_v6_redist_unchanged = "enabled"` + "\n"
 	config += `					set_next_hop_v6_unchanged = "enabled"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	community_lists = {` + "\n"
+	config += `		"COMMUNITY_LIST1" = {` + "\n"
+	config += `			mode = "standard"` + "\n"
+	config += `			entries = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					action = "permit"` + "\n"
+	config += `					items = {` + "\n"
+	config += `						"regular:as2-nn2:65001:123" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

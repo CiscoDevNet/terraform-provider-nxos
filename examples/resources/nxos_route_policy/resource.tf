@@ -50,13 +50,19 @@ resource "nxos_route_policy" "example" {
           match_tags = {
             "12345" = {}
           }
-          set_metric_is_bgp      = false
-          set_metric             = "100"
-          set_metric_delay       = 10
-          set_metric_load        = 10
-          set_metric_mtu         = 1500
-          set_metric_reliability = 100
-          set_metric_type        = "type-1"
+          set_metric_is_bgp                = false
+          set_metric                       = "100"
+          set_metric_delay                 = 10
+          set_metric_load                  = 10
+          set_metric_mtu                   = 1500
+          set_metric_reliability           = 100
+          set_metric_type                  = "type-1"
+          set_next_hop_v4_peer_address     = "disabled"
+          set_next_hop_v4_redist_unchanged = "enabled"
+          set_next_hop_v4_unchanged        = "enabled"
+          set_next_hop_v6_peer_address     = "disabled"
+          set_next_hop_v6_redist_unchanged = "enabled"
+          set_next_hop_v6_unchanged        = "enabled"
         }
       }
     }

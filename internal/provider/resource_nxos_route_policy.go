@@ -63,7 +63,7 @@ func (r *RoutePolicyResource) Metadata(ctx context.Context, req resource.Metadat
 func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.").AddApiDocumentation("rpmEntity", "Routing%20and%20Forwarding/rpm:Entity/", []string{"rtpfxRuleV4", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType"}, []string{"Routing%20and%20Forwarding/rtpfx:RuleV4/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtmap:Rule/", "Routing%20and%20Forwarding/rtmap:Entry/", "Routing%20and%20Forwarding/rtmap:MatchRtDst/", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/", "Routing%20and%20Forwarding/rtmap:SetRegComm/", "Routing%20and%20Forwarding/rtregcom:Item/", "Routing%20and%20Forwarding/rtmap:MatchRtTag/", "Routing%20and%20Forwarding/rtmap:SetMetric/", "Routing%20and%20Forwarding/rtmap:SetMetricType/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.").AddApiDocumentation("rpmEntity", "Routing%20and%20Forwarding/rpm:Entity/", []string{"rtpfxRuleV4", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr"}, []string{"Routing%20and%20Forwarding/rtpfx:RuleV4/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtmap:Rule/", "Routing%20and%20Forwarding/rtmap:Entry/", "Routing%20and%20Forwarding/rtmap:MatchRtDst/", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/", "Routing%20and%20Forwarding/rtmap:SetRegComm/", "Routing%20and%20Forwarding/rtregcom:Item/", "Routing%20and%20Forwarding/rtmap:MatchRtTag/", "Routing%20and%20Forwarding/rtmap:SetMetric/", "Routing%20and%20Forwarding/rtmap:SetMetricType/", "Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -353,6 +353,48 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 											stringvalidator.OneOf("type-1", "type-2", "internal", "external"),
 										},
 									},
+									"set_next_hop_v4_peer_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set Next Hop V4 Peer Address.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"set_next_hop_v4_redist_unchanged": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set IPv4 Next Hop Redist Unchanged.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"set_next_hop_v4_unchanged": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set IPv4 Next Hop Unchanged.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"set_next_hop_v6_peer_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set Next Hop V6 Peer Address.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"set_next_hop_v6_redist_unchanged": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set IPv6 Next Hop Redist Unchanged.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"set_next_hop_v6_unchanged": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set IPv6 Next Hop Unchanged.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
 								},
 							},
 						},
@@ -468,7 +510,7 @@ func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "rtpfxRuleV4,rtpfxEntry,rtmapRule,rtmapEntry,rtmapMatchRtDst,rtmapRsRtDstAtt,rtmapSetRegComm,rtregcomItem,rtmapMatchRtTag,rtmapSetMetric,rtmapSetMetricType")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "rtpfxRuleV4,rtpfxEntry,rtmapRule,rtmapEntry,rtmapMatchRtDst,rtmapRsRtDstAtt,rtmapSetRegComm,rtregcomItem,rtmapMatchRtTag,rtmapSetMetric,rtmapSetMetricType,rtmapSetNhPeerAddr")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -93,6 +93,12 @@ type RoutePolicyRouteMapsEntries struct {
 	SetMetricMtu                   types.Int64                                                    `tfsdk:"set_metric_mtu"`
 	SetMetricReliability           types.Int64                                                    `tfsdk:"set_metric_reliability"`
 	SetMetricType                  types.String                                                   `tfsdk:"set_metric_type"`
+	SetNextHopV4PeerAddress        types.String                                                   `tfsdk:"set_next_hop_v4_peer_address"`
+	SetNextHopV4RedistUnchanged    types.String                                                   `tfsdk:"set_next_hop_v4_redist_unchanged"`
+	SetNextHopV4Unchanged          types.String                                                   `tfsdk:"set_next_hop_v4_unchanged"`
+	SetNextHopV6PeerAddress        types.String                                                   `tfsdk:"set_next_hop_v6_peer_address"`
+	SetNextHopV6RedistUnchanged    types.String                                                   `tfsdk:"set_next_hop_v6_redist_unchanged"`
+	SetNextHopV6Unchanged          types.String                                                   `tfsdk:"set_next_hop_v6_unchanged"`
 }
 
 type RoutePolicyRouteMapsEntriesMatchRoutePrefixLists struct {
@@ -348,6 +354,28 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 					if attrs != "{}" {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetMetricType.attributes", attrs)
 					}
+					attrs = "{}"
+					if !child.SetNextHopV4PeerAddress.IsUnknown() && !child.SetNextHopV4PeerAddress.IsNull() {
+						attrs, _ = sjson.Set(attrs, "v4PeerAddr", child.SetNextHopV4PeerAddress.ValueString())
+					}
+					if !child.SetNextHopV4RedistUnchanged.IsUnknown() && !child.SetNextHopV4RedistUnchanged.IsNull() {
+						attrs, _ = sjson.Set(attrs, "v4RedistUnchange", child.SetNextHopV4RedistUnchanged.ValueString())
+					}
+					if !child.SetNextHopV4Unchanged.IsUnknown() && !child.SetNextHopV4Unchanged.IsNull() {
+						attrs, _ = sjson.Set(attrs, "v4Unchange", child.SetNextHopV4Unchanged.ValueString())
+					}
+					if !child.SetNextHopV6PeerAddress.IsUnknown() && !child.SetNextHopV6PeerAddress.IsNull() {
+						attrs, _ = sjson.Set(attrs, "v6PeerAddr", child.SetNextHopV6PeerAddress.ValueString())
+					}
+					if !child.SetNextHopV6RedistUnchanged.IsUnknown() && !child.SetNextHopV6RedistUnchanged.IsNull() {
+						attrs, _ = sjson.Set(attrs, "v6RedistUnchange", child.SetNextHopV6RedistUnchanged.ValueString())
+					}
+					if !child.SetNextHopV6Unchanged.IsUnknown() && !child.SetNextHopV6Unchanged.IsNull() {
+						attrs, _ = sjson.Set(attrs, "v6Unchange", child.SetNextHopV6Unchanged.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetNhPeerAddr.attributes", attrs)
+					}
 				}
 			}
 		}
@@ -552,6 +580,25 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 													},
 												)
 												nestedChildrtmapEntry.SetMetricType = types.StringValue(rrtmapSetMetricType.Get("rtmapSetMetricType.attributes.metricT").String())
+											}
+											{
+												var rrtmapSetNhPeerAddr gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetNhPeerAddr.attributes.rn").String()
+														if rnValue == "nhpa" {
+															rrtmapSetNhPeerAddr = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetNextHopV4PeerAddress = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v4PeerAddr").String())
+												nestedChildrtmapEntry.SetNextHopV4RedistUnchanged = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v4RedistUnchange").String())
+												nestedChildrtmapEntry.SetNextHopV4Unchanged = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v4Unchange").String())
+												nestedChildrtmapEntry.SetNextHopV6PeerAddress = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v6PeerAddr").String())
+												nestedChildrtmapEntry.SetNextHopV6RedistUnchanged = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v6RedistUnchange").String())
+												nestedChildrtmapEntry.SetNextHopV6Unchanged = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v6Unchange").String())
 											}
 											if child.Entries == nil {
 												child.Entries = make(map[string]RoutePolicyRouteMapsEntries)
@@ -932,6 +979,49 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					ncItem.SetMetricType = types.StringValue(rrtmapSetMetricType.Get("rtmapSetMetricType.attributes.metricT").String())
 				} else {
 					ncItem.SetMetricType = types.StringNull()
+				}
+			}
+			{
+				var rrtmapSetNhPeerAddr gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetNhPeerAddr.attributes.rn").String()
+						if rnValue == "nhpa" {
+							rrtmapSetNhPeerAddr = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetNextHopV4PeerAddress.IsNull() {
+					ncItem.SetNextHopV4PeerAddress = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v4PeerAddr").String())
+				} else {
+					ncItem.SetNextHopV4PeerAddress = types.StringNull()
+				}
+				if !ncItem.SetNextHopV4RedistUnchanged.IsNull() {
+					ncItem.SetNextHopV4RedistUnchanged = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v4RedistUnchange").String())
+				} else {
+					ncItem.SetNextHopV4RedistUnchanged = types.StringNull()
+				}
+				if !ncItem.SetNextHopV4Unchanged.IsNull() {
+					ncItem.SetNextHopV4Unchanged = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v4Unchange").String())
+				} else {
+					ncItem.SetNextHopV4Unchanged = types.StringNull()
+				}
+				if !ncItem.SetNextHopV6PeerAddress.IsNull() {
+					ncItem.SetNextHopV6PeerAddress = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v6PeerAddr").String())
+				} else {
+					ncItem.SetNextHopV6PeerAddress = types.StringNull()
+				}
+				if !ncItem.SetNextHopV6RedistUnchanged.IsNull() {
+					ncItem.SetNextHopV6RedistUnchanged = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v6RedistUnchange").String())
+				} else {
+					ncItem.SetNextHopV6RedistUnchanged = types.StringNull()
+				}
+				if !ncItem.SetNextHopV6Unchanged.IsNull() {
+					ncItem.SetNextHopV6Unchanged = types.StringValue(rrtmapSetNhPeerAddr.Get("rtmapSetNhPeerAddr.attributes.v6Unchange").String())
+				} else {
+					ncItem.SetNextHopV6Unchanged = types.StringNull()
 				}
 			}
 			item.Entries[nc] = ncItem

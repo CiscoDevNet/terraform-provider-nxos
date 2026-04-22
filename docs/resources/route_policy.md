@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.
   API Documentation
-  rpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rpm:Entity/rtpfxRuleV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/rtpfxEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtpfx:Entry/rtmapRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:Rule/rtmapEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:Entry/rtmapMatchRtDst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/rtmapRsRtDstAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/rtmapSetRegComm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetRegComm/rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtregcom:Item/rtmapMatchRtTag https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/rtmapSetMetric https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetric/rtmapSetMetricType https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetricType/
+  rpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rpm:Entity/rtpfxRuleV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/rtpfxEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtpfx:Entry/rtmapRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:Rule/rtmapEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:Entry/rtmapMatchRtDst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/rtmapRsRtDstAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/rtmapSetRegComm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetRegComm/rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtregcom:Item/rtmapMatchRtTag https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/rtmapSetMetric https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetric/rtmapSetMetricType https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetricType/rtmapSetNhPeerAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/
 ---
 
 # nxos_route_policy (Resource)
@@ -26,6 +26,7 @@ This resource can manage the route policy configuration on NX-OS devices, includ
 - [rtmapMatchRtTag](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/)
 - [rtmapSetMetric](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetric/)
 - [rtmapSetMetricType](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetricType/)
+- [rtmapSetNhPeerAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/)
 
 ## Example Usage
 
@@ -82,13 +83,19 @@ resource "nxos_route_policy" "example" {
           match_tags = {
             "12345" = {}
           }
-          set_metric_is_bgp      = false
-          set_metric             = "100"
-          set_metric_delay       = 10
-          set_metric_load        = 10
-          set_metric_mtu         = 1500
-          set_metric_reliability = 100
-          set_metric_type        = "type-1"
+          set_metric_is_bgp                = false
+          set_metric                       = "100"
+          set_metric_delay                 = 10
+          set_metric_load                  = 10
+          set_metric_mtu                   = 1500
+          set_metric_reliability           = 100
+          set_metric_type                  = "type-1"
+          set_next_hop_v4_peer_address     = "disabled"
+          set_next_hop_v4_redist_unchanged = "enabled"
+          set_next_hop_v4_unchanged        = "enabled"
+          set_next_hop_v6_peer_address     = "disabled"
+          set_next_hop_v6_redist_unchanged = "enabled"
+          set_next_hop_v6_unchanged        = "enabled"
         }
       }
     }
@@ -195,6 +202,18 @@ Optional:
   - Range: `0`-`255`
 - `set_metric_type` (String) Metric Type.
   - Choices: `type-1`, `type-2`, `internal`, `external`
+- `set_next_hop_v4_peer_address` (String) Set Next Hop V4 Peer Address.
+  - Choices: `enabled`, `disabled`
+- `set_next_hop_v4_redist_unchanged` (String) Set IPv4 Next Hop Redist Unchanged.
+  - Choices: `enabled`, `disabled`
+- `set_next_hop_v4_unchanged` (String) Set IPv4 Next Hop Unchanged.
+  - Choices: `enabled`, `disabled`
+- `set_next_hop_v6_peer_address` (String) Set Next Hop V6 Peer Address.
+  - Choices: `enabled`, `disabled`
+- `set_next_hop_v6_redist_unchanged` (String) Set IPv6 Next Hop Redist Unchanged.
+  - Choices: `enabled`, `disabled`
+- `set_next_hop_v6_unchanged` (String) Set IPv6 Next Hop Unchanged.
+  - Choices: `enabled`, `disabled`
 - `set_regular_community_additive` (String) Add To Existing Community.
   - Choices: `enabled`, `disabled`
 - `set_regular_community_criteria` (String) Criteria.

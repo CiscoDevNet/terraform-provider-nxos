@@ -402,4 +402,59 @@ child_classes:
                   - internal
                   - external
                 example: type-1
+          - class_name: rtmapSetNhPeerAddr
+            doc_path: Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/
+            rn: nhpa
+            type: single
+            tf_name: set_next_hop
+            description: 'Set Nexthop Peer Address configuration.'
+            attributes:
+              - nxos_name: v4PeerAddr
+                tf_name: set_next_hop_v4_peer_address
+                type: String
+                description: 'Set Next Hop V4 Peer Address.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: v4RedistUnchange
+                tf_name: set_next_hop_v4_redist_unchanged
+                type: String
+                description: 'Set IPv4 Next Hop Redist Unchanged.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: v4Unchange
+                tf_name: set_next_hop_v4_unchanged
+                type: String
+                description: 'Set IPv4 Next Hop Unchanged.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: v6PeerAddr
+                tf_name: set_next_hop_v6_peer_address
+                type: String
+                description: 'Set Next Hop V6 Peer Address.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: v6RedistUnchange
+                tf_name: set_next_hop_v6_redist_unchanged
+                type: String
+                description: 'Set IPv6 Next Hop Redist Unchanged.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: v6Unchange
+                tf_name: set_next_hop_v6_unchanged
+                type: String
+                description: 'Set IPv6 Next Hop Unchanged.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
 test_prerequisites:

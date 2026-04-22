@@ -64,6 +64,12 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_mtu", "1500"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_reliability", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_type", "type-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v4_peer_address", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v4_redist_unchanged", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v4_unchanged", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v6_peer_address", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v6_redist_unchanged", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v6_unchanged", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -142,6 +148,12 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `					set_metric_mtu = 1500` + "\n"
 	config += `					set_metric_reliability = 100` + "\n"
 	config += `					set_metric_type = "type-1"` + "\n"
+	config += `					set_next_hop_v4_peer_address = "disabled"` + "\n"
+	config += `					set_next_hop_v4_redist_unchanged = "enabled"` + "\n"
+	config += `					set_next_hop_v4_unchanged = "enabled"` + "\n"
+	config += `					set_next_hop_v6_peer_address = "disabled"` + "\n"
+	config += `					set_next_hop_v6_redist_unchanged = "enabled"` + "\n"
+	config += `					set_next_hop_v6_unchanged = "enabled"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

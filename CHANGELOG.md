@@ -1,3 +1,11 @@
+## 0.10.0
+
+- Add feature-sets (`fex`, `mpls`, `virtualization`) configuration to `nxos_feature` resource and data source
+- BREAKING CHANGE: The `nxos_feature` resource is now rooted at `sys` instead of `sys/fm`. Existing state must be removed and re-imported (`terraform state rm nxos_feature.<name>` followed by `terraform import nxos_feature.<name> sys`). The Terraform attribute surface (e.g. `bgp`, `ospf`, `vpc`) is unchanged.
+- Add extended configuration to `nxos_port_channel_interface` resource and data source
+- Add set next hop peer address and unchanged configuration to `nxos_route_policy` resource and data source
+- Fix resource updates sending attributes not present in the Terraform configuration, causing failures on certain NX-OS versions (#460)
+
 ## 0.9.6
 
 - Fix `nxos_access_list`: updating an existing access list entry no longer fails with `Duplicate sequence number`/duplicate object errors (regression of #204, re-reported in #453)

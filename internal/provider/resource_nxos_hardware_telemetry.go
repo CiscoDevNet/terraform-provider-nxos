@@ -45,25 +45,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &SFlowResource{}
-var _ resource.ResourceWithIdentity = &SFlowResource{}
+var _ resource.Resource = &HardwareTelemetryResource{}
+var _ resource.ResourceWithIdentity = &HardwareTelemetryResource{}
 
-func NewSFlowResource() resource.Resource {
-	return &SFlowResource{}
+func NewHardwareTelemetryResource() resource.Resource {
+	return &HardwareTelemetryResource{}
 }
 
-type SFlowResource struct {
+type HardwareTelemetryResource struct {
 	data *NxosProviderData
 }
 
-func (r *SFlowResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_sflow"
+func (r *HardwareTelemetryResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_hardware_telemetry"
 }
 
-func (r *SFlowResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *HardwareTelemetryResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the sFlow configuration on NX-OS devices.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the hardware telemetry configuration on NX-OS devices, including sFlow.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -151,7 +151,7 @@ func (r *SFlowResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 	}
 }
 
-func (r *SFlowResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *HardwareTelemetryResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
@@ -162,7 +162,7 @@ func (r *SFlowResource) IdentitySchema(ctx context.Context, req resource.Identit
 	}
 }
 
-func (r *SFlowResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *HardwareTelemetryResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -174,8 +174,8 @@ func (r *SFlowResource) Configure(ctx context.Context, req resource.ConfigureReq
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *SFlowResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan SFlow
+func (r *HardwareTelemetryResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan HardwareTelemetry
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -185,7 +185,7 @@ func (r *SFlowResource) Create(ctx context.Context, req resource.CreateRequest, 
 	}
 
 	// Read config
-	var config SFlow
+	var config HardwareTelemetry
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -211,7 +211,7 @@ func (r *SFlowResource) Create(ctx context.Context, req resource.CreateRequest, 
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity SFlowIdentity
+	var identity HardwareTelemetryIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -227,8 +227,8 @@ func (r *SFlowResource) Create(ctx context.Context, req resource.CreateRequest, 
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *SFlowResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state SFlow
+func (r *HardwareTelemetryResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state HardwareTelemetry
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -239,7 +239,7 @@ func (r *SFlowResource) Read(ctx context.Context, req resource.ReadRequest, resp
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity SFlowIdentity
+		var identity HardwareTelemetryIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -279,7 +279,7 @@ func (r *SFlowResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		}
 	}
 
-	var identity SFlowIdentity
+	var identity HardwareTelemetryIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -295,8 +295,8 @@ func (r *SFlowResource) Read(ctx context.Context, req resource.ReadRequest, resp
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *SFlowResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan SFlow
+func (r *HardwareTelemetryResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan HardwareTelemetry
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -306,7 +306,7 @@ func (r *SFlowResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	}
 
 	// Read config
-	var config SFlow
+	var config HardwareTelemetry
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -331,7 +331,7 @@ func (r *SFlowResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity SFlowIdentity
+	var identity HardwareTelemetryIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -345,8 +345,8 @@ func (r *SFlowResource) Update(ctx context.Context, req resource.UpdateRequest, 
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *SFlowResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state SFlow
+func (r *HardwareTelemetryResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state HardwareTelemetry
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -382,7 +382,7 @@ func (r *SFlowResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *SFlowResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *HardwareTelemetryResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
@@ -401,7 +401,7 @@ func (r *SFlowResource) ImportState(ctx context.Context, req resource.ImportStat
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity SFlowIdentity
+		var identity HardwareTelemetryIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -411,7 +411,7 @@ func (r *SFlowResource) ImportState(ctx context.Context, req resource.ImportStat
 		}
 	}
 
-	var state SFlow
+	var state HardwareTelemetry
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

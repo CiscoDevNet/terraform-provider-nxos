@@ -1,4 +1,4 @@
-resource "nxos_sflow" "example" {
+resource "nxos_hardware_telemetry" "example" {
   admin_state                = "enabled"
   agent_address              = "172.24.141.69"
   counter_poll_interval      = 30

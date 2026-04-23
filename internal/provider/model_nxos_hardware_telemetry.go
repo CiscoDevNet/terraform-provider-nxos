@@ -36,7 +36,7 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
-type SFlow struct {
+type HardwareTelemetry struct {
 	Device                  types.String `tfsdk:"device"`
 	Dn                      types.String `tfsdk:"id"`
 	AdminState              types.String `tfsdk:"admin_state"`
@@ -54,11 +54,11 @@ type SFlow struct {
 	ReceiverVrfName         types.String `tfsdk:"receiver_vrf_name"`
 }
 
-type SFlowIdentity struct {
+type HardwareTelemetryIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
 
-func (data *SFlowIdentity) toIdentity(ctx context.Context, plan *SFlow) {
+func (data *HardwareTelemetryIdentity) toIdentity(ctx context.Context, plan *HardwareTelemetry) {
 	if plan.Device.IsNull() {
 		data.Device = types.StringValue("")
 	} else {
@@ -66,7 +66,7 @@ func (data *SFlowIdentity) toIdentity(ctx context.Context, plan *SFlow) {
 	}
 }
 
-func (data *SFlow) fromIdentity(ctx context.Context, identity *SFlowIdentity) {
+func (data *HardwareTelemetry) fromIdentity(ctx context.Context, identity *HardwareTelemetryIdentity) {
 	if identity.Device.ValueString() == "" {
 		data.Device = types.StringNull()
 	} else {
@@ -78,11 +78,11 @@ func (data *SFlow) fromIdentity(ctx context.Context, identity *SFlowIdentity) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
-func (data SFlow) getDn() string {
+func (data HardwareTelemetry) getDn() string {
 	return "sys/hwtelemetry"
 }
 
-func (data SFlow) getClassName() string {
+func (data HardwareTelemetry) getClassName() string {
 	return "analyticsHwTelemetry"
 }
 
@@ -90,7 +90,7 @@ func (data SFlow) getClassName() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data SFlow) toBody(config SFlow) nxos.Body {
+func (data HardwareTelemetry) toBody(config HardwareTelemetry) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	var attrs string
@@ -102,43 +102,43 @@ func (data SFlow) toBody(config SFlow) nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
-		if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() {
+		if !data.AdminState.IsUnknown() && !data.AdminState.IsNull() && !config.AdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.AdminState.ValueString())
 		}
-		if !data.AgentAddress.IsUnknown() && !data.AgentAddress.IsNull() {
+		if !data.AgentAddress.IsUnknown() && !data.AgentAddress.IsNull() && !config.AgentAddress.IsNull() {
 			attrs, _ = sjson.Set(attrs, "agentAddress", data.AgentAddress.ValueString())
 		}
-		if !data.CounterPollInterval.IsUnknown() && !data.CounterPollInterval.IsNull() {
+		if !data.CounterPollInterval.IsUnknown() && !data.CounterPollInterval.IsNull() && !config.CounterPollInterval.IsNull() {
 			attrs, _ = sjson.Set(attrs, "counterPollInterval", strconv.FormatInt(data.CounterPollInterval.ValueInt64(), 10))
 		}
-		if !data.Control.IsUnknown() && !data.Control.IsNull() {
+		if !data.Control.IsUnknown() && !data.Control.IsNull() && !config.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		if !data.ExtendedBgp.IsUnknown() && !data.ExtendedBgp.IsNull() {
+		if !data.ExtendedBgp.IsUnknown() && !data.ExtendedBgp.IsNull() && !config.ExtendedBgp.IsNull() {
 			attrs, _ = sjson.Set(attrs, "isExtendedBgp", strconv.FormatBool(data.ExtendedBgp.ValueBool()))
 		}
-		if !data.ExtendedSwitch.IsUnknown() && !data.ExtendedSwitch.IsNull() {
+		if !data.ExtendedSwitch.IsUnknown() && !data.ExtendedSwitch.IsNull() && !config.ExtendedSwitch.IsNull() {
 			attrs, _ = sjson.Set(attrs, "isExtendedSwitch", strconv.FormatBool(data.ExtendedSwitch.ValueBool()))
 		}
-		if !data.MaxHeaderSize.IsUnknown() && !data.MaxHeaderSize.IsNull() {
+		if !data.MaxHeaderSize.IsUnknown() && !data.MaxHeaderSize.IsNull() && !config.MaxHeaderSize.IsNull() {
 			attrs, _ = sjson.Set(attrs, "maxHeaderSize", strconv.FormatInt(data.MaxHeaderSize.ValueInt64(), 10))
 		}
-		if !data.PacketSamplingRate.IsUnknown() && !data.PacketSamplingRate.IsNull() {
+		if !data.PacketSamplingRate.IsUnknown() && !data.PacketSamplingRate.IsNull() && !config.PacketSamplingRate.IsNull() {
 			attrs, _ = sjson.Set(attrs, "pktSamplingRate", strconv.FormatInt(data.PacketSamplingRate.ValueInt64(), 10))
 		}
-		if !data.ReceiverAddress.IsUnknown() && !data.ReceiverAddress.IsNull() {
+		if !data.ReceiverAddress.IsUnknown() && !data.ReceiverAddress.IsNull() && !config.ReceiverAddress.IsNull() {
 			attrs, _ = sjson.Set(attrs, "rcvrAddress", data.ReceiverAddress.ValueString())
 		}
-		if !data.ReceiverMaxDatagramSize.IsUnknown() && !data.ReceiverMaxDatagramSize.IsNull() {
+		if !data.ReceiverMaxDatagramSize.IsUnknown() && !data.ReceiverMaxDatagramSize.IsNull() && !config.ReceiverMaxDatagramSize.IsNull() {
 			attrs, _ = sjson.Set(attrs, "rcvrMaxDatagramSize", strconv.FormatInt(data.ReceiverMaxDatagramSize.ValueInt64(), 10))
 		}
-		if !data.ReceiverPort.IsUnknown() && !data.ReceiverPort.IsNull() {
+		if !data.ReceiverPort.IsUnknown() && !data.ReceiverPort.IsNull() && !config.ReceiverPort.IsNull() {
 			attrs, _ = sjson.Set(attrs, "rcvrPort", strconv.FormatInt(data.ReceiverPort.ValueInt64(), 10))
 		}
-		if !data.ReceiverSourceAddress.IsUnknown() && !data.ReceiverSourceAddress.IsNull() {
+		if !data.ReceiverSourceAddress.IsUnknown() && !data.ReceiverSourceAddress.IsNull() && !config.ReceiverSourceAddress.IsNull() {
 			attrs, _ = sjson.Set(attrs, "rcvrSrcAddress", data.ReceiverSourceAddress.ValueString())
 		}
-		if !data.ReceiverVrfName.IsUnknown() && !data.ReceiverVrfName.IsNull() {
+		if !data.ReceiverVrfName.IsUnknown() && !data.ReceiverVrfName.IsNull() && !config.ReceiverVrfName.IsNull() {
 			attrs, _ = sjson.Set(attrs, "rcvrVrfName", data.ReceiverVrfName.ValueString())
 		}
 		if attrs != "{}" {
@@ -153,7 +153,7 @@ func (data SFlow) toBody(config SFlow) nxos.Body {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *SFlow) fromBody(res gjson.Result) {
+func (data *HardwareTelemetry) fromBody(res gjson.Result) {
 	{
 		var rsflowSflow gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -196,7 +196,7 @@ func (data *SFlow) fromBody(res gjson.Result) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *SFlow) updateFromBody(res gjson.Result) {
+func (data *HardwareTelemetry) updateFromBody(res gjson.Result) {
 	var rsflowSflow gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -277,7 +277,7 @@ func (data *SFlow) updateFromBody(res gjson.Result) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 
-func (data SFlow) toDeleteBody() nxos.Body {
+func (data HardwareTelemetry) toDeleteBody() nxos.Body {
 	body := ""
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})

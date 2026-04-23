@@ -1,10 +1,10 @@
 ---
-name: sFlow
+name: Hardware Telemetry
 class_name: analyticsHwTelemetry
 dn: sys/hwtelemetry
 no_delete: true
-ds_description: This data source can read the sFlow configuration on NX-OS devices.
-res_description: This resource can manage the sFlow configuration on NX-OS devices.
+ds_description: This data source can read the hardware telemetry configuration on NX-OS devices, including sFlow.
+res_description: This resource can manage the hardware telemetry configuration on NX-OS devices, including sFlow.
 doc_path: System/analytics:HwTelemetry/
 doc_category: System
 child_classes:

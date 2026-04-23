@@ -1,1 +1,1 @@
-- Add `nxos_sflow` resource and data source
+- Add `nxos_hardware_telemetry` resource and data source

@@ -33,19 +33,19 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosSFlow(t *testing.T) {
+func TestAccNxosHardwareTelemetry(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "agent_address", "172.24.141.69"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "counter_poll_interval", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "control", "stateful-ha"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "max_header_size", "64"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "packet_sampling_rate", "4096"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "receiver_address", "10.92.198.113"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "receiver_max_datagram_size", "1400"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "receiver_port", "2055"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "receiver_source_address", "10.0.0.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_sflow.test", "receiver_vrf_name", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "agent_address", "172.24.141.69"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "counter_poll_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "max_header_size", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "packet_sampling_rate", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receiver_address", "10.92.198.113"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receiver_max_datagram_size", "1400"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receiver_port", "2055"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receiver_source_address", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receiver_vrf_name", "management"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -55,16 +55,16 @@ func TestAccNxosSFlow(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosSFlowPrerequisitesConfig + testAccNxosSFlowConfig_all(),
+				Config: testAccNxosHardwareTelemetryPrerequisitesConfig + testAccNxosHardwareTelemetryConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
-				ResourceName:      "nxos_sflow.test",
+				ResourceName:      "nxos_hardware_telemetry.test",
 				ImportState:       true,
-				ImportStateIdFunc: nxosSFlowImportStateIdFunc("nxos_sflow.test"),
+				ImportStateIdFunc: nxosHardwareTelemetryImportStateIdFunc("nxos_hardware_telemetry.test"),
 			},
 			{
-				ResourceName:       "nxos_sflow.test",
+				ResourceName:       "nxos_hardware_telemetry.test",
 				ImportState:        true,
 				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
 				ExpectNonEmptyPlan: true,
@@ -77,7 +77,7 @@ func TestAccNxosSFlow(t *testing.T) {
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosSFlowImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func nxosHardwareTelemetryImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -87,7 +87,7 @@ func nxosSFlowImportStateIdFunc(resourceName string) resource.ImportStateIdFunc 
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosSFlowPrerequisitesConfig = `
+const testAccNxosHardwareTelemetryPrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/sflow"
   class_name = "fmSflow"
@@ -102,8 +102,8 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosSFlowConfig_minimum() string {
-	config := `resource "nxos_sflow" "test" {` + "\n"
+func testAccNxosHardwareTelemetryConfig_minimum() string {
+	config := `resource "nxos_hardware_telemetry" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -112,8 +112,8 @@ func testAccNxosSFlowConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosSFlowConfig_all() string {
-	config := `resource "nxos_sflow" "test" {` + "\n"
+func testAccNxosHardwareTelemetryConfig_all() string {
+	config := `resource "nxos_hardware_telemetry" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	agent_address = "172.24.141.69"` + "\n"
 	config += `	counter_poll_interval = 30` + "\n"

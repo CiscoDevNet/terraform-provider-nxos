@@ -38,26 +38,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &SFlowDataSource{}
-	_ datasource.DataSourceWithConfigure = &SFlowDataSource{}
+	_ datasource.DataSource              = &HardwareTelemetryDataSource{}
+	_ datasource.DataSourceWithConfigure = &HardwareTelemetryDataSource{}
 )
 
-func NewSFlowDataSource() datasource.DataSource {
-	return &SFlowDataSource{}
+func NewHardwareTelemetryDataSource() datasource.DataSource {
+	return &HardwareTelemetryDataSource{}
 }
 
-type SFlowDataSource struct {
+type HardwareTelemetryDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *SFlowDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_sflow"
+func (d *HardwareTelemetryDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_hardware_telemetry"
 }
 
-func (d *SFlowDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *HardwareTelemetryDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the sFlow configuration on NX-OS devices.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the hardware telemetry configuration on NX-OS devices, including sFlow.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -124,7 +124,7 @@ func (d *SFlowDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 	}
 }
 
-func (d *SFlowDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *HardwareTelemetryDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -135,8 +135,8 @@ func (d *SFlowDataSource) Configure(_ context.Context, req datasource.ConfigureR
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (d *SFlowDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SFlow
+func (d *HardwareTelemetryDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config HardwareTelemetry
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

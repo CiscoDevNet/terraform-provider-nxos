@@ -1,3 +1,8 @@
+## 0.10.1
+
+- Add community list configuration to `nxos_route_policy` resource and data source
+- Add `nxos_hardware_telemetry` resource and data source
+
 ## 0.10.0
 
 - Add feature-sets (`fex`, `mpls`, `virtualization`) configuration to `nxos_feature` resource and data source

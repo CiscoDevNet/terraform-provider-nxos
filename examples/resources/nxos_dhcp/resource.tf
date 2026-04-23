@@ -35,7 +35,6 @@ resource "nxos_dhcp" "example" {
       smart_relay         = true
       subnet_broadcast    = true
       options             = "relay-info"
-      subnet_selection    = "10.0.0.0"
       v6_smart_relay      = false
       addresses = {
         "VRF1;1.1.1.1" = {

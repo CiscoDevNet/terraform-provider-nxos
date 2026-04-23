@@ -34,10 +34,7 @@ resource "nxos_queuing_qos" "example" {
       match_type = "match-any"
       match_class_maps = {
         "c-out-q1" = {
-          next_class_map      = "c-out-q2"
-          previous_class_map  = "c-out-q2"
-          priority            = 1
-          remaining_bandwidth = 10
+          priority = 1
         }
       }
     }

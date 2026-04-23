@@ -26,8 +26,6 @@ resource "nxos_hardware_telemetry" "example" {
   sflow_agent_address              = "172.24.141.69"
   sflow_counter_poll_interval      = 30
   sflow_control                    = "stateful-ha"
-  sflow_extended_bgp               = true
-  sflow_extended_switch            = true
   sflow_max_header_size            = 64
   sflow_packet_sampling_rate       = 4096
   sflow_receiver_address           = "10.92.198.113"

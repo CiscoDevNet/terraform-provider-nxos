@@ -51,15 +51,12 @@ resource "nxos_spanning_tree" "example" {
   }
   vlans = {
     "100" = {
-      admin_state        = "disabled"
-      diameter           = 3
-      enabled_interfaces = "eth1/9"
-      forward_time       = 20
-      hello_time         = 5
-      max_age            = 25
-      priority           = "4096"
-      root_mode          = "enabled"
-      root_type          = "primary"
+      admin_state  = "disabled"
+      diameter     = 3
+      forward_time = 20
+      hello_time   = 5
+      max_age      = 25
+      priority     = "4096"
     }
   }
 }

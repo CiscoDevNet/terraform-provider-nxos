@@ -26,7 +26,6 @@ resource "nxos_system" "example" {
   arp_unnumbered_svi_software_replication            = "enabled"
   arp_cache_limit                                    = 200000
   arp_cache_syslog_rate                              = 5
-  arp_control                                        = "stateful-ha"
   arp_evpn_timeout                                   = 3000
   arp_interface_cache_limit                          = 1000
   arp_ip_adjacency_route_distance                    = 200
@@ -39,7 +38,6 @@ resource "nxos_system" "example" {
   arp_timeout                                        = 1800
   arp_vpc_domains = {
     "100" = {
-      arp_sync = "enabled"
     }
   }
   nd_admin_state                         = "enabled"
@@ -48,7 +46,6 @@ resource "nxos_system" "example" {
   nd_aging_interval                      = 1500
   nd_cache_limit                         = 200000
   nd_cache_syslog_rate                   = 5
-  nd_control                             = "stateful-ha"
   nd_ipv6_adjacency_route_distance       = 200
   nd_off_list_timeout                    = 300
   nd_probe_interval_for_solicit_neighbor = 10
@@ -57,32 +54,12 @@ resource "nxos_system" "example" {
     "default" = {
       interfaces = {
         "vlan100" = {
-          boot_file_url                  = "tftp://192.168.1.1/boot"
-          control                        = "redirects"
-          dad_attempts                   = 3
-          dadns_interval                 = 3000
-          default_ra_lifetime            = "disabled"
-          delete_adjacency_on_mac_delete = "enabled"
-          dns_search_list_suppress       = "enabled"
-          dns_suppress                   = "enabled"
-          hop_limit                      = 128
-          mac_extract                    = "nud-phase"
-          mtu                            = 9000
-          neighbor_solicit_interval      = 2000
-          ra_interval                    = 300
-          ra_interval_min                = 100
-          ra_lifetime                    = 900
-          reachable_time                 = 30000
-          retransmit_timer               = 5000
-          route_suppress                 = "enabled"
-          router_preference              = "high"
         }
       }
     }
   }
   nd_vpc_domains = {
     "100" = {
-      nd_sync = "enabled"
     }
   }
   clock_admin_state                = "enabled"
@@ -90,7 +67,6 @@ resource "nxos_system" "example" {
   clock_format                     = "24hours"
   clock_format_debug               = false
   clock_format_syslog              = false
-  clock_protocol                   = "ntp"
   clock_timezone_name              = "PST"
   clock_timezone_hours             = -8
   clock_timezone_minutes           = 0
@@ -141,24 +117,13 @@ resource "nxos_system" "example" {
   }
   smart_licensing_transport_mode     = "transportSmart"
   smart_licensing_transport_cslu_url = "https://cslu.example.com"
-  boot_aci                           = "bootflash:aci.bin"
   boot_auto_copy                     = "disable"
   boot_dhcp                          = 500
   boot_exclude_configuration         = "enable"
-  boot_fex                           = "bootflash:fex.img"
-  boot_mode                          = "lxc"
   boot_order                         = "pxe"
   boot_poap                          = "enable"
   boot_image_verification            = "enable"
-  boot_image_supervisor_1            = "bootflash:nxos64.10.5.3.F.bin"
-  boot_image_supervisor_2            = "bootflash:nxos64.10.5.3.F.bin"
   cfs_admin_state                    = "enabled"
-  cfs_distribute                     = "enabled"
-  cfs_ethernet_distribution          = "disabled"
-  cfs_ipv4_distribution              = "enabled"
-  cfs_ipv4_multicast_address         = "239.255.1.1"
-  cfs_ipv6_distribution              = "disabled"
-  cfs_ipv6_multicast_address         = "ff15::1"
   udld_admin_state                   = "enabled"
   udld_aggressive                    = "enabled"
   udld_message_interval              = 20
@@ -169,64 +134,6 @@ resource "nxos_system" "example" {
       bidirectional_detection = "port-enabled"
     }
   }
-  platform_access_list_match_inner_header            = "enable"
-  platform_acl_tap_aggregation                       = "enable"
-  platform_description                               = "My platform"
-  platform_disable_parse_error                       = "enable"
-  platform_global_tx_span                            = "enable"
-  platform_high_multicast_priority                   = "enabled"
-  platform_hardware_lou_resource_threshold           = 10
-  platform_ingress_bd_ifacl_label_optimization       = "enable"
-  platform_ingress_racl_size                         = "enable"
-  platform_ingress_replication_round_robin           = true
-  platform_ip_statistics                             = "enable"
-  platform_ipv6_alpm_carve_value                     = 128
-  platform_ipv6_lpm_max_entries                      = 1024
-  platform_lpm_max_limit                             = 1024
-  platform_multicast_dcs_check                       = "enable"
-  platform_multicast_flex_stats                      = "enable"
-  platform_multicast_lpm_max_entries                 = 1024
-  platform_multicast_nlb                             = "enable"
-  platform_multicast_racl_bridge                     = "enabled"
-  platform_mld_snooping                              = "enable"
-  platform_mpls_adjacency_stats_mode                 = "BYTES"
-  platform_mpls_ecmp_mode                            = "enable"
-  platform_mrouting_disable_l2_update                = "enable"
-  platform_mrouting_disable_second_route_update      = "enable"
-  platform_mrouting_performance_mode                 = "enable"
-  platform_multicast_max_limit                       = 2048
-  platform_multicast_rpf_check_optimization          = "enabled"
-  platform_multicast_service_reflect_port            = 10
-  platform_multicast_syslog_threshold                = 80
-  platform_openflow_forward_pdu                      = "enabled"
-  platform_pbr_skip_self_ip                          = "enabled"
-  platform_port_channel_fast_convergence             = "enable"
-  platform_port_channel_load_balance_algorithm       = "PC_LB_ALGO_RTAG7"
-  platform_port_channel_load_balance_resilient       = "yes"
-  platform_port_channel_mpls_load_balance_label_ip   = "LABEL_IP"
-  platform_port_channel_mpls_load_balance_label_only = "LABEL_ONLY"
-  platform_port_channel_scale_fanout                 = "enable"
-  platform_pic_core_enable                           = "enabled"
-  platform_profile_front_port_mode                   = "sfp-plus"
-  platform_profile_mode                              = "QS_PORT_MODE_64X10G"
-  platform_profile_tuple                             = "Enable"
-  platform_pstat_configuration                       = "PSTAT_ENABLE"
-  platform_qos_min_buffer                            = "none"
-  platform_routing_mode                              = "NON_HIER_DEFAULT"
-  platform_service_template_name                     = "template1"
-  platform_svi_and_si_flex_stats                     = "enable"
-  platform_svi_flex_stats                            = "enable"
-  platform_switch_mode                               = "n3k"
-  platform_switching_fabric_speed                    = "fabric-speed-40g"
-  platform_switching_mode                            = "STORE_FORWARD"
-  platform_system_fabric_mode                        = "full-rate"
-  platform_tcam_syslog_threshold                     = 80
-  platform_unicast_max_limit                         = 2048
-  platform_unicast_syslog_threshold                  = 80
-  platform_unicast_trace                             = "enable"
-  platform_unknown_unicast_flood                     = "disabled"
-  platform_urpf_status                               = "disabled"
-  platform_wrr_unicast_bandwidth                     = 60
   management_interfaces = {
     "mgmt0" = {
       admin_state      = "up"
@@ -241,16 +148,11 @@ resource "nxos_system" "example" {
       speed            = "auto"
     }
   }
-  lldp_admin_state                 = "enabled"
-  lldp_instance_admin_state        = "enabled"
   lldp_advertise_system_chassis_id = "enabled"
-  lldp_control                     = "stateful-ha"
   lldp_hold_time                   = 180
-  lldp_infra_vlan                  = 0
   lldp_init_delay_time             = 5
   lldp_multi_peer                  = "disabled"
   lldp_optional_tlv_select         = "port-desc"
-  lldp_optional_tlv_select_hidden  = "unknown"
   lldp_port_channel                = "disabled"
   lldp_port_id_sub_type            = "short"
   lldp_system_description          = "Cisco NX-OS"
@@ -259,8 +161,6 @@ resource "nxos_system" "example" {
     "eth1/1" = {
       admin_receive_state  = "disabled"
       admin_transmit_state = "disabled"
-      description          = "My Description"
-      name                 = "eth1/1"
       port_dcbxp_version   = "CEE"
       port_description     = "My Port"
       system_description   = "Cisco NX-OS"
@@ -281,31 +181,17 @@ resource "nxos_system" "example" {
       port_description = "My Port"
     }
   }
-  copp_admin_state                        = "enabled"
-  copp_rate_limiter                       = true
-  copp_profile_type                       = "strict"
-  console_exec_timeout                    = 30
-  vty_exec_timeout                        = 30
-  vty_session_limit                       = 16
-  icam_monitor_interval                   = 4
-  icam_number_of_intervals                = 336
-  icam_scale_critical_threshold           = 95
-  icam_scale_info_threshold               = 70
-  icam_scale_configuration                = true
-  icam_scale_warning_threshold            = 85
-  nxapi_vrf                               = "management"
-  nxapi_http_port                         = 80
-  nxapi_https_port                        = 443
-  nxapi_idle_timeout                      = 10
-  nxapi_certificate_enable                = false
-  nxapi_certificate_file                  = "bootflash:server.crt"
-  nxapi_key_file                          = "bootflash:server.key"
-  nxapi_encrypted_key_passphrase          = "mypassphrase"
-  nxapi_trustpoint                        = "mytrustpoint"
-  nxapi_ssl_protocols                     = "TLSv1.2"
-  nxapi_ssl_ciphers_weak                  = false
-  nxapi_client_certificate_authentication = "optional"
-  nxapi_sudi                              = false
+  copp_admin_state              = "enabled"
+  copp_rate_limiter             = true
+  console_exec_timeout          = 30
+  vty_exec_timeout              = 30
+  vty_session_limit             = 16
+  icam_monitor_interval         = 4
+  icam_number_of_intervals      = 336
+  icam_scale_critical_threshold = 95
+  icam_scale_info_threshold     = 70
+  icam_scale_configuration      = true
+  icam_scale_warning_threshold  = 85
   breakout_modules = {
     "1" = {
       front_panel_ports = {

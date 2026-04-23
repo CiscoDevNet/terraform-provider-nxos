@@ -32,8 +32,6 @@ resource "nxos_vrf" "example" {
       controller_id       = 1
       encap               = "vxlan-103901"
       l3vni               = false
-      oui                 = "000000"
-      vpn_id              = "100:200"
       routing_encap       = "unknown"
       route_distinguisher = "rd:unknown:0:0"
       address_families = {

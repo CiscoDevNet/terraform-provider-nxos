@@ -16,7 +16,6 @@ resource "nxos_svi_interface" "example" {
       mtu                     = 9216
       mtu_inherit             = false
       snmp_trap_link_status   = false
-      vlan_id                 = 100
       vrf_dn                  = "sys/inst-VRF123"
     }
   }

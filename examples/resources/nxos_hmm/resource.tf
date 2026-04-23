@@ -5,7 +5,6 @@ resource "nxos_hmm" "example" {
   administrative_distance = 150
   control                 = "stateful-ha"
   limit_vlan_mac          = 100
-  selective_host_probe    = "yes"
   interfaces = {
     "vlan10" = {
       admin_state = "enabled"

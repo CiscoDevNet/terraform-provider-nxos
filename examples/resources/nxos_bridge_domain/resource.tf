@@ -11,7 +11,6 @@ resource "nxos_bridge_domain" "example" {
       forwarding_control  = "mdst-flood"
       forwarding_mode     = "bridge"
       long_name           = false
-      mac_packet_classify = "enable"
       mode                = "CE"
       vrf_name            = "default"
       cross_connect       = "disable"

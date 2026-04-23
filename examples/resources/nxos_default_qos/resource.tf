@@ -12,8 +12,6 @@ resource "nxos_default_qos" "example" {
       match_type = "match-any"
       match_class_maps = {
         "Voice" = {
-          next_class_map                = "Voice"
-          previous_class_map            = "Voice"
           set_qos_group_id              = 1
           police_bc_rate                = 200
           police_bc_unit                = "mbytes"

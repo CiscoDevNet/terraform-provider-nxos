@@ -15,10 +15,7 @@ resource "nxos_nvo" "example" {
       suppress_arp                       = true
       suppress_mac_route                 = false
       anycast_source_interface           = "unspecified"
-      configuration_source               = "cli"
-      controller_id                      = 0
       description                        = "My NVE interface"
-      encapsulation_type                 = "vxlan"
       fabric_ready_time                  = 30
       multicast_routing_source_interface = "unspecified"
       multisite_virtual_mac              = "00:00:00:00:00:00"

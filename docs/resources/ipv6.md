@@ -64,13 +64,11 @@ resource "nxos_ipv6" "example" {
           link_local_address         = "2001:db8:3333:4444:5555:6666:7777:8888"
           addresses = {
             "2001:db8:3333:4444:5555:6666:7777:8888" = {
-              type                    = "primary"
-              tag                     = 1234
-              aggregate_prefix_length = 64
-              control                 = "anycast"
-              preference              = 10
-              use_bia                 = "enabled"
-              vpc_peer                = "2001:db8::1"
+              type       = "primary"
+              tag        = 1234
+              control    = "anycast"
+              preference = 10
+              vpc_peer   = "2001:db8::1"
             }
           }
         }

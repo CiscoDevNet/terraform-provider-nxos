@@ -64,7 +64,6 @@ resource "nxos_isis" "example" {
               max_ecmp                                = 4
               multi_topology                          = "st"
               router_id_interface                     = "lo0"
-              router_id_ip_address                    = "1.2.3.4"
               table_map                               = "rm1"
               table_map_filter                        = "enabled"
             }
@@ -115,7 +114,6 @@ resource "nxos_isis" "example" {
       control                      = "advert-tep"
       description                  = "ISIS interface"
       lsp_refresh_interval         = 100
-      mesh_group_blocked           = true
       mesh_group_id                = 10
       ipv6_metric_l1               = 1000
       ipv6_metric_l2               = 1000

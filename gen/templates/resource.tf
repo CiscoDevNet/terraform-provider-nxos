@@ -5,7 +5,9 @@
 {{- range .Children -}}
 {{- if eq .Type "single" -}}
 {{- range .Attributes}}
+{{- if not .ExcludeTest}}
 {{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
 {{- end -}}
 {{- if .TfChildClasses -}}
 {{- template "renderChildren" (makeMap "Children" .TfChildClasses "Indent" $indent) -}}
@@ -20,7 +22,7 @@
 {{$indent}}{{.TfName}} = {
 {{$indent}}  "{{$mapKey}}" = {
 {{- range .Attributes}}
-{{- if not .Id}}
+{{- if and (not .Id) (not .ExcludeTest)}}
 {{$indent}}    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 {{- end}}
 {{- end -}}
@@ -36,7 +38,9 @@
 {{- /* ==================== end renderChildren ==================== */ -}}
 resource "nxos_{{snakeCase .Name}}" "example" {
 {{- range  .Attributes}}
+{{- if not .ExcludeTest}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
 {{- end -}}
 {{- template "renderChildren" (makeMap "Children" .TfChildClasses "Indent" "  ") }}
 }

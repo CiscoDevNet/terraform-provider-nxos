@@ -1,13 +1,11 @@
 resource "nxos_pim" "example" {
-  admin_state                    = "enabled"
-  instance_admin_state           = "enabled"
-  control                        = "stateful-ha"
-  evpn_border_leaf               = false
-  extra_net                      = false
-  join_prune_delay               = 200
-  null_register_delay            = 1000
-  null_register_number_of_routes = 500
-  register_stop                  = false
+  admin_state          = "enabled"
+  instance_admin_state = "enabled"
+  control              = "stateful-ha"
+  evpn_border_leaf     = false
+  extra_net            = false
+  join_prune_delay     = 200
+  register_stop        = false
   vrfs = {
     "default" = {
       admin_state          = "enabled"
@@ -36,7 +34,6 @@ resource "nxos_pim" "example" {
           join_prune_route_map = "JP_POLICY"
           name                 = "pim-if"
           neighbor_route_map   = "NEIGH_POLICY"
-          neighbor_prefix_list = "NEIGH_PFX"
           pfm_sd_boundary      = 0
           rfc_strict           = false
         }
@@ -45,10 +42,6 @@ resource "nxos_pim" "example" {
       ssm_policy_description       = "SSM_Policy"
       ssm_range_group_list_1       = "232.0.0.0/8"
       ssm_range_group_list_2       = "233.0.0.0/8"
-      ssm_range_group_list_3       = "0.0.0.0"
-      ssm_range_group_list_4       = "0.0.0.0"
-      ssm_range_prefix_list        = ""
-      ssm_range_route_map          = ""
       ssm_range_none               = false
       static_rp_policy_name        = "RP"
       static_rp_policy_description = "Static_RP_Policy"

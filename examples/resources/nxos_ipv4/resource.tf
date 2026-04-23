@@ -1,15 +1,12 @@
 resource "nxos_ipv4" "example" {
-  admin_state                             = "enabled"
-  instance_admin_state                    = "enabled"
-  access_list_match_local                 = "enabled"
-  control                                 = "stateful-ha"
-  hardware_ecmp_hash_offset_concatenation = "enabled"
-  hardware_ecmp_hash_offset_value         = 10
-  hardware_ecmp_hash_polynomial           = "CRC32HI"
-  logging_level                           = "warning"
-  redirect_syslog                         = "disabled"
-  redirect_syslog_interval                = 120
-  source_route                            = "disabled"
+  admin_state              = "enabled"
+  instance_admin_state     = "enabled"
+  access_list_match_local  = "enabled"
+  control                  = "stateful-ha"
+  logging_level            = "warning"
+  redirect_syslog          = "disabled"
+  redirect_syslog_interval = 120
+  source_route             = "disabled"
   vrfs = {
     "VRF1" = {
       auto_discard                 = "enabled"

@@ -5,7 +5,6 @@ resource "nxos_keychain" "example" {
       keys = {
         "1" = {
           cryptographic_algorithm = "AES"
-          encryption_type         = "type7"
           key_string              = "secret_password"
         }
       }

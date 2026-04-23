@@ -435,15 +435,18 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 		}
 	}
 	for key, child := range data.CommunityLists {
+		configChild, configChildOk := config.CommunityLists[key]
+		_ = configChild
+		_ = configChildOk
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "name", key)
-		if !child.Description.IsUnknown() && !child.Description.IsNull() {
+		if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 		}
-		if !child.Mode.IsUnknown() && !child.Mode.IsNull() {
+		if configChildOk && !child.Mode.IsUnknown() && !child.Mode.IsNull() && !configChild.Mode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
 		}
-		if !child.Type.IsUnknown() && !child.Type.IsNull() {
+		if configChildOk && !child.Type.IsUnknown() && !child.Type.IsNull() && !configChild.Type.IsNull() {
 			attrs, _ = sjson.Set(attrs, "type", child.Type.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.rtregcomRule.attributes", attrs)
@@ -451,18 +454,21 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtregcomRule.children"
 			for key, child := range child.Entries {
+				configChild, configChildOk := configChild.Entries[key]
+				_ = configChild
+				_ = configChildOk
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "order", key)
-				if !child.Action.IsUnknown() && !child.Action.IsNull() {
+				if configChildOk && !child.Action.IsUnknown() && !child.Action.IsNull() && !configChild.Action.IsNull() {
 					attrs, _ = sjson.Set(attrs, "action", child.Action.ValueString())
 				}
-				if !child.Description.IsUnknown() && !child.Description.IsNull() {
+				if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 					attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 				}
-				if !child.Name.IsUnknown() && !child.Name.IsNull() {
+				if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
 					attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 				}
-				if !child.Regex.IsUnknown() && !child.Regex.IsNull() {
+				if configChildOk && !child.Regex.IsUnknown() && !child.Regex.IsNull() && !configChild.Regex.IsNull() {
 					attrs, _ = sjson.Set(attrs, "regex", child.Regex.ValueString())
 				}
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtregcomEntry.attributes", attrs)
@@ -470,12 +476,15 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtregcomEntry.children"
 					for key, child := range child.Items {
+						configChild, configChildOk := configChild.Items[key]
+						_ = configChild
+						_ = configChildOk
 						attrs = "{}"
 						attrs, _ = sjson.Set(attrs, "community", key)
-						if !child.Description.IsUnknown() && !child.Description.IsNull() {
+						if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 							attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 						}
-						if !child.Name.IsUnknown() && !child.Name.IsNull() {
+						if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
 							attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 						}
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtregcomItem.attributes", attrs)

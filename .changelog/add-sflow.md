@@ -1,0 +1,1 @@
+- Add `nxos_hardware_telemetry` resource and data source

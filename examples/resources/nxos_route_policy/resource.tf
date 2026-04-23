@@ -67,4 +67,25 @@ resource "nxos_route_policy" "example" {
       }
     }
   }
+  community_lists = {
+    "COMMUNITY_LIST1" = {
+      description = "My community list"
+      mode        = "standard"
+      type        = "regular"
+      entries = {
+        "10" = {
+          action      = "permit"
+          description = "My entry"
+          name        = "ENTRY1"
+          regex       = ".*"
+          items = {
+            "regular:as2-nn2:65001:123" = {
+              description = "My community"
+              name        = "COMMUNITY1"
+            }
+          }
+        }
+      }
+    }
+  }
 }

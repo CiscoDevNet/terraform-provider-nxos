@@ -457,4 +457,109 @@ child_classes:
                   - enabled
                   - disabled
                 example: enabled
+  - class_name: rtregcomRule
+    doc_path: Routing%20and%20Forwarding/rtregcom:Rule/
+    rn: rtregcom-[%s]
+    type: list
+    tf_name: community_lists
+    description: 'List of Community Lists.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Object name.'
+        example: 'COMMUNITY_LIST1'
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: 'Description of the specified attribute.'
+        example: 'My community list'
+        exclude_test: true
+      - nxos_name: mode
+        tf_name: mode
+        type: String
+        description: 'Mode.'
+        enum_values:
+          - standard
+          - regex
+        example: standard
+      - nxos_name: type
+        tf_name: type
+        type: String
+        description: 'Type.'
+        enum_values:
+          - regular
+          - extended
+          - large
+        example: regular
+        exclude_test: true
+    child_classes:
+      - class_name: rtregcomEntry
+        doc_path: Routing%20and%20Forwarding/rtregcom:Entry/
+        rn: ent-%v
+        type: list
+        tf_name: entries
+        description: 'List of Community List entries.'
+        attributes:
+          - nxos_name: order
+            tf_name: order
+            type: Int64
+            id: true
+            description: 'Order.'
+            min_int: 1
+            max_int: 4294967294
+            example: 10
+          - nxos_name: action
+            tf_name: action
+            type: String
+            description: 'Action.'
+            enum_values:
+              - deny
+              - permit
+            example: permit
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My entry'
+            exclude_test: true
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: 'Object name.'
+            example: 'ENTRY1'
+            exclude_test: true
+          - nxos_name: regex
+            tf_name: regex
+            type: String
+            description: 'Regular Expression.'
+            example: '.*'
+            exclude_test: true
+        child_classes:
+          - class_name: rtregcomItem
+            doc_path: Routing%20and%20Forwarding/rtregcom:Item/
+            rn: item-%s
+            type: list
+            tf_name: items
+            description: 'List of Community List items.'
+            attributes:
+              - nxos_name: community
+                tf_name: community
+                type: String
+                id: true
+                description: 'Community.'
+                example: regular:as2-nn2:65001:123
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: 'My community'
+                exclude_test: true
+              - nxos_name: name
+                tf_name: name
+                type: String
+                description: 'Object name.'
+                example: 'COMMUNITY1'
+                exclude_test: true
 test_prerequisites:

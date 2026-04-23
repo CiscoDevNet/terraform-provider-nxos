@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This data source can read the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.
   API Documentation
-  rpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rpm:Entity/rtpfxRuleV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/rtpfxEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtpfx:Entry/rtmapRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:Rule/rtmapEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:Entry/rtmapMatchRtDst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/rtmapRsRtDstAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/rtmapSetRegComm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetRegComm/rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtregcom:Item/rtmapMatchRtTag https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/rtmapSetMetric https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetric/rtmapSetMetricType https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetricType/rtmapSetNhPeerAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/
+  rpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rpm:Entity/rtpfxRuleV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/rtpfxEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtpfx:Entry/rtmapRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:Rule/rtmapEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:Entry/rtmapMatchRtDst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/rtmapRsRtDstAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/rtmapSetRegComm https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetRegComm/rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtregcom:Item/rtmapMatchRtTag https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/rtmapSetMetric https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetric/rtmapSetMetricType https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetricType/rtmapSetNhPeerAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/rtregcomRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtregcom:Rule/rtregcomEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtregcom:Entry/rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtregcom:Item/
 ---
 
 # nxos_route_policy (Data Source)
@@ -27,6 +27,9 @@ This data source can read the route policy configuration on NX-OS devices, inclu
 - [rtmapSetMetric](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetric/)
 - [rtmapSetMetricType](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetMetricType/)
 - [rtmapSetNhPeerAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/)
+- [rtregcomRule](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtregcom:Rule/)
+- [rtregcomEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtregcom:Entry/)
+- [rtregcomItem](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtregcom:Item/)
 
 ## Example Usage
 
@@ -45,11 +48,48 @@ data "nxos_route_policy" "example" {
 ### Read-Only
 
 - `admin_state` (String) The administrative state of the object or policy.
+- `community_lists` (Attributes Map) List of Community Lists.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--community_lists))
 - `id` (String) The distinguished name of the object.
 - `ipv4_prefix_lists` (Attributes Map) List of IPv4 Prefix Lists.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--ipv4_prefix_lists))
 - `route_maps` (Attributes Map) List of Route Maps.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--route_maps))
+
+<a id="nestedatt--community_lists"></a>
+### Nested Schema for `community_lists`
+
+Read-Only:
+
+- `description` (String) Description of the specified attribute.
+- `entries` (Attributes Map) List of Community List entries.
+  - Map key: `order` - Order.
+  - Key range: `1`-`4294967294` (see [below for nested schema](#nestedatt--community_lists--entries))
+- `mode` (String) Mode.
+- `type` (String) Type.
+
+<a id="nestedatt--community_lists--entries"></a>
+### Nested Schema for `community_lists.entries`
+
+Read-Only:
+
+- `action` (String) Action.
+- `description` (String) Description of the specified attribute.
+- `items` (Attributes Map) List of Community List items.
+  - Map key: `community` - Community. (see [below for nested schema](#nestedatt--community_lists--entries--items))
+- `name` (String) Object name.
+- `regex` (String) Regular Expression.
+
+<a id="nestedatt--community_lists--entries--items"></a>
+### Nested Schema for `community_lists.entries.items`
+
+Read-Only:
+
+- `description` (String) Description of the specified attribute.
+- `name` (String) Object name.
+
+
+
 
 <a id="nestedatt--ipv4_prefix_lists"></a>
 ### Nested Schema for `ipv4_prefix_lists`

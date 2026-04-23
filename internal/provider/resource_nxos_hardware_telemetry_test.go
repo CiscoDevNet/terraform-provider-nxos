@@ -35,17 +35,17 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosHardwareTelemetry(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "agent_address", "172.24.141.69"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "counter_poll_interval", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "control", "stateful-ha"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "max_header_size", "64"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "packet_sampling_rate", "4096"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receiver_address", "10.92.198.113"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receiver_max_datagram_size", "1400"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receiver_port", "2055"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receiver_source_address", "10.0.0.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receiver_vrf_name", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_agent_address", "172.24.141.69"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_counter_poll_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_max_header_size", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_packet_sampling_rate", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_address", "10.92.198.113"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_max_datagram_size", "1400"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_port", "2055"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_source_address", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_vrf_name", "management"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -114,17 +114,17 @@ func testAccNxosHardwareTelemetryConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosHardwareTelemetryConfig_all() string {
 	config := `resource "nxos_hardware_telemetry" "test" {` + "\n"
-	config += `	admin_state = "enabled"` + "\n"
-	config += `	agent_address = "172.24.141.69"` + "\n"
-	config += `	counter_poll_interval = 30` + "\n"
-	config += `	control = "stateful-ha"` + "\n"
-	config += `	max_header_size = 64` + "\n"
-	config += `	packet_sampling_rate = 4096` + "\n"
-	config += `	receiver_address = "10.92.198.113"` + "\n"
-	config += `	receiver_max_datagram_size = 1400` + "\n"
-	config += `	receiver_port = 2055` + "\n"
-	config += `	receiver_source_address = "10.0.0.1"` + "\n"
-	config += `	receiver_vrf_name = "management"` + "\n"
+	config += `	sflow_admin_state = "enabled"` + "\n"
+	config += `	sflow_agent_address = "172.24.141.69"` + "\n"
+	config += `	sflow_counter_poll_interval = 30` + "\n"
+	config += `	sflow_control = "stateful-ha"` + "\n"
+	config += `	sflow_max_header_size = 64` + "\n"
+	config += `	sflow_packet_sampling_rate = 4096` + "\n"
+	config += `	sflow_receiver_address = "10.92.198.113"` + "\n"
+	config += `	sflow_receiver_max_datagram_size = 1400` + "\n"
+	config += `	sflow_receiver_port = 2055` + "\n"
+	config += `	sflow_receiver_source_address = "10.0.0.1"` + "\n"
+	config += `	sflow_receiver_vrf_name = "management"` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

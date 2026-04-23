@@ -22,19 +22,19 @@ This resource can manage the hardware telemetry configuration on NX-OS devices, 
 
 ```terraform
 resource "nxos_hardware_telemetry" "example" {
-  admin_state                = "enabled"
-  agent_address              = "172.24.141.69"
-  counter_poll_interval      = 30
-  control                    = "stateful-ha"
-  extended_bgp               = true
-  extended_switch            = true
-  max_header_size            = 64
-  packet_sampling_rate       = 4096
-  receiver_address           = "10.92.198.113"
-  receiver_max_datagram_size = 1400
-  receiver_port              = 2055
-  receiver_source_address    = "10.0.0.1"
-  receiver_vrf_name          = "management"
+  sflow_admin_state                = "enabled"
+  sflow_agent_address              = "172.24.141.69"
+  sflow_counter_poll_interval      = 30
+  sflow_control                    = "stateful-ha"
+  sflow_extended_bgp               = true
+  sflow_extended_switch            = true
+  sflow_max_header_size            = 64
+  sflow_packet_sampling_rate       = 4096
+  sflow_receiver_address           = "10.92.198.113"
+  sflow_receiver_max_datagram_size = 1400
+  sflow_receiver_port              = 2055
+  sflow_receiver_source_address    = "10.0.0.1"
+  sflow_receiver_vrf_name          = "management"
 }
 ```
 
@@ -43,27 +43,27 @@ resource "nxos_hardware_telemetry" "example" {
 
 ### Optional
 
-- `admin_state` (String) The administrative state of the object or policy.
-  - Choices: `enabled`, `disabled`
-- `agent_address` (String) The IP address associated with this agent. In the case of a multi-homed agent, this should be the loopback address of the agent.The address should be an invariant that does not change as interfaces are reconfigured, enabled, disabled, added or removed.
-- `control` (String) The control state.
-  - Choices: `stateful-ha`
-- `counter_poll_interval` (Number) The maximum number of seconds between successive samples of the counters associated with this data source.
-  - Range: `0`-`2147483647`
 - `device` (String) A device name from the provider configuration.
-- `extended_bgp` (Boolean) Describes whether sflow is configured in extended bgp flow.
-- `extended_switch` (Boolean) Describes whether sflow is configured in extended switch flow.
-- `max_header_size` (Number) The maximum number of bytes that should be copied from a sampled packet. The agent may have an internal maximum and minimum permissible sizes.
+- `sflow_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `sflow_agent_address` (String) The IP address associated with this agent. In the case of a multi-homed agent, this should be the loopback address of the agent.The address should be an invariant that does not change as interfaces are reconfigured, enabled, disabled, added or removed.
+- `sflow_control` (String) The control state.
+  - Choices: `stateful-ha`
+- `sflow_counter_poll_interval` (Number) The maximum number of seconds between successive samples of the counters associated with this data source.
+  - Range: `0`-`2147483647`
+- `sflow_extended_bgp` (Boolean) Describes whether sflow is configured in extended bgp flow.
+- `sflow_extended_switch` (Boolean) Describes whether sflow is configured in extended switch flow.
+- `sflow_max_header_size` (Number) The maximum number of bytes that should be copied from a sampled packet. The agent may have an internal maximum and minimum permissible sizes.
   - Range: `64`-`256`
-- `packet_sampling_rate` (Number) The statistical sampling rate for packet sampling from this source.
+- `sflow_packet_sampling_rate` (Number) The statistical sampling rate for packet sampling from this source.
   - Range: `0`-`4294967295`
-- `receiver_address` (String) The IP address of the sFlow collector. If set to 0.0.0.0 not sFlow datagrams will be sent.
-- `receiver_max_datagram_size` (Number) The maximum number of data bytes that can be sent in a single sample datagram.
+- `sflow_receiver_address` (String) The IP address of the sFlow collector. If set to 0.0.0.0 not sFlow datagrams will be sent.
+- `sflow_receiver_max_datagram_size` (Number) The maximum number of data bytes that can be sent in a single sample datagram.
   - Range: `200`-`9000`
-- `receiver_port` (Number) The destination port for sFlow datagrams.
+- `sflow_receiver_port` (Number) The destination port for sFlow datagrams.
   - Range: `1`-`65535`
-- `receiver_source_address` (String) The source ip-address option causes the sent sFlow datagram to use the source IP address as the IP packet source address.
-- `receiver_vrf_name` (String) It holds collector vrf name.
+- `sflow_receiver_source_address` (String) The source ip-address option causes the sent sFlow datagram to use the source IP address as the IP packet source address.
+- `sflow_receiver_vrf_name` (String) It holds collector vrf name.
 
 ### Read-Only
 

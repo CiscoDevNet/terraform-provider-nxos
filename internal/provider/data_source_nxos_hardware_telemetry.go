@@ -68,55 +68,55 @@ func (d *HardwareTelemetryDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"admin_state": schema.StringAttribute{
+			"sflow_admin_state": schema.StringAttribute{
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"agent_address": schema.StringAttribute{
+			"sflow_agent_address": schema.StringAttribute{
 				MarkdownDescription: "The IP address associated with this agent. In the case of a multi-homed agent, this should be the loopback address of the agent.The address should be an invariant that does not change as interfaces are reconfigured, enabled, disabled, added or removed.",
 				Computed:            true,
 			},
-			"counter_poll_interval": schema.Int64Attribute{
+			"sflow_counter_poll_interval": schema.Int64Attribute{
 				MarkdownDescription: "The maximum number of seconds between successive samples of the counters associated with this data source.",
 				Computed:            true,
 			},
-			"control": schema.StringAttribute{
+			"sflow_control": schema.StringAttribute{
 				MarkdownDescription: "The control state.",
 				Computed:            true,
 			},
-			"extended_bgp": schema.BoolAttribute{
+			"sflow_extended_bgp": schema.BoolAttribute{
 				MarkdownDescription: "Describes whether sflow is configured in extended bgp flow.",
 				Computed:            true,
 			},
-			"extended_switch": schema.BoolAttribute{
+			"sflow_extended_switch": schema.BoolAttribute{
 				MarkdownDescription: "Describes whether sflow is configured in extended switch flow.",
 				Computed:            true,
 			},
-			"max_header_size": schema.Int64Attribute{
+			"sflow_max_header_size": schema.Int64Attribute{
 				MarkdownDescription: "The maximum number of bytes that should be copied from a sampled packet. The agent may have an internal maximum and minimum permissible sizes.",
 				Computed:            true,
 			},
-			"packet_sampling_rate": schema.Int64Attribute{
+			"sflow_packet_sampling_rate": schema.Int64Attribute{
 				MarkdownDescription: "The statistical sampling rate for packet sampling from this source.",
 				Computed:            true,
 			},
-			"receiver_address": schema.StringAttribute{
+			"sflow_receiver_address": schema.StringAttribute{
 				MarkdownDescription: "The IP address of the sFlow collector. If set to 0.0.0.0 not sFlow datagrams will be sent.",
 				Computed:            true,
 			},
-			"receiver_max_datagram_size": schema.Int64Attribute{
+			"sflow_receiver_max_datagram_size": schema.Int64Attribute{
 				MarkdownDescription: "The maximum number of data bytes that can be sent in a single sample datagram.",
 				Computed:            true,
 			},
-			"receiver_port": schema.Int64Attribute{
+			"sflow_receiver_port": schema.Int64Attribute{
 				MarkdownDescription: "The destination port for sFlow datagrams.",
 				Computed:            true,
 			},
-			"receiver_source_address": schema.StringAttribute{
+			"sflow_receiver_source_address": schema.StringAttribute{
 				MarkdownDescription: "The source ip-address option causes the sent sFlow datagram to use the source IP address as the IP packet source address.",
 				Computed:            true,
 			},
-			"receiver_vrf_name": schema.StringAttribute{
+			"sflow_receiver_vrf_name": schema.StringAttribute{
 				MarkdownDescription: "It holds collector vrf name.",
 				Computed:            true,
 			},

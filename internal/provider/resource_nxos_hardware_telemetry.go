@@ -77,73 +77,73 @@ func (r *HardwareTelemetryResource) Schema(ctx context.Context, req resource.Sch
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"admin_state": schema.StringAttribute{
+			"sflow_admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"agent_address": schema.StringAttribute{
+			"sflow_agent_address": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The IP address associated with this agent. In the case of a multi-homed agent, this should be the loopback address of the agent.The address should be an invariant that does not change as interfaces are reconfigured, enabled, disabled, added or removed.").String,
 				Optional:            true,
 			},
-			"counter_poll_interval": schema.Int64Attribute{
+			"sflow_counter_poll_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The maximum number of seconds between successive samples of the counters associated with this data source.").AddIntegerRangeDescription(0, 2147483647).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
-			"control": schema.StringAttribute{
+			"sflow_control": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
 				Optional:            true,
 			},
-			"extended_bgp": schema.BoolAttribute{
+			"sflow_extended_bgp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Describes whether sflow is configured in extended bgp flow.").String,
 				Optional:            true,
 			},
-			"extended_switch": schema.BoolAttribute{
+			"sflow_extended_switch": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Describes whether sflow is configured in extended switch flow.").String,
 				Optional:            true,
 			},
-			"max_header_size": schema.Int64Attribute{
+			"sflow_max_header_size": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The maximum number of bytes that should be copied from a sampled packet. The agent may have an internal maximum and minimum permissible sizes.").AddIntegerRangeDescription(64, 256).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(64, 256),
 				},
 			},
-			"packet_sampling_rate": schema.Int64Attribute{
+			"sflow_packet_sampling_rate": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The statistical sampling rate for packet sampling from this source.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"receiver_address": schema.StringAttribute{
+			"sflow_receiver_address": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The IP address of the sFlow collector. If set to 0.0.0.0 not sFlow datagrams will be sent.").String,
 				Optional:            true,
 			},
-			"receiver_max_datagram_size": schema.Int64Attribute{
+			"sflow_receiver_max_datagram_size": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The maximum number of data bytes that can be sent in a single sample datagram.").AddIntegerRangeDescription(200, 9000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(200, 9000),
 				},
 			},
-			"receiver_port": schema.Int64Attribute{
+			"sflow_receiver_port": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The destination port for sFlow datagrams.").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
 				},
 			},
-			"receiver_source_address": schema.StringAttribute{
+			"sflow_receiver_source_address": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The source ip-address option causes the sent sFlow datagram to use the source IP address as the IP packet source address.").String,
 				Optional:            true,
 			},
-			"receiver_vrf_name": schema.StringAttribute{
+			"sflow_receiver_vrf_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("It holds collector vrf name.").String,
 				Optional:            true,
 			},

@@ -25,7 +25,7 @@ child_classes:
         doc_path: Flow/sflow:Inst/
         attributes:
           - nxos_name: adminSt
-            tf_name: admin_state
+            tf_name: sflow_admin_state
             type: String
             description: 'The administrative state of the object or policy.'
             enum_values:
@@ -33,19 +33,19 @@ child_classes:
               - disabled
             example: enabled
           - nxos_name: agentAddress
-            tf_name: agent_address
+            tf_name: sflow_agent_address
             type: String
             description: 'The IP address associated with this agent. In the case of a multi-homed agent, this should be the loopback address of the agent.The address should be an invariant that does not change as interfaces are reconfigured, enabled, disabled, added or removed.'
             example: 172.24.141.69
           - nxos_name: counterPollInterval
-            tf_name: counter_poll_interval
+            tf_name: sflow_counter_poll_interval
             type: Int64
             min_int: 0
             max_int: 2147483647
             description: 'The maximum number of seconds between successive samples of the counters associated with this data source.'
             example: 30
           - nxos_name: ctrl
-            tf_name: control
+            tf_name: sflow_control
             type: String
             description: 'The control state.'
             enum_values:
@@ -53,59 +53,59 @@ child_classes:
             allow_non_enum_values: true
             example: stateful-ha
           - nxos_name: isExtendedBgp
-            tf_name: extended_bgp
+            tf_name: sflow_extended_bgp
             type: Bool
             description: 'Describes whether sflow is configured in extended bgp flow.'
             example: true
             exclude_test: true
           - nxos_name: isExtendedSwitch
-            tf_name: extended_switch
+            tf_name: sflow_extended_switch
             type: Bool
             description: 'Describes whether sflow is configured in extended switch flow.'
             example: true
             exclude_test: true
           - nxos_name: maxHeaderSize
-            tf_name: max_header_size
+            tf_name: sflow_max_header_size
             type: Int64
             min_int: 64
             max_int: 256
             description: 'The maximum number of bytes that should be copied from a sampled packet. The agent may have an internal maximum and minimum permissible sizes.'
             example: 64
           - nxos_name: pktSamplingRate
-            tf_name: packet_sampling_rate
+            tf_name: sflow_packet_sampling_rate
             type: Int64
             min_int: 0
             max_int: 4294967295
             description: 'The statistical sampling rate for packet sampling from this source.'
             example: 4096
           - nxos_name: rcvrAddress
-            tf_name: receiver_address
+            tf_name: sflow_receiver_address
             type: String
             write_only: true
             description: 'The IP address of the sFlow collector. If set to 0.0.0.0 not sFlow datagrams will be sent.'
             example: 10.92.198.113
           - nxos_name: rcvrMaxDatagramSize
-            tf_name: receiver_max_datagram_size
+            tf_name: sflow_receiver_max_datagram_size
             type: Int64
             min_int: 200
             max_int: 9000
             description: 'The maximum number of data bytes that can be sent in a single sample datagram.'
             example: 1400
           - nxos_name: rcvrPort
-            tf_name: receiver_port
+            tf_name: sflow_receiver_port
             type: Int64
             min_int: 1
             max_int: 65535
             description: 'The destination port for sFlow datagrams.'
             example: 2055
           - nxos_name: rcvrSrcAddress
-            tf_name: receiver_source_address
+            tf_name: sflow_receiver_source_address
             type: String
             write_only: true
             description: 'The source ip-address option causes the sent sFlow datagram to use the source IP address as the IP packet source address.'
             example: 10.0.0.1
           - nxos_name: rcvrVrfName
-            tf_name: receiver_vrf_name
+            tf_name: sflow_receiver_vrf_name
             type: String
             write_only: true
             description: 'It holds collector vrf name.'

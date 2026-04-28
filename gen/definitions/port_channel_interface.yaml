@@ -437,7 +437,7 @@ child_classes:
               - all
             example: bcast
       - class_name: pcAggrIfExtended
-        rn: physExtd
+        rn: aggrExtd
         type: single
         tf_name: extended
         description: 'Port-channel interface extended configuration.'

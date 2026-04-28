@@ -573,7 +573,7 @@ func (data *PortChannelInterface) fromBody(res gjson.Result) {
 							value.Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
 									rnValue := nestedV.Get("pcAggrIfExtended.attributes.rn").String()
-									if rnValue == "physExtd" {
+									if rnValue == "aggrExtd" {
 										rpcAggrIfExtended = nestedV
 										return false
 									}
@@ -938,7 +938,7 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 			rpcAggrIf.Get("pcAggrIf.children").ForEach(
 				func(_, v gjson.Result) bool {
 					rnValue := v.Get("pcAggrIfExtended.attributes.rn").String()
-					if rnValue == "physExtd" {
+					if rnValue == "aggrExtd" {
 						rpcAggrIfExtended = v
 						return false
 					}

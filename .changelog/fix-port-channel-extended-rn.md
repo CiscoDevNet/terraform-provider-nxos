@@ -1,0 +1,1 @@
+- Fix `nxos_port_channel_interface`: extended attributes (storm control, switchport block, MAC learn, etc.) were not read back from the device due to incorrect child class RN (`physExtd` → `aggrExtd`)

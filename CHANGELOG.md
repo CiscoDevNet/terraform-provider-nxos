@@ -1,3 +1,7 @@
+## 0.10.2
+
+- Fix `nxos_port_channel_interface`: extended attributes (storm control, switchport block, MAC learn, etc.) were not read back from the device due to incorrect child class RN (`physExtd` → `aggrExtd`)
+
 ## 0.10.1
 
 - Add community list configuration to `nxos_route_policy` resource and data source

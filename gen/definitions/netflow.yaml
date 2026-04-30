@@ -7,6 +7,7 @@ ds_description: This data source can read the Netflow configuration on NX-OS dev
 res_description: This resource can manage the Netflow configuration on NX-OS devices, including exporters, records, monitors, hardware profiles, and class maps.
 doc_path: Flow/flow:Entity/
 doc_category: System
+test_tags: [FEATURE_NETFLOW]
 child_classes:
   - class_name: flowExporter
     doc_path: Flow/flow:Exporter/
@@ -253,3 +254,10 @@ child_classes:
             id: true
             description: 'Match using ACL.'
             example: 'ACL1'
+test_prerequisites:
+  - dn: sys/fm/netflow
+    class_name: fmNetflow
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

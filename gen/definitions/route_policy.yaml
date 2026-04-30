@@ -265,6 +265,20 @@ child_classes:
                     description: "DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]`"
                     example: sys/rpm/pfxlistv4-[PREFIX_LIST1]
                     id: true
+              - class_name: rtmapRsRtDstAccAtt
+                doc_path: Routing%20and%20Forwarding/rtmap:RsRtDstAccAtt/
+                rn: rtrtDstAccAtt-[%s]
+                type: list
+                tf_name: match_route_access_lists
+                description: 'List of Match Route Access Lists.'
+                attributes:
+                  - nxos_name: tDn
+                    tf_name: access_list_dn
+                    type: String
+                    description: 'DN of Access List. For example: `sys/acl/ipv4/name-[ACL1]`.'
+                    example: sys/acl/ipv4/name-[ACL1]
+                    id: true
+                    exclude_test: true
           - class_name: rtmapSetRegComm
             doc_path: Routing%20and%20Forwarding/rtmap:SetRegComm/
             rn: sregcomm
@@ -457,6 +471,109 @@ child_classes:
                   - enabled
                   - disabled
                 example: enabled
+          - class_name: rtmapSetPref
+            doc_path: Routing%20and%20Forwarding/rtmap:SetPref/
+            rn: spref
+            type: single
+            tf_name: set_local_preference
+            description: 'A set rule based on preference.'
+            attributes:
+              - nxos_name: localPref
+                tf_name: set_local_preference
+                type: Int64
+                description: 'Local Preference.'
+                min_int: 0
+                max_int: 4294967295
+                example: 100
+          - class_name: rtmapSetPathSelection
+            doc_path: Routing%20and%20Forwarding/rtmap:SetPathSelection/
+            rn: spselect
+            type: single
+            tf_name: set_path_selection
+            description: 'Set As Path Tag.'
+            attributes:
+              - nxos_name: psAdvertise
+                tf_name: set_path_selection_advertise
+                type: String
+                description: 'Specifies BGP path Advertise.'
+                enum_values:
+                  - unspecified
+                  - ps-all
+                  - ps-bestplus
+                  - ps-best2
+                  - ps-mpath
+                example: ps-all
+          - class_name: rtmapSetEvpn
+            doc_path: Routing%20and%20Forwarding/rtmap:SetEvpn/
+            rn: sevpn
+            type: single
+            tf_name: set_evpn
+            description: 'Set Evpn Gateway Ip Addr and Ether Tag.'
+            attributes:
+              - nxos_name: gwType
+                tf_name: set_evpn_gateway_type
+                type: String
+                description: 'EVPN Gateway Address Type.'
+                enum_values:
+                  - ip-address
+                  - nexthop
+                example: ip-address
+                exclude_test: true
+              - nxos_name: ip
+                tf_name: set_evpn_gateway_ip
+                type: String
+                description: 'EVPN Gateway IP Address.'
+                example: 10.1.1.1
+                exclude_test: true
+          - class_name: rtmapMatchRtNh
+            doc_path: Routing%20and%20Forwarding/rtmap:MatchRtNh/
+            rn: mrtnh
+            type: single
+            tf_name: match_next_hop
+            description: 'A match rule based on route next hops.'
+            child_classes:
+              - class_name: rtmapRsRtNhAtt
+                doc_path: Routing%20and%20Forwarding/rtmap:RsRtNhAtt/
+                rn: rtrtNhAtt-[%s]
+                type: list
+                tf_name: match_next_hop_prefix_lists
+                description: 'List of Match Next Hop Prefix Lists.'
+                attributes:
+                  - nxos_name: tDn
+                    tf_name: prefix_list_dn
+                    type: String
+                    description: 'DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]`.'
+                    example: sys/rpm/pfxlistv4-[PREFIX_LIST1]
+                    id: true
+          - class_name: rtmapMatchRegComm
+            doc_path: Routing%20and%20Forwarding/rtmap:MatchRegComm/
+            rn: mregcomm
+            type: single
+            tf_name: match_regular_community
+            description: 'A match rule based on regular communities.'
+            attributes:
+              - nxos_name: criteria
+                tf_name: match_regular_community_criteria
+                type: String
+                description: 'Criteria.'
+                enum_values:
+                  - exact
+                  - sub-group
+                example: exact
+            child_classes:
+              - class_name: rtmapRsRegCommAtt
+                doc_path: Routing%20and%20Forwarding/rtmap:RsRegCommAtt/
+                rn: rsregCommAtt-[%s]
+                type: list
+                tf_name: match_regular_community_lists
+                description: 'List of Match Regular Community Lists.'
+                attributes:
+                  - nxos_name: tDn
+                    tf_name: community_list_dn
+                    type: String
+                    description: 'DN of Community List. For example: `sys/rpm/rtregcom-[COMMUNITY_LIST1]`.'
+                    example: sys/rpm/rtregcom-[COMMUNITY_LIST1]
+                    id: true
   - class_name: rtregcomRule
     doc_path: Routing%20and%20Forwarding/rtregcom:Rule/
     rn: rtregcom-[%s]

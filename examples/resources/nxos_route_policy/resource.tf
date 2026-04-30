@@ -37,6 +37,9 @@ resource "nxos_route_policy" "example" {
           match_route_prefix_lists = {
             "sys/rpm/pfxlistv4-[PREFIX_LIST1]" = {}
           }
+          match_route_access_lists = {
+            "sys/acl/ipv4/name-[ACL1]" = {}
+          }
           set_regular_community_additive     = "disabled"
           set_regular_community_no_community = "disabled"
           set_regular_community_criteria     = "none"
@@ -60,6 +63,15 @@ resource "nxos_route_policy" "example" {
           set_next_hop_v6_peer_address     = "disabled"
           set_next_hop_v6_redist_unchanged = "enabled"
           set_next_hop_v6_unchanged        = "enabled"
+          set_local_preference             = 100
+          set_path_selection_advertise     = "ps-all"
+          match_next_hop_prefix_lists = {
+            "sys/rpm/pfxlistv4-[PREFIX_LIST1]" = {}
+          }
+          match_regular_community_criteria = "exact"
+          match_regular_community_lists = {
+            "sys/rpm/rtregcom-[COMMUNITY_LIST1]" = {}
+          }
         }
       }
     }

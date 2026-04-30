@@ -3,6 +3,7 @@ name: PTP
 class_name: ptpPtpEntity
 dn: sys/ptp
 no_delete: true
+test_tags: [PTP]
 ds_description: 'This data source can read the PTP (Precision Time Protocol) configuration on NX-OS devices, including clock settings, domain configuration, notifications, interface-level PTP settings, and unicast peers.'
 res_description: 'This resource can manage the PTP (Precision Time Protocol) configuration on NX-OS devices, including clock settings, domain configuration, notifications, interface-level PTP settings, and unicast peers.'
 doc_path: System/ptp:PtpEntity/
@@ -16,17 +17,14 @@ attributes:
       - enabled
       - disabled
     example: enabled
-    test_tags: [PTP_EXTENDED]
   - nxos_name: clockIdentity
     tf_name: clock_identity
     type: String
     description: 'PTP clock-identity MAC Address.'
     example: '01:02:03:04:05:06'
-    test_tags: [PTP_EXTENDED]
   - nxos_name: clockOperationOneStep
     tf_name: clock_operation_one_step
     type: String
-    test_tags: [PTP_EXTENDED]
     description: 'PTP Clock Operation One Step PTP enable/disable.'
     enum_values:
       - enabled
@@ -40,7 +38,6 @@ attributes:
       - enabled
       - disabled
     example: enabled
-    test_tags: [PTP_EXTENDED]
   - nxos_name: clockPeriodicUpdateInterval
     tf_name: clock_periodic_update_interval
     type: Int64
@@ -48,13 +45,11 @@ attributes:
     min_int: 0
     max_int: 3600
     example: 120
-    test_tags: [PTP_EXTENDED]
   - nxos_name: clockSyncAuto
     tf_name: clock_sync_auto
     type: Bool
     description: 'PTP clock-sync auto yes/no.'
     example: true
-    test_tags: [PTP_EXTENDED]
   - nxos_name: convergenceTime
     tf_name: convergence_time
     type: Int64
@@ -62,7 +57,6 @@ attributes:
     min_int: 3
     max_int: 2600
     example: 60
-    test_tags: [PTP_EXTENDED]
   - nxos_name: correctionRangeLogging
     tf_name: correction_range_logging
     type: String
@@ -71,7 +65,6 @@ attributes:
       - enabled
       - disabled
     example: enabled
-    test_tags: [PTP_EXTENDED]
   - nxos_name: correctionRangeThreshold
     tf_name: correction_range_threshold
     type: Int64
@@ -79,11 +72,9 @@ attributes:
     min_int: 10
     max_int: 1000000000
     example: 200000
-    test_tags: [PTP_EXTENDED]
   - nxos_name: deviceType
     tf_name: device_type
     type: String
-    test_tags: [PTP_EXTENDED]
     description: 'PTP Device Type bounday clock/ generalized PTP.'
     enum_values:
       - boundaryClock
@@ -100,7 +91,6 @@ attributes:
   - nxos_name: enhancedClientScale
     tf_name: enhanced_client_scale
     type: String
-    test_tags: [PTP_EXTENDED]
     description: 'PTP enhanced multicast client scale enable/disable.'
     enum_values:
       - enabled
@@ -114,7 +104,6 @@ attributes:
       - enabled
       - disabled
     example: enabled
-    test_tags: [PTP_EXTENDED]
   - nxos_name: gmCapConvergenceTime
     tf_name: grandmaster_capable_convergence_time
     type: Int64
@@ -122,7 +111,6 @@ attributes:
     min_int: 3
     max_int: 2600
     example: 60
-    test_tags: [PTP_EXTENDED]
   - nxos_name: grandmasterCapable
     tf_name: grandmaster_capable
     type: String
@@ -131,13 +119,11 @@ attributes:
       - disabled
       - enabled
     example: disabled
-    test_tags: [PTP_EXTENDED]
   - nxos_name: ipv6McastRxScope
     tf_name: ipv6_multicast_receive_scope
     type: String
     description: 'PTP over IPv6 multicast dest IP scope for receive.'
     example: '2-13'
-    test_tags: [PTP_EXTENDED]
   - nxos_name: ipv6McastTxScope
     tf_name: ipv6_multicast_transmit_scope
     type: Int64
@@ -145,7 +131,6 @@ attributes:
     min_int: 0
     max_int: 65535
     example: 2
-    test_tags: [PTP_EXTENDED]
   - nxos_name: meanPathDelay
     tf_name: mean_path_delay
     type: Int64
@@ -153,7 +138,6 @@ attributes:
     min_int: 10
     max_int: 1000000000
     example: 500000000
-    test_tags: [PTP_EXTENDED]
   - nxos_name: mgmt
     tf_name: management
     type: String
@@ -162,7 +146,6 @@ attributes:
       - enabled
       - disabled
     example: disabled
-    test_tags: [PTP_EXTENDED]
   - nxos_name: multiDomain
     tf_name: multi_domain
     type: String
@@ -171,7 +154,6 @@ attributes:
       - enabled
       - disabled
     example: enabled
-    test_tags: [PTP_EXTENDED]
   - nxos_name: multiDomainTransPriority1
     tf_name: multi_domain_transition_priority1
     type: Int64
@@ -179,7 +161,6 @@ attributes:
     min_int: 0
     max_int: 255
     example: 128
-    test_tags: [PTP_EXTENDED]
   - nxos_name: multiDomainTransPriority2
     tf_name: multi_domain_transition_priority2
     type: Int64
@@ -187,7 +168,6 @@ attributes:
     min_int: 0
     max_int: 255
     example: 128
-    test_tags: [PTP_EXTENDED]
   - nxos_name: notifyGmChange
     tf_name: notify_grandmaster_change
     type: String
@@ -207,7 +187,6 @@ attributes:
   - nxos_name: offload
     tf_name: offload
     type: String
-    test_tags: [PTP_EXTENDED]
     description: 'PTP offload enable/disable.'
     enum_values:
       - enabled
@@ -242,7 +221,6 @@ attributes:
   - nxos_name: scale1g
     tf_name: scale_1g
     type: Bool
-    test_tags: [PTP_EXTENDED]
     description: 'ptp packets timestamping at asic for 1g ports.'
     example: true
   - nxos_name: sourceIp
@@ -253,13 +231,11 @@ attributes:
   - nxos_name: sourceIpv6
     tf_name: source_ipv6
     type: String
-    test_tags: [PTP_EXTENDED]
     description: 'PTP source IPv6 address for all the PTP packets in the multicast PTP mode.'
     example: '2001:db8::1'
   - nxos_name: toleranceMPDState
     tf_name: tolerance_mean_path_delay_state
     type: String
-    test_tags: [PTP_EXTENDED]
     description: 'PTP tolerance mean path delay threshold enable/disable.'
     enum_values:
       - enabled
@@ -268,7 +244,6 @@ attributes:
   - nxos_name: toleranceMPDVal
     tf_name: tolerance_mean_path_delay_value
     type: String
-    test_tags: [PTP_EXTENDED]
     description: 'PTP tolerance mean path delay threshold.'
     example: '50'
   - nxos_name: toleranceRPDState
@@ -279,13 +254,11 @@ attributes:
       - enabled
       - disabled
     example: enabled
-    test_tags: [PTP_EXTENDED]
   - nxos_name: toleranceRPDVal
     tf_name: tolerance_reverse_path_delay_value
     type: String
     description: 'PTP tolerance reverse path delay threshold.'
     example: '50'
-    test_tags: [PTP_EXTENDED]
   - nxos_name: vrfName
     tf_name: vrf_name
     type: String
@@ -296,7 +269,6 @@ attributes:
     type: String
     description: 'PTP vrf name for ptp source ipv6.'
     example: default
-    test_tags: [PTP_EXTENDED]
 child_classes:
   - class_name: ptpPtpDomain
     rn: domain-[%d]
@@ -320,7 +292,6 @@ child_classes:
         min_int: 0
         max_int: 255
         example: 200
-        test_tags: [PTP_EXTENDED]
       - nxos_name: clockClassThreshold
         tf_name: clock_class_threshold
         type: Int64
@@ -328,7 +299,6 @@ child_classes:
         min_int: 0
         max_int: 255
         example: 200
-        test_tags: [PTP_EXTENDED]
       - nxos_name: priority
         tf_name: priority
         type: Int64
@@ -336,7 +306,6 @@ child_classes:
         min_int: 0
         max_int: 255
         example: 128
-        test_tags: [PTP_EXTENDED]
   - class_name: ptpPtpNotifyHighCorr
     rn: notifyhighcorr
     type: single
@@ -427,7 +396,6 @@ child_classes:
           - aes67
           - smpte-2059-2
         example: aes67
-        test_tags: [PTP_EXTENDED]
       - nxos_name: announceIntervalVal
         tf_name: announce_interval_value
         type: Int64
@@ -444,7 +412,6 @@ child_classes:
           - aes67
           - smpte-2059-2
         example: aes67
-        test_tags: [PTP_EXTENDED]
       - nxos_name: announceTimeoutVal
         tf_name: announce_timeout_value
         type: Int64
@@ -459,7 +426,6 @@ child_classes:
         min_int: 0
         max_int: 512000000
         example: 1000
-        test_tags: [PTP_EXTENDED]
       - nxos_name: asymmetricDirection
         tf_name: asymmetric_direction
         type: String
@@ -469,7 +435,6 @@ child_classes:
           - forward-path
           - reverse-path
         example: forward-path
-        test_tags: [PTP_EXTENDED]
       - nxos_name: delayRequestMinIntervalType
         tf_name: delay_request_min_interval_type
         type: String
@@ -479,7 +444,6 @@ child_classes:
           - aes67
           - smpte-2059-2
         example: aes67
-        test_tags: [PTP_EXTENDED]
       - nxos_name: delayRequestMinIntervalVal
         tf_name: delay_request_min_interval_value
         type: Int64
@@ -492,7 +456,6 @@ child_classes:
         type: String
         description: 'PTP over IPv6 multicast dest IP scope for receive.'
         example: '1-14'
-        test_tags: [PTP_EXTENDED]
       - nxos_name: ipv6McastTxScope
         tf_name: ipv6_multicast_transmit_scope
         type: Int64
@@ -500,7 +463,6 @@ child_classes:
         min_int: 0
         max_int: 65535
         example: 2
-        test_tags: [PTP_EXTENDED]
       - nxos_name: negoSchema
         tf_name: negotiation_schema
         type: String
@@ -513,13 +475,11 @@ child_classes:
         min_int: 5
         max_int: 2000000
         example: 500000
-        test_tags: [PTP_EXTENDED]
       - nxos_name: profileOverride
         tf_name: profile_override
         type: Bool
         description: 'Allow override of configuration limits imposed by global PTP profile.'
         example: true
-        test_tags: [PTP_EXTENDED]
       - nxos_name: ptp
         tf_name: ptp
         type: Bool
@@ -532,7 +492,6 @@ child_classes:
         min_int: 0
         max_int: 255
         example: 128
-        test_tags: [PTP_EXTENDED]
       - nxos_name: ptpDestinationMac
         tf_name: destination_mac
         type: String
@@ -541,7 +500,6 @@ child_classes:
           - non-forwardable
           - forwardable
         example: forwardable
-        test_tags: [PTP_EXTENDED]
       - nxos_name: ptpInterfaceDomain
         tf_name: domain
         type: Int64
@@ -549,7 +507,6 @@ child_classes:
         min_int: 0
         max_int: 127
         example: 1
-        test_tags: [PTP_EXTENDED]
       - nxos_name: ptpRxNoMatch
         tf_name: receive_no_match
         type: String
@@ -559,7 +516,6 @@ child_classes:
           - drop
           - follow-rx
         example: drop
-        test_tags: [PTP_EXTENDED]
       - nxos_name: role
         tf_name: role
         type: String
@@ -578,7 +534,6 @@ child_classes:
           - aes67
           - smpte-2059-2
         example: aes67
-        test_tags: [PTP_EXTENDED]
       - nxos_name: syncIntervalVal
         tf_name: sync_interval_value
         type: Int64
@@ -613,7 +568,6 @@ child_classes:
         type: String
         description: 'Source IPv6 address for ucast messages.'
         example: '2001:db8::1'
-        test_tags: [PTP_EXTENDED]
       - nxos_name: ucastVrf
         tf_name: unicast_vrf
         type: String
@@ -624,13 +578,11 @@ child_classes:
         type: String
         description: 'VRF to be used for Ipv6 ptp messages.'
         example: default
-        test_tags: [PTP_EXTENDED]
       - nxos_name: vlan
         tf_name: vlan
         type: String
         description: 'PTP VLAN id configuration.'
         example: vlan-100
-        test_tags: [PTP_EXTENDED]
     child_classes:
       - class_name: ptpPtpPeer
         rn: peer-[%s]

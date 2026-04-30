@@ -31,112 +31,51 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPTP(t *testing.T) {
+	if os.Getenv("PTP") == "" {
+		t.Skip("skipping test, set environment variable PTP")
+	}
 	var checks []resource.TestCheckFunc
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "acl_redirect", "enabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_identity", "01:02:03:04:05:06"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_operation_one_step", "enabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_periodic_update", "enabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_periodic_update_interval", "120"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_sync_auto", "true"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "convergence_time", "60"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "correction_range_logging", "enabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "correction_range_threshold", "200000"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "device_type", "generalizedPtp"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "acl_redirect", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_identity", "01:02:03:04:05:06"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_operation_one_step", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_periodic_update", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_periodic_update_interval", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_sync_auto", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "convergence_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "correction_range_logging", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "correction_range_threshold", "200000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "device_type", "generalizedPtp"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domain_number", "1"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "enhanced_client_scale", "enabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "forward_version1", "enabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "grandmaster_capable_convergence_time", "60"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "grandmaster_capable", "disabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "ipv6_multicast_receive_scope", "2-13"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "ipv6_multicast_transmit_scope", "2"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "mean_path_delay", "500000000"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "management", "disabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "multi_domain", "enabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "multi_domain_transition_priority1", "128"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "multi_domain_transition_priority2", "128"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "enhanced_client_scale", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "forward_version1", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "grandmaster_capable_convergence_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "grandmaster_capable", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "ipv6_multicast_receive_scope", "2-13"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "ipv6_multicast_transmit_scope", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "mean_path_delay", "500000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "management", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "multi_domain", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "multi_domain_transition_priority1", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "multi_domain_transition_priority2", "128"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_grandmaster_change", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_parent_change", "enabled"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "offload", "enabled"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "offload", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "peer_delay_request_interval", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "priority1", "128"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "priority2", "128"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "using_system_clock", "true"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "scale_1g", "true"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "scale_1g", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "source_ip", "10.1.1.1"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "source_ipv6", "2001:db8::1"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_mean_path_delay_state", "enabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_mean_path_delay_value", "50"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_reverse_path_delay_state", "enabled"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_reverse_path_delay_value", "50"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "source_ipv6", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_mean_path_delay_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_mean_path_delay_value", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_reverse_path_delay_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_reverse_path_delay_value", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "vrf_name", "default"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "vrf_name_ipv6", "default"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domains.1.clock_accuracy_threshold", "200"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domains.1.clock_class_threshold", "200"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domains.1.priority", "128"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "vrf_name_ipv6", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domains.1.clock_accuracy_threshold", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domains.1.clock_class_threshold", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domains.1.priority", "128"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_high_correction_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_high_correction", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_high_correction_periodic", "enabled"))
@@ -144,68 +83,34 @@ func TestAccDataSourceNxosPTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_port_state_change_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_port_state_change", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_port_state_change_periodic", "enabled"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.announce_interval_type", "aes67"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.announce_interval_type", "aes67"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.announce_interval_value", "2"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.announce_timeout_type", "aes67"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.announce_timeout_type", "aes67"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.announce_timeout_value", "3"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.asymmetric_delay_value", "1000"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.asymmetric_direction", "forward-path"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.delay_request_min_interval_type", "aes67"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.asymmetric_delay_value", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.asymmetric_direction", "forward-path"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.delay_request_min_interval_type", "aes67"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.delay_request_min_interval_value", "0"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.ipv6_multicast_receive_scope", "1-14"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.ipv6_multicast_transmit_scope", "2"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.ipv6_multicast_receive_scope", "1-14"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.ipv6_multicast_transmit_scope", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.negotiation_schema", "schema1"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.neighbor_propagation_delay_threshold", "500000"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.profile_override", "true"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.neighbor_propagation_delay_threshold", "500000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.profile_override", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.ptp", "true"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.cost", "128"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.destination_mac", "forwardable"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.domain", "1"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.receive_no_match", "drop"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.cost", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.destination_mac", "forwardable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.domain", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.receive_no_match", "drop"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.role", "master"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.sync_interval_type", "aes67"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.sync_interval_type", "aes67"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.sync_interval_value", "-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.transmission", "multicast"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.transport", "ipv4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.unicast_source", "10.2.2.1"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.unicast_source_ipv6", "2001:db8::1"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.unicast_source_ipv6", "2001:db8::1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.unicast_vrf", "default"))
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.unicast_vrf_ipv6", "default"))
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.vlan", "vlan-100"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.unicast_vrf_ipv6", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.vlan", "vlan-100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.peers.10.1.1.2.negotiation_schema", "schema1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -239,113 +144,49 @@ resource "nxos_dme" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosPTPConfig() string {
 	config := `resource "nxos_ptp" "test" {` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	acl_redirect = "enabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	clock_identity = "01:02:03:04:05:06"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	clock_operation_one_step = "enabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	clock_periodic_update = "enabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	clock_periodic_update_interval = 120` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	clock_sync_auto = true` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	convergence_time = 60` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	correction_range_logging = "enabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	correction_range_threshold = 200000` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	device_type = "generalizedPtp"` + "\n"
-	}
+	config += `	acl_redirect = "enabled"` + "\n"
+	config += `	clock_identity = "01:02:03:04:05:06"` + "\n"
+	config += `	clock_operation_one_step = "enabled"` + "\n"
+	config += `	clock_periodic_update = "enabled"` + "\n"
+	config += `	clock_periodic_update_interval = 120` + "\n"
+	config += `	clock_sync_auto = true` + "\n"
+	config += `	convergence_time = 60` + "\n"
+	config += `	correction_range_logging = "enabled"` + "\n"
+	config += `	correction_range_threshold = 200000` + "\n"
+	config += `	device_type = "generalizedPtp"` + "\n"
 	config += `	domain_number = 1` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	enhanced_client_scale = "enabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	forward_version1 = "enabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	grandmaster_capable_convergence_time = 60` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	grandmaster_capable = "disabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	ipv6_multicast_receive_scope = "2-13"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	ipv6_multicast_transmit_scope = 2` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	mean_path_delay = 500000000` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	management = "disabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	multi_domain = "enabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	multi_domain_transition_priority1 = 128` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	multi_domain_transition_priority2 = 128` + "\n"
-	}
+	config += `	enhanced_client_scale = "enabled"` + "\n"
+	config += `	forward_version1 = "enabled"` + "\n"
+	config += `	grandmaster_capable_convergence_time = 60` + "\n"
+	config += `	grandmaster_capable = "disabled"` + "\n"
+	config += `	ipv6_multicast_receive_scope = "2-13"` + "\n"
+	config += `	ipv6_multicast_transmit_scope = 2` + "\n"
+	config += `	mean_path_delay = 500000000` + "\n"
+	config += `	management = "disabled"` + "\n"
+	config += `	multi_domain = "enabled"` + "\n"
+	config += `	multi_domain_transition_priority1 = 128` + "\n"
+	config += `	multi_domain_transition_priority2 = 128` + "\n"
 	config += `	notify_grandmaster_change = "enabled"` + "\n"
 	config += `	notify_parent_change = "enabled"` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	offload = "enabled"` + "\n"
-	}
+	config += `	offload = "enabled"` + "\n"
 	config += `	peer_delay_request_interval = 1` + "\n"
 	config += `	priority1 = 128` + "\n"
 	config += `	priority2 = 128` + "\n"
 	config += `	using_system_clock = true` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	scale_1g = true` + "\n"
-	}
+	config += `	scale_1g = true` + "\n"
 	config += `	source_ip = "10.1.1.1"` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	source_ipv6 = "2001:db8::1"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	tolerance_mean_path_delay_state = "enabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	tolerance_mean_path_delay_value = "50"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	tolerance_reverse_path_delay_state = "enabled"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	tolerance_reverse_path_delay_value = "50"` + "\n"
-	}
+	config += `	source_ipv6 = "2001:db8::1"` + "\n"
+	config += `	tolerance_mean_path_delay_state = "enabled"` + "\n"
+	config += `	tolerance_mean_path_delay_value = "50"` + "\n"
+	config += `	tolerance_reverse_path_delay_state = "enabled"` + "\n"
+	config += `	tolerance_reverse_path_delay_value = "50"` + "\n"
 	config += `	vrf_name = "default"` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `	vrf_name_ipv6 = "default"` + "\n"
-	}
+	config += `	vrf_name_ipv6 = "default"` + "\n"
 	config += `	domains = {` + "\n"
 	config += `		"1" = {` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			clock_accuracy_threshold = 200` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			clock_class_threshold = 200` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			priority = 128` + "\n"
-	}
+	config += `			clock_accuracy_threshold = 200` + "\n"
+	config += `			clock_class_threshold = 200` + "\n"
+	config += `			priority = 128` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	notify_high_correction_interval = 10` + "\n"
@@ -357,68 +198,34 @@ func testAccDataSourceNxosPTPConfig() string {
 	config += `	notify_port_state_change_periodic = "enabled"` + "\n"
 	config += `	interfaces = {` + "\n"
 	config += `		"eth1/1" = {` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			announce_interval_type = "aes67"` + "\n"
-	}
+	config += `			announce_interval_type = "aes67"` + "\n"
 	config += `			announce_interval_value = 2` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			announce_timeout_type = "aes67"` + "\n"
-	}
+	config += `			announce_timeout_type = "aes67"` + "\n"
 	config += `			announce_timeout_value = 3` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			asymmetric_delay_value = 1000` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			asymmetric_direction = "forward-path"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			delay_request_min_interval_type = "aes67"` + "\n"
-	}
+	config += `			asymmetric_delay_value = 1000` + "\n"
+	config += `			asymmetric_direction = "forward-path"` + "\n"
+	config += `			delay_request_min_interval_type = "aes67"` + "\n"
 	config += `			delay_request_min_interval_value = 0` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			ipv6_multicast_receive_scope = "1-14"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			ipv6_multicast_transmit_scope = 2` + "\n"
-	}
+	config += `			ipv6_multicast_receive_scope = "1-14"` + "\n"
+	config += `			ipv6_multicast_transmit_scope = 2` + "\n"
 	config += `			negotiation_schema = "schema1"` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			neighbor_propagation_delay_threshold = 500000` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			profile_override = true` + "\n"
-	}
+	config += `			neighbor_propagation_delay_threshold = 500000` + "\n"
+	config += `			profile_override = true` + "\n"
 	config += `			ptp = true` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			cost = 128` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			destination_mac = "forwardable"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			domain = 1` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			receive_no_match = "drop"` + "\n"
-	}
+	config += `			cost = 128` + "\n"
+	config += `			destination_mac = "forwardable"` + "\n"
+	config += `			domain = 1` + "\n"
+	config += `			receive_no_match = "drop"` + "\n"
 	config += `			role = "master"` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			sync_interval_type = "aes67"` + "\n"
-	}
+	config += `			sync_interval_type = "aes67"` + "\n"
 	config += `			sync_interval_value = -1` + "\n"
 	config += `			transmission = "multicast"` + "\n"
 	config += `			transport = "ipv4"` + "\n"
 	config += `			unicast_source = "10.2.2.1"` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			unicast_source_ipv6 = "2001:db8::1"` + "\n"
-	}
+	config += `			unicast_source_ipv6 = "2001:db8::1"` + "\n"
 	config += `			unicast_vrf = "default"` + "\n"
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			unicast_vrf_ipv6 = "default"` + "\n"
-	}
-	if os.Getenv("PTP_EXTENDED") != "" {
-		config += `			vlan = "vlan-100"` + "\n"
-	}
+	config += `			unicast_vrf_ipv6 = "default"` + "\n"
+	config += `			vlan = "vlan-100"` + "\n"
 	config += `			peers = {` + "\n"
 	config += `				"10.1.1.2" = {` + "\n"
 	config += `					negotiation_schema = "schema1"` + "\n"

@@ -55,7 +55,7 @@ child_classes:
                 doc_path: Security%20and%20Policing/esg:MatchConnectedEpV4/
                 rn: connectedepv4-[%s]-[%s]
                 type: list
-                tf_name: connected_endpoints_ipv4
+                tf_name: selector_connected_endpoints_ipv4
                 description: 'List of connected endpoints selectors based on VRF and IPv4 address/prefix.'
                 attributes:
                   - nxos_name: vrf
@@ -74,7 +74,7 @@ child_classes:
                 doc_path: Security%20and%20Policing/esg:MatchConnectedEpV6/
                 rn: connectedepv6-[%s]-[%s]
                 type: list
-                tf_name: connected_endpoints_ipv6
+                tf_name: selector_connected_endpoints_ipv6
                 description: 'List of connected endpoints selectors based on VRF and IPv6 address/prefix.'
                 attributes:
                   - nxos_name: vrf
@@ -93,7 +93,7 @@ child_classes:
                 doc_path: Security%20and%20Policing/esg:MatchVlan/
                 rn: vlan-[%s]
                 type: list
-                tf_name: match_vlans
+                tf_name: selector_match_vlans
                 description: 'List of selectors based on VLAN.'
                 attributes:
                   - nxos_name: vlanId

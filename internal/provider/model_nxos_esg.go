@@ -49,19 +49,19 @@ type ESG struct {
 }
 
 type ESGSecurityGroups struct {
-	Name                   types.String                                       `tfsdk:"name"`
-	ConnectedEndpointsIpv4 map[string]ESGSecurityGroupsConnectedEndpointsIpv4 `tfsdk:"connected_endpoints_ipv4"`
-	ConnectedEndpointsIpv6 map[string]ESGSecurityGroupsConnectedEndpointsIpv6 `tfsdk:"connected_endpoints_ipv6"`
-	MatchVlans             map[string]ESGSecurityGroupsMatchVlans             `tfsdk:"match_vlans"`
+	Name                           types.String                                               `tfsdk:"name"`
+	SelectorConnectedEndpointsIpv4 map[string]ESGSecurityGroupsSelectorConnectedEndpointsIpv4 `tfsdk:"selector_connected_endpoints_ipv4"`
+	SelectorConnectedEndpointsIpv6 map[string]ESGSecurityGroupsSelectorConnectedEndpointsIpv6 `tfsdk:"selector_connected_endpoints_ipv6"`
+	SelectorMatchVlans             map[string]ESGSecurityGroupsSelectorMatchVlans             `tfsdk:"selector_match_vlans"`
 }
 
-type ESGSecurityGroupsConnectedEndpointsIpv4 struct {
+type ESGSecurityGroupsSelectorConnectedEndpointsIpv4 struct {
 }
 
-type ESGSecurityGroupsConnectedEndpointsIpv6 struct {
+type ESGSecurityGroupsSelectorConnectedEndpointsIpv6 struct {
 }
 
-type ESGSecurityGroupsMatchVlans struct {
+type ESGSecurityGroupsSelectorMatchVlans struct {
 }
 
 type ESGClassMaps struct {
@@ -131,17 +131,17 @@ func (data ESGSecurityGroups) getRn(key string) string {
 	return fmt.Sprintf("grp-[%v]", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
-func (data ESGSecurityGroupsConnectedEndpointsIpv4) getRn(key string) string {
+func (data ESGSecurityGroupsSelectorConnectedEndpointsIpv4) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("connectedepv4-[%s]-[%s]", keyParts[0], keyParts[1])
 }
 
-func (data ESGSecurityGroupsConnectedEndpointsIpv6) getRn(key string) string {
+func (data ESGSecurityGroupsSelectorConnectedEndpointsIpv6) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("connectedepv6-[%s]-[%s]", keyParts[0], keyParts[1])
 }
 
-func (data ESGSecurityGroupsMatchVlans) getRn(key string) string {
+func (data ESGSecurityGroupsSelectorMatchVlans) getRn(key string) string {
 	return fmt.Sprintf("vlan-[%s]", key)
 }
 
@@ -206,8 +206,8 @@ func (data ESG) toBody(config ESG) nxos.Body {
 					attrs = "{}"
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
-					for key := range child.ConnectedEndpointsIpv4 {
-						configChild, configChildOk := configChild.ConnectedEndpointsIpv4[key]
+					for key := range child.SelectorConnectedEndpointsIpv4 {
+						configChild, configChildOk := configChild.SelectorConnectedEndpointsIpv4[key]
 						_ = configChild
 						_ = configChildOk
 						attrs = "{}"
@@ -216,8 +216,8 @@ func (data ESG) toBody(config ESG) nxos.Body {
 						attrs, _ = sjson.Set(attrs, "addr", keyParts[1])
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchConnectedEpV4.attributes", attrs)
 					}
-					for key := range child.ConnectedEndpointsIpv6 {
-						configChild, configChildOk := configChild.ConnectedEndpointsIpv6[key]
+					for key := range child.SelectorConnectedEndpointsIpv6 {
+						configChild, configChildOk := configChild.SelectorConnectedEndpointsIpv6[key]
 						_ = configChild
 						_ = configChildOk
 						attrs = "{}"
@@ -226,8 +226,8 @@ func (data ESG) toBody(config ESG) nxos.Body {
 						attrs, _ = sjson.Set(attrs, "addr", keyParts[1])
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchConnectedEpV6.attributes", attrs)
 					}
-					for key := range child.MatchVlans {
-						configChild, configChildOk := configChild.MatchVlans[key]
+					for key := range child.SelectorMatchVlans {
+						configChild, configChildOk := configChild.SelectorMatchVlans[key]
 						_ = configChild
 						_ = configChildOk
 						attrs = "{}"
@@ -401,12 +401,12 @@ func (data *ESG) fromBody(res gjson.Result) {
 										nestedV.ForEach(
 											func(nestedClassname, nestedValue gjson.Result) bool {
 												if nestedClassname.String() == "esgMatchConnectedEpV4" {
-													var nestedChildesgMatchConnectedEpV4 ESGSecurityGroupsConnectedEndpointsIpv4
+													var nestedChildesgMatchConnectedEpV4 ESGSecurityGroupsSelectorConnectedEndpointsIpv4
 													nestedMapKey := nestedValue.Get("attributes.vrf").String() + ";" + nestedValue.Get("attributes.addr").String()
-													if child.ConnectedEndpointsIpv4 == nil {
-														child.ConnectedEndpointsIpv4 = make(map[string]ESGSecurityGroupsConnectedEndpointsIpv4)
+													if child.SelectorConnectedEndpointsIpv4 == nil {
+														child.SelectorConnectedEndpointsIpv4 = make(map[string]ESGSecurityGroupsSelectorConnectedEndpointsIpv4)
 													}
-													child.ConnectedEndpointsIpv4[nestedMapKey] = nestedChildesgMatchConnectedEpV4
+													child.SelectorConnectedEndpointsIpv4[nestedMapKey] = nestedChildesgMatchConnectedEpV4
 												}
 												return true
 											},
@@ -419,12 +419,12 @@ func (data *ESG) fromBody(res gjson.Result) {
 										nestedV.ForEach(
 											func(nestedClassname, nestedValue gjson.Result) bool {
 												if nestedClassname.String() == "esgMatchConnectedEpV6" {
-													var nestedChildesgMatchConnectedEpV6 ESGSecurityGroupsConnectedEndpointsIpv6
+													var nestedChildesgMatchConnectedEpV6 ESGSecurityGroupsSelectorConnectedEndpointsIpv6
 													nestedMapKey := nestedValue.Get("attributes.vrf").String() + ";" + nestedValue.Get("attributes.addr").String()
-													if child.ConnectedEndpointsIpv6 == nil {
-														child.ConnectedEndpointsIpv6 = make(map[string]ESGSecurityGroupsConnectedEndpointsIpv6)
+													if child.SelectorConnectedEndpointsIpv6 == nil {
+														child.SelectorConnectedEndpointsIpv6 = make(map[string]ESGSecurityGroupsSelectorConnectedEndpointsIpv6)
 													}
-													child.ConnectedEndpointsIpv6[nestedMapKey] = nestedChildesgMatchConnectedEpV6
+													child.SelectorConnectedEndpointsIpv6[nestedMapKey] = nestedChildesgMatchConnectedEpV6
 												}
 												return true
 											},
@@ -437,12 +437,12 @@ func (data *ESG) fromBody(res gjson.Result) {
 										nestedV.ForEach(
 											func(nestedClassname, nestedValue gjson.Result) bool {
 												if nestedClassname.String() == "esgMatchVlan" {
-													var nestedChildesgMatchVlan ESGSecurityGroupsMatchVlans
+													var nestedChildesgMatchVlan ESGSecurityGroupsSelectorMatchVlans
 													nestedMapKey := nestedValue.Get("attributes.vlanId").String()
-													if child.MatchVlans == nil {
-														child.MatchVlans = make(map[string]ESGSecurityGroupsMatchVlans)
+													if child.SelectorMatchVlans == nil {
+														child.SelectorMatchVlans = make(map[string]ESGSecurityGroupsSelectorMatchVlans)
 													}
-													child.MatchVlans[nestedMapKey] = nestedChildesgMatchVlan
+													child.SelectorMatchVlans[nestedMapKey] = nestedChildesgMatchVlan
 												}
 												return true
 											},
@@ -652,8 +652,8 @@ func (data *ESG) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
-			for nc := range item.ConnectedEndpointsIpv4 {
-				ncItem := item.ConnectedEndpointsIpv4[nc]
+			for nc := range item.SelectorConnectedEndpointsIpv4 {
+				ncItem := item.SelectorConnectedEndpointsIpv4[nc]
 				keyParts := strings.SplitN(nc, ";", 2)
 				var resgMatchConnectedEpV4 gjson.Result
 				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
@@ -667,13 +667,13 @@ func (data *ESG) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !resgMatchConnectedEpV4.Exists() {
-					delete(item.ConnectedEndpointsIpv4, nc)
+					delete(item.SelectorConnectedEndpointsIpv4, nc)
 					continue
 				}
-				item.ConnectedEndpointsIpv4[nc] = ncItem
+				item.SelectorConnectedEndpointsIpv4[nc] = ncItem
 			}
-			for nc := range item.ConnectedEndpointsIpv6 {
-				ncItem := item.ConnectedEndpointsIpv6[nc]
+			for nc := range item.SelectorConnectedEndpointsIpv6 {
+				ncItem := item.SelectorConnectedEndpointsIpv6[nc]
 				keyParts := strings.SplitN(nc, ";", 2)
 				var resgMatchConnectedEpV6 gjson.Result
 				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
@@ -687,13 +687,13 @@ func (data *ESG) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !resgMatchConnectedEpV6.Exists() {
-					delete(item.ConnectedEndpointsIpv6, nc)
+					delete(item.SelectorConnectedEndpointsIpv6, nc)
 					continue
 				}
-				item.ConnectedEndpointsIpv6[nc] = ncItem
+				item.SelectorConnectedEndpointsIpv6[nc] = ncItem
 			}
-			for nc := range item.MatchVlans {
-				ncItem := item.MatchVlans[nc]
+			for nc := range item.SelectorMatchVlans {
+				ncItem := item.SelectorMatchVlans[nc]
 				var resgMatchVlan gjson.Result
 				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -705,10 +705,10 @@ func (data *ESG) updateFromBody(res gjson.Result) {
 					},
 				)
 				if !resgMatchVlan.Exists() {
-					delete(item.MatchVlans, nc)
+					delete(item.SelectorMatchVlans, nc)
 					continue
 				}
-				item.MatchVlans[nc] = ncItem
+				item.SelectorMatchVlans[nc] = ncItem
 			}
 		}
 		data.SecurityGroups[key] = item
@@ -954,27 +954,27 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG) nx
 		if matchBodyPathdi == "" {
 			continue
 		}
-		for stateKey := range stateItemdi.ConnectedEndpointsIpv4 {
-			if _, found := planItemdi.ConnectedEndpointsIpv4[stateKey]; !found {
-				stateChild := stateItemdi.ConnectedEndpointsIpv4[stateKey]
+		for stateKey := range stateItemdi.SelectorConnectedEndpointsIpv4 {
+			if _, found := planItemdi.SelectorConnectedEndpointsIpv4[stateKey]; !found {
+				stateChild := stateItemdi.SelectorConnectedEndpointsIpv4[stateKey]
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV4.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV4.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.esgSelectorEntity.children"+".-1", deleteBody)
 			}
 		}
-		for stateKey := range stateItemdi.ConnectedEndpointsIpv6 {
-			if _, found := planItemdi.ConnectedEndpointsIpv6[stateKey]; !found {
-				stateChild := stateItemdi.ConnectedEndpointsIpv6[stateKey]
+		for stateKey := range stateItemdi.SelectorConnectedEndpointsIpv6 {
+			if _, found := planItemdi.SelectorConnectedEndpointsIpv6[stateKey]; !found {
+				stateChild := stateItemdi.SelectorConnectedEndpointsIpv6[stateKey]
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV6.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV6.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.esgSelectorEntity.children"+".-1", deleteBody)
 			}
 		}
-		for stateKey := range stateItemdi.MatchVlans {
-			if _, found := planItemdi.MatchVlans[stateKey]; !found {
-				stateChild := stateItemdi.MatchVlans[stateKey]
+		for stateKey := range stateItemdi.SelectorMatchVlans {
+			if _, found := planItemdi.SelectorMatchVlans[stateKey]; !found {
+				stateChild := stateItemdi.SelectorMatchVlans[stateKey]
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "esgMatchVlan.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "esgMatchVlan.attributes.status", "deleted")

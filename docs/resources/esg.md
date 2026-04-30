@@ -37,13 +37,13 @@ resource "nxos_esg" "example" {
   security_groups = {
     "100" = {
       name = "group1"
-      connected_endpoints_ipv4 = {
+      selector_connected_endpoints_ipv4 = {
         "default;10.0.0.0/24" = {}
       }
-      connected_endpoints_ipv6 = {
+      selector_connected_endpoints_ipv6 = {
         "default;2001:db8::/32" = {}
       }
-      match_vlans = {
+      selector_match_vlans = {
         "vlan-100" = {}
       }
     }
@@ -182,28 +182,28 @@ Optional:
 
 Optional:
 
-- `connected_endpoints_ipv4` (Attributes Map) List of connected endpoints selectors based on VRF and IPv4 address/prefix.
-  - Map key format: `<vrf>;<address>`
-  - Key component `vrf`: Name of VRF that the prefix belongs to.
-  - Key component `address`: IPv4 prefix that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--connected_endpoints_ipv4))
-- `connected_endpoints_ipv6` (Attributes Map) List of connected endpoints selectors based on VRF and IPv6 address/prefix.
-  - Map key format: `<vrf>;<address>`
-  - Key component `vrf`: Name of VRF that the prefix belongs to.
-  - Key component `address`: IPv6 prefix that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--connected_endpoints_ipv6))
-- `match_vlans` (Attributes Map) List of selectors based on VLAN.
-  - Map key: `vlan_id` - VLAN ID that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--match_vlans))
 - `name` (String) Name of the security-group.
+- `selector_connected_endpoints_ipv4` (Attributes Map) List of connected endpoints selectors based on VRF and IPv4 address/prefix.
+  - Map key format: `<vrf>;<address>`
+  - Key component `vrf`: Name of VRF that the prefix belongs to.
+  - Key component `address`: IPv4 prefix that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--selector_connected_endpoints_ipv4))
+- `selector_connected_endpoints_ipv6` (Attributes Map) List of connected endpoints selectors based on VRF and IPv6 address/prefix.
+  - Map key format: `<vrf>;<address>`
+  - Key component `vrf`: Name of VRF that the prefix belongs to.
+  - Key component `address`: IPv6 prefix that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--selector_connected_endpoints_ipv6))
+- `selector_match_vlans` (Attributes Map) List of selectors based on VLAN.
+  - Map key: `vlan_id` - VLAN ID that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--selector_match_vlans))
 
-<a id="nestedatt--security_groups--connected_endpoints_ipv4"></a>
-### Nested Schema for `security_groups.connected_endpoints_ipv4`
+<a id="nestedatt--security_groups--selector_connected_endpoints_ipv4"></a>
+### Nested Schema for `security_groups.selector_connected_endpoints_ipv4`
 
 
-<a id="nestedatt--security_groups--connected_endpoints_ipv6"></a>
-### Nested Schema for `security_groups.connected_endpoints_ipv6`
+<a id="nestedatt--security_groups--selector_connected_endpoints_ipv6"></a>
+### Nested Schema for `security_groups.selector_connected_endpoints_ipv6`
 
 
-<a id="nestedatt--security_groups--match_vlans"></a>
-### Nested Schema for `security_groups.match_vlans`
+<a id="nestedatt--security_groups--selector_match_vlans"></a>
+### Nested Schema for `security_groups.selector_match_vlans`
 
 ## Import
 

@@ -93,21 +93,21 @@ func (r *ESGResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							MarkdownDescription: helpers.NewAttributeDescription("Name of the security-group.").String,
 							Optional:            true,
 						},
-						"connected_endpoints_ipv4": schema.MapNestedAttribute{
+						"selector_connected_endpoints_ipv4": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("List of connected endpoints selectors based on VRF and IPv4 address/prefix.\n  - Map key format: `<vrf>;<address>`\n  - Key component `vrf`: Name of VRF that the prefix belongs to.\n  - Key component `address`: IPv4 prefix that needs to be classified in this security-group.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{},
 							},
 						},
-						"connected_endpoints_ipv6": schema.MapNestedAttribute{
+						"selector_connected_endpoints_ipv6": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("List of connected endpoints selectors based on VRF and IPv6 address/prefix.\n  - Map key format: `<vrf>;<address>`\n  - Key component `vrf`: Name of VRF that the prefix belongs to.\n  - Key component `address`: IPv6 prefix that needs to be classified in this security-group.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{},
 							},
 						},
-						"match_vlans": schema.MapNestedAttribute{
+						"selector_match_vlans": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("List of selectors based on VLAN.\n  - Map key: `vlan_id` - VLAN ID that needs to be classified in this security-group.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{

@@ -3,13 +3,13 @@ resource "nxos_esg" "example" {
   security_groups = {
     "100" = {
       name = "group1"
-      connected_endpoints_ipv4 = {
+      selector_connected_endpoints_ipv4 = {
         "default;10.0.0.0/24" = {}
       }
-      connected_endpoints_ipv6 = {
+      selector_connected_endpoints_ipv6 = {
         "default;2001:db8::/32" = {}
       }
-      match_vlans = {
+      selector_match_vlans = {
         "vlan-100" = {}
       }
     }

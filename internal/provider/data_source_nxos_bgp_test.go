@@ -93,6 +93,8 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.origin_as_validate", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.origin_as_validate_signal_ibgp", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.table_map_filter", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.load_balance_egress_filter_policy_route_map", "LB_EGR_FILTER_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.load_balance_egress_multipath_auto_policy_route_map", "LB_EGR_MPATH_MAP"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertised_prefixes.192.168.1.0/24.route_map", "rt-map"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertised_prefixes.192.168.1.0/24.evpn", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.route_map", "route_map_ospf_1"))
@@ -313,6 +315,8 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `					origin_as_validate = "disabled"` + "\n"
 	config += `					origin_as_validate_signal_ibgp = "disabled"` + "\n"
 	config += `					table_map_filter = "disabled"` + "\n"
+	config += `					load_balance_egress_filter_policy_route_map = "LB_EGR_FILTER_MAP"` + "\n"
+	config += `					load_balance_egress_multipath_auto_policy_route_map = "LB_EGR_MPATH_MAP"` + "\n"
 	config += `					advertised_prefixes = {` + "\n"
 	config += `						"192.168.1.0/24" = {` + "\n"
 	config += `							route_map = "rt-map"` + "\n"

@@ -92,48 +92,52 @@ type BGPVrfs struct {
 }
 
 type BGPVrfsAddressFamilies struct {
-	CriticalNexthopTimeout            types.String                                        `tfsdk:"critical_nexthop_timeout"`
-	NonCriticalNexthopTimeout         types.String                                        `tfsdk:"non_critical_nexthop_timeout"`
-	AdvertiseL2vpnEvpn                types.String                                        `tfsdk:"advertise_l2vpn_evpn"`
-	AdvertisePhysicalIpForType5Routes types.String                                        `tfsdk:"advertise_physical_ip_for_type5_routes"`
-	MaxEcmpPaths                      types.Int64                                         `tfsdk:"max_ecmp_paths"`
-	MaxExternalEcmpPaths              types.Int64                                         `tfsdk:"max_external_ecmp_paths"`
-	MaxExternalInternalEcmpPaths      types.Int64                                         `tfsdk:"max_external_internal_ecmp_paths"`
-	MaxLocalEcmpPaths                 types.Int64                                         `tfsdk:"max_local_ecmp_paths"`
-	MaxMixedEcmpPaths                 types.Int64                                         `tfsdk:"max_mixed_ecmp_paths"`
-	DefaultInformationOriginate       types.String                                        `tfsdk:"default_information_originate"`
-	NextHopRouteMapName               types.String                                        `tfsdk:"next_hop_route_map_name"`
-	PrefixPriority                    types.String                                        `tfsdk:"prefix_priority"`
-	RetainRtAll                       types.String                                        `tfsdk:"retain_rt_all"`
-	AdvertiseOnlyActiveRoutes         types.String                                        `tfsdk:"advertise_only_active_routes"`
-	TableMapRouteMapName              types.String                                        `tfsdk:"table_map_route_map_name"`
-	VniEthernetTag                    types.String                                        `tfsdk:"vni_ethernet_tag"`
-	WaitIgpConverged                  types.String                                        `tfsdk:"wait_igp_converged"`
-	AdvertiseSystemMac                types.String                                        `tfsdk:"advertise_system_mac"`
-	AllocateLabelAll                  types.String                                        `tfsdk:"allocate_label_all"`
-	AllocateLabelOptionB              types.String                                        `tfsdk:"allocate_label_option_b"`
-	AllocateLabelRouteMap             types.String                                        `tfsdk:"allocate_label_route_map"`
-	BestpathOriginAsAllowInvalid      types.String                                        `tfsdk:"bestpath_origin_as_allow_invalid"`
-	BestpathOriginAsUseValidity       types.String                                        `tfsdk:"bestpath_origin_as_use_validity"`
-	ClientToClientReflection          types.String                                        `tfsdk:"client_to_client_reflection"`
-	DefaultMetric                     types.String                                        `tfsdk:"default_metric"`
-	ExportGatewayIp                   types.String                                        `tfsdk:"export_gateway_ip"`
-	IgpMetric                         types.Int64                                         `tfsdk:"igp_metric"`
-	LabelAllocationMode               types.String                                        `tfsdk:"label_allocation_mode"`
-	MaxPathUnequalCost                types.String                                        `tfsdk:"max_path_unequal_cost"`
-	NexthopLoadBalanceEgressMultisite types.String                                        `tfsdk:"nexthop_load_balance_egress_multisite"`
-	OriginateMap                      types.String                                        `tfsdk:"originate_map"`
-	OriginAsValidate                  types.String                                        `tfsdk:"origin_as_validate"`
-	OriginAsValidateSignalIbgp        types.String                                        `tfsdk:"origin_as_validate_signal_ibgp"`
-	RetainRtRouteMap                  types.String                                        `tfsdk:"retain_rt_route_map"`
-	TableMapFilter                    types.String                                        `tfsdk:"table_map_filter"`
-	TimerBestpathDefer                types.Int64                                         `tfsdk:"timer_bestpath_defer"`
-	TimerBestpathDeferMax             types.Int64                                         `tfsdk:"timer_bestpath_defer_max"`
-	AdvertisedPrefixes                map[string]BGPVrfsAddressFamiliesAdvertisedPrefixes `tfsdk:"advertised_prefixes"`
-	Redistributions                   map[string]BGPVrfsAddressFamiliesRedistributions    `tfsdk:"redistributions"`
-	AdditionalPathsCapability         types.String                                        `tfsdk:"additional_paths_capability"`
-	AdditionalPathsRouteMap           types.String                                        `tfsdk:"additional_paths_route_map"`
-	AggregateAddresses                map[string]BGPVrfsAddressFamiliesAggregateAddresses `tfsdk:"aggregate_addresses"`
+	CriticalNexthopTimeout                        types.String                                        `tfsdk:"critical_nexthop_timeout"`
+	NonCriticalNexthopTimeout                     types.String                                        `tfsdk:"non_critical_nexthop_timeout"`
+	AdvertiseL2vpnEvpn                            types.String                                        `tfsdk:"advertise_l2vpn_evpn"`
+	AdvertisePhysicalIpForType5Routes             types.String                                        `tfsdk:"advertise_physical_ip_for_type5_routes"`
+	MaxEcmpPaths                                  types.Int64                                         `tfsdk:"max_ecmp_paths"`
+	MaxExternalEcmpPaths                          types.Int64                                         `tfsdk:"max_external_ecmp_paths"`
+	MaxExternalInternalEcmpPaths                  types.Int64                                         `tfsdk:"max_external_internal_ecmp_paths"`
+	MaxLocalEcmpPaths                             types.Int64                                         `tfsdk:"max_local_ecmp_paths"`
+	MaxMixedEcmpPaths                             types.Int64                                         `tfsdk:"max_mixed_ecmp_paths"`
+	DefaultInformationOriginate                   types.String                                        `tfsdk:"default_information_originate"`
+	NextHopRouteMapName                           types.String                                        `tfsdk:"next_hop_route_map_name"`
+	PrefixPriority                                types.String                                        `tfsdk:"prefix_priority"`
+	RetainRtAll                                   types.String                                        `tfsdk:"retain_rt_all"`
+	AdvertiseOnlyActiveRoutes                     types.String                                        `tfsdk:"advertise_only_active_routes"`
+	TableMapRouteMapName                          types.String                                        `tfsdk:"table_map_route_map_name"`
+	VniEthernetTag                                types.String                                        `tfsdk:"vni_ethernet_tag"`
+	WaitIgpConverged                              types.String                                        `tfsdk:"wait_igp_converged"`
+	AdvertiseSystemMac                            types.String                                        `tfsdk:"advertise_system_mac"`
+	AllocateLabelAll                              types.String                                        `tfsdk:"allocate_label_all"`
+	AllocateLabelOptionB                          types.String                                        `tfsdk:"allocate_label_option_b"`
+	AllocateLabelRouteMap                         types.String                                        `tfsdk:"allocate_label_route_map"`
+	BestpathOriginAsAllowInvalid                  types.String                                        `tfsdk:"bestpath_origin_as_allow_invalid"`
+	BestpathOriginAsUseValidity                   types.String                                        `tfsdk:"bestpath_origin_as_use_validity"`
+	ClientToClientReflection                      types.String                                        `tfsdk:"client_to_client_reflection"`
+	DefaultMetric                                 types.String                                        `tfsdk:"default_metric"`
+	ExportGatewayIp                               types.String                                        `tfsdk:"export_gateway_ip"`
+	IgpMetric                                     types.Int64                                         `tfsdk:"igp_metric"`
+	LabelAllocationMode                           types.String                                        `tfsdk:"label_allocation_mode"`
+	MaxPathUnequalCost                            types.String                                        `tfsdk:"max_path_unequal_cost"`
+	NexthopLoadBalanceEgressMultisite             types.String                                        `tfsdk:"nexthop_load_balance_egress_multisite"`
+	OriginateMap                                  types.String                                        `tfsdk:"originate_map"`
+	OriginAsValidate                              types.String                                        `tfsdk:"origin_as_validate"`
+	OriginAsValidateSignalIbgp                    types.String                                        `tfsdk:"origin_as_validate_signal_ibgp"`
+	RetainRtRouteMap                              types.String                                        `tfsdk:"retain_rt_route_map"`
+	TableMapFilter                                types.String                                        `tfsdk:"table_map_filter"`
+	TimerBestpathDefer                            types.Int64                                         `tfsdk:"timer_bestpath_defer"`
+	TimerBestpathDeferMax                         types.Int64                                         `tfsdk:"timer_bestpath_defer_max"`
+	DefaultInformationOriginateRouteDistinguisher types.String                                        `tfsdk:"default_information_originate_route_distinguisher"`
+	DefaultInformationOriginateRouteTarget        types.String                                        `tfsdk:"default_information_originate_route_target"`
+	LoadBalanceEgressFilterPolicyRouteMap         types.String                                        `tfsdk:"load_balance_egress_filter_policy_route_map"`
+	LoadBalanceEgressMultipathAutoPolicyRouteMap  types.String                                        `tfsdk:"load_balance_egress_multipath_auto_policy_route_map"`
+	AdvertisedPrefixes                            map[string]BGPVrfsAddressFamiliesAdvertisedPrefixes `tfsdk:"advertised_prefixes"`
+	Redistributions                               map[string]BGPVrfsAddressFamiliesRedistributions    `tfsdk:"redistributions"`
+	AdditionalPathsCapability                     types.String                                        `tfsdk:"additional_paths_capability"`
+	AdditionalPathsRouteMap                       types.String                                        `tfsdk:"additional_paths_route_map"`
+	AggregateAddresses                            map[string]BGPVrfsAddressFamiliesAggregateAddresses `tfsdk:"aggregate_addresses"`
 }
 
 type BGPVrfsAddressFamiliesAdvertisedPrefixes struct {
@@ -667,6 +671,18 @@ func (data BGP) toBody(config BGP) nxos.Body {
 					}
 					if configChildOk && !child.TimerBestpathDeferMax.IsUnknown() && !child.TimerBestpathDeferMax.IsNull() && !configChild.TimerBestpathDeferMax.IsNull() {
 						attrs, _ = sjson.Set(attrs, "tmrMax", strconv.FormatInt(child.TimerBestpathDeferMax.ValueInt64(), 10))
+					}
+					if configChildOk && !child.DefaultInformationOriginateRouteDistinguisher.IsUnknown() && !child.DefaultInformationOriginateRouteDistinguisher.IsNull() && !configChild.DefaultInformationOriginateRouteDistinguisher.IsNull() {
+						attrs, _ = sjson.Set(attrs, "defInfOrigRd", child.DefaultInformationOriginateRouteDistinguisher.ValueString())
+					}
+					if configChildOk && !child.DefaultInformationOriginateRouteTarget.IsUnknown() && !child.DefaultInformationOriginateRouteTarget.IsNull() && !configChild.DefaultInformationOriginateRouteTarget.IsNull() {
+						attrs, _ = sjson.Set(attrs, "defInfOrigRtt", child.DefaultInformationOriginateRouteTarget.ValueString())
+					}
+					if configChildOk && !child.LoadBalanceEgressFilterPolicyRouteMap.IsUnknown() && !child.LoadBalanceEgressFilterPolicyRouteMap.IsNull() && !configChild.LoadBalanceEgressFilterPolicyRouteMap.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ldBalEgrFilterPolRtMap", child.LoadBalanceEgressFilterPolicyRouteMap.ValueString())
+					}
+					if configChildOk && !child.LoadBalanceEgressMultipathAutoPolicyRouteMap.IsUnknown() && !child.LoadBalanceEgressMultipathAutoPolicyRouteMap.IsNull() && !configChild.LoadBalanceEgressMultipathAutoPolicyRouteMap.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ldBalEgrMPathAutoPolRtMap", child.LoadBalanceEgressMultipathAutoPolicyRouteMap.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpDomAf.attributes", attrs)
 					{
@@ -1363,6 +1379,10 @@ func (data *BGP) fromBody(res gjson.Result) {
 												nestedChildbgpDomAf.TableMapFilter = types.StringValue(nestedValue.Get("attributes.tblMapFltr").String())
 												nestedChildbgpDomAf.TimerBestpathDefer = types.Int64Value(nestedValue.Get("attributes.tmrBstpthDfr").Int())
 												nestedChildbgpDomAf.TimerBestpathDeferMax = types.Int64Value(nestedValue.Get("attributes.tmrMax").Int())
+												nestedChildbgpDomAf.DefaultInformationOriginateRouteDistinguisher = types.StringValue(nestedValue.Get("attributes.defInfOrigRd").String())
+												nestedChildbgpDomAf.DefaultInformationOriginateRouteTarget = types.StringValue(nestedValue.Get("attributes.defInfOrigRtt").String())
+												nestedChildbgpDomAf.LoadBalanceEgressFilterPolicyRouteMap = types.StringValue(nestedValue.Get("attributes.ldBalEgrFilterPolRtMap").String())
+												nestedChildbgpDomAf.LoadBalanceEgressMultipathAutoPolicyRouteMap = types.StringValue(nestedValue.Get("attributes.ldBalEgrMPathAutoPolRtMap").String())
 												nestedMapKey := nestedValue.Get("attributes.type").String()
 												nestedValue.Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
@@ -2218,6 +2238,26 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				ncItem.TimerBestpathDeferMax = types.Int64Value(rbgpDomAf.Get("bgpDomAf.attributes.tmrMax").Int())
 			} else {
 				ncItem.TimerBestpathDeferMax = types.Int64Null()
+			}
+			if !ncItem.DefaultInformationOriginateRouteDistinguisher.IsNull() {
+				ncItem.DefaultInformationOriginateRouteDistinguisher = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.defInfOrigRd").String())
+			} else {
+				ncItem.DefaultInformationOriginateRouteDistinguisher = types.StringNull()
+			}
+			if !ncItem.DefaultInformationOriginateRouteTarget.IsNull() {
+				ncItem.DefaultInformationOriginateRouteTarget = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.defInfOrigRtt").String())
+			} else {
+				ncItem.DefaultInformationOriginateRouteTarget = types.StringNull()
+			}
+			if !ncItem.LoadBalanceEgressFilterPolicyRouteMap.IsNull() {
+				ncItem.LoadBalanceEgressFilterPolicyRouteMap = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.ldBalEgrFilterPolRtMap").String())
+			} else {
+				ncItem.LoadBalanceEgressFilterPolicyRouteMap = types.StringNull()
+			}
+			if !ncItem.LoadBalanceEgressMultipathAutoPolicyRouteMap.IsNull() {
+				ncItem.LoadBalanceEgressMultipathAutoPolicyRouteMap = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.ldBalEgrMPathAutoPolRtMap").String())
+			} else {
+				ncItem.LoadBalanceEgressMultipathAutoPolicyRouteMap = types.StringNull()
 			}
 			for nc_ := range ncItem.AdvertisedPrefixes {
 				nc_Item := ncItem.AdvertisedPrefixes[nc_]

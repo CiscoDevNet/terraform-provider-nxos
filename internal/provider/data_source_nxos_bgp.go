@@ -386,6 +386,22 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "Configure bestpath defer timer.",
 										Computed:            true,
 									},
+									"default_information_originate_route_distinguisher": schema.StringAttribute{
+										MarkdownDescription: "Default-information Originate always Route Distinguisher.",
+										Computed:            true,
+									},
+									"default_information_originate_route_target": schema.StringAttribute{
+										MarkdownDescription: "Default-information Originate always Route Target.",
+										Computed:            true,
+									},
+									"load_balance_egress_filter_policy_route_map": schema.StringAttribute{
+										MarkdownDescription: "Filter-policy route-map for load-balance egress.",
+										Computed:            true,
+									},
+									"load_balance_egress_multipath_auto_policy_route_map": schema.StringAttribute{
+										MarkdownDescription: "Multipath auto-policy route-map for load-balance egress.",
+										Computed:            true,
+									},
 									"advertised_prefixes": schema.MapNestedAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("List of BGP advertised prefixes.\n  - Map key: `prefix` - IP address of the network or prefix to advertise.").String,
 										Computed:            true,

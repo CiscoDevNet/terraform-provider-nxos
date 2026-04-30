@@ -63,7 +63,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, and Hypershield (Service Acceleration) settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Acceleration/sas:Sas/", "Service%20Acceleration/sas:Svc/", "Service%20Acceleration/sas:SvcInstance/", "Service%20Acceleration/sas:SController/", "Service%20Acceleration/sas:FwSvcPolicy/", "Service%20Acceleration/sas:IpVrf/", "Service%20Acceleration/sas:Dom/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, and SSH server configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Acceleration/sas:Sas/", "Service%20Acceleration/sas:Svc/", "Service%20Acceleration/sas:SvcInstance/", "Service%20Acceleration/sas:SController/", "Service%20Acceleration/sas:FwSvcPolicy/", "Service%20Acceleration/sas:IpVrf/", "Service%20Acceleration/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1913,6 +1913,88 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
+			"ssh_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Admin state.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"ssh_ciphers": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Or Disable All Ciphers.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"ssh_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+				Optional:            true,
+			},
+			"ssh_enable_weak_ciphers": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable or Disable weak Ciphers.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"ssh_key_exchange_algorithms": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Or Disable All Key Exchange methods.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"ssh_key_types": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Or Disable All Public Key Algorithms.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"ssh_login_attempts": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Max number of login attempts allowed before SSH session is reset.").AddIntegerRangeDescription(1, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 10),
+				},
+			},
+			"ssh_login_grace_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum grace time of SSH login.").AddIntegerRangeDescription(0, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3600),
+				},
+			},
+			"ssh_message_authentication_codes": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Or Disable All Message Authentication Codes.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"ssh_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SSH port.").AddIntegerRangeDescription(22, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(22, 65535),
+				},
+			},
+			"ssh_keys": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of SSH server keys.\n  - Map key: `type` - SSH server key type.\n  - Key choices: `rsa`, `dsa`, `ecdsa`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_length": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Length of the key in bytes.").AddIntegerRangeDescription(0, 4096).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4096),
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -2022,7 +2104,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,ndVpc,ndVpcDom,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,cfsEntity,cfsInst,udldEntity,udldInst,udldPhysIf,platformEntity,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,cdpEntity,cdpInst,cdpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt,icamEntity,icamInst,icamScale,nxapiInst,imBreakout,imMod,imFpP,sasSas,sasSvc,sasSvcInstance,sasSController,sasFwSvcPolicy,sasIpVrf,sasDom")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,ndVpc,ndVpcDom,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,cfsEntity,cfsInst,udldEntity,udldInst,udldPhysIf,platformEntity,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,cdpEntity,cdpInst,cdpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt,icamEntity,icamInst,icamScale,nxapiInst,imBreakout,imMod,imFpP,sasSas,sasSvc,sasSvcInstance,sasSController,sasFwSvcPolicy,sasIpVrf,sasDom,commEntity,commSsh,commSshKey")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

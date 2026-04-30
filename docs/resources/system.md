@@ -3,14 +3,14 @@
 page_title: "nxos_system Resource - terraform-provider-nxos"
 subcategory: "System"
 description: |-
-  This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, and Hypershield (Service Acceleration) settings.
+  This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, and SSH server configuration.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/ndVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpc/ndVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpcDom/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/cfsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Entity/cfsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Inst/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/cdpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AEntity/cdpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AInst/cdpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AIf/coppEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Entity/coppProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Profile/terminalTerminal https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Terminal/terminalLine https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Line/terminalConsole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Console/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Vty/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalSesLmt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:SesLmt/icamEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Entity/icamInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Inst/icamScale https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Scale/nxapiInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/nxapi:Inst/imBreakout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Breakout/imMod https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Mod/imFpP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:FpP/sasSas https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Sas/sasSvc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Svc/sasSvcInstance https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SvcInstance/sasSController https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SController/sasFwSvcPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:FwSvcPolicy/sasIpVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:IpVrf/sasDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Dom/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/ndVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpc/ndVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpcDom/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/cfsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Entity/cfsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Inst/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/cdpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AEntity/cdpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AInst/cdpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AIf/coppEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Entity/coppProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Profile/terminalTerminal https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Terminal/terminalLine https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Line/terminalConsole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Console/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Vty/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalSesLmt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:SesLmt/icamEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Entity/icamInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Inst/icamScale https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Scale/nxapiInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/nxapi:Inst/imBreakout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Breakout/imMod https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Mod/imFpP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:FpP/sasSas https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Sas/sasSvc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Svc/sasSvcInstance https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SvcInstance/sasSController https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SController/sasFwSvcPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:FwSvcPolicy/sasIpVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:IpVrf/sasDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Dom/commEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Entity/commSsh https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Ssh/commSshKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:SshKey/
 ---
 
 # nxos_system (Resource)
 
-This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, and Hypershield (Service Acceleration) settings.
+This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, and SSH server configuration.
 
 ### API Documentation
 
@@ -78,6 +78,9 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [sasFwSvcPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:FwSvcPolicy/)
 - [sasIpVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:IpVrf/)
 - [sasDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Dom/)
+- [commEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Entity/)
+- [commSsh](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Ssh/)
+- [commSshKey](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:SshKey/)
 
 ## Example Usage
 
@@ -299,6 +302,21 @@ resource "nxos_system" "example" {
           affinity = 1
         }
       }
+    }
+  }
+  ssh_admin_state                  = "enabled"
+  ssh_ciphers                      = "no"
+  ssh_description                  = "SSH access"
+  ssh_enable_weak_ciphers          = "no"
+  ssh_key_exchange_algorithms      = "no"
+  ssh_key_types                    = "no"
+  ssh_login_attempts               = 4
+  ssh_login_grace_time             = 60
+  ssh_message_authentication_codes = "no"
+  ssh_port                         = 22
+  ssh_keys = {
+    "rsa" = {
+      key_length = 2048
     }
   }
 }
@@ -678,6 +696,28 @@ resource "nxos_system" "example" {
 - `smart_licensing_transport_cslu_url` (String) Defining Transport CSLU url property.
 - `smart_licensing_transport_mode` (String) Defining transport mode property.
   - Choices: `transportCallhome`, `transportCslu`, `transportOff`, `transportSmart`
+- `ssh_admin_state` (String) Admin state.
+  - Choices: `enabled`, `disabled`
+- `ssh_ciphers` (String) Enable Or Disable All Ciphers.
+  - Choices: `no`, `yes`
+- `ssh_description` (String) Description of the specified attribute.
+- `ssh_enable_weak_ciphers` (String) Enable or Disable weak Ciphers.
+  - Choices: `no`, `yes`
+- `ssh_key_exchange_algorithms` (String) Enable Or Disable All Key Exchange methods.
+  - Choices: `no`, `yes`
+- `ssh_key_types` (String) Enable Or Disable All Public Key Algorithms.
+  - Choices: `no`, `yes`
+- `ssh_keys` (Attributes Map) List of SSH server keys.
+  - Map key: `type` - SSH server key type.
+  - Key choices: `rsa`, `dsa`, `ecdsa` (see [below for nested schema](#nestedatt--ssh_keys))
+- `ssh_login_attempts` (Number) Max number of login attempts allowed before SSH session is reset.
+  - Range: `1`-`10`
+- `ssh_login_grace_time` (Number) Maximum grace time of SSH login.
+  - Range: `0`-`3600`
+- `ssh_message_authentication_codes` (String) Enable Or Disable All Message Authentication Codes.
+  - Choices: `no`, `yes`
+- `ssh_port` (Number) SSH port.
+  - Range: `22`-`65535`
 - `udld_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `udld_aggressive` (String) Global Aggressive Mode.
@@ -889,6 +929,15 @@ Optional:
 - `affinity` (Number) Service module number for traffic pinning - use 0 for dynamic pinning.
   - Range: `0`-`16`
 
+
+
+<a id="nestedatt--ssh_keys"></a>
+### Nested Schema for `ssh_keys`
+
+Optional:
+
+- `key_length` (Number) Length of the key in bytes.
+  - Range: `0`-`4096`
 
 
 <a id="nestedatt--udld_interfaces"></a>

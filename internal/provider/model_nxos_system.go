@@ -259,7 +259,7 @@ type System struct {
 	SshLoginGraceTime                             types.Int64                           `tfsdk:"ssh_login_grace_time"`
 	SshMessageAuthenticationCodes                 types.String                          `tfsdk:"ssh_message_authentication_codes"`
 	SshPort                                       types.Int64                           `tfsdk:"ssh_port"`
-	Keys                                          map[string]SystemKeys                 `tfsdk:"keys"`
+	SshKeys                                       map[string]SystemSshKeys              `tfsdk:"ssh_keys"`
 }
 
 type SystemArpVpcDomains struct {
@@ -387,7 +387,7 @@ type SystemServiceInstancesVrfs struct {
 	Affinity types.Int64 `tfsdk:"affinity"`
 }
 
-type SystemKeys struct {
+type SystemSshKeys struct {
 	KeyLength types.Int64 `tfsdk:"key_length"`
 }
 
@@ -479,7 +479,7 @@ func (data SystemServiceInstancesVrfs) getRn(key string) string {
 	return fmt.Sprintf("dom-[%s]", key)
 }
 
-func (data SystemKeys) getRn(key string) string {
+func (data SystemSshKeys) getRn(key string) string {
 	return fmt.Sprintf("key-[%s]", key)
 }
 
@@ -1784,8 +1784,8 @@ func (data System) toBody(config System) nxos.Body {
 			}
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
-			for key, child := range data.Keys {
-				configChild, configChildOk := config.Keys[key]
+			for key, child := range data.SshKeys {
+				configChild, configChildOk := config.SshKeys[key]
 				_ = configChild
 				_ = configChildOk
 				attrs = "{}"
@@ -3007,13 +3007,13 @@ func (data *System) fromBody(res gjson.Result) {
 					v.ForEach(
 						func(classname, value gjson.Result) bool {
 							if classname.String() == "commSshKey" {
-								var child SystemKeys
+								var child SystemSshKeys
 								child.KeyLength = types.Int64Value(value.Get("attributes.keyLen").Int())
 								mapKey := value.Get("attributes.type").String()
-								if data.Keys == nil {
-									data.Keys = make(map[string]SystemKeys)
+								if data.SshKeys == nil {
+									data.SshKeys = make(map[string]SystemSshKeys)
 								}
-								data.Keys[mapKey] = child
+								data.SshKeys[mapKey] = child
 							}
 							return true
 						},
@@ -5289,7 +5289,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 		} else {
 			data.SshPort = types.Int64Null()
 		}
-		for key, item := range data.Keys {
+		for key, item := range data.SshKeys {
 			var rcommSshKey gjson.Result
 			rcommSsh.Get("commSsh.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -5301,7 +5301,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 				},
 			)
 			if !rcommSshKey.Exists() {
-				delete(data.Keys, key)
+				delete(data.SshKeys, key)
 				continue
 			}
 			if !item.KeyLength.IsNull() {
@@ -5309,7 +5309,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 			} else {
 				item.KeyLength = types.Int64Null()
 			}
-			data.Keys[key] = item
+			data.SshKeys[key] = item
 		}
 	}
 }
@@ -6206,7 +6206,7 @@ func (data System) toDeleteBody() nxos.Body {
 			}
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			for key, child := range data.Keys {
+			for key, child := range data.SshKeys {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.rn", child.getRn(key))
 				deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.status", "deleted")
@@ -6459,9 +6459,9 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			}
 		}
 	}
-	for stateKey := range state.Keys {
-		if _, found := data.Keys[stateKey]; !found {
-			stateChild := state.Keys[stateKey]
+	for stateKey := range state.SshKeys {
+		if _, found := data.SshKeys[stateKey]; !found {
+			stateChild := state.SshKeys[stateKey]
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.status", "deleted")

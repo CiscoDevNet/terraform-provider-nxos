@@ -203,7 +203,7 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_login_grace_time", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_message_authentication_codes", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_port", "22"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "keys.rsa.key_length", "2048"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_keys.rsa.key_length", "2048"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -473,7 +473,7 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `	ssh_login_grace_time = 60` + "\n"
 	config += `	ssh_message_authentication_codes = "no"` + "\n"
 	config += `	ssh_port = 22` + "\n"
-	config += `	keys = {` + "\n"
+	config += `	ssh_keys = {` + "\n"
 	config += `		"rsa" = {` + "\n"
 	config += `			key_length = 2048` + "\n"
 	config += `		}` + "\n"

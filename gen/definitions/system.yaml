@@ -2843,7 +2843,7 @@ child_classes:
           - class_name: commSshKey
             rn: key-[%s]
             type: list
-            tf_name: keys
+            tf_name: ssh_keys
             description: 'List of SSH server keys.'
             doc_path: Communication/comm:SshKey/
             attributes:

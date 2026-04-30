@@ -1325,7 +1325,7 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "SSH port.",
 				Computed:            true,
 			},
-			"keys": schema.MapNestedAttribute{
+			"ssh_keys": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("List of SSH server keys.\n  - Map key: `type` - SSH server key type.\n  - Key choices: `rsa`, `dsa`, `ecdsa`").String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

@@ -202,9 +202,6 @@ data "nxos_system" "example" {
 - `icam_scale_info_threshold` (Number) Info threshold percent.
 - `icam_scale_warning_threshold` (Number) Warning threshold percent.
 - `id` (String) The distinguished name of the object.
-- `keys` (Attributes Map) List of SSH server keys.
-  - Map key: `type` - SSH server key type.
-  - Key choices: `rsa`, `dsa`, `ecdsa` (see [below for nested schema](#nestedatt--keys))
 - `lldp_admin_state` (String) The administrative state of the object or policy.
 - `lldp_advertise_system_chassis_id` (String) LLDP chassis-id switch configuration.
 - `lldp_control` (String) The control state.
@@ -323,6 +320,9 @@ data "nxos_system" "example" {
 - `ssh_enable_weak_ciphers` (String) Enable or Disable weak Ciphers.
 - `ssh_key_exchange_algorithms` (String) Enable Or Disable All Key Exchange methods.
 - `ssh_key_types` (String) Enable Or Disable All Public Key Algorithms.
+- `ssh_keys` (Attributes Map) List of SSH server keys.
+  - Map key: `type` - SSH server key type.
+  - Key choices: `rsa`, `dsa`, `ecdsa` (see [below for nested schema](#nestedatt--ssh_keys))
 - `ssh_login_attempts` (Number) Max number of login attempts allowed before SSH session is reset.
 - `ssh_login_grace_time` (Number) Maximum grace time of SSH login.
 - `ssh_message_authentication_codes` (String) Enable Or Disable All Message Authentication Codes.
@@ -392,14 +392,6 @@ Read-Only:
 - `domain_name` (String) Object name.
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
-
-
-<a id="nestedatt--keys"></a>
-### Nested Schema for `keys`
-
-Read-Only:
-
-- `key_length` (Number) Length of the key in bytes.
 
 
 <a id="nestedatt--lldp_interfaces"></a>
@@ -501,6 +493,14 @@ Read-Only:
 
 - `affinity` (Number) Service module number for traffic pinning - use 0 for dynamic pinning.
 
+
+
+<a id="nestedatt--ssh_keys"></a>
+### Nested Schema for `ssh_keys`
+
+Read-Only:
+
+- `key_length` (Number) Length of the key in bytes.
 
 
 <a id="nestedatt--udld_interfaces"></a>

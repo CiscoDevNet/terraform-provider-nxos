@@ -314,7 +314,7 @@ resource "nxos_system" "example" {
   ssh_login_grace_time             = 60
   ssh_message_authentication_codes = "no"
   ssh_port                         = 22
-  keys = {
+  ssh_keys = {
     "rsa" = {
       key_length = 2048
     }
@@ -500,9 +500,6 @@ resource "nxos_system" "example" {
   - Range: `1`-`100`
 - `icam_scale_warning_threshold` (Number) Warning threshold percent.
   - Range: `1`-`100`
-- `keys` (Attributes Map) List of SSH server keys.
-  - Map key: `type` - SSH server key type.
-  - Key choices: `rsa`, `dsa`, `ecdsa` (see [below for nested schema](#nestedatt--keys))
 - `lldp_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `lldp_advertise_system_chassis_id` (String) LLDP chassis-id switch configuration.
@@ -710,6 +707,9 @@ resource "nxos_system" "example" {
   - Choices: `no`, `yes`
 - `ssh_key_types` (String) Enable Or Disable All Public Key Algorithms.
   - Choices: `no`, `yes`
+- `ssh_keys` (Attributes Map) List of SSH server keys.
+  - Map key: `type` - SSH server key type.
+  - Key choices: `rsa`, `dsa`, `ecdsa` (see [below for nested schema](#nestedatt--ssh_keys))
 - `ssh_login_attempts` (Number) Max number of login attempts allowed before SSH session is reset.
   - Range: `1`-`10`
 - `ssh_login_grace_time` (Number) Maximum grace time of SSH login.
@@ -795,15 +795,6 @@ Optional:
 - `domain_name` (String) Object name.
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
-
-
-<a id="nestedatt--keys"></a>
-### Nested Schema for `keys`
-
-Optional:
-
-- `key_length` (Number) Length of the key in bytes.
-  - Range: `0`-`4096`
 
 
 <a id="nestedatt--lldp_interfaces"></a>
@@ -938,6 +929,15 @@ Optional:
 - `affinity` (Number) Service module number for traffic pinning - use 0 for dynamic pinning.
   - Range: `0`-`16`
 
+
+
+<a id="nestedatt--ssh_keys"></a>
+### Nested Schema for `ssh_keys`
+
+Optional:
+
+- `key_length` (Number) Length of the key in bytes.
+  - Range: `0`-`4096`
 
 
 <a id="nestedatt--udld_interfaces"></a>

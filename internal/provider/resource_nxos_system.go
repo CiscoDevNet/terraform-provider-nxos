@@ -1980,7 +1980,7 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					int64validator.Between(22, 65535),
 				},
 			},
-			"keys": schema.MapNestedAttribute{
+			"ssh_keys": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("List of SSH server keys.\n  - Map key: `type` - SSH server key type.\n  - Key choices: `rsa`, `dsa`, `ecdsa`").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

@@ -15,6 +15,22 @@ resource "nxos_route_policy" "example" {
       }
     }
   }
+  ipv6_prefix_lists = {
+    "PREFIX_LIST_V6_1" = {
+      description = "My IPv6 prefix list"
+      mode        = "IPV6"
+      entries = {
+        "10" = {
+          action     = "permit"
+          criteria   = "inexact"
+          prefix     = "2001:db8::/32"
+          from_range = 48
+          to_range   = 64
+          mask       = "ffff:ff00::"
+        }
+      }
+    }
+  }
   route_maps = {
     "ROUTE_MAP1" = {
       pbr_statistics = "enabled"

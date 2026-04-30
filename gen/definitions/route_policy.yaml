@@ -2,8 +2,8 @@
 name: Route Policy
 class_name: rpmEntity
 dn: sys/rpm
-ds_description: This data source can read the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.
-res_description: This resource can manage the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.
+ds_description: This data source can read the route policy configuration on NX-OS devices, including IPv4 and IPv6 prefix lists and route maps with match and set criteria.
+res_description: This resource can manage the route policy configuration on NX-OS devices, including IPv4 and IPv6 prefix lists and route maps with match and set criteria.
 doc_path: Routing%20and%20Forwarding/rpm:Entity/
 doc_category: Routing
 attributes:
@@ -98,6 +98,87 @@ child_classes:
             type: String
             description: "Mask."
             example: 255.255.255.0
+  - class_name: rtpfxRuleV6
+    doc_path: Routing%20and%20Forwarding/rtpfx:RuleV6/
+    rn: pfxlistv6-[%s]
+    type: list
+    tf_name: ipv6_prefix_lists
+    description: 'List of IPv6 Prefix Lists.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Object name.'
+        example: 'PREFIX_LIST_V6_1'
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: 'descr.'
+        example: 'My IPv6 prefix list'
+      - nxos_name: mode
+        tf_name: mode
+        type: String
+        description: 'Mode of ipv6 prefix-list.'
+        enum_values:
+          - IPV6
+        example: IPV6
+    child_classes:
+      - class_name: rtpfxEntry
+        doc_path: Routing%20and%20Forwarding/rtpfx:Entry/
+        rn: ent-%v
+        type: list
+        tf_name: entries
+        description: 'IPv6 Prefix List entries.'
+        attributes:
+          - nxos_name: order
+            tf_name: order
+            type: Int64
+            id: true
+            description: "Order."
+            min_int: 1
+            max_int: 4294967294
+            example: 10
+          - nxos_name: action
+            tf_name: action
+            type: String
+            description: "Action."
+            enum_values:
+              - deny
+              - permit
+            example: permit
+          - nxos_name: criteria
+            tf_name: criteria
+            type: String
+            description: "Criteria."
+            enum_values:
+              - exact
+              - inexact
+            example: inexact
+          - nxos_name: pfx
+            tf_name: prefix
+            type: String
+            description: "Specifies the OSPF route prefix."
+            example: '2001:db8::/32'
+          - nxos_name: fromPfxLen
+            tf_name: from_range
+            type: Int64
+            description: "The start of a range used to describe the prefix length if the criteria is not an exact match."
+            min_int: 0
+            max_int: 128
+            example: 48
+          - nxos_name: toPfxLen
+            tf_name: to_range
+            type: Int64
+            description: "The end of a range to describe the prefix length if the criteria is not an exact match."
+            min_int: 0
+            max_int: 128
+            example: 64
+          - nxos_name: mask
+            tf_name: mask
+            type: String
+            description: "Mask."
+            example: 'ffff:ff00::'
   - class_name: rtmapRule
     doc_path: Routing%20and%20Forwarding/rtmap:Rule/
     rn: rtmap-[%s]

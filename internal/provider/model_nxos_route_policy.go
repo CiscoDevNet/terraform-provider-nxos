@@ -42,6 +42,7 @@ type RoutePolicy struct {
 	Dn              types.String                          `tfsdk:"id"`
 	AdminState      types.String                          `tfsdk:"admin_state"`
 	Ipv4PrefixLists map[string]RoutePolicyIpv4PrefixLists `tfsdk:"ipv4_prefix_lists"`
+	Ipv6PrefixLists map[string]RoutePolicyIpv6PrefixLists `tfsdk:"ipv6_prefix_lists"`
 	RouteMaps       map[string]RoutePolicyRouteMaps       `tfsdk:"route_maps"`
 	CommunityLists  map[string]RoutePolicyCommunityLists  `tfsdk:"community_lists"`
 }
@@ -53,6 +54,21 @@ type RoutePolicyIpv4PrefixLists struct {
 }
 
 type RoutePolicyIpv4PrefixListsEntries struct {
+	Action    types.String `tfsdk:"action"`
+	Criteria  types.String `tfsdk:"criteria"`
+	Prefix    types.String `tfsdk:"prefix"`
+	FromRange types.Int64  `tfsdk:"from_range"`
+	ToRange   types.Int64  `tfsdk:"to_range"`
+	Mask      types.String `tfsdk:"mask"`
+}
+
+type RoutePolicyIpv6PrefixLists struct {
+	Description types.String                                 `tfsdk:"description"`
+	Mode        types.String                                 `tfsdk:"mode"`
+	Entries     map[string]RoutePolicyIpv6PrefixListsEntries `tfsdk:"entries"`
+}
+
+type RoutePolicyIpv6PrefixListsEntries struct {
 	Action    types.String `tfsdk:"action"`
 	Criteria  types.String `tfsdk:"criteria"`
 	Prefix    types.String `tfsdk:"prefix"`
@@ -186,6 +202,14 @@ func (data RoutePolicyIpv4PrefixListsEntries) getRn(key string) string {
 	return fmt.Sprintf("ent-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
+func (data RoutePolicyIpv6PrefixLists) getRn(key string) string {
+	return fmt.Sprintf("pfxlistv6-[%s]", key)
+}
+
+func (data RoutePolicyIpv6PrefixListsEntries) getRn(key string) string {
+	return fmt.Sprintf("ent-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
 func (data RoutePolicyRouteMaps) getRn(key string) string {
 	return fmt.Sprintf("rtmap-[%s]", key)
 }
@@ -262,6 +286,50 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtpfxRuleV4.children"
+			for key, child := range child.Entries {
+				configChild, configChildOk := configChild.Entries[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "order", key)
+				if configChildOk && !child.Action.IsUnknown() && !child.Action.IsNull() && !configChild.Action.IsNull() {
+					attrs, _ = sjson.Set(attrs, "action", child.Action.ValueString())
+				}
+				if configChildOk && !child.Criteria.IsUnknown() && !child.Criteria.IsNull() && !configChild.Criteria.IsNull() {
+					attrs, _ = sjson.Set(attrs, "criteria", child.Criteria.ValueString())
+				}
+				if configChildOk && !child.Prefix.IsUnknown() && !child.Prefix.IsNull() && !configChild.Prefix.IsNull() {
+					attrs, _ = sjson.Set(attrs, "pfx", child.Prefix.ValueString())
+				}
+				if configChildOk && !child.FromRange.IsUnknown() && !child.FromRange.IsNull() && !configChild.FromRange.IsNull() {
+					attrs, _ = sjson.Set(attrs, "fromPfxLen", strconv.FormatInt(child.FromRange.ValueInt64(), 10))
+				}
+				if configChildOk && !child.ToRange.IsUnknown() && !child.ToRange.IsNull() && !configChild.ToRange.IsNull() {
+					attrs, _ = sjson.Set(attrs, "toPfxLen", strconv.FormatInt(child.ToRange.ValueInt64(), 10))
+				}
+				if configChildOk && !child.Mask.IsUnknown() && !child.Mask.IsNull() && !configChild.Mask.IsNull() {
+					attrs, _ = sjson.Set(attrs, "mask", child.Mask.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtpfxEntry.attributes", attrs)
+			}
+		}
+	}
+	for key, child := range data.Ipv6PrefixLists {
+		configChild, configChildOk := config.Ipv6PrefixLists[key]
+		_ = configChild
+		_ = configChildOk
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "name", key)
+		if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+		}
+		if configChildOk && !child.Mode.IsUnknown() && !child.Mode.IsNull() && !configChild.Mode.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.rtpfxRuleV6.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtpfxRuleV6.children"
 			for key, child := range child.Entries {
 				configChild, configChildOk := configChild.Entries[key]
 				_ = configChild
@@ -634,6 +702,50 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 							data.Ipv4PrefixLists = make(map[string]RoutePolicyIpv4PrefixLists)
 						}
 						data.Ipv4PrefixLists[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "rtpfxRuleV6" {
+						var child RoutePolicyIpv6PrefixLists
+						child.Description = types.StringValue(value.Get("attributes.descr").String())
+						child.Mode = types.StringValue(value.Get("attributes.mode").String())
+						mapKey := value.Get("attributes.name").String()
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "rtpfxEntry" {
+											var nestedChildrtpfxEntry RoutePolicyIpv6PrefixListsEntries
+											nestedChildrtpfxEntry.Action = types.StringValue(nestedValue.Get("attributes.action").String())
+											nestedChildrtpfxEntry.Criteria = types.StringValue(nestedValue.Get("attributes.criteria").String())
+											nestedChildrtpfxEntry.Prefix = types.StringValue(nestedValue.Get("attributes.pfx").String())
+											nestedChildrtpfxEntry.FromRange = types.Int64Value(nestedValue.Get("attributes.fromPfxLen").Int())
+											nestedChildrtpfxEntry.ToRange = types.Int64Value(nestedValue.Get("attributes.toPfxLen").Int())
+											nestedChildrtpfxEntry.Mask = types.StringValue(nestedValue.Get("attributes.mask").String())
+											nestedMapKey := nestedValue.Get("attributes.order").String()
+											if child.Entries == nil {
+												child.Entries = make(map[string]RoutePolicyIpv6PrefixListsEntries)
+											}
+											child.Entries[nestedMapKey] = nestedChildrtpfxEntry
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						if data.Ipv6PrefixLists == nil {
+							data.Ipv6PrefixLists = make(map[string]RoutePolicyIpv6PrefixLists)
+						}
+						data.Ipv6PrefixLists[mapKey] = child
 					}
 					return true
 				},
@@ -1102,6 +1214,81 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 			item.Entries[nc] = ncItem
 		}
 		data.Ipv4PrefixLists[key] = item
+	}
+	for key, item := range data.Ipv6PrefixLists {
+		var rrtpfxRuleV6 gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("rtpfxRuleV6.attributes.name").String() == key {
+					rrtpfxRuleV6 = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rrtpfxRuleV6.Exists() {
+			delete(data.Ipv6PrefixLists, key)
+			continue
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rrtpfxRuleV6.Get("rtpfxRuleV6.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.Mode.IsNull() {
+			item.Mode = types.StringValue(rrtpfxRuleV6.Get("rtpfxRuleV6.attributes.mode").String())
+		} else {
+			item.Mode = types.StringNull()
+		}
+		for nc := range item.Entries {
+			ncItem := item.Entries[nc]
+			var rrtpfxEntry gjson.Result
+			rrtpfxRuleV6.Get("rtpfxRuleV6.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("rtpfxEntry.attributes.order").String() == nc {
+						rrtpfxEntry = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rrtpfxEntry.Exists() {
+				delete(item.Entries, nc)
+				continue
+			}
+			if !ncItem.Action.IsNull() {
+				ncItem.Action = types.StringValue(rrtpfxEntry.Get("rtpfxEntry.attributes.action").String())
+			} else {
+				ncItem.Action = types.StringNull()
+			}
+			if !ncItem.Criteria.IsNull() {
+				ncItem.Criteria = types.StringValue(rrtpfxEntry.Get("rtpfxEntry.attributes.criteria").String())
+			} else {
+				ncItem.Criteria = types.StringNull()
+			}
+			if !ncItem.Prefix.IsNull() {
+				ncItem.Prefix = types.StringValue(rrtpfxEntry.Get("rtpfxEntry.attributes.pfx").String())
+			} else {
+				ncItem.Prefix = types.StringNull()
+			}
+			if !ncItem.FromRange.IsNull() {
+				ncItem.FromRange = types.Int64Value(rrtpfxEntry.Get("rtpfxEntry.attributes.fromPfxLen").Int())
+			} else {
+				ncItem.FromRange = types.Int64Null()
+			}
+			if !ncItem.ToRange.IsNull() {
+				ncItem.ToRange = types.Int64Value(rrtpfxEntry.Get("rtpfxEntry.attributes.toPfxLen").Int())
+			} else {
+				ncItem.ToRange = types.Int64Null()
+			}
+			if !ncItem.Mask.IsNull() {
+				ncItem.Mask = types.StringValue(rrtpfxEntry.Get("rtpfxEntry.attributes.mask").String())
+			} else {
+				ncItem.Mask = types.StringNull()
+			}
+			item.Entries[nc] = ncItem
+		}
+		data.Ipv6PrefixLists[key] = item
 	}
 	for key, item := range data.RouteMaps {
 		var rrtmapRule gjson.Result
@@ -1700,6 +1887,41 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 			if mv.Get("rtpfxRuleV4.attributes.rn").String() == stateItemdi.getRn(di) {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtpfxRuleV4.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.Entries {
+			if _, found := planItemdi.Entries[stateChildKey]; !found {
+				stateChild := stateItemdi.Entries[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "rtpfxEntry.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "rtpfxEntry.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+	}
+	for stateKey := range state.Ipv6PrefixLists {
+		if _, found := data.Ipv6PrefixLists[stateKey]; !found {
+			stateChild := state.Ipv6PrefixLists[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "rtpfxRuleV6.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "rtpfxRuleV6.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+		}
+	}
+	for di := range state.Ipv6PrefixLists {
+		if _, found := data.Ipv6PrefixLists[di]; !found {
+			continue
+		}
+		stateItemdi := state.Ipv6PrefixLists[di]
+		planItemdi := data.Ipv6PrefixLists[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+			if mv.Get("rtpfxRuleV6.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtpfxRuleV6.children"
 				break
 			}
 		}

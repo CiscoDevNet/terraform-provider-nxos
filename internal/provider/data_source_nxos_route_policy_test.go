@@ -39,6 +39,14 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv4_prefix_lists.PREFIX_LIST1.entries.10.from_range", "26"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv4_prefix_lists.PREFIX_LIST1.entries.10.to_range", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv4_prefix_lists.PREFIX_LIST1.entries.10.mask", "255.255.255.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv6_prefix_lists.PREFIX_LIST_V6_1.description", "My IPv6 prefix list"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv6_prefix_lists.PREFIX_LIST_V6_1.mode", "IPV6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv6_prefix_lists.PREFIX_LIST_V6_1.entries.10.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv6_prefix_lists.PREFIX_LIST_V6_1.entries.10.criteria", "inexact"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv6_prefix_lists.PREFIX_LIST_V6_1.entries.10.prefix", "2001:db8::/32"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv6_prefix_lists.PREFIX_LIST_V6_1.entries.10.from_range", "48"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv6_prefix_lists.PREFIX_LIST_V6_1.entries.10.to_range", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv6_prefix_lists.PREFIX_LIST_V6_1.entries.10.mask", "ffff:ff00::"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.pbr_statistics", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.description", "My route map entry"))
@@ -108,6 +116,22 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `					from_range = 26` + "\n"
 	config += `					to_range = 32` + "\n"
 	config += `					mask = "255.255.255.0"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ipv6_prefix_lists = {` + "\n"
+	config += `		"PREFIX_LIST_V6_1" = {` + "\n"
+	config += `			description = "My IPv6 prefix list"` + "\n"
+	config += `			mode = "IPV6"` + "\n"
+	config += `			entries = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					action = "permit"` + "\n"
+	config += `					criteria = "inexact"` + "\n"
+	config += `					prefix = "2001:db8::/32"` + "\n"
+	config += `					from_range = 48` + "\n"
+	config += `					to_range = 64` + "\n"
+	config += `					mask = "ffff:ff00::"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

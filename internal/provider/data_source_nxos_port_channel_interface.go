@@ -57,7 +57,7 @@ func (d *PortChannelInterfaceDataSource) Metadata(_ context.Context, req datasou
 func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -259,6 +259,10 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 						},
 						"storm_control_packet_type": schema.StringAttribute{
 							MarkdownDescription: "Packet Type.",
+							Computed:            true,
+						},
+						"multisite_interface_tracking": schema.StringAttribute{
+							MarkdownDescription: "Configure EVPN multisite tracking for DCI/Fabric interface.",
 							Computed:            true,
 						},
 						"allow_multi_tag": schema.StringAttribute{
@@ -464,7 +468,7 @@ func (d *PortChannelInterfaceDataSource) Read(ctx context.Context, req datasourc
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "pcAggrIf,nwRtVrfMbr,l1StormCtrlP,pcAggrIfExtended,pcRsMbrIfs")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "pcAggrIf,nwRtVrfMbr,l1StormCtrlP,nvoMultisiteIfTracking,pcAggrIfExtended,pcRsMbrIfs")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

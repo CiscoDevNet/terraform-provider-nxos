@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
 ---
 
 # nxos_physical_interface (Data Source)
@@ -17,6 +17,7 @@ This data source can read the configuration of physical interfaces on NX-OS devi
 - [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
+- [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
 - [l1PhysIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/)
 
 ## Example Usage
@@ -90,6 +91,7 @@ Read-Only:
 - `medium` (String) The administrative port medium type.
 - `mode` (String) Administrative port mode.
 - `mtu` (Number) Administrative port mtu.
+- `multisite_interface_tracking` (String) Configure EVPN multisite tracking for DCI/Fabric interface.
 - `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `optics_loopback` (String) Configured Loopback.
 - `packet_timestamp_egress_source_id` (Number) Egress timestamp Source Id.

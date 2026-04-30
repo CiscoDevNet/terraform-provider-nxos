@@ -536,6 +536,23 @@ child_classes:
               - mcast
               - all
             example: bcast
+      - class_name: nvoMultisiteIfTracking
+        doc_path: Network%20Virtualization/nvo:MultisiteIfTracking/
+        rn: multisiteiftracking
+        type: single
+        tf_name: multisite_interface_tracking
+        description: 'Tracking for Multisite DCI and Fabric Interfaces.'
+        attributes:
+          - nxos_name: tracking
+            tf_name: multisite_interface_tracking
+            type: String
+            description: 'Configure EVPN multisite tracking for DCI/Fabric interface.'
+            exclude_test: true
+            enum_values:
+              - unknown
+              - dci
+              - fabric
+            example: dci
       - class_name: l1PhysIfExtended
         rn: physExtd
         type: single

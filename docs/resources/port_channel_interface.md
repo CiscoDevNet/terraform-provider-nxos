@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
   API Documentation
-  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
+  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Resource)
@@ -17,6 +17,7 @@ This resource can manage port-channel interfaces on NX-OS devices, including cha
 - [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
+- [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
 - [pcAggrIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/)
 - [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/)
 
@@ -162,6 +163,8 @@ Optional:
   - Choices: `access`, `trunk`, `fex-fabric`, `dot1q-tunnel`, `promiscuous`, `host`, `trunk_secondary`, `trunk_promiscuous`, `vntag`
 - `mtu` (Number) Administrative port mtu.
   - Range: `576`-`9216`
+- `multisite_interface_tracking` (String) Configure EVPN multisite tracking for DCI/Fabric interface.
+  - Choices: `unknown`, `dci`, `fabric`
 - `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `optics_loopback` (String) Configured Loopback.
   - Choices: `disable`, `internal`, `line`

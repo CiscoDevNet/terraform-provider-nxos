@@ -27,7 +27,6 @@ import (
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
@@ -45,25 +44,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &SVIInterfaceResource{}
-var _ resource.ResourceWithIdentity = &SVIInterfaceResource{}
+var _ resource.Resource = &TtagResource{}
+var _ resource.ResourceWithIdentity = &TtagResource{}
 
-func NewSVIInterfaceResource() resource.Resource {
-	return &SVIInterfaceResource{}
+func NewTtagResource() resource.Resource {
+	return &TtagResource{}
 }
 
-type SVIInterfaceResource struct {
+type TtagResource struct {
 	data *NxosProviderData
 }
 
-func (r *SVIInterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_svi_interface"
+func (r *TtagResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ttag"
 }
 
-func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *TtagResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.").AddApiDocumentation("interfaceEntity", "", []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking"}, []string{"Interfaces/svi:If/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "Network%20Virtualization/nvo:MultisiteIfTracking/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PTP ttag configuration on NX-OS devices, including per-interface ttag settings for underlay and overlay traffic.").AddApiDocumentation("ttagTtagEntity", "Interfaces/ttag:TtagEntity/", []string{"ttagTtagIf"}, []string{"Interfaces/ttag:TtagIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -77,115 +76,33 @@ func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"svi_interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("List of SVI interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
+			"ttag_marker_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PTP ttag marker interval in seconds.").AddIntegerRangeDescription(1, 25200).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 25200),
+				},
+			},
+			"ttag_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Per-interface PTP ttag configuration and management.\n  - Map key: `interface_id` - Interface id of port with PTP configuration.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"admin_state": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("down", "up").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("down", "up"),
-							},
-						},
-						"autostate": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Autostate Enabled?").String,
+						"ttag": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("TTAG header for underlay traffic (outer) on interface.").String,
 							Optional:            true,
 						},
-						"bandwidth": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(1, 400000000).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 400000000),
-							},
-						},
-						"carrier_delay": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The hold period for which carrier transition, such as L2 interfacing going down, is ignored.").AddIntegerRangeDescription(0, 60000).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 60000),
-							},
-						},
-						"delay": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port delay.").AddIntegerRangeDescription(1, 16777215).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 16777215),
-							},
-						},
-						"description": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Tunnel Description.").String,
+						"ttag_inner": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("TTAG header for overlay traffic (inner) on interface.").String,
 							Optional:            true,
 						},
-						"inband_management": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("An in-band management interface configuration.").String,
+						"ttag_marker": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ttag marker packet on interface.").String,
 							Optional:            true,
 						},
-						"load_interval_counter_1": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Load-averaging Interval 1.").AddIntegerRangeDescription(60, 600).String,
+						"ttag_strip": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Strip ttag from egress packet on this interface.").String,
 							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(60, 600),
-							},
-						},
-						"load_interval_counter_2": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Load-averaging Interval 2.").AddIntegerRangeDescription(60, 600).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(60, 600),
-							},
-						},
-						"load_interval_counter_3": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Load-averaging Interval 3.").AddIntegerRangeDescription(60, 600).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(60, 600),
-							},
-						},
-						"mac_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The MAC address.").String,
-							Optional:            true,
-						},
-						"medium": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Indicates the administrative port medium type.").AddStringEnumDescription("bcast", "p2p").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("bcast", "p2p"),
-							},
-						},
-						"mtu": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The administrative MTU port on the aggregated interface.").AddIntegerRangeDescription(64, 9216).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(64, 9216),
-							},
-						},
-						"mtu_inherit": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("A property for specifying if the MTU is inherited from global policy.").String,
-							Optional:            true,
-						},
-						"snmp_trap_link_status": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("SNMP Trap Link Status Enabled?").String,
-							Optional:            true,
-						},
-						"vlan_id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The VLAN ID associated with the SVI.").AddIntegerRangeDescription(0, 4095).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 4095),
-							},
-						},
-						"vrf_dn": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("DN of VRF. For example: `sys/inst-VRF1`.").String,
-							Optional:            true,
-						},
-						"multisite_interface_tracking": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN multisite tracking for DCI/Fabric interface.").AddStringEnumDescription("unknown", "dci", "fabric").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("unknown", "dci", "fabric"),
-							},
 						},
 					},
 				},
@@ -194,7 +111,7 @@ func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 	}
 }
 
-func (r *SVIInterfaceResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *TtagResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
@@ -205,7 +122,7 @@ func (r *SVIInterfaceResource) IdentitySchema(ctx context.Context, req resource.
 	}
 }
 
-func (r *SVIInterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *TtagResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -217,8 +134,8 @@ func (r *SVIInterfaceResource) Configure(ctx context.Context, req resource.Confi
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *SVIInterfaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan SVIInterface
+func (r *TtagResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan Ttag
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -228,7 +145,7 @@ func (r *SVIInterfaceResource) Create(ctx context.Context, req resource.CreateRe
 	}
 
 	// Read config
-	var config SVIInterface
+	var config Ttag
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -254,7 +171,7 @@ func (r *SVIInterfaceResource) Create(ctx context.Context, req resource.CreateRe
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity SVIInterfaceIdentity
+	var identity TtagIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -270,8 +187,8 @@ func (r *SVIInterfaceResource) Create(ctx context.Context, req resource.CreateRe
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *SVIInterfaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state SVIInterface
+func (r *TtagResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state Ttag
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -282,7 +199,7 @@ func (r *SVIInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity SVIInterfaceIdentity
+		var identity TtagIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -299,7 +216,7 @@ func (r *SVIInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "sviIf,nwRtVrfMbr,nvoMultisiteIfTracking")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ttagTtagIf")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -322,7 +239,7 @@ func (r *SVIInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 		}
 	}
 
-	var identity SVIInterfaceIdentity
+	var identity TtagIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -338,8 +255,8 @@ func (r *SVIInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *SVIInterfaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan SVIInterface
+func (r *TtagResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan Ttag
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -349,13 +266,13 @@ func (r *SVIInterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 	}
 
 	// Read config
-	var config SVIInterface
+	var config Ttag
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	var state SVIInterface
+	var state Ttag
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -382,7 +299,7 @@ func (r *SVIInterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity SVIInterfaceIdentity
+	var identity TtagIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -396,8 +313,8 @@ func (r *SVIInterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *SVIInterfaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state SVIInterface
+func (r *TtagResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state Ttag
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -433,7 +350,7 @@ func (r *SVIInterfaceResource) Delete(ctx context.Context, req resource.DeleteRe
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *SVIInterfaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *TtagResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
@@ -452,7 +369,7 @@ func (r *SVIInterfaceResource) ImportState(ctx context.Context, req resource.Imp
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity SVIInterfaceIdentity
+		var identity TtagIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -462,7 +379,7 @@ func (r *SVIInterfaceResource) ImportState(ctx context.Context, req resource.Imp
 		}
 	}
 
-	var state SVIInterface
+	var state Ttag
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

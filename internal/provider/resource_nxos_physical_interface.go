@@ -63,7 +63,7 @@ func (r *PhysicalInterfaceResource) Metadata(ctx context.Context, req resource.M
 func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:PhysIfExtended/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "System/l1:PhysIfExtended/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -472,6 +472,13 @@ func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.Sch
 								stringvalidator.OneOf("bcast", "unk-ucast", "mcast", "all"),
 							},
 						},
+						"multisite_interface_tracking": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN multisite tracking for DCI/Fabric interface.").AddStringEnumDescription("unknown", "dci", "fabric").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("unknown", "dci", "fabric"),
+							},
+						},
 						"allow_multi_tag": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Allow Multitag.").AddStringEnumDescription("disable", "enable").String,
 							Optional:            true,
@@ -787,7 +794,7 @@ func (r *PhysicalInterfaceResource) Read(ctx context.Context, req resource.ReadR
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l1PhysIf,nwRtVrfMbr,l1StormCtrlP,l1PhysIfExtended")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l1PhysIf,nwRtVrfMbr,l1StormCtrlP,nvoMultisiteIfTracking,l1PhysIfExtended")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

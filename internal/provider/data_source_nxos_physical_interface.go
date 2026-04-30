@@ -57,7 +57,7 @@ func (d *PhysicalInterfaceDataSource) Metadata(_ context.Context, req datasource
 func (d *PhysicalInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:PhysIfExtended/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "System/l1:PhysIfExtended/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -313,6 +313,10 @@ func (d *PhysicalInterfaceDataSource) Schema(ctx context.Context, req datasource
 							MarkdownDescription: "Packet Type.",
 							Computed:            true,
 						},
+						"multisite_interface_tracking": schema.StringAttribute{
+							MarkdownDescription: "Configure EVPN multisite tracking for DCI/Fabric interface.",
+							Computed:            true,
+						},
 						"allow_multi_tag": schema.StringAttribute{
 							MarkdownDescription: "Allow Multitag.",
 							Computed:            true,
@@ -500,7 +504,7 @@ func (d *PhysicalInterfaceDataSource) Read(ctx context.Context, req datasource.R
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l1PhysIf,nwRtVrfMbr,l1StormCtrlP,l1PhysIfExtended")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l1PhysIf,nwRtVrfMbr,l1StormCtrlP,nvoMultisiteIfTracking,l1PhysIfExtended")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

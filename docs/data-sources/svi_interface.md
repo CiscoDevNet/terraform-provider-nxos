@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.
   API Documentation
-  sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/
 ---
 
 # nxos_svi_interface (Data Source)
@@ -16,6 +16,7 @@ This data source can read SVI (Switch Virtual Interface) configurations on NX-OS
 
 - [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
 
 ## Example Usage
 
@@ -56,6 +57,7 @@ Read-Only:
 - `medium` (String) Indicates the administrative port medium type.
 - `mtu` (Number) The administrative MTU port on the aggregated interface.
 - `mtu_inherit` (Boolean) A property for specifying if the MTU is inherited from global policy.
+- `multisite_interface_tracking` (String) Configure EVPN multisite tracking for DCI/Fabric interface.
 - `snmp_trap_link_status` (Boolean) SNMP Trap Link Status Enabled?
 - `vlan_id` (Number) The VLAN ID associated with the SVI.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

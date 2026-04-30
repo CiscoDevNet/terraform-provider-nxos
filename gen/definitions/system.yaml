@@ -1884,6 +1884,840 @@ child_classes:
         max_int: 100
         example: 60
         exclude_test: true
+    child_classes:
+      - class_name: platformTcamRegion
+        doc_path: System/platform%3ATcamRegion/
+        rn: tcamRegion
+        type: single
+        tf_name: tcam_region
+        no_delete: true
+        description: 'TCAM region configuration.'
+        attributes:
+          - nxos_name: arpaclSize
+            tf_name: tcam_region_arp_acl_size
+            type: Int64
+            description: 'ARP ACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: coppSize
+            tf_name: tcam_region_copp_size
+            type: Int64
+            description: 'Ingress Copp TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: coppSystemSize
+            tf_name: tcam_region_copp_system_size
+            type: Int64
+            description: 'Copp System TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: eIpv6QosSize
+            tf_name: tcam_region_egress_ipv6_qos_size
+            type: Int64
+            description: 'Egress IPV6 Qos TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: eIpv6RaclSize
+            tf_name: tcam_region_egress_ipv6_racl_size
+            type: Int64
+            description: 'Egress IPv6 RACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: eMacQosSize
+            tf_name: tcam_region_egress_mac_qos_size
+            type: Int64
+            description: 'Egress Mac Qos TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: eQosLiteSize
+            tf_name: tcam_region_egress_qos_lite_size
+            type: Int64
+            description: 'Egress Qos Lite TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: eQosSize
+            tf_name: tcam_region_egress_qos_size
+            type: Int64
+            description: 'Egress Qos TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: eRaclSize
+            tf_name: tcam_region_egress_racl_size
+            type: Int64
+            description: 'Egress RACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: eVaclSize
+            tf_name: tcam_region_egress_vacl_size
+            type: Int64
+            description: 'Egress VACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: fcoeEgressSize
+            tf_name: tcam_region_fcoe_egress_size
+            type: Int64
+            description: 'Egress FCoE Counters size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: fcoeIngressSize
+            tf_name: tcam_region_fcoe_ingress_size
+            type: Int64
+            description: 'Ingress FCoE Counters size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: fhsSize
+            tf_name: tcam_region_fhs_size
+            type: Int64
+            description: 'FHS TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ifaclLiteSize
+            tf_name: tcam_region_interface_acl_lite_size
+            type: Int64
+            description: 'Interface ACL Lite TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ifaclSize
+            tf_name: tcam_region_interface_acl_size
+            type: Int64
+            description: 'Interface ACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ifaclUdfSize
+            tf_name: tcam_region_interface_acl_udf_size
+            type: Int64
+            description: 'IPV4 IFACL SPAN UDF size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ingFlowRedirectSize
+            tf_name: tcam_region_ingress_flow_redirect_size
+            type: Int64
+            description: 'Size of Egress region in ACX.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ingFlowSize
+            tf_name: tcam_region_ingress_flow_size
+            type: Int64
+            description: 'Ingress Flow TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 512
+            exclude_test: true
+          - nxos_name: ipsgSize
+            tf_name: tcam_region_ipsg_size
+            type: Int64
+            description: 'IPSG TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ipv6IfaclSize
+            tf_name: tcam_region_ipv6_interface_acl_size
+            type: Int64
+            description: 'IPv6 Interface ACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ipv6L3qosSize
+            tf_name: tcam_region_ipv6_l3_qos_size
+            type: Int64
+            description: 'IPV6 L3 QoS TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ipv6PbrSize
+            tf_name: tcam_region_ipv6_pbr_size
+            type: Int64
+            description: 'IPV6 PBR TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ipv6QosSize
+            tf_name: tcam_region_ipv6_qos_size
+            type: Int64
+            description: 'IPV6 QoS TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ipv6RaclSize
+            tf_name: tcam_region_ipv6_racl_size
+            type: Int64
+            description: 'IPV6 RACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ipv6SpanL2Size
+            tf_name: tcam_region_ipv6_span_l2_size
+            type: Int64
+            description: 'IPV6 L2 SPAN TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ipv6SpanSize
+            tf_name: tcam_region_ipv6_span_size
+            type: Int64
+            description: 'IPV6 SPAN TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ipv6SupSize
+            tf_name: tcam_region_ipv6_sup_size
+            type: Int64
+            description: 'IPV6 SUP TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ipv6VaclSize
+            tf_name: tcam_region_ipv6_vacl_size
+            type: Int64
+            description: 'IPV6 VACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: ipv6VqosSize
+            tf_name: tcam_region_ipv6_vlan_qos_size
+            type: Int64
+            description: 'IPV6 VLAN QoS TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: l3qosIntraLiteSize
+            tf_name: tcam_region_l3_qos_intra_lite_size
+            type: Int64
+            description: 'L3 QoS Intra Lite TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: macIfaclSize
+            tf_name: tcam_region_mac_interface_acl_size
+            type: Int64
+            description: 'MAC Interface ACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: macL3qosSize
+            tf_name: tcam_region_mac_l3_qos_size
+            type: Int64
+            description: 'MAC L3 QoS TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: macQosSize
+            tf_name: tcam_region_mac_qos_size
+            type: Int64
+            description: 'MAC QoS TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: macVaclSize
+            tf_name: tcam_region_mac_vacl_size
+            type: Int64
+            description: 'MAC VACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: macVqosSize
+            tf_name: tcam_region_mac_vlan_qos_size
+            type: Int64
+            description: 'MAC VLAN QoS TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: mcastBidirSize
+            tf_name: tcam_region_multicast_bidir_size
+            type: Int64
+            description: 'MCAST BIDIR TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: mplsDoublewide
+            tf_name: tcam_region_mpls_doublewide
+            type: Bool
+            description: 'MPLS double-wide TCAM region.'
+            example: "true"
+            exclude_test: true
+          - nxos_name: mplsSize
+            tf_name: tcam_region_mpls_size
+            type: Int64
+            description: 'MPLS TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: mvpnSize
+            tf_name: tcam_region_mvpn_size
+            type: Int64
+            description: 'MVPN TCAM region size.'
+            min_int: 0
+            max_int: 10
+            example: 5
+            exclude_test: true
+          - nxos_name: n9kArpaclSize
+            tf_name: tcam_region_n9k_arp_acl_size
+            type: Int64
+            description: 'n9k-arp-acl TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: natSize
+            tf_name: tcam_region_nat_size
+            type: Int64
+            description: 'NAT TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: openflowDoublewide
+            tf_name: tcam_region_openflow_doublewide
+            type: Bool
+            description: 'Openflow double-wide TCAM region.'
+            example: "true"
+            exclude_test: true
+          - nxos_name: openflowLiteSize
+            tf_name: tcam_region_openflow_lite_size
+            type: Int64
+            description: 'OPENFLOW Lite TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: openflowSize
+            tf_name: tcam_region_openflow_size
+            type: Int64
+            description: 'OPENFLOW TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: pbrSize
+            tf_name: tcam_region_pbr_size
+            type: Int64
+            description: 'IPV4 PBR TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: qosIntraLiteSize
+            tf_name: tcam_region_qos_intra_lite_size
+            type: Int64
+            description: 'QoS Intra Lite TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: qosSize
+            tf_name: tcam_region_qos_size
+            type: Int64
+            description: 'QOS TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: qoslblSize
+            tf_name: tcam_region_qos_label_size
+            type: Int64
+            description: 'Qos Label TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: raclLiteSize
+            tf_name: tcam_region_racl_lite_size
+            type: Int64
+            description: 'RACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: raclSize
+            tf_name: tcam_region_racl_size
+            type: Int64
+            description: 'RACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: raclUdfSize
+            tf_name: tcam_region_racl_udf_size
+            type: Int64
+            description: 'IPV4 RACL SPAN UDF TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: supSize
+            tf_name: tcam_region_sup_size
+            type: Int64
+            description: 'SUP TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: sviSize
+            tf_name: tcam_region_svi_size
+            type: Int64
+            description: 'Ingress SVI Counters TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: tcpNatSize
+            tf_name: tcam_region_tcp_nat_size
+            type: Int64
+            description: 'TCP NAT TCAM region size.'
+            min_int: 0
+            max_int: 100
+            example: 50
+            exclude_test: true
+          - nxos_name: vaclLiteSize
+            tf_name: tcam_region_vacl_lite_size
+            type: Int64
+            description: 'VACL Lite TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: vaclSize
+            tf_name: tcam_region_vacl_size
+            type: Int64
+            description: 'Virtual ACL TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: vpcConvergenceSize
+            tf_name: tcam_region_vpc_convergence_size
+            type: Int64
+            description: 'VPC TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: vqosIntraLiteSize
+            tf_name: tcam_region_vlan_qos_intra_lite_size
+            type: Int64
+            description: 'VLAN QoS Intra Lite TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: vqosSize
+            tf_name: tcam_region_vlan_qos_size
+            type: Int64
+            description: 'VLAN QoS TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+          - nxos_name: vxlanp2pSize
+            tf_name: tcam_region_vxlan_p2p_size
+            type: Int64
+            description: 'VXLAN P2P TCAM region size.'
+            min_int: 0
+            max_int: 2147483647
+            example: 256
+            exclude_test: true
+        child_classes:
+          - class_name: platformTcamRegionExtended
+            doc_path: System/platform%3ATcamRegionExtended/
+            rn: tcamregionextd
+            type: single
+            tf_name: tcam_region_extended
+            no_delete: true
+            description: 'Extended TCAM region configuration.'
+            attributes:
+              - nxos_name: eIfaclAllPerPortStats
+                tf_name: tcam_region_extended_egress_interface_acl_all_per_port_stats
+                type: Bool
+                description: 'e-ifacl-all region with per-port-stats.'
+                example: "true"
+                exclude_test: true
+              - nxos_name: eIfaclAllSize
+                tf_name: tcam_region_extended_egress_interface_acl_all_size
+                type: Int64
+                description: 'e-pacl-all TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: eIpv6RaclPerPortStats
+                tf_name: tcam_region_extended_egress_ipv6_racl_per_port_stats
+                type: Bool
+                description: 'e-ipv6-racl region with per-port-stats.'
+                example: "true"
+                exclude_test: true
+              - nxos_name: eRaclPerPortStats
+                tf_name: tcam_region_extended_egress_racl_per_port_stats
+                type: Bool
+                description: 'e-racl region with per-port-stats.'
+                example: "true"
+                exclude_test: true
+              - nxos_name: egrCoppSize
+                tf_name: tcam_region_extended_egress_copp_size
+                type: Int64
+                description: 'Egress CoPP TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: egrFlowSize
+                tf_name: tcam_region_extended_egress_flow_size
+                type: Int64
+                description: 'Egress Flow TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: egrHwTelemetrySize
+                tf_name: tcam_region_extended_egress_hardware_telemetry_size
+                type: Int64
+                description: 'e-hw-telemetry TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: egrIfaclSize
+                tf_name: tcam_region_extended_egress_interface_acl_size
+                type: Int64
+                description: 'Egress Interface ACL TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: egrL2QosSize
+                tf_name: tcam_region_extended_egress_l2_qos_size
+                type: Int64
+                description: 'egr-l2-qos TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: egrL3VlanQosSize
+                tf_name: tcam_region_extended_egress_l3_vlan_qos_size
+                type: Int64
+                description: 'egr-l3-vlan-qos TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: egrRaclSize
+                tf_name: tcam_region_extended_egress_racl_size
+                type: Int64
+                description: 'egr-racl TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: egrSupSize
+                tf_name: tcam_region_extended_egress_sup_size
+                type: Int64
+                description: 'Egress SUP TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: hwTelemetrySize
+                tf_name: tcam_region_extended_hardware_telemetry_size
+                type: Int64
+                description: 'hw-telemetry TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ifaclAllPerPortStats
+                tf_name: tcam_region_extended_interface_acl_all_per_port_stats
+                type: Bool
+                description: 'ifacl-all region with per-port-stats.'
+                example: "true"
+                exclude_test: true
+              - nxos_name: ifaclAllProfile
+                tf_name: tcam_region_extended_interface_acl_all_profile
+                type: Int64
+                description: 'ifacl-all region match profile.'
+                min_int: 0
+                max_int: 15
+                example: 1
+                exclude_test: true
+              - nxos_name: ifaclAllSize
+                tf_name: tcam_region_extended_interface_acl_all_size
+                type: Int64
+                description: 'pacl-all TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ifaclPerPortStats
+                tf_name: tcam_region_extended_interface_acl_per_port_stats
+                type: Bool
+                description: 'ifacl region with per-port-stats.'
+                example: "true"
+                exclude_test: true
+              - nxos_name: ingDaclSize
+                tf_name: tcam_region_extended_ingress_dacl_size
+                type: Int64
+                description: 'ing-dacl TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingIfaclSize
+                tf_name: tcam_region_extended_ingress_interface_acl_size
+                type: Int64
+                description: 'Ingress Ifacl TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingIfaclWideSize
+                tf_name: tcam_region_extended_ingress_interface_acl_wide_size
+                type: Int64
+                description: 'Ingress Ifacl Wide TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingIpv6ifaclLiteSize
+                tf_name: tcam_region_extended_ingress_ipv6_interface_acl_lite_size
+                type: Int64
+                description: 'IPv6 Interface ACL Lite TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingL2L3QosSize
+                tf_name: tcam_region_extended_ingress_l2_l3_qos_size
+                type: Int64
+                description: 'ing-l2-l3-qos TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingL2QosSize
+                tf_name: tcam_region_extended_ingress_l2_qos_size
+                type: Int64
+                description: 'ing-l2-qos TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingL2SpanFilterSize
+                tf_name: tcam_region_extended_ingress_l2_span_filter_size
+                type: Int64
+                description: 'ing-l2-span-filter TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingL3SpanFilterSize
+                tf_name: tcam_region_extended_ingress_l3_span_filter_size
+                type: Int64
+                description: 'ing-l3-span-filter TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingPaclSbSize
+                tf_name: tcam_region_extended_ingress_pacl_sb_size
+                type: Int64
+                description: 'ing-pacl-sb TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingRaclSize
+                tf_name: tcam_region_extended_ingress_racl_size
+                type: Int64
+                description: 'Ingress Racl TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingRbaclSize
+                tf_name: tcam_region_extended_ingress_rbacl_size
+                type: Int64
+                description: 'ing-rbacl TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingRedirectSize
+                tf_name: tcam_region_extended_ingress_redirect_size
+                type: Int64
+                description: 'Size of Ingress redirect region in ACX.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingStormControlSize
+                tf_name: tcam_region_extended_ingress_storm_control_size
+                type: Int64
+                description: 'Ingress Storm Control TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingSupSize
+                tf_name: tcam_region_extended_ingress_sup_size
+                type: Int64
+                description: 'Ingress SUP TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingVaclNhSize
+                tf_name: tcam_region_extended_ingress_vacl_nh_size
+                type: Int64
+                description: 'ing-vacl-nh TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ingVlanQosSize
+                tf_name: tcam_region_extended_ingress_vlan_qos_size
+                type: Int64
+                description: 'Ingress L3VlanQos TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: ipv6IfaclPerPortStats
+                tf_name: tcam_region_extended_ipv6_interface_acl_per_port_stats
+                type: Bool
+                description: 'ipv6-ifacl region with per-port-stats.'
+                example: "true"
+                exclude_test: true
+              - nxos_name: ipv6RaclPerPortStats
+                tf_name: tcam_region_extended_ipv6_racl_per_port_stats
+                type: Bool
+                description: 'ipv6-racl region with per-port-stats.'
+                example: "true"
+                exclude_test: true
+              - nxos_name: macIfaclPerPortStats
+                tf_name: tcam_region_extended_mac_interface_acl_per_port_stats
+                type: Bool
+                description: 'mac-ifacl region with per-port-stats.'
+                example: "true"
+                exclude_test: true
+              - nxos_name: mcastNatSize
+                tf_name: tcam_region_extended_multicast_nat_size
+                type: Int64
+                description: 'multicast NAT TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: mcastNbmSize
+                tf_name: tcam_region_extended_multicast_nbm_size
+                type: Int64
+                description: 'Multicast NBM TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: raclAllPerPortStats
+                tf_name: tcam_region_extended_racl_all_per_port_stats
+                type: Bool
+                description: 'racl-all region with per-port-stats.'
+                example: "true"
+                exclude_test: true
+              - nxos_name: raclAllProfile
+                tf_name: tcam_region_extended_racl_all_profile
+                type: Int64
+                description: 'racl-all region match profile.'
+                min_int: 0
+                max_int: 15
+                example: 1
+                exclude_test: true
+              - nxos_name: raclAllSize
+                tf_name: tcam_region_extended_racl_all_size
+                type: Int64
+                description: 'racl-all TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: raclPerPortStats
+                tf_name: tcam_region_extended_racl_per_port_stats
+                type: Bool
+                description: 'racl region with per-port-stats.'
+                example: "true"
+                exclude_test: true
+              - nxos_name: redirectV4Size
+                tf_name: tcam_region_extended_redirect_v4_size
+                type: Int64
+                description: 'redirect_v4 TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: spanSize
+                tf_name: tcam_region_extended_span_size
+                type: Int64
+                description: 'span TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
+              - nxos_name: spanTahSize
+                tf_name: tcam_region_extended_span_tahoe_size
+                type: Int64
+                description: 'span Tahoe TCAM region size.'
+                min_int: 0
+                max_int: 2147483647
+                example: 256
+                exclude_test: true
   - class_name: mgmtMgmtIf
     doc_path: System/mgmt%3AMgmtIf/
     rn: mgmt-[%s]

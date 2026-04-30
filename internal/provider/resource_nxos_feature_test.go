@@ -70,7 +70,9 @@ func TestAccNxosFeature(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "pvlan", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "sflow", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "scp_server", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "security_group", "enabled"))
+	if os.Getenv("ESG") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "security_group", "enabled"))
+	}
 	if os.Getenv("HYPERSHIELD") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "service_acceleration", "enabled"))
 	}
@@ -170,7 +172,9 @@ func testAccNxosFeatureConfig_all() string {
 	config += `	pvlan = "enabled"` + "\n"
 	config += `	sflow = "enabled"` + "\n"
 	config += `	scp_server = "enabled"` + "\n"
-	config += `	security_group = "enabled"` + "\n"
+	if os.Getenv("ESG") != "" {
+		config += `	security_group = "enabled"` + "\n"
+	}
 	if os.Getenv("HYPERSHIELD") != "" {
 		config += `	service_acceleration = "enabled"` + "\n"
 	}

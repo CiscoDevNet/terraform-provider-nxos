@@ -1,0 +1,2 @@
+- Add `nxos_esg` resource and data source
+- Add Security Group feature to `nxos_feature` resource and data source

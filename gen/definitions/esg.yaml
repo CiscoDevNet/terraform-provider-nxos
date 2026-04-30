@@ -1,0 +1,314 @@
+---
+name: ESG
+class_name: esgEntity
+dn: sys/esg
+ds_description: This data source can read the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.
+res_description: This resource can manage the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.
+doc_path: Security%20and%20Policing/esg:Entity/
+doc_category: Security
+test_tags: [ESG]
+attributes:
+  - nxos_name: macSegmentation
+    tf_name: mac_segmentation
+    type: String
+    description: 'System security-group mac-segmentation.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+child_classes:
+  - class_name: esgGroupEntity
+    doc_path: Security%20and%20Policing/esg:GroupEntity/
+    rn: group
+    type: single
+    tf_name: group
+    description: 'Security-Groups and Selector Entities.'
+    child_classes:
+      - class_name: esgGroupInst
+        doc_path: Security%20and%20Policing/esg:GroupInst/
+        rn: grp-[%v]
+        type: list
+        tf_name: security_groups
+        description: 'List of security-group instances.'
+        attributes:
+          - nxos_name: id
+            tf_name: security_group_id
+            type: Int64
+            id: true
+            description: 'ID of the security-group.'
+            min_int: 1
+            max_int: 65535
+            example: 100
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: 'Name of the security-group.'
+            example: group1
+        child_classes:
+          - class_name: esgSelectorEntity
+            doc_path: Security%20and%20Policing/esg:SelectorEntity/
+            rn: selector
+            type: single
+            tf_name: selector
+            description: 'ESG Selectors Entity for this GroupInst.'
+            child_classes:
+              - class_name: esgMatchConnectedEpV4
+                doc_path: Security%20and%20Policing/esg:MatchConnectedEpV4/
+                rn: connectedepv4-[%s]-[%s]
+                type: list
+                tf_name: connected_endpoints_ipv4
+                description: 'List of connected endpoints selectors based on VRF and IPv4 address/prefix.'
+                attributes:
+                  - nxos_name: vrf
+                    tf_name: vrf
+                    type: String
+                    id: true
+                    description: 'Name of VRF that the prefix belongs to.'
+                    example: default
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'IPv4 prefix that needs to be classified in this security-group.'
+                    example: 10.0.0.0/24
+              - class_name: esgMatchConnectedEpV6
+                doc_path: Security%20and%20Policing/esg:MatchConnectedEpV6/
+                rn: connectedepv6-[%s]-[%s]
+                type: list
+                tf_name: connected_endpoints_ipv6
+                description: 'List of connected endpoints selectors based on VRF and IPv6 address/prefix.'
+                attributes:
+                  - nxos_name: vrf
+                    tf_name: vrf
+                    type: String
+                    id: true
+                    description: 'Name of VRF that the prefix belongs to.'
+                    example: default
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'IPv6 prefix that needs to be classified in this security-group.'
+                    example: '2001:db8::/32'
+              - class_name: esgMatchVlan
+                doc_path: Security%20and%20Policing/esg:MatchVlan/
+                rn: vlan-[%s]
+                type: list
+                tf_name: match_vlans
+                description: 'List of selectors based on VLAN.'
+                attributes:
+                  - nxos_name: vlanId
+                    tf_name: vlan_id
+                    type: String
+                    id: true
+                    description: 'VLAN ID that needs to be classified in this security-group.'
+                    example: vlan-100
+  - class_name: esgClassMapEntity
+    doc_path: Security%20and%20Policing/esg:ClassMapEntity/
+    rn: classmap
+    type: single
+    tf_name: class_map
+    description: 'ClassMap.'
+    child_classes:
+      - class_name: esgClassMapInst
+        doc_path: Security%20and%20Policing/esg:ClassMapInst/
+        rn: cmap-%s
+        type: list
+        tf_name: class_maps
+        description: 'List of class map instances.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of class-map instance.'
+            example: cmap1
+          - nxos_name: desc
+            tf_name: description
+            type: String
+            description: 'Description of class-map.'
+            example: 'My class map'
+        child_classes:
+          - class_name: esgClassMapFilterEntry
+            doc_path: Security%20and%20Policing/esg:ClassMapFilterEntry/
+            rn: entry-%s
+            type: list
+            tf_name: filter_entries
+            description: 'List of filter entries for SGACL ClassMap.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Object name.'
+                example: entry1
+              - nxos_name: applyToFrag
+                tf_name: apply_to_fragment
+                type: Bool
+                description: 'Apply Rule for all Fragments.'
+                example: true
+              - nxos_name: arpOpc
+                tf_name: arp_opcode
+                type: String
+                description: 'ARP opcodes.'
+                enum_values:
+                  - unspecified
+                  - req
+                  - reply
+                example: req
+              - nxos_name: etherT
+                tf_name: ether_type
+                type: String
+                description: 'Ether type.'
+                enum_values:
+                  - unspecified
+                  - ipv4
+                  - arp
+                  - trill
+                  - ipv6
+                  - mpls_ucast
+                  - mac_security
+                  - fcoe
+                  - ip
+                example: ipv4
+              - nxos_name: icmpv4T
+                tf_name: icmpv4_type
+                type: Int64
+                description: 'ICMPv4 Type.'
+                min_int: 0
+                max_int: 255
+                example: 8
+              - nxos_name: icmpv6T
+                tf_name: icmpv6_type
+                type: Int64
+                description: 'ICMPv6 Type.'
+                min_int: 0
+                max_int: 255
+                example: 128
+              - nxos_name: matchDPortZero
+                tf_name: match_destination_port_zero
+                type: Bool
+                description: 'L4 Dport match being zero for contract filter entry.'
+                example: true
+              - nxos_name: matchDscp
+                tf_name: match_dscp
+                type: Int64
+                description: 'IP DSCP match for contract filter entry.'
+                min_int: 0
+                max_int: 64
+                example: 32
+              - nxos_name: matchSPortZero
+                tf_name: match_source_port_zero
+                type: Bool
+                description: 'L4 Sport match being zero for contract filter entry.'
+                example: true
+              - nxos_name: stateful
+                tf_name: stateful
+                type: Bool
+                description: 'Stateful match for contract filter entry.'
+                example: true
+  - class_name: esgPolicyMapEntity
+    doc_path: Security%20and%20Policing/esg:PolicyMapEntity/
+    rn: policymap
+    type: single
+    tf_name: policy_map
+    description: 'PolicyMap.'
+    child_classes:
+      - class_name: esgPolicyMapInst
+        doc_path: Security%20and%20Policing/esg:PolicyMapInst/
+        rn: pmap-%s
+        type: list
+        tf_name: policy_maps
+        description: 'List of policy map instances.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of policy-map instance.'
+            example: pmap1
+          - nxos_name: desc
+            tf_name: description
+            type: String
+            description: 'Description of policy-map.'
+            example: 'My policy map'
+        child_classes:
+          - class_name: esgMatchClassMap
+            doc_path: Security%20and%20Policing/esg:MatchClassMap/
+            rn: cmap-%s
+            type: list
+            tf_name: match_class_maps
+            description: 'List of match class-maps.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Match using class-map.'
+                example: cmap1
+              - nxos_name: countAction
+                tf_name: count_action
+                type: Bool
+                description: 'Count Action - default is enabled.'
+                example: false
+              - nxos_name: forwardingAction
+                tf_name: forwarding_action
+                type: String
+                description: 'Default Forwarding Action.'
+                enum_values:
+                  - deny
+                  - permit
+                example: deny
+              - nxos_name: logAction
+                tf_name: log_action
+                type: Bool
+                description: 'Logging Action - default is disabled.'
+                example: true
+              - nxos_name: redirectChain
+                tf_name: redirect_chain
+                type: String
+                description: 'Redirect Action to the input Service Chain.'
+                example: chain1
+  - class_name: esgDom
+    doc_path: Security%20and%20Policing/esg:Dom/
+    rn: dom-%s
+    type: list
+    tf_name: domains
+    description: 'List of ESG domains (VRFs).'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'The name of the object.'
+        example: default
+      - nxos_name: defaultAction
+        tf_name: default_action
+        type: String
+        description: 'Default VRF''s Action when there is no contract match.'
+        enum_values:
+          - deny
+          - permit
+        example: deny
+      - nxos_name: pcTag
+        tf_name: policy_classifier_tag
+        type: Int64
+        description: 'VRF''s Default Class Id aka Policy Classifier Tag.'
+        min_int: 0
+        max_int: 65535
+        example: 100
+      - nxos_name: securityMode
+        tf_name: security_mode
+        type: String
+        description: 'Policy Control Enforcement Mode.'
+        enum_values:
+          - enforced
+          - unenforced
+        example: enforced
+test_prerequisites:
+  - dn: sys/fm/securitygroup
+    class_name: fmSecurityGroup
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

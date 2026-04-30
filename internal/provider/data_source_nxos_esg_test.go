@@ -37,19 +37,19 @@ func TestAccDataSourceNxosESG(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.apply_to_fragment", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.arp_opcode", "req"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.ether_type", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.icmpv4_type", "8"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.icmpv6_type", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.icmpv4_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.icmpv6_type", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_destination_port_zero", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_dscp", "32"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_dscp", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_source_port_zero", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.stateful", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.description", "My policy map"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.count_action", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.forwarding_action", "deny"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.log_action", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.forwarding_action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.log_action", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.redirect_chain", "chain1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.default.default_action", "deny"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.default.policy_classifier_tag", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.default.policy_classifier_tag", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.default.security_mode", "enforced"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -109,10 +109,10 @@ func testAccDataSourceNxosESGConfig() string {
 	config += `					apply_to_fragment = true` + "\n"
 	config += `					arp_opcode = "req"` + "\n"
 	config += `					ether_type = "ipv4"` + "\n"
-	config += `					icmpv4_type = 8` + "\n"
-	config += `					icmpv6_type = 128` + "\n"
+	config += `					icmpv4_type = 0` + "\n"
+	config += `					icmpv6_type = 0` + "\n"
 	config += `					match_destination_port_zero = true` + "\n"
-	config += `					match_dscp = 32` + "\n"
+	config += `					match_dscp = 0` + "\n"
 	config += `					match_source_port_zero = true` + "\n"
 	config += `					stateful = true` + "\n"
 	config += `				}` + "\n"
@@ -125,8 +125,8 @@ func testAccDataSourceNxosESGConfig() string {
 	config += `			match_class_maps = {` + "\n"
 	config += `				"cmap1" = {` + "\n"
 	config += `					count_action = false` + "\n"
-	config += `					forwarding_action = "deny"` + "\n"
-	config += `					log_action = true` + "\n"
+	config += `					forwarding_action = "permit"` + "\n"
+	config += `					log_action = false` + "\n"
 	config += `					redirect_chain = "chain1"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
@@ -135,7 +135,7 @@ func testAccDataSourceNxosESGConfig() string {
 	config += `	domains = {` + "\n"
 	config += `		"default" = {` + "\n"
 	config += `			default_action = "deny"` + "\n"
-	config += `			policy_classifier_tag = 100` + "\n"
+	config += `			policy_classifier_tag = 200` + "\n"
 	config += `			security_mode = "enforced"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"

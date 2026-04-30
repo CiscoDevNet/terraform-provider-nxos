@@ -176,14 +176,14 @@ child_classes:
                 description: 'ICMPv4 Type.'
                 min_int: 0
                 max_int: 255
-                example: 8
+                example: 0
               - nxos_name: icmpv6T
                 tf_name: icmpv6_type
                 type: Int64
                 description: 'ICMPv6 Type.'
                 min_int: 0
                 max_int: 255
-                example: 128
+                example: 0
               - nxos_name: matchDPortZero
                 tf_name: match_destination_port_zero
                 type: Bool
@@ -195,7 +195,7 @@ child_classes:
                 description: 'IP DSCP match for contract filter entry.'
                 min_int: 0
                 max_int: 64
-                example: 32
+                example: 0
               - nxos_name: matchSPortZero
                 tf_name: match_source_port_zero
                 type: Bool
@@ -257,12 +257,12 @@ child_classes:
                 enum_values:
                   - deny
                   - permit
-                example: deny
+                example: permit
               - nxos_name: logAction
                 tf_name: log_action
                 type: Bool
                 description: 'Logging Action - default is disabled.'
-                example: true
+                example: false
               - nxos_name: redirectChain
                 tf_name: redirect_chain
                 type: String
@@ -295,7 +295,7 @@ child_classes:
         description: 'VRF''s Default Class Id aka Policy Classifier Tag.'
         min_int: 0
         max_int: 65535
-        example: 100
+        example: 200
       - nxos_name: securityMode
         tf_name: security_mode
         type: String

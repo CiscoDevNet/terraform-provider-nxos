@@ -37,16 +37,16 @@ data "nxos_nvo" "example" {
 
 ### Read-Only
 
-- `dci_advertise_pip` (String) Enables/disables advertise PIP towards DCI in EVPN Multisite Border-gateway setup.
-- `delay_restore_time` (Number) Delay-Restore Time.
-- `df_election_time` (String) DF election time for anycast border gateways. Only one fractional digit supported.
-- `fabric_advertise_pip` (String) Enables/disables advertise PIP towards Fabric in EVPN Multisite Border-gateway setup.
+- `evpn_multisite_border_gateway_dci_advertise_pip` (String) Enables/disables advertise PIP towards DCI in EVPN Multisite Border-gateway setup.
+- `evpn_multisite_border_gateway_delay_restore_time` (Number) Delay-Restore Time.
+- `evpn_multisite_border_gateway_df_election_time` (String) DF election time for anycast border gateways. Only one fractional digit supported.
+- `evpn_multisite_border_gateway_fabric_advertise_pip` (String) Enables/disables advertise PIP towards Fabric in EVPN Multisite Border-gateway setup.
+- `evpn_multisite_border_gateway_site_id` (Number) Configuration of EVPN Multisite Border Gateway.
+- `evpn_multisite_border_gateway_split_horizon_per_site` (String) Enables/disables the per-site split-horizon feature on an EVPN Multisite anycast border gateway.
+- `evpn_multisite_border_gateway_state` (String) Configures the state of EVPN Multisite Border-gateway.
 - `id` (String) The distinguished name of the object.
 - `nve_interfaces` (Attributes Map) NVE interface configuration.
   - Map key: `id` - Network Virtualization Overlay Endpoint (NVE) ID. (see [below for nested schema](#nestedatt--nve_interfaces))
-- `site_id` (Number) Configuration of EVPN Multisite Border Gateway.
-- `split_horizon_per_site` (String) Enables/disables the per-site split-horizon feature on an EVPN Multisite anycast border gateway.
-- `state` (String) Configures the state of EVPN Multisite Border-gateway.
 - `vxlan_udp_port` (Number) VxLAN UDP Port. Allowed value range is 1024-65535.
 - `vxlan_udp_source_port_mode` (String) VxLAN UDP Source Port Mode.
 

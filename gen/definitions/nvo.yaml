@@ -33,7 +33,7 @@ child_classes:
     description: 'Configuration of EVPN Multisite Border Gateway.'
     attributes:
       - nxos_name: dciAdvertisePip
-        tf_name: dci_advertise_pip
+        tf_name: evpn_multisite_border_gateway_dci_advertise_pip
         type: String
         description: 'Enables/disables advertise PIP towards DCI in EVPN Multisite Border-gateway setup.'
         enum_values:
@@ -41,19 +41,19 @@ child_classes:
           - enable
         example: enable
       - nxos_name: delayRestoreTime
-        tf_name: delay_restore_time
+        tf_name: evpn_multisite_border_gateway_delay_restore_time
         type: Int64
         description: 'Delay-Restore Time.'
         min_int: 30
         max_int: 1000
         example: 300
       - nxos_name: dfElectionTime
-        tf_name: df_election_time
+        tf_name: evpn_multisite_border_gateway_df_election_time
         type: String
         description: 'DF election time for anycast border gateways. Only one fractional digit supported.'
         example: '2.000000'
       - nxos_name: fabricAdvertisePip
-        tf_name: fabric_advertise_pip
+        tf_name: evpn_multisite_border_gateway_fabric_advertise_pip
         type: String
         description: 'Enables/disables advertise PIP towards Fabric in EVPN Multisite Border-gateway setup.'
         enum_values:
@@ -61,14 +61,14 @@ child_classes:
           - enableL3
         example: enableL3
       - nxos_name: siteId
-        tf_name: site_id
+        tf_name: evpn_multisite_border_gateway_site_id
         type: Int64
         description: 'Configuration of EVPN Multisite Border Gateway.'
         min_int: 0
         max_int: 281474976710655
         example: 65535
       - nxos_name: splitHorizonPerSite
-        tf_name: split_horizon_per_site
+        tf_name: evpn_multisite_border_gateway_split_horizon_per_site
         type: String
         description: 'Enables/disables the per-site split-horizon feature on an EVPN Multisite anycast border gateway.'
         enum_values:
@@ -76,7 +76,7 @@ child_classes:
           - enable
         example: enable
       - nxos_name: state
-        tf_name: state
+        tf_name: evpn_multisite_border_gateway_state
         type: String
         description: 'Configures the state of EVPN Multisite Border-gateway.'
         enum_values:

@@ -37,13 +37,13 @@ func TestAccNxosNVO(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "vxlan_udp_port", "4789"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "vxlan_udp_source_port_mode", "high"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "dci_advertise_pip", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "delay_restore_time", "300"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "df_election_time", "2.000000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "fabric_advertise_pip", "enableL3"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "site_id", "65535"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "split_horizon_per_site", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "evpn_multisite_border_gateway_dci_advertise_pip", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "evpn_multisite_border_gateway_delay_restore_time", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "evpn_multisite_border_gateway_df_election_time", "2.000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "evpn_multisite_border_gateway_fabric_advertise_pip", "enableL3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "evpn_multisite_border_gateway_site_id", "65535"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "evpn_multisite_border_gateway_split_horizon_per_site", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "evpn_multisite_border_gateway_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.advertise_virtual_mac", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.hold_down_time", "60"))
@@ -150,13 +150,13 @@ func testAccNxosNVOConfig_all() string {
 	config := `resource "nxos_nvo" "test" {` + "\n"
 	config += `	vxlan_udp_port = 4789` + "\n"
 	config += `	vxlan_udp_source_port_mode = "high"` + "\n"
-	config += `	dci_advertise_pip = "enable"` + "\n"
-	config += `	delay_restore_time = 300` + "\n"
-	config += `	df_election_time = "2.000000"` + "\n"
-	config += `	fabric_advertise_pip = "enableL3"` + "\n"
-	config += `	site_id = 65535` + "\n"
-	config += `	split_horizon_per_site = "enable"` + "\n"
-	config += `	state = "enabled"` + "\n"
+	config += `	evpn_multisite_border_gateway_dci_advertise_pip = "enable"` + "\n"
+	config += `	evpn_multisite_border_gateway_delay_restore_time = 300` + "\n"
+	config += `	evpn_multisite_border_gateway_df_election_time = "2.000000"` + "\n"
+	config += `	evpn_multisite_border_gateway_fabric_advertise_pip = "enableL3"` + "\n"
+	config += `	evpn_multisite_border_gateway_site_id = 65535` + "\n"
+	config += `	evpn_multisite_border_gateway_split_horizon_per_site = "enable"` + "\n"
+	config += `	evpn_multisite_border_gateway_state = "enabled"` + "\n"
 	config += `	nve_interfaces = {` + "\n"
 	config += `		"1" = {` + "\n"
 	config += `			admin_state = "enabled"` + "\n"

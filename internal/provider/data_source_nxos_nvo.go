@@ -76,31 +76,31 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "VxLAN UDP Source Port Mode.",
 				Computed:            true,
 			},
-			"dci_advertise_pip": schema.StringAttribute{
+			"evpn_multisite_border_gateway_dci_advertise_pip": schema.StringAttribute{
 				MarkdownDescription: "Enables/disables advertise PIP towards DCI in EVPN Multisite Border-gateway setup.",
 				Computed:            true,
 			},
-			"delay_restore_time": schema.Int64Attribute{
+			"evpn_multisite_border_gateway_delay_restore_time": schema.Int64Attribute{
 				MarkdownDescription: "Delay-Restore Time.",
 				Computed:            true,
 			},
-			"df_election_time": schema.StringAttribute{
+			"evpn_multisite_border_gateway_df_election_time": schema.StringAttribute{
 				MarkdownDescription: "DF election time for anycast border gateways. Only one fractional digit supported.",
 				Computed:            true,
 			},
-			"fabric_advertise_pip": schema.StringAttribute{
+			"evpn_multisite_border_gateway_fabric_advertise_pip": schema.StringAttribute{
 				MarkdownDescription: "Enables/disables advertise PIP towards Fabric in EVPN Multisite Border-gateway setup.",
 				Computed:            true,
 			},
-			"site_id": schema.Int64Attribute{
+			"evpn_multisite_border_gateway_site_id": schema.Int64Attribute{
 				MarkdownDescription: "Configuration of EVPN Multisite Border Gateway.",
 				Computed:            true,
 			},
-			"split_horizon_per_site": schema.StringAttribute{
+			"evpn_multisite_border_gateway_split_horizon_per_site": schema.StringAttribute{
 				MarkdownDescription: "Enables/disables the per-site split-horizon feature on an EVPN Multisite anycast border gateway.",
 				Computed:            true,
 			},
-			"state": schema.StringAttribute{
+			"evpn_multisite_border_gateway_state": schema.StringAttribute{
 				MarkdownDescription: "Configures the state of EVPN Multisite Border-gateway.",
 				Computed:            true,
 			},

@@ -91,46 +91,46 @@ func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.OneOf("low", "high", "rfc"),
 				},
 			},
-			"dci_advertise_pip": schema.StringAttribute{
+			"evpn_multisite_border_gateway_dci_advertise_pip": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enables/disables advertise PIP towards DCI in EVPN Multisite Border-gateway setup.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"delay_restore_time": schema.Int64Attribute{
+			"evpn_multisite_border_gateway_delay_restore_time": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Delay-Restore Time.").AddIntegerRangeDescription(30, 1000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(30, 1000),
 				},
 			},
-			"df_election_time": schema.StringAttribute{
+			"evpn_multisite_border_gateway_df_election_time": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DF election time for anycast border gateways. Only one fractional digit supported.").String,
 				Optional:            true,
 			},
-			"fabric_advertise_pip": schema.StringAttribute{
+			"evpn_multisite_border_gateway_fabric_advertise_pip": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enables/disables advertise PIP towards Fabric in EVPN Multisite Border-gateway setup.").AddStringEnumDescription("disable", "enableL3").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enableL3"),
 				},
 			},
-			"site_id": schema.Int64Attribute{
+			"evpn_multisite_border_gateway_site_id": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configuration of EVPN Multisite Border Gateway.").AddIntegerRangeDescription(0, 281474976710655).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 281474976710655),
 				},
 			},
-			"split_horizon_per_site": schema.StringAttribute{
+			"evpn_multisite_border_gateway_split_horizon_per_site": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enables/disables the per-site split-horizon feature on an EVPN Multisite anycast border gateway.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"state": schema.StringAttribute{
+			"evpn_multisite_border_gateway_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configures the state of EVPN Multisite Border-gateway.").AddStringEnumDescription("enabled").String,
 				Optional:            true,
 				Validators: []validator.String{

@@ -63,7 +63,7 @@ func (r *RoutePolicyResource) Metadata(ctx context.Context, req resource.Metadat
 func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.").AddApiDocumentation("rpmEntity", "Routing%20and%20Forwarding/rpm:Entity/", []string{"rtpfxRuleV4", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapRsRtDstAccAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtmapSetPref", "rtmapSetPathSelection", "rtmapSetEvpn", "rtmapMatchRtNh", "rtmapRsRtNhAtt", "rtmapMatchRegComm", "rtmapRsRegCommAtt", "rtregcomRule", "rtregcomEntry", "rtregcomItem"}, []string{"Routing%20and%20Forwarding/rtpfx:RuleV4/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtmap:Rule/", "Routing%20and%20Forwarding/rtmap:Entry/", "Routing%20and%20Forwarding/rtmap:MatchRtDst/", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/", "Routing%20and%20Forwarding/rtmap:RsRtDstAccAtt/", "Routing%20and%20Forwarding/rtmap:SetRegComm/", "Routing%20and%20Forwarding/rtregcom:Item/", "Routing%20and%20Forwarding/rtmap:MatchRtTag/", "Routing%20and%20Forwarding/rtmap:SetMetric/", "Routing%20and%20Forwarding/rtmap:SetMetricType/", "Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/", "Routing%20and%20Forwarding/rtmap:SetPref/", "Routing%20and%20Forwarding/rtmap:SetPathSelection/", "Routing%20and%20Forwarding/rtmap:SetEvpn/", "Routing%20and%20Forwarding/rtmap:MatchRtNh/", "Routing%20and%20Forwarding/rtmap:RsRtNhAtt/", "Routing%20and%20Forwarding/rtmap:MatchRegComm/", "Routing%20and%20Forwarding/rtmap:RsRegCommAtt/", "Routing%20and%20Forwarding/rtregcom:Rule/", "Routing%20and%20Forwarding/rtregcom:Entry/", "Routing%20and%20Forwarding/rtregcom:Item/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the route policy configuration on NX-OS devices, including IPv4 and IPv6 prefix lists and route maps with match and set criteria.").AddApiDocumentation("rpmEntity", "Routing%20and%20Forwarding/rpm:Entity/", []string{"rtpfxRuleV4", "rtpfxEntry", "rtpfxRuleV6", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapRsRtDstAccAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtmapSetPref", "rtmapSetPathSelection", "rtmapSetEvpn", "rtmapMatchRtNh", "rtmapRsRtNhAtt", "rtmapMatchRegComm", "rtmapRsRegCommAtt", "rtregcomRule", "rtregcomEntry", "rtregcomItem"}, []string{"Routing%20and%20Forwarding/rtpfx:RuleV4/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtpfx:RuleV6/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtmap:Rule/", "Routing%20and%20Forwarding/rtmap:Entry/", "Routing%20and%20Forwarding/rtmap:MatchRtDst/", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/", "Routing%20and%20Forwarding/rtmap:RsRtDstAccAtt/", "Routing%20and%20Forwarding/rtmap:SetRegComm/", "Routing%20and%20Forwarding/rtregcom:Item/", "Routing%20and%20Forwarding/rtmap:MatchRtTag/", "Routing%20and%20Forwarding/rtmap:SetMetric/", "Routing%20and%20Forwarding/rtmap:SetMetricType/", "Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/", "Routing%20and%20Forwarding/rtmap:SetPref/", "Routing%20and%20Forwarding/rtmap:SetPathSelection/", "Routing%20and%20Forwarding/rtmap:SetEvpn/", "Routing%20and%20Forwarding/rtmap:MatchRtNh/", "Routing%20and%20Forwarding/rtmap:RsRtNhAtt/", "Routing%20and%20Forwarding/rtmap:MatchRegComm/", "Routing%20and%20Forwarding/rtmap:RsRegCommAtt/", "Routing%20and%20Forwarding/rtregcom:Rule/", "Routing%20and%20Forwarding/rtregcom:Entry/", "Routing%20and%20Forwarding/rtregcom:Item/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -102,6 +102,69 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 						"entries": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List entries.\n  - Map key: `order` - Order.\n  - Key range: `1`-`4294967294`").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"action": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Action.").AddStringEnumDescription("deny", "permit").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("deny", "permit"),
+										},
+									},
+									"criteria": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Criteria.").AddStringEnumDescription("exact", "inexact").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("exact", "inexact"),
+										},
+									},
+									"prefix": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specifies the OSPF route prefix.").String,
+										Optional:            true,
+									},
+									"from_range": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The start of a range used to describe the prefix length if the criteria is not an exact match.").AddIntegerRangeDescription(0, 128).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 128),
+										},
+									},
+									"to_range": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The end of a range to describe the prefix length if the criteria is not an exact match.").AddIntegerRangeDescription(0, 128).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 128),
+										},
+									},
+									"mask": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Mask.").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ipv6_prefix_lists": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 Prefix Lists.\n  - Map key: `name` - Object name.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("descr.").String,
+							Optional:            true,
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Mode of ipv6 prefix-list.").AddStringEnumDescription("IPV6").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("IPV6"),
+							},
+						},
+						"entries": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 Prefix List entries.\n  - Map key: `order` - Order.\n  - Key range: `1`-`4294967294`").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -632,7 +695,7 @@ func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "rtpfxRuleV4,rtpfxEntry,rtmapRule,rtmapEntry,rtmapMatchRtDst,rtmapRsRtDstAtt,rtmapRsRtDstAccAtt,rtmapSetRegComm,rtregcomItem,rtmapMatchRtTag,rtmapSetMetric,rtmapSetMetricType,rtmapSetNhPeerAddr,rtmapSetPref,rtmapSetPathSelection,rtmapSetEvpn,rtmapMatchRtNh,rtmapRsRtNhAtt,rtmapMatchRegComm,rtmapRsRegCommAtt,rtregcomRule,rtregcomEntry,rtregcomItem")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "rtpfxRuleV4,rtpfxEntry,rtpfxRuleV6,rtpfxEntry,rtmapRule,rtmapEntry,rtmapMatchRtDst,rtmapRsRtDstAtt,rtmapRsRtDstAccAtt,rtmapSetRegComm,rtregcomItem,rtmapMatchRtTag,rtmapSetMetric,rtmapSetMetricType,rtmapSetNhPeerAddr,rtmapSetPref,rtmapSetPathSelection,rtmapSetEvpn,rtmapMatchRtNh,rtmapRsRtNhAtt,rtmapMatchRegComm,rtmapRsRegCommAtt,rtregcomRule,rtregcomEntry,rtregcomItem")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

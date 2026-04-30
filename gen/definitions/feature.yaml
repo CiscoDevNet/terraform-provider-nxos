@@ -16,6 +16,21 @@ child_classes:
     description: 'Feature Management entity.'
     doc_path: Feature%20Management/fm:Entity/
     child_classes:
+      - class_name: fmAnalytics
+        rn: analytics
+        type: single
+        no_delete: true
+        description: 'Analytics feature configuration.'
+        doc_path: Feature%20Management/fm:Analytics/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: analytics
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmBashShell
         rn: bashshell
         type: single
@@ -85,6 +100,21 @@ child_classes:
         attributes:
           - nxos_name: adminSt
             tf_name: evpn
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmGrpc
+        rn: grpc
+        type: single
+        no_delete: true
+        description: 'gRPC feature configuration.'
+        doc_path: Feature%20Management/fm:Grpc/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: grpc
             type: String
             description: 'Administrative state.'
             enum_values:
@@ -365,6 +395,36 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmScpServer
+        rn: scpserver
+        type: single
+        no_delete: true
+        description: 'SCP Server feature configuration.'
+        doc_path: Feature%20Management/fm:ScpServer/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: scp_server
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmSecurityGroup
+        rn: securitygroup
+        type: single
+        no_delete: true
+        description: 'Security Group feature configuration.'
+        doc_path: Feature%20Management/fm:SecurityGroup/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: security_group
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmServiceAcceleration
         rn: serviceacceleration
         type: single
@@ -381,6 +441,21 @@ child_classes:
               - disabled
             example: enabled
             test_tags: [HYPERSHIELD]
+      - class_name: fmSftpServer
+        rn: sftpserver
+        type: single
+        no_delete: true
+        description: 'SFTP Server feature configuration.'
+        doc_path: Feature%20Management/fm:SftpServer/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: sftp_server
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmSsh
         rn: ssh
         type: single
@@ -405,6 +480,21 @@ child_classes:
         attributes:
           - nxos_name: adminSt
             tf_name: tacacs
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmTelemetry
+        rn: telemetry
+        type: single
+        no_delete: true
+        description: 'Telemetry feature configuration.'
+        doc_path: Feature%20Management/fm:Telemetry/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: telemetry
             type: String
             description: 'Administrative state.'
             enum_values:

@@ -57,7 +57,7 @@ func (d *BGPDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.").AddApiDocumentation("bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/", []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP"}, []string{"Routing%20and%20Forwarding/bgp:Inst/", "Routing%20and%20Forwarding/bgp:Dom/", "Routing%20and%20Forwarding/bgp:RtCtrl/", "Routing%20and%20Forwarding/bgp:Gr/", "Routing%20and%20Forwarding/bgp:DomAf/", "Routing%20and%20Forwarding/bgp:AdvPrefix/", "Routing%20and%20Forwarding/bgp:InterLeakP/", "Routing%20and%20Forwarding/bgp:PeerCont/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:Peer/", "Routing%20and%20Forwarding/bgp:LocalAsn/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:RtCtrlP/", "Routing%20and%20Forwarding/bgp:PfxCtrlP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.").AddApiDocumentation("bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/", []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpAddlPath", "bgpAggAddr", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPeerIf"}, []string{"Routing%20and%20Forwarding/bgp:Inst/", "Routing%20and%20Forwarding/bgp:Dom/", "Routing%20and%20Forwarding/bgp:RtCtrl/", "Routing%20and%20Forwarding/bgp:Gr/", "Routing%20and%20Forwarding/bgp:DomAf/", "Routing%20and%20Forwarding/bgp:AdvPrefix/", "Routing%20and%20Forwarding/bgp:InterLeakP/", "Routing%20and%20Forwarding/bgp:AddlPath/", "Routing%20and%20Forwarding/bgp:AggAddr/", "Routing%20and%20Forwarding/bgp:PeerCont/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:Peer/", "Routing%20and%20Forwarding/bgp:LocalAsn/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:RtCtrlP/", "Routing%20and%20Forwarding/bgp:PfxCtrlP/", "Routing%20and%20Forwarding/bgp:PeerIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -421,6 +421,42 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 												},
 												"asn": schema.StringAttribute{
 													MarkdownDescription: "The autonomous system number.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"additional_paths_capability": schema.StringAttribute{
+										MarkdownDescription: "Additional paths capability.",
+										Computed:            true,
+									},
+									"additional_paths_route_map": schema.StringAttribute{
+										MarkdownDescription: "Route map name for path selection.",
+										Computed:            true,
+									},
+									"aggregate_addresses": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of BGP aggregate addresses.\n  - Map key: `address` - Aggregate Address.").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"advertise_map": schema.StringAttribute{
+													MarkdownDescription: "Advertise Map: Route map used to select attribute information from selected routes.",
+													Computed:            true,
+												},
+												"as_set": schema.StringAttribute{
+													MarkdownDescription: "AS-SET.",
+													Computed:            true,
+												},
+												"attribute_map": schema.StringAttribute{
+													MarkdownDescription: "Attribute Map: Route map to set attribute information of aggregate.",
+													Computed:            true,
+												},
+												"summary_only": schema.StringAttribute{
+													MarkdownDescription: "Aggregate address Summary only.",
+													Computed:            true,
+												},
+												"suppress_map": schema.StringAttribute{
+													MarkdownDescription: "Suppress Map to conditionally filter more-specific routes.",
 													Computed:            true,
 												},
 											},
@@ -899,6 +935,139 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 								},
 							},
 						},
+						"interface_peers": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of BGP interface peers.\n  - Map key: `interface_id` - Interface identifier of the neighbor.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"remote_asn": schema.StringAttribute{
+										MarkdownDescription: "Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "The name of the object.",
+										Computed:            true,
+									},
+									"peer_template": schema.StringAttribute{
+										MarkdownDescription: "Peer Template To Import From.",
+										Computed:            true,
+									},
+									"peer_type": schema.StringAttribute{
+										MarkdownDescription: "Neighbor Fabric Type.",
+										Computed:            true,
+									},
+									"admin_state": schema.StringAttribute{
+										MarkdownDescription: "Administrative State.",
+										Computed:            true,
+									},
+									"affinity_group": schema.Int64Attribute{
+										MarkdownDescription: "Affinity group for the neighbor.",
+										Computed:            true,
+									},
+									"asn_type": schema.StringAttribute{
+										MarkdownDescription: "Specify peer ASN type as External or Internal.",
+										Computed:            true,
+									},
+									"bfd_type": schema.StringAttribute{
+										MarkdownDescription: "Specify BFD session type.",
+										Computed:            true,
+									},
+									"bmp_server_1": schema.StringAttribute{
+										MarkdownDescription: "Activate BMP Server 1.",
+										Computed:            true,
+									},
+									"bmp_server_2": schema.StringAttribute{
+										MarkdownDescription: "Activate BMP Server 2.",
+										Computed:            true,
+									},
+									"capability_suppress_4_byte_asn": schema.StringAttribute{
+										MarkdownDescription: "Capability Suppress 4-byte-as.",
+										Computed:            true,
+									},
+									"connection_mode": schema.StringAttribute{
+										MarkdownDescription: "BGP transport connection mode.",
+										Computed:            true,
+									},
+									"peer_control": schema.StringAttribute{
+										MarkdownDescription: "Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.",
+										Computed:            true,
+									},
+									"dscp": schema.StringAttribute{
+										MarkdownDescription: "Specify DSCP value for Locally Originated packets.",
+										Computed:            true,
+									},
+									"dynamic_route_map": schema.StringAttribute{
+										MarkdownDescription: "Dynamic/Prefix Peer Route Map.",
+										Computed:            true,
+									},
+									"egress_peer_engineering": schema.StringAttribute{
+										MarkdownDescription: "Egress Peer Engineering EPE for neighbor.",
+										Computed:            true,
+									},
+									"egress_peer_engineering_peer_set": schema.StringAttribute{
+										MarkdownDescription: "Egress Peer Engineering EPE Peer-Set name.",
+										Computed:            true,
+									},
+									"hold_time": schema.Int64Attribute{
+										MarkdownDescription: "Hold Interval.",
+										Computed:            true,
+									},
+									"keepalive_interval": schema.Int64Attribute{
+										MarkdownDescription: "Keepalive Interval.",
+										Computed:            true,
+									},
+									"log_neighbor_changes": schema.StringAttribute{
+										MarkdownDescription: "Log messages for Neighbor up/down events.",
+										Computed:            true,
+									},
+									"low_memory_exempt": schema.StringAttribute{
+										MarkdownDescription: "Low Memory Exempt.",
+										Computed:            true,
+									},
+									"max_peer_count": schema.Int64Attribute{
+										MarkdownDescription: "Maximum Peers For the interface.",
+										Computed:            true,
+									},
+									"password_type": schema.StringAttribute{
+										MarkdownDescription: "Password EnCrypt Type.",
+										Computed:            true,
+									},
+									"password": schema.StringAttribute{
+										MarkdownDescription: "Configure a password for neighbor.",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"password_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										Computed:            true,
+									},
+									"password_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Computed:            true,
+									},
+									"private_as_control": schema.StringAttribute{
+										MarkdownDescription: "Remove private AS number from outbound updates.",
+										Computed:            true,
+									},
+									"session_template": schema.StringAttribute{
+										MarkdownDescription: "Peer Session Template To Import From.",
+										Computed:            true,
+									},
+									"ebgp_multihop_ttl": schema.Int64Attribute{
+										MarkdownDescription: "eBGP Multihop TTL value.",
+										Computed:            true,
+									},
+									"ttl_security_hops": schema.Int64Attribute{
+										MarkdownDescription: "Enable TTL Security Mechanism.",
+										Computed:            true,
+									},
+									"internal_vpn_client": schema.StringAttribute{
+										MarkdownDescription: "internal-vpn-client for iBGP PE-CE Support.",
+										Computed:            true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -934,7 +1103,7 @@ func (d *BGPDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "bgpInst,bgpDom,bgpRtCtrl,bgpGr,bgpDomAf,bgpAdvPrefix,bgpInterLeakP,bgpPeerCont,bgpPeerAf,bgpMaxPfxP,bgpPeer,bgpLocalAsn,bgpPeerAf,bgpMaxPfxP,bgpRtCtrlP,bgpPfxCtrlP")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "bgpInst,bgpDom,bgpRtCtrl,bgpGr,bgpDomAf,bgpAdvPrefix,bgpInterLeakP,bgpAddlPath,bgpAggAddr,bgpPeerCont,bgpPeerAf,bgpMaxPfxP,bgpPeer,bgpLocalAsn,bgpPeerAf,bgpMaxPfxP,bgpRtCtrlP,bgpPfxCtrlP,bgpPeerIf")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

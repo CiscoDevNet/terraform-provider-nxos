@@ -78,6 +78,16 @@ resource "nxos_bgp" "example" {
               srv6_prefix_type = "unspecified"
             }
           }
+          additional_paths_capability = "send"
+          additional_paths_route_map  = "ADD_PATH_MAP"
+          aggregate_addresses = {
+            "10.0.0.0/8" = {
+              advertise_map = "ADV_MAP"
+              as_set        = "enabled"
+              attribute_map = "ATTR_MAP"
+              summary_only  = "enabled"
+            }
+          }
         }
       }
       peer_templates = {
@@ -183,6 +193,32 @@ resource "nxos_bgp" "example" {
               }
             }
           }
+        }
+      }
+      interface_peers = {
+        "eth1/1" = {
+          remote_asn                     = "65002"
+          description                    = "My description"
+          peer_template                  = "SPINE-PEERS"
+          peer_type                      = "fabric-internal"
+          admin_state                    = "enabled"
+          asn_type                       = "none"
+          bfd_type                       = "none"
+          bmp_server_1                   = "disabled"
+          bmp_server_2                   = "disabled"
+          capability_suppress_4_byte_asn = "disabled"
+          connection_mode                = "passive"
+          peer_control                   = "bfd"
+          dscp                           = "af11"
+          dynamic_route_map              = "DYN_RT_MAP"
+          hold_time                      = 45
+          keepalive_interval             = 15
+          log_neighbor_changes           = "none"
+          low_memory_exempt              = "disabled"
+          password                       = "secret_password"
+          private_as_control             = "none"
+          session_template               = "SESS_TEMPLATE"
+          internal_vpn_client            = "disabled"
         }
       }
     }

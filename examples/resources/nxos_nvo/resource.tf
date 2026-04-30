@@ -1,6 +1,13 @@
 resource "nxos_nvo" "example" {
   vxlan_udp_port             = 4789
   vxlan_udp_source_port_mode = "high"
+  dci_advertise_pip          = "enable"
+  delay_restore_time         = 300
+  df_election_time           = "2.000000"
+  fabric_advertise_pip       = "enableL3"
+  site_id                    = 65535
+  split_horizon_per_site     = "enable"
+  state                      = "enabled"
   nve_interfaces = {
     "1" = {
       admin_state                        = "enabled"

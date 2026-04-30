@@ -42,6 +42,13 @@ type NVO struct {
 	Dn                     types.String                `tfsdk:"id"`
 	VxlanUdpPort           types.Int64                 `tfsdk:"vxlan_udp_port"`
 	VxlanUdpSourcePortMode types.String                `tfsdk:"vxlan_udp_source_port_mode"`
+	DciAdvertisePip        types.String                `tfsdk:"dci_advertise_pip"`
+	DelayRestoreTime       types.Int64                 `tfsdk:"delay_restore_time"`
+	DfElectionTime         types.String                `tfsdk:"df_election_time"`
+	FabricAdvertisePip     types.String                `tfsdk:"fabric_advertise_pip"`
+	SiteId                 types.Int64                 `tfsdk:"site_id"`
+	SplitHorizonPerSite    types.String                `tfsdk:"split_horizon_per_site"`
+	State                  types.String                `tfsdk:"state"`
 	NveInterfaces          map[string]NVONveInterfaces `tfsdk:"nve_interfaces"`
 }
 
@@ -136,6 +143,31 @@ func (data NVO) toBody(config NVO) nxos.Body {
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
+	attrs = "{}"
+	if !data.DciAdvertisePip.IsUnknown() && !data.DciAdvertisePip.IsNull() && !config.DciAdvertisePip.IsNull() {
+		attrs, _ = sjson.Set(attrs, "dciAdvertisePip", data.DciAdvertisePip.ValueString())
+	}
+	if !data.DelayRestoreTime.IsUnknown() && !data.DelayRestoreTime.IsNull() && !config.DelayRestoreTime.IsNull() {
+		attrs, _ = sjson.Set(attrs, "delayRestoreTime", strconv.FormatInt(data.DelayRestoreTime.ValueInt64(), 10))
+	}
+	if !data.DfElectionTime.IsUnknown() && !data.DfElectionTime.IsNull() && !config.DfElectionTime.IsNull() {
+		attrs, _ = sjson.Set(attrs, "dfElectionTime", data.DfElectionTime.ValueString())
+	}
+	if !data.FabricAdvertisePip.IsUnknown() && !data.FabricAdvertisePip.IsNull() && !config.FabricAdvertisePip.IsNull() {
+		attrs, _ = sjson.Set(attrs, "fabricAdvertisePip", data.FabricAdvertisePip.ValueString())
+	}
+	if !data.SiteId.IsUnknown() && !data.SiteId.IsNull() && !config.SiteId.IsNull() {
+		attrs, _ = sjson.Set(attrs, "siteId", strconv.FormatInt(data.SiteId.ValueInt64(), 10))
+	}
+	if !data.SplitHorizonPerSite.IsUnknown() && !data.SplitHorizonPerSite.IsNull() && !config.SplitHorizonPerSite.IsNull() {
+		attrs, _ = sjson.Set(attrs, "splitHorizonPerSite", data.SplitHorizonPerSite.ValueString())
+	}
+	if !data.State.IsUnknown() && !data.State.IsNull() && !config.State.IsNull() {
+		attrs, _ = sjson.Set(attrs, "state", data.State.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nvoEvpnMultisiteBordergw.attributes", attrs)
+	}
 	for key, child := range data.NveInterfaces {
 		configChild, configChildOk := config.NveInterfaces[key]
 		_ = configChild
@@ -269,6 +301,26 @@ func (data NVO) toBody(config NVO) nxos.Body {
 func (data *NVO) fromBody(res gjson.Result) {
 	data.VxlanUdpPort = types.Int64Value(res.Get(data.getClassName() + ".attributes.vxlanUDPPort").Int())
 	data.VxlanUdpSourcePortMode = types.StringValue(res.Get(data.getClassName() + ".attributes.vxlanUDPSrcPortMode").String())
+	{
+		var rnvoEvpnMultisiteBordergw gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("nvoEvpnMultisiteBordergw.attributes.rn").String()
+				if rnValue == "multisite" {
+					rnvoEvpnMultisiteBordergw = v
+					return false
+				}
+				return true
+			},
+		)
+		data.DciAdvertisePip = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.dciAdvertisePip").String())
+		data.DelayRestoreTime = types.Int64Value(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.delayRestoreTime").Int())
+		data.DfElectionTime = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.dfElectionTime").String())
+		data.FabricAdvertisePip = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.fabricAdvertisePip").String())
+		data.SiteId = types.Int64Value(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.siteId").Int())
+		data.SplitHorizonPerSite = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.splitHorizonPerSite").String())
+		data.State = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.state").String())
+	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -376,6 +428,52 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 		data.VxlanUdpSourcePortMode = types.StringValue(res.Get(data.getClassName() + ".attributes.vxlanUDPSrcPortMode").String())
 	} else {
 		data.VxlanUdpSourcePortMode = types.StringNull()
+	}
+	var rnvoEvpnMultisiteBordergw gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("nvoEvpnMultisiteBordergw.attributes.rn").String()
+			if rnValue == "multisite" {
+				rnvoEvpnMultisiteBordergw = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.DciAdvertisePip.IsNull() {
+		data.DciAdvertisePip = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.dciAdvertisePip").String())
+	} else {
+		data.DciAdvertisePip = types.StringNull()
+	}
+	if !data.DelayRestoreTime.IsNull() {
+		data.DelayRestoreTime = types.Int64Value(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.delayRestoreTime").Int())
+	} else {
+		data.DelayRestoreTime = types.Int64Null()
+	}
+	if !data.DfElectionTime.IsNull() {
+		data.DfElectionTime = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.dfElectionTime").String())
+	} else {
+		data.DfElectionTime = types.StringNull()
+	}
+	if !data.FabricAdvertisePip.IsNull() {
+		data.FabricAdvertisePip = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.fabricAdvertisePip").String())
+	} else {
+		data.FabricAdvertisePip = types.StringNull()
+	}
+	if !data.SiteId.IsNull() {
+		data.SiteId = types.Int64Value(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.siteId").Int())
+	} else {
+		data.SiteId = types.Int64Null()
+	}
+	if !data.SplitHorizonPerSite.IsNull() {
+		data.SplitHorizonPerSite = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.splitHorizonPerSite").String())
+	} else {
+		data.SplitHorizonPerSite = types.StringNull()
+	}
+	if !data.State.IsNull() {
+		data.State = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.state").String())
+	} else {
+		data.State = types.StringNull()
 	}
 	for key, item := range data.NveInterfaces {
 		var rnvoEp gjson.Result
@@ -601,6 +699,12 @@ func (data NVO) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
 	childrenPath := data.getClassName() + ".children"
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMultisiteBordergw.attributes.rn", "multisite")
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMultisiteBordergw.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 	for key, child := range data.NveInterfaces {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEp.attributes.rn", child.getRn(key))

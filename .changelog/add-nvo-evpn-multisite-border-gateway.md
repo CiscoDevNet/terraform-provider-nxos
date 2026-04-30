@@ -1,0 +1,1 @@
+- Add EVPN Multisite Border Gateway configuration to `nxos_nvo` resource and data source

@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, and Hypershield (Service Acceleration) settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, and Hypershield (Service Acceleration) settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, and SSH server configuration.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, and SSH server configuration.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -2751,6 +2751,119 @@ child_classes:
                             description: 'Service module number for traffic pinning - use 0 for dynamic pinning.'
                             example: 1
                             test_tags: [HYPERSHIELD]
+  - class_name: commEntity
+    doc_path: Communication/comm:Entity/
+    rn: comm
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: commSsh
+        rn: ssh
+        type: single
+        no_delete: true
+        tf_name: ssh
+        description: 'SSH server configuration.'
+        doc_path: Communication/comm:Ssh/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: ssh_admin_state
+            type: String
+            description: 'Admin state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: ciphers
+            tf_name: ssh_ciphers
+            type: String
+            description: 'Enable Or Disable All Ciphers.'
+            enum_values:
+              - "no"
+              - "yes"
+            example: "no"
+          - nxos_name: descr
+            tf_name: ssh_description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'SSH access'
+          - nxos_name: enWeakCiphers
+            tf_name: ssh_enable_weak_ciphers
+            type: String
+            description: 'Enable or Disable weak Ciphers.'
+            enum_values:
+              - "no"
+              - "yes"
+            example: "no"
+          - nxos_name: keyExchangeAlgorithms
+            tf_name: ssh_key_exchange_algorithms
+            type: String
+            description: 'Enable Or Disable All Key Exchange methods.'
+            enum_values:
+              - "no"
+              - "yes"
+            example: "no"
+          - nxos_name: keyTypes
+            tf_name: ssh_key_types
+            type: String
+            description: 'Enable Or Disable All Public Key Algorithms.'
+            enum_values:
+              - "no"
+              - "yes"
+            example: "no"
+          - nxos_name: loginAttempts
+            tf_name: ssh_login_attempts
+            type: Int64
+            description: 'Max number of login attempts allowed before SSH session is reset.'
+            min_int: 1
+            max_int: 10
+            example: 4
+          - nxos_name: loginGraceTime
+            tf_name: ssh_login_grace_time
+            type: Int64
+            description: 'Maximum grace time of SSH login.'
+            min_int: 0
+            max_int: 3600
+            example: 60
+          - nxos_name: messageAuthCodes
+            tf_name: ssh_message_authentication_codes
+            type: String
+            description: 'Enable Or Disable All Message Authentication Codes.'
+            enum_values:
+              - "no"
+              - "yes"
+            example: "no"
+          - nxos_name: port
+            tf_name: ssh_port
+            type: Int64
+            description: 'SSH port.'
+            min_int: 22
+            max_int: 65535
+            example: 22
+        child_classes:
+          - class_name: commSshKey
+            rn: key-[%s]
+            type: list
+            tf_name: keys
+            description: 'List of SSH server keys.'
+            doc_path: Communication/comm:SshKey/
+            attributes:
+              - nxos_name: type
+                tf_name: type
+                type: String
+                id: true
+                description: 'SSH server key type.'
+                enum_values:
+                  - rsa
+                  - dsa
+                  - ecdsa
+                example: rsa
+              - nxos_name: keyLen
+                tf_name: key_length
+                type: Int64
+                description: 'Length of the key in bytes.'
+                min_int: 0
+                max_int: 4096
+                example: 2048
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld

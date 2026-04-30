@@ -74,6 +74,9 @@ func TestAccNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v6_peer_address", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v6_redist_unchanged", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_next_hop_v6_unchanged", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_local_preference", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_path_selection_advertise", "ps-all"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.match_regular_community_criteria", "exact"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.mode", "standard"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.entries.10.action", "permit"))
 	var tfVersion *goversion.Version
@@ -195,6 +198,17 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config += `					set_next_hop_v6_peer_address = "disabled"` + "\n"
 	config += `					set_next_hop_v6_redist_unchanged = "enabled"` + "\n"
 	config += `					set_next_hop_v6_unchanged = "enabled"` + "\n"
+	config += `					set_local_preference = 100` + "\n"
+	config += `					set_path_selection_advertise = "ps-all"` + "\n"
+	config += `					match_next_hop_prefix_lists = {` + "\n"
+	config += `						"sys/rpm/pfxlistv4-[PREFIX_LIST1]" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					match_regular_community_criteria = "exact"` + "\n"
+	config += `					match_regular_community_lists = {` + "\n"
+	config += `						"sys/rpm/rtregcom-[COMMUNITY_LIST1]" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

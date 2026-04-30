@@ -1,0 +1,1 @@
+- Add set local preference, set path selection, set evpn, match next hop, match regular community, and match route access list configuration to `nxos_route_policy` resource and data source

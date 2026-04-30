@@ -1,6 +1,13 @@
 resource "nxos_nvo" "example" {
-  vxlan_udp_port             = 4789
-  vxlan_udp_source_port_mode = "high"
+  vxlan_udp_port                                       = 4789
+  vxlan_udp_source_port_mode                           = "high"
+  evpn_multisite_border_gateway_dci_advertise_pip      = "enable"
+  evpn_multisite_border_gateway_delay_restore_time     = 300
+  evpn_multisite_border_gateway_df_election_time       = "2.000000"
+  evpn_multisite_border_gateway_fabric_advertise_pip   = "enableL3"
+  evpn_multisite_border_gateway_site_id                = 65535
+  evpn_multisite_border_gateway_split_horizon_per_site = "enable"
+  evpn_multisite_border_gateway_state                  = "enabled"
   nve_interfaces = {
     "1" = {
       admin_state                        = "enabled"

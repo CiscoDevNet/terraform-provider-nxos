@@ -5,7 +5,7 @@ subcategory: "Overlay"
 description: |-
   This resource can manage the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.
   API Documentation
-  nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Eps/nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:IngRepl/
+  nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Eps/nvoEvpnMultisiteBordergw https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:IngRepl/
 ---
 
 # nxos_nvo (Resource)
@@ -15,6 +15,7 @@ This resource can manage the NVO (Network Virtualization Overlay) configuration 
 ### API Documentation
 
 - [nvoEps](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Eps/)
+- [nvoEvpnMultisiteBordergw](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/)
 - [nvoEp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Ep/)
 - [nvoNws](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nws/)
 - [nvoNw](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nw/)
@@ -24,8 +25,15 @@ This resource can manage the NVO (Network Virtualization Overlay) configuration 
 
 ```terraform
 resource "nxos_nvo" "example" {
-  vxlan_udp_port             = 4789
-  vxlan_udp_source_port_mode = "high"
+  vxlan_udp_port                                       = 4789
+  vxlan_udp_source_port_mode                           = "high"
+  evpn_multisite_border_gateway_dci_advertise_pip      = "enable"
+  evpn_multisite_border_gateway_delay_restore_time     = 300
+  evpn_multisite_border_gateway_df_election_time       = "2.000000"
+  evpn_multisite_border_gateway_fabric_advertise_pip   = "enableL3"
+  evpn_multisite_border_gateway_site_id                = 65535
+  evpn_multisite_border_gateway_split_horizon_per_site = "enable"
+  evpn_multisite_border_gateway_state                  = "enabled"
   nve_interfaces = {
     "1" = {
       admin_state                        = "enabled"
@@ -69,6 +77,19 @@ resource "nxos_nvo" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `evpn_multisite_border_gateway_dci_advertise_pip` (String) Enables/disables advertise PIP towards DCI in EVPN Multisite Border-gateway setup.
+  - Choices: `disable`, `enable`
+- `evpn_multisite_border_gateway_delay_restore_time` (Number) Delay-Restore Time.
+  - Range: `30`-`1000`
+- `evpn_multisite_border_gateway_df_election_time` (String) DF election time for anycast border gateways. Only one fractional digit supported.
+- `evpn_multisite_border_gateway_fabric_advertise_pip` (String) Enables/disables advertise PIP towards Fabric in EVPN Multisite Border-gateway setup.
+  - Choices: `disable`, `enableL3`
+- `evpn_multisite_border_gateway_site_id` (Number) Configuration of EVPN Multisite Border Gateway.
+  - Range: `0`-`281474976710655`
+- `evpn_multisite_border_gateway_split_horizon_per_site` (String) Enables/disables the per-site split-horizon feature on an EVPN Multisite anycast border gateway.
+  - Choices: `disable`, `enable`
+- `evpn_multisite_border_gateway_state` (String) Configures the state of EVPN Multisite Border-gateway.
+  - Choices: `enabled`
 - `nve_interfaces` (Attributes Map) NVE interface configuration.
   - Map key: `id` - Network Virtualization Overlay Endpoint (NVE) ID. (see [below for nested schema](#nestedatt--nve_interfaces))
 - `vxlan_udp_port` (Number) VxLAN UDP Port. Allowed value range is 1024-65535.

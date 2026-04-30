@@ -5,7 +5,7 @@ subcategory: "Overlay"
 description: |-
   This data source can read the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.
   API Documentation
-  nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Eps/nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:IngRepl/
+  nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Eps/nvoEvpnMultisiteBordergw https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:IngRepl/
 ---
 
 # nxos_nvo (Data Source)
@@ -15,6 +15,7 @@ This data source can read the NVO (Network Virtualization Overlay) configuration
 ### API Documentation
 
 - [nvoEps](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Eps/)
+- [nvoEvpnMultisiteBordergw](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/)
 - [nvoEp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Ep/)
 - [nvoNws](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nws/)
 - [nvoNw](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nw/)
@@ -36,6 +37,13 @@ data "nxos_nvo" "example" {
 
 ### Read-Only
 
+- `evpn_multisite_border_gateway_dci_advertise_pip` (String) Enables/disables advertise PIP towards DCI in EVPN Multisite Border-gateway setup.
+- `evpn_multisite_border_gateway_delay_restore_time` (Number) Delay-Restore Time.
+- `evpn_multisite_border_gateway_df_election_time` (String) DF election time for anycast border gateways. Only one fractional digit supported.
+- `evpn_multisite_border_gateway_fabric_advertise_pip` (String) Enables/disables advertise PIP towards Fabric in EVPN Multisite Border-gateway setup.
+- `evpn_multisite_border_gateway_site_id` (Number) Configuration of EVPN Multisite Border Gateway.
+- `evpn_multisite_border_gateway_split_horizon_per_site` (String) Enables/disables the per-site split-horizon feature on an EVPN Multisite anycast border gateway.
+- `evpn_multisite_border_gateway_state` (String) Configures the state of EVPN Multisite Border-gateway.
 - `id` (String) The distinguished name of the object.
 - `nve_interfaces` (Attributes Map) NVE interface configuration.
   - Map key: `id` - Network Virtualization Overlay Endpoint (NVE) ID. (see [below for nested schema](#nestedatt--nve_interfaces))

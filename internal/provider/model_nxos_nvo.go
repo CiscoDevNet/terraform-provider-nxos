@@ -38,11 +38,18 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type NVO struct {
-	Device                 types.String                `tfsdk:"device"`
-	Dn                     types.String                `tfsdk:"id"`
-	VxlanUdpPort           types.Int64                 `tfsdk:"vxlan_udp_port"`
-	VxlanUdpSourcePortMode types.String                `tfsdk:"vxlan_udp_source_port_mode"`
-	NveInterfaces          map[string]NVONveInterfaces `tfsdk:"nve_interfaces"`
+	Device                                        types.String                `tfsdk:"device"`
+	Dn                                            types.String                `tfsdk:"id"`
+	VxlanUdpPort                                  types.Int64                 `tfsdk:"vxlan_udp_port"`
+	VxlanUdpSourcePortMode                        types.String                `tfsdk:"vxlan_udp_source_port_mode"`
+	EvpnMultisiteBorderGatewayDciAdvertisePip     types.String                `tfsdk:"evpn_multisite_border_gateway_dci_advertise_pip"`
+	EvpnMultisiteBorderGatewayDelayRestoreTime    types.Int64                 `tfsdk:"evpn_multisite_border_gateway_delay_restore_time"`
+	EvpnMultisiteBorderGatewayDfElectionTime      types.String                `tfsdk:"evpn_multisite_border_gateway_df_election_time"`
+	EvpnMultisiteBorderGatewayFabricAdvertisePip  types.String                `tfsdk:"evpn_multisite_border_gateway_fabric_advertise_pip"`
+	EvpnMultisiteBorderGatewaySiteId              types.Int64                 `tfsdk:"evpn_multisite_border_gateway_site_id"`
+	EvpnMultisiteBorderGatewaySplitHorizonPerSite types.String                `tfsdk:"evpn_multisite_border_gateway_split_horizon_per_site"`
+	EvpnMultisiteBorderGatewayState               types.String                `tfsdk:"evpn_multisite_border_gateway_state"`
+	NveInterfaces                                 map[string]NVONveInterfaces `tfsdk:"nve_interfaces"`
 }
 
 type NVONveInterfaces struct {
@@ -136,6 +143,31 @@ func (data NVO) toBody(config NVO) nxos.Body {
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
+	attrs = "{}"
+	if !data.EvpnMultisiteBorderGatewayDciAdvertisePip.IsUnknown() && !data.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() && !config.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() {
+		attrs, _ = sjson.Set(attrs, "dciAdvertisePip", data.EvpnMultisiteBorderGatewayDciAdvertisePip.ValueString())
+	}
+	if !data.EvpnMultisiteBorderGatewayDelayRestoreTime.IsUnknown() && !data.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() && !config.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() {
+		attrs, _ = sjson.Set(attrs, "delayRestoreTime", strconv.FormatInt(data.EvpnMultisiteBorderGatewayDelayRestoreTime.ValueInt64(), 10))
+	}
+	if !data.EvpnMultisiteBorderGatewayDfElectionTime.IsUnknown() && !data.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() && !config.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() {
+		attrs, _ = sjson.Set(attrs, "dfElectionTime", data.EvpnMultisiteBorderGatewayDfElectionTime.ValueString())
+	}
+	if !data.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsUnknown() && !data.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() && !config.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() {
+		attrs, _ = sjson.Set(attrs, "fabricAdvertisePip", data.EvpnMultisiteBorderGatewayFabricAdvertisePip.ValueString())
+	}
+	if !data.EvpnMultisiteBorderGatewaySiteId.IsUnknown() && !data.EvpnMultisiteBorderGatewaySiteId.IsNull() && !config.EvpnMultisiteBorderGatewaySiteId.IsNull() {
+		attrs, _ = sjson.Set(attrs, "siteId", strconv.FormatInt(data.EvpnMultisiteBorderGatewaySiteId.ValueInt64(), 10))
+	}
+	if !data.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsUnknown() && !data.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() && !config.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() {
+		attrs, _ = sjson.Set(attrs, "splitHorizonPerSite", data.EvpnMultisiteBorderGatewaySplitHorizonPerSite.ValueString())
+	}
+	if !data.EvpnMultisiteBorderGatewayState.IsUnknown() && !data.EvpnMultisiteBorderGatewayState.IsNull() && !config.EvpnMultisiteBorderGatewayState.IsNull() {
+		attrs, _ = sjson.Set(attrs, "state", data.EvpnMultisiteBorderGatewayState.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nvoEvpnMultisiteBordergw.attributes", attrs)
+	}
 	for key, child := range data.NveInterfaces {
 		configChild, configChildOk := config.NveInterfaces[key]
 		_ = configChild
@@ -269,6 +301,26 @@ func (data NVO) toBody(config NVO) nxos.Body {
 func (data *NVO) fromBody(res gjson.Result) {
 	data.VxlanUdpPort = types.Int64Value(res.Get(data.getClassName() + ".attributes.vxlanUDPPort").Int())
 	data.VxlanUdpSourcePortMode = types.StringValue(res.Get(data.getClassName() + ".attributes.vxlanUDPSrcPortMode").String())
+	{
+		var rnvoEvpnMultisiteBordergw gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("nvoEvpnMultisiteBordergw.attributes.rn").String()
+				if rnValue == "multisite" {
+					rnvoEvpnMultisiteBordergw = v
+					return false
+				}
+				return true
+			},
+		)
+		data.EvpnMultisiteBorderGatewayDciAdvertisePip = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.dciAdvertisePip").String())
+		data.EvpnMultisiteBorderGatewayDelayRestoreTime = types.Int64Value(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.delayRestoreTime").Int())
+		data.EvpnMultisiteBorderGatewayDfElectionTime = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.dfElectionTime").String())
+		data.EvpnMultisiteBorderGatewayFabricAdvertisePip = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.fabricAdvertisePip").String())
+		data.EvpnMultisiteBorderGatewaySiteId = types.Int64Value(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.siteId").Int())
+		data.EvpnMultisiteBorderGatewaySplitHorizonPerSite = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.splitHorizonPerSite").String())
+		data.EvpnMultisiteBorderGatewayState = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.state").String())
+	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -376,6 +428,52 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 		data.VxlanUdpSourcePortMode = types.StringValue(res.Get(data.getClassName() + ".attributes.vxlanUDPSrcPortMode").String())
 	} else {
 		data.VxlanUdpSourcePortMode = types.StringNull()
+	}
+	var rnvoEvpnMultisiteBordergw gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("nvoEvpnMultisiteBordergw.attributes.rn").String()
+			if rnValue == "multisite" {
+				rnvoEvpnMultisiteBordergw = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() {
+		data.EvpnMultisiteBorderGatewayDciAdvertisePip = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.dciAdvertisePip").String())
+	} else {
+		data.EvpnMultisiteBorderGatewayDciAdvertisePip = types.StringNull()
+	}
+	if !data.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() {
+		data.EvpnMultisiteBorderGatewayDelayRestoreTime = types.Int64Value(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.delayRestoreTime").Int())
+	} else {
+		data.EvpnMultisiteBorderGatewayDelayRestoreTime = types.Int64Null()
+	}
+	if !data.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() {
+		data.EvpnMultisiteBorderGatewayDfElectionTime = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.dfElectionTime").String())
+	} else {
+		data.EvpnMultisiteBorderGatewayDfElectionTime = types.StringNull()
+	}
+	if !data.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() {
+		data.EvpnMultisiteBorderGatewayFabricAdvertisePip = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.fabricAdvertisePip").String())
+	} else {
+		data.EvpnMultisiteBorderGatewayFabricAdvertisePip = types.StringNull()
+	}
+	if !data.EvpnMultisiteBorderGatewaySiteId.IsNull() {
+		data.EvpnMultisiteBorderGatewaySiteId = types.Int64Value(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.siteId").Int())
+	} else {
+		data.EvpnMultisiteBorderGatewaySiteId = types.Int64Null()
+	}
+	if !data.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() {
+		data.EvpnMultisiteBorderGatewaySplitHorizonPerSite = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.splitHorizonPerSite").String())
+	} else {
+		data.EvpnMultisiteBorderGatewaySplitHorizonPerSite = types.StringNull()
+	}
+	if !data.EvpnMultisiteBorderGatewayState.IsNull() {
+		data.EvpnMultisiteBorderGatewayState = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.state").String())
+	} else {
+		data.EvpnMultisiteBorderGatewayState = types.StringNull()
 	}
 	for key, item := range data.NveInterfaces {
 		var rnvoEp gjson.Result
@@ -601,6 +699,12 @@ func (data NVO) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
 	childrenPath := data.getClassName() + ".children"
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMultisiteBordergw.attributes.rn", "multisite")
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMultisiteBordergw.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 	for key, child := range data.NveInterfaces {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEp.attributes.rn", child.getRn(key))

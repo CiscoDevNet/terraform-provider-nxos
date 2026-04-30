@@ -57,7 +57,7 @@ func (d *NVODataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.").AddApiDocumentation("nvoEps", "Network%20Virtualization/nvo:Eps/", []string{"nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:Ep/", "Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.").AddApiDocumentation("nvoEps", "Network%20Virtualization/nvo:Eps/", []string{"nvoEvpnMultisiteBordergw", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:EvpnMultisiteBordergw/", "Network%20Virtualization/nvo:Ep/", "Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -74,6 +74,34 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"vxlan_udp_source_port_mode": schema.StringAttribute{
 				MarkdownDescription: "VxLAN UDP Source Port Mode.",
+				Computed:            true,
+			},
+			"evpn_multisite_border_gateway_dci_advertise_pip": schema.StringAttribute{
+				MarkdownDescription: "Enables/disables advertise PIP towards DCI in EVPN Multisite Border-gateway setup.",
+				Computed:            true,
+			},
+			"evpn_multisite_border_gateway_delay_restore_time": schema.Int64Attribute{
+				MarkdownDescription: "Delay-Restore Time.",
+				Computed:            true,
+			},
+			"evpn_multisite_border_gateway_df_election_time": schema.StringAttribute{
+				MarkdownDescription: "DF election time for anycast border gateways. Only one fractional digit supported.",
+				Computed:            true,
+			},
+			"evpn_multisite_border_gateway_fabric_advertise_pip": schema.StringAttribute{
+				MarkdownDescription: "Enables/disables advertise PIP towards Fabric in EVPN Multisite Border-gateway setup.",
+				Computed:            true,
+			},
+			"evpn_multisite_border_gateway_site_id": schema.Int64Attribute{
+				MarkdownDescription: "Configuration of EVPN Multisite Border Gateway.",
+				Computed:            true,
+			},
+			"evpn_multisite_border_gateway_split_horizon_per_site": schema.StringAttribute{
+				MarkdownDescription: "Enables/disables the per-site split-horizon feature on an EVPN Multisite anycast border gateway.",
+				Computed:            true,
+			},
+			"evpn_multisite_border_gateway_state": schema.StringAttribute{
+				MarkdownDescription: "Configures the state of EVPN Multisite Border-gateway.",
 				Computed:            true,
 			},
 			"nve_interfaces": schema.MapNestedAttribute{
@@ -240,7 +268,7 @@ func (d *NVODataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "nvoEp,nvoNws,nvoNw,nvoIngRepl")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "nvoEvpnMultisiteBordergw,nvoEp,nvoNws,nvoNw,nvoIngRepl")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -38,333 +38,221 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type System struct {
-	Device                                              types.String                          `tfsdk:"device"`
-	Dn                                                  types.String                          `tfsdk:"id"`
-	Name                                                types.String                          `tfsdk:"name"`
-	EthernetMtu                                         types.Int64                           `tfsdk:"ethernet_mtu"`
-	EthernetDefaultAdminState                           types.String                          `tfsdk:"ethernet_default_admin_state"`
-	EthernetAdminLinkDownSyslogLevel                    types.Int64                           `tfsdk:"ethernet_admin_link_down_syslog_level"`
-	EthernetAdminLinkUpSyslogLevel                      types.Int64                           `tfsdk:"ethernet_admin_link_up_syslog_level"`
-	EthernetAdminState                                  types.String                          `tfsdk:"ethernet_admin_state"`
-	EthernetAllowUnsupportedSfp                         types.Bool                            `tfsdk:"ethernet_allow_unsupported_sfp"`
-	EthernetChassisInfrastructureAdaptorVlan            types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
-	EthernetChassisInfrastructureEpdsPortNumber         types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
-	EthernetChassisInfrastructureIpv6Address            types.String                          `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
-	EthernetChassisInfrastructureVlan                   types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_vlan"`
-	EthernetChassisManagementInstance                   types.String                          `tfsdk:"ethernet_chassis_management_instance"`
-	EthernetChassisManagementInstanceFabricNumber       types.String                          `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
-	EthernetControl                                     types.String                          `tfsdk:"ethernet_control"`
-	EthernetInterfaceSyslogInfo                         types.String                          `tfsdk:"ethernet_interface_syslog_info"`
-	EthernetLogEvent                                    types.String                          `tfsdk:"ethernet_log_event"`
-	EthernetDefaultLayer                                types.String                          `tfsdk:"ethernet_default_layer"`
-	EthernetSystemInterfaceAdminState                   types.String                          `tfsdk:"ethernet_system_interface_admin_state"`
-	EthernetSystemLinkFailureLaserOn                    types.Bool                            `tfsdk:"ethernet_system_link_failure_laser_on"`
-	EthernetSystemStormControlMultiThreshold            types.Bool                            `tfsdk:"ethernet_system_storm_control_multi_threshold"`
-	EthernetVlanTagNative                               types.Bool                            `tfsdk:"ethernet_vlan_tag_native"`
-	ArpAdminState                                       types.String                          `tfsdk:"arp_admin_state"`
-	ArpInstanceAdminState                               types.String                          `tfsdk:"arp_instance_admin_state"`
-	ArpAllowStaticArpOutsideSubnet                      types.String                          `tfsdk:"arp_allow_static_arp_outside_subnet"`
-	ArpUnnumberedSviSoftwareReplication                 types.String                          `tfsdk:"arp_unnumbered_svi_software_replication"`
-	ArpCacheLimit                                       types.Int64                           `tfsdk:"arp_cache_limit"`
-	ArpCacheSyslogRate                                  types.Int64                           `tfsdk:"arp_cache_syslog_rate"`
-	ArpControl                                          types.String                          `tfsdk:"arp_control"`
-	ArpEvpnTimeout                                      types.Int64                           `tfsdk:"arp_evpn_timeout"`
-	ArpInterfaceCacheLimit                              types.Int64                           `tfsdk:"arp_interface_cache_limit"`
-	ArpIpAdjacencyRouteDistance                         types.Int64                           `tfsdk:"arp_ip_adjacency_route_distance"`
-	ArpIpArpCos                                         types.Int64                           `tfsdk:"arp_ip_arp_cos"`
-	ArpOffListTimeout                                   types.Int64                           `tfsdk:"arp_off_list_timeout"`
-	ArpRarpFabricForwarding                             types.String                          `tfsdk:"arp_rarp_fabric_forwarding"`
-	ArpRarpFabricForwardingRate                         types.Int64                           `tfsdk:"arp_rarp_fabric_forwarding_rate"`
-	ArpResolveOutsideSubnet                             types.String                          `tfsdk:"arp_resolve_outside_subnet"`
-	ArpSuppressionTimeout                               types.Int64                           `tfsdk:"arp_suppression_timeout"`
-	ArpTimeout                                          types.Int64                           `tfsdk:"arp_timeout"`
-	ArpVpcDomains                                       map[string]SystemArpVpcDomains        `tfsdk:"arp_vpc_domains"`
-	NdAdminState                                        types.String                          `tfsdk:"nd_admin_state"`
-	NdAcceptSolicitNeighborEntry                        types.String                          `tfsdk:"nd_accept_solicit_neighbor_entry"`
-	NdInstanceAdminState                                types.String                          `tfsdk:"nd_instance_admin_state"`
-	NdAgingInterval                                     types.Int64                           `tfsdk:"nd_aging_interval"`
-	NdCacheLimit                                        types.Int64                           `tfsdk:"nd_cache_limit"`
-	NdCacheSyslogRate                                   types.Int64                           `tfsdk:"nd_cache_syslog_rate"`
-	NdControl                                           types.String                          `tfsdk:"nd_control"`
-	NdIpv6AdjacencyRouteDistance                        types.Int64                           `tfsdk:"nd_ipv6_adjacency_route_distance"`
-	NdOffListTimeout                                    types.Int64                           `tfsdk:"nd_off_list_timeout"`
-	NdProbeIntervalForSolicitNeighbor                   types.Int64                           `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
-	NdSolicitNeighborAdvertisement                      types.String                          `tfsdk:"nd_solicit_neighbor_advertisement"`
-	NdVrfs                                              map[string]SystemNdVrfs               `tfsdk:"nd_vrfs"`
-	NdVpcDomains                                        map[string]SystemNdVpcDomains         `tfsdk:"nd_vpc_domains"`
-	ClockAdminState                                     types.String                          `tfsdk:"clock_admin_state"`
-	ClockAuthenticationState                            types.String                          `tfsdk:"clock_authentication_state"`
-	ClockFormat                                         types.String                          `tfsdk:"clock_format"`
-	ClockFormatDebug                                    types.Bool                            `tfsdk:"clock_format_debug"`
-	ClockFormatSyslog                                   types.Bool                            `tfsdk:"clock_format_syslog"`
-	ClockProtocol                                       types.String                          `tfsdk:"clock_protocol"`
-	ClockTimezoneName                                   types.String                          `tfsdk:"clock_timezone_name"`
-	ClockTimezoneHours                                  types.Int64                           `tfsdk:"clock_timezone_hours"`
-	ClockTimezoneMinutes                                types.Int64                           `tfsdk:"clock_timezone_minutes"`
-	ClockSummerTimeName                                 types.String                          `tfsdk:"clock_summer_time_name"`
-	ClockSummerTimeOffsetMinutes                        types.Int64                           `tfsdk:"clock_summer_time_offset_minutes"`
-	ClockSummerTimeStartWeek                            types.Int64                           `tfsdk:"clock_summer_time_start_week"`
-	ClockSummerTimeStartDay                             types.String                          `tfsdk:"clock_summer_time_start_day"`
-	ClockSummerTimeStartMonth                           types.String                          `tfsdk:"clock_summer_time_start_month"`
-	ClockSummerTimeStartTime                            types.String                          `tfsdk:"clock_summer_time_start_time"`
-	ClockSummerTimeEndWeek                              types.Int64                           `tfsdk:"clock_summer_time_end_week"`
-	ClockSummerTimeEndDay                               types.String                          `tfsdk:"clock_summer_time_end_day"`
-	ClockSummerTimeEndMonth                             types.String                          `tfsdk:"clock_summer_time_end_month"`
-	ClockSummerTimeEndTime                              types.String                          `tfsdk:"clock_summer_time_end_time"`
-	DnsAdminState                                       types.String                          `tfsdk:"dns_admin_state"`
-	DnsProfiles                                         map[string]SystemDnsProfiles          `tfsdk:"dns_profiles"`
-	Vdcs                                                map[string]SystemVdcs                 `tfsdk:"vdcs"`
-	CliAliases                                          map[string]SystemCliAliases           `tfsdk:"cli_aliases"`
-	SmartLicensingTransportMode                         types.String                          `tfsdk:"smart_licensing_transport_mode"`
-	SmartLicensingTransportCsluUrl                      types.String                          `tfsdk:"smart_licensing_transport_cslu_url"`
-	BootAci                                             types.String                          `tfsdk:"boot_aci"`
-	BootAutoCopy                                        types.String                          `tfsdk:"boot_auto_copy"`
-	BootDhcp                                            types.Int64                           `tfsdk:"boot_dhcp"`
-	BootExcludeConfiguration                            types.String                          `tfsdk:"boot_exclude_configuration"`
-	BootFex                                             types.String                          `tfsdk:"boot_fex"`
-	BootMode                                            types.String                          `tfsdk:"boot_mode"`
-	BootOrder                                           types.String                          `tfsdk:"boot_order"`
-	BootPoap                                            types.String                          `tfsdk:"boot_poap"`
-	BootImageVerification                               types.String                          `tfsdk:"boot_image_verification"`
-	BootImageSupervisor1                                types.String                          `tfsdk:"boot_image_supervisor_1"`
-	BootImageSupervisor2                                types.String                          `tfsdk:"boot_image_supervisor_2"`
-	CfsAdminState                                       types.String                          `tfsdk:"cfs_admin_state"`
-	CfsDistribute                                       types.String                          `tfsdk:"cfs_distribute"`
-	CfsEthernetDistribution                             types.String                          `tfsdk:"cfs_ethernet_distribution"`
-	CfsIpv4Distribution                                 types.String                          `tfsdk:"cfs_ipv4_distribution"`
-	CfsIpv4MulticastAddress                             types.String                          `tfsdk:"cfs_ipv4_multicast_address"`
-	CfsIpv6Distribution                                 types.String                          `tfsdk:"cfs_ipv6_distribution"`
-	CfsIpv6MulticastAddress                             types.String                          `tfsdk:"cfs_ipv6_multicast_address"`
-	UdldAdminState                                      types.String                          `tfsdk:"udld_admin_state"`
-	UdldAggressive                                      types.String                          `tfsdk:"udld_aggressive"`
-	UdldMessageInterval                                 types.Int64                           `tfsdk:"udld_message_interval"`
-	UdldInterfaces                                      map[string]SystemUdldInterfaces       `tfsdk:"udld_interfaces"`
-	PlatformAccessListMatchInnerHeader                  types.String                          `tfsdk:"platform_access_list_match_inner_header"`
-	PlatformAclTapAggregation                           types.String                          `tfsdk:"platform_acl_tap_aggregation"`
-	PlatformDescription                                 types.String                          `tfsdk:"platform_description"`
-	PlatformDisableParseError                           types.String                          `tfsdk:"platform_disable_parse_error"`
-	PlatformGlobalTxSpan                                types.String                          `tfsdk:"platform_global_tx_span"`
-	PlatformHighMulticastPriority                       types.String                          `tfsdk:"platform_high_multicast_priority"`
-	PlatformHardwareLouResourceThreshold                types.Int64                           `tfsdk:"platform_hardware_lou_resource_threshold"`
-	PlatformIngressBdIfaclLabelOptimization             types.String                          `tfsdk:"platform_ingress_bd_ifacl_label_optimization"`
-	PlatformIngressRaclSize                             types.String                          `tfsdk:"platform_ingress_racl_size"`
-	PlatformIngressReplicationRoundRobin                types.Bool                            `tfsdk:"platform_ingress_replication_round_robin"`
-	PlatformIpStatistics                                types.String                          `tfsdk:"platform_ip_statistics"`
-	PlatformIpv6AlpmCarveValue                          types.Int64                           `tfsdk:"platform_ipv6_alpm_carve_value"`
-	PlatformIpv6LpmMaxEntries                           types.Int64                           `tfsdk:"platform_ipv6_lpm_max_entries"`
-	PlatformLpmMaxLimit                                 types.Int64                           `tfsdk:"platform_lpm_max_limit"`
-	PlatformMulticastDcsCheck                           types.String                          `tfsdk:"platform_multicast_dcs_check"`
-	PlatformMulticastFlexStats                          types.String                          `tfsdk:"platform_multicast_flex_stats"`
-	PlatformMulticastLpmMaxEntries                      types.Int64                           `tfsdk:"platform_multicast_lpm_max_entries"`
-	PlatformMulticastNlb                                types.String                          `tfsdk:"platform_multicast_nlb"`
-	PlatformMulticastRaclBridge                         types.String                          `tfsdk:"platform_multicast_racl_bridge"`
-	PlatformMldSnooping                                 types.String                          `tfsdk:"platform_mld_snooping"`
-	PlatformMplsAdjacencyStatsMode                      types.String                          `tfsdk:"platform_mpls_adjacency_stats_mode"`
-	PlatformMplsEcmpMode                                types.String                          `tfsdk:"platform_mpls_ecmp_mode"`
-	PlatformMroutingDisableL2Update                     types.String                          `tfsdk:"platform_mrouting_disable_l2_update"`
-	PlatformMroutingDisableSecondRouteUpdate            types.String                          `tfsdk:"platform_mrouting_disable_second_route_update"`
-	PlatformMroutingPerformanceMode                     types.String                          `tfsdk:"platform_mrouting_performance_mode"`
-	PlatformMulticastMaxLimit                           types.Int64                           `tfsdk:"platform_multicast_max_limit"`
-	PlatformMulticastRpfCheckOptimization               types.String                          `tfsdk:"platform_multicast_rpf_check_optimization"`
-	PlatformMulticastServiceReflectPort                 types.Int64                           `tfsdk:"platform_multicast_service_reflect_port"`
-	PlatformMulticastSyslogThreshold                    types.Int64                           `tfsdk:"platform_multicast_syslog_threshold"`
-	PlatformOpenflowForwardPdu                          types.String                          `tfsdk:"platform_openflow_forward_pdu"`
-	PlatformPbrSkipSelfIp                               types.String                          `tfsdk:"platform_pbr_skip_self_ip"`
-	PlatformPortChannelFastConvergence                  types.String                          `tfsdk:"platform_port_channel_fast_convergence"`
-	PlatformPortChannelLoadBalanceAlgorithm             types.String                          `tfsdk:"platform_port_channel_load_balance_algorithm"`
-	PlatformPortChannelLoadBalanceResilient             types.String                          `tfsdk:"platform_port_channel_load_balance_resilient"`
-	PlatformPortChannelMplsLoadBalanceLabelIp           types.String                          `tfsdk:"platform_port_channel_mpls_load_balance_label_ip"`
-	PlatformPortChannelMplsLoadBalanceLabelOnly         types.String                          `tfsdk:"platform_port_channel_mpls_load_balance_label_only"`
-	PlatformPortChannelScaleFanout                      types.String                          `tfsdk:"platform_port_channel_scale_fanout"`
-	PlatformPicCoreEnable                               types.String                          `tfsdk:"platform_pic_core_enable"`
-	PlatformProfileFrontPortMode                        types.String                          `tfsdk:"platform_profile_front_port_mode"`
-	PlatformProfileMode                                 types.String                          `tfsdk:"platform_profile_mode"`
-	PlatformProfileTuple                                types.String                          `tfsdk:"platform_profile_tuple"`
-	PlatformPstatConfiguration                          types.String                          `tfsdk:"platform_pstat_configuration"`
-	PlatformQosMinBuffer                                types.String                          `tfsdk:"platform_qos_min_buffer"`
-	PlatformRoutingMode                                 types.String                          `tfsdk:"platform_routing_mode"`
-	PlatformServiceTemplateName                         types.String                          `tfsdk:"platform_service_template_name"`
-	PlatformSviAndSiFlexStats                           types.String                          `tfsdk:"platform_svi_and_si_flex_stats"`
-	PlatformSviFlexStats                                types.String                          `tfsdk:"platform_svi_flex_stats"`
-	PlatformSwitchMode                                  types.String                          `tfsdk:"platform_switch_mode"`
-	PlatformSwitchingFabricSpeed                        types.String                          `tfsdk:"platform_switching_fabric_speed"`
-	PlatformSwitchingMode                               types.String                          `tfsdk:"platform_switching_mode"`
-	PlatformSystemFabricMode                            types.String                          `tfsdk:"platform_system_fabric_mode"`
-	PlatformTcamSyslogThreshold                         types.Int64                           `tfsdk:"platform_tcam_syslog_threshold"`
-	PlatformUnicastMaxLimit                             types.Int64                           `tfsdk:"platform_unicast_max_limit"`
-	PlatformUnicastSyslogThreshold                      types.Int64                           `tfsdk:"platform_unicast_syslog_threshold"`
-	PlatformUnicastTrace                                types.String                          `tfsdk:"platform_unicast_trace"`
-	PlatformUnknownUnicastFlood                         types.String                          `tfsdk:"platform_unknown_unicast_flood"`
-	PlatformUrpfStatus                                  types.String                          `tfsdk:"platform_urpf_status"`
-	PlatformWrrUnicastBandwidth                         types.Int64                           `tfsdk:"platform_wrr_unicast_bandwidth"`
-	TcamRegionArpAclSize                                types.Int64                           `tfsdk:"tcam_region_arp_acl_size"`
-	TcamRegionCoppSize                                  types.Int64                           `tfsdk:"tcam_region_copp_size"`
-	TcamRegionCoppSystemSize                            types.Int64                           `tfsdk:"tcam_region_copp_system_size"`
-	TcamRegionEgressIpv6QosSize                         types.Int64                           `tfsdk:"tcam_region_egress_ipv6_qos_size"`
-	TcamRegionEgressIpv6RaclSize                        types.Int64                           `tfsdk:"tcam_region_egress_ipv6_racl_size"`
-	TcamRegionEgressMacQosSize                          types.Int64                           `tfsdk:"tcam_region_egress_mac_qos_size"`
-	TcamRegionEgressQosLiteSize                         types.Int64                           `tfsdk:"tcam_region_egress_qos_lite_size"`
-	TcamRegionEgressQosSize                             types.Int64                           `tfsdk:"tcam_region_egress_qos_size"`
-	TcamRegionEgressRaclSize                            types.Int64                           `tfsdk:"tcam_region_egress_racl_size"`
-	TcamRegionEgressVaclSize                            types.Int64                           `tfsdk:"tcam_region_egress_vacl_size"`
-	TcamRegionFcoeEgressSize                            types.Int64                           `tfsdk:"tcam_region_fcoe_egress_size"`
-	TcamRegionFcoeIngressSize                           types.Int64                           `tfsdk:"tcam_region_fcoe_ingress_size"`
-	TcamRegionFhsSize                                   types.Int64                           `tfsdk:"tcam_region_fhs_size"`
-	TcamRegionInterfaceAclLiteSize                      types.Int64                           `tfsdk:"tcam_region_interface_acl_lite_size"`
-	TcamRegionInterfaceAclSize                          types.Int64                           `tfsdk:"tcam_region_interface_acl_size"`
-	TcamRegionInterfaceAclUdfSize                       types.Int64                           `tfsdk:"tcam_region_interface_acl_udf_size"`
-	TcamRegionIngressFlowRedirectSize                   types.Int64                           `tfsdk:"tcam_region_ingress_flow_redirect_size"`
-	TcamRegionIngressFlowSize                           types.Int64                           `tfsdk:"tcam_region_ingress_flow_size"`
-	TcamRegionIpsgSize                                  types.Int64                           `tfsdk:"tcam_region_ipsg_size"`
-	TcamRegionIpv6InterfaceAclSize                      types.Int64                           `tfsdk:"tcam_region_ipv6_interface_acl_size"`
-	TcamRegionIpv6L3QosSize                             types.Int64                           `tfsdk:"tcam_region_ipv6_l3_qos_size"`
-	TcamRegionIpv6PbrSize                               types.Int64                           `tfsdk:"tcam_region_ipv6_pbr_size"`
-	TcamRegionIpv6QosSize                               types.Int64                           `tfsdk:"tcam_region_ipv6_qos_size"`
-	TcamRegionIpv6RaclSize                              types.Int64                           `tfsdk:"tcam_region_ipv6_racl_size"`
-	TcamRegionIpv6SpanL2Size                            types.Int64                           `tfsdk:"tcam_region_ipv6_span_l2_size"`
-	TcamRegionIpv6SpanSize                              types.Int64                           `tfsdk:"tcam_region_ipv6_span_size"`
-	TcamRegionIpv6SupSize                               types.Int64                           `tfsdk:"tcam_region_ipv6_sup_size"`
-	TcamRegionIpv6VaclSize                              types.Int64                           `tfsdk:"tcam_region_ipv6_vacl_size"`
-	TcamRegionIpv6VlanQosSize                           types.Int64                           `tfsdk:"tcam_region_ipv6_vlan_qos_size"`
-	TcamRegionL3QosIntraLiteSize                        types.Int64                           `tfsdk:"tcam_region_l3_qos_intra_lite_size"`
-	TcamRegionMacInterfaceAclSize                       types.Int64                           `tfsdk:"tcam_region_mac_interface_acl_size"`
-	TcamRegionMacL3QosSize                              types.Int64                           `tfsdk:"tcam_region_mac_l3_qos_size"`
-	TcamRegionMacQosSize                                types.Int64                           `tfsdk:"tcam_region_mac_qos_size"`
-	TcamRegionMacVaclSize                               types.Int64                           `tfsdk:"tcam_region_mac_vacl_size"`
-	TcamRegionMacVlanQosSize                            types.Int64                           `tfsdk:"tcam_region_mac_vlan_qos_size"`
-	TcamRegionMulticastBidirSize                        types.Int64                           `tfsdk:"tcam_region_multicast_bidir_size"`
-	TcamRegionMplsDoublewide                            types.Bool                            `tfsdk:"tcam_region_mpls_doublewide"`
-	TcamRegionMplsSize                                  types.Int64                           `tfsdk:"tcam_region_mpls_size"`
-	TcamRegionMvpnSize                                  types.Int64                           `tfsdk:"tcam_region_mvpn_size"`
-	TcamRegionN9kArpAclSize                             types.Int64                           `tfsdk:"tcam_region_n9k_arp_acl_size"`
-	TcamRegionNatSize                                   types.Int64                           `tfsdk:"tcam_region_nat_size"`
-	TcamRegionOpenflowDoublewide                        types.Bool                            `tfsdk:"tcam_region_openflow_doublewide"`
-	TcamRegionOpenflowLiteSize                          types.Int64                           `tfsdk:"tcam_region_openflow_lite_size"`
-	TcamRegionOpenflowSize                              types.Int64                           `tfsdk:"tcam_region_openflow_size"`
-	TcamRegionPbrSize                                   types.Int64                           `tfsdk:"tcam_region_pbr_size"`
-	TcamRegionQosIntraLiteSize                          types.Int64                           `tfsdk:"tcam_region_qos_intra_lite_size"`
-	TcamRegionQosSize                                   types.Int64                           `tfsdk:"tcam_region_qos_size"`
-	TcamRegionQosLabelSize                              types.Int64                           `tfsdk:"tcam_region_qos_label_size"`
-	TcamRegionRaclLiteSize                              types.Int64                           `tfsdk:"tcam_region_racl_lite_size"`
-	TcamRegionRaclSize                                  types.Int64                           `tfsdk:"tcam_region_racl_size"`
-	TcamRegionRaclUdfSize                               types.Int64                           `tfsdk:"tcam_region_racl_udf_size"`
-	TcamRegionSupSize                                   types.Int64                           `tfsdk:"tcam_region_sup_size"`
-	TcamRegionSviSize                                   types.Int64                           `tfsdk:"tcam_region_svi_size"`
-	TcamRegionTcpNatSize                                types.Int64                           `tfsdk:"tcam_region_tcp_nat_size"`
-	TcamRegionVaclLiteSize                              types.Int64                           `tfsdk:"tcam_region_vacl_lite_size"`
-	TcamRegionVaclSize                                  types.Int64                           `tfsdk:"tcam_region_vacl_size"`
-	TcamRegionVpcConvergenceSize                        types.Int64                           `tfsdk:"tcam_region_vpc_convergence_size"`
-	TcamRegionVlanQosIntraLiteSize                      types.Int64                           `tfsdk:"tcam_region_vlan_qos_intra_lite_size"`
-	TcamRegionVlanQosSize                               types.Int64                           `tfsdk:"tcam_region_vlan_qos_size"`
-	TcamRegionVxlanP2pSize                              types.Int64                           `tfsdk:"tcam_region_vxlan_p2p_size"`
-	TcamRegionExtendedEgressInterfaceAclAllPerPortStats types.Bool                            `tfsdk:"tcam_region_extended_egress_interface_acl_all_per_port_stats"`
-	TcamRegionExtendedEgressInterfaceAclAllSize         types.Int64                           `tfsdk:"tcam_region_extended_egress_interface_acl_all_size"`
-	TcamRegionExtendedEgressIpv6RaclPerPortStats        types.Bool                            `tfsdk:"tcam_region_extended_egress_ipv6_racl_per_port_stats"`
-	TcamRegionExtendedEgressRaclPerPortStats            types.Bool                            `tfsdk:"tcam_region_extended_egress_racl_per_port_stats"`
-	TcamRegionExtendedEgressCoppSize                    types.Int64                           `tfsdk:"tcam_region_extended_egress_copp_size"`
-	TcamRegionExtendedEgressFlowSize                    types.Int64                           `tfsdk:"tcam_region_extended_egress_flow_size"`
-	TcamRegionExtendedEgressHardwareTelemetrySize       types.Int64                           `tfsdk:"tcam_region_extended_egress_hardware_telemetry_size"`
-	TcamRegionExtendedEgressInterfaceAclSize            types.Int64                           `tfsdk:"tcam_region_extended_egress_interface_acl_size"`
-	TcamRegionExtendedEgressL2QosSize                   types.Int64                           `tfsdk:"tcam_region_extended_egress_l2_qos_size"`
-	TcamRegionExtendedEgressL3VlanQosSize               types.Int64                           `tfsdk:"tcam_region_extended_egress_l3_vlan_qos_size"`
-	TcamRegionExtendedEgressRaclSize                    types.Int64                           `tfsdk:"tcam_region_extended_egress_racl_size"`
-	TcamRegionExtendedEgressSupSize                     types.Int64                           `tfsdk:"tcam_region_extended_egress_sup_size"`
-	TcamRegionExtendedHardwareTelemetrySize             types.Int64                           `tfsdk:"tcam_region_extended_hardware_telemetry_size"`
-	TcamRegionExtendedInterfaceAclAllPerPortStats       types.Bool                            `tfsdk:"tcam_region_extended_interface_acl_all_per_port_stats"`
-	TcamRegionExtendedInterfaceAclAllProfile            types.Int64                           `tfsdk:"tcam_region_extended_interface_acl_all_profile"`
-	TcamRegionExtendedInterfaceAclAllSize               types.Int64                           `tfsdk:"tcam_region_extended_interface_acl_all_size"`
-	TcamRegionExtendedInterfaceAclPerPortStats          types.Bool                            `tfsdk:"tcam_region_extended_interface_acl_per_port_stats"`
-	TcamRegionExtendedIngressDaclSize                   types.Int64                           `tfsdk:"tcam_region_extended_ingress_dacl_size"`
-	TcamRegionExtendedIngressInterfaceAclSize           types.Int64                           `tfsdk:"tcam_region_extended_ingress_interface_acl_size"`
-	TcamRegionExtendedIngressInterfaceAclWideSize       types.Int64                           `tfsdk:"tcam_region_extended_ingress_interface_acl_wide_size"`
-	TcamRegionExtendedIngressIpv6InterfaceAclLiteSize   types.Int64                           `tfsdk:"tcam_region_extended_ingress_ipv6_interface_acl_lite_size"`
-	TcamRegionExtendedIngressL2L3QosSize                types.Int64                           `tfsdk:"tcam_region_extended_ingress_l2_l3_qos_size"`
-	TcamRegionExtendedIngressL2QosSize                  types.Int64                           `tfsdk:"tcam_region_extended_ingress_l2_qos_size"`
-	TcamRegionExtendedIngressL2SpanFilterSize           types.Int64                           `tfsdk:"tcam_region_extended_ingress_l2_span_filter_size"`
-	TcamRegionExtendedIngressL3SpanFilterSize           types.Int64                           `tfsdk:"tcam_region_extended_ingress_l3_span_filter_size"`
-	TcamRegionExtendedIngressPaclSbSize                 types.Int64                           `tfsdk:"tcam_region_extended_ingress_pacl_sb_size"`
-	TcamRegionExtendedIngressRaclSize                   types.Int64                           `tfsdk:"tcam_region_extended_ingress_racl_size"`
-	TcamRegionExtendedIngressRbaclSize                  types.Int64                           `tfsdk:"tcam_region_extended_ingress_rbacl_size"`
-	TcamRegionExtendedIngressRedirectSize               types.Int64                           `tfsdk:"tcam_region_extended_ingress_redirect_size"`
-	TcamRegionExtendedIngressStormControlSize           types.Int64                           `tfsdk:"tcam_region_extended_ingress_storm_control_size"`
-	TcamRegionExtendedIngressSupSize                    types.Int64                           `tfsdk:"tcam_region_extended_ingress_sup_size"`
-	TcamRegionExtendedIngressVaclNhSize                 types.Int64                           `tfsdk:"tcam_region_extended_ingress_vacl_nh_size"`
-	TcamRegionExtendedIngressVlanQosSize                types.Int64                           `tfsdk:"tcam_region_extended_ingress_vlan_qos_size"`
-	TcamRegionExtendedIpv6InterfaceAclPerPortStats      types.Bool                            `tfsdk:"tcam_region_extended_ipv6_interface_acl_per_port_stats"`
-	TcamRegionExtendedIpv6RaclPerPortStats              types.Bool                            `tfsdk:"tcam_region_extended_ipv6_racl_per_port_stats"`
-	TcamRegionExtendedMacInterfaceAclPerPortStats       types.Bool                            `tfsdk:"tcam_region_extended_mac_interface_acl_per_port_stats"`
-	TcamRegionExtendedMulticastNatSize                  types.Int64                           `tfsdk:"tcam_region_extended_multicast_nat_size"`
-	TcamRegionExtendedMulticastNbmSize                  types.Int64                           `tfsdk:"tcam_region_extended_multicast_nbm_size"`
-	TcamRegionExtendedRaclAllPerPortStats               types.Bool                            `tfsdk:"tcam_region_extended_racl_all_per_port_stats"`
-	TcamRegionExtendedRaclAllProfile                    types.Int64                           `tfsdk:"tcam_region_extended_racl_all_profile"`
-	TcamRegionExtendedRaclAllSize                       types.Int64                           `tfsdk:"tcam_region_extended_racl_all_size"`
-	TcamRegionExtendedRaclPerPortStats                  types.Bool                            `tfsdk:"tcam_region_extended_racl_per_port_stats"`
-	TcamRegionExtendedRedirectV4Size                    types.Int64                           `tfsdk:"tcam_region_extended_redirect_v4_size"`
-	TcamRegionExtendedSpanSize                          types.Int64                           `tfsdk:"tcam_region_extended_span_size"`
-	TcamRegionExtendedSpanTahoeSize                     types.Int64                           `tfsdk:"tcam_region_extended_span_tahoe_size"`
-	ManagementInterfaces                                map[string]SystemManagementInterfaces `tfsdk:"management_interfaces"`
-	LldpAdminState                                      types.String                          `tfsdk:"lldp_admin_state"`
-	LldpInstanceAdminState                              types.String                          `tfsdk:"lldp_instance_admin_state"`
-	LldpAdvertiseSystemChassisId                        types.String                          `tfsdk:"lldp_advertise_system_chassis_id"`
-	LldpControl                                         types.String                          `tfsdk:"lldp_control"`
-	LldpHoldTime                                        types.Int64                           `tfsdk:"lldp_hold_time"`
-	LldpInfraVlan                                       types.Int64                           `tfsdk:"lldp_infra_vlan"`
-	LldpInitDelayTime                                   types.Int64                           `tfsdk:"lldp_init_delay_time"`
-	LldpMultiPeer                                       types.String                          `tfsdk:"lldp_multi_peer"`
-	LldpOptionalTlvSelect                               types.String                          `tfsdk:"lldp_optional_tlv_select"`
-	LldpOptionalTlvSelectHidden                         types.String                          `tfsdk:"lldp_optional_tlv_select_hidden"`
-	LldpPortChannel                                     types.String                          `tfsdk:"lldp_port_channel"`
-	LldpPortIdSubType                                   types.String                          `tfsdk:"lldp_port_id_sub_type"`
-	LldpSystemDescription                               types.String                          `tfsdk:"lldp_system_description"`
-	LldpTransmitFrequency                               types.Int64                           `tfsdk:"lldp_transmit_frequency"`
-	LldpInterfaces                                      map[string]SystemLldpInterfaces       `tfsdk:"lldp_interfaces"`
-	CdpAdminState                                       types.String                          `tfsdk:"cdp_admin_state"`
-	CdpDeviceIdType                                     types.String                          `tfsdk:"cdp_device_id_type"`
-	CdpHoldInterval                                     types.Int64                           `tfsdk:"cdp_hold_interval"`
-	CdpPnpStartupVlan                                   types.Int64                           `tfsdk:"cdp_pnp_startup_vlan"`
-	CdpTransmitFrequency                                types.Int64                           `tfsdk:"cdp_transmit_frequency"`
-	CdpVersion                                          types.String                          `tfsdk:"cdp_version"`
-	CdpInterfaces                                       map[string]SystemCdpInterfaces        `tfsdk:"cdp_interfaces"`
-	CoppAdminState                                      types.String                          `tfsdk:"copp_admin_state"`
-	CoppRateLimiter                                     types.Bool                            `tfsdk:"copp_rate_limiter"`
-	CoppProfileType                                     types.String                          `tfsdk:"copp_profile_type"`
-	ConsoleExecTimeout                                  types.Int64                           `tfsdk:"console_exec_timeout"`
-	VtyExecTimeout                                      types.Int64                           `tfsdk:"vty_exec_timeout"`
-	VtySessionLimit                                     types.Int64                           `tfsdk:"vty_session_limit"`
-	IcamMonitorInterval                                 types.Int64                           `tfsdk:"icam_monitor_interval"`
-	IcamNumberOfIntervals                               types.Int64                           `tfsdk:"icam_number_of_intervals"`
-	IcamScaleCriticalThreshold                          types.Int64                           `tfsdk:"icam_scale_critical_threshold"`
-	IcamScaleInfoThreshold                              types.Int64                           `tfsdk:"icam_scale_info_threshold"`
-	IcamScaleConfiguration                              types.Bool                            `tfsdk:"icam_scale_configuration"`
-	IcamScaleWarningThreshold                           types.Int64                           `tfsdk:"icam_scale_warning_threshold"`
-	NxapiVrf                                            types.String                          `tfsdk:"nxapi_vrf"`
-	NxapiHttpPort                                       types.Int64                           `tfsdk:"nxapi_http_port"`
-	NxapiHttpsPort                                      types.Int64                           `tfsdk:"nxapi_https_port"`
-	NxapiIdleTimeout                                    types.Int64                           `tfsdk:"nxapi_idle_timeout"`
-	NxapiCertificateEnable                              types.Bool                            `tfsdk:"nxapi_certificate_enable"`
-	NxapiCertificateFile                                types.String                          `tfsdk:"nxapi_certificate_file"`
-	NxapiKeyFile                                        types.String                          `tfsdk:"nxapi_key_file"`
-	NxapiEncryptedKeyPassphrase                         types.String                          `tfsdk:"nxapi_encrypted_key_passphrase"`
-	NxapiEncryptedKeyPassphraseWo                       types.String                          `tfsdk:"nxapi_encrypted_key_passphrase_wo"`
-	NxapiEncryptedKeyPassphraseWoVersion                types.Int64                           `tfsdk:"nxapi_encrypted_key_passphrase_wo_version"`
-	NxapiTrustpoint                                     types.String                          `tfsdk:"nxapi_trustpoint"`
-	NxapiSslProtocols                                   types.String                          `tfsdk:"nxapi_ssl_protocols"`
-	NxapiSslCiphersWeak                                 types.Bool                            `tfsdk:"nxapi_ssl_ciphers_weak"`
-	NxapiClientCertificateAuthentication                types.String                          `tfsdk:"nxapi_client_certificate_authentication"`
-	NxapiSudi                                           types.Bool                            `tfsdk:"nxapi_sudi"`
-	BreakoutModules                                     map[string]SystemBreakoutModules      `tfsdk:"breakout_modules"`
-	ServiceInstances                                    map[string]SystemServiceInstances     `tfsdk:"service_instances"`
-	SshAdminState                                       types.String                          `tfsdk:"ssh_admin_state"`
-	SshCiphers                                          types.String                          `tfsdk:"ssh_ciphers"`
-	SshDescription                                      types.String                          `tfsdk:"ssh_description"`
-	SshEnableWeakCiphers                                types.String                          `tfsdk:"ssh_enable_weak_ciphers"`
-	SshKeyExchangeAlgorithms                            types.String                          `tfsdk:"ssh_key_exchange_algorithms"`
-	SshKeyTypes                                         types.String                          `tfsdk:"ssh_key_types"`
-	SshLoginAttempts                                    types.Int64                           `tfsdk:"ssh_login_attempts"`
-	SshLoginGraceTime                                   types.Int64                           `tfsdk:"ssh_login_grace_time"`
-	SshMessageAuthenticationCodes                       types.String                          `tfsdk:"ssh_message_authentication_codes"`
-	SshPort                                             types.Int64                           `tfsdk:"ssh_port"`
-	SshKeys                                             map[string]SystemSshKeys              `tfsdk:"ssh_keys"`
+	Device                                        types.String                          `tfsdk:"device"`
+	Dn                                            types.String                          `tfsdk:"id"`
+	Name                                          types.String                          `tfsdk:"name"`
+	EthernetMtu                                   types.Int64                           `tfsdk:"ethernet_mtu"`
+	EthernetDefaultAdminState                     types.String                          `tfsdk:"ethernet_default_admin_state"`
+	EthernetAdminLinkDownSyslogLevel              types.Int64                           `tfsdk:"ethernet_admin_link_down_syslog_level"`
+	EthernetAdminLinkUpSyslogLevel                types.Int64                           `tfsdk:"ethernet_admin_link_up_syslog_level"`
+	EthernetAdminState                            types.String                          `tfsdk:"ethernet_admin_state"`
+	EthernetAllowUnsupportedSfp                   types.Bool                            `tfsdk:"ethernet_allow_unsupported_sfp"`
+	EthernetChassisInfrastructureAdaptorVlan      types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
+	EthernetChassisInfrastructureEpdsPortNumber   types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
+	EthernetChassisInfrastructureIpv6Address      types.String                          `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
+	EthernetChassisInfrastructureVlan             types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_vlan"`
+	EthernetChassisManagementInstance             types.String                          `tfsdk:"ethernet_chassis_management_instance"`
+	EthernetChassisManagementInstanceFabricNumber types.String                          `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
+	EthernetControl                               types.String                          `tfsdk:"ethernet_control"`
+	EthernetInterfaceSyslogInfo                   types.String                          `tfsdk:"ethernet_interface_syslog_info"`
+	EthernetLogEvent                              types.String                          `tfsdk:"ethernet_log_event"`
+	EthernetDefaultLayer                          types.String                          `tfsdk:"ethernet_default_layer"`
+	EthernetSystemInterfaceAdminState             types.String                          `tfsdk:"ethernet_system_interface_admin_state"`
+	EthernetSystemLinkFailureLaserOn              types.Bool                            `tfsdk:"ethernet_system_link_failure_laser_on"`
+	EthernetSystemStormControlMultiThreshold      types.Bool                            `tfsdk:"ethernet_system_storm_control_multi_threshold"`
+	EthernetVlanTagNative                         types.Bool                            `tfsdk:"ethernet_vlan_tag_native"`
+	ArpAdminState                                 types.String                          `tfsdk:"arp_admin_state"`
+	ArpInstanceAdminState                         types.String                          `tfsdk:"arp_instance_admin_state"`
+	ArpAllowStaticArpOutsideSubnet                types.String                          `tfsdk:"arp_allow_static_arp_outside_subnet"`
+	ArpUnnumberedSviSoftwareReplication           types.String                          `tfsdk:"arp_unnumbered_svi_software_replication"`
+	ArpCacheLimit                                 types.Int64                           `tfsdk:"arp_cache_limit"`
+	ArpCacheSyslogRate                            types.Int64                           `tfsdk:"arp_cache_syslog_rate"`
+	ArpControl                                    types.String                          `tfsdk:"arp_control"`
+	ArpEvpnTimeout                                types.Int64                           `tfsdk:"arp_evpn_timeout"`
+	ArpInterfaceCacheLimit                        types.Int64                           `tfsdk:"arp_interface_cache_limit"`
+	ArpIpAdjacencyRouteDistance                   types.Int64                           `tfsdk:"arp_ip_adjacency_route_distance"`
+	ArpIpArpCos                                   types.Int64                           `tfsdk:"arp_ip_arp_cos"`
+	ArpOffListTimeout                             types.Int64                           `tfsdk:"arp_off_list_timeout"`
+	ArpRarpFabricForwarding                       types.String                          `tfsdk:"arp_rarp_fabric_forwarding"`
+	ArpRarpFabricForwardingRate                   types.Int64                           `tfsdk:"arp_rarp_fabric_forwarding_rate"`
+	ArpResolveOutsideSubnet                       types.String                          `tfsdk:"arp_resolve_outside_subnet"`
+	ArpSuppressionTimeout                         types.Int64                           `tfsdk:"arp_suppression_timeout"`
+	ArpTimeout                                    types.Int64                           `tfsdk:"arp_timeout"`
+	ArpVpcDomains                                 map[string]SystemArpVpcDomains        `tfsdk:"arp_vpc_domains"`
+	NdAdminState                                  types.String                          `tfsdk:"nd_admin_state"`
+	NdAcceptSolicitNeighborEntry                  types.String                          `tfsdk:"nd_accept_solicit_neighbor_entry"`
+	NdInstanceAdminState                          types.String                          `tfsdk:"nd_instance_admin_state"`
+	NdAgingInterval                               types.Int64                           `tfsdk:"nd_aging_interval"`
+	NdCacheLimit                                  types.Int64                           `tfsdk:"nd_cache_limit"`
+	NdCacheSyslogRate                             types.Int64                           `tfsdk:"nd_cache_syslog_rate"`
+	NdControl                                     types.String                          `tfsdk:"nd_control"`
+	NdIpv6AdjacencyRouteDistance                  types.Int64                           `tfsdk:"nd_ipv6_adjacency_route_distance"`
+	NdOffListTimeout                              types.Int64                           `tfsdk:"nd_off_list_timeout"`
+	NdProbeIntervalForSolicitNeighbor             types.Int64                           `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
+	NdSolicitNeighborAdvertisement                types.String                          `tfsdk:"nd_solicit_neighbor_advertisement"`
+	NdVrfs                                        map[string]SystemNdVrfs               `tfsdk:"nd_vrfs"`
+	NdVpcDomains                                  map[string]SystemNdVpcDomains         `tfsdk:"nd_vpc_domains"`
+	ClockAdminState                               types.String                          `tfsdk:"clock_admin_state"`
+	ClockAuthenticationState                      types.String                          `tfsdk:"clock_authentication_state"`
+	ClockFormat                                   types.String                          `tfsdk:"clock_format"`
+	ClockFormatDebug                              types.Bool                            `tfsdk:"clock_format_debug"`
+	ClockFormatSyslog                             types.Bool                            `tfsdk:"clock_format_syslog"`
+	ClockProtocol                                 types.String                          `tfsdk:"clock_protocol"`
+	ClockTimezoneName                             types.String                          `tfsdk:"clock_timezone_name"`
+	ClockTimezoneHours                            types.Int64                           `tfsdk:"clock_timezone_hours"`
+	ClockTimezoneMinutes                          types.Int64                           `tfsdk:"clock_timezone_minutes"`
+	ClockSummerTimeName                           types.String                          `tfsdk:"clock_summer_time_name"`
+	ClockSummerTimeOffsetMinutes                  types.Int64                           `tfsdk:"clock_summer_time_offset_minutes"`
+	ClockSummerTimeStartWeek                      types.Int64                           `tfsdk:"clock_summer_time_start_week"`
+	ClockSummerTimeStartDay                       types.String                          `tfsdk:"clock_summer_time_start_day"`
+	ClockSummerTimeStartMonth                     types.String                          `tfsdk:"clock_summer_time_start_month"`
+	ClockSummerTimeStartTime                      types.String                          `tfsdk:"clock_summer_time_start_time"`
+	ClockSummerTimeEndWeek                        types.Int64                           `tfsdk:"clock_summer_time_end_week"`
+	ClockSummerTimeEndDay                         types.String                          `tfsdk:"clock_summer_time_end_day"`
+	ClockSummerTimeEndMonth                       types.String                          `tfsdk:"clock_summer_time_end_month"`
+	ClockSummerTimeEndTime                        types.String                          `tfsdk:"clock_summer_time_end_time"`
+	DnsAdminState                                 types.String                          `tfsdk:"dns_admin_state"`
+	DnsProfiles                                   map[string]SystemDnsProfiles          `tfsdk:"dns_profiles"`
+	Vdcs                                          map[string]SystemVdcs                 `tfsdk:"vdcs"`
+	CliAliases                                    map[string]SystemCliAliases           `tfsdk:"cli_aliases"`
+	SmartLicensingTransportMode                   types.String                          `tfsdk:"smart_licensing_transport_mode"`
+	SmartLicensingTransportCsluUrl                types.String                          `tfsdk:"smart_licensing_transport_cslu_url"`
+	BootAci                                       types.String                          `tfsdk:"boot_aci"`
+	BootAutoCopy                                  types.String                          `tfsdk:"boot_auto_copy"`
+	BootDhcp                                      types.Int64                           `tfsdk:"boot_dhcp"`
+	BootExcludeConfiguration                      types.String                          `tfsdk:"boot_exclude_configuration"`
+	BootFex                                       types.String                          `tfsdk:"boot_fex"`
+	BootMode                                      types.String                          `tfsdk:"boot_mode"`
+	BootOrder                                     types.String                          `tfsdk:"boot_order"`
+	BootPoap                                      types.String                          `tfsdk:"boot_poap"`
+	BootImageVerification                         types.String                          `tfsdk:"boot_image_verification"`
+	BootImageSupervisor1                          types.String                          `tfsdk:"boot_image_supervisor_1"`
+	BootImageSupervisor2                          types.String                          `tfsdk:"boot_image_supervisor_2"`
+	CfsAdminState                                 types.String                          `tfsdk:"cfs_admin_state"`
+	CfsDistribute                                 types.String                          `tfsdk:"cfs_distribute"`
+	CfsEthernetDistribution                       types.String                          `tfsdk:"cfs_ethernet_distribution"`
+	CfsIpv4Distribution                           types.String                          `tfsdk:"cfs_ipv4_distribution"`
+	CfsIpv4MulticastAddress                       types.String                          `tfsdk:"cfs_ipv4_multicast_address"`
+	CfsIpv6Distribution                           types.String                          `tfsdk:"cfs_ipv6_distribution"`
+	CfsIpv6MulticastAddress                       types.String                          `tfsdk:"cfs_ipv6_multicast_address"`
+	UdldAdminState                                types.String                          `tfsdk:"udld_admin_state"`
+	UdldAggressive                                types.String                          `tfsdk:"udld_aggressive"`
+	UdldMessageInterval                           types.Int64                           `tfsdk:"udld_message_interval"`
+	UdldInterfaces                                map[string]SystemUdldInterfaces       `tfsdk:"udld_interfaces"`
+	PlatformAccessListMatchInnerHeader            types.String                          `tfsdk:"platform_access_list_match_inner_header"`
+	PlatformAclTapAggregation                     types.String                          `tfsdk:"platform_acl_tap_aggregation"`
+	PlatformDescription                           types.String                          `tfsdk:"platform_description"`
+	PlatformDisableParseError                     types.String                          `tfsdk:"platform_disable_parse_error"`
+	PlatformGlobalTxSpan                          types.String                          `tfsdk:"platform_global_tx_span"`
+	PlatformHighMulticastPriority                 types.String                          `tfsdk:"platform_high_multicast_priority"`
+	PlatformHardwareLouResourceThreshold          types.Int64                           `tfsdk:"platform_hardware_lou_resource_threshold"`
+	PlatformIngressBdIfaclLabelOptimization       types.String                          `tfsdk:"platform_ingress_bd_ifacl_label_optimization"`
+	PlatformIngressRaclSize                       types.String                          `tfsdk:"platform_ingress_racl_size"`
+	PlatformIngressReplicationRoundRobin          types.Bool                            `tfsdk:"platform_ingress_replication_round_robin"`
+	PlatformIpStatistics                          types.String                          `tfsdk:"platform_ip_statistics"`
+	PlatformIpv6AlpmCarveValue                    types.Int64                           `tfsdk:"platform_ipv6_alpm_carve_value"`
+	PlatformIpv6LpmMaxEntries                     types.Int64                           `tfsdk:"platform_ipv6_lpm_max_entries"`
+	PlatformLpmMaxLimit                           types.Int64                           `tfsdk:"platform_lpm_max_limit"`
+	PlatformMulticastDcsCheck                     types.String                          `tfsdk:"platform_multicast_dcs_check"`
+	PlatformMulticastFlexStats                    types.String                          `tfsdk:"platform_multicast_flex_stats"`
+	PlatformMulticastLpmMaxEntries                types.Int64                           `tfsdk:"platform_multicast_lpm_max_entries"`
+	PlatformMulticastNlb                          types.String                          `tfsdk:"platform_multicast_nlb"`
+	PlatformMulticastRaclBridge                   types.String                          `tfsdk:"platform_multicast_racl_bridge"`
+	PlatformMldSnooping                           types.String                          `tfsdk:"platform_mld_snooping"`
+	PlatformMplsAdjacencyStatsMode                types.String                          `tfsdk:"platform_mpls_adjacency_stats_mode"`
+	PlatformMplsEcmpMode                          types.String                          `tfsdk:"platform_mpls_ecmp_mode"`
+	PlatformMroutingDisableL2Update               types.String                          `tfsdk:"platform_mrouting_disable_l2_update"`
+	PlatformMroutingDisableSecondRouteUpdate      types.String                          `tfsdk:"platform_mrouting_disable_second_route_update"`
+	PlatformMroutingPerformanceMode               types.String                          `tfsdk:"platform_mrouting_performance_mode"`
+	PlatformMulticastMaxLimit                     types.Int64                           `tfsdk:"platform_multicast_max_limit"`
+	PlatformMulticastRpfCheckOptimization         types.String                          `tfsdk:"platform_multicast_rpf_check_optimization"`
+	PlatformMulticastServiceReflectPort           types.Int64                           `tfsdk:"platform_multicast_service_reflect_port"`
+	PlatformMulticastSyslogThreshold              types.Int64                           `tfsdk:"platform_multicast_syslog_threshold"`
+	PlatformOpenflowForwardPdu                    types.String                          `tfsdk:"platform_openflow_forward_pdu"`
+	PlatformPbrSkipSelfIp                         types.String                          `tfsdk:"platform_pbr_skip_self_ip"`
+	PlatformPortChannelFastConvergence            types.String                          `tfsdk:"platform_port_channel_fast_convergence"`
+	PlatformPortChannelLoadBalanceAlgorithm       types.String                          `tfsdk:"platform_port_channel_load_balance_algorithm"`
+	PlatformPortChannelLoadBalanceResilient       types.String                          `tfsdk:"platform_port_channel_load_balance_resilient"`
+	PlatformPortChannelMplsLoadBalanceLabelIp     types.String                          `tfsdk:"platform_port_channel_mpls_load_balance_label_ip"`
+	PlatformPortChannelMplsLoadBalanceLabelOnly   types.String                          `tfsdk:"platform_port_channel_mpls_load_balance_label_only"`
+	PlatformPortChannelScaleFanout                types.String                          `tfsdk:"platform_port_channel_scale_fanout"`
+	PlatformPicCoreEnable                         types.String                          `tfsdk:"platform_pic_core_enable"`
+	PlatformProfileFrontPortMode                  types.String                          `tfsdk:"platform_profile_front_port_mode"`
+	PlatformProfileMode                           types.String                          `tfsdk:"platform_profile_mode"`
+	PlatformProfileTuple                          types.String                          `tfsdk:"platform_profile_tuple"`
+	PlatformPstatConfiguration                    types.String                          `tfsdk:"platform_pstat_configuration"`
+	PlatformQosMinBuffer                          types.String                          `tfsdk:"platform_qos_min_buffer"`
+	PlatformRoutingMode                           types.String                          `tfsdk:"platform_routing_mode"`
+	PlatformServiceTemplateName                   types.String                          `tfsdk:"platform_service_template_name"`
+	PlatformSviAndSiFlexStats                     types.String                          `tfsdk:"platform_svi_and_si_flex_stats"`
+	PlatformSviFlexStats                          types.String                          `tfsdk:"platform_svi_flex_stats"`
+	PlatformSwitchMode                            types.String                          `tfsdk:"platform_switch_mode"`
+	PlatformSwitchingFabricSpeed                  types.String                          `tfsdk:"platform_switching_fabric_speed"`
+	PlatformSwitchingMode                         types.String                          `tfsdk:"platform_switching_mode"`
+	PlatformSystemFabricMode                      types.String                          `tfsdk:"platform_system_fabric_mode"`
+	PlatformTcamSyslogThreshold                   types.Int64                           `tfsdk:"platform_tcam_syslog_threshold"`
+	PlatformUnicastMaxLimit                       types.Int64                           `tfsdk:"platform_unicast_max_limit"`
+	PlatformUnicastSyslogThreshold                types.Int64                           `tfsdk:"platform_unicast_syslog_threshold"`
+	PlatformUnicastTrace                          types.String                          `tfsdk:"platform_unicast_trace"`
+	PlatformUnknownUnicastFlood                   types.String                          `tfsdk:"platform_unknown_unicast_flood"`
+	PlatformUrpfStatus                            types.String                          `tfsdk:"platform_urpf_status"`
+	PlatformWrrUnicastBandwidth                   types.Int64                           `tfsdk:"platform_wrr_unicast_bandwidth"`
+	ManagementInterfaces                          map[string]SystemManagementInterfaces `tfsdk:"management_interfaces"`
+	LldpAdminState                                types.String                          `tfsdk:"lldp_admin_state"`
+	LldpInstanceAdminState                        types.String                          `tfsdk:"lldp_instance_admin_state"`
+	LldpAdvertiseSystemChassisId                  types.String                          `tfsdk:"lldp_advertise_system_chassis_id"`
+	LldpControl                                   types.String                          `tfsdk:"lldp_control"`
+	LldpHoldTime                                  types.Int64                           `tfsdk:"lldp_hold_time"`
+	LldpInfraVlan                                 types.Int64                           `tfsdk:"lldp_infra_vlan"`
+	LldpInitDelayTime                             types.Int64                           `tfsdk:"lldp_init_delay_time"`
+	LldpMultiPeer                                 types.String                          `tfsdk:"lldp_multi_peer"`
+	LldpOptionalTlvSelect                         types.String                          `tfsdk:"lldp_optional_tlv_select"`
+	LldpOptionalTlvSelectHidden                   types.String                          `tfsdk:"lldp_optional_tlv_select_hidden"`
+	LldpPortChannel                               types.String                          `tfsdk:"lldp_port_channel"`
+	LldpPortIdSubType                             types.String                          `tfsdk:"lldp_port_id_sub_type"`
+	LldpSystemDescription                         types.String                          `tfsdk:"lldp_system_description"`
+	LldpTransmitFrequency                         types.Int64                           `tfsdk:"lldp_transmit_frequency"`
+	LldpInterfaces                                map[string]SystemLldpInterfaces       `tfsdk:"lldp_interfaces"`
+	CdpAdminState                                 types.String                          `tfsdk:"cdp_admin_state"`
+	CdpDeviceIdType                               types.String                          `tfsdk:"cdp_device_id_type"`
+	CdpHoldInterval                               types.Int64                           `tfsdk:"cdp_hold_interval"`
+	CdpPnpStartupVlan                             types.Int64                           `tfsdk:"cdp_pnp_startup_vlan"`
+	CdpTransmitFrequency                          types.Int64                           `tfsdk:"cdp_transmit_frequency"`
+	CdpVersion                                    types.String                          `tfsdk:"cdp_version"`
+	CdpInterfaces                                 map[string]SystemCdpInterfaces        `tfsdk:"cdp_interfaces"`
+	CoppAdminState                                types.String                          `tfsdk:"copp_admin_state"`
+	CoppRateLimiter                               types.Bool                            `tfsdk:"copp_rate_limiter"`
+	CoppProfileType                               types.String                          `tfsdk:"copp_profile_type"`
+	ConsoleExecTimeout                            types.Int64                           `tfsdk:"console_exec_timeout"`
+	VtyExecTimeout                                types.Int64                           `tfsdk:"vty_exec_timeout"`
+	VtySessionLimit                               types.Int64                           `tfsdk:"vty_session_limit"`
+	IcamMonitorInterval                           types.Int64                           `tfsdk:"icam_monitor_interval"`
+	IcamNumberOfIntervals                         types.Int64                           `tfsdk:"icam_number_of_intervals"`
+	IcamScaleCriticalThreshold                    types.Int64                           `tfsdk:"icam_scale_critical_threshold"`
+	IcamScaleInfoThreshold                        types.Int64                           `tfsdk:"icam_scale_info_threshold"`
+	IcamScaleConfiguration                        types.Bool                            `tfsdk:"icam_scale_configuration"`
+	IcamScaleWarningThreshold                     types.Int64                           `tfsdk:"icam_scale_warning_threshold"`
+	NxapiVrf                                      types.String                          `tfsdk:"nxapi_vrf"`
+	NxapiHttpPort                                 types.Int64                           `tfsdk:"nxapi_http_port"`
+	NxapiHttpsPort                                types.Int64                           `tfsdk:"nxapi_https_port"`
+	NxapiIdleTimeout                              types.Int64                           `tfsdk:"nxapi_idle_timeout"`
+	NxapiCertificateEnable                        types.Bool                            `tfsdk:"nxapi_certificate_enable"`
+	NxapiCertificateFile                          types.String                          `tfsdk:"nxapi_certificate_file"`
+	NxapiKeyFile                                  types.String                          `tfsdk:"nxapi_key_file"`
+	NxapiEncryptedKeyPassphrase                   types.String                          `tfsdk:"nxapi_encrypted_key_passphrase"`
+	NxapiEncryptedKeyPassphraseWo                 types.String                          `tfsdk:"nxapi_encrypted_key_passphrase_wo"`
+	NxapiEncryptedKeyPassphraseWoVersion          types.Int64                           `tfsdk:"nxapi_encrypted_key_passphrase_wo_version"`
+	NxapiTrustpoint                               types.String                          `tfsdk:"nxapi_trustpoint"`
+	NxapiSslProtocols                             types.String                          `tfsdk:"nxapi_ssl_protocols"`
+	NxapiSslCiphersWeak                           types.Bool                            `tfsdk:"nxapi_ssl_ciphers_weak"`
+	NxapiClientCertificateAuthentication          types.String                          `tfsdk:"nxapi_client_certificate_authentication"`
+	NxapiSudi                                     types.Bool                            `tfsdk:"nxapi_sudi"`
+	BreakoutModules                               map[string]SystemBreakoutModules      `tfsdk:"breakout_modules"`
+	ServiceInstances                              map[string]SystemServiceInstances     `tfsdk:"service_instances"`
+	ErspanOriginIpIsGlobal                        types.Bool                            `tfsdk:"erspan_origin_ip_is_global"`
+	ErspanOriginIpIsGlobalIpv6                    types.Bool                            `tfsdk:"erspan_origin_ip_is_global_ipv6"`
+	ErspanOriginIpAddress                         types.String                          `tfsdk:"erspan_origin_ip_address"`
+	ErspanOriginIpv6Address                       types.String                          `tfsdk:"erspan_origin_ipv6_address"`
 }
 
 type SystemArpVpcDomains struct {
@@ -492,10 +380,6 @@ type SystemServiceInstancesVrfs struct {
 	Affinity types.Int64 `tfsdk:"affinity"`
 }
 
-type SystemSshKeys struct {
-	KeyLength types.Int64 `tfsdk:"key_length"`
-}
-
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -582,10 +466,6 @@ func (data SystemServiceInstances) getRn(key string) string {
 
 func (data SystemServiceInstancesVrfs) getRn(key string) string {
 	return fmt.Sprintf("dom-[%s]", key)
-}
-
-func (data SystemSshKeys) getRn(key string) string {
-	return fmt.Sprintf("key-[%s]", key)
 }
 
 func (data System) getClassName() string {
@@ -1235,512 +1115,183 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
-	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformEntity"
-		attrs = "{}"
-		if !data.PlatformAccessListMatchInnerHeader.IsUnknown() && !data.PlatformAccessListMatchInnerHeader.IsNull() && !config.PlatformAccessListMatchInnerHeader.IsNull() {
-			attrs, _ = sjson.Set(attrs, "accessListMatchInnerHeader", data.PlatformAccessListMatchInnerHeader.ValueString())
-		}
-		if !data.PlatformAclTapAggregation.IsUnknown() && !data.PlatformAclTapAggregation.IsNull() && !config.PlatformAclTapAggregation.IsNull() {
-			attrs, _ = sjson.Set(attrs, "aclTapAggregation", data.PlatformAclTapAggregation.ValueString())
-		}
-		if !data.PlatformDescription.IsUnknown() && !data.PlatformDescription.IsNull() && !config.PlatformDescription.IsNull() {
-			attrs, _ = sjson.Set(attrs, "descr", data.PlatformDescription.ValueString())
-		}
-		if !data.PlatformDisableParseError.IsUnknown() && !data.PlatformDisableParseError.IsNull() && !config.PlatformDisableParseError.IsNull() {
-			attrs, _ = sjson.Set(attrs, "disParseErr", data.PlatformDisableParseError.ValueString())
-		}
-		if !data.PlatformGlobalTxSpan.IsUnknown() && !data.PlatformGlobalTxSpan.IsNull() && !config.PlatformGlobalTxSpan.IsNull() {
-			attrs, _ = sjson.Set(attrs, "globalTxSpan", data.PlatformGlobalTxSpan.ValueString())
-		}
-		if !data.PlatformHighMulticastPriority.IsUnknown() && !data.PlatformHighMulticastPriority.IsNull() && !config.PlatformHighMulticastPriority.IsNull() {
-			attrs, _ = sjson.Set(attrs, "highMulticastPriority", data.PlatformHighMulticastPriority.ValueString())
-		}
-		if !data.PlatformHardwareLouResourceThreshold.IsUnknown() && !data.PlatformHardwareLouResourceThreshold.IsNull() && !config.PlatformHardwareLouResourceThreshold.IsNull() {
-			attrs, _ = sjson.Set(attrs, "hwLouResThreshold", strconv.FormatInt(data.PlatformHardwareLouResourceThreshold.ValueInt64(), 10))
-		}
-		if !data.PlatformIngressBdIfaclLabelOptimization.IsUnknown() && !data.PlatformIngressBdIfaclLabelOptimization.IsNull() && !config.PlatformIngressBdIfaclLabelOptimization.IsNull() {
-			attrs, _ = sjson.Set(attrs, "iBdIfaclLblOpt", data.PlatformIngressBdIfaclLabelOptimization.ValueString())
-		}
-		if !data.PlatformIngressRaclSize.IsUnknown() && !data.PlatformIngressRaclSize.IsNull() && !config.PlatformIngressRaclSize.IsNull() {
-			attrs, _ = sjson.Set(attrs, "iRaclSize", data.PlatformIngressRaclSize.ValueString())
-		}
-		if !data.PlatformIngressReplicationRoundRobin.IsUnknown() && !data.PlatformIngressReplicationRoundRobin.IsNull() && !config.PlatformIngressReplicationRoundRobin.IsNull() {
-			attrs, _ = sjson.Set(attrs, "ingRepRoundRobin", strconv.FormatBool(data.PlatformIngressReplicationRoundRobin.ValueBool()))
-		}
-		if !data.PlatformIpStatistics.IsUnknown() && !data.PlatformIpStatistics.IsNull() && !config.PlatformIpStatistics.IsNull() {
-			attrs, _ = sjson.Set(attrs, "ipStatistics", data.PlatformIpStatistics.ValueString())
-		}
-		if !data.PlatformIpv6AlpmCarveValue.IsUnknown() && !data.PlatformIpv6AlpmCarveValue.IsNull() && !config.PlatformIpv6AlpmCarveValue.IsNull() {
-			attrs, _ = sjson.Set(attrs, "ipv6AlpmCarveValue", strconv.FormatInt(data.PlatformIpv6AlpmCarveValue.ValueInt64(), 10))
-		}
-		if !data.PlatformIpv6LpmMaxEntries.IsUnknown() && !data.PlatformIpv6LpmMaxEntries.IsNull() && !config.PlatformIpv6LpmMaxEntries.IsNull() {
-			attrs, _ = sjson.Set(attrs, "ipv6LpmMaxEntries", strconv.FormatInt(data.PlatformIpv6LpmMaxEntries.ValueInt64(), 10))
-		}
-		if !data.PlatformLpmMaxLimit.IsUnknown() && !data.PlatformLpmMaxLimit.IsNull() && !config.PlatformLpmMaxLimit.IsNull() {
-			attrs, _ = sjson.Set(attrs, "lpmMaxLimit", strconv.FormatInt(data.PlatformLpmMaxLimit.ValueInt64(), 10))
-		}
-		if !data.PlatformMulticastDcsCheck.IsUnknown() && !data.PlatformMulticastDcsCheck.IsNull() && !config.PlatformMulticastDcsCheck.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mcastDcsCheck", data.PlatformMulticastDcsCheck.ValueString())
-		}
-		if !data.PlatformMulticastFlexStats.IsUnknown() && !data.PlatformMulticastFlexStats.IsNull() && !config.PlatformMulticastFlexStats.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mcastFlexStats", data.PlatformMulticastFlexStats.ValueString())
-		}
-		if !data.PlatformMulticastLpmMaxEntries.IsUnknown() && !data.PlatformMulticastLpmMaxEntries.IsNull() && !config.PlatformMulticastLpmMaxEntries.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mcastLpmMaxEntries", strconv.FormatInt(data.PlatformMulticastLpmMaxEntries.ValueInt64(), 10))
-		}
-		if !data.PlatformMulticastNlb.IsUnknown() && !data.PlatformMulticastNlb.IsNull() && !config.PlatformMulticastNlb.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mcastNlb", data.PlatformMulticastNlb.ValueString())
-		}
-		if !data.PlatformMulticastRaclBridge.IsUnknown() && !data.PlatformMulticastRaclBridge.IsNull() && !config.PlatformMulticastRaclBridge.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mcastRaclBridge", data.PlatformMulticastRaclBridge.ValueString())
-		}
-		if !data.PlatformMldSnooping.IsUnknown() && !data.PlatformMldSnooping.IsNull() && !config.PlatformMldSnooping.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mldSnooping", data.PlatformMldSnooping.ValueString())
-		}
-		if !data.PlatformMplsAdjacencyStatsMode.IsUnknown() && !data.PlatformMplsAdjacencyStatsMode.IsNull() && !config.PlatformMplsAdjacencyStatsMode.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mplsAdjStatsMode", data.PlatformMplsAdjacencyStatsMode.ValueString())
-		}
-		if !data.PlatformMplsEcmpMode.IsUnknown() && !data.PlatformMplsEcmpMode.IsNull() && !config.PlatformMplsEcmpMode.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mplsCfgEcmpMode", data.PlatformMplsEcmpMode.ValueString())
-		}
-		if !data.PlatformMroutingDisableL2Update.IsUnknown() && !data.PlatformMroutingDisableL2Update.IsNull() && !config.PlatformMroutingDisableL2Update.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mroutingDisableL2Upd", data.PlatformMroutingDisableL2Update.ValueString())
-		}
-		if !data.PlatformMroutingDisableSecondRouteUpdate.IsUnknown() && !data.PlatformMroutingDisableSecondRouteUpdate.IsNull() && !config.PlatformMroutingDisableSecondRouteUpdate.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mroutingDisableSecRouteUpd", data.PlatformMroutingDisableSecondRouteUpdate.ValueString())
-		}
-		if !data.PlatformMroutingPerformanceMode.IsUnknown() && !data.PlatformMroutingPerformanceMode.IsNull() && !config.PlatformMroutingPerformanceMode.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mroutingPerfMode", data.PlatformMroutingPerformanceMode.ValueString())
-		}
-		if !data.PlatformMulticastMaxLimit.IsUnknown() && !data.PlatformMulticastMaxLimit.IsNull() && !config.PlatformMulticastMaxLimit.IsNull() {
-			attrs, _ = sjson.Set(attrs, "multicastMaxLimit", strconv.FormatInt(data.PlatformMulticastMaxLimit.ValueInt64(), 10))
-		}
-		if !data.PlatformMulticastRpfCheckOptimization.IsUnknown() && !data.PlatformMulticastRpfCheckOptimization.IsNull() && !config.PlatformMulticastRpfCheckOptimization.IsNull() {
-			attrs, _ = sjson.Set(attrs, "multicastRpfCheckOptimization", data.PlatformMulticastRpfCheckOptimization.ValueString())
-		}
-		if !data.PlatformMulticastServiceReflectPort.IsUnknown() && !data.PlatformMulticastServiceReflectPort.IsNull() && !config.PlatformMulticastServiceReflectPort.IsNull() {
-			attrs, _ = sjson.Set(attrs, "multicastServiceReflectPort", strconv.FormatInt(data.PlatformMulticastServiceReflectPort.ValueInt64(), 10))
-		}
-		if !data.PlatformMulticastSyslogThreshold.IsUnknown() && !data.PlatformMulticastSyslogThreshold.IsNull() && !config.PlatformMulticastSyslogThreshold.IsNull() {
-			attrs, _ = sjson.Set(attrs, "multicastSyslogThreshold", strconv.FormatInt(data.PlatformMulticastSyslogThreshold.ValueInt64(), 10))
-		}
-		if !data.PlatformOpenflowForwardPdu.IsUnknown() && !data.PlatformOpenflowForwardPdu.IsNull() && !config.PlatformOpenflowForwardPdu.IsNull() {
-			attrs, _ = sjson.Set(attrs, "openflowForwardPdu", data.PlatformOpenflowForwardPdu.ValueString())
-		}
-		if !data.PlatformPbrSkipSelfIp.IsUnknown() && !data.PlatformPbrSkipSelfIp.IsNull() && !config.PlatformPbrSkipSelfIp.IsNull() {
-			attrs, _ = sjson.Set(attrs, "pbrSkipSelfIp", data.PlatformPbrSkipSelfIp.ValueString())
-		}
-		if !data.PlatformPortChannelFastConvergence.IsUnknown() && !data.PlatformPortChannelFastConvergence.IsNull() && !config.PlatformPortChannelFastConvergence.IsNull() {
-			attrs, _ = sjson.Set(attrs, "pcFastConv", data.PlatformPortChannelFastConvergence.ValueString())
-		}
-		if !data.PlatformPortChannelLoadBalanceAlgorithm.IsUnknown() && !data.PlatformPortChannelLoadBalanceAlgorithm.IsNull() && !config.PlatformPortChannelLoadBalanceAlgorithm.IsNull() {
-			attrs, _ = sjson.Set(attrs, "pcLbAlgo", data.PlatformPortChannelLoadBalanceAlgorithm.ValueString())
-		}
-		if !data.PlatformPortChannelLoadBalanceResilient.IsUnknown() && !data.PlatformPortChannelLoadBalanceResilient.IsNull() && !config.PlatformPortChannelLoadBalanceResilient.IsNull() {
-			attrs, _ = sjson.Set(attrs, "pcLbRes", data.PlatformPortChannelLoadBalanceResilient.ValueString())
-		}
-		if !data.PlatformPortChannelMplsLoadBalanceLabelIp.IsUnknown() && !data.PlatformPortChannelMplsLoadBalanceLabelIp.IsNull() && !config.PlatformPortChannelMplsLoadBalanceLabelIp.IsNull() {
-			attrs, _ = sjson.Set(attrs, "pcMplsLbLabelIp", data.PlatformPortChannelMplsLoadBalanceLabelIp.ValueString())
-		}
-		if !data.PlatformPortChannelMplsLoadBalanceLabelOnly.IsUnknown() && !data.PlatformPortChannelMplsLoadBalanceLabelOnly.IsNull() && !config.PlatformPortChannelMplsLoadBalanceLabelOnly.IsNull() {
-			attrs, _ = sjson.Set(attrs, "pcMplsLbLabelOnly", data.PlatformPortChannelMplsLoadBalanceLabelOnly.ValueString())
-		}
-		if !data.PlatformPortChannelScaleFanout.IsUnknown() && !data.PlatformPortChannelScaleFanout.IsNull() && !config.PlatformPortChannelScaleFanout.IsNull() {
-			attrs, _ = sjson.Set(attrs, "pcScaleFanout", data.PlatformPortChannelScaleFanout.ValueString())
-		}
-		if !data.PlatformPicCoreEnable.IsUnknown() && !data.PlatformPicCoreEnable.IsNull() && !config.PlatformPicCoreEnable.IsNull() {
-			attrs, _ = sjson.Set(attrs, "picCoreEnable", data.PlatformPicCoreEnable.ValueString())
-		}
-		if !data.PlatformProfileFrontPortMode.IsUnknown() && !data.PlatformProfileFrontPortMode.IsNull() && !config.PlatformProfileFrontPortMode.IsNull() {
-			attrs, _ = sjson.Set(attrs, "profileFrontPortmode", data.PlatformProfileFrontPortMode.ValueString())
-		}
-		if !data.PlatformProfileMode.IsUnknown() && !data.PlatformProfileMode.IsNull() && !config.PlatformProfileMode.IsNull() {
-			attrs, _ = sjson.Set(attrs, "profileMode", data.PlatformProfileMode.ValueString())
-		}
-		if !data.PlatformProfileTuple.IsUnknown() && !data.PlatformProfileTuple.IsNull() && !config.PlatformProfileTuple.IsNull() {
-			attrs, _ = sjson.Set(attrs, "profileTuple", data.PlatformProfileTuple.ValueString())
-		}
-		if !data.PlatformPstatConfiguration.IsUnknown() && !data.PlatformPstatConfiguration.IsNull() && !config.PlatformPstatConfiguration.IsNull() {
-			attrs, _ = sjson.Set(attrs, "pstatCfg", data.PlatformPstatConfiguration.ValueString())
-		}
-		if !data.PlatformQosMinBuffer.IsUnknown() && !data.PlatformQosMinBuffer.IsNull() && !config.PlatformQosMinBuffer.IsNull() {
-			attrs, _ = sjson.Set(attrs, "qosMinBuffer", data.PlatformQosMinBuffer.ValueString())
-		}
-		if !data.PlatformRoutingMode.IsUnknown() && !data.PlatformRoutingMode.IsNull() && !config.PlatformRoutingMode.IsNull() {
-			attrs, _ = sjson.Set(attrs, "routingMode", data.PlatformRoutingMode.ValueString())
-		}
-		if !data.PlatformServiceTemplateName.IsUnknown() && !data.PlatformServiceTemplateName.IsNull() && !config.PlatformServiceTemplateName.IsNull() {
-			attrs, _ = sjson.Set(attrs, "serviceTemplateName", data.PlatformServiceTemplateName.ValueString())
-		}
-		if !data.PlatformSviAndSiFlexStats.IsUnknown() && !data.PlatformSviAndSiFlexStats.IsNull() && !config.PlatformSviAndSiFlexStats.IsNull() {
-			attrs, _ = sjson.Set(attrs, "sviAndSiFlexStats", data.PlatformSviAndSiFlexStats.ValueString())
-		}
-		if !data.PlatformSviFlexStats.IsUnknown() && !data.PlatformSviFlexStats.IsNull() && !config.PlatformSviFlexStats.IsNull() {
-			attrs, _ = sjson.Set(attrs, "sviFlexStats", data.PlatformSviFlexStats.ValueString())
-		}
-		if !data.PlatformSwitchMode.IsUnknown() && !data.PlatformSwitchMode.IsNull() && !config.PlatformSwitchMode.IsNull() {
-			attrs, _ = sjson.Set(attrs, "switchMode", data.PlatformSwitchMode.ValueString())
-		}
-		if !data.PlatformSwitchingFabricSpeed.IsUnknown() && !data.PlatformSwitchingFabricSpeed.IsNull() && !config.PlatformSwitchingFabricSpeed.IsNull() {
-			attrs, _ = sjson.Set(attrs, "switchingFabricSpeed", data.PlatformSwitchingFabricSpeed.ValueString())
-		}
-		if !data.PlatformSwitchingMode.IsUnknown() && !data.PlatformSwitchingMode.IsNull() && !config.PlatformSwitchingMode.IsNull() {
-			attrs, _ = sjson.Set(attrs, "switchingMode", data.PlatformSwitchingMode.ValueString())
-		}
-		if !data.PlatformSystemFabricMode.IsUnknown() && !data.PlatformSystemFabricMode.IsNull() && !config.PlatformSystemFabricMode.IsNull() {
-			attrs, _ = sjson.Set(attrs, "systemFabricMode", data.PlatformSystemFabricMode.ValueString())
-		}
-		if !data.PlatformTcamSyslogThreshold.IsUnknown() && !data.PlatformTcamSyslogThreshold.IsNull() && !config.PlatformTcamSyslogThreshold.IsNull() {
-			attrs, _ = sjson.Set(attrs, "tcamSyslogThreshold", strconv.FormatInt(data.PlatformTcamSyslogThreshold.ValueInt64(), 10))
-		}
-		if !data.PlatformUnicastMaxLimit.IsUnknown() && !data.PlatformUnicastMaxLimit.IsNull() && !config.PlatformUnicastMaxLimit.IsNull() {
-			attrs, _ = sjson.Set(attrs, "unicastMaxLimit", strconv.FormatInt(data.PlatformUnicastMaxLimit.ValueInt64(), 10))
-		}
-		if !data.PlatformUnicastSyslogThreshold.IsUnknown() && !data.PlatformUnicastSyslogThreshold.IsNull() && !config.PlatformUnicastSyslogThreshold.IsNull() {
-			attrs, _ = sjson.Set(attrs, "unicastSyslogThreshold", strconv.FormatInt(data.PlatformUnicastSyslogThreshold.ValueInt64(), 10))
-		}
-		if !data.PlatformUnicastTrace.IsUnknown() && !data.PlatformUnicastTrace.IsNull() && !config.PlatformUnicastTrace.IsNull() {
-			attrs, _ = sjson.Set(attrs, "unicastTrace", data.PlatformUnicastTrace.ValueString())
-		}
-		if !data.PlatformUnknownUnicastFlood.IsUnknown() && !data.PlatformUnknownUnicastFlood.IsNull() && !config.PlatformUnknownUnicastFlood.IsNull() {
-			attrs, _ = sjson.Set(attrs, "unknownUnicastFlood", data.PlatformUnknownUnicastFlood.ValueString())
-		}
-		if !data.PlatformUrpfStatus.IsUnknown() && !data.PlatformUrpfStatus.IsNull() && !config.PlatformUrpfStatus.IsNull() {
-			attrs, _ = sjson.Set(attrs, "urpfStatus", data.PlatformUrpfStatus.ValueString())
-		}
-		if !data.PlatformWrrUnicastBandwidth.IsUnknown() && !data.PlatformWrrUnicastBandwidth.IsNull() && !config.PlatformWrrUnicastBandwidth.IsNull() {
-			attrs, _ = sjson.Set(attrs, "wrrUnicastBw", strconv.FormatInt(data.PlatformWrrUnicastBandwidth.ValueInt64(), 10))
-		}
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
-		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".platformTcamRegion"
-			attrs = "{}"
-			if !data.TcamRegionArpAclSize.IsUnknown() && !data.TcamRegionArpAclSize.IsNull() && !config.TcamRegionArpAclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "arpaclSize", strconv.FormatInt(data.TcamRegionArpAclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionCoppSize.IsUnknown() && !data.TcamRegionCoppSize.IsNull() && !config.TcamRegionCoppSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "coppSize", strconv.FormatInt(data.TcamRegionCoppSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionCoppSystemSize.IsUnknown() && !data.TcamRegionCoppSystemSize.IsNull() && !config.TcamRegionCoppSystemSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "coppSystemSize", strconv.FormatInt(data.TcamRegionCoppSystemSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionEgressIpv6QosSize.IsUnknown() && !data.TcamRegionEgressIpv6QosSize.IsNull() && !config.TcamRegionEgressIpv6QosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eIpv6QosSize", strconv.FormatInt(data.TcamRegionEgressIpv6QosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionEgressIpv6RaclSize.IsUnknown() && !data.TcamRegionEgressIpv6RaclSize.IsNull() && !config.TcamRegionEgressIpv6RaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eIpv6RaclSize", strconv.FormatInt(data.TcamRegionEgressIpv6RaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionEgressMacQosSize.IsUnknown() && !data.TcamRegionEgressMacQosSize.IsNull() && !config.TcamRegionEgressMacQosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eMacQosSize", strconv.FormatInt(data.TcamRegionEgressMacQosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionEgressQosLiteSize.IsUnknown() && !data.TcamRegionEgressQosLiteSize.IsNull() && !config.TcamRegionEgressQosLiteSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eQosLiteSize", strconv.FormatInt(data.TcamRegionEgressQosLiteSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionEgressQosSize.IsUnknown() && !data.TcamRegionEgressQosSize.IsNull() && !config.TcamRegionEgressQosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eQosSize", strconv.FormatInt(data.TcamRegionEgressQosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionEgressRaclSize.IsUnknown() && !data.TcamRegionEgressRaclSize.IsNull() && !config.TcamRegionEgressRaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eRaclSize", strconv.FormatInt(data.TcamRegionEgressRaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionEgressVaclSize.IsUnknown() && !data.TcamRegionEgressVaclSize.IsNull() && !config.TcamRegionEgressVaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eVaclSize", strconv.FormatInt(data.TcamRegionEgressVaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionFcoeEgressSize.IsUnknown() && !data.TcamRegionFcoeEgressSize.IsNull() && !config.TcamRegionFcoeEgressSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "fcoeEgressSize", strconv.FormatInt(data.TcamRegionFcoeEgressSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionFcoeIngressSize.IsUnknown() && !data.TcamRegionFcoeIngressSize.IsNull() && !config.TcamRegionFcoeIngressSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "fcoeIngressSize", strconv.FormatInt(data.TcamRegionFcoeIngressSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionFhsSize.IsUnknown() && !data.TcamRegionFhsSize.IsNull() && !config.TcamRegionFhsSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "fhsSize", strconv.FormatInt(data.TcamRegionFhsSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionInterfaceAclLiteSize.IsUnknown() && !data.TcamRegionInterfaceAclLiteSize.IsNull() && !config.TcamRegionInterfaceAclLiteSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ifaclLiteSize", strconv.FormatInt(data.TcamRegionInterfaceAclLiteSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionInterfaceAclSize.IsUnknown() && !data.TcamRegionInterfaceAclSize.IsNull() && !config.TcamRegionInterfaceAclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ifaclSize", strconv.FormatInt(data.TcamRegionInterfaceAclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionInterfaceAclUdfSize.IsUnknown() && !data.TcamRegionInterfaceAclUdfSize.IsNull() && !config.TcamRegionInterfaceAclUdfSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ifaclUdfSize", strconv.FormatInt(data.TcamRegionInterfaceAclUdfSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIngressFlowRedirectSize.IsUnknown() && !data.TcamRegionIngressFlowRedirectSize.IsNull() && !config.TcamRegionIngressFlowRedirectSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingFlowRedirectSize", strconv.FormatInt(data.TcamRegionIngressFlowRedirectSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIngressFlowSize.IsUnknown() && !data.TcamRegionIngressFlowSize.IsNull() && !config.TcamRegionIngressFlowSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingFlowSize", strconv.FormatInt(data.TcamRegionIngressFlowSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpsgSize.IsUnknown() && !data.TcamRegionIpsgSize.IsNull() && !config.TcamRegionIpsgSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipsgSize", strconv.FormatInt(data.TcamRegionIpsgSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpv6InterfaceAclSize.IsUnknown() && !data.TcamRegionIpv6InterfaceAclSize.IsNull() && !config.TcamRegionIpv6InterfaceAclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6IfaclSize", strconv.FormatInt(data.TcamRegionIpv6InterfaceAclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpv6L3QosSize.IsUnknown() && !data.TcamRegionIpv6L3QosSize.IsNull() && !config.TcamRegionIpv6L3QosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6L3qosSize", strconv.FormatInt(data.TcamRegionIpv6L3QosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpv6PbrSize.IsUnknown() && !data.TcamRegionIpv6PbrSize.IsNull() && !config.TcamRegionIpv6PbrSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6PbrSize", strconv.FormatInt(data.TcamRegionIpv6PbrSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpv6QosSize.IsUnknown() && !data.TcamRegionIpv6QosSize.IsNull() && !config.TcamRegionIpv6QosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6QosSize", strconv.FormatInt(data.TcamRegionIpv6QosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpv6RaclSize.IsUnknown() && !data.TcamRegionIpv6RaclSize.IsNull() && !config.TcamRegionIpv6RaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6RaclSize", strconv.FormatInt(data.TcamRegionIpv6RaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpv6SpanL2Size.IsUnknown() && !data.TcamRegionIpv6SpanL2Size.IsNull() && !config.TcamRegionIpv6SpanL2Size.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6SpanL2Size", strconv.FormatInt(data.TcamRegionIpv6SpanL2Size.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpv6SpanSize.IsUnknown() && !data.TcamRegionIpv6SpanSize.IsNull() && !config.TcamRegionIpv6SpanSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6SpanSize", strconv.FormatInt(data.TcamRegionIpv6SpanSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpv6SupSize.IsUnknown() && !data.TcamRegionIpv6SupSize.IsNull() && !config.TcamRegionIpv6SupSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6SupSize", strconv.FormatInt(data.TcamRegionIpv6SupSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpv6VaclSize.IsUnknown() && !data.TcamRegionIpv6VaclSize.IsNull() && !config.TcamRegionIpv6VaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6VaclSize", strconv.FormatInt(data.TcamRegionIpv6VaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionIpv6VlanQosSize.IsUnknown() && !data.TcamRegionIpv6VlanQosSize.IsNull() && !config.TcamRegionIpv6VlanQosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6VqosSize", strconv.FormatInt(data.TcamRegionIpv6VlanQosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionL3QosIntraLiteSize.IsUnknown() && !data.TcamRegionL3QosIntraLiteSize.IsNull() && !config.TcamRegionL3QosIntraLiteSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "l3qosIntraLiteSize", strconv.FormatInt(data.TcamRegionL3QosIntraLiteSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionMacInterfaceAclSize.IsUnknown() && !data.TcamRegionMacInterfaceAclSize.IsNull() && !config.TcamRegionMacInterfaceAclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "macIfaclSize", strconv.FormatInt(data.TcamRegionMacInterfaceAclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionMacL3QosSize.IsUnknown() && !data.TcamRegionMacL3QosSize.IsNull() && !config.TcamRegionMacL3QosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "macL3qosSize", strconv.FormatInt(data.TcamRegionMacL3QosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionMacQosSize.IsUnknown() && !data.TcamRegionMacQosSize.IsNull() && !config.TcamRegionMacQosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "macQosSize", strconv.FormatInt(data.TcamRegionMacQosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionMacVaclSize.IsUnknown() && !data.TcamRegionMacVaclSize.IsNull() && !config.TcamRegionMacVaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "macVaclSize", strconv.FormatInt(data.TcamRegionMacVaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionMacVlanQosSize.IsUnknown() && !data.TcamRegionMacVlanQosSize.IsNull() && !config.TcamRegionMacVlanQosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "macVqosSize", strconv.FormatInt(data.TcamRegionMacVlanQosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionMulticastBidirSize.IsUnknown() && !data.TcamRegionMulticastBidirSize.IsNull() && !config.TcamRegionMulticastBidirSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "mcastBidirSize", strconv.FormatInt(data.TcamRegionMulticastBidirSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionMplsDoublewide.IsUnknown() && !data.TcamRegionMplsDoublewide.IsNull() && !config.TcamRegionMplsDoublewide.IsNull() {
-				attrs, _ = sjson.Set(attrs, "mplsDoublewide", strconv.FormatBool(data.TcamRegionMplsDoublewide.ValueBool()))
-			}
-			if !data.TcamRegionMplsSize.IsUnknown() && !data.TcamRegionMplsSize.IsNull() && !config.TcamRegionMplsSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "mplsSize", strconv.FormatInt(data.TcamRegionMplsSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionMvpnSize.IsUnknown() && !data.TcamRegionMvpnSize.IsNull() && !config.TcamRegionMvpnSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "mvpnSize", strconv.FormatInt(data.TcamRegionMvpnSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionN9kArpAclSize.IsUnknown() && !data.TcamRegionN9kArpAclSize.IsNull() && !config.TcamRegionN9kArpAclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "n9kArpaclSize", strconv.FormatInt(data.TcamRegionN9kArpAclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionNatSize.IsUnknown() && !data.TcamRegionNatSize.IsNull() && !config.TcamRegionNatSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "natSize", strconv.FormatInt(data.TcamRegionNatSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionOpenflowDoublewide.IsUnknown() && !data.TcamRegionOpenflowDoublewide.IsNull() && !config.TcamRegionOpenflowDoublewide.IsNull() {
-				attrs, _ = sjson.Set(attrs, "openflowDoublewide", strconv.FormatBool(data.TcamRegionOpenflowDoublewide.ValueBool()))
-			}
-			if !data.TcamRegionOpenflowLiteSize.IsUnknown() && !data.TcamRegionOpenflowLiteSize.IsNull() && !config.TcamRegionOpenflowLiteSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "openflowLiteSize", strconv.FormatInt(data.TcamRegionOpenflowLiteSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionOpenflowSize.IsUnknown() && !data.TcamRegionOpenflowSize.IsNull() && !config.TcamRegionOpenflowSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "openflowSize", strconv.FormatInt(data.TcamRegionOpenflowSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionPbrSize.IsUnknown() && !data.TcamRegionPbrSize.IsNull() && !config.TcamRegionPbrSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "pbrSize", strconv.FormatInt(data.TcamRegionPbrSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionQosIntraLiteSize.IsUnknown() && !data.TcamRegionQosIntraLiteSize.IsNull() && !config.TcamRegionQosIntraLiteSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "qosIntraLiteSize", strconv.FormatInt(data.TcamRegionQosIntraLiteSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionQosSize.IsUnknown() && !data.TcamRegionQosSize.IsNull() && !config.TcamRegionQosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "qosSize", strconv.FormatInt(data.TcamRegionQosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionQosLabelSize.IsUnknown() && !data.TcamRegionQosLabelSize.IsNull() && !config.TcamRegionQosLabelSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "qoslblSize", strconv.FormatInt(data.TcamRegionQosLabelSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionRaclLiteSize.IsUnknown() && !data.TcamRegionRaclLiteSize.IsNull() && !config.TcamRegionRaclLiteSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "raclLiteSize", strconv.FormatInt(data.TcamRegionRaclLiteSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionRaclSize.IsUnknown() && !data.TcamRegionRaclSize.IsNull() && !config.TcamRegionRaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "raclSize", strconv.FormatInt(data.TcamRegionRaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionRaclUdfSize.IsUnknown() && !data.TcamRegionRaclUdfSize.IsNull() && !config.TcamRegionRaclUdfSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "raclUdfSize", strconv.FormatInt(data.TcamRegionRaclUdfSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionSupSize.IsUnknown() && !data.TcamRegionSupSize.IsNull() && !config.TcamRegionSupSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "supSize", strconv.FormatInt(data.TcamRegionSupSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionSviSize.IsUnknown() && !data.TcamRegionSviSize.IsNull() && !config.TcamRegionSviSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "sviSize", strconv.FormatInt(data.TcamRegionSviSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionTcpNatSize.IsUnknown() && !data.TcamRegionTcpNatSize.IsNull() && !config.TcamRegionTcpNatSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "tcpNatSize", strconv.FormatInt(data.TcamRegionTcpNatSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionVaclLiteSize.IsUnknown() && !data.TcamRegionVaclLiteSize.IsNull() && !config.TcamRegionVaclLiteSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "vaclLiteSize", strconv.FormatInt(data.TcamRegionVaclLiteSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionVaclSize.IsUnknown() && !data.TcamRegionVaclSize.IsNull() && !config.TcamRegionVaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "vaclSize", strconv.FormatInt(data.TcamRegionVaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionVpcConvergenceSize.IsUnknown() && !data.TcamRegionVpcConvergenceSize.IsNull() && !config.TcamRegionVpcConvergenceSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "vpcConvergenceSize", strconv.FormatInt(data.TcamRegionVpcConvergenceSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionVlanQosIntraLiteSize.IsUnknown() && !data.TcamRegionVlanQosIntraLiteSize.IsNull() && !config.TcamRegionVlanQosIntraLiteSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "vqosIntraLiteSize", strconv.FormatInt(data.TcamRegionVlanQosIntraLiteSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionVlanQosSize.IsUnknown() && !data.TcamRegionVlanQosSize.IsNull() && !config.TcamRegionVlanQosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "vqosSize", strconv.FormatInt(data.TcamRegionVlanQosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionVxlanP2pSize.IsUnknown() && !data.TcamRegionVxlanP2pSize.IsNull() && !config.TcamRegionVxlanP2pSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "vxlanp2pSize", strconv.FormatInt(data.TcamRegionVxlanP2pSize.ValueInt64(), 10))
-			}
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-			nestedChildrenPath := childBodyPath + ".children"
-			attrs = "{}"
-			if !data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsUnknown() && !data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() && !config.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eIfaclAllPerPortStats", strconv.FormatBool(data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.ValueBool()))
-			}
-			if !data.TcamRegionExtendedEgressInterfaceAclAllSize.IsUnknown() && !data.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() && !config.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eIfaclAllSize", strconv.FormatInt(data.TcamRegionExtendedEgressInterfaceAclAllSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsUnknown() && !data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() && !config.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eIpv6RaclPerPortStats", strconv.FormatBool(data.TcamRegionExtendedEgressIpv6RaclPerPortStats.ValueBool()))
-			}
-			if !data.TcamRegionExtendedEgressRaclPerPortStats.IsUnknown() && !data.TcamRegionExtendedEgressRaclPerPortStats.IsNull() && !config.TcamRegionExtendedEgressRaclPerPortStats.IsNull() {
-				attrs, _ = sjson.Set(attrs, "eRaclPerPortStats", strconv.FormatBool(data.TcamRegionExtendedEgressRaclPerPortStats.ValueBool()))
-			}
-			if !data.TcamRegionExtendedEgressCoppSize.IsUnknown() && !data.TcamRegionExtendedEgressCoppSize.IsNull() && !config.TcamRegionExtendedEgressCoppSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "egrCoppSize", strconv.FormatInt(data.TcamRegionExtendedEgressCoppSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedEgressFlowSize.IsUnknown() && !data.TcamRegionExtendedEgressFlowSize.IsNull() && !config.TcamRegionExtendedEgressFlowSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "egrFlowSize", strconv.FormatInt(data.TcamRegionExtendedEgressFlowSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedEgressHardwareTelemetrySize.IsUnknown() && !data.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() && !config.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "egrHwTelemetrySize", strconv.FormatInt(data.TcamRegionExtendedEgressHardwareTelemetrySize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedEgressInterfaceAclSize.IsUnknown() && !data.TcamRegionExtendedEgressInterfaceAclSize.IsNull() && !config.TcamRegionExtendedEgressInterfaceAclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "egrIfaclSize", strconv.FormatInt(data.TcamRegionExtendedEgressInterfaceAclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedEgressL2QosSize.IsUnknown() && !data.TcamRegionExtendedEgressL2QosSize.IsNull() && !config.TcamRegionExtendedEgressL2QosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "egrL2QosSize", strconv.FormatInt(data.TcamRegionExtendedEgressL2QosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedEgressL3VlanQosSize.IsUnknown() && !data.TcamRegionExtendedEgressL3VlanQosSize.IsNull() && !config.TcamRegionExtendedEgressL3VlanQosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "egrL3VlanQosSize", strconv.FormatInt(data.TcamRegionExtendedEgressL3VlanQosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedEgressRaclSize.IsUnknown() && !data.TcamRegionExtendedEgressRaclSize.IsNull() && !config.TcamRegionExtendedEgressRaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "egrRaclSize", strconv.FormatInt(data.TcamRegionExtendedEgressRaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedEgressSupSize.IsUnknown() && !data.TcamRegionExtendedEgressSupSize.IsNull() && !config.TcamRegionExtendedEgressSupSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "egrSupSize", strconv.FormatInt(data.TcamRegionExtendedEgressSupSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedHardwareTelemetrySize.IsUnknown() && !data.TcamRegionExtendedHardwareTelemetrySize.IsNull() && !config.TcamRegionExtendedHardwareTelemetrySize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "hwTelemetrySize", strconv.FormatInt(data.TcamRegionExtendedHardwareTelemetrySize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsUnknown() && !data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() && !config.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ifaclAllPerPortStats", strconv.FormatBool(data.TcamRegionExtendedInterfaceAclAllPerPortStats.ValueBool()))
-			}
-			if !data.TcamRegionExtendedInterfaceAclAllProfile.IsUnknown() && !data.TcamRegionExtendedInterfaceAclAllProfile.IsNull() && !config.TcamRegionExtendedInterfaceAclAllProfile.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ifaclAllProfile", strconv.FormatInt(data.TcamRegionExtendedInterfaceAclAllProfile.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedInterfaceAclAllSize.IsUnknown() && !data.TcamRegionExtendedInterfaceAclAllSize.IsNull() && !config.TcamRegionExtendedInterfaceAclAllSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ifaclAllSize", strconv.FormatInt(data.TcamRegionExtendedInterfaceAclAllSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedInterfaceAclPerPortStats.IsUnknown() && !data.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() && !config.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ifaclPerPortStats", strconv.FormatBool(data.TcamRegionExtendedInterfaceAclPerPortStats.ValueBool()))
-			}
-			if !data.TcamRegionExtendedIngressDaclSize.IsUnknown() && !data.TcamRegionExtendedIngressDaclSize.IsNull() && !config.TcamRegionExtendedIngressDaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingDaclSize", strconv.FormatInt(data.TcamRegionExtendedIngressDaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressInterfaceAclSize.IsUnknown() && !data.TcamRegionExtendedIngressInterfaceAclSize.IsNull() && !config.TcamRegionExtendedIngressInterfaceAclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingIfaclSize", strconv.FormatInt(data.TcamRegionExtendedIngressInterfaceAclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressInterfaceAclWideSize.IsUnknown() && !data.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() && !config.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingIfaclWideSize", strconv.FormatInt(data.TcamRegionExtendedIngressInterfaceAclWideSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsUnknown() && !data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() && !config.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingIpv6ifaclLiteSize", strconv.FormatInt(data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressL2L3QosSize.IsUnknown() && !data.TcamRegionExtendedIngressL2L3QosSize.IsNull() && !config.TcamRegionExtendedIngressL2L3QosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingL2L3QosSize", strconv.FormatInt(data.TcamRegionExtendedIngressL2L3QosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressL2QosSize.IsUnknown() && !data.TcamRegionExtendedIngressL2QosSize.IsNull() && !config.TcamRegionExtendedIngressL2QosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingL2QosSize", strconv.FormatInt(data.TcamRegionExtendedIngressL2QosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressL2SpanFilterSize.IsUnknown() && !data.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() && !config.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingL2SpanFilterSize", strconv.FormatInt(data.TcamRegionExtendedIngressL2SpanFilterSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressL3SpanFilterSize.IsUnknown() && !data.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() && !config.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingL3SpanFilterSize", strconv.FormatInt(data.TcamRegionExtendedIngressL3SpanFilterSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressPaclSbSize.IsUnknown() && !data.TcamRegionExtendedIngressPaclSbSize.IsNull() && !config.TcamRegionExtendedIngressPaclSbSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingPaclSbSize", strconv.FormatInt(data.TcamRegionExtendedIngressPaclSbSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressRaclSize.IsUnknown() && !data.TcamRegionExtendedIngressRaclSize.IsNull() && !config.TcamRegionExtendedIngressRaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingRaclSize", strconv.FormatInt(data.TcamRegionExtendedIngressRaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressRbaclSize.IsUnknown() && !data.TcamRegionExtendedIngressRbaclSize.IsNull() && !config.TcamRegionExtendedIngressRbaclSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingRbaclSize", strconv.FormatInt(data.TcamRegionExtendedIngressRbaclSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressRedirectSize.IsUnknown() && !data.TcamRegionExtendedIngressRedirectSize.IsNull() && !config.TcamRegionExtendedIngressRedirectSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingRedirectSize", strconv.FormatInt(data.TcamRegionExtendedIngressRedirectSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressStormControlSize.IsUnknown() && !data.TcamRegionExtendedIngressStormControlSize.IsNull() && !config.TcamRegionExtendedIngressStormControlSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingStormControlSize", strconv.FormatInt(data.TcamRegionExtendedIngressStormControlSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressSupSize.IsUnknown() && !data.TcamRegionExtendedIngressSupSize.IsNull() && !config.TcamRegionExtendedIngressSupSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingSupSize", strconv.FormatInt(data.TcamRegionExtendedIngressSupSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressVaclNhSize.IsUnknown() && !data.TcamRegionExtendedIngressVaclNhSize.IsNull() && !config.TcamRegionExtendedIngressVaclNhSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingVaclNhSize", strconv.FormatInt(data.TcamRegionExtendedIngressVaclNhSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIngressVlanQosSize.IsUnknown() && !data.TcamRegionExtendedIngressVlanQosSize.IsNull() && !config.TcamRegionExtendedIngressVlanQosSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ingVlanQosSize", strconv.FormatInt(data.TcamRegionExtendedIngressVlanQosSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsUnknown() && !data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() && !config.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6IfaclPerPortStats", strconv.FormatBool(data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.ValueBool()))
-			}
-			if !data.TcamRegionExtendedIpv6RaclPerPortStats.IsUnknown() && !data.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() && !config.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ipv6RaclPerPortStats", strconv.FormatBool(data.TcamRegionExtendedIpv6RaclPerPortStats.ValueBool()))
-			}
-			if !data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsUnknown() && !data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() && !config.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() {
-				attrs, _ = sjson.Set(attrs, "macIfaclPerPortStats", strconv.FormatBool(data.TcamRegionExtendedMacInterfaceAclPerPortStats.ValueBool()))
-			}
-			if !data.TcamRegionExtendedMulticastNatSize.IsUnknown() && !data.TcamRegionExtendedMulticastNatSize.IsNull() && !config.TcamRegionExtendedMulticastNatSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "mcastNatSize", strconv.FormatInt(data.TcamRegionExtendedMulticastNatSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedMulticastNbmSize.IsUnknown() && !data.TcamRegionExtendedMulticastNbmSize.IsNull() && !config.TcamRegionExtendedMulticastNbmSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "mcastNbmSize", strconv.FormatInt(data.TcamRegionExtendedMulticastNbmSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedRaclAllPerPortStats.IsUnknown() && !data.TcamRegionExtendedRaclAllPerPortStats.IsNull() && !config.TcamRegionExtendedRaclAllPerPortStats.IsNull() {
-				attrs, _ = sjson.Set(attrs, "raclAllPerPortStats", strconv.FormatBool(data.TcamRegionExtendedRaclAllPerPortStats.ValueBool()))
-			}
-			if !data.TcamRegionExtendedRaclAllProfile.IsUnknown() && !data.TcamRegionExtendedRaclAllProfile.IsNull() && !config.TcamRegionExtendedRaclAllProfile.IsNull() {
-				attrs, _ = sjson.Set(attrs, "raclAllProfile", strconv.FormatInt(data.TcamRegionExtendedRaclAllProfile.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedRaclAllSize.IsUnknown() && !data.TcamRegionExtendedRaclAllSize.IsNull() && !config.TcamRegionExtendedRaclAllSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "raclAllSize", strconv.FormatInt(data.TcamRegionExtendedRaclAllSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedRaclPerPortStats.IsUnknown() && !data.TcamRegionExtendedRaclPerPortStats.IsNull() && !config.TcamRegionExtendedRaclPerPortStats.IsNull() {
-				attrs, _ = sjson.Set(attrs, "raclPerPortStats", strconv.FormatBool(data.TcamRegionExtendedRaclPerPortStats.ValueBool()))
-			}
-			if !data.TcamRegionExtendedRedirectV4Size.IsUnknown() && !data.TcamRegionExtendedRedirectV4Size.IsNull() && !config.TcamRegionExtendedRedirectV4Size.IsNull() {
-				attrs, _ = sjson.Set(attrs, "redirectV4Size", strconv.FormatInt(data.TcamRegionExtendedRedirectV4Size.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedSpanSize.IsUnknown() && !data.TcamRegionExtendedSpanSize.IsNull() && !config.TcamRegionExtendedSpanSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "spanSize", strconv.FormatInt(data.TcamRegionExtendedSpanSize.ValueInt64(), 10))
-			}
-			if !data.TcamRegionExtendedSpanTahoeSize.IsUnknown() && !data.TcamRegionExtendedSpanTahoeSize.IsNull() && !config.TcamRegionExtendedSpanTahoeSize.IsNull() {
-				attrs, _ = sjson.Set(attrs, "spanTahSize", strconv.FormatInt(data.TcamRegionExtendedSpanTahoeSize.ValueInt64(), 10))
-			}
-			if attrs != "{}" {
-				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.platformTcamRegionExtended.attributes", attrs)
-			}
-		}
+	attrs = "{}"
+	if !data.PlatformAccessListMatchInnerHeader.IsUnknown() && !data.PlatformAccessListMatchInnerHeader.IsNull() && !config.PlatformAccessListMatchInnerHeader.IsNull() {
+		attrs, _ = sjson.Set(attrs, "accessListMatchInnerHeader", data.PlatformAccessListMatchInnerHeader.ValueString())
+	}
+	if !data.PlatformAclTapAggregation.IsUnknown() && !data.PlatformAclTapAggregation.IsNull() && !config.PlatformAclTapAggregation.IsNull() {
+		attrs, _ = sjson.Set(attrs, "aclTapAggregation", data.PlatformAclTapAggregation.ValueString())
+	}
+	if !data.PlatformDescription.IsUnknown() && !data.PlatformDescription.IsNull() && !config.PlatformDescription.IsNull() {
+		attrs, _ = sjson.Set(attrs, "descr", data.PlatformDescription.ValueString())
+	}
+	if !data.PlatformDisableParseError.IsUnknown() && !data.PlatformDisableParseError.IsNull() && !config.PlatformDisableParseError.IsNull() {
+		attrs, _ = sjson.Set(attrs, "disParseErr", data.PlatformDisableParseError.ValueString())
+	}
+	if !data.PlatformGlobalTxSpan.IsUnknown() && !data.PlatformGlobalTxSpan.IsNull() && !config.PlatformGlobalTxSpan.IsNull() {
+		attrs, _ = sjson.Set(attrs, "globalTxSpan", data.PlatformGlobalTxSpan.ValueString())
+	}
+	if !data.PlatformHighMulticastPriority.IsUnknown() && !data.PlatformHighMulticastPriority.IsNull() && !config.PlatformHighMulticastPriority.IsNull() {
+		attrs, _ = sjson.Set(attrs, "highMulticastPriority", data.PlatformHighMulticastPriority.ValueString())
+	}
+	if !data.PlatformHardwareLouResourceThreshold.IsUnknown() && !data.PlatformHardwareLouResourceThreshold.IsNull() && !config.PlatformHardwareLouResourceThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "hwLouResThreshold", strconv.FormatInt(data.PlatformHardwareLouResourceThreshold.ValueInt64(), 10))
+	}
+	if !data.PlatformIngressBdIfaclLabelOptimization.IsUnknown() && !data.PlatformIngressBdIfaclLabelOptimization.IsNull() && !config.PlatformIngressBdIfaclLabelOptimization.IsNull() {
+		attrs, _ = sjson.Set(attrs, "iBdIfaclLblOpt", data.PlatformIngressBdIfaclLabelOptimization.ValueString())
+	}
+	if !data.PlatformIngressRaclSize.IsUnknown() && !data.PlatformIngressRaclSize.IsNull() && !config.PlatformIngressRaclSize.IsNull() {
+		attrs, _ = sjson.Set(attrs, "iRaclSize", data.PlatformIngressRaclSize.ValueString())
+	}
+	if !data.PlatformIngressReplicationRoundRobin.IsUnknown() && !data.PlatformIngressReplicationRoundRobin.IsNull() && !config.PlatformIngressReplicationRoundRobin.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ingRepRoundRobin", strconv.FormatBool(data.PlatformIngressReplicationRoundRobin.ValueBool()))
+	}
+	if !data.PlatformIpStatistics.IsUnknown() && !data.PlatformIpStatistics.IsNull() && !config.PlatformIpStatistics.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ipStatistics", data.PlatformIpStatistics.ValueString())
+	}
+	if !data.PlatformIpv6AlpmCarveValue.IsUnknown() && !data.PlatformIpv6AlpmCarveValue.IsNull() && !config.PlatformIpv6AlpmCarveValue.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ipv6AlpmCarveValue", strconv.FormatInt(data.PlatformIpv6AlpmCarveValue.ValueInt64(), 10))
+	}
+	if !data.PlatformIpv6LpmMaxEntries.IsUnknown() && !data.PlatformIpv6LpmMaxEntries.IsNull() && !config.PlatformIpv6LpmMaxEntries.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ipv6LpmMaxEntries", strconv.FormatInt(data.PlatformIpv6LpmMaxEntries.ValueInt64(), 10))
+	}
+	if !data.PlatformLpmMaxLimit.IsUnknown() && !data.PlatformLpmMaxLimit.IsNull() && !config.PlatformLpmMaxLimit.IsNull() {
+		attrs, _ = sjson.Set(attrs, "lpmMaxLimit", strconv.FormatInt(data.PlatformLpmMaxLimit.ValueInt64(), 10))
+	}
+	if !data.PlatformMulticastDcsCheck.IsUnknown() && !data.PlatformMulticastDcsCheck.IsNull() && !config.PlatformMulticastDcsCheck.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcastDcsCheck", data.PlatformMulticastDcsCheck.ValueString())
+	}
+	if !data.PlatformMulticastFlexStats.IsUnknown() && !data.PlatformMulticastFlexStats.IsNull() && !config.PlatformMulticastFlexStats.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcastFlexStats", data.PlatformMulticastFlexStats.ValueString())
+	}
+	if !data.PlatformMulticastLpmMaxEntries.IsUnknown() && !data.PlatformMulticastLpmMaxEntries.IsNull() && !config.PlatformMulticastLpmMaxEntries.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcastLpmMaxEntries", strconv.FormatInt(data.PlatformMulticastLpmMaxEntries.ValueInt64(), 10))
+	}
+	if !data.PlatformMulticastNlb.IsUnknown() && !data.PlatformMulticastNlb.IsNull() && !config.PlatformMulticastNlb.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcastNlb", data.PlatformMulticastNlb.ValueString())
+	}
+	if !data.PlatformMulticastRaclBridge.IsUnknown() && !data.PlatformMulticastRaclBridge.IsNull() && !config.PlatformMulticastRaclBridge.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcastRaclBridge", data.PlatformMulticastRaclBridge.ValueString())
+	}
+	if !data.PlatformMldSnooping.IsUnknown() && !data.PlatformMldSnooping.IsNull() && !config.PlatformMldSnooping.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mldSnooping", data.PlatformMldSnooping.ValueString())
+	}
+	if !data.PlatformMplsAdjacencyStatsMode.IsUnknown() && !data.PlatformMplsAdjacencyStatsMode.IsNull() && !config.PlatformMplsAdjacencyStatsMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mplsAdjStatsMode", data.PlatformMplsAdjacencyStatsMode.ValueString())
+	}
+	if !data.PlatformMplsEcmpMode.IsUnknown() && !data.PlatformMplsEcmpMode.IsNull() && !config.PlatformMplsEcmpMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mplsCfgEcmpMode", data.PlatformMplsEcmpMode.ValueString())
+	}
+	if !data.PlatformMroutingDisableL2Update.IsUnknown() && !data.PlatformMroutingDisableL2Update.IsNull() && !config.PlatformMroutingDisableL2Update.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mroutingDisableL2Upd", data.PlatformMroutingDisableL2Update.ValueString())
+	}
+	if !data.PlatformMroutingDisableSecondRouteUpdate.IsUnknown() && !data.PlatformMroutingDisableSecondRouteUpdate.IsNull() && !config.PlatformMroutingDisableSecondRouteUpdate.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mroutingDisableSecRouteUpd", data.PlatformMroutingDisableSecondRouteUpdate.ValueString())
+	}
+	if !data.PlatformMroutingPerformanceMode.IsUnknown() && !data.PlatformMroutingPerformanceMode.IsNull() && !config.PlatformMroutingPerformanceMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mroutingPerfMode", data.PlatformMroutingPerformanceMode.ValueString())
+	}
+	if !data.PlatformMulticastMaxLimit.IsUnknown() && !data.PlatformMulticastMaxLimit.IsNull() && !config.PlatformMulticastMaxLimit.IsNull() {
+		attrs, _ = sjson.Set(attrs, "multicastMaxLimit", strconv.FormatInt(data.PlatformMulticastMaxLimit.ValueInt64(), 10))
+	}
+	if !data.PlatformMulticastRpfCheckOptimization.IsUnknown() && !data.PlatformMulticastRpfCheckOptimization.IsNull() && !config.PlatformMulticastRpfCheckOptimization.IsNull() {
+		attrs, _ = sjson.Set(attrs, "multicastRpfCheckOptimization", data.PlatformMulticastRpfCheckOptimization.ValueString())
+	}
+	if !data.PlatformMulticastServiceReflectPort.IsUnknown() && !data.PlatformMulticastServiceReflectPort.IsNull() && !config.PlatformMulticastServiceReflectPort.IsNull() {
+		attrs, _ = sjson.Set(attrs, "multicastServiceReflectPort", strconv.FormatInt(data.PlatformMulticastServiceReflectPort.ValueInt64(), 10))
+	}
+	if !data.PlatformMulticastSyslogThreshold.IsUnknown() && !data.PlatformMulticastSyslogThreshold.IsNull() && !config.PlatformMulticastSyslogThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "multicastSyslogThreshold", strconv.FormatInt(data.PlatformMulticastSyslogThreshold.ValueInt64(), 10))
+	}
+	if !data.PlatformOpenflowForwardPdu.IsUnknown() && !data.PlatformOpenflowForwardPdu.IsNull() && !config.PlatformOpenflowForwardPdu.IsNull() {
+		attrs, _ = sjson.Set(attrs, "openflowForwardPdu", data.PlatformOpenflowForwardPdu.ValueString())
+	}
+	if !data.PlatformPbrSkipSelfIp.IsUnknown() && !data.PlatformPbrSkipSelfIp.IsNull() && !config.PlatformPbrSkipSelfIp.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pbrSkipSelfIp", data.PlatformPbrSkipSelfIp.ValueString())
+	}
+	if !data.PlatformPortChannelFastConvergence.IsUnknown() && !data.PlatformPortChannelFastConvergence.IsNull() && !config.PlatformPortChannelFastConvergence.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcFastConv", data.PlatformPortChannelFastConvergence.ValueString())
+	}
+	if !data.PlatformPortChannelLoadBalanceAlgorithm.IsUnknown() && !data.PlatformPortChannelLoadBalanceAlgorithm.IsNull() && !config.PlatformPortChannelLoadBalanceAlgorithm.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcLbAlgo", data.PlatformPortChannelLoadBalanceAlgorithm.ValueString())
+	}
+	if !data.PlatformPortChannelLoadBalanceResilient.IsUnknown() && !data.PlatformPortChannelLoadBalanceResilient.IsNull() && !config.PlatformPortChannelLoadBalanceResilient.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcLbRes", data.PlatformPortChannelLoadBalanceResilient.ValueString())
+	}
+	if !data.PlatformPortChannelMplsLoadBalanceLabelIp.IsUnknown() && !data.PlatformPortChannelMplsLoadBalanceLabelIp.IsNull() && !config.PlatformPortChannelMplsLoadBalanceLabelIp.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcMplsLbLabelIp", data.PlatformPortChannelMplsLoadBalanceLabelIp.ValueString())
+	}
+	if !data.PlatformPortChannelMplsLoadBalanceLabelOnly.IsUnknown() && !data.PlatformPortChannelMplsLoadBalanceLabelOnly.IsNull() && !config.PlatformPortChannelMplsLoadBalanceLabelOnly.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcMplsLbLabelOnly", data.PlatformPortChannelMplsLoadBalanceLabelOnly.ValueString())
+	}
+	if !data.PlatformPortChannelScaleFanout.IsUnknown() && !data.PlatformPortChannelScaleFanout.IsNull() && !config.PlatformPortChannelScaleFanout.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pcScaleFanout", data.PlatformPortChannelScaleFanout.ValueString())
+	}
+	if !data.PlatformPicCoreEnable.IsUnknown() && !data.PlatformPicCoreEnable.IsNull() && !config.PlatformPicCoreEnable.IsNull() {
+		attrs, _ = sjson.Set(attrs, "picCoreEnable", data.PlatformPicCoreEnable.ValueString())
+	}
+	if !data.PlatformProfileFrontPortMode.IsUnknown() && !data.PlatformProfileFrontPortMode.IsNull() && !config.PlatformProfileFrontPortMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "profileFrontPortmode", data.PlatformProfileFrontPortMode.ValueString())
+	}
+	if !data.PlatformProfileMode.IsUnknown() && !data.PlatformProfileMode.IsNull() && !config.PlatformProfileMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "profileMode", data.PlatformProfileMode.ValueString())
+	}
+	if !data.PlatformProfileTuple.IsUnknown() && !data.PlatformProfileTuple.IsNull() && !config.PlatformProfileTuple.IsNull() {
+		attrs, _ = sjson.Set(attrs, "profileTuple", data.PlatformProfileTuple.ValueString())
+	}
+	if !data.PlatformPstatConfiguration.IsUnknown() && !data.PlatformPstatConfiguration.IsNull() && !config.PlatformPstatConfiguration.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pstatCfg", data.PlatformPstatConfiguration.ValueString())
+	}
+	if !data.PlatformQosMinBuffer.IsUnknown() && !data.PlatformQosMinBuffer.IsNull() && !config.PlatformQosMinBuffer.IsNull() {
+		attrs, _ = sjson.Set(attrs, "qosMinBuffer", data.PlatformQosMinBuffer.ValueString())
+	}
+	if !data.PlatformRoutingMode.IsUnknown() && !data.PlatformRoutingMode.IsNull() && !config.PlatformRoutingMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "routingMode", data.PlatformRoutingMode.ValueString())
+	}
+	if !data.PlatformServiceTemplateName.IsUnknown() && !data.PlatformServiceTemplateName.IsNull() && !config.PlatformServiceTemplateName.IsNull() {
+		attrs, _ = sjson.Set(attrs, "serviceTemplateName", data.PlatformServiceTemplateName.ValueString())
+	}
+	if !data.PlatformSviAndSiFlexStats.IsUnknown() && !data.PlatformSviAndSiFlexStats.IsNull() && !config.PlatformSviAndSiFlexStats.IsNull() {
+		attrs, _ = sjson.Set(attrs, "sviAndSiFlexStats", data.PlatformSviAndSiFlexStats.ValueString())
+	}
+	if !data.PlatformSviFlexStats.IsUnknown() && !data.PlatformSviFlexStats.IsNull() && !config.PlatformSviFlexStats.IsNull() {
+		attrs, _ = sjson.Set(attrs, "sviFlexStats", data.PlatformSviFlexStats.ValueString())
+	}
+	if !data.PlatformSwitchMode.IsUnknown() && !data.PlatformSwitchMode.IsNull() && !config.PlatformSwitchMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "switchMode", data.PlatformSwitchMode.ValueString())
+	}
+	if !data.PlatformSwitchingFabricSpeed.IsUnknown() && !data.PlatformSwitchingFabricSpeed.IsNull() && !config.PlatformSwitchingFabricSpeed.IsNull() {
+		attrs, _ = sjson.Set(attrs, "switchingFabricSpeed", data.PlatformSwitchingFabricSpeed.ValueString())
+	}
+	if !data.PlatformSwitchingMode.IsUnknown() && !data.PlatformSwitchingMode.IsNull() && !config.PlatformSwitchingMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "switchingMode", data.PlatformSwitchingMode.ValueString())
+	}
+	if !data.PlatformSystemFabricMode.IsUnknown() && !data.PlatformSystemFabricMode.IsNull() && !config.PlatformSystemFabricMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "systemFabricMode", data.PlatformSystemFabricMode.ValueString())
+	}
+	if !data.PlatformTcamSyslogThreshold.IsUnknown() && !data.PlatformTcamSyslogThreshold.IsNull() && !config.PlatformTcamSyslogThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "tcamSyslogThreshold", strconv.FormatInt(data.PlatformTcamSyslogThreshold.ValueInt64(), 10))
+	}
+	if !data.PlatformUnicastMaxLimit.IsUnknown() && !data.PlatformUnicastMaxLimit.IsNull() && !config.PlatformUnicastMaxLimit.IsNull() {
+		attrs, _ = sjson.Set(attrs, "unicastMaxLimit", strconv.FormatInt(data.PlatformUnicastMaxLimit.ValueInt64(), 10))
+	}
+	if !data.PlatformUnicastSyslogThreshold.IsUnknown() && !data.PlatformUnicastSyslogThreshold.IsNull() && !config.PlatformUnicastSyslogThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "unicastSyslogThreshold", strconv.FormatInt(data.PlatformUnicastSyslogThreshold.ValueInt64(), 10))
+	}
+	if !data.PlatformUnicastTrace.IsUnknown() && !data.PlatformUnicastTrace.IsNull() && !config.PlatformUnicastTrace.IsNull() {
+		attrs, _ = sjson.Set(attrs, "unicastTrace", data.PlatformUnicastTrace.ValueString())
+	}
+	if !data.PlatformUnknownUnicastFlood.IsUnknown() && !data.PlatformUnknownUnicastFlood.IsNull() && !config.PlatformUnknownUnicastFlood.IsNull() {
+		attrs, _ = sjson.Set(attrs, "unknownUnicastFlood", data.PlatformUnknownUnicastFlood.ValueString())
+	}
+	if !data.PlatformUrpfStatus.IsUnknown() && !data.PlatformUrpfStatus.IsNull() && !config.PlatformUrpfStatus.IsNull() {
+		attrs, _ = sjson.Set(attrs, "urpfStatus", data.PlatformUrpfStatus.ValueString())
+	}
+	if !data.PlatformWrrUnicastBandwidth.IsUnknown() && !data.PlatformWrrUnicastBandwidth.IsNull() && !config.PlatformWrrUnicastBandwidth.IsNull() {
+		attrs, _ = sjson.Set(attrs, "wrrUnicastBw", strconv.FormatInt(data.PlatformWrrUnicastBandwidth.ValueInt64(), 10))
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformEntity.attributes", attrs)
 	}
 	for key, child := range data.ManagementInterfaces {
 		configChild, configChildOk := config.ManagementInterfaces[key]
@@ -2176,60 +1727,21 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
-	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".commEntity"
-		attrs = "{}"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
-		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".commSsh"
-			attrs = "{}"
-			if !data.SshAdminState.IsUnknown() && !data.SshAdminState.IsNull() && !config.SshAdminState.IsNull() {
-				attrs, _ = sjson.Set(attrs, "adminSt", data.SshAdminState.ValueString())
-			}
-			if !data.SshCiphers.IsUnknown() && !data.SshCiphers.IsNull() && !config.SshCiphers.IsNull() {
-				attrs, _ = sjson.Set(attrs, "ciphers", data.SshCiphers.ValueString())
-			}
-			if !data.SshDescription.IsUnknown() && !data.SshDescription.IsNull() && !config.SshDescription.IsNull() {
-				attrs, _ = sjson.Set(attrs, "descr", data.SshDescription.ValueString())
-			}
-			if !data.SshEnableWeakCiphers.IsUnknown() && !data.SshEnableWeakCiphers.IsNull() && !config.SshEnableWeakCiphers.IsNull() {
-				attrs, _ = sjson.Set(attrs, "enWeakCiphers", data.SshEnableWeakCiphers.ValueString())
-			}
-			if !data.SshKeyExchangeAlgorithms.IsUnknown() && !data.SshKeyExchangeAlgorithms.IsNull() && !config.SshKeyExchangeAlgorithms.IsNull() {
-				attrs, _ = sjson.Set(attrs, "keyExchangeAlgorithms", data.SshKeyExchangeAlgorithms.ValueString())
-			}
-			if !data.SshKeyTypes.IsUnknown() && !data.SshKeyTypes.IsNull() && !config.SshKeyTypes.IsNull() {
-				attrs, _ = sjson.Set(attrs, "keyTypes", data.SshKeyTypes.ValueString())
-			}
-			if !data.SshLoginAttempts.IsUnknown() && !data.SshLoginAttempts.IsNull() && !config.SshLoginAttempts.IsNull() {
-				attrs, _ = sjson.Set(attrs, "loginAttempts", strconv.FormatInt(data.SshLoginAttempts.ValueInt64(), 10))
-			}
-			if !data.SshLoginGraceTime.IsUnknown() && !data.SshLoginGraceTime.IsNull() && !config.SshLoginGraceTime.IsNull() {
-				attrs, _ = sjson.Set(attrs, "loginGraceTime", strconv.FormatInt(data.SshLoginGraceTime.ValueInt64(), 10))
-			}
-			if !data.SshMessageAuthenticationCodes.IsUnknown() && !data.SshMessageAuthenticationCodes.IsNull() && !config.SshMessageAuthenticationCodes.IsNull() {
-				attrs, _ = sjson.Set(attrs, "messageAuthCodes", data.SshMessageAuthenticationCodes.ValueString())
-			}
-			if !data.SshPort.IsUnknown() && !data.SshPort.IsNull() && !config.SshPort.IsNull() {
-				attrs, _ = sjson.Set(attrs, "port", strconv.FormatInt(data.SshPort.ValueInt64(), 10))
-			}
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-			nestedChildrenPath := childBodyPath + ".children"
-			for key, child := range data.SshKeys {
-				configChild, configChildOk := config.SshKeys[key]
-				_ = configChild
-				_ = configChildOk
-				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "type", key)
-				if configChildOk && !child.KeyLength.IsUnknown() && !child.KeyLength.IsNull() && !configChild.KeyLength.IsNull() {
-					attrs, _ = sjson.Set(attrs, "keyLen", strconv.FormatInt(child.KeyLength.ValueInt64(), 10))
-				}
-				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.commSshKey.attributes", attrs)
-			}
-		}
+	attrs = "{}"
+	if !data.ErspanOriginIpIsGlobal.IsUnknown() && !data.ErspanOriginIpIsGlobal.IsNull() && !config.ErspanOriginIpIsGlobal.IsNull() {
+		attrs, _ = sjson.Set(attrs, "isGlobal", strconv.FormatBool(data.ErspanOriginIpIsGlobal.ValueBool()))
+	}
+	if !data.ErspanOriginIpIsGlobalIpv6.IsUnknown() && !data.ErspanOriginIpIsGlobalIpv6.IsNull() && !config.ErspanOriginIpIsGlobalIpv6.IsNull() {
+		attrs, _ = sjson.Set(attrs, "isGlobalv6", strconv.FormatBool(data.ErspanOriginIpIsGlobalIpv6.ValueBool()))
+	}
+	if !data.ErspanOriginIpAddress.IsUnknown() && !data.ErspanOriginIpAddress.IsNull() && !config.ErspanOriginIpAddress.IsNull() {
+		attrs, _ = sjson.Set(attrs, "originIp", data.ErspanOriginIpAddress.ValueString())
+	}
+	if !data.ErspanOriginIpv6Address.IsUnknown() && !data.ErspanOriginIpv6Address.IsNull() && !config.ErspanOriginIpv6Address.IsNull() {
+		attrs, _ = sjson.Set(attrs, "originIpv6", data.ErspanOriginIpv6Address.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.spanErspanOriginIp.attributes", attrs)
 	}
 
 	return nxos.Body{Str: body}
@@ -2901,137 +2413,6 @@ func (data *System) fromBody(res gjson.Result) {
 		data.PlatformUnknownUnicastFlood = types.StringValue(rplatformEntity.Get("platformEntity.attributes.unknownUnicastFlood").String())
 		data.PlatformUrpfStatus = types.StringValue(rplatformEntity.Get("platformEntity.attributes.urpfStatus").String())
 		data.PlatformWrrUnicastBandwidth = types.Int64Value(rplatformEntity.Get("platformEntity.attributes.wrrUnicastBw").Int())
-		{
-			var rplatformTcamRegion gjson.Result
-			rplatformEntity.Get("platformEntity.children").ForEach(
-				func(_, v gjson.Result) bool {
-					rnValue := v.Get("platformTcamRegion.attributes.rn").String()
-					if rnValue == "tcamRegion" {
-						rplatformTcamRegion = v
-						return false
-					}
-					return true
-				},
-			)
-			data.TcamRegionArpAclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.arpaclSize").Int())
-			data.TcamRegionCoppSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.coppSize").Int())
-			data.TcamRegionCoppSystemSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.coppSystemSize").Int())
-			data.TcamRegionEgressIpv6QosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eIpv6QosSize").Int())
-			data.TcamRegionEgressIpv6RaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eIpv6RaclSize").Int())
-			data.TcamRegionEgressMacQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eMacQosSize").Int())
-			data.TcamRegionEgressQosLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eQosLiteSize").Int())
-			data.TcamRegionEgressQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eQosSize").Int())
-			data.TcamRegionEgressRaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eRaclSize").Int())
-			data.TcamRegionEgressVaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eVaclSize").Int())
-			data.TcamRegionFcoeEgressSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.fcoeEgressSize").Int())
-			data.TcamRegionFcoeIngressSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.fcoeIngressSize").Int())
-			data.TcamRegionFhsSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.fhsSize").Int())
-			data.TcamRegionInterfaceAclLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ifaclLiteSize").Int())
-			data.TcamRegionInterfaceAclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ifaclSize").Int())
-			data.TcamRegionInterfaceAclUdfSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ifaclUdfSize").Int())
-			data.TcamRegionIngressFlowRedirectSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ingFlowRedirectSize").Int())
-			data.TcamRegionIngressFlowSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ingFlowSize").Int())
-			data.TcamRegionIpsgSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipsgSize").Int())
-			data.TcamRegionIpv6InterfaceAclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6IfaclSize").Int())
-			data.TcamRegionIpv6L3QosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6L3qosSize").Int())
-			data.TcamRegionIpv6PbrSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6PbrSize").Int())
-			data.TcamRegionIpv6QosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6QosSize").Int())
-			data.TcamRegionIpv6RaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6RaclSize").Int())
-			data.TcamRegionIpv6SpanL2Size = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6SpanL2Size").Int())
-			data.TcamRegionIpv6SpanSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6SpanSize").Int())
-			data.TcamRegionIpv6SupSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6SupSize").Int())
-			data.TcamRegionIpv6VaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6VaclSize").Int())
-			data.TcamRegionIpv6VlanQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6VqosSize").Int())
-			data.TcamRegionL3QosIntraLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.l3qosIntraLiteSize").Int())
-			data.TcamRegionMacInterfaceAclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.macIfaclSize").Int())
-			data.TcamRegionMacL3QosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.macL3qosSize").Int())
-			data.TcamRegionMacQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.macQosSize").Int())
-			data.TcamRegionMacVaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.macVaclSize").Int())
-			data.TcamRegionMacVlanQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.macVqosSize").Int())
-			data.TcamRegionMulticastBidirSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.mcastBidirSize").Int())
-			data.TcamRegionMplsDoublewide = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegion.Get("platformTcamRegion.attributes.mplsDoublewide").String()))
-			data.TcamRegionMplsSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.mplsSize").Int())
-			data.TcamRegionMvpnSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.mvpnSize").Int())
-			data.TcamRegionN9kArpAclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.n9kArpaclSize").Int())
-			data.TcamRegionNatSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.natSize").Int())
-			data.TcamRegionOpenflowDoublewide = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegion.Get("platformTcamRegion.attributes.openflowDoublewide").String()))
-			data.TcamRegionOpenflowLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.openflowLiteSize").Int())
-			data.TcamRegionOpenflowSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.openflowSize").Int())
-			data.TcamRegionPbrSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.pbrSize").Int())
-			data.TcamRegionQosIntraLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.qosIntraLiteSize").Int())
-			data.TcamRegionQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.qosSize").Int())
-			data.TcamRegionQosLabelSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.qoslblSize").Int())
-			data.TcamRegionRaclLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.raclLiteSize").Int())
-			data.TcamRegionRaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.raclSize").Int())
-			data.TcamRegionRaclUdfSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.raclUdfSize").Int())
-			data.TcamRegionSupSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.supSize").Int())
-			data.TcamRegionSviSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.sviSize").Int())
-			data.TcamRegionTcpNatSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.tcpNatSize").Int())
-			data.TcamRegionVaclLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vaclLiteSize").Int())
-			data.TcamRegionVaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vaclSize").Int())
-			data.TcamRegionVpcConvergenceSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vpcConvergenceSize").Int())
-			data.TcamRegionVlanQosIntraLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vqosIntraLiteSize").Int())
-			data.TcamRegionVlanQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vqosSize").Int())
-			data.TcamRegionVxlanP2pSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vxlanp2pSize").Int())
-			{
-				var rplatformTcamRegionExtended gjson.Result
-				rplatformTcamRegion.Get("platformTcamRegion.children").ForEach(
-					func(_, v gjson.Result) bool {
-						rnValue := v.Get("platformTcamRegionExtended.attributes.rn").String()
-						if rnValue == "tcamregionextd" {
-							rplatformTcamRegionExtended = v
-							return false
-						}
-						return true
-					},
-				)
-				data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.eIfaclAllPerPortStats").String()))
-				data.TcamRegionExtendedEgressInterfaceAclAllSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.eIfaclAllSize").Int())
-				data.TcamRegionExtendedEgressIpv6RaclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.eIpv6RaclPerPortStats").String()))
-				data.TcamRegionExtendedEgressRaclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.eRaclPerPortStats").String()))
-				data.TcamRegionExtendedEgressCoppSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrCoppSize").Int())
-				data.TcamRegionExtendedEgressFlowSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrFlowSize").Int())
-				data.TcamRegionExtendedEgressHardwareTelemetrySize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrHwTelemetrySize").Int())
-				data.TcamRegionExtendedEgressInterfaceAclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrIfaclSize").Int())
-				data.TcamRegionExtendedEgressL2QosSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrL2QosSize").Int())
-				data.TcamRegionExtendedEgressL3VlanQosSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrL3VlanQosSize").Int())
-				data.TcamRegionExtendedEgressRaclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrRaclSize").Int())
-				data.TcamRegionExtendedEgressSupSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrSupSize").Int())
-				data.TcamRegionExtendedHardwareTelemetrySize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.hwTelemetrySize").Int())
-				data.TcamRegionExtendedInterfaceAclAllPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ifaclAllPerPortStats").String()))
-				data.TcamRegionExtendedInterfaceAclAllProfile = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ifaclAllProfile").Int())
-				data.TcamRegionExtendedInterfaceAclAllSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ifaclAllSize").Int())
-				data.TcamRegionExtendedInterfaceAclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ifaclPerPortStats").String()))
-				data.TcamRegionExtendedIngressDaclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingDaclSize").Int())
-				data.TcamRegionExtendedIngressInterfaceAclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingIfaclSize").Int())
-				data.TcamRegionExtendedIngressInterfaceAclWideSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingIfaclWideSize").Int())
-				data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingIpv6ifaclLiteSize").Int())
-				data.TcamRegionExtendedIngressL2L3QosSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingL2L3QosSize").Int())
-				data.TcamRegionExtendedIngressL2QosSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingL2QosSize").Int())
-				data.TcamRegionExtendedIngressL2SpanFilterSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingL2SpanFilterSize").Int())
-				data.TcamRegionExtendedIngressL3SpanFilterSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingL3SpanFilterSize").Int())
-				data.TcamRegionExtendedIngressPaclSbSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingPaclSbSize").Int())
-				data.TcamRegionExtendedIngressRaclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingRaclSize").Int())
-				data.TcamRegionExtendedIngressRbaclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingRbaclSize").Int())
-				data.TcamRegionExtendedIngressRedirectSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingRedirectSize").Int())
-				data.TcamRegionExtendedIngressStormControlSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingStormControlSize").Int())
-				data.TcamRegionExtendedIngressSupSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingSupSize").Int())
-				data.TcamRegionExtendedIngressVaclNhSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingVaclNhSize").Int())
-				data.TcamRegionExtendedIngressVlanQosSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingVlanQosSize").Int())
-				data.TcamRegionExtendedIpv6InterfaceAclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ipv6IfaclPerPortStats").String()))
-				data.TcamRegionExtendedIpv6RaclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ipv6RaclPerPortStats").String()))
-				data.TcamRegionExtendedMacInterfaceAclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.macIfaclPerPortStats").String()))
-				data.TcamRegionExtendedMulticastNatSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.mcastNatSize").Int())
-				data.TcamRegionExtendedMulticastNbmSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.mcastNbmSize").Int())
-				data.TcamRegionExtendedRaclAllPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.raclAllPerPortStats").String()))
-				data.TcamRegionExtendedRaclAllProfile = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.raclAllProfile").Int())
-				data.TcamRegionExtendedRaclAllSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.raclAllSize").Int())
-				data.TcamRegionExtendedRaclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.raclPerPortStats").String()))
-				data.TcamRegionExtendedRedirectV4Size = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.redirectV4Size").Int())
-				data.TcamRegionExtendedSpanSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.spanSize").Int())
-				data.TcamRegionExtendedSpanTahoeSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.spanTahSize").Int())
-			}
-		}
 	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -3534,59 +2915,21 @@ func (data *System) fromBody(res gjson.Result) {
 		}
 	}
 	{
-		var rcommEntity gjson.Result
+		var rspanErspanOriginIp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				rnValue := v.Get("commEntity.attributes.rn").String()
-				if rnValue == "comm" {
-					rcommEntity = v
+				rnValue := v.Get("spanErspanOriginIp.attributes.rn").String()
+				if rnValue == "originip" {
+					rspanErspanOriginIp = v
 					return false
 				}
 				return true
 			},
 		)
-		{
-			var rcommSsh gjson.Result
-			rcommEntity.Get("commEntity.children").ForEach(
-				func(_, v gjson.Result) bool {
-					rnValue := v.Get("commSsh.attributes.rn").String()
-					if rnValue == "ssh" {
-						rcommSsh = v
-						return false
-					}
-					return true
-				},
-			)
-			data.SshAdminState = types.StringValue(rcommSsh.Get("commSsh.attributes.adminSt").String())
-			data.SshCiphers = types.StringValue(rcommSsh.Get("commSsh.attributes.ciphers").String())
-			data.SshDescription = types.StringValue(rcommSsh.Get("commSsh.attributes.descr").String())
-			data.SshEnableWeakCiphers = types.StringValue(rcommSsh.Get("commSsh.attributes.enWeakCiphers").String())
-			data.SshKeyExchangeAlgorithms = types.StringValue(rcommSsh.Get("commSsh.attributes.keyExchangeAlgorithms").String())
-			data.SshKeyTypes = types.StringValue(rcommSsh.Get("commSsh.attributes.keyTypes").String())
-			data.SshLoginAttempts = types.Int64Value(rcommSsh.Get("commSsh.attributes.loginAttempts").Int())
-			data.SshLoginGraceTime = types.Int64Value(rcommSsh.Get("commSsh.attributes.loginGraceTime").Int())
-			data.SshMessageAuthenticationCodes = types.StringValue(rcommSsh.Get("commSsh.attributes.messageAuthCodes").String())
-			data.SshPort = types.Int64Value(rcommSsh.Get("commSsh.attributes.port").Int())
-			rcommSsh.Get("commSsh.children").ForEach(
-				func(_, v gjson.Result) bool {
-					v.ForEach(
-						func(classname, value gjson.Result) bool {
-							if classname.String() == "commSshKey" {
-								var child SystemSshKeys
-								child.KeyLength = types.Int64Value(value.Get("attributes.keyLen").Int())
-								mapKey := value.Get("attributes.type").String()
-								if data.SshKeys == nil {
-									data.SshKeys = make(map[string]SystemSshKeys)
-								}
-								data.SshKeys[mapKey] = child
-							}
-							return true
-						},
-					)
-					return true
-				},
-			)
-		}
+		data.ErspanOriginIpIsGlobal = types.BoolValue(helpers.ParseNxosBoolean(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.isGlobal").String()))
+		data.ErspanOriginIpIsGlobalIpv6 = types.BoolValue(helpers.ParseNxosBoolean(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.isGlobalv6").String()))
+		data.ErspanOriginIpAddress = types.StringValue(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.originIp").String())
+		data.ErspanOriginIpv6Address = types.StringValue(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.originIpv6").String())
 	}
 }
 
@@ -5002,557 +4345,6 @@ func (data *System) updateFromBody(res gjson.Result) {
 	} else {
 		data.PlatformWrrUnicastBandwidth = types.Int64Null()
 	}
-	{
-		var rplatformTcamRegion gjson.Result
-		rplatformEntity.Get("platformEntity.children").ForEach(
-			func(_, v gjson.Result) bool {
-				rnValue := v.Get("platformTcamRegion.attributes.rn").String()
-				if rnValue == "tcamRegion" {
-					rplatformTcamRegion = v
-					return false
-				}
-				return true
-			},
-		)
-		if !data.TcamRegionArpAclSize.IsNull() {
-			data.TcamRegionArpAclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.arpaclSize").Int())
-		} else {
-			data.TcamRegionArpAclSize = types.Int64Null()
-		}
-		if !data.TcamRegionCoppSize.IsNull() {
-			data.TcamRegionCoppSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.coppSize").Int())
-		} else {
-			data.TcamRegionCoppSize = types.Int64Null()
-		}
-		if !data.TcamRegionCoppSystemSize.IsNull() {
-			data.TcamRegionCoppSystemSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.coppSystemSize").Int())
-		} else {
-			data.TcamRegionCoppSystemSize = types.Int64Null()
-		}
-		if !data.TcamRegionEgressIpv6QosSize.IsNull() {
-			data.TcamRegionEgressIpv6QosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eIpv6QosSize").Int())
-		} else {
-			data.TcamRegionEgressIpv6QosSize = types.Int64Null()
-		}
-		if !data.TcamRegionEgressIpv6RaclSize.IsNull() {
-			data.TcamRegionEgressIpv6RaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eIpv6RaclSize").Int())
-		} else {
-			data.TcamRegionEgressIpv6RaclSize = types.Int64Null()
-		}
-		if !data.TcamRegionEgressMacQosSize.IsNull() {
-			data.TcamRegionEgressMacQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eMacQosSize").Int())
-		} else {
-			data.TcamRegionEgressMacQosSize = types.Int64Null()
-		}
-		if !data.TcamRegionEgressQosLiteSize.IsNull() {
-			data.TcamRegionEgressQosLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eQosLiteSize").Int())
-		} else {
-			data.TcamRegionEgressQosLiteSize = types.Int64Null()
-		}
-		if !data.TcamRegionEgressQosSize.IsNull() {
-			data.TcamRegionEgressQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eQosSize").Int())
-		} else {
-			data.TcamRegionEgressQosSize = types.Int64Null()
-		}
-		if !data.TcamRegionEgressRaclSize.IsNull() {
-			data.TcamRegionEgressRaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eRaclSize").Int())
-		} else {
-			data.TcamRegionEgressRaclSize = types.Int64Null()
-		}
-		if !data.TcamRegionEgressVaclSize.IsNull() {
-			data.TcamRegionEgressVaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.eVaclSize").Int())
-		} else {
-			data.TcamRegionEgressVaclSize = types.Int64Null()
-		}
-		if !data.TcamRegionFcoeEgressSize.IsNull() {
-			data.TcamRegionFcoeEgressSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.fcoeEgressSize").Int())
-		} else {
-			data.TcamRegionFcoeEgressSize = types.Int64Null()
-		}
-		if !data.TcamRegionFcoeIngressSize.IsNull() {
-			data.TcamRegionFcoeIngressSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.fcoeIngressSize").Int())
-		} else {
-			data.TcamRegionFcoeIngressSize = types.Int64Null()
-		}
-		if !data.TcamRegionFhsSize.IsNull() {
-			data.TcamRegionFhsSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.fhsSize").Int())
-		} else {
-			data.TcamRegionFhsSize = types.Int64Null()
-		}
-		if !data.TcamRegionInterfaceAclLiteSize.IsNull() {
-			data.TcamRegionInterfaceAclLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ifaclLiteSize").Int())
-		} else {
-			data.TcamRegionInterfaceAclLiteSize = types.Int64Null()
-		}
-		if !data.TcamRegionInterfaceAclSize.IsNull() {
-			data.TcamRegionInterfaceAclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ifaclSize").Int())
-		} else {
-			data.TcamRegionInterfaceAclSize = types.Int64Null()
-		}
-		if !data.TcamRegionInterfaceAclUdfSize.IsNull() {
-			data.TcamRegionInterfaceAclUdfSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ifaclUdfSize").Int())
-		} else {
-			data.TcamRegionInterfaceAclUdfSize = types.Int64Null()
-		}
-		if !data.TcamRegionIngressFlowRedirectSize.IsNull() {
-			data.TcamRegionIngressFlowRedirectSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ingFlowRedirectSize").Int())
-		} else {
-			data.TcamRegionIngressFlowRedirectSize = types.Int64Null()
-		}
-		if !data.TcamRegionIngressFlowSize.IsNull() {
-			data.TcamRegionIngressFlowSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ingFlowSize").Int())
-		} else {
-			data.TcamRegionIngressFlowSize = types.Int64Null()
-		}
-		if !data.TcamRegionIpsgSize.IsNull() {
-			data.TcamRegionIpsgSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipsgSize").Int())
-		} else {
-			data.TcamRegionIpsgSize = types.Int64Null()
-		}
-		if !data.TcamRegionIpv6InterfaceAclSize.IsNull() {
-			data.TcamRegionIpv6InterfaceAclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6IfaclSize").Int())
-		} else {
-			data.TcamRegionIpv6InterfaceAclSize = types.Int64Null()
-		}
-		if !data.TcamRegionIpv6L3QosSize.IsNull() {
-			data.TcamRegionIpv6L3QosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6L3qosSize").Int())
-		} else {
-			data.TcamRegionIpv6L3QosSize = types.Int64Null()
-		}
-		if !data.TcamRegionIpv6PbrSize.IsNull() {
-			data.TcamRegionIpv6PbrSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6PbrSize").Int())
-		} else {
-			data.TcamRegionIpv6PbrSize = types.Int64Null()
-		}
-		if !data.TcamRegionIpv6QosSize.IsNull() {
-			data.TcamRegionIpv6QosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6QosSize").Int())
-		} else {
-			data.TcamRegionIpv6QosSize = types.Int64Null()
-		}
-		if !data.TcamRegionIpv6RaclSize.IsNull() {
-			data.TcamRegionIpv6RaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6RaclSize").Int())
-		} else {
-			data.TcamRegionIpv6RaclSize = types.Int64Null()
-		}
-		if !data.TcamRegionIpv6SpanL2Size.IsNull() {
-			data.TcamRegionIpv6SpanL2Size = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6SpanL2Size").Int())
-		} else {
-			data.TcamRegionIpv6SpanL2Size = types.Int64Null()
-		}
-		if !data.TcamRegionIpv6SpanSize.IsNull() {
-			data.TcamRegionIpv6SpanSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6SpanSize").Int())
-		} else {
-			data.TcamRegionIpv6SpanSize = types.Int64Null()
-		}
-		if !data.TcamRegionIpv6SupSize.IsNull() {
-			data.TcamRegionIpv6SupSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6SupSize").Int())
-		} else {
-			data.TcamRegionIpv6SupSize = types.Int64Null()
-		}
-		if !data.TcamRegionIpv6VaclSize.IsNull() {
-			data.TcamRegionIpv6VaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6VaclSize").Int())
-		} else {
-			data.TcamRegionIpv6VaclSize = types.Int64Null()
-		}
-		if !data.TcamRegionIpv6VlanQosSize.IsNull() {
-			data.TcamRegionIpv6VlanQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.ipv6VqosSize").Int())
-		} else {
-			data.TcamRegionIpv6VlanQosSize = types.Int64Null()
-		}
-		if !data.TcamRegionL3QosIntraLiteSize.IsNull() {
-			data.TcamRegionL3QosIntraLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.l3qosIntraLiteSize").Int())
-		} else {
-			data.TcamRegionL3QosIntraLiteSize = types.Int64Null()
-		}
-		if !data.TcamRegionMacInterfaceAclSize.IsNull() {
-			data.TcamRegionMacInterfaceAclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.macIfaclSize").Int())
-		} else {
-			data.TcamRegionMacInterfaceAclSize = types.Int64Null()
-		}
-		if !data.TcamRegionMacL3QosSize.IsNull() {
-			data.TcamRegionMacL3QosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.macL3qosSize").Int())
-		} else {
-			data.TcamRegionMacL3QosSize = types.Int64Null()
-		}
-		if !data.TcamRegionMacQosSize.IsNull() {
-			data.TcamRegionMacQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.macQosSize").Int())
-		} else {
-			data.TcamRegionMacQosSize = types.Int64Null()
-		}
-		if !data.TcamRegionMacVaclSize.IsNull() {
-			data.TcamRegionMacVaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.macVaclSize").Int())
-		} else {
-			data.TcamRegionMacVaclSize = types.Int64Null()
-		}
-		if !data.TcamRegionMacVlanQosSize.IsNull() {
-			data.TcamRegionMacVlanQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.macVqosSize").Int())
-		} else {
-			data.TcamRegionMacVlanQosSize = types.Int64Null()
-		}
-		if !data.TcamRegionMulticastBidirSize.IsNull() {
-			data.TcamRegionMulticastBidirSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.mcastBidirSize").Int())
-		} else {
-			data.TcamRegionMulticastBidirSize = types.Int64Null()
-		}
-		if !data.TcamRegionMplsDoublewide.IsNull() {
-			data.TcamRegionMplsDoublewide = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegion.Get("platformTcamRegion.attributes.mplsDoublewide").String()))
-		} else {
-			data.TcamRegionMplsDoublewide = types.BoolNull()
-		}
-		if !data.TcamRegionMplsSize.IsNull() {
-			data.TcamRegionMplsSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.mplsSize").Int())
-		} else {
-			data.TcamRegionMplsSize = types.Int64Null()
-		}
-		if !data.TcamRegionMvpnSize.IsNull() {
-			data.TcamRegionMvpnSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.mvpnSize").Int())
-		} else {
-			data.TcamRegionMvpnSize = types.Int64Null()
-		}
-		if !data.TcamRegionN9kArpAclSize.IsNull() {
-			data.TcamRegionN9kArpAclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.n9kArpaclSize").Int())
-		} else {
-			data.TcamRegionN9kArpAclSize = types.Int64Null()
-		}
-		if !data.TcamRegionNatSize.IsNull() {
-			data.TcamRegionNatSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.natSize").Int())
-		} else {
-			data.TcamRegionNatSize = types.Int64Null()
-		}
-		if !data.TcamRegionOpenflowDoublewide.IsNull() {
-			data.TcamRegionOpenflowDoublewide = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegion.Get("platformTcamRegion.attributes.openflowDoublewide").String()))
-		} else {
-			data.TcamRegionOpenflowDoublewide = types.BoolNull()
-		}
-		if !data.TcamRegionOpenflowLiteSize.IsNull() {
-			data.TcamRegionOpenflowLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.openflowLiteSize").Int())
-		} else {
-			data.TcamRegionOpenflowLiteSize = types.Int64Null()
-		}
-		if !data.TcamRegionOpenflowSize.IsNull() {
-			data.TcamRegionOpenflowSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.openflowSize").Int())
-		} else {
-			data.TcamRegionOpenflowSize = types.Int64Null()
-		}
-		if !data.TcamRegionPbrSize.IsNull() {
-			data.TcamRegionPbrSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.pbrSize").Int())
-		} else {
-			data.TcamRegionPbrSize = types.Int64Null()
-		}
-		if !data.TcamRegionQosIntraLiteSize.IsNull() {
-			data.TcamRegionQosIntraLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.qosIntraLiteSize").Int())
-		} else {
-			data.TcamRegionQosIntraLiteSize = types.Int64Null()
-		}
-		if !data.TcamRegionQosSize.IsNull() {
-			data.TcamRegionQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.qosSize").Int())
-		} else {
-			data.TcamRegionQosSize = types.Int64Null()
-		}
-		if !data.TcamRegionQosLabelSize.IsNull() {
-			data.TcamRegionQosLabelSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.qoslblSize").Int())
-		} else {
-			data.TcamRegionQosLabelSize = types.Int64Null()
-		}
-		if !data.TcamRegionRaclLiteSize.IsNull() {
-			data.TcamRegionRaclLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.raclLiteSize").Int())
-		} else {
-			data.TcamRegionRaclLiteSize = types.Int64Null()
-		}
-		if !data.TcamRegionRaclSize.IsNull() {
-			data.TcamRegionRaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.raclSize").Int())
-		} else {
-			data.TcamRegionRaclSize = types.Int64Null()
-		}
-		if !data.TcamRegionRaclUdfSize.IsNull() {
-			data.TcamRegionRaclUdfSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.raclUdfSize").Int())
-		} else {
-			data.TcamRegionRaclUdfSize = types.Int64Null()
-		}
-		if !data.TcamRegionSupSize.IsNull() {
-			data.TcamRegionSupSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.supSize").Int())
-		} else {
-			data.TcamRegionSupSize = types.Int64Null()
-		}
-		if !data.TcamRegionSviSize.IsNull() {
-			data.TcamRegionSviSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.sviSize").Int())
-		} else {
-			data.TcamRegionSviSize = types.Int64Null()
-		}
-		if !data.TcamRegionTcpNatSize.IsNull() {
-			data.TcamRegionTcpNatSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.tcpNatSize").Int())
-		} else {
-			data.TcamRegionTcpNatSize = types.Int64Null()
-		}
-		if !data.TcamRegionVaclLiteSize.IsNull() {
-			data.TcamRegionVaclLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vaclLiteSize").Int())
-		} else {
-			data.TcamRegionVaclLiteSize = types.Int64Null()
-		}
-		if !data.TcamRegionVaclSize.IsNull() {
-			data.TcamRegionVaclSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vaclSize").Int())
-		} else {
-			data.TcamRegionVaclSize = types.Int64Null()
-		}
-		if !data.TcamRegionVpcConvergenceSize.IsNull() {
-			data.TcamRegionVpcConvergenceSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vpcConvergenceSize").Int())
-		} else {
-			data.TcamRegionVpcConvergenceSize = types.Int64Null()
-		}
-		if !data.TcamRegionVlanQosIntraLiteSize.IsNull() {
-			data.TcamRegionVlanQosIntraLiteSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vqosIntraLiteSize").Int())
-		} else {
-			data.TcamRegionVlanQosIntraLiteSize = types.Int64Null()
-		}
-		if !data.TcamRegionVlanQosSize.IsNull() {
-			data.TcamRegionVlanQosSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vqosSize").Int())
-		} else {
-			data.TcamRegionVlanQosSize = types.Int64Null()
-		}
-		if !data.TcamRegionVxlanP2pSize.IsNull() {
-			data.TcamRegionVxlanP2pSize = types.Int64Value(rplatformTcamRegion.Get("platformTcamRegion.attributes.vxlanp2pSize").Int())
-		} else {
-			data.TcamRegionVxlanP2pSize = types.Int64Null()
-		}
-		{
-			var rplatformTcamRegionExtended gjson.Result
-			rplatformTcamRegion.Get("platformTcamRegion.children").ForEach(
-				func(_, v gjson.Result) bool {
-					rnValue := v.Get("platformTcamRegionExtended.attributes.rn").String()
-					if rnValue == "tcamregionextd" {
-						rplatformTcamRegionExtended = v
-						return false
-					}
-					return true
-				},
-			)
-			if !data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() {
-				data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.eIfaclAllPerPortStats").String()))
-			} else {
-				data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats = types.BoolNull()
-			}
-			if !data.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() {
-				data.TcamRegionExtendedEgressInterfaceAclAllSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.eIfaclAllSize").Int())
-			} else {
-				data.TcamRegionExtendedEgressInterfaceAclAllSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() {
-				data.TcamRegionExtendedEgressIpv6RaclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.eIpv6RaclPerPortStats").String()))
-			} else {
-				data.TcamRegionExtendedEgressIpv6RaclPerPortStats = types.BoolNull()
-			}
-			if !data.TcamRegionExtendedEgressRaclPerPortStats.IsNull() {
-				data.TcamRegionExtendedEgressRaclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.eRaclPerPortStats").String()))
-			} else {
-				data.TcamRegionExtendedEgressRaclPerPortStats = types.BoolNull()
-			}
-			if !data.TcamRegionExtendedEgressCoppSize.IsNull() {
-				data.TcamRegionExtendedEgressCoppSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrCoppSize").Int())
-			} else {
-				data.TcamRegionExtendedEgressCoppSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedEgressFlowSize.IsNull() {
-				data.TcamRegionExtendedEgressFlowSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrFlowSize").Int())
-			} else {
-				data.TcamRegionExtendedEgressFlowSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() {
-				data.TcamRegionExtendedEgressHardwareTelemetrySize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrHwTelemetrySize").Int())
-			} else {
-				data.TcamRegionExtendedEgressHardwareTelemetrySize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedEgressInterfaceAclSize.IsNull() {
-				data.TcamRegionExtendedEgressInterfaceAclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrIfaclSize").Int())
-			} else {
-				data.TcamRegionExtendedEgressInterfaceAclSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedEgressL2QosSize.IsNull() {
-				data.TcamRegionExtendedEgressL2QosSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrL2QosSize").Int())
-			} else {
-				data.TcamRegionExtendedEgressL2QosSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedEgressL3VlanQosSize.IsNull() {
-				data.TcamRegionExtendedEgressL3VlanQosSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrL3VlanQosSize").Int())
-			} else {
-				data.TcamRegionExtendedEgressL3VlanQosSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedEgressRaclSize.IsNull() {
-				data.TcamRegionExtendedEgressRaclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrRaclSize").Int())
-			} else {
-				data.TcamRegionExtendedEgressRaclSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedEgressSupSize.IsNull() {
-				data.TcamRegionExtendedEgressSupSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.egrSupSize").Int())
-			} else {
-				data.TcamRegionExtendedEgressSupSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedHardwareTelemetrySize.IsNull() {
-				data.TcamRegionExtendedHardwareTelemetrySize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.hwTelemetrySize").Int())
-			} else {
-				data.TcamRegionExtendedHardwareTelemetrySize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() {
-				data.TcamRegionExtendedInterfaceAclAllPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ifaclAllPerPortStats").String()))
-			} else {
-				data.TcamRegionExtendedInterfaceAclAllPerPortStats = types.BoolNull()
-			}
-			if !data.TcamRegionExtendedInterfaceAclAllProfile.IsNull() {
-				data.TcamRegionExtendedInterfaceAclAllProfile = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ifaclAllProfile").Int())
-			} else {
-				data.TcamRegionExtendedInterfaceAclAllProfile = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedInterfaceAclAllSize.IsNull() {
-				data.TcamRegionExtendedInterfaceAclAllSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ifaclAllSize").Int())
-			} else {
-				data.TcamRegionExtendedInterfaceAclAllSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() {
-				data.TcamRegionExtendedInterfaceAclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ifaclPerPortStats").String()))
-			} else {
-				data.TcamRegionExtendedInterfaceAclPerPortStats = types.BoolNull()
-			}
-			if !data.TcamRegionExtendedIngressDaclSize.IsNull() {
-				data.TcamRegionExtendedIngressDaclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingDaclSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressDaclSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressInterfaceAclSize.IsNull() {
-				data.TcamRegionExtendedIngressInterfaceAclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingIfaclSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressInterfaceAclSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() {
-				data.TcamRegionExtendedIngressInterfaceAclWideSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingIfaclWideSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressInterfaceAclWideSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() {
-				data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingIpv6ifaclLiteSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressL2L3QosSize.IsNull() {
-				data.TcamRegionExtendedIngressL2L3QosSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingL2L3QosSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressL2L3QosSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressL2QosSize.IsNull() {
-				data.TcamRegionExtendedIngressL2QosSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingL2QosSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressL2QosSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() {
-				data.TcamRegionExtendedIngressL2SpanFilterSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingL2SpanFilterSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressL2SpanFilterSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() {
-				data.TcamRegionExtendedIngressL3SpanFilterSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingL3SpanFilterSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressL3SpanFilterSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressPaclSbSize.IsNull() {
-				data.TcamRegionExtendedIngressPaclSbSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingPaclSbSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressPaclSbSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressRaclSize.IsNull() {
-				data.TcamRegionExtendedIngressRaclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingRaclSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressRaclSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressRbaclSize.IsNull() {
-				data.TcamRegionExtendedIngressRbaclSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingRbaclSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressRbaclSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressRedirectSize.IsNull() {
-				data.TcamRegionExtendedIngressRedirectSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingRedirectSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressRedirectSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressStormControlSize.IsNull() {
-				data.TcamRegionExtendedIngressStormControlSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingStormControlSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressStormControlSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressSupSize.IsNull() {
-				data.TcamRegionExtendedIngressSupSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingSupSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressSupSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressVaclNhSize.IsNull() {
-				data.TcamRegionExtendedIngressVaclNhSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingVaclNhSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressVaclNhSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIngressVlanQosSize.IsNull() {
-				data.TcamRegionExtendedIngressVlanQosSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ingVlanQosSize").Int())
-			} else {
-				data.TcamRegionExtendedIngressVlanQosSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() {
-				data.TcamRegionExtendedIpv6InterfaceAclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ipv6IfaclPerPortStats").String()))
-			} else {
-				data.TcamRegionExtendedIpv6InterfaceAclPerPortStats = types.BoolNull()
-			}
-			if !data.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() {
-				data.TcamRegionExtendedIpv6RaclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.ipv6RaclPerPortStats").String()))
-			} else {
-				data.TcamRegionExtendedIpv6RaclPerPortStats = types.BoolNull()
-			}
-			if !data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() {
-				data.TcamRegionExtendedMacInterfaceAclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.macIfaclPerPortStats").String()))
-			} else {
-				data.TcamRegionExtendedMacInterfaceAclPerPortStats = types.BoolNull()
-			}
-			if !data.TcamRegionExtendedMulticastNatSize.IsNull() {
-				data.TcamRegionExtendedMulticastNatSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.mcastNatSize").Int())
-			} else {
-				data.TcamRegionExtendedMulticastNatSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedMulticastNbmSize.IsNull() {
-				data.TcamRegionExtendedMulticastNbmSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.mcastNbmSize").Int())
-			} else {
-				data.TcamRegionExtendedMulticastNbmSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedRaclAllPerPortStats.IsNull() {
-				data.TcamRegionExtendedRaclAllPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.raclAllPerPortStats").String()))
-			} else {
-				data.TcamRegionExtendedRaclAllPerPortStats = types.BoolNull()
-			}
-			if !data.TcamRegionExtendedRaclAllProfile.IsNull() {
-				data.TcamRegionExtendedRaclAllProfile = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.raclAllProfile").Int())
-			} else {
-				data.TcamRegionExtendedRaclAllProfile = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedRaclAllSize.IsNull() {
-				data.TcamRegionExtendedRaclAllSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.raclAllSize").Int())
-			} else {
-				data.TcamRegionExtendedRaclAllSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedRaclPerPortStats.IsNull() {
-				data.TcamRegionExtendedRaclPerPortStats = types.BoolValue(helpers.ParseNxosBoolean(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.raclPerPortStats").String()))
-			} else {
-				data.TcamRegionExtendedRaclPerPortStats = types.BoolNull()
-			}
-			if !data.TcamRegionExtendedRedirectV4Size.IsNull() {
-				data.TcamRegionExtendedRedirectV4Size = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.redirectV4Size").Int())
-			} else {
-				data.TcamRegionExtendedRedirectV4Size = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedSpanSize.IsNull() {
-				data.TcamRegionExtendedSpanSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.spanSize").Int())
-			} else {
-				data.TcamRegionExtendedSpanSize = types.Int64Null()
-			}
-			if !data.TcamRegionExtendedSpanTahoeSize.IsNull() {
-				data.TcamRegionExtendedSpanTahoeSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.spanTahSize").Int())
-			} else {
-				data.TcamRegionExtendedSpanTahoeSize = types.Int64Null()
-			}
-		}
-	}
 	for key, item := range data.ManagementInterfaces {
 		var rmgmtMgmtIf gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -6332,101 +5124,36 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.ServiceInstances[key] = item
 		}
 	}
-	var rcommEntity gjson.Result
+	var rspanErspanOriginIp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
-			rnValue := v.Get("commEntity.attributes.rn").String()
-			if rnValue == "comm" {
-				rcommEntity = v
+			rnValue := v.Get("spanErspanOriginIp.attributes.rn").String()
+			if rnValue == "originip" {
+				rspanErspanOriginIp = v
 				return false
 			}
 			return true
 		},
 	)
-	{
-		var rcommSsh gjson.Result
-		rcommEntity.Get("commEntity.children").ForEach(
-			func(_, v gjson.Result) bool {
-				rnValue := v.Get("commSsh.attributes.rn").String()
-				if rnValue == "ssh" {
-					rcommSsh = v
-					return false
-				}
-				return true
-			},
-		)
-		if !data.SshAdminState.IsNull() {
-			data.SshAdminState = types.StringValue(rcommSsh.Get("commSsh.attributes.adminSt").String())
-		} else {
-			data.SshAdminState = types.StringNull()
-		}
-		if !data.SshCiphers.IsNull() {
-			data.SshCiphers = types.StringValue(rcommSsh.Get("commSsh.attributes.ciphers").String())
-		} else {
-			data.SshCiphers = types.StringNull()
-		}
-		if !data.SshDescription.IsNull() {
-			data.SshDescription = types.StringValue(rcommSsh.Get("commSsh.attributes.descr").String())
-		} else {
-			data.SshDescription = types.StringNull()
-		}
-		if !data.SshEnableWeakCiphers.IsNull() {
-			data.SshEnableWeakCiphers = types.StringValue(rcommSsh.Get("commSsh.attributes.enWeakCiphers").String())
-		} else {
-			data.SshEnableWeakCiphers = types.StringNull()
-		}
-		if !data.SshKeyExchangeAlgorithms.IsNull() {
-			data.SshKeyExchangeAlgorithms = types.StringValue(rcommSsh.Get("commSsh.attributes.keyExchangeAlgorithms").String())
-		} else {
-			data.SshKeyExchangeAlgorithms = types.StringNull()
-		}
-		if !data.SshKeyTypes.IsNull() {
-			data.SshKeyTypes = types.StringValue(rcommSsh.Get("commSsh.attributes.keyTypes").String())
-		} else {
-			data.SshKeyTypes = types.StringNull()
-		}
-		if !data.SshLoginAttempts.IsNull() {
-			data.SshLoginAttempts = types.Int64Value(rcommSsh.Get("commSsh.attributes.loginAttempts").Int())
-		} else {
-			data.SshLoginAttempts = types.Int64Null()
-		}
-		if !data.SshLoginGraceTime.IsNull() {
-			data.SshLoginGraceTime = types.Int64Value(rcommSsh.Get("commSsh.attributes.loginGraceTime").Int())
-		} else {
-			data.SshLoginGraceTime = types.Int64Null()
-		}
-		if !data.SshMessageAuthenticationCodes.IsNull() {
-			data.SshMessageAuthenticationCodes = types.StringValue(rcommSsh.Get("commSsh.attributes.messageAuthCodes").String())
-		} else {
-			data.SshMessageAuthenticationCodes = types.StringNull()
-		}
-		if !data.SshPort.IsNull() {
-			data.SshPort = types.Int64Value(rcommSsh.Get("commSsh.attributes.port").Int())
-		} else {
-			data.SshPort = types.Int64Null()
-		}
-		for key, item := range data.SshKeys {
-			var rcommSshKey gjson.Result
-			rcommSsh.Get("commSsh.children").ForEach(
-				func(_, v gjson.Result) bool {
-					if v.Get("commSshKey.attributes.type").String() == key {
-						rcommSshKey = v
-						return false
-					}
-					return true
-				},
-			)
-			if !rcommSshKey.Exists() {
-				delete(data.SshKeys, key)
-				continue
-			}
-			if !item.KeyLength.IsNull() {
-				item.KeyLength = types.Int64Value(rcommSshKey.Get("commSshKey.attributes.keyLen").Int())
-			} else {
-				item.KeyLength = types.Int64Null()
-			}
-			data.SshKeys[key] = item
-		}
+	if !data.ErspanOriginIpIsGlobal.IsNull() {
+		data.ErspanOriginIpIsGlobal = types.BoolValue(helpers.ParseNxosBoolean(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.isGlobal").String()))
+	} else {
+		data.ErspanOriginIpIsGlobal = types.BoolNull()
+	}
+	if !data.ErspanOriginIpIsGlobalIpv6.IsNull() {
+		data.ErspanOriginIpIsGlobalIpv6 = types.BoolValue(helpers.ParseNxosBoolean(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.isGlobalv6").String()))
+	} else {
+		data.ErspanOriginIpIsGlobalIpv6 = types.BoolNull()
+	}
+	if !data.ErspanOriginIpAddress.IsNull() {
+		data.ErspanOriginIpAddress = types.StringValue(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.originIp").String())
+	} else {
+		data.ErspanOriginIpAddress = types.StringNull()
+	}
+	if !data.ErspanOriginIpv6Address.IsNull() {
+		data.ErspanOriginIpv6Address = types.StringValue(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.originIpv6").String())
+	} else {
+		data.ErspanOriginIpv6Address = types.StringNull()
 	}
 }
 
@@ -6810,514 +5537,185 @@ func (data System) toDeleteBody() nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformEntity"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		childBody := ""
 		if !data.PlatformAccessListMatchInnerHeader.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"accessListMatchInnerHeader", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "accessListMatchInnerHeader", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformAclTapAggregation.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"aclTapAggregation", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "aclTapAggregation", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformDescription.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformDisableParseError.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"disParseErr", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "disParseErr", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformGlobalTxSpan.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"globalTxSpan", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "globalTxSpan", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformHighMulticastPriority.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"highMulticastPriority", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "highMulticastPriority", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformHardwareLouResourceThreshold.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"hwLouResThreshold", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "hwLouResThreshold", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformIngressBdIfaclLabelOptimization.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"iBdIfaclLblOpt", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "iBdIfaclLblOpt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformIngressRaclSize.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"iRaclSize", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "iRaclSize", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformIngressReplicationRoundRobin.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ingRepRoundRobin", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ingRepRoundRobin", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformIpStatistics.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipStatistics", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ipStatistics", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformIpv6AlpmCarveValue.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6AlpmCarveValue", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ipv6AlpmCarveValue", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformIpv6LpmMaxEntries.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6LpmMaxEntries", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ipv6LpmMaxEntries", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformLpmMaxLimit.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"lpmMaxLimit", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "lpmMaxLimit", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMulticastDcsCheck.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mcastDcsCheck", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mcastDcsCheck", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMulticastFlexStats.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mcastFlexStats", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mcastFlexStats", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMulticastLpmMaxEntries.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mcastLpmMaxEntries", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mcastLpmMaxEntries", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMulticastNlb.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mcastNlb", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mcastNlb", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMulticastRaclBridge.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mcastRaclBridge", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mcastRaclBridge", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMldSnooping.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mldSnooping", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mldSnooping", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMplsAdjacencyStatsMode.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mplsAdjStatsMode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mplsAdjStatsMode", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMplsEcmpMode.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mplsCfgEcmpMode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mplsCfgEcmpMode", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMroutingDisableL2Update.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mroutingDisableL2Upd", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mroutingDisableL2Upd", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMroutingDisableSecondRouteUpdate.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mroutingDisableSecRouteUpd", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mroutingDisableSecRouteUpd", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMroutingPerformanceMode.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mroutingPerfMode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "mroutingPerfMode", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMulticastMaxLimit.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"multicastMaxLimit", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "multicastMaxLimit", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMulticastRpfCheckOptimization.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"multicastRpfCheckOptimization", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "multicastRpfCheckOptimization", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMulticastServiceReflectPort.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"multicastServiceReflectPort", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "multicastServiceReflectPort", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformMulticastSyslogThreshold.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"multicastSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "multicastSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformOpenflowForwardPdu.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"openflowForwardPdu", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "openflowForwardPdu", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformPbrSkipSelfIp.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pbrSkipSelfIp", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "pbrSkipSelfIp", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformPortChannelFastConvergence.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pcFastConv", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "pcFastConv", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformPortChannelLoadBalanceAlgorithm.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pcLbAlgo", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "pcLbAlgo", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformPortChannelLoadBalanceResilient.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pcLbRes", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "pcLbRes", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformPortChannelMplsLoadBalanceLabelIp.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pcMplsLbLabelIp", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "pcMplsLbLabelIp", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformPortChannelMplsLoadBalanceLabelOnly.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pcMplsLbLabelOnly", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "pcMplsLbLabelOnly", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformPortChannelScaleFanout.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pcScaleFanout", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "pcScaleFanout", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformPicCoreEnable.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"picCoreEnable", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "picCoreEnable", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformProfileFrontPortMode.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"profileFrontPortmode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "profileFrontPortmode", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformProfileMode.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"profileMode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "profileMode", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformProfileTuple.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"profileTuple", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "profileTuple", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformPstatConfiguration.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pstatCfg", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "pstatCfg", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformQosMinBuffer.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"qosMinBuffer", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "qosMinBuffer", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformRoutingMode.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"routingMode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "routingMode", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformServiceTemplateName.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"serviceTemplateName", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "serviceTemplateName", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformSviAndSiFlexStats.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"sviAndSiFlexStats", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "sviAndSiFlexStats", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformSviFlexStats.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"sviFlexStats", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "sviFlexStats", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformSwitchMode.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"switchMode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "switchMode", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformSwitchingFabricSpeed.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"switchingFabricSpeed", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "switchingFabricSpeed", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformSwitchingMode.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"switchingMode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "switchingMode", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformSystemFabricMode.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"systemFabricMode", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "systemFabricMode", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformTcamSyslogThreshold.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"tcamSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "tcamSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformUnicastMaxLimit.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"unicastMaxLimit", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "unicastMaxLimit", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformUnicastSyslogThreshold.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"unicastSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "unicastSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformUnicastTrace.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"unicastTrace", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "unicastTrace", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformUnknownUnicastFlood.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"unknownUnicastFlood", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "unknownUnicastFlood", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformUrpfStatus.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"urpfStatus", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "urpfStatus", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.PlatformWrrUnicastBandwidth.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"wrrUnicastBw", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "wrrUnicastBw", "DME_UNSET_PROPERTY_MARKER")
 		}
-		nestedChildrenPath := childBodyPath + ".children"
-		_ = nestedChildrenPath
-		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".platformTcamRegion"
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-			if !data.TcamRegionArpAclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"arpaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionCoppSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"coppSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionCoppSystemSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"coppSystemSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionEgressIpv6QosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"eIpv6QosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionEgressIpv6RaclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"eIpv6RaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionEgressMacQosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"eMacQosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionEgressQosLiteSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"eQosLiteSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionEgressQosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"eQosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionEgressRaclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"eRaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionEgressVaclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"eVaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionFcoeEgressSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"fcoeEgressSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionFcoeIngressSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"fcoeIngressSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionFhsSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"fhsSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionInterfaceAclLiteSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ifaclLiteSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionInterfaceAclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ifaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionInterfaceAclUdfSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ifaclUdfSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIngressFlowRedirectSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ingFlowRedirectSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIngressFlowSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ingFlowSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpsgSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipsgSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpv6InterfaceAclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6IfaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpv6L3QosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6L3qosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpv6PbrSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6PbrSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpv6QosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6QosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpv6RaclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6RaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpv6SpanL2Size.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6SpanL2Size", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpv6SpanSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6SpanSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpv6SupSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6SupSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpv6VaclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6VaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionIpv6VlanQosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ipv6VqosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionL3QosIntraLiteSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"l3qosIntraLiteSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionMacInterfaceAclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"macIfaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionMacL3QosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"macL3qosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionMacQosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"macQosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionMacVaclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"macVaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionMacVlanQosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"macVqosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionMulticastBidirSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"mcastBidirSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionMplsDoublewide.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"mplsDoublewide", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionMplsSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"mplsSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionMvpnSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"mvpnSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionN9kArpAclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"n9kArpaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionNatSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"natSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionOpenflowDoublewide.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"openflowDoublewide", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionOpenflowLiteSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"openflowLiteSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionOpenflowSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"openflowSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionPbrSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"pbrSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionQosIntraLiteSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"qosIntraLiteSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionQosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"qosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionQosLabelSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"qoslblSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionRaclLiteSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"raclLiteSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionRaclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"raclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionRaclUdfSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"raclUdfSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionSupSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"supSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionSviSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"sviSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionTcpNatSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"tcpNatSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionVaclLiteSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"vaclLiteSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionVaclSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"vaclSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionVpcConvergenceSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"vpcConvergenceSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionVlanQosIntraLiteSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"vqosIntraLiteSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionVlanQosSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"vqosSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.TcamRegionVxlanP2pSize.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"vxlanp2pSize", "DME_UNSET_PROPERTY_MARKER")
-			}
-			nestedChildrenPath := childBodyPath + ".children"
-			_ = nestedChildrenPath
-			{
-				childBody := ""
-				if !data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "eIfaclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "eIfaclAllSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "eIpv6RaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressRaclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "eRaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressCoppSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrCoppSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressFlowSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrFlowSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrHwTelemetrySize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressInterfaceAclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrIfaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressL2QosSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrL2QosSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressL3VlanQosSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrL3VlanQosSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressRaclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrRaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressSupSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrSupSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedHardwareTelemetrySize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "hwTelemetrySize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ifaclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedInterfaceAclAllProfile.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ifaclAllProfile", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedInterfaceAclAllSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ifaclAllSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ifaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressDaclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingDaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressInterfaceAclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingIfaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingIfaclWideSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingIpv6ifaclLiteSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressL2L3QosSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingL2L3QosSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressL2QosSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingL2QosSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingL2SpanFilterSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingL3SpanFilterSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressPaclSbSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingPaclSbSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressRaclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingRaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressRbaclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingRbaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressRedirectSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingRedirectSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressStormControlSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingStormControlSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressSupSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingSupSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressVaclNhSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingVaclNhSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressVlanQosSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingVlanQosSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ipv6IfaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ipv6RaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "macIfaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedMulticastNatSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "mcastNatSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedMulticastNbmSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "mcastNbmSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedRaclAllPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "raclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedRaclAllProfile.IsNull() {
-					childBody, _ = sjson.Set(childBody, "raclAllProfile", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedRaclAllSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "raclAllSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedRaclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "raclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedRedirectV4Size.IsNull() {
-					childBody, _ = sjson.Set(childBody, "redirectV4Size", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedSpanSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "spanSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedSpanTahoeSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "spanTahSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if childBody != "" {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".platformTcamRegionExtended"
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-				}
-			}
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformEntity"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
 	for key, child := range data.ManagementInterfaces {
@@ -7610,54 +6008,10 @@ func (data System) toDeleteBody() nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".commEntity"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-		nestedChildrenPath := childBodyPath + ".children"
-		_ = nestedChildrenPath
-		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".commSsh"
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-			if !data.SshAdminState.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.SshCiphers.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ciphers", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.SshDescription.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.SshEnableWeakCiphers.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"enWeakCiphers", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.SshKeyExchangeAlgorithms.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"keyExchangeAlgorithms", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.SshKeyTypes.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"keyTypes", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.SshLoginAttempts.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"loginAttempts", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.SshLoginGraceTime.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"loginGraceTime", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.SshMessageAuthenticationCodes.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"messageAuthCodes", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.SshPort.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
-			}
-			nestedChildrenPath := childBodyPath + ".children"
-			_ = nestedChildrenPath
-			for key, child := range data.SshKeys {
-				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.rn", child.getRn(key))
-				deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.status", "deleted")
-				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-			}
-		}
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.rn", "originip")
+		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
 	return nxos.Body{Str: body}
@@ -7902,15 +6256,6 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				deleteBody, _ = sjson.Set(deleteBody, "sasDom.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.sasFwSvcPolicy.children"+".0.sasIpVrf.children"+".-1", deleteBody)
 			}
-		}
-	}
-	for stateKey := range state.SshKeys {
-		if _, found := data.SshKeys[stateKey]; !found {
-			stateChild := state.SshKeys[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.commEntity.children"+".0.commSsh.children"+".-1", deleteBody)
 		}
 	}
 	return body

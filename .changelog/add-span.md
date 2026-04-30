@@ -1,0 +1,2 @@
+- Add `nxos_span` resource and data source
+- Add `erspan_origin_ip` attributes to `nxos_system` resource and data source

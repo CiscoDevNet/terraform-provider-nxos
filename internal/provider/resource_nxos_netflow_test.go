@@ -22,7 +22,6 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -35,9 +34,6 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosNetflow(t *testing.T) {
-	if os.Getenv("FEATURE_NETFLOW") == "" {
-		t.Skip("skipping test, set environment variable FEATURE_NETFLOW")
-	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_netflow.test", "exporters.EXPORTER1.description", "Netflow exporter"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_netflow.test", "exporters.EXPORTER1.destination_ip", "10.1.1.1"))
@@ -68,7 +64,7 @@ func TestAccNxosNetflow(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosNetflowPrerequisitesConfig + testAccNxosNetflowConfig_all(),
+				Config: testAccNxosNetflowConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -100,24 +96,12 @@ func nxosNetflowImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosNetflowPrerequisitesConfig = `
-resource "nxos_dme" "PreReq0" {
-  dn = "sys/fm/netflow"
-  class_name = "fmNetflow"
-  delete = false
-  content = {
-      adminSt = "enabled"
-  }
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosNetflowConfig_minimum() string {
 	config := `resource "nxos_netflow" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -175,7 +159,6 @@ func testAccNxosNetflowConfig_all() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

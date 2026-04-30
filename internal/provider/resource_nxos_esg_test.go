@@ -22,7 +22,6 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -35,9 +34,6 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosESG(t *testing.T) {
-	if os.Getenv("ESG") == "" {
-		t.Skip("skipping test, set environment variable ESG")
-	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "mac_segmentation", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "security_groups.100.name", "group1"))

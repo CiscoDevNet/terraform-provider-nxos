@@ -6,7 +6,6 @@ ds_description: This data source can read the ESG (Endpoint Security Group) conf
 res_description: This resource can manage the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.
 doc_path: Security%20and%20Policing/esg:Entity/
 doc_category: Security
-test_tags: [ESG]
 attributes:
   - nxos_name: macSegmentation
     tf_name: mac_segmentation

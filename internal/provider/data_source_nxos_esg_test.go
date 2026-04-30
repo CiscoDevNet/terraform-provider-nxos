@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -31,9 +30,6 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosESG(t *testing.T) {
-	if os.Getenv("ESG") == "" {
-		t.Skip("skipping test, set environment variable ESG")
-	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "mac_segmentation", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "security_groups.100.name", "group1"))

@@ -39,11 +39,13 @@ func TestAccNxosFeature(t *testing.T) {
 		t.Skip("skipping test, set environment variable FEATURES")
 	}
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "analytics", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "bash_shell", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "bfd", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "bgp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "dhcp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "evpn", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "grpc", "enabled"))
 	if os.Getenv("FEATURE_HMM") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "hmm", "enabled"))
 	}
@@ -67,11 +69,15 @@ func TestAccNxosFeature(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ptp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "pvlan", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "sflow", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "scp_server", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "security_group", "enabled"))
 	if os.Getenv("HYPERSHIELD") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "service_acceleration", "enabled"))
 	}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "sftp_server", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ssh", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "tacacs", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "telemetry", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "telnet", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "udld", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vn_segment", "enabled"))
@@ -133,11 +139,13 @@ func testAccNxosFeatureConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosFeatureConfig_all() string {
 	config := `resource "nxos_feature" "test" {` + "\n"
+	config += `	analytics = "enabled"` + "\n"
 	config += `	bash_shell = "enabled"` + "\n"
 	config += `	bfd = "enabled"` + "\n"
 	config += `	bgp = "enabled"` + "\n"
 	config += `	dhcp = "enabled"` + "\n"
 	config += `	evpn = "enabled"` + "\n"
+	config += `	grpc = "enabled"` + "\n"
 	if os.Getenv("FEATURE_HMM") != "" {
 		config += `	hmm = "enabled"` + "\n"
 	}
@@ -161,11 +169,15 @@ func testAccNxosFeatureConfig_all() string {
 	config += `	ptp = "enabled"` + "\n"
 	config += `	pvlan = "enabled"` + "\n"
 	config += `	sflow = "enabled"` + "\n"
+	config += `	scp_server = "enabled"` + "\n"
+	config += `	security_group = "enabled"` + "\n"
 	if os.Getenv("HYPERSHIELD") != "" {
 		config += `	service_acceleration = "enabled"` + "\n"
 	}
+	config += `	sftp_server = "enabled"` + "\n"
 	config += `	ssh = "enabled"` + "\n"
 	config += `	tacacs = "enabled"` + "\n"
+	config += `	telemetry = "enabled"` + "\n"
 	config += `	telnet = "enabled"` + "\n"
 	config += `	udld = "enabled"` + "\n"
 	config += `	vn_segment = "enabled"` + "\n"

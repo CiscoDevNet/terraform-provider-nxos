@@ -68,7 +68,7 @@ func TestAccNxosNetflow(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosNetflowConfig_all(),
+				Config: testAccNxosNetflowPrerequisitesConfig + testAccNxosNetflowConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -100,12 +100,24 @@ func nxosNetflowImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosNetflowPrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/netflow"
+  class_name = "fmNetflow"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosNetflowConfig_minimum() string {
 	config := `resource "nxos_netflow" "test" {` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -163,6 +175,7 @@ func testAccNxosNetflowConfig_all() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

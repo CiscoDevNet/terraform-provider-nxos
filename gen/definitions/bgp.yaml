@@ -729,6 +729,73 @@ child_classes:
                     description: 'The autonomous system number.'
                     example: '65001'
                     exclude_test: true
+              - class_name: bgpAddlPath
+                doc_path: Routing%20and%20Forwarding/bgp:AddlPath/
+                rn: addlpath
+                type: single
+                tf_name: additional_paths
+                description: 'BGP Additional Paths configuration.'
+                attributes:
+                  - nxos_name: capability
+                    tf_name: additional_paths_capability
+                    type: String
+                    description: 'Additional paths capability.'
+                    allow_non_enum_values: true
+                    enum_values:
+                      - send
+                      - receive
+                      - install-bkup
+                    example: send
+                  - nxos_name: rtMap
+                    tf_name: additional_paths_route_map
+                    type: String
+                    description: 'Route map name for path selection.'
+                    example: ADD_PATH_MAP
+              - class_name: bgpAggAddr
+                doc_path: Routing%20and%20Forwarding/bgp:AggAddr/
+                rn: aggaddr-[%s]
+                type: list
+                tf_name: aggregate_addresses
+                description: 'List of BGP aggregate addresses.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'Aggregate Address.'
+                    example: '10.0.0.0/8'
+                  - nxos_name: adverMap
+                    tf_name: advertise_map
+                    type: String
+                    description: 'Advertise Map: Route map used to select attribute information from selected routes.'
+                    example: ADV_MAP
+                  - nxos_name: asSet
+                    tf_name: as_set
+                    type: String
+                    description: 'AS-SET.'
+                    enum_values:
+                      - disabled
+                      - enabled
+                    example: enabled
+                  - nxos_name: attrMap
+                    tf_name: attribute_map
+                    type: String
+                    description: 'Attribute Map: Route map to set attribute information of aggregate.'
+                    example: ATTR_MAP
+                  - nxos_name: summaryOnly
+                    tf_name: summary_only
+                    type: String
+                    description: 'Aggregate address Summary only.'
+                    enum_values:
+                      - disabled
+                      - enabled
+                    example: enabled
+                  - nxos_name: supprMap
+                    tf_name: suppress_map
+                    type: String
+                    description: 'Suppress Map to conditionally filter more-specific routes.'
+                    example: SUPPR_MAP
+                    exclude_test: true
           - class_name: bgpPeerCont
             doc_path: Routing%20and%20Forwarding/bgp:PeerCont/
             rn: peercont-%s
@@ -1609,6 +1676,301 @@ child_classes:
                         type: String
                         description: 'Name of list to control the route distribution.'
                         example: PREFIX_LIST1
+          - class_name: bgpPeerIf
+            doc_path: Routing%20and%20Forwarding/bgp:PeerIf/
+            rn: peerif-[%s]
+            type: list
+            tf_name: interface_peers
+            description: 'List of BGP interface peers.'
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'Interface identifier of the neighbor.'
+                example: 'eth1/1'
+              - nxos_name: asn
+                tf_name: remote_asn
+                type: String
+                description: 'Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).'
+                example: '65002'
+              - nxos_name: name
+                tf_name: description
+                type: String
+                description: 'The name of the object.'
+                example: 'My description'
+              - nxos_name: peerImp
+                tf_name: peer_template
+                type: String
+                description: 'Peer Template To Import From.'
+                example: 'SPINE-PEERS'
+              - nxos_name: peerType
+                tf_name: peer_type
+                type: String
+                description: 'Neighbor Fabric Type.'
+                enum_values:
+                  - fabric-internal
+                  - fabric-external
+                  - fabric-border-leaf
+                example: 'fabric-internal'
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'Administrative State.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: affGrp
+                tf_name: affinity_group
+                type: Int64
+                description: 'Affinity group for the neighbor.'
+                min_int: 0
+                max_int: 65535
+                example: 0
+                exclude_test: true
+              - nxos_name: asnType
+                tf_name: asn_type
+                type: String
+                description: 'Specify peer ASN type as External or Internal.'
+                enum_values:
+                  - none
+                  - external
+                  - internal
+                example: none
+              - nxos_name: bfdType
+                tf_name: bfd_type
+                type: String
+                description: 'Specify BFD session type.'
+                enum_values:
+                  - none
+                  - singlehop
+                  - multihop
+                example: none
+              - nxos_name: bmpSrvId1St
+                tf_name: bmp_server_1
+                type: String
+                description: 'Activate BMP Server 1.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: bmpSrvId2St
+                tf_name: bmp_server_2
+                type: String
+                description: 'Activate BMP Server 2.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: capSuppr4ByteAsn
+                tf_name: capability_suppress_4_byte_asn
+                type: String
+                description: 'Capability Suppress 4-byte-as.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: connMode
+                tf_name: connection_mode
+                type: String
+                description: 'BGP transport connection mode.'
+                allow_non_enum_values: true
+                enum_values:
+                  - passive
+                example: passive
+              - nxos_name: ctrl
+                tf_name: peer_control
+                type: String
+                description: 'Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.'
+                example: 'bfd'
+              - nxos_name: dscp
+                tf_name: dscp
+                type: String
+                description: 'Specify DSCP value for Locally Originated packets.'
+                enum_values:
+                  - '0'
+                  - '1'
+                  - '2'
+                  - '3'
+                  - '4'
+                  - '5'
+                  - '6'
+                  - '7'
+                  - cs1
+                  - '9'
+                  - af11
+                  - '11'
+                  - af12
+                  - '13'
+                  - af13
+                  - '15'
+                  - cs2
+                  - '17'
+                  - af21
+                  - '19'
+                  - af22
+                  - '21'
+                  - af23
+                  - '23'
+                  - cs3
+                  - '25'
+                  - af31
+                  - '27'
+                  - af32
+                  - '29'
+                  - af33
+                  - '31'
+                  - cs4
+                  - '33'
+                  - af41
+                  - '35'
+                  - af42
+                  - '37'
+                  - af43
+                  - '39'
+                  - cs5
+                  - '41'
+                  - '42'
+                  - '43'
+                  - '44'
+                  - '45'
+                  - ef
+                  - '47'
+                  - cs6
+                  - '49'
+                  - '50'
+                  - '51'
+                  - '52'
+                  - '53'
+                  - '54'
+                  - '55'
+                  - cs7
+                  - '57'
+                  - '58'
+                  - '59'
+                  - '60'
+                  - '61'
+                  - '62'
+                  - '63'
+                example: af11
+              - nxos_name: dynRtMap
+                tf_name: dynamic_route_map
+                type: String
+                description: 'Dynamic/Prefix Peer Route Map.'
+                example: DYN_RT_MAP
+              - nxos_name: epe
+                tf_name: egress_peer_engineering
+                type: String
+                description: 'Egress Peer Engineering EPE for neighbor.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+                exclude_test: true
+              - nxos_name: epePeerSet
+                tf_name: egress_peer_engineering_peer_set
+                type: String
+                description: 'Egress Peer Engineering EPE Peer-Set name.'
+                example: EPE_PEER_SET
+                exclude_test: true
+              - nxos_name: holdIntvl
+                tf_name: hold_time
+                type: Int64
+                description: 'Hold Interval.'
+                min_int: 3
+                max_int: 3600
+                example: 45
+              - nxos_name: kaIntvl
+                tf_name: keepalive_interval
+                type: Int64
+                description: 'Keepalive Interval.'
+                min_int: 0
+                max_int: 3600
+                example: 15
+              - nxos_name: logNbrChgs
+                tf_name: log_neighbor_changes
+                type: String
+                description: 'Log messages for Neighbor up/down events.'
+                enum_values:
+                  - none
+                  - enable
+                  - disable
+                example: none
+              - nxos_name: lowMemExempt
+                tf_name: low_memory_exempt
+                type: String
+                description: 'Low Memory Exempt.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: maxPeerCnt
+                tf_name: max_peer_count
+                type: Int64
+                description: 'Maximum Peers For the interface.'
+                min_int: 1
+                max_int: 1000
+                example: 1
+                exclude_test: true
+              - nxos_name: passwdType
+                tf_name: password_type
+                type: String
+                description: 'Password EnCrypt Type.'
+                enum_values:
+                  - '0'
+                  - '3'
+                  - LINE
+                  - '6'
+                  - '7'
+                example: LINE
+                exclude_test: true
+              - nxos_name: password
+                tf_name: password
+                description: 'Configure a password for neighbor.'
+                type: String
+                example: secret_password
+                write_only: true
+                sensitive: true
+              - nxos_name: privateASctrl
+                tf_name: private_as_control
+                type: String
+                description: 'Remove private AS number from outbound updates.'
+                enum_values:
+                  - none
+                  - remove-exclusive
+                  - remove-all
+                  - replace-as
+                example: none
+              - nxos_name: sessionContImp
+                tf_name: session_template
+                type: String
+                description: 'Peer Session Template To Import From.'
+                example: SESS_TEMPLATE
+              - nxos_name: ttl
+                tf_name: ebgp_multihop_ttl
+                type: Int64
+                description: 'eBGP Multihop TTL value.'
+                min_int: 2
+                max_int: 255
+                example: 5
+                exclude_test: true
+              - nxos_name: ttlScrtyHops
+                tf_name: ttl_security_hops
+                type: Int64
+                description: 'Enable TTL Security Mechanism.'
+                min_int: 1
+                max_int: 254
+                example: 1
+                exclude_test: true
+              - nxos_name: internalVpnClient
+                tf_name: internal_vpn_client
+                type: String
+                description: 'internal-vpn-client for iBGP PE-CE Support.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp

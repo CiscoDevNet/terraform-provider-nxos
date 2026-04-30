@@ -1,0 +1,3 @@
+- Add additional paths configuration to `nxos_bgp` resource and data source
+- Add aggregate address configuration to `nxos_bgp` resource and data source
+- Add interface peer configuration to `nxos_bgp` resource and data source

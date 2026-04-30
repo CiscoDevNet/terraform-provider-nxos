@@ -88,6 +88,7 @@ type BGPVrfs struct {
 	AddressFamilies                map[string]BGPVrfsAddressFamilies `tfsdk:"address_families"`
 	PeerTemplates                  map[string]BGPVrfsPeerTemplates   `tfsdk:"peer_templates"`
 	Peers                          map[string]BGPVrfsPeers           `tfsdk:"peers"`
+	InterfacePeers                 map[string]BGPVrfsInterfacePeers  `tfsdk:"interface_peers"`
 }
 
 type BGPVrfsAddressFamilies struct {
@@ -130,6 +131,9 @@ type BGPVrfsAddressFamilies struct {
 	TimerBestpathDeferMax             types.Int64                                         `tfsdk:"timer_bestpath_defer_max"`
 	AdvertisedPrefixes                map[string]BGPVrfsAddressFamiliesAdvertisedPrefixes `tfsdk:"advertised_prefixes"`
 	Redistributions                   map[string]BGPVrfsAddressFamiliesRedistributions    `tfsdk:"redistributions"`
+	AdditionalPathsCapability         types.String                                        `tfsdk:"additional_paths_capability"`
+	AdditionalPathsRouteMap           types.String                                        `tfsdk:"additional_paths_route_map"`
+	AggregateAddresses                map[string]BGPVrfsAddressFamiliesAggregateAddresses `tfsdk:"aggregate_addresses"`
 }
 
 type BGPVrfsAddressFamiliesAdvertisedPrefixes struct {
@@ -142,6 +146,14 @@ type BGPVrfsAddressFamiliesRedistributions struct {
 	Scope          types.String `tfsdk:"scope"`
 	Srv6PrefixType types.String `tfsdk:"srv6_prefix_type"`
 	Asn            types.String `tfsdk:"asn"`
+}
+
+type BGPVrfsAddressFamiliesAggregateAddresses struct {
+	AdvertiseMap types.String `tfsdk:"advertise_map"`
+	AsSet        types.String `tfsdk:"as_set"`
+	AttributeMap types.String `tfsdk:"attribute_map"`
+	SummaryOnly  types.String `tfsdk:"summary_only"`
+	SuppressMap  types.String `tfsdk:"suppress_map"`
 }
 
 type BGPVrfsPeerTemplates struct {
@@ -271,6 +283,40 @@ type BGPVrfsPeersPeerAddressFamiliesPrefixListControls struct {
 	List types.String `tfsdk:"list"`
 }
 
+type BGPVrfsInterfacePeers struct {
+	RemoteAsn                    types.String `tfsdk:"remote_asn"`
+	Description                  types.String `tfsdk:"description"`
+	PeerTemplate                 types.String `tfsdk:"peer_template"`
+	PeerType                     types.String `tfsdk:"peer_type"`
+	AdminState                   types.String `tfsdk:"admin_state"`
+	AffinityGroup                types.Int64  `tfsdk:"affinity_group"`
+	AsnType                      types.String `tfsdk:"asn_type"`
+	BfdType                      types.String `tfsdk:"bfd_type"`
+	BmpServer1                   types.String `tfsdk:"bmp_server_1"`
+	BmpServer2                   types.String `tfsdk:"bmp_server_2"`
+	CapabilitySuppress4ByteAsn   types.String `tfsdk:"capability_suppress_4_byte_asn"`
+	ConnectionMode               types.String `tfsdk:"connection_mode"`
+	PeerControl                  types.String `tfsdk:"peer_control"`
+	Dscp                         types.String `tfsdk:"dscp"`
+	DynamicRouteMap              types.String `tfsdk:"dynamic_route_map"`
+	EgressPeerEngineering        types.String `tfsdk:"egress_peer_engineering"`
+	EgressPeerEngineeringPeerSet types.String `tfsdk:"egress_peer_engineering_peer_set"`
+	HoldTime                     types.Int64  `tfsdk:"hold_time"`
+	KeepaliveInterval            types.Int64  `tfsdk:"keepalive_interval"`
+	LogNeighborChanges           types.String `tfsdk:"log_neighbor_changes"`
+	LowMemoryExempt              types.String `tfsdk:"low_memory_exempt"`
+	MaxPeerCount                 types.Int64  `tfsdk:"max_peer_count"`
+	PasswordType                 types.String `tfsdk:"password_type"`
+	Password                     types.String `tfsdk:"password"`
+	PasswordWo                   types.String `tfsdk:"password_wo"`
+	PasswordWoVersion            types.Int64  `tfsdk:"password_wo_version"`
+	PrivateAsControl             types.String `tfsdk:"private_as_control"`
+	SessionTemplate              types.String `tfsdk:"session_template"`
+	EbgpMultihopTtl              types.Int64  `tfsdk:"ebgp_multihop_ttl"`
+	TtlSecurityHops              types.Int64  `tfsdk:"ttl_security_hops"`
+	InternalVpnClient            types.String `tfsdk:"internal_vpn_client"`
+}
+
 type BGPIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -316,6 +362,10 @@ func (data BGPVrfsAddressFamiliesRedistributions) getRn(key string) string {
 	return fmt.Sprintf("interleak-%s-interleak-%s", keyParts[0], keyParts[1])
 }
 
+func (data BGPVrfsAddressFamiliesAggregateAddresses) getRn(key string) string {
+	return fmt.Sprintf("aggaddr-[%s]", key)
+}
+
 func (data BGPVrfsPeerTemplates) getRn(key string) string {
 	return fmt.Sprintf("peercont-%s", key)
 }
@@ -338,6 +388,10 @@ func (data BGPVrfsPeersPeerAddressFamiliesRouteControls) getRn(key string) strin
 
 func (data BGPVrfsPeersPeerAddressFamiliesPrefixListControls) getRn(key string) string {
 	return fmt.Sprintf("pfxctrl-%s", key)
+}
+
+func (data BGPVrfsInterfacePeers) getRn(key string) string {
+	return fmt.Sprintf("peerif-[%s]", key)
 }
 
 func (data BGP) getClassName() string {
@@ -653,6 +707,39 @@ func (data BGP) toBody(config BGP) nxos.Body {
 								attrs, _ = sjson.Set(attrs, "asn", child.Asn.ValueString())
 							}
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpInterLeakP.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.AdditionalPathsCapability.IsUnknown() && !child.AdditionalPathsCapability.IsNull() && !configChild.AdditionalPathsCapability.IsNull() {
+							attrs, _ = sjson.Set(attrs, "capability", child.AdditionalPathsCapability.ValueString())
+						}
+						if !child.AdditionalPathsRouteMap.IsUnknown() && !child.AdditionalPathsRouteMap.IsNull() && !configChild.AdditionalPathsRouteMap.IsNull() {
+							attrs, _ = sjson.Set(attrs, "rtMap", child.AdditionalPathsRouteMap.ValueString())
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpAddlPath.attributes", attrs)
+						}
+						for key, child := range child.AggregateAddresses {
+							configChild, configChildOk := configChild.AggregateAddresses[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "addr", key)
+							if configChildOk && !child.AdvertiseMap.IsUnknown() && !child.AdvertiseMap.IsNull() && !configChild.AdvertiseMap.IsNull() {
+								attrs, _ = sjson.Set(attrs, "adverMap", child.AdvertiseMap.ValueString())
+							}
+							if configChildOk && !child.AsSet.IsUnknown() && !child.AsSet.IsNull() && !configChild.AsSet.IsNull() {
+								attrs, _ = sjson.Set(attrs, "asSet", child.AsSet.ValueString())
+							}
+							if configChildOk && !child.AttributeMap.IsUnknown() && !child.AttributeMap.IsNull() && !configChild.AttributeMap.IsNull() {
+								attrs, _ = sjson.Set(attrs, "attrMap", child.AttributeMap.ValueString())
+							}
+							if configChildOk && !child.SummaryOnly.IsUnknown() && !child.SummaryOnly.IsNull() && !configChild.SummaryOnly.IsNull() {
+								attrs, _ = sjson.Set(attrs, "summaryOnly", child.SummaryOnly.ValueString())
+							}
+							if configChildOk && !child.SuppressMap.IsUnknown() && !child.SuppressMap.IsNull() && !configChild.SuppressMap.IsNull() {
+								attrs, _ = sjson.Set(attrs, "supprMap", child.SuppressMap.ValueString())
+							}
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpAggAddr.attributes", attrs)
 						}
 					}
 				}
@@ -1039,6 +1126,103 @@ func (data BGP) toBody(config BGP) nxos.Body {
 						}
 					}
 				}
+				for key, child := range child.InterfacePeers {
+					configChild, configChildOk := configChild.InterfacePeers[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "id", key)
+					if configChildOk && !child.RemoteAsn.IsUnknown() && !child.RemoteAsn.IsNull() && !configChild.RemoteAsn.IsNull() {
+						attrs, _ = sjson.Set(attrs, "asn", child.RemoteAsn.ValueString())
+					}
+					if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+						attrs, _ = sjson.Set(attrs, "name", child.Description.ValueString())
+					}
+					if configChildOk && !child.PeerTemplate.IsUnknown() && !child.PeerTemplate.IsNull() && !configChild.PeerTemplate.IsNull() {
+						attrs, _ = sjson.Set(attrs, "peerImp", child.PeerTemplate.ValueString())
+					}
+					if configChildOk && !child.PeerType.IsUnknown() && !child.PeerType.IsNull() && !configChild.PeerType.IsNull() {
+						attrs, _ = sjson.Set(attrs, "peerType", child.PeerType.ValueString())
+					}
+					if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
+						attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+					}
+					if configChildOk && !child.AffinityGroup.IsUnknown() && !child.AffinityGroup.IsNull() && !configChild.AffinityGroup.IsNull() {
+						attrs, _ = sjson.Set(attrs, "affGrp", strconv.FormatInt(child.AffinityGroup.ValueInt64(), 10))
+					}
+					if configChildOk && !child.AsnType.IsUnknown() && !child.AsnType.IsNull() && !configChild.AsnType.IsNull() {
+						attrs, _ = sjson.Set(attrs, "asnType", child.AsnType.ValueString())
+					}
+					if configChildOk && !child.BfdType.IsUnknown() && !child.BfdType.IsNull() && !configChild.BfdType.IsNull() {
+						attrs, _ = sjson.Set(attrs, "bfdType", child.BfdType.ValueString())
+					}
+					if configChildOk && !child.BmpServer1.IsUnknown() && !child.BmpServer1.IsNull() && !configChild.BmpServer1.IsNull() {
+						attrs, _ = sjson.Set(attrs, "bmpSrvId1St", child.BmpServer1.ValueString())
+					}
+					if configChildOk && !child.BmpServer2.IsUnknown() && !child.BmpServer2.IsNull() && !configChild.BmpServer2.IsNull() {
+						attrs, _ = sjson.Set(attrs, "bmpSrvId2St", child.BmpServer2.ValueString())
+					}
+					if configChildOk && !child.CapabilitySuppress4ByteAsn.IsUnknown() && !child.CapabilitySuppress4ByteAsn.IsNull() && !configChild.CapabilitySuppress4ByteAsn.IsNull() {
+						attrs, _ = sjson.Set(attrs, "capSuppr4ByteAsn", child.CapabilitySuppress4ByteAsn.ValueString())
+					}
+					if configChildOk && !child.ConnectionMode.IsUnknown() && !child.ConnectionMode.IsNull() && !configChild.ConnectionMode.IsNull() {
+						attrs, _ = sjson.Set(attrs, "connMode", child.ConnectionMode.ValueString())
+					}
+					if configChildOk && !child.PeerControl.IsUnknown() && !child.PeerControl.IsNull() && !configChild.PeerControl.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ctrl", child.PeerControl.ValueString())
+					}
+					if configChildOk && !child.Dscp.IsUnknown() && !child.Dscp.IsNull() && !configChild.Dscp.IsNull() {
+						attrs, _ = sjson.Set(attrs, "dscp", child.Dscp.ValueString())
+					}
+					if configChildOk && !child.DynamicRouteMap.IsUnknown() && !child.DynamicRouteMap.IsNull() && !configChild.DynamicRouteMap.IsNull() {
+						attrs, _ = sjson.Set(attrs, "dynRtMap", child.DynamicRouteMap.ValueString())
+					}
+					if configChildOk && !child.EgressPeerEngineering.IsUnknown() && !child.EgressPeerEngineering.IsNull() && !configChild.EgressPeerEngineering.IsNull() {
+						attrs, _ = sjson.Set(attrs, "epe", child.EgressPeerEngineering.ValueString())
+					}
+					if configChildOk && !child.EgressPeerEngineeringPeerSet.IsUnknown() && !child.EgressPeerEngineeringPeerSet.IsNull() && !configChild.EgressPeerEngineeringPeerSet.IsNull() {
+						attrs, _ = sjson.Set(attrs, "epePeerSet", child.EgressPeerEngineeringPeerSet.ValueString())
+					}
+					if configChildOk && !child.HoldTime.IsUnknown() && !child.HoldTime.IsNull() && !configChild.HoldTime.IsNull() {
+						attrs, _ = sjson.Set(attrs, "holdIntvl", strconv.FormatInt(child.HoldTime.ValueInt64(), 10))
+					}
+					if configChildOk && !child.KeepaliveInterval.IsUnknown() && !child.KeepaliveInterval.IsNull() && !configChild.KeepaliveInterval.IsNull() {
+						attrs, _ = sjson.Set(attrs, "kaIntvl", strconv.FormatInt(child.KeepaliveInterval.ValueInt64(), 10))
+					}
+					if configChildOk && !child.LogNeighborChanges.IsUnknown() && !child.LogNeighborChanges.IsNull() && !configChild.LogNeighborChanges.IsNull() {
+						attrs, _ = sjson.Set(attrs, "logNbrChgs", child.LogNeighborChanges.ValueString())
+					}
+					if configChildOk && !child.LowMemoryExempt.IsUnknown() && !child.LowMemoryExempt.IsNull() && !configChild.LowMemoryExempt.IsNull() {
+						attrs, _ = sjson.Set(attrs, "lowMemExempt", child.LowMemoryExempt.ValueString())
+					}
+					if configChildOk && !child.MaxPeerCount.IsUnknown() && !child.MaxPeerCount.IsNull() && !configChild.MaxPeerCount.IsNull() {
+						attrs, _ = sjson.Set(attrs, "maxPeerCnt", strconv.FormatInt(child.MaxPeerCount.ValueInt64(), 10))
+					}
+					if configChildOk && !child.PasswordType.IsUnknown() && !child.PasswordType.IsNull() && !configChild.PasswordType.IsNull() {
+						attrs, _ = sjson.Set(attrs, "passwdType", child.PasswordType.ValueString())
+					}
+					if configChildOk && !configChild.PasswordWo.IsNull() {
+						attrs, _ = sjson.Set(attrs, "password", configChild.PasswordWo.ValueString())
+					} else if !child.Password.IsUnknown() && !child.Password.IsNull() {
+						attrs, _ = sjson.Set(attrs, "password", child.Password.ValueString())
+					}
+					if configChildOk && !child.PrivateAsControl.IsUnknown() && !child.PrivateAsControl.IsNull() && !configChild.PrivateAsControl.IsNull() {
+						attrs, _ = sjson.Set(attrs, "privateASctrl", child.PrivateAsControl.ValueString())
+					}
+					if configChildOk && !child.SessionTemplate.IsUnknown() && !child.SessionTemplate.IsNull() && !configChild.SessionTemplate.IsNull() {
+						attrs, _ = sjson.Set(attrs, "sessionContImp", child.SessionTemplate.ValueString())
+					}
+					if configChildOk && !child.EbgpMultihopTtl.IsUnknown() && !child.EbgpMultihopTtl.IsNull() && !configChild.EbgpMultihopTtl.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ttl", strconv.FormatInt(child.EbgpMultihopTtl.ValueInt64(), 10))
+					}
+					if configChildOk && !child.TtlSecurityHops.IsUnknown() && !child.TtlSecurityHops.IsNull() && !configChild.TtlSecurityHops.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ttlScrtyHops", strconv.FormatInt(child.TtlSecurityHops.ValueInt64(), 10))
+					}
+					if configChildOk && !child.InternalVpnClient.IsUnknown() && !child.InternalVpnClient.IsNull() && !configChild.InternalVpnClient.IsNull() {
+						attrs, _ = sjson.Set(attrs, "internalVpnClient", child.InternalVpnClient.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpPeerIf.attributes", attrs)
+				}
 			}
 		}
 	}
@@ -1215,6 +1399,44 @@ func (data *BGP) fromBody(res gjson.Result) {
 																		nestedChildbgpDomAf.Redistributions = make(map[string]BGPVrfsAddressFamiliesRedistributions)
 																	}
 																	nestedChildbgpDomAf.Redistributions[nestedMapKey] = nestedChildbgpInterLeakP
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												{
+													var rbgpAddlPath gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("bgpAddlPath.attributes.rn").String()
+															if rnValue == "addlpath" {
+																rbgpAddlPath = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildbgpDomAf.AdditionalPathsCapability = types.StringValue(rbgpAddlPath.Get("bgpAddlPath.attributes.capability").String())
+													nestedChildbgpDomAf.AdditionalPathsRouteMap = types.StringValue(rbgpAddlPath.Get("bgpAddlPath.attributes.rtMap").String())
+												}
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "bgpAggAddr" {
+																	var nestedChildbgpAggAddr BGPVrfsAddressFamiliesAggregateAddresses
+																	nestedChildbgpAggAddr.AdvertiseMap = types.StringValue(nestedValue.Get("attributes.adverMap").String())
+																	nestedChildbgpAggAddr.AsSet = types.StringValue(nestedValue.Get("attributes.asSet").String())
+																	nestedChildbgpAggAddr.AttributeMap = types.StringValue(nestedValue.Get("attributes.attrMap").String())
+																	nestedChildbgpAggAddr.SummaryOnly = types.StringValue(nestedValue.Get("attributes.summaryOnly").String())
+																	nestedChildbgpAggAddr.SuppressMap = types.StringValue(nestedValue.Get("attributes.supprMap").String())
+																	nestedMapKey := nestedValue.Get("attributes.addr").String()
+																	if nestedChildbgpDomAf.AggregateAddresses == nil {
+																		nestedChildbgpDomAf.AggregateAddresses = make(map[string]BGPVrfsAddressFamiliesAggregateAddresses)
+																	}
+																	nestedChildbgpDomAf.AggregateAddresses[nestedMapKey] = nestedChildbgpAggAddr
 																}
 																return true
 															},
@@ -1472,6 +1694,52 @@ func (data *BGP) fromBody(res gjson.Result) {
 													child.Peers = make(map[string]BGPVrfsPeers)
 												}
 												child.Peers[nestedMapKey] = nestedChildbgpPeer
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "bgpPeerIf" {
+												var nestedChildbgpPeerIf BGPVrfsInterfacePeers
+												nestedChildbgpPeerIf.RemoteAsn = types.StringValue(nestedValue.Get("attributes.asn").String())
+												nestedChildbgpPeerIf.Description = types.StringValue(nestedValue.Get("attributes.name").String())
+												nestedChildbgpPeerIf.PeerTemplate = types.StringValue(nestedValue.Get("attributes.peerImp").String())
+												nestedChildbgpPeerIf.PeerType = types.StringValue(nestedValue.Get("attributes.peerType").String())
+												nestedChildbgpPeerIf.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
+												nestedChildbgpPeerIf.AffinityGroup = types.Int64Value(nestedValue.Get("attributes.affGrp").Int())
+												nestedChildbgpPeerIf.AsnType = types.StringValue(nestedValue.Get("attributes.asnType").String())
+												nestedChildbgpPeerIf.BfdType = types.StringValue(nestedValue.Get("attributes.bfdType").String())
+												nestedChildbgpPeerIf.BmpServer1 = types.StringValue(nestedValue.Get("attributes.bmpSrvId1St").String())
+												nestedChildbgpPeerIf.BmpServer2 = types.StringValue(nestedValue.Get("attributes.bmpSrvId2St").String())
+												nestedChildbgpPeerIf.CapabilitySuppress4ByteAsn = types.StringValue(nestedValue.Get("attributes.capSuppr4ByteAsn").String())
+												nestedChildbgpPeerIf.ConnectionMode = types.StringValue(nestedValue.Get("attributes.connMode").String())
+												nestedChildbgpPeerIf.PeerControl = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+												nestedChildbgpPeerIf.Dscp = types.StringValue(nestedValue.Get("attributes.dscp").String())
+												nestedChildbgpPeerIf.DynamicRouteMap = types.StringValue(nestedValue.Get("attributes.dynRtMap").String())
+												nestedChildbgpPeerIf.EgressPeerEngineering = types.StringValue(nestedValue.Get("attributes.epe").String())
+												nestedChildbgpPeerIf.EgressPeerEngineeringPeerSet = types.StringValue(nestedValue.Get("attributes.epePeerSet").String())
+												nestedChildbgpPeerIf.HoldTime = types.Int64Value(nestedValue.Get("attributes.holdIntvl").Int())
+												nestedChildbgpPeerIf.KeepaliveInterval = types.Int64Value(nestedValue.Get("attributes.kaIntvl").Int())
+												nestedChildbgpPeerIf.LogNeighborChanges = types.StringValue(nestedValue.Get("attributes.logNbrChgs").String())
+												nestedChildbgpPeerIf.LowMemoryExempt = types.StringValue(nestedValue.Get("attributes.lowMemExempt").String())
+												nestedChildbgpPeerIf.MaxPeerCount = types.Int64Value(nestedValue.Get("attributes.maxPeerCnt").Int())
+												nestedChildbgpPeerIf.PasswordType = types.StringValue(nestedValue.Get("attributes.passwdType").String())
+												nestedChildbgpPeerIf.PrivateAsControl = types.StringValue(nestedValue.Get("attributes.privateASctrl").String())
+												nestedChildbgpPeerIf.SessionTemplate = types.StringValue(nestedValue.Get("attributes.sessionContImp").String())
+												nestedChildbgpPeerIf.EbgpMultihopTtl = types.Int64Value(nestedValue.Get("attributes.ttl").Int())
+												nestedChildbgpPeerIf.TtlSecurityHops = types.Int64Value(nestedValue.Get("attributes.ttlScrtyHops").Int())
+												nestedChildbgpPeerIf.InternalVpnClient = types.StringValue(nestedValue.Get("attributes.internalVpnClient").String())
+												nestedMapKey := nestedValue.Get("attributes.id").String()
+												if child.InterfacePeers == nil {
+													child.InterfacePeers = make(map[string]BGPVrfsInterfacePeers)
+												}
+												child.InterfacePeers[nestedMapKey] = nestedChildbgpPeerIf
 											}
 											return true
 										},
@@ -2018,6 +2286,72 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					nc_Item.Asn = types.StringNull()
 				}
 				ncItem.Redistributions[nc_] = nc_Item
+			}
+			{
+				var rbgpAddlPath gjson.Result
+				rbgpDomAf.Get("bgpDomAf.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("bgpAddlPath.attributes.rn").String()
+						if rnValue == "addlpath" {
+							rbgpAddlPath = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.AdditionalPathsCapability.IsNull() {
+					ncItem.AdditionalPathsCapability = types.StringValue(rbgpAddlPath.Get("bgpAddlPath.attributes.capability").String())
+				} else {
+					ncItem.AdditionalPathsCapability = types.StringNull()
+				}
+				if !ncItem.AdditionalPathsRouteMap.IsNull() {
+					ncItem.AdditionalPathsRouteMap = types.StringValue(rbgpAddlPath.Get("bgpAddlPath.attributes.rtMap").String())
+				} else {
+					ncItem.AdditionalPathsRouteMap = types.StringNull()
+				}
+			}
+			for nc_ := range ncItem.AggregateAddresses {
+				nc_Item := ncItem.AggregateAddresses[nc_]
+				var rbgpAggAddr gjson.Result
+				rbgpDomAf.Get("bgpDomAf.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("bgpAggAddr.attributes.addr").String() == nc_ {
+							rbgpAggAddr = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rbgpAggAddr.Exists() {
+					delete(ncItem.AggregateAddresses, nc_)
+					continue
+				}
+				if !nc_Item.AdvertiseMap.IsNull() {
+					nc_Item.AdvertiseMap = types.StringValue(rbgpAggAddr.Get("bgpAggAddr.attributes.adverMap").String())
+				} else {
+					nc_Item.AdvertiseMap = types.StringNull()
+				}
+				if !nc_Item.AsSet.IsNull() {
+					nc_Item.AsSet = types.StringValue(rbgpAggAddr.Get("bgpAggAddr.attributes.asSet").String())
+				} else {
+					nc_Item.AsSet = types.StringNull()
+				}
+				if !nc_Item.AttributeMap.IsNull() {
+					nc_Item.AttributeMap = types.StringValue(rbgpAggAddr.Get("bgpAggAddr.attributes.attrMap").String())
+				} else {
+					nc_Item.AttributeMap = types.StringNull()
+				}
+				if !nc_Item.SummaryOnly.IsNull() {
+					nc_Item.SummaryOnly = types.StringValue(rbgpAggAddr.Get("bgpAggAddr.attributes.summaryOnly").String())
+				} else {
+					nc_Item.SummaryOnly = types.StringNull()
+				}
+				if !nc_Item.SuppressMap.IsNull() {
+					nc_Item.SuppressMap = types.StringValue(rbgpAggAddr.Get("bgpAggAddr.attributes.supprMap").String())
+				} else {
+					nc_Item.SuppressMap = types.StringNull()
+				}
+				ncItem.AggregateAddresses[nc_] = nc_Item
 			}
 			item.AddressFamilies[nc] = ncItem
 		}
@@ -2663,6 +2997,164 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			}
 			item.Peers[nc] = ncItem
 		}
+		for nc := range item.InterfacePeers {
+			ncItem := item.InterfacePeers[nc]
+			var rbgpPeerIf gjson.Result
+			rbgpDom.Get("bgpDom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("bgpPeerIf.attributes.id").String() == nc {
+						rbgpPeerIf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rbgpPeerIf.Exists() {
+				delete(item.InterfacePeers, nc)
+				continue
+			}
+			if !ncItem.RemoteAsn.IsNull() {
+				ncItem.RemoteAsn = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.asn").String())
+			} else {
+				ncItem.RemoteAsn = types.StringNull()
+			}
+			if !ncItem.Description.IsNull() {
+				ncItem.Description = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.name").String())
+			} else {
+				ncItem.Description = types.StringNull()
+			}
+			if !ncItem.PeerTemplate.IsNull() {
+				ncItem.PeerTemplate = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.peerImp").String())
+			} else {
+				ncItem.PeerTemplate = types.StringNull()
+			}
+			if !ncItem.PeerType.IsNull() {
+				ncItem.PeerType = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.peerType").String())
+			} else {
+				ncItem.PeerType = types.StringNull()
+			}
+			if !ncItem.AdminState.IsNull() {
+				ncItem.AdminState = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.adminSt").String())
+			} else {
+				ncItem.AdminState = types.StringNull()
+			}
+			if !ncItem.AffinityGroup.IsNull() {
+				ncItem.AffinityGroup = types.Int64Value(rbgpPeerIf.Get("bgpPeerIf.attributes.affGrp").Int())
+			} else {
+				ncItem.AffinityGroup = types.Int64Null()
+			}
+			if !ncItem.AsnType.IsNull() {
+				ncItem.AsnType = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.asnType").String())
+			} else {
+				ncItem.AsnType = types.StringNull()
+			}
+			if !ncItem.BfdType.IsNull() {
+				ncItem.BfdType = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.bfdType").String())
+			} else {
+				ncItem.BfdType = types.StringNull()
+			}
+			if !ncItem.BmpServer1.IsNull() {
+				ncItem.BmpServer1 = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.bmpSrvId1St").String())
+			} else {
+				ncItem.BmpServer1 = types.StringNull()
+			}
+			if !ncItem.BmpServer2.IsNull() {
+				ncItem.BmpServer2 = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.bmpSrvId2St").String())
+			} else {
+				ncItem.BmpServer2 = types.StringNull()
+			}
+			if !ncItem.CapabilitySuppress4ByteAsn.IsNull() {
+				ncItem.CapabilitySuppress4ByteAsn = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.capSuppr4ByteAsn").String())
+			} else {
+				ncItem.CapabilitySuppress4ByteAsn = types.StringNull()
+			}
+			if !ncItem.ConnectionMode.IsNull() {
+				ncItem.ConnectionMode = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.connMode").String())
+			} else {
+				ncItem.ConnectionMode = types.StringNull()
+			}
+			if !ncItem.PeerControl.IsNull() {
+				ncItem.PeerControl = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.ctrl").String())
+			} else {
+				ncItem.PeerControl = types.StringNull()
+			}
+			if !ncItem.Dscp.IsNull() {
+				ncItem.Dscp = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.dscp").String())
+			} else {
+				ncItem.Dscp = types.StringNull()
+			}
+			if !ncItem.DynamicRouteMap.IsNull() {
+				ncItem.DynamicRouteMap = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.dynRtMap").String())
+			} else {
+				ncItem.DynamicRouteMap = types.StringNull()
+			}
+			if !ncItem.EgressPeerEngineering.IsNull() {
+				ncItem.EgressPeerEngineering = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.epe").String())
+			} else {
+				ncItem.EgressPeerEngineering = types.StringNull()
+			}
+			if !ncItem.EgressPeerEngineeringPeerSet.IsNull() {
+				ncItem.EgressPeerEngineeringPeerSet = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.epePeerSet").String())
+			} else {
+				ncItem.EgressPeerEngineeringPeerSet = types.StringNull()
+			}
+			if !ncItem.HoldTime.IsNull() {
+				ncItem.HoldTime = types.Int64Value(rbgpPeerIf.Get("bgpPeerIf.attributes.holdIntvl").Int())
+			} else {
+				ncItem.HoldTime = types.Int64Null()
+			}
+			if !ncItem.KeepaliveInterval.IsNull() {
+				ncItem.KeepaliveInterval = types.Int64Value(rbgpPeerIf.Get("bgpPeerIf.attributes.kaIntvl").Int())
+			} else {
+				ncItem.KeepaliveInterval = types.Int64Null()
+			}
+			if !ncItem.LogNeighborChanges.IsNull() {
+				ncItem.LogNeighborChanges = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.logNbrChgs").String())
+			} else {
+				ncItem.LogNeighborChanges = types.StringNull()
+			}
+			if !ncItem.LowMemoryExempt.IsNull() {
+				ncItem.LowMemoryExempt = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.lowMemExempt").String())
+			} else {
+				ncItem.LowMemoryExempt = types.StringNull()
+			}
+			if !ncItem.MaxPeerCount.IsNull() {
+				ncItem.MaxPeerCount = types.Int64Value(rbgpPeerIf.Get("bgpPeerIf.attributes.maxPeerCnt").Int())
+			} else {
+				ncItem.MaxPeerCount = types.Int64Null()
+			}
+			if !ncItem.PasswordType.IsNull() {
+				ncItem.PasswordType = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.passwdType").String())
+			} else {
+				ncItem.PasswordType = types.StringNull()
+			}
+			if !ncItem.PrivateAsControl.IsNull() {
+				ncItem.PrivateAsControl = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.privateASctrl").String())
+			} else {
+				ncItem.PrivateAsControl = types.StringNull()
+			}
+			if !ncItem.SessionTemplate.IsNull() {
+				ncItem.SessionTemplate = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.sessionContImp").String())
+			} else {
+				ncItem.SessionTemplate = types.StringNull()
+			}
+			if !ncItem.EbgpMultihopTtl.IsNull() {
+				ncItem.EbgpMultihopTtl = types.Int64Value(rbgpPeerIf.Get("bgpPeerIf.attributes.ttl").Int())
+			} else {
+				ncItem.EbgpMultihopTtl = types.Int64Null()
+			}
+			if !ncItem.TtlSecurityHops.IsNull() {
+				ncItem.TtlSecurityHops = types.Int64Value(rbgpPeerIf.Get("bgpPeerIf.attributes.ttlScrtyHops").Int())
+			} else {
+				ncItem.TtlSecurityHops = types.Int64Null()
+			}
+			if !ncItem.InternalVpnClient.IsNull() {
+				ncItem.InternalVpnClient = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.internalVpnClient").String())
+			} else {
+				ncItem.InternalVpnClient = types.StringNull()
+			}
+			item.InterfacePeers[nc] = ncItem
+		}
 		data.Vrfs[key] = item
 	}
 }
@@ -2747,6 +3239,15 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "bgpInterLeakP.attributes.rn", stateChild.getRn(stateChildKey))
 					deleteBody, _ = sjson.Set(deleteBody, "bgpInterLeakP.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi_.AggregateAddresses {
+				if _, found := planItemdi_.AggregateAddresses[stateChildKey]; !found {
+					stateChild := stateItemdi_.AggregateAddresses[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "bgpAggAddr.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "bgpAggAddr.attributes.status", "deleted")
 					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 				}
 			}
@@ -2870,6 +3371,15 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
 					}
 				}
+			}
+		}
+		for stateChildKey := range stateItemdi.InterfacePeers {
+			if _, found := planItemdi.InterfacePeers[stateChildKey]; !found {
+				stateChild := stateItemdi.InterfacePeers[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "bgpPeerIf.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "bgpPeerIf.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 			}
 		}
 	}

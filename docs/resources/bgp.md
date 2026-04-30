@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.
   API Documentation
-  bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/
+  bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpAddlPath https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AddlPath/bgpAggAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AggAddr/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpPeerIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/
 ---
 
 # nxos_bgp (Resource)
@@ -22,6 +22,8 @@ This resource can manage the BGP configuration on NX-OS devices, including the B
 - [bgpDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/)
 - [bgpAdvPrefix](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/)
 - [bgpInterLeakP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/)
+- [bgpAddlPath](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AddlPath/)
+- [bgpAggAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AggAddr/)
 - [bgpPeerCont](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/)
 - [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
 - [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
@@ -31,6 +33,7 @@ This resource can manage the BGP configuration on NX-OS devices, including the B
 - [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
 - [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
 - [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
+- [bgpPeerIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/)
 
 ## Example Usage
 
@@ -113,6 +116,16 @@ resource "nxos_bgp" "example" {
               route_map        = "route_map_ospf_1"
               scope            = "inter"
               srv6_prefix_type = "unspecified"
+            }
+          }
+          additional_paths_capability = "send"
+          additional_paths_route_map  = "ADD_PATH_MAP"
+          aggregate_addresses = {
+            "10.0.0.0/8" = {
+              advertise_map = "ADV_MAP"
+              as_set        = "enabled"
+              attribute_map = "ATTR_MAP"
+              summary_only  = "enabled"
             }
           }
         }
@@ -222,6 +235,32 @@ resource "nxos_bgp" "example" {
           }
         }
       }
+      interface_peers = {
+        "eth1/1" = {
+          remote_asn                     = "65002"
+          description                    = "My description"
+          peer_template                  = "SPINE-PEERS"
+          peer_type                      = "fabric-internal"
+          admin_state                    = "enabled"
+          asn_type                       = "none"
+          bfd_type                       = "none"
+          bmp_server_1                   = "disabled"
+          bmp_server_2                   = "disabled"
+          capability_suppress_4_byte_asn = "disabled"
+          connection_mode                = "passive"
+          peer_control                   = "bfd"
+          dscp                           = "af11"
+          dynamic_route_map              = "DYN_RT_MAP"
+          hold_time                      = 45
+          keepalive_interval             = 15
+          log_neighbor_changes           = "none"
+          low_memory_exempt              = "disabled"
+          password                       = "secret_password"
+          private_as_control             = "none"
+          session_template               = "SESS_TEMPLATE"
+          internal_vpn_client            = "disabled"
+        }
+      }
     }
   }
 }
@@ -295,6 +334,8 @@ Optional:
   - Range: `1`-`3600`
 - `hold_time` (Number) The time period to wait before declaring the neighbor device down.
   - Range: `3`-`3600`
+- `interface_peers` (Attributes Map) List of BGP interface peers.
+  - Map key: `interface_id` - Interface identifier of the neighbor. (see [below for nested schema](#nestedatt--vrfs--interface_peers))
 - `keepalive_interval` (Number) The interval time between sending keepalive messages.
   - Range: `0`-`3600`
 - `local_asn` (String) Local Asn for the EBGP neighbor.
@@ -329,6 +370,9 @@ Optional:
 
 Optional:
 
+- `additional_paths_capability` (String) Additional paths capability.
+  - Choices: `send`, `receive`, `install-bkup`
+- `additional_paths_route_map` (String) Route map name for path selection.
 - `advertise_l2vpn_evpn` (String) Advertise L2vpn Evpn.
   - Choices: `enabled`, `disabled`
 - `advertise_only_active_routes` (String) Advertise only active routes to peers
@@ -339,6 +383,8 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `advertised_prefixes` (Attributes Map) List of BGP advertised prefixes.
   - Map key: `prefix` - IP address of the network or prefix to advertise. (see [below for nested schema](#nestedatt--vrfs--address_families--advertised_prefixes))
+- `aggregate_addresses` (Attributes Map) List of BGP aggregate addresses.
+  - Map key: `address` - Aggregate Address. (see [below for nested schema](#nestedatt--vrfs--address_families--aggregate_addresses))
 - `allocate_label_all` (String) Allocate labels for all routes.
   - Choices: `enabled`, `disabled`
 - `allocate_label_option_b` (String) Allow allocation of option B labels.
@@ -412,6 +458,20 @@ Optional:
 - `route_map` (String) Route map to modify attributes.
 
 
+<a id="nestedatt--vrfs--address_families--aggregate_addresses"></a>
+### Nested Schema for `vrfs.address_families.aggregate_addresses`
+
+Optional:
+
+- `advertise_map` (String) Advertise Map: Route map used to select attribute information from selected routes.
+- `as_set` (String) AS-SET.
+  - Choices: `disabled`, `enabled`
+- `attribute_map` (String) Attribute Map: Route map to set attribute information of aggregate.
+- `summary_only` (String) Aggregate address Summary only.
+  - Choices: `disabled`, `enabled`
+- `suppress_map` (String) Suppress Map to conditionally filter more-specific routes.
+
+
 <a id="nestedatt--vrfs--address_families--redistributions"></a>
 ### Nested Schema for `vrfs.address_families.redistributions`
 
@@ -424,6 +484,67 @@ Optional:
 - `srv6_prefix_type` (String) SRv6 Prefix Type; Valid only when proto is srv6.
   - Choices: `unspecified`, `locator`
 
+
+
+<a id="nestedatt--vrfs--interface_peers"></a>
+### Nested Schema for `vrfs.interface_peers`
+
+Optional:
+
+- `admin_state` (String) Administrative State.
+  - Choices: `enabled`, `disabled`
+- `affinity_group` (Number) Affinity group for the neighbor.
+  - Range: `0`-`65535`
+- `asn_type` (String) Specify peer ASN type as External or Internal.
+  - Choices: `none`, `external`, `internal`
+- `bfd_type` (String) Specify BFD session type.
+  - Choices: `none`, `singlehop`, `multihop`
+- `bmp_server_1` (String) Activate BMP Server 1.
+  - Choices: `enabled`, `disabled`
+- `bmp_server_2` (String) Activate BMP Server 2.
+  - Choices: `enabled`, `disabled`
+- `capability_suppress_4_byte_asn` (String) Capability Suppress 4-byte-as.
+  - Choices: `enabled`, `disabled`
+- `connection_mode` (String) BGP transport connection mode.
+  - Choices: `passive`
+- `description` (String) The name of the object.
+- `dscp` (String) Specify DSCP value for Locally Originated packets.
+  - Choices: `0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `cs1`, `9`, `af11`, `11`, `af12`, `13`, `af13`, `15`, `cs2`, `17`, `af21`, `19`, `af22`, `21`, `af23`, `23`, `cs3`, `25`, `af31`, `27`, `af32`, `29`, `af33`, `31`, `cs4`, `33`, `af41`, `35`, `af42`, `37`, `af43`, `39`, `cs5`, `41`, `42`, `43`, `44`, `45`, `ef`, `47`, `cs6`, `49`, `50`, `51`, `52`, `53`, `54`, `55`, `cs7`, `57`, `58`, `59`, `60`, `61`, `62`, `63`
+- `dynamic_route_map` (String) Dynamic/Prefix Peer Route Map.
+- `ebgp_multihop_ttl` (Number) eBGP Multihop TTL value.
+  - Range: `2`-`255`
+- `egress_peer_engineering` (String) Egress Peer Engineering EPE for neighbor.
+  - Choices: `enabled`, `disabled`
+- `egress_peer_engineering_peer_set` (String) Egress Peer Engineering EPE Peer-Set name.
+- `hold_time` (Number) Hold Interval.
+  - Range: `3`-`3600`
+- `internal_vpn_client` (String) internal-vpn-client for iBGP PE-CE Support.
+  - Choices: `enabled`, `disabled`
+- `keepalive_interval` (Number) Keepalive Interval.
+  - Range: `0`-`3600`
+- `log_neighbor_changes` (String) Log messages for Neighbor up/down events.
+  - Choices: `none`, `enable`, `disable`
+- `low_memory_exempt` (String) Low Memory Exempt.
+  - Choices: `enabled`, `disabled`
+- `max_peer_count` (Number) Maximum Peers For the interface.
+  - Range: `1`-`1000`
+- `password` (String, Sensitive) Configure a password for neighbor.
+- `password_type` (String) Password EnCrypt Type.
+  - Choices: `0`, `3`, `LINE`, `6`, `7`
+- `password_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `password_wo_version` (Number) The write-only version of the attribute.
+- `peer_control` (String) Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
+  - Single value. Example: `bfd`
+  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
+- `peer_template` (String) Peer Template To Import From.
+- `peer_type` (String) Neighbor Fabric Type.
+  - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`
+- `private_as_control` (String) Remove private AS number from outbound updates.
+  - Choices: `none`, `remove-exclusive`, `remove-all`, `replace-as`
+- `remote_asn` (String) Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).
+- `session_template` (String) Peer Session Template To Import From.
+- `ttl_security_hops` (Number) Enable TTL Security Mechanism.
+  - Range: `1`-`254`
 
 
 <a id="nestedatt--vrfs--peer_templates"></a>

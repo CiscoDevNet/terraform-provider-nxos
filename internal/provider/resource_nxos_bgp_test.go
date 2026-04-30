@@ -102,6 +102,12 @@ func TestAccNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.route_map", "route_map_ospf_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.scope", "inter"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.srv6_prefix_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.additional_paths_capability", "send"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.additional_paths_route_map", "ADD_PATH_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.aggregate_addresses.10.0.0.0/8.advertise_map", "ADV_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.aggregate_addresses.10.0.0.0/8.as_set", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.aggregate_addresses.10.0.0.0/8.attribute_map", "ATTR_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.aggregate_addresses.10.0.0.0/8.summary_only", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.remote_asn", "65002"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.description", "My Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_type", "fabric-internal"))
@@ -183,6 +189,28 @@ func TestAccNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.max_prefix_threshold", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.route_controls.in.route_map_name", "ROUTE_MAP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.prefix_list_controls.in.list", "PREFIX_LIST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.remote_asn", "65002"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.description", "My description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.peer_template", "SPINE-PEERS"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.peer_type", "fabric-internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.asn_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.bfd_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.bmp_server_1", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.bmp_server_2", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.capability_suppress_4_byte_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.connection_mode", "passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.peer_control", "bfd"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.dscp", "af11"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.dynamic_route_map", "DYN_RT_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.hold_time", "45"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.keepalive_interval", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.log_neighbor_changes", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.low_memory_exempt", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.password", "secret_password"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.private_as_control", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.session_template", "SESS_TEMPLATE"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.internal_vpn_client", "disabled"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
@@ -341,6 +369,16 @@ func testAccNxosBGPConfig_all(includeWriteOnly bool) string {
 	config += `							srv6_prefix_type = "unspecified"` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
+	config += `					additional_paths_capability = "send"` + "\n"
+	config += `					additional_paths_route_map = "ADD_PATH_MAP"` + "\n"
+	config += `					aggregate_addresses = {` + "\n"
+	config += `						"10.0.0.0/8" = {` + "\n"
+	config += `							advertise_map = "ADV_MAP"` + "\n"
+	config += `							as_set = "enabled"` + "\n"
+	config += `							attribute_map = "ATTR_MAP"` + "\n"
+	config += `							summary_only = "enabled"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `			peer_templates = {` + "\n"
@@ -452,6 +490,38 @@ func testAccNxosBGPConfig_all(includeWriteOnly bool) string {
 	config += `							}` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			interface_peers = {` + "\n"
+	config += `				"eth1/1" = {` + "\n"
+	config += `					remote_asn = "65002"` + "\n"
+	config += `					description = "My description"` + "\n"
+	config += `					peer_template = "SPINE-PEERS"` + "\n"
+	config += `					peer_type = "fabric-internal"` + "\n"
+	config += `					admin_state = "enabled"` + "\n"
+	config += `					asn_type = "none"` + "\n"
+	config += `					bfd_type = "none"` + "\n"
+	config += `					bmp_server_1 = "disabled"` + "\n"
+	config += `					bmp_server_2 = "disabled"` + "\n"
+	config += `					capability_suppress_4_byte_asn = "disabled"` + "\n"
+	config += `					connection_mode = "passive"` + "\n"
+	config += `					peer_control = "bfd"` + "\n"
+	config += `					dscp = "af11"` + "\n"
+	config += `					dynamic_route_map = "DYN_RT_MAP"` + "\n"
+	config += `					hold_time = 45` + "\n"
+	config += `					keepalive_interval = 15` + "\n"
+	config += `					log_neighbor_changes = "none"` + "\n"
+	config += `					low_memory_exempt = "disabled"` + "\n"
+	if includeWriteOnly {
+		config += `					password = "secret_password"` + "\n"
+		config += `					password_wo = "secret_password"` + "\n"
+		config += `					password_wo_version = 1` + "\n"
+	} else {
+		config += `					password = "secret_password"` + "\n"
+	}
+	config += `					private_as_control = "none"` + "\n"
+	config += `					session_template = "SESS_TEMPLATE"` + "\n"
+	config += `					internal_vpn_client = "disabled"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

@@ -1,0 +1,256 @@
+---
+name: Netflow
+class_name: flowEntity
+dn: sys/flow
+no_delete: true
+ds_description: This data source can read the Netflow configuration on NX-OS devices, including exporters, records, monitors, hardware profiles, and class maps.
+res_description: This resource can manage the Netflow configuration on NX-OS devices, including exporters, records, monitors, hardware profiles, and class maps.
+doc_path: Flow/flow:Entity/
+doc_category: Flow
+test_tags: [FEATURE_NETFLOW]
+child_classes:
+  - class_name: flowExporter
+    doc_path: Flow/flow:Exporter/
+    rn: fe-[%s]
+    type: list
+    tf_name: exporters
+    description: 'Netflow exporter (collector) configuration.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Flow exporter name.'
+        example: 'EXPORTER1'
+      - nxos_name: description
+        tf_name: description
+        type: String
+        description: 'Flow exporter description.'
+        example: 'Netflow exporter'
+      - nxos_name: destinationIp
+        tf_name: destination_ip
+        type: String
+        description: 'Collector IP.'
+        example: '10.1.1.1'
+      - nxos_name: destinationPort
+        tf_name: destination_port
+        type: Int64
+        description: 'Collector L4 Port.'
+        min_int: 1
+        max_int: 65535
+        example: 9995
+      - nxos_name: dscp
+        tf_name: dscp
+        type: Int64
+        description: 'DSCP value.'
+        min_int: 0
+        max_int: 63
+        example: 46
+      - nxos_name: sourceInterface
+        tf_name: source_interface
+        type: String
+        description: 'Source Interface.'
+        example: 'lo0'
+      - nxos_name: version
+        tf_name: version
+        type: String
+        description: 'Export version format.'
+        enum_values:
+          - unspecified
+          - v5
+          - v9
+          - cisco1
+        example: v9
+      - nxos_name: vrfName
+        tf_name: vrf_name
+        type: String
+        description: 'Collector VRF.'
+        example: 'default'
+  - class_name: flowRecord
+    doc_path: Flow/flow:Record/
+    rn: fr-[%s]
+    type: list
+    tf_name: records
+    description: 'Netflow record configuration.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Flow record name.'
+        example: 'RECORD1'
+      - nxos_name: description
+        tf_name: description
+        type: String
+        description: 'Flow record description.'
+        example: 'Netflow record'
+      - nxos_name: collectParams
+        tf_name: collect_parameters
+        type: String
+        description: 'Collect Params.'
+        enum_values:
+          - unspecified
+          - count-bytes
+          - count-pkts
+          - sampler-id
+          - pkt-disp
+          - ts-first
+          - ts-recent
+          - ingress-vrf-id
+        allow_non_enum_values: true
+        example: count-bytes
+      - nxos_name: matchParams
+        tf_name: match_parameters
+        type: String
+        description: 'Match Params.'
+        enum_values:
+          - unspecified
+          - ethertype
+          - dst-mac
+          - src-mac
+          - vlan
+          - protocol
+          - tos
+          - src-ipv4
+          - dst-ipv4
+          - src-ipv6
+          - dst-ipv6
+          - src-port
+          - dst-port
+          - src-ip
+          - dst-ip
+        allow_non_enum_values: true
+        example: src-ipv4
+  - class_name: flowMonitor
+    doc_path: Flow/flow:Monitor/
+    rn: fm-[%s]
+    type: list
+    tf_name: monitors
+    description: 'Netflow monitor configuration.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Flow monitor name.'
+        example: 'MONITOR1'
+      - nxos_name: description
+        tf_name: description
+        type: String
+        description: 'Flow monitor description.'
+        example: 'Netflow monitor'
+    child_classes:
+      - class_name: flowExporterBucket
+        doc_path: Flow/flow:ExporterBucket/
+        rn: feb-[%v]
+        type: list
+        tf_name: exporter_buckets
+        description: 'Flow exporter bucket configuration.'
+        attributes:
+          - nxos_name: id
+            tf_name: id
+            type: Int64
+            id: true
+            description: 'Flow exporter bucket ID.'
+            min_int: 0
+            max_int: 255
+            example: 1
+          - nxos_name: description
+            tf_name: description
+            type: String
+            description: 'Flow exporter bucket description.'
+            example: 'Bucket 1'
+          - nxos_name: hashHi
+            tf_name: hash_high
+            type: Int64
+            description: 'Hash high.'
+            min_int: 0
+            max_int: 4294967295
+            example: 4294967295
+          - nxos_name: hashLo
+            tf_name: hash_low
+            type: Int64
+            description: 'Hash low.'
+            min_int: 0
+            max_int: 4294967295
+            example: 0
+  - class_name: flowHwProfile
+    doc_path: Flow/flow:HwProfile/
+    rn: hp-[%s]
+    type: list
+    tf_name: hardware_profiles
+    description: 'Netflow hardware profile configuration.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Hardware profile name.'
+        example: 'HWPROFILE1'
+      - nxos_name: description
+        tf_name: description
+        type: String
+        description: 'Hardware profile description.'
+        example: 'Hardware profile'
+      - nxos_name: burstIntervalShift
+        tf_name: burst_interval_shift
+        type: Int64
+        description: 'Timestamp shift value for burst interval.'
+        min_int: 0
+        max_int: 255
+        example: 10
+      - nxos_name: exportInterval
+        tf_name: export_interval
+        type: Int64
+        description: 'Export Interval in milliseconds.'
+        min_int: 0
+        max_int: 4294967295
+        example: 200
+      - nxos_name: ipPacketIdShift
+        tf_name: ip_packet_id_shift
+        type: Int64
+        description: 'IP Packet ID Shift.'
+        min_int: 0
+        max_int: 255
+        example: 10
+      - nxos_name: mtu
+        tf_name: mtu
+        type: Int64
+        description: 'MTU.'
+        min_int: 576
+        max_int: 9216
+        example: 1500
+      - nxos_name: sourcePort
+        tf_name: source_port
+        type: Int64
+        description: 'Source L4 Port.'
+        min_int: 1
+        max_int: 65535
+        example: 10000
+  - class_name: flowClassMap
+    doc_path: Flow/flow:ClassMap/
+    rn: cmap-[%s]
+    type: list
+    tf_name: class_maps
+    description: 'Netflow class map configuration.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Name of class-map.'
+        example: 'CMAP1'
+    child_classes:
+      - class_name: flowMatchAcl
+        doc_path: Flow/flow:MatchAcl/
+        rn: acl-[%s]
+        type: list
+        tf_name: match_acls
+        description: 'Match ACL configuration.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Match using ACL.'
+            example: 'ACL1'

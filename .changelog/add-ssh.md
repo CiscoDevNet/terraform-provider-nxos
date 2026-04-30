@@ -1,0 +1,1 @@
+- Add `nxos_ssh` resource and data source

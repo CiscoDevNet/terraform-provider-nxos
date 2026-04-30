@@ -572,6 +572,22 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 											int64validator.Between(300, 300000),
 										},
 									},
+									"default_information_originate_route_distinguisher": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Default-information Originate always Route Distinguisher.").String,
+										Optional:            true,
+									},
+									"default_information_originate_route_target": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Default-information Originate always Route Target.").String,
+										Optional:            true,
+									},
+									"load_balance_egress_filter_policy_route_map": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Filter-policy route-map for load-balance egress.").String,
+										Optional:            true,
+									},
+									"load_balance_egress_multipath_auto_policy_route_map": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Multipath auto-policy route-map for load-balance egress.").String,
+										Optional:            true,
+									},
 									"advertised_prefixes": schema.MapNestedAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("List of BGP advertised prefixes.\n  - Map key: `prefix` - IP address of the network or prefix to advertise.").String,
 										Optional:            true,

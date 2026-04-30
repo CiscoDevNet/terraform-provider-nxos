@@ -133,10 +133,14 @@ Read-Only:
 - `client_to_client_reflection` (String) client-to-client Reflection of routes.
 - `critical_nexthop_timeout` (String) The next-hop address tracking delay timer for critical next-hop reachability routes.
 - `default_information_originate` (String) default-information originate.
+- `default_information_originate_route_distinguisher` (String) Default-information Originate always Route Distinguisher.
+- `default_information_originate_route_target` (String) Default-information Originate always Route Target.
 - `default_metric` (String) Default Metric.
 - `export_gateway_ip` (String) Export Gateway IP to Type-5 EVPN routes for VRF.
 - `igp_metric` (Number) Dampen IGP metric-related changes.
 - `label_allocation_mode` (String) per VRF label allocation mode.
+- `load_balance_egress_filter_policy_route_map` (String) Filter-policy route-map for load-balance egress.
+- `load_balance_egress_multipath_auto_policy_route_map` (String) Multipath auto-policy route-map for load-balance egress.
 - `max_ecmp_paths` (Number) The maximum number of equal-cost paths for BGP load sharing.
 - `max_external_ecmp_paths` (Number) Max External ECMP.
 - `max_external_internal_ecmp_paths` (Number) Max External Internal ECMP.

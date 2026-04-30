@@ -637,6 +637,28 @@ child_classes:
                 max_int: 300000
                 example: 300
                 exclude_test: true
+              - nxos_name: defInfOrigRd
+                tf_name: default_information_originate_route_distinguisher
+                type: String
+                description: 'Default-information Originate always Route Distinguisher.'
+                example: 'rd:as2-nn2:1:1'
+                exclude_test: true
+              - nxos_name: defInfOrigRtt
+                tf_name: default_information_originate_route_target
+                type: String
+                description: 'Default-information Originate always Route Target.'
+                example: 'route-target:as2-nn2:1:1'
+                exclude_test: true
+              - nxos_name: ldBalEgrFilterPolRtMap
+                tf_name: load_balance_egress_filter_policy_route_map
+                type: String
+                description: 'Filter-policy route-map for load-balance egress.'
+                example: LB_EGR_FILTER_MAP
+              - nxos_name: ldBalEgrMPathAutoPolRtMap
+                tf_name: load_balance_egress_multipath_auto_policy_route_map
+                type: String
+                description: 'Multipath auto-policy route-map for load-balance egress.'
+                example: LB_EGR_MPATH_MAP
             child_classes:
               - class_name: bgpAdvPrefix
                 doc_path: Routing%20and%20Forwarding/bgp:AdvPrefix/

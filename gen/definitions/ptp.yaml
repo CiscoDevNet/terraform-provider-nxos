@@ -1,0 +1,611 @@
+---
+name: PTP
+class_name: ptpPtpEntity
+dn: sys/ptp
+no_delete: true
+test_tags: [PTP]
+ds_description: 'This data source can read the PTP (Precision Time Protocol) configuration on NX-OS devices, including clock settings, domain configuration, notifications, interface-level PTP settings, and unicast peers.'
+res_description: 'This resource can manage the PTP (Precision Time Protocol) configuration on NX-OS devices, including clock settings, domain configuration, notifications, interface-level PTP settings, and unicast peers.'
+doc_path: System/ptp:PtpEntity/
+doc_category: System
+attributes:
+  - nxos_name: aclRedirect
+    tf_name: acl_redirect
+    type: String
+    description: 'PTP acl redirect enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: clockIdentity
+    tf_name: clock_identity
+    type: String
+    description: 'PTP clock-identity MAC Address.'
+    example: '01:02:03:04:05:06'
+  - nxos_name: clockOperationOneStep
+    tf_name: clock_operation_one_step
+    type: String
+    description: 'PTP Clock Operation One Step PTP enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: clockPeriodicUpdate
+    tf_name: clock_periodic_update
+    type: String
+    description: 'PTP clock periodic-update enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: clockPeriodicUpdateInterval
+    tf_name: clock_periodic_update_interval
+    type: Int64
+    description: 'PTP clok periodic-update interval value.'
+    min_int: 0
+    max_int: 3600
+    example: 120
+  - nxos_name: clockSyncAuto
+    tf_name: clock_sync_auto
+    type: Bool
+    description: 'PTP clock-sync auto yes/no.'
+    example: true
+  - nxos_name: convergenceTime
+    tf_name: convergence_time
+    type: Int64
+    description: 'PTP convergence-time value.'
+    min_int: 3
+    max_int: 2600
+    example: 60
+  - nxos_name: correctionRangeLogging
+    tf_name: correction_range_logging
+    type: String
+    description: 'PTP correction range logging enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: correctionRangeThreshold
+    tf_name: correction_range_threshold
+    type: Int64
+    description: 'PTP correction range threshold.'
+    min_int: 10
+    max_int: 1000000000
+    example: 200000
+  - nxos_name: deviceType
+    tf_name: device_type
+    type: String
+    description: 'PTP Device Type bounday clock/ generalized PTP.'
+    enum_values:
+      - boundaryClock
+      - generalizedPtp
+      - ordinaryClockGm
+    example: generalizedPtp
+  - nxos_name: domainNum
+    tf_name: domain_number
+    type: Int64
+    description: 'PTP Clock Domain number to use for this clock.'
+    min_int: 0
+    max_int: 127
+    example: 1
+  - nxos_name: enhancedClientScale
+    tf_name: enhanced_client_scale
+    type: String
+    description: 'PTP enhanced multicast client scale enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: forwardVersion1
+    tf_name: forward_version1
+    type: String
+    description: 'PTP forwarding of PTPv1 packets enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: gmCapConvergenceTime
+    tf_name: grandmaster_capable_convergence_time
+    type: Int64
+    description: 'PTP grandmaster-capable convergence-time value.'
+    min_int: 3
+    max_int: 2600
+    example: 60
+  - nxos_name: grandmasterCapable
+    tf_name: grandmaster_capable
+    type: String
+    description: 'PTP grandmaster-capable enable/disable.'
+    enum_values:
+      - disabled
+      - enabled
+    example: disabled
+  - nxos_name: ipv6McastRxScope
+    tf_name: ipv6_multicast_receive_scope
+    type: String
+    description: 'PTP over IPv6 multicast dest IP scope for receive.'
+    example: '2-13'
+  - nxos_name: ipv6McastTxScope
+    tf_name: ipv6_multicast_transmit_scope
+    type: Int64
+    description: 'PTP over IPv6 multicast dest IP scope for transmit.'
+    min_int: 0
+    max_int: 65535
+    example: 2
+  - nxos_name: meanPathDelay
+    tf_name: mean_path_delay
+    type: Int64
+    description: 'PTP Mean Path Delay.'
+    min_int: 10
+    max_int: 1000000000
+    example: 500000000
+  - nxos_name: mgmt
+    tf_name: management
+    type: String
+    description: 'PTP management packet support enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: disabled
+  - nxos_name: multiDomain
+    tf_name: multi_domain
+    type: String
+    description: 'PTP multi-domain enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: multiDomainTransPriority1
+    tf_name: multi_domain_transition_priority1
+    type: Int64
+    description: 'PTP multi-domain transition-attributes Priority 1 value.'
+    min_int: 0
+    max_int: 255
+    example: 128
+  - nxos_name: multiDomainTransPriority2
+    tf_name: multi_domain_transition_priority2
+    type: Int64
+    description: 'PTP multi-domain transition-attributes Priority 2 value.'
+    min_int: 0
+    max_int: 255
+    example: 128
+  - nxos_name: notifyGmChange
+    tf_name: notify_grandmaster_change
+    type: String
+    description: 'PTP gm-change notification enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: notifyParentChange
+    tf_name: notify_parent_change
+    type: String
+    description: 'PTP parent-change notification enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: offload
+    tf_name: offload
+    type: String
+    description: 'PTP offload enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: peerDelayReqInterval
+    tf_name: peer_delay_request_interval
+    type: Int64
+    description: 'PTP peer delay request interval.'
+    min_int: 0
+    max_int: 5
+    example: 1
+  - nxos_name: priority1
+    tf_name: priority1
+    type: Int64
+    description: 'PTP priority1 value to use when advertising the clock.'
+    min_int: 0
+    max_int: 255
+    example: 128
+  - nxos_name: priority2
+    tf_name: priority2
+    type: Int64
+    description: 'PTP priority2 value to use when advertising the clock.'
+    min_int: 0
+    max_int: 255
+    example: 128
+  - nxos_name: ptpUsingSysClock
+    tf_name: using_system_clock
+    type: Bool
+    description: 'PTP using system-clock to form full ptp time.'
+    example: true
+  - nxos_name: scale1g
+    tf_name: scale_1g
+    type: Bool
+    description: 'ptp packets timestamping at asic for 1g ports.'
+    example: true
+  - nxos_name: sourceIp
+    tf_name: source_ip
+    type: String
+    description: 'PTP source IPv4 address for all the PTP packets in the multicast PTP mode.'
+    example: 10.1.1.1
+  - nxos_name: sourceIpv6
+    tf_name: source_ipv6
+    type: String
+    description: 'PTP source IPv6 address for all the PTP packets in the multicast PTP mode.'
+    example: '2001:db8::1'
+  - nxos_name: toleranceMPDState
+    tf_name: tolerance_mean_path_delay_state
+    type: String
+    description: 'PTP tolerance mean path delay threshold enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: toleranceMPDVal
+    tf_name: tolerance_mean_path_delay_value
+    type: String
+    description: 'PTP tolerance mean path delay threshold.'
+    example: '50'
+  - nxos_name: toleranceRPDState
+    tf_name: tolerance_reverse_path_delay_state
+    type: String
+    description: 'PTP tolerance reverse path delay threshold enable/disable.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: toleranceRPDVal
+    tf_name: tolerance_reverse_path_delay_value
+    type: String
+    description: 'PTP tolerance reverse path delay threshold.'
+    example: '50'
+  - nxos_name: vrfName
+    tf_name: vrf_name
+    type: String
+    description: 'PTP vrf name for ptp source ip.'
+    example: default
+  - nxos_name: vrfNameIpv6
+    tf_name: vrf_name_ipv6
+    type: String
+    description: 'PTP vrf name for ptp source ipv6.'
+    example: default
+child_classes:
+  - class_name: ptpPtpDomain
+    rn: domain-[%d]
+    type: list
+    tf_name: domains
+    description: 'PTP Domain Object for multiple Domain properties.'
+    doc_path: System/ptp:PtpDomain/
+    attributes:
+      - nxos_name: domain
+        tf_name: domain
+        type: Int64
+        id: true
+        description: 'PTP Clock Domain value.'
+        min_int: 0
+        max_int: 127
+        example: 1
+      - nxos_name: clockAccThreshold
+        tf_name: clock_accuracy_threshold
+        type: Int64
+        description: 'Domain clock-accuracy-threshold value.'
+        min_int: 0
+        max_int: 255
+        example: 200
+      - nxos_name: clockClassThreshold
+        tf_name: clock_class_threshold
+        type: Int64
+        description: 'Domain clock-class-threshold value.'
+        min_int: 0
+        max_int: 255
+        example: 200
+      - nxos_name: priority
+        tf_name: priority
+        type: Int64
+        description: 'Priority value for PTP Domain.'
+        min_int: 0
+        max_int: 255
+        example: 128
+  - class_name: ptpPtpNotifyHighCorr
+    rn: notifyhighcorr
+    type: single
+    tf_name: notify_high_correction
+    description: 'PTP high-correction notification.'
+    doc_path: System/ptp:PtpNotifyHighCorr/
+    attributes:
+      - nxos_name: interval
+        tf_name: notify_high_correction_interval
+        type: Int64
+        description: 'PTP high-correction notification interval.'
+        min_int: 0
+        max_int: 300
+        example: 10
+      - nxos_name: notify
+        tf_name: notify_high_correction
+        type: String
+        description: 'PTP high-correction notification enable/disable.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: periodic
+        tf_name: notify_high_correction_periodic
+        type: String
+        description: 'PTP high-correction notification periodic-notification.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+  - class_name: ptpPtpNotifyPortStateChg
+    rn: notifyportstatechg
+    type: single
+    tf_name: notify_port_state_change
+    description: 'PTP port-state-change notification.'
+    doc_path: System/ptp:PtpNotifyPortStateChg/
+    attributes:
+      - nxos_name: category
+        tf_name: notify_port_state_change_category
+        type: String
+        description: 'PTP port-state-change notification category.'
+        enum_values:
+          - master-slave-only
+          - all
+        example: all
+      - nxos_name: interval
+        tf_name: notify_port_state_change_interval
+        type: Int64
+        description: 'PTP port-state-change notification interval.'
+        min_int: 0
+        max_int: 300
+        example: 10
+      - nxos_name: notify
+        tf_name: notify_port_state_change
+        type: String
+        description: 'PTP port-state-change notification enable/disable.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: periodic
+        tf_name: notify_port_state_change_periodic
+        type: String
+        description: 'PTP port-state-change notification periodic-notification.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+  - class_name: ptpPtpIf
+    rn: if-[%s]
+    type: list
+    tf_name: interfaces
+    description: 'PTP interface configuration.'
+    doc_path: System/ptp:PtpIf/
+    attributes:
+      - nxos_name: id
+        tf_name: interface_id
+        type: String
+        id: true
+        description: 'Interface id of port with PTP configuration.'
+        example: eth1/1
+      - nxos_name: announceIntervalType
+        tf_name: announce_interval_type
+        type: String
+        description: 'PTP announce interval time code.'
+        enum_values:
+          - none
+          - aes67
+          - smpte-2059-2
+        example: aes67
+      - nxos_name: announceIntervalVal
+        tf_name: announce_interval_value
+        type: Int64
+        description: 'PTP announce interval value.'
+        min_int: -3
+        max_int: 4
+        example: 2
+      - nxos_name: announceTimeoutType
+        tf_name: announce_timeout_type
+        type: String
+        description: 'PTP announce timeout time code.'
+        enum_values:
+          - none
+          - aes67
+          - smpte-2059-2
+        example: aes67
+      - nxos_name: announceTimeoutVal
+        tf_name: announce_timeout_value
+        type: Int64
+        description: 'PTP announce timeout value.'
+        min_int: 2
+        max_int: 10
+        example: 3
+      - nxos_name: asymmetricDelayValue
+        tf_name: asymmetric_delay_value
+        type: Int64
+        description: 'compensation time(ns) for asymmetric delay.'
+        min_int: 0
+        max_int: 512000000
+        example: 1000
+      - nxos_name: asymmetricDirection
+        tf_name: asymmetric_direction
+        type: String
+        description: 'asymmetric delay directionfrom master to slave OR slave to master.'
+        enum_values:
+          - none
+          - forward-path
+          - reverse-path
+        example: forward-path
+      - nxos_name: delayRequestMinIntervalType
+        tf_name: delay_request_min_interval_type
+        type: String
+        description: 'PTP delay-request minimum interval time code.'
+        enum_values:
+          - none
+          - aes67
+          - smpte-2059-2
+        example: aes67
+      - nxos_name: delayRequestMinIntervalVal
+        tf_name: delay_request_min_interval_value
+        type: Int64
+        description: 'PTP delay-request minimum interval value.'
+        min_int: -4
+        max_int: 6
+        example: 0
+      - nxos_name: ipv6McastRxScope
+        tf_name: ipv6_multicast_receive_scope
+        type: String
+        description: 'PTP over IPv6 multicast dest IP scope for receive.'
+        example: '1-14'
+      - nxos_name: ipv6McastTxScope
+        tf_name: ipv6_multicast_transmit_scope
+        type: Int64
+        description: 'PTP over IPv6 multicast dest IP scope for transmit.'
+        min_int: 0
+        max_int: 65535
+        example: 2
+      - nxos_name: negoSchema
+        tf_name: negotiation_schema
+        type: String
+        description: 'Unicast negotiation schema for interface.'
+        example: schema1
+      - nxos_name: neighborPropagationDelayThreshold
+        tf_name: neighbor_propagation_delay_threshold
+        type: Int64
+        description: 'GPTP propagation delay threshold.'
+        min_int: 5
+        max_int: 2000000
+        example: 500000
+      - nxos_name: profileOverride
+        tf_name: profile_override
+        type: Bool
+        description: 'Allow override of configuration limits imposed by global PTP profile.'
+        example: true
+      - nxos_name: ptp
+        tf_name: ptp
+        type: Bool
+        description: 'PTP enable or disable at interface level.'
+        example: true
+      - nxos_name: ptpCost
+        tf_name: cost
+        type: Int64
+        description: 'PTP cost value in interface.'
+        min_int: 0
+        max_int: 255
+        example: 128
+      - nxos_name: ptpDestinationMac
+        tf_name: destination_mac
+        type: String
+        description: 'PTP destination mac forwardable or non-forwardable.'
+        enum_values:
+          - non-forwardable
+          - forwardable
+        example: forwardable
+      - nxos_name: ptpInterfaceDomain
+        tf_name: domain
+        type: Int64
+        description: 'PTP domain value in interface.'
+        min_int: 0
+        max_int: 127
+        example: 1
+      - nxos_name: ptpRxNoMatch
+        tf_name: receive_no_match
+        type: String
+        description: 'PTP packets destination MAC with RX packet not matching.'
+        enum_values:
+          - accept
+          - drop
+          - follow-rx
+        example: drop
+      - nxos_name: role
+        tf_name: role
+        type: String
+        description: 'Transport role for PTP interface with default master.'
+        enum_values:
+          - master
+          - slave
+          - dynamic
+        example: master
+      - nxos_name: syncIntervalType
+        tf_name: sync_interval_type
+        type: String
+        description: 'PTP sync interval time code.'
+        enum_values:
+          - none
+          - aes67
+          - smpte-2059-2
+        example: aes67
+      - nxos_name: syncIntervalVal
+        tf_name: sync_interval_value
+        type: Int64
+        description: 'PTP sync interval value.'
+        min_int: -7
+        max_int: 1
+        example: -1
+      - nxos_name: transmission
+        tf_name: transmission
+        type: String
+        description: 'Transport mode for PTP interface with default multicast.'
+        enum_values:
+          - multicast
+          - unicast
+        example: multicast
+      - nxos_name: transport
+        tf_name: transport
+        type: String
+        description: 'Transport type for PTP interface with default IPv4.'
+        enum_values:
+          - ipv4
+          - ipv6
+          - eth
+        example: ipv4
+      - nxos_name: ucastSrc
+        tf_name: unicast_source
+        type: String
+        description: 'Source IPv4 address for ucast messages.'
+        example: 10.2.2.1
+      - nxos_name: ucastSrcIpv6
+        tf_name: unicast_source_ipv6
+        type: String
+        description: 'Source IPv6 address for ucast messages.'
+        example: '2001:db8::1'
+      - nxos_name: ucastVrf
+        tf_name: unicast_vrf
+        type: String
+        description: 'VRF to be used for ptp messages.'
+        example: default
+      - nxos_name: ucastVrfIpv6
+        tf_name: unicast_vrf_ipv6
+        type: String
+        description: 'VRF to be used for Ipv6 ptp messages.'
+        example: default
+      - nxos_name: vlan
+        tf_name: vlan
+        type: String
+        description: 'PTP VLAN id configuration.'
+        example: vlan-100
+    child_classes:
+      - class_name: ptpPtpPeer
+        rn: peer-[%s]
+        type: list
+        tf_name: peers
+        description: 'Peer IP address for transport mode.'
+        doc_path: System/ptp:PtpPeer/
+        attributes:
+          - nxos_name: id
+            tf_name: ip
+            type: String
+            id: true
+            description: 'IP address value for transport mode.'
+            example: 10.1.1.2
+          - nxos_name: negoSchema
+            tf_name: negotiation_schema
+            type: String
+            description: 'Unicast negotiation schema for peer.'
+            example: schema1
+test_prerequisites:
+  - dn: sys/fm/ptp
+    class_name: fmPtp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

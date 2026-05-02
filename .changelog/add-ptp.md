@@ -1,0 +1,1 @@
+- Add `nxos_ptp` resource and data source

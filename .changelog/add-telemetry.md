@@ -1,1 +1,0 @@
-- Add `nxos_telemetry` resource and data source

@@ -7,6 +7,30 @@ description: |-
 
 # Changelog
 
+## 0.11.0
+
+- Add `nxos_analytics` resource and data source
+- Add additional paths configuration to `nxos_bgp` resource and data source
+- Add aggregate address configuration to `nxos_bgp` resource and data source
+- Add interface peer configuration to `nxos_bgp` resource and data source
+- Add `default_information_originate_route_distinguisher`, `default_information_originate_route_target`, `load_balance_egress_filter_policy_route_map`, and `load_balance_egress_multipath_auto_policy_route_map` attributes to `nxos_bgp` resource and data source
+- Add `nxos_esg` resource and data source
+- Add SCP Server, SFTP Server, gRPC, Analytics, Security Group, and Telemetry feature configuration to `nxos_feature` resource and data source
+- Add IPv6 prefix list configuration to `nxos_route_policy` resource and data source
+- Add `nxos_netflow` resource and data source
+- Add NVE platform and InfraVlan configuration to `nxos_system` resource and data source
+- Add EVPN Multisite Border Gateway configuration to `nxos_nvo` resource and data source
+- Add TCAM region and extended TCAM region configuration to `nxos_system` resource and data source
+- Add `nxos_ptp` resource and data source
+- Add set local preference, set path selection, set evpn, match next hop, match regular community, and match route access list configuration to `nxos_route_policy` resource and data source
+- Add `nxos_span` resource and data source
+- Add `erspan_origin_ip` attributes to `nxos_system` resource and data source
+- Add SSH server configuration to `nxos_system` resource and data source
+- Add SSH server key configuration to `nxos_system` resource and data source
+- Add `nxos_telemetry` resource and data source
+- Add PTP ttag configuration to `nxos_system` resource and data source
+- Add multisite interface tracking configuration to `nxos_physical_interface`, `nxos_port_channel_interface`, and `nxos_svi_interface` resources and data sources
+
 ## 0.10.2
 
 - Fix `nxos_port_channel_interface`: extended attributes (storm control, switchport block, MAC learn, etc.) were not read back from the device due to incorrect child class RN (`physExtd` → `aggrExtd`)

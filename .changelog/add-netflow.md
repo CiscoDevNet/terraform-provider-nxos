@@ -1,1 +1,0 @@
-- Add `nxos_netflow` resource and data source

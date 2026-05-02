@@ -1,2 +1,0 @@
-- Add PTP ttag configuration to `nxos_system` resource and data source
-- Add multisite interface tracking configuration to `nxos_physical_interface`, `nxos_port_channel_interface`, and `nxos_svi_interface` resources and data sources

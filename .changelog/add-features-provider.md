@@ -1,1 +1,0 @@
-- Add SCP Server, SFTP Server, gRPC, Analytics, Security Group, and Telemetry feature configuration to `nxos_feature` resource and data source

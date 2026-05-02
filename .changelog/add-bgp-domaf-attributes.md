@@ -1,1 +1,0 @@
-- Add `default_information_originate_route_distinguisher`, `default_information_originate_route_target`, `load_balance_egress_filter_policy_route_map`, and `load_balance_egress_multipath_auto_policy_route_map` attributes to `nxos_bgp` resource and data source

@@ -1,0 +1,203 @@
+---
+name: Telemetry
+class_name: telemetryEntity
+dn: sys/tm
+no_delete: true
+ds_description: This data source can read the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.
+res_description: This resource can manage the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.
+doc_path: Streaming%20Telemetry/telemetry:Entity/
+doc_category: System
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy.'
+    enum_values:
+      - enabled
+    example: enabled
+  - nxos_name: batchDmeEvt
+    tf_name: batch_dme_events
+    type: Bool
+    description: 'DME events batching is enabled or disabled.'
+    example: false
+  - nxos_name: mergeSubs
+    tf_name: merge_subscriptions
+    type: Bool
+    description: 'Subscriptions merging enabled or disabled.'
+    example: true
+child_classes:
+  - class_name: telemetryDestGroup
+    rn: dest-[%s]
+    type: list
+    tf_name: destination_groups
+    description: 'Destination Group.'
+    doc_path: Streaming%20Telemetry/telemetry:DestGroup/
+    attributes:
+      - nxos_name: id
+        tf_name: id
+        type: String
+        id: true
+        description: 'Destination group ID.'
+        example: '1'
+    child_classes:
+      - class_name: telemetryDest
+        rn: addr-[%s]-port-[%d]
+        type: list
+        tf_name: destinations
+        description: 'Destination.'
+        doc_path: Streaming%20Telemetry/telemetry:Dest/
+        attributes:
+          - nxos_name: addr
+            tf_name: address
+            type: String
+            id: true
+            description: 'Destination IP address.'
+            example: '192.168.1.1'
+          - nxos_name: enc
+            tf_name: encoding
+            type: String
+            description: 'Destination encoding type.'
+            enum_values:
+              - GPB
+              - JSON
+              - GPB-compact
+              - Form-data
+            example: GPB
+          - nxos_name: nodeid
+            tf_name: node_id
+            type: String
+            description: 'Destination node Identifier.'
+            example: 'host1'
+          - nxos_name: port
+            tf_name: port
+            type: Int64
+            id: true
+            min_int: 0
+            max_int: 65535
+            description: 'Destination port number.'
+            example: 50001
+          - nxos_name: proto
+            tf_name: protocol
+            type: String
+            description: 'Destination protocol type.'
+            enum_values:
+              - UDP
+              - gRPC
+              - HTTP
+            example: gRPC
+  - class_name: telemetrySensorGroup
+    rn: sensor-[%s]
+    type: list
+    tf_name: sensor_groups
+    description: 'Sensor Group.'
+    doc_path: Streaming%20Telemetry/telemetry:SensorGroup/
+    attributes:
+      - nxos_name: dataSrc
+        tf_name: data_source
+        type: String
+        description: 'Data source for this sensor group.'
+        enum_values:
+          - DME
+          - NX-API
+          - YANG
+          - NATIVE
+          - DEFAULT
+        example: DME
+      - nxos_name: id
+        tf_name: id
+        type: String
+        id: true
+        description: 'Sensor group identifier.'
+        example: '1'
+    child_classes:
+      - class_name: telemetrySensorPath
+        rn: path-[%s]
+        type: list
+        tf_name: sensor_paths
+        description: 'The DME/Open-Config/Device-Yang/Usability path.'
+        doc_path: Streaming%20Telemetry/telemetry:SensorPath/
+        attributes:
+          - nxos_name: alias
+            tf_name: alias
+            type: String
+            description: 'The alias of the en-coding path.'
+            example: 'mypath'
+          - nxos_name: depth
+            tf_name: depth
+            type: Int64
+            min_int: 0
+            max_int: 4294967295
+            description: 'The number of levels of managed objects retrieved (For path property value == Usability path only level 0 is valid value).'
+            example: 1
+          - nxos_name: filterCondition
+            tf_name: filter_condition
+            type: String
+            description: 'The condition(s) for filtering the queried notifications.'
+            example: 'gt(operBitrate,0)'
+          - nxos_name: path
+            tf_name: path
+            type: String
+            id: true
+            description: 'The path to the monitored data.'
+            example: 'sys/intf'
+          - nxos_name: queryCondition
+            tf_name: query_condition
+            type: String
+            description: 'The condition(s) for retrieving notifications.'
+            example: 'query-condition-example'
+  - class_name: telemetrySubscription
+    rn: subs-[%d]
+    type: list
+    tf_name: subscriptions
+    description: 'Subscription.'
+    doc_path: Streaming%20Telemetry/telemetry:Subscription/
+    attributes:
+      - nxos_name: id
+        tf_name: id
+        type: Int64
+        id: true
+        min_int: 1
+        max_int: 4095
+        description: 'Subscription identifier.'
+        example: 1
+    child_classes:
+      - class_name: telemetryRsSensorGroupRel
+        rn: rtsensorGroupRel-[%s]
+        type: list
+        tf_name: sensor_group_relationships
+        description: 'Link to sensorGroup entry.'
+        doc_path: Streaming%20Telemetry/telemetry:RsSensorGroupRel/
+        attributes:
+          - nxos_name: tDn
+            tf_name: target_dn
+            type: String
+            id: true
+            description: 'Target distinguished name of the sensor group.'
+            example: 'sys/tm/sensor-1'
+          - nxos_name: sampleIntvl
+            tf_name: sample_interval
+            type: Int64
+            min_int: 0
+            max_int: 604800000
+            description: 'Sensor sample inteval.'
+            example: 5000
+      - class_name: telemetryRsDestGroupRel
+        rn: rtdestGroupRel-[%s]
+        type: list
+        tf_name: destination_group_relationships
+        description: 'Link to destGroup entry.'
+        doc_path: Streaming%20Telemetry/telemetry:RsDestGroupRel/
+        attributes:
+          - nxos_name: tDn
+            tf_name: target_dn
+            type: String
+            id: true
+            description: 'Target distinguished name of the destination group.'
+            example: 'sys/tm/dest-1'
+test_prerequisites:
+  - dn: sys/fm/telemetry
+    class_name: fmTelemetry
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

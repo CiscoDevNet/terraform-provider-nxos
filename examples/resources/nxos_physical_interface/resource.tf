@@ -59,6 +59,8 @@ resource "nxos_physical_interface" "example" {
       storm_control_rate                     = "50.000000"
       storm_control_rate_packets_per_second  = 500
       storm_control_packet_type              = "bcast"
+      priority_flow_control_mode             = "on"
+      priority_flow_control_send_tlv         = true
       extended_description                   = "Extended interface config"
     }
   }

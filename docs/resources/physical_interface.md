@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
 ---
 
 # nxos_physical_interface (Resource)
@@ -18,6 +18,8 @@ This resource can manage physical interfaces on NX-OS devices, including setting
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
 - [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
+- [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/)
+- [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
 - [l1PhysIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/)
 
 ## Example Usage
@@ -84,6 +86,8 @@ resource "nxos_physical_interface" "example" {
       storm_control_rate                     = "50.000000"
       storm_control_rate_packets_per_second  = 500
       storm_control_packet_type              = "bcast"
+      priority_flow_control_mode             = "on"
+      priority_flow_control_send_tlv         = true
       extended_description                   = "Extended interface config"
     }
   }
@@ -207,6 +211,14 @@ Optional:
   - Choices: `no`, `yes`
 - `port_type_fabric` (String) Identifies if or not the port is a fabric-facing port.
   - Choices: `no`, `yes`
+- `priority_flow_control_mode` (String) Priority-flow-control mode on/off/auto.
+  - Choices: `auto`, `on`, `off`
+- `priority_flow_control_send_tlv` (Boolean) Send_tlv used for sending dcbx pfc tlv when pfc mode is on.
+- `priority_flow_control_watchdog_disable_action` (Boolean) Only generate syslog for stuck queue, no action.
+- `priority_flow_control_watchdog_interface_multiplier` (Number) Shutdown mutlipler value.
+  - Range: `0`-`40`
+- `priority_flow_control_watchdog_interval` (String) Watch dog internal on/off.
+  - Choices: `on`, `off`
 - `router_mac` (String) The administrative router MAC address.
 - `router_mac_ipv6_extract` (String) Disable/enable switchport ipv6 extract.
   - Choices: `disable`, `enable`

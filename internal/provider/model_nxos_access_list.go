@@ -1358,6 +1358,7 @@ func (data AccessList) toDeleteBody() nxos.Body {
 		if len(data.AccessLists) > 0 {
 			hasNestedChildren = true
 		}
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv4aclAF"

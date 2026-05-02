@@ -64,7 +64,7 @@ func TestAccDataSourceNxosDefaultQoS(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDefaultQoSPrerequisitesConfig + testAccDataSourceNxosDefaultQoSConfig(),
+				Config: testAccDataSourceNxosDefaultQoSConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -74,24 +74,6 @@ func TestAccDataSourceNxosDefaultQoS(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceNxosDefaultQoSPrerequisitesConfig = `
-resource "nxos_dme" "PreReq0" {
-  dn = "sys/ipqos/dflt/c/name-[Voice]"
-  class_name = "ipqosCMapInst"
-  content = {
-      name = "Voice"
-  }
-}
-
-resource "nxos_dme" "PreReq1" {
-  dn = "sys/ipqos/dflt/p/name-[PM1]"
-  class_name = "ipqosPMapInst"
-  content = {
-      name = "PM1"
-  }
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
@@ -146,7 +128,6 @@ func testAccDataSourceNxosDefaultQoSConfig() string {
 	config += `			policy_map_statistics = false` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

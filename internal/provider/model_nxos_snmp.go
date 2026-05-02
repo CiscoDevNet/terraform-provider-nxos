@@ -5342,12 +5342,15 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "unknownUser", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if len(data.LocalUsers) > 0 {
 			hasNestedChildren = true
 		}
 		if len(data.Hosts) > 0 {
 			hasNestedChildren = true
 		}
+		hasNestedChildren = true
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".snmpInst"
@@ -5429,6 +5432,35 @@ func (data SNMP) toDeleteBody() nxos.Body {
 					childBody, _ = sjson.Set(childBody, "enableAllViaCLI", "DME_UNSET_PROPERTY_MARKER")
 				}
 				hasNestedChildren := false
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
+				hasNestedChildren = true
 				if childBody != "" || hasNestedChildren {
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTraps"
@@ -6194,6 +6226,8 @@ func (data SNMP) toDeleteBody() nxos.Body {
 					{
 						childBody := ""
 						hasNestedChildren := false
+						hasNestedChildren = true
+						hasNestedChildren = true
 						if childBody != "" || hasNestedChildren {
 							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmpls"

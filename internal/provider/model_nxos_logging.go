@@ -775,6 +775,7 @@ func (data Logging) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogging"
@@ -818,9 +819,15 @@ func (data Logging) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if len(data.RemoteDestinations) > 0 {
 			hasNestedChildren = true
 		}
+		hasNestedChildren = true
+		hasNestedChildren = true
+		hasNestedChildren = true
+		hasNestedChildren = true
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".syslogSyslog"

@@ -7207,6 +7207,7 @@ func (data System) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".arpEntity"
@@ -7267,6 +7268,7 @@ func (data System) toDeleteBody() nxos.Body {
 					childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
 				}
 				hasNestedChildren := false
+				hasNestedChildren = true
 				if childBody != "" || hasNestedChildren {
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".arpInst"
@@ -7292,6 +7294,7 @@ func (data System) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ndEntity"
@@ -7337,6 +7340,7 @@ func (data System) toDeleteBody() nxos.Body {
 				if len(data.NdVrfs) > 0 {
 					hasNestedChildren = true
 				}
+				hasNestedChildren = true
 				if childBody != "" || hasNestedChildren {
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ndInst"
@@ -7383,6 +7387,8 @@ func (data System) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "protocol", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		hasNestedChildren = true
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".datetimeClock"
@@ -7427,6 +7433,7 @@ func (data System) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerLicenseManager"
@@ -7439,6 +7446,7 @@ func (data System) toDeleteBody() nxos.Body {
 			{
 				childBody := ""
 				hasNestedChildren := false
+				hasNestedChildren = true
 				if childBody != "" || hasNestedChildren {
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerInst"
@@ -7535,6 +7543,7 @@ func (data System) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".udldEntity"
@@ -7752,6 +7761,7 @@ func (data System) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "wrrUnicastBw", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if len(data.PlatformNveInterfaces) > 0 {
 			hasNestedChildren = true
 		}
@@ -8131,6 +8141,7 @@ func (data System) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".lldpEntity"
@@ -8216,6 +8227,7 @@ func (data System) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".cdpEntity"
@@ -8303,6 +8315,7 @@ func (data System) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".terminalTerminal"
@@ -8315,6 +8328,8 @@ func (data System) toDeleteBody() nxos.Body {
 			{
 				childBody := ""
 				hasNestedChildren := false
+				hasNestedChildren = true
+				hasNestedChildren = true
 				if childBody != "" || hasNestedChildren {
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalLine"
@@ -8468,6 +8483,7 @@ func (data System) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".sasSas"
@@ -8488,6 +8504,7 @@ func (data System) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".commEntity"

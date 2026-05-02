@@ -72,7 +72,7 @@ func TestAccNxosDefaultQoS(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQoSPrerequisitesConfig + testAccNxosDefaultQoSConfig_all(),
+				Config: testAccNxosDefaultQoSConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -104,31 +104,12 @@ func nxosDefaultQoSImportStateIdFunc(resourceName string) resource.ImportStateId
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosDefaultQoSPrerequisitesConfig = `
-resource "nxos_dme" "PreReq0" {
-  dn = "sys/ipqos/dflt/c/name-[Voice]"
-  class_name = "ipqosCMapInst"
-  content = {
-      name = "Voice"
-  }
-}
-
-resource "nxos_dme" "PreReq1" {
-  dn = "sys/ipqos/dflt/p/name-[PM1]"
-  class_name = "ipqosPMapInst"
-  content = {
-      name = "PM1"
-  }
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosDefaultQoSConfig_minimum() string {
 	config := `resource "nxos_default_qos" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -186,7 +167,6 @@ func testAccNxosDefaultQoSConfig_all() string {
 	config += `			policy_map_statistics = false` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

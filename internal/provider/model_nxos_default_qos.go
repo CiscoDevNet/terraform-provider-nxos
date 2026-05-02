@@ -989,6 +989,7 @@ func (data DefaultQoS) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"

@@ -574,6 +574,7 @@ func (data QueuingQoS) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"
@@ -586,6 +587,7 @@ func (data QueuingQoS) toDeleteBody() nxos.Body {
 			{
 				childBody := ""
 				hasNestedChildren := false
+				hasNestedChildren = true
 				if childBody != "" || hasNestedChildren {
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEgress"

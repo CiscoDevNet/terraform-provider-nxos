@@ -387,14 +387,3 @@ child_classes:
                     type: Bool
                     description: 'Turn on/off statistics.'
                     example: false
-test_prerequisites:
-  - dn: sys/ipqos/dflt/c/name-[Voice]
-    class_name: ipqosCMapInst
-    attributes:
-      - name: name
-        value: Voice
-  - dn: sys/ipqos/dflt/p/name-[PM1]
-    class_name: ipqosPMapInst
-    attributes:
-      - name: name
-        value: PM1

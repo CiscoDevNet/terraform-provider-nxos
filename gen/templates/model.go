@@ -940,6 +940,10 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	if len(data.{{toGoName .TfName}}) > 0 {
 		hasNestedChildren = true
 	}
+	{{- else if and .NoDelete (eq .Type "single") .ChildClasses}}
+	hasNestedChildren = true
+	{{- else if and (not .NoDelete) (eq .Type "single")}}
+	hasNestedChildren = true
 	{{- end}}
 	{{- end}}
 	if childBody != "" || hasNestedChildren {

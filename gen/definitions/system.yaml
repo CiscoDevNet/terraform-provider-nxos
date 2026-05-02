@@ -1317,7 +1317,7 @@ child_classes:
                 example: port-enabled
   - class_name: platformEntity
     doc_path: System/platform%3AEntity/
-    rn: platform
+    rn: pltfm
     type: single
     tf_name: platform
     no_delete: true

@@ -3286,7 +3286,7 @@ func (data *System) fromBody(res gjson.Result) {
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
 				rnValue := v.Get("platformEntity.attributes.rn").String()
-				if rnValue == "platform" {
+				if rnValue == "pltfm" {
 					rplatformEntity = v
 					return false
 				}
@@ -5247,7 +5247,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			rnValue := v.Get("platformEntity.attributes.rn").String()
-			if rnValue == "platform" {
+			if rnValue == "pltfm" {
 				rplatformEntity = v
 				return false
 			}

@@ -1317,7 +1317,7 @@ child_classes:
                 example: port-enabled
   - class_name: platformEntity
     doc_path: System/platform%3AEntity/
-    rn: platform
+    rn: pltfm
     type: single
     tf_name: platform
     no_delete: true
@@ -2718,6 +2718,59 @@ child_classes:
                 max_int: 2147483647
                 example: 256
                 exclude_test: true
+      - class_name: platformNVE
+        doc_path: System/platform%3ANVE/
+        rn: nve-%v
+        type: list
+        no_delete: true
+        tf_name: platform_nve_interfaces
+        description: 'NVE platform configuration.'
+        attributes:
+          - nxos_name: id
+            tf_name: id
+            type: Int64
+            id: true
+            description: 'Int nve.'
+            min_int: 0
+            max_int: 65535
+            example: 1
+          - nxos_name: ipmcIndexSize
+            tf_name: ipmc_index_size
+            type: Int64
+            description: 'Global ipmc index size.'
+            min_int: 0
+            max_int: 7000
+            example: 4000
+          - nxos_name: overlayVlanId
+            tf_name: overlay_vlan_id
+            type: String
+            description: 'Nve overlay vlan id range.'
+            example: '1-10'
+            exclude_test: true
+        child_classes:
+          - class_name: platformInfraVlan
+            doc_path: System/platform%3AInfraVlan/
+            rn: infravlan-%v
+            type: list
+            tf_name: infra_vlans
+            description: 'InfraVlan configuration.'
+            attributes:
+              - nxos_name: id
+                tf_name: id
+                type: Int64
+                id: true
+                description: 'Id for all vlans that are infravlan enabled.'
+                min_int: 0
+                max_int: 4096
+                example: 100
+              - nxos_name: force
+                tf_name: force
+                type: String
+                description: 'Force flag if infra vlan added by force.'
+                enum_values:
+                  - Disable
+                  - Enable
+                example: Enable
   - class_name: mgmtMgmtIf
     doc_path: System/mgmt%3AMgmtIf/
     rn: mgmt-[%s]
@@ -3788,3 +3841,23 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
+  - dn: sys/fm/nvo
+    class_name: fmNvo
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/evpn
+    class_name: fmEvpn
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+    dependencies: [2]
+  - dn: sys/eps/epId-1
+    class_name: nvoEp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+    dependencies: [3]

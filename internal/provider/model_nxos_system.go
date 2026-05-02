@@ -38,339 +38,340 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type System struct {
-	Device                                              types.String                          `tfsdk:"device"`
-	Dn                                                  types.String                          `tfsdk:"id"`
-	Name                                                types.String                          `tfsdk:"name"`
-	EthernetMtu                                         types.Int64                           `tfsdk:"ethernet_mtu"`
-	EthernetDefaultAdminState                           types.String                          `tfsdk:"ethernet_default_admin_state"`
-	EthernetAdminLinkDownSyslogLevel                    types.Int64                           `tfsdk:"ethernet_admin_link_down_syslog_level"`
-	EthernetAdminLinkUpSyslogLevel                      types.Int64                           `tfsdk:"ethernet_admin_link_up_syslog_level"`
-	EthernetAdminState                                  types.String                          `tfsdk:"ethernet_admin_state"`
-	EthernetAllowUnsupportedSfp                         types.Bool                            `tfsdk:"ethernet_allow_unsupported_sfp"`
-	EthernetChassisInfrastructureAdaptorVlan            types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
-	EthernetChassisInfrastructureEpdsPortNumber         types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
-	EthernetChassisInfrastructureIpv6Address            types.String                          `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
-	EthernetChassisInfrastructureVlan                   types.Int64                           `tfsdk:"ethernet_chassis_infrastructure_vlan"`
-	EthernetChassisManagementInstance                   types.String                          `tfsdk:"ethernet_chassis_management_instance"`
-	EthernetChassisManagementInstanceFabricNumber       types.String                          `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
-	EthernetControl                                     types.String                          `tfsdk:"ethernet_control"`
-	EthernetInterfaceSyslogInfo                         types.String                          `tfsdk:"ethernet_interface_syslog_info"`
-	EthernetLogEvent                                    types.String                          `tfsdk:"ethernet_log_event"`
-	EthernetDefaultLayer                                types.String                          `tfsdk:"ethernet_default_layer"`
-	EthernetSystemInterfaceAdminState                   types.String                          `tfsdk:"ethernet_system_interface_admin_state"`
-	EthernetSystemLinkFailureLaserOn                    types.Bool                            `tfsdk:"ethernet_system_link_failure_laser_on"`
-	EthernetSystemStormControlMultiThreshold            types.Bool                            `tfsdk:"ethernet_system_storm_control_multi_threshold"`
-	EthernetVlanTagNative                               types.Bool                            `tfsdk:"ethernet_vlan_tag_native"`
-	ArpAdminState                                       types.String                          `tfsdk:"arp_admin_state"`
-	ArpInstanceAdminState                               types.String                          `tfsdk:"arp_instance_admin_state"`
-	ArpAllowStaticArpOutsideSubnet                      types.String                          `tfsdk:"arp_allow_static_arp_outside_subnet"`
-	ArpUnnumberedSviSoftwareReplication                 types.String                          `tfsdk:"arp_unnumbered_svi_software_replication"`
-	ArpCacheLimit                                       types.Int64                           `tfsdk:"arp_cache_limit"`
-	ArpCacheSyslogRate                                  types.Int64                           `tfsdk:"arp_cache_syslog_rate"`
-	ArpControl                                          types.String                          `tfsdk:"arp_control"`
-	ArpEvpnTimeout                                      types.Int64                           `tfsdk:"arp_evpn_timeout"`
-	ArpInterfaceCacheLimit                              types.Int64                           `tfsdk:"arp_interface_cache_limit"`
-	ArpIpAdjacencyRouteDistance                         types.Int64                           `tfsdk:"arp_ip_adjacency_route_distance"`
-	ArpIpArpCos                                         types.Int64                           `tfsdk:"arp_ip_arp_cos"`
-	ArpOffListTimeout                                   types.Int64                           `tfsdk:"arp_off_list_timeout"`
-	ArpRarpFabricForwarding                             types.String                          `tfsdk:"arp_rarp_fabric_forwarding"`
-	ArpRarpFabricForwardingRate                         types.Int64                           `tfsdk:"arp_rarp_fabric_forwarding_rate"`
-	ArpResolveOutsideSubnet                             types.String                          `tfsdk:"arp_resolve_outside_subnet"`
-	ArpSuppressionTimeout                               types.Int64                           `tfsdk:"arp_suppression_timeout"`
-	ArpTimeout                                          types.Int64                           `tfsdk:"arp_timeout"`
-	ArpVpcDomains                                       map[string]SystemArpVpcDomains        `tfsdk:"arp_vpc_domains"`
-	NdAdminState                                        types.String                          `tfsdk:"nd_admin_state"`
-	NdAcceptSolicitNeighborEntry                        types.String                          `tfsdk:"nd_accept_solicit_neighbor_entry"`
-	NdInstanceAdminState                                types.String                          `tfsdk:"nd_instance_admin_state"`
-	NdAgingInterval                                     types.Int64                           `tfsdk:"nd_aging_interval"`
-	NdCacheLimit                                        types.Int64                           `tfsdk:"nd_cache_limit"`
-	NdCacheSyslogRate                                   types.Int64                           `tfsdk:"nd_cache_syslog_rate"`
-	NdControl                                           types.String                          `tfsdk:"nd_control"`
-	NdIpv6AdjacencyRouteDistance                        types.Int64                           `tfsdk:"nd_ipv6_adjacency_route_distance"`
-	NdOffListTimeout                                    types.Int64                           `tfsdk:"nd_off_list_timeout"`
-	NdProbeIntervalForSolicitNeighbor                   types.Int64                           `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
-	NdSolicitNeighborAdvertisement                      types.String                          `tfsdk:"nd_solicit_neighbor_advertisement"`
-	NdVrfs                                              map[string]SystemNdVrfs               `tfsdk:"nd_vrfs"`
-	NdVpcDomains                                        map[string]SystemNdVpcDomains         `tfsdk:"nd_vpc_domains"`
-	ClockAdminState                                     types.String                          `tfsdk:"clock_admin_state"`
-	ClockAuthenticationState                            types.String                          `tfsdk:"clock_authentication_state"`
-	ClockFormat                                         types.String                          `tfsdk:"clock_format"`
-	ClockFormatDebug                                    types.Bool                            `tfsdk:"clock_format_debug"`
-	ClockFormatSyslog                                   types.Bool                            `tfsdk:"clock_format_syslog"`
-	ClockProtocol                                       types.String                          `tfsdk:"clock_protocol"`
-	ClockTimezoneName                                   types.String                          `tfsdk:"clock_timezone_name"`
-	ClockTimezoneHours                                  types.Int64                           `tfsdk:"clock_timezone_hours"`
-	ClockTimezoneMinutes                                types.Int64                           `tfsdk:"clock_timezone_minutes"`
-	ClockSummerTimeName                                 types.String                          `tfsdk:"clock_summer_time_name"`
-	ClockSummerTimeOffsetMinutes                        types.Int64                           `tfsdk:"clock_summer_time_offset_minutes"`
-	ClockSummerTimeStartWeek                            types.Int64                           `tfsdk:"clock_summer_time_start_week"`
-	ClockSummerTimeStartDay                             types.String                          `tfsdk:"clock_summer_time_start_day"`
-	ClockSummerTimeStartMonth                           types.String                          `tfsdk:"clock_summer_time_start_month"`
-	ClockSummerTimeStartTime                            types.String                          `tfsdk:"clock_summer_time_start_time"`
-	ClockSummerTimeEndWeek                              types.Int64                           `tfsdk:"clock_summer_time_end_week"`
-	ClockSummerTimeEndDay                               types.String                          `tfsdk:"clock_summer_time_end_day"`
-	ClockSummerTimeEndMonth                             types.String                          `tfsdk:"clock_summer_time_end_month"`
-	ClockSummerTimeEndTime                              types.String                          `tfsdk:"clock_summer_time_end_time"`
-	DnsAdminState                                       types.String                          `tfsdk:"dns_admin_state"`
-	DnsProfiles                                         map[string]SystemDnsProfiles          `tfsdk:"dns_profiles"`
-	Vdcs                                                map[string]SystemVdcs                 `tfsdk:"vdcs"`
-	CliAliases                                          map[string]SystemCliAliases           `tfsdk:"cli_aliases"`
-	SmartLicensingTransportMode                         types.String                          `tfsdk:"smart_licensing_transport_mode"`
-	SmartLicensingTransportCsluUrl                      types.String                          `tfsdk:"smart_licensing_transport_cslu_url"`
-	BootAci                                             types.String                          `tfsdk:"boot_aci"`
-	BootAutoCopy                                        types.String                          `tfsdk:"boot_auto_copy"`
-	BootDhcp                                            types.Int64                           `tfsdk:"boot_dhcp"`
-	BootExcludeConfiguration                            types.String                          `tfsdk:"boot_exclude_configuration"`
-	BootFex                                             types.String                          `tfsdk:"boot_fex"`
-	BootMode                                            types.String                          `tfsdk:"boot_mode"`
-	BootOrder                                           types.String                          `tfsdk:"boot_order"`
-	BootPoap                                            types.String                          `tfsdk:"boot_poap"`
-	BootImageVerification                               types.String                          `tfsdk:"boot_image_verification"`
-	BootImageSupervisor1                                types.String                          `tfsdk:"boot_image_supervisor_1"`
-	BootImageSupervisor2                                types.String                          `tfsdk:"boot_image_supervisor_2"`
-	CfsAdminState                                       types.String                          `tfsdk:"cfs_admin_state"`
-	CfsDistribute                                       types.String                          `tfsdk:"cfs_distribute"`
-	CfsEthernetDistribution                             types.String                          `tfsdk:"cfs_ethernet_distribution"`
-	CfsIpv4Distribution                                 types.String                          `tfsdk:"cfs_ipv4_distribution"`
-	CfsIpv4MulticastAddress                             types.String                          `tfsdk:"cfs_ipv4_multicast_address"`
-	CfsIpv6Distribution                                 types.String                          `tfsdk:"cfs_ipv6_distribution"`
-	CfsIpv6MulticastAddress                             types.String                          `tfsdk:"cfs_ipv6_multicast_address"`
-	UdldAdminState                                      types.String                          `tfsdk:"udld_admin_state"`
-	UdldAggressive                                      types.String                          `tfsdk:"udld_aggressive"`
-	UdldMessageInterval                                 types.Int64                           `tfsdk:"udld_message_interval"`
-	UdldInterfaces                                      map[string]SystemUdldInterfaces       `tfsdk:"udld_interfaces"`
-	PlatformAccessListMatchInnerHeader                  types.String                          `tfsdk:"platform_access_list_match_inner_header"`
-	PlatformAclTapAggregation                           types.String                          `tfsdk:"platform_acl_tap_aggregation"`
-	PlatformDescription                                 types.String                          `tfsdk:"platform_description"`
-	PlatformDisableParseError                           types.String                          `tfsdk:"platform_disable_parse_error"`
-	PlatformGlobalTxSpan                                types.String                          `tfsdk:"platform_global_tx_span"`
-	PlatformHighMulticastPriority                       types.String                          `tfsdk:"platform_high_multicast_priority"`
-	PlatformHardwareLouResourceThreshold                types.Int64                           `tfsdk:"platform_hardware_lou_resource_threshold"`
-	PlatformIngressBdIfaclLabelOptimization             types.String                          `tfsdk:"platform_ingress_bd_ifacl_label_optimization"`
-	PlatformIngressRaclSize                             types.String                          `tfsdk:"platform_ingress_racl_size"`
-	PlatformIngressReplicationRoundRobin                types.Bool                            `tfsdk:"platform_ingress_replication_round_robin"`
-	PlatformIpStatistics                                types.String                          `tfsdk:"platform_ip_statistics"`
-	PlatformIpv6AlpmCarveValue                          types.Int64                           `tfsdk:"platform_ipv6_alpm_carve_value"`
-	PlatformIpv6LpmMaxEntries                           types.Int64                           `tfsdk:"platform_ipv6_lpm_max_entries"`
-	PlatformLpmMaxLimit                                 types.Int64                           `tfsdk:"platform_lpm_max_limit"`
-	PlatformMulticastDcsCheck                           types.String                          `tfsdk:"platform_multicast_dcs_check"`
-	PlatformMulticastFlexStats                          types.String                          `tfsdk:"platform_multicast_flex_stats"`
-	PlatformMulticastLpmMaxEntries                      types.Int64                           `tfsdk:"platform_multicast_lpm_max_entries"`
-	PlatformMulticastNlb                                types.String                          `tfsdk:"platform_multicast_nlb"`
-	PlatformMulticastRaclBridge                         types.String                          `tfsdk:"platform_multicast_racl_bridge"`
-	PlatformMldSnooping                                 types.String                          `tfsdk:"platform_mld_snooping"`
-	PlatformMplsAdjacencyStatsMode                      types.String                          `tfsdk:"platform_mpls_adjacency_stats_mode"`
-	PlatformMplsEcmpMode                                types.String                          `tfsdk:"platform_mpls_ecmp_mode"`
-	PlatformMroutingDisableL2Update                     types.String                          `tfsdk:"platform_mrouting_disable_l2_update"`
-	PlatformMroutingDisableSecondRouteUpdate            types.String                          `tfsdk:"platform_mrouting_disable_second_route_update"`
-	PlatformMroutingPerformanceMode                     types.String                          `tfsdk:"platform_mrouting_performance_mode"`
-	PlatformMulticastMaxLimit                           types.Int64                           `tfsdk:"platform_multicast_max_limit"`
-	PlatformMulticastRpfCheckOptimization               types.String                          `tfsdk:"platform_multicast_rpf_check_optimization"`
-	PlatformMulticastServiceReflectPort                 types.Int64                           `tfsdk:"platform_multicast_service_reflect_port"`
-	PlatformMulticastSyslogThreshold                    types.Int64                           `tfsdk:"platform_multicast_syslog_threshold"`
-	PlatformOpenflowForwardPdu                          types.String                          `tfsdk:"platform_openflow_forward_pdu"`
-	PlatformPbrSkipSelfIp                               types.String                          `tfsdk:"platform_pbr_skip_self_ip"`
-	PlatformPortChannelFastConvergence                  types.String                          `tfsdk:"platform_port_channel_fast_convergence"`
-	PlatformPortChannelLoadBalanceAlgorithm             types.String                          `tfsdk:"platform_port_channel_load_balance_algorithm"`
-	PlatformPortChannelLoadBalanceResilient             types.String                          `tfsdk:"platform_port_channel_load_balance_resilient"`
-	PlatformPortChannelMplsLoadBalanceLabelIp           types.String                          `tfsdk:"platform_port_channel_mpls_load_balance_label_ip"`
-	PlatformPortChannelMplsLoadBalanceLabelOnly         types.String                          `tfsdk:"platform_port_channel_mpls_load_balance_label_only"`
-	PlatformPortChannelScaleFanout                      types.String                          `tfsdk:"platform_port_channel_scale_fanout"`
-	PlatformPicCoreEnable                               types.String                          `tfsdk:"platform_pic_core_enable"`
-	PlatformProfileFrontPortMode                        types.String                          `tfsdk:"platform_profile_front_port_mode"`
-	PlatformProfileMode                                 types.String                          `tfsdk:"platform_profile_mode"`
-	PlatformProfileTuple                                types.String                          `tfsdk:"platform_profile_tuple"`
-	PlatformPstatConfiguration                          types.String                          `tfsdk:"platform_pstat_configuration"`
-	PlatformQosMinBuffer                                types.String                          `tfsdk:"platform_qos_min_buffer"`
-	PlatformRoutingMode                                 types.String                          `tfsdk:"platform_routing_mode"`
-	PlatformServiceTemplateName                         types.String                          `tfsdk:"platform_service_template_name"`
-	PlatformSviAndSiFlexStats                           types.String                          `tfsdk:"platform_svi_and_si_flex_stats"`
-	PlatformSviFlexStats                                types.String                          `tfsdk:"platform_svi_flex_stats"`
-	PlatformSwitchMode                                  types.String                          `tfsdk:"platform_switch_mode"`
-	PlatformSwitchingFabricSpeed                        types.String                          `tfsdk:"platform_switching_fabric_speed"`
-	PlatformSwitchingMode                               types.String                          `tfsdk:"platform_switching_mode"`
-	PlatformSystemFabricMode                            types.String                          `tfsdk:"platform_system_fabric_mode"`
-	PlatformTcamSyslogThreshold                         types.Int64                           `tfsdk:"platform_tcam_syslog_threshold"`
-	PlatformUnicastMaxLimit                             types.Int64                           `tfsdk:"platform_unicast_max_limit"`
-	PlatformUnicastSyslogThreshold                      types.Int64                           `tfsdk:"platform_unicast_syslog_threshold"`
-	PlatformUnicastTrace                                types.String                          `tfsdk:"platform_unicast_trace"`
-	PlatformUnknownUnicastFlood                         types.String                          `tfsdk:"platform_unknown_unicast_flood"`
-	PlatformUrpfStatus                                  types.String                          `tfsdk:"platform_urpf_status"`
-	PlatformWrrUnicastBandwidth                         types.Int64                           `tfsdk:"platform_wrr_unicast_bandwidth"`
-	TcamRegionArpAclSize                                types.Int64                           `tfsdk:"tcam_region_arp_acl_size"`
-	TcamRegionCoppSize                                  types.Int64                           `tfsdk:"tcam_region_copp_size"`
-	TcamRegionCoppSystemSize                            types.Int64                           `tfsdk:"tcam_region_copp_system_size"`
-	TcamRegionEgressIpv6QosSize                         types.Int64                           `tfsdk:"tcam_region_egress_ipv6_qos_size"`
-	TcamRegionEgressIpv6RaclSize                        types.Int64                           `tfsdk:"tcam_region_egress_ipv6_racl_size"`
-	TcamRegionEgressMacQosSize                          types.Int64                           `tfsdk:"tcam_region_egress_mac_qos_size"`
-	TcamRegionEgressQosLiteSize                         types.Int64                           `tfsdk:"tcam_region_egress_qos_lite_size"`
-	TcamRegionEgressQosSize                             types.Int64                           `tfsdk:"tcam_region_egress_qos_size"`
-	TcamRegionEgressRaclSize                            types.Int64                           `tfsdk:"tcam_region_egress_racl_size"`
-	TcamRegionEgressVaclSize                            types.Int64                           `tfsdk:"tcam_region_egress_vacl_size"`
-	TcamRegionFcoeEgressSize                            types.Int64                           `tfsdk:"tcam_region_fcoe_egress_size"`
-	TcamRegionFcoeIngressSize                           types.Int64                           `tfsdk:"tcam_region_fcoe_ingress_size"`
-	TcamRegionFhsSize                                   types.Int64                           `tfsdk:"tcam_region_fhs_size"`
-	TcamRegionInterfaceAclLiteSize                      types.Int64                           `tfsdk:"tcam_region_interface_acl_lite_size"`
-	TcamRegionInterfaceAclSize                          types.Int64                           `tfsdk:"tcam_region_interface_acl_size"`
-	TcamRegionInterfaceAclUdfSize                       types.Int64                           `tfsdk:"tcam_region_interface_acl_udf_size"`
-	TcamRegionIngressFlowRedirectSize                   types.Int64                           `tfsdk:"tcam_region_ingress_flow_redirect_size"`
-	TcamRegionIngressFlowSize                           types.Int64                           `tfsdk:"tcam_region_ingress_flow_size"`
-	TcamRegionIpsgSize                                  types.Int64                           `tfsdk:"tcam_region_ipsg_size"`
-	TcamRegionIpv6InterfaceAclSize                      types.Int64                           `tfsdk:"tcam_region_ipv6_interface_acl_size"`
-	TcamRegionIpv6L3QosSize                             types.Int64                           `tfsdk:"tcam_region_ipv6_l3_qos_size"`
-	TcamRegionIpv6PbrSize                               types.Int64                           `tfsdk:"tcam_region_ipv6_pbr_size"`
-	TcamRegionIpv6QosSize                               types.Int64                           `tfsdk:"tcam_region_ipv6_qos_size"`
-	TcamRegionIpv6RaclSize                              types.Int64                           `tfsdk:"tcam_region_ipv6_racl_size"`
-	TcamRegionIpv6SpanL2Size                            types.Int64                           `tfsdk:"tcam_region_ipv6_span_l2_size"`
-	TcamRegionIpv6SpanSize                              types.Int64                           `tfsdk:"tcam_region_ipv6_span_size"`
-	TcamRegionIpv6SupSize                               types.Int64                           `tfsdk:"tcam_region_ipv6_sup_size"`
-	TcamRegionIpv6VaclSize                              types.Int64                           `tfsdk:"tcam_region_ipv6_vacl_size"`
-	TcamRegionIpv6VlanQosSize                           types.Int64                           `tfsdk:"tcam_region_ipv6_vlan_qos_size"`
-	TcamRegionL3QosIntraLiteSize                        types.Int64                           `tfsdk:"tcam_region_l3_qos_intra_lite_size"`
-	TcamRegionMacInterfaceAclSize                       types.Int64                           `tfsdk:"tcam_region_mac_interface_acl_size"`
-	TcamRegionMacL3QosSize                              types.Int64                           `tfsdk:"tcam_region_mac_l3_qos_size"`
-	TcamRegionMacQosSize                                types.Int64                           `tfsdk:"tcam_region_mac_qos_size"`
-	TcamRegionMacVaclSize                               types.Int64                           `tfsdk:"tcam_region_mac_vacl_size"`
-	TcamRegionMacVlanQosSize                            types.Int64                           `tfsdk:"tcam_region_mac_vlan_qos_size"`
-	TcamRegionMulticastBidirSize                        types.Int64                           `tfsdk:"tcam_region_multicast_bidir_size"`
-	TcamRegionMplsDoublewide                            types.Bool                            `tfsdk:"tcam_region_mpls_doublewide"`
-	TcamRegionMplsSize                                  types.Int64                           `tfsdk:"tcam_region_mpls_size"`
-	TcamRegionMvpnSize                                  types.Int64                           `tfsdk:"tcam_region_mvpn_size"`
-	TcamRegionN9kArpAclSize                             types.Int64                           `tfsdk:"tcam_region_n9k_arp_acl_size"`
-	TcamRegionNatSize                                   types.Int64                           `tfsdk:"tcam_region_nat_size"`
-	TcamRegionOpenflowDoublewide                        types.Bool                            `tfsdk:"tcam_region_openflow_doublewide"`
-	TcamRegionOpenflowLiteSize                          types.Int64                           `tfsdk:"tcam_region_openflow_lite_size"`
-	TcamRegionOpenflowSize                              types.Int64                           `tfsdk:"tcam_region_openflow_size"`
-	TcamRegionPbrSize                                   types.Int64                           `tfsdk:"tcam_region_pbr_size"`
-	TcamRegionQosIntraLiteSize                          types.Int64                           `tfsdk:"tcam_region_qos_intra_lite_size"`
-	TcamRegionQosSize                                   types.Int64                           `tfsdk:"tcam_region_qos_size"`
-	TcamRegionQosLabelSize                              types.Int64                           `tfsdk:"tcam_region_qos_label_size"`
-	TcamRegionRaclLiteSize                              types.Int64                           `tfsdk:"tcam_region_racl_lite_size"`
-	TcamRegionRaclSize                                  types.Int64                           `tfsdk:"tcam_region_racl_size"`
-	TcamRegionRaclUdfSize                               types.Int64                           `tfsdk:"tcam_region_racl_udf_size"`
-	TcamRegionSupSize                                   types.Int64                           `tfsdk:"tcam_region_sup_size"`
-	TcamRegionSviSize                                   types.Int64                           `tfsdk:"tcam_region_svi_size"`
-	TcamRegionTcpNatSize                                types.Int64                           `tfsdk:"tcam_region_tcp_nat_size"`
-	TcamRegionVaclLiteSize                              types.Int64                           `tfsdk:"tcam_region_vacl_lite_size"`
-	TcamRegionVaclSize                                  types.Int64                           `tfsdk:"tcam_region_vacl_size"`
-	TcamRegionVpcConvergenceSize                        types.Int64                           `tfsdk:"tcam_region_vpc_convergence_size"`
-	TcamRegionVlanQosIntraLiteSize                      types.Int64                           `tfsdk:"tcam_region_vlan_qos_intra_lite_size"`
-	TcamRegionVlanQosSize                               types.Int64                           `tfsdk:"tcam_region_vlan_qos_size"`
-	TcamRegionVxlanP2pSize                              types.Int64                           `tfsdk:"tcam_region_vxlan_p2p_size"`
-	TcamRegionExtendedEgressInterfaceAclAllPerPortStats types.Bool                            `tfsdk:"tcam_region_extended_egress_interface_acl_all_per_port_stats"`
-	TcamRegionExtendedEgressInterfaceAclAllSize         types.Int64                           `tfsdk:"tcam_region_extended_egress_interface_acl_all_size"`
-	TcamRegionExtendedEgressIpv6RaclPerPortStats        types.Bool                            `tfsdk:"tcam_region_extended_egress_ipv6_racl_per_port_stats"`
-	TcamRegionExtendedEgressRaclPerPortStats            types.Bool                            `tfsdk:"tcam_region_extended_egress_racl_per_port_stats"`
-	TcamRegionExtendedEgressCoppSize                    types.Int64                           `tfsdk:"tcam_region_extended_egress_copp_size"`
-	TcamRegionExtendedEgressFlowSize                    types.Int64                           `tfsdk:"tcam_region_extended_egress_flow_size"`
-	TcamRegionExtendedEgressHardwareTelemetrySize       types.Int64                           `tfsdk:"tcam_region_extended_egress_hardware_telemetry_size"`
-	TcamRegionExtendedEgressInterfaceAclSize            types.Int64                           `tfsdk:"tcam_region_extended_egress_interface_acl_size"`
-	TcamRegionExtendedEgressL2QosSize                   types.Int64                           `tfsdk:"tcam_region_extended_egress_l2_qos_size"`
-	TcamRegionExtendedEgressL3VlanQosSize               types.Int64                           `tfsdk:"tcam_region_extended_egress_l3_vlan_qos_size"`
-	TcamRegionExtendedEgressRaclSize                    types.Int64                           `tfsdk:"tcam_region_extended_egress_racl_size"`
-	TcamRegionExtendedEgressSupSize                     types.Int64                           `tfsdk:"tcam_region_extended_egress_sup_size"`
-	TcamRegionExtendedHardwareTelemetrySize             types.Int64                           `tfsdk:"tcam_region_extended_hardware_telemetry_size"`
-	TcamRegionExtendedInterfaceAclAllPerPortStats       types.Bool                            `tfsdk:"tcam_region_extended_interface_acl_all_per_port_stats"`
-	TcamRegionExtendedInterfaceAclAllProfile            types.Int64                           `tfsdk:"tcam_region_extended_interface_acl_all_profile"`
-	TcamRegionExtendedInterfaceAclAllSize               types.Int64                           `tfsdk:"tcam_region_extended_interface_acl_all_size"`
-	TcamRegionExtendedInterfaceAclPerPortStats          types.Bool                            `tfsdk:"tcam_region_extended_interface_acl_per_port_stats"`
-	TcamRegionExtendedIngressDaclSize                   types.Int64                           `tfsdk:"tcam_region_extended_ingress_dacl_size"`
-	TcamRegionExtendedIngressInterfaceAclSize           types.Int64                           `tfsdk:"tcam_region_extended_ingress_interface_acl_size"`
-	TcamRegionExtendedIngressInterfaceAclWideSize       types.Int64                           `tfsdk:"tcam_region_extended_ingress_interface_acl_wide_size"`
-	TcamRegionExtendedIngressIpv6InterfaceAclLiteSize   types.Int64                           `tfsdk:"tcam_region_extended_ingress_ipv6_interface_acl_lite_size"`
-	TcamRegionExtendedIngressL2L3QosSize                types.Int64                           `tfsdk:"tcam_region_extended_ingress_l2_l3_qos_size"`
-	TcamRegionExtendedIngressL2QosSize                  types.Int64                           `tfsdk:"tcam_region_extended_ingress_l2_qos_size"`
-	TcamRegionExtendedIngressL2SpanFilterSize           types.Int64                           `tfsdk:"tcam_region_extended_ingress_l2_span_filter_size"`
-	TcamRegionExtendedIngressL3SpanFilterSize           types.Int64                           `tfsdk:"tcam_region_extended_ingress_l3_span_filter_size"`
-	TcamRegionExtendedIngressPaclSbSize                 types.Int64                           `tfsdk:"tcam_region_extended_ingress_pacl_sb_size"`
-	TcamRegionExtendedIngressRaclSize                   types.Int64                           `tfsdk:"tcam_region_extended_ingress_racl_size"`
-	TcamRegionExtendedIngressRbaclSize                  types.Int64                           `tfsdk:"tcam_region_extended_ingress_rbacl_size"`
-	TcamRegionExtendedIngressRedirectSize               types.Int64                           `tfsdk:"tcam_region_extended_ingress_redirect_size"`
-	TcamRegionExtendedIngressStormControlSize           types.Int64                           `tfsdk:"tcam_region_extended_ingress_storm_control_size"`
-	TcamRegionExtendedIngressSupSize                    types.Int64                           `tfsdk:"tcam_region_extended_ingress_sup_size"`
-	TcamRegionExtendedIngressVaclNhSize                 types.Int64                           `tfsdk:"tcam_region_extended_ingress_vacl_nh_size"`
-	TcamRegionExtendedIngressVlanQosSize                types.Int64                           `tfsdk:"tcam_region_extended_ingress_vlan_qos_size"`
-	TcamRegionExtendedIpv6InterfaceAclPerPortStats      types.Bool                            `tfsdk:"tcam_region_extended_ipv6_interface_acl_per_port_stats"`
-	TcamRegionExtendedIpv6RaclPerPortStats              types.Bool                            `tfsdk:"tcam_region_extended_ipv6_racl_per_port_stats"`
-	TcamRegionExtendedMacInterfaceAclPerPortStats       types.Bool                            `tfsdk:"tcam_region_extended_mac_interface_acl_per_port_stats"`
-	TcamRegionExtendedMulticastNatSize                  types.Int64                           `tfsdk:"tcam_region_extended_multicast_nat_size"`
-	TcamRegionExtendedMulticastNbmSize                  types.Int64                           `tfsdk:"tcam_region_extended_multicast_nbm_size"`
-	TcamRegionExtendedRaclAllPerPortStats               types.Bool                            `tfsdk:"tcam_region_extended_racl_all_per_port_stats"`
-	TcamRegionExtendedRaclAllProfile                    types.Int64                           `tfsdk:"tcam_region_extended_racl_all_profile"`
-	TcamRegionExtendedRaclAllSize                       types.Int64                           `tfsdk:"tcam_region_extended_racl_all_size"`
-	TcamRegionExtendedRaclPerPortStats                  types.Bool                            `tfsdk:"tcam_region_extended_racl_per_port_stats"`
-	TcamRegionExtendedRedirectV4Size                    types.Int64                           `tfsdk:"tcam_region_extended_redirect_v4_size"`
-	TcamRegionExtendedSpanSize                          types.Int64                           `tfsdk:"tcam_region_extended_span_size"`
-	TcamRegionExtendedSpanTahoeSize                     types.Int64                           `tfsdk:"tcam_region_extended_span_tahoe_size"`
-	ManagementInterfaces                                map[string]SystemManagementInterfaces `tfsdk:"management_interfaces"`
-	LldpAdminState                                      types.String                          `tfsdk:"lldp_admin_state"`
-	LldpInstanceAdminState                              types.String                          `tfsdk:"lldp_instance_admin_state"`
-	LldpAdvertiseSystemChassisId                        types.String                          `tfsdk:"lldp_advertise_system_chassis_id"`
-	LldpControl                                         types.String                          `tfsdk:"lldp_control"`
-	LldpHoldTime                                        types.Int64                           `tfsdk:"lldp_hold_time"`
-	LldpInfraVlan                                       types.Int64                           `tfsdk:"lldp_infra_vlan"`
-	LldpInitDelayTime                                   types.Int64                           `tfsdk:"lldp_init_delay_time"`
-	LldpMultiPeer                                       types.String                          `tfsdk:"lldp_multi_peer"`
-	LldpOptionalTlvSelect                               types.String                          `tfsdk:"lldp_optional_tlv_select"`
-	LldpOptionalTlvSelectHidden                         types.String                          `tfsdk:"lldp_optional_tlv_select_hidden"`
-	LldpPortChannel                                     types.String                          `tfsdk:"lldp_port_channel"`
-	LldpPortIdSubType                                   types.String                          `tfsdk:"lldp_port_id_sub_type"`
-	LldpSystemDescription                               types.String                          `tfsdk:"lldp_system_description"`
-	LldpTransmitFrequency                               types.Int64                           `tfsdk:"lldp_transmit_frequency"`
-	LldpInterfaces                                      map[string]SystemLldpInterfaces       `tfsdk:"lldp_interfaces"`
-	CdpAdminState                                       types.String                          `tfsdk:"cdp_admin_state"`
-	CdpDeviceIdType                                     types.String                          `tfsdk:"cdp_device_id_type"`
-	CdpHoldInterval                                     types.Int64                           `tfsdk:"cdp_hold_interval"`
-	CdpPnpStartupVlan                                   types.Int64                           `tfsdk:"cdp_pnp_startup_vlan"`
-	CdpTransmitFrequency                                types.Int64                           `tfsdk:"cdp_transmit_frequency"`
-	CdpVersion                                          types.String                          `tfsdk:"cdp_version"`
-	CdpInterfaces                                       map[string]SystemCdpInterfaces        `tfsdk:"cdp_interfaces"`
-	CoppAdminState                                      types.String                          `tfsdk:"copp_admin_state"`
-	CoppRateLimiter                                     types.Bool                            `tfsdk:"copp_rate_limiter"`
-	CoppProfileType                                     types.String                          `tfsdk:"copp_profile_type"`
-	ConsoleExecTimeout                                  types.Int64                           `tfsdk:"console_exec_timeout"`
-	VtyExecTimeout                                      types.Int64                           `tfsdk:"vty_exec_timeout"`
-	VtySessionLimit                                     types.Int64                           `tfsdk:"vty_session_limit"`
-	IcamMonitorInterval                                 types.Int64                           `tfsdk:"icam_monitor_interval"`
-	IcamNumberOfIntervals                               types.Int64                           `tfsdk:"icam_number_of_intervals"`
-	IcamScaleCriticalThreshold                          types.Int64                           `tfsdk:"icam_scale_critical_threshold"`
-	IcamScaleInfoThreshold                              types.Int64                           `tfsdk:"icam_scale_info_threshold"`
-	IcamScaleConfiguration                              types.Bool                            `tfsdk:"icam_scale_configuration"`
-	IcamScaleWarningThreshold                           types.Int64                           `tfsdk:"icam_scale_warning_threshold"`
-	NxapiVrf                                            types.String                          `tfsdk:"nxapi_vrf"`
-	NxapiHttpPort                                       types.Int64                           `tfsdk:"nxapi_http_port"`
-	NxapiHttpsPort                                      types.Int64                           `tfsdk:"nxapi_https_port"`
-	NxapiIdleTimeout                                    types.Int64                           `tfsdk:"nxapi_idle_timeout"`
-	NxapiCertificateEnable                              types.Bool                            `tfsdk:"nxapi_certificate_enable"`
-	NxapiCertificateFile                                types.String                          `tfsdk:"nxapi_certificate_file"`
-	NxapiKeyFile                                        types.String                          `tfsdk:"nxapi_key_file"`
-	NxapiEncryptedKeyPassphrase                         types.String                          `tfsdk:"nxapi_encrypted_key_passphrase"`
-	NxapiEncryptedKeyPassphraseWo                       types.String                          `tfsdk:"nxapi_encrypted_key_passphrase_wo"`
-	NxapiEncryptedKeyPassphraseWoVersion                types.Int64                           `tfsdk:"nxapi_encrypted_key_passphrase_wo_version"`
-	NxapiTrustpoint                                     types.String                          `tfsdk:"nxapi_trustpoint"`
-	NxapiSslProtocols                                   types.String                          `tfsdk:"nxapi_ssl_protocols"`
-	NxapiSslCiphersWeak                                 types.Bool                            `tfsdk:"nxapi_ssl_ciphers_weak"`
-	NxapiClientCertificateAuthentication                types.String                          `tfsdk:"nxapi_client_certificate_authentication"`
-	NxapiSudi                                           types.Bool                            `tfsdk:"nxapi_sudi"`
-	BreakoutModules                                     map[string]SystemBreakoutModules      `tfsdk:"breakout_modules"`
-	ServiceInstances                                    map[string]SystemServiceInstances     `tfsdk:"service_instances"`
-	SshAdminState                                       types.String                          `tfsdk:"ssh_admin_state"`
-	SshCiphers                                          types.String                          `tfsdk:"ssh_ciphers"`
-	SshDescription                                      types.String                          `tfsdk:"ssh_description"`
-	SshEnableWeakCiphers                                types.String                          `tfsdk:"ssh_enable_weak_ciphers"`
-	SshKeyExchangeAlgorithms                            types.String                          `tfsdk:"ssh_key_exchange_algorithms"`
-	SshKeyTypes                                         types.String                          `tfsdk:"ssh_key_types"`
-	SshLoginAttempts                                    types.Int64                           `tfsdk:"ssh_login_attempts"`
-	SshLoginGraceTime                                   types.Int64                           `tfsdk:"ssh_login_grace_time"`
-	SshMessageAuthenticationCodes                       types.String                          `tfsdk:"ssh_message_authentication_codes"`
-	SshPort                                             types.Int64                           `tfsdk:"ssh_port"`
-	SshKeys                                             map[string]SystemSshKeys              `tfsdk:"ssh_keys"`
-	ErspanOriginIpIsGlobal                              types.Bool                            `tfsdk:"erspan_origin_ip_is_global"`
-	ErspanOriginIpIsGlobalIpv6                          types.Bool                            `tfsdk:"erspan_origin_ip_is_global_ipv6"`
-	ErspanOriginIpAddress                               types.String                          `tfsdk:"erspan_origin_ip_address"`
-	ErspanOriginIpv6Address                             types.String                          `tfsdk:"erspan_origin_ipv6_address"`
-	TtagMarkerInterval                                  types.Int64                           `tfsdk:"ttag_marker_interval"`
-	TtagInterfaces                                      map[string]SystemTtagInterfaces       `tfsdk:"ttag_interfaces"`
+	Device                                              types.String                           `tfsdk:"device"`
+	Dn                                                  types.String                           `tfsdk:"id"`
+	Name                                                types.String                           `tfsdk:"name"`
+	EthernetMtu                                         types.Int64                            `tfsdk:"ethernet_mtu"`
+	EthernetDefaultAdminState                           types.String                           `tfsdk:"ethernet_default_admin_state"`
+	EthernetAdminLinkDownSyslogLevel                    types.Int64                            `tfsdk:"ethernet_admin_link_down_syslog_level"`
+	EthernetAdminLinkUpSyslogLevel                      types.Int64                            `tfsdk:"ethernet_admin_link_up_syslog_level"`
+	EthernetAdminState                                  types.String                           `tfsdk:"ethernet_admin_state"`
+	EthernetAllowUnsupportedSfp                         types.Bool                             `tfsdk:"ethernet_allow_unsupported_sfp"`
+	EthernetChassisInfrastructureAdaptorVlan            types.Int64                            `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
+	EthernetChassisInfrastructureEpdsPortNumber         types.Int64                            `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
+	EthernetChassisInfrastructureIpv6Address            types.String                           `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
+	EthernetChassisInfrastructureVlan                   types.Int64                            `tfsdk:"ethernet_chassis_infrastructure_vlan"`
+	EthernetChassisManagementInstance                   types.String                           `tfsdk:"ethernet_chassis_management_instance"`
+	EthernetChassisManagementInstanceFabricNumber       types.String                           `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
+	EthernetControl                                     types.String                           `tfsdk:"ethernet_control"`
+	EthernetInterfaceSyslogInfo                         types.String                           `tfsdk:"ethernet_interface_syslog_info"`
+	EthernetLogEvent                                    types.String                           `tfsdk:"ethernet_log_event"`
+	EthernetDefaultLayer                                types.String                           `tfsdk:"ethernet_default_layer"`
+	EthernetSystemInterfaceAdminState                   types.String                           `tfsdk:"ethernet_system_interface_admin_state"`
+	EthernetSystemLinkFailureLaserOn                    types.Bool                             `tfsdk:"ethernet_system_link_failure_laser_on"`
+	EthernetSystemStormControlMultiThreshold            types.Bool                             `tfsdk:"ethernet_system_storm_control_multi_threshold"`
+	EthernetVlanTagNative                               types.Bool                             `tfsdk:"ethernet_vlan_tag_native"`
+	ArpAdminState                                       types.String                           `tfsdk:"arp_admin_state"`
+	ArpInstanceAdminState                               types.String                           `tfsdk:"arp_instance_admin_state"`
+	ArpAllowStaticArpOutsideSubnet                      types.String                           `tfsdk:"arp_allow_static_arp_outside_subnet"`
+	ArpUnnumberedSviSoftwareReplication                 types.String                           `tfsdk:"arp_unnumbered_svi_software_replication"`
+	ArpCacheLimit                                       types.Int64                            `tfsdk:"arp_cache_limit"`
+	ArpCacheSyslogRate                                  types.Int64                            `tfsdk:"arp_cache_syslog_rate"`
+	ArpControl                                          types.String                           `tfsdk:"arp_control"`
+	ArpEvpnTimeout                                      types.Int64                            `tfsdk:"arp_evpn_timeout"`
+	ArpInterfaceCacheLimit                              types.Int64                            `tfsdk:"arp_interface_cache_limit"`
+	ArpIpAdjacencyRouteDistance                         types.Int64                            `tfsdk:"arp_ip_adjacency_route_distance"`
+	ArpIpArpCos                                         types.Int64                            `tfsdk:"arp_ip_arp_cos"`
+	ArpOffListTimeout                                   types.Int64                            `tfsdk:"arp_off_list_timeout"`
+	ArpRarpFabricForwarding                             types.String                           `tfsdk:"arp_rarp_fabric_forwarding"`
+	ArpRarpFabricForwardingRate                         types.Int64                            `tfsdk:"arp_rarp_fabric_forwarding_rate"`
+	ArpResolveOutsideSubnet                             types.String                           `tfsdk:"arp_resolve_outside_subnet"`
+	ArpSuppressionTimeout                               types.Int64                            `tfsdk:"arp_suppression_timeout"`
+	ArpTimeout                                          types.Int64                            `tfsdk:"arp_timeout"`
+	ArpVpcDomains                                       map[string]SystemArpVpcDomains         `tfsdk:"arp_vpc_domains"`
+	NdAdminState                                        types.String                           `tfsdk:"nd_admin_state"`
+	NdAcceptSolicitNeighborEntry                        types.String                           `tfsdk:"nd_accept_solicit_neighbor_entry"`
+	NdInstanceAdminState                                types.String                           `tfsdk:"nd_instance_admin_state"`
+	NdAgingInterval                                     types.Int64                            `tfsdk:"nd_aging_interval"`
+	NdCacheLimit                                        types.Int64                            `tfsdk:"nd_cache_limit"`
+	NdCacheSyslogRate                                   types.Int64                            `tfsdk:"nd_cache_syslog_rate"`
+	NdControl                                           types.String                           `tfsdk:"nd_control"`
+	NdIpv6AdjacencyRouteDistance                        types.Int64                            `tfsdk:"nd_ipv6_adjacency_route_distance"`
+	NdOffListTimeout                                    types.Int64                            `tfsdk:"nd_off_list_timeout"`
+	NdProbeIntervalForSolicitNeighbor                   types.Int64                            `tfsdk:"nd_probe_interval_for_solicit_neighbor"`
+	NdSolicitNeighborAdvertisement                      types.String                           `tfsdk:"nd_solicit_neighbor_advertisement"`
+	NdVrfs                                              map[string]SystemNdVrfs                `tfsdk:"nd_vrfs"`
+	NdVpcDomains                                        map[string]SystemNdVpcDomains          `tfsdk:"nd_vpc_domains"`
+	ClockAdminState                                     types.String                           `tfsdk:"clock_admin_state"`
+	ClockAuthenticationState                            types.String                           `tfsdk:"clock_authentication_state"`
+	ClockFormat                                         types.String                           `tfsdk:"clock_format"`
+	ClockFormatDebug                                    types.Bool                             `tfsdk:"clock_format_debug"`
+	ClockFormatSyslog                                   types.Bool                             `tfsdk:"clock_format_syslog"`
+	ClockProtocol                                       types.String                           `tfsdk:"clock_protocol"`
+	ClockTimezoneName                                   types.String                           `tfsdk:"clock_timezone_name"`
+	ClockTimezoneHours                                  types.Int64                            `tfsdk:"clock_timezone_hours"`
+	ClockTimezoneMinutes                                types.Int64                            `tfsdk:"clock_timezone_minutes"`
+	ClockSummerTimeName                                 types.String                           `tfsdk:"clock_summer_time_name"`
+	ClockSummerTimeOffsetMinutes                        types.Int64                            `tfsdk:"clock_summer_time_offset_minutes"`
+	ClockSummerTimeStartWeek                            types.Int64                            `tfsdk:"clock_summer_time_start_week"`
+	ClockSummerTimeStartDay                             types.String                           `tfsdk:"clock_summer_time_start_day"`
+	ClockSummerTimeStartMonth                           types.String                           `tfsdk:"clock_summer_time_start_month"`
+	ClockSummerTimeStartTime                            types.String                           `tfsdk:"clock_summer_time_start_time"`
+	ClockSummerTimeEndWeek                              types.Int64                            `tfsdk:"clock_summer_time_end_week"`
+	ClockSummerTimeEndDay                               types.String                           `tfsdk:"clock_summer_time_end_day"`
+	ClockSummerTimeEndMonth                             types.String                           `tfsdk:"clock_summer_time_end_month"`
+	ClockSummerTimeEndTime                              types.String                           `tfsdk:"clock_summer_time_end_time"`
+	DnsAdminState                                       types.String                           `tfsdk:"dns_admin_state"`
+	DnsProfiles                                         map[string]SystemDnsProfiles           `tfsdk:"dns_profiles"`
+	Vdcs                                                map[string]SystemVdcs                  `tfsdk:"vdcs"`
+	CliAliases                                          map[string]SystemCliAliases            `tfsdk:"cli_aliases"`
+	SmartLicensingTransportMode                         types.String                           `tfsdk:"smart_licensing_transport_mode"`
+	SmartLicensingTransportCsluUrl                      types.String                           `tfsdk:"smart_licensing_transport_cslu_url"`
+	BootAci                                             types.String                           `tfsdk:"boot_aci"`
+	BootAutoCopy                                        types.String                           `tfsdk:"boot_auto_copy"`
+	BootDhcp                                            types.Int64                            `tfsdk:"boot_dhcp"`
+	BootExcludeConfiguration                            types.String                           `tfsdk:"boot_exclude_configuration"`
+	BootFex                                             types.String                           `tfsdk:"boot_fex"`
+	BootMode                                            types.String                           `tfsdk:"boot_mode"`
+	BootOrder                                           types.String                           `tfsdk:"boot_order"`
+	BootPoap                                            types.String                           `tfsdk:"boot_poap"`
+	BootImageVerification                               types.String                           `tfsdk:"boot_image_verification"`
+	BootImageSupervisor1                                types.String                           `tfsdk:"boot_image_supervisor_1"`
+	BootImageSupervisor2                                types.String                           `tfsdk:"boot_image_supervisor_2"`
+	CfsAdminState                                       types.String                           `tfsdk:"cfs_admin_state"`
+	CfsDistribute                                       types.String                           `tfsdk:"cfs_distribute"`
+	CfsEthernetDistribution                             types.String                           `tfsdk:"cfs_ethernet_distribution"`
+	CfsIpv4Distribution                                 types.String                           `tfsdk:"cfs_ipv4_distribution"`
+	CfsIpv4MulticastAddress                             types.String                           `tfsdk:"cfs_ipv4_multicast_address"`
+	CfsIpv6Distribution                                 types.String                           `tfsdk:"cfs_ipv6_distribution"`
+	CfsIpv6MulticastAddress                             types.String                           `tfsdk:"cfs_ipv6_multicast_address"`
+	UdldAdminState                                      types.String                           `tfsdk:"udld_admin_state"`
+	UdldAggressive                                      types.String                           `tfsdk:"udld_aggressive"`
+	UdldMessageInterval                                 types.Int64                            `tfsdk:"udld_message_interval"`
+	UdldInterfaces                                      map[string]SystemUdldInterfaces        `tfsdk:"udld_interfaces"`
+	PlatformAccessListMatchInnerHeader                  types.String                           `tfsdk:"platform_access_list_match_inner_header"`
+	PlatformAclTapAggregation                           types.String                           `tfsdk:"platform_acl_tap_aggregation"`
+	PlatformDescription                                 types.String                           `tfsdk:"platform_description"`
+	PlatformDisableParseError                           types.String                           `tfsdk:"platform_disable_parse_error"`
+	PlatformGlobalTxSpan                                types.String                           `tfsdk:"platform_global_tx_span"`
+	PlatformHighMulticastPriority                       types.String                           `tfsdk:"platform_high_multicast_priority"`
+	PlatformHardwareLouResourceThreshold                types.Int64                            `tfsdk:"platform_hardware_lou_resource_threshold"`
+	PlatformIngressBdIfaclLabelOptimization             types.String                           `tfsdk:"platform_ingress_bd_ifacl_label_optimization"`
+	PlatformIngressRaclSize                             types.String                           `tfsdk:"platform_ingress_racl_size"`
+	PlatformIngressReplicationRoundRobin                types.Bool                             `tfsdk:"platform_ingress_replication_round_robin"`
+	PlatformIpStatistics                                types.String                           `tfsdk:"platform_ip_statistics"`
+	PlatformIpv6AlpmCarveValue                          types.Int64                            `tfsdk:"platform_ipv6_alpm_carve_value"`
+	PlatformIpv6LpmMaxEntries                           types.Int64                            `tfsdk:"platform_ipv6_lpm_max_entries"`
+	PlatformLpmMaxLimit                                 types.Int64                            `tfsdk:"platform_lpm_max_limit"`
+	PlatformMulticastDcsCheck                           types.String                           `tfsdk:"platform_multicast_dcs_check"`
+	PlatformMulticastFlexStats                          types.String                           `tfsdk:"platform_multicast_flex_stats"`
+	PlatformMulticastLpmMaxEntries                      types.Int64                            `tfsdk:"platform_multicast_lpm_max_entries"`
+	PlatformMulticastNlb                                types.String                           `tfsdk:"platform_multicast_nlb"`
+	PlatformMulticastRaclBridge                         types.String                           `tfsdk:"platform_multicast_racl_bridge"`
+	PlatformMldSnooping                                 types.String                           `tfsdk:"platform_mld_snooping"`
+	PlatformMplsAdjacencyStatsMode                      types.String                           `tfsdk:"platform_mpls_adjacency_stats_mode"`
+	PlatformMplsEcmpMode                                types.String                           `tfsdk:"platform_mpls_ecmp_mode"`
+	PlatformMroutingDisableL2Update                     types.String                           `tfsdk:"platform_mrouting_disable_l2_update"`
+	PlatformMroutingDisableSecondRouteUpdate            types.String                           `tfsdk:"platform_mrouting_disable_second_route_update"`
+	PlatformMroutingPerformanceMode                     types.String                           `tfsdk:"platform_mrouting_performance_mode"`
+	PlatformMulticastMaxLimit                           types.Int64                            `tfsdk:"platform_multicast_max_limit"`
+	PlatformMulticastRpfCheckOptimization               types.String                           `tfsdk:"platform_multicast_rpf_check_optimization"`
+	PlatformMulticastServiceReflectPort                 types.Int64                            `tfsdk:"platform_multicast_service_reflect_port"`
+	PlatformMulticastSyslogThreshold                    types.Int64                            `tfsdk:"platform_multicast_syslog_threshold"`
+	PlatformOpenflowForwardPdu                          types.String                           `tfsdk:"platform_openflow_forward_pdu"`
+	PlatformPbrSkipSelfIp                               types.String                           `tfsdk:"platform_pbr_skip_self_ip"`
+	PlatformPortChannelFastConvergence                  types.String                           `tfsdk:"platform_port_channel_fast_convergence"`
+	PlatformPortChannelLoadBalanceAlgorithm             types.String                           `tfsdk:"platform_port_channel_load_balance_algorithm"`
+	PlatformPortChannelLoadBalanceResilient             types.String                           `tfsdk:"platform_port_channel_load_balance_resilient"`
+	PlatformPortChannelMplsLoadBalanceLabelIp           types.String                           `tfsdk:"platform_port_channel_mpls_load_balance_label_ip"`
+	PlatformPortChannelMplsLoadBalanceLabelOnly         types.String                           `tfsdk:"platform_port_channel_mpls_load_balance_label_only"`
+	PlatformPortChannelScaleFanout                      types.String                           `tfsdk:"platform_port_channel_scale_fanout"`
+	PlatformPicCoreEnable                               types.String                           `tfsdk:"platform_pic_core_enable"`
+	PlatformProfileFrontPortMode                        types.String                           `tfsdk:"platform_profile_front_port_mode"`
+	PlatformProfileMode                                 types.String                           `tfsdk:"platform_profile_mode"`
+	PlatformProfileTuple                                types.String                           `tfsdk:"platform_profile_tuple"`
+	PlatformPstatConfiguration                          types.String                           `tfsdk:"platform_pstat_configuration"`
+	PlatformQosMinBuffer                                types.String                           `tfsdk:"platform_qos_min_buffer"`
+	PlatformRoutingMode                                 types.String                           `tfsdk:"platform_routing_mode"`
+	PlatformServiceTemplateName                         types.String                           `tfsdk:"platform_service_template_name"`
+	PlatformSviAndSiFlexStats                           types.String                           `tfsdk:"platform_svi_and_si_flex_stats"`
+	PlatformSviFlexStats                                types.String                           `tfsdk:"platform_svi_flex_stats"`
+	PlatformSwitchMode                                  types.String                           `tfsdk:"platform_switch_mode"`
+	PlatformSwitchingFabricSpeed                        types.String                           `tfsdk:"platform_switching_fabric_speed"`
+	PlatformSwitchingMode                               types.String                           `tfsdk:"platform_switching_mode"`
+	PlatformSystemFabricMode                            types.String                           `tfsdk:"platform_system_fabric_mode"`
+	PlatformTcamSyslogThreshold                         types.Int64                            `tfsdk:"platform_tcam_syslog_threshold"`
+	PlatformUnicastMaxLimit                             types.Int64                            `tfsdk:"platform_unicast_max_limit"`
+	PlatformUnicastSyslogThreshold                      types.Int64                            `tfsdk:"platform_unicast_syslog_threshold"`
+	PlatformUnicastTrace                                types.String                           `tfsdk:"platform_unicast_trace"`
+	PlatformUnknownUnicastFlood                         types.String                           `tfsdk:"platform_unknown_unicast_flood"`
+	PlatformUrpfStatus                                  types.String                           `tfsdk:"platform_urpf_status"`
+	PlatformWrrUnicastBandwidth                         types.Int64                            `tfsdk:"platform_wrr_unicast_bandwidth"`
+	TcamRegionArpAclSize                                types.Int64                            `tfsdk:"tcam_region_arp_acl_size"`
+	TcamRegionCoppSize                                  types.Int64                            `tfsdk:"tcam_region_copp_size"`
+	TcamRegionCoppSystemSize                            types.Int64                            `tfsdk:"tcam_region_copp_system_size"`
+	TcamRegionEgressIpv6QosSize                         types.Int64                            `tfsdk:"tcam_region_egress_ipv6_qos_size"`
+	TcamRegionEgressIpv6RaclSize                        types.Int64                            `tfsdk:"tcam_region_egress_ipv6_racl_size"`
+	TcamRegionEgressMacQosSize                          types.Int64                            `tfsdk:"tcam_region_egress_mac_qos_size"`
+	TcamRegionEgressQosLiteSize                         types.Int64                            `tfsdk:"tcam_region_egress_qos_lite_size"`
+	TcamRegionEgressQosSize                             types.Int64                            `tfsdk:"tcam_region_egress_qos_size"`
+	TcamRegionEgressRaclSize                            types.Int64                            `tfsdk:"tcam_region_egress_racl_size"`
+	TcamRegionEgressVaclSize                            types.Int64                            `tfsdk:"tcam_region_egress_vacl_size"`
+	TcamRegionFcoeEgressSize                            types.Int64                            `tfsdk:"tcam_region_fcoe_egress_size"`
+	TcamRegionFcoeIngressSize                           types.Int64                            `tfsdk:"tcam_region_fcoe_ingress_size"`
+	TcamRegionFhsSize                                   types.Int64                            `tfsdk:"tcam_region_fhs_size"`
+	TcamRegionInterfaceAclLiteSize                      types.Int64                            `tfsdk:"tcam_region_interface_acl_lite_size"`
+	TcamRegionInterfaceAclSize                          types.Int64                            `tfsdk:"tcam_region_interface_acl_size"`
+	TcamRegionInterfaceAclUdfSize                       types.Int64                            `tfsdk:"tcam_region_interface_acl_udf_size"`
+	TcamRegionIngressFlowRedirectSize                   types.Int64                            `tfsdk:"tcam_region_ingress_flow_redirect_size"`
+	TcamRegionIngressFlowSize                           types.Int64                            `tfsdk:"tcam_region_ingress_flow_size"`
+	TcamRegionIpsgSize                                  types.Int64                            `tfsdk:"tcam_region_ipsg_size"`
+	TcamRegionIpv6InterfaceAclSize                      types.Int64                            `tfsdk:"tcam_region_ipv6_interface_acl_size"`
+	TcamRegionIpv6L3QosSize                             types.Int64                            `tfsdk:"tcam_region_ipv6_l3_qos_size"`
+	TcamRegionIpv6PbrSize                               types.Int64                            `tfsdk:"tcam_region_ipv6_pbr_size"`
+	TcamRegionIpv6QosSize                               types.Int64                            `tfsdk:"tcam_region_ipv6_qos_size"`
+	TcamRegionIpv6RaclSize                              types.Int64                            `tfsdk:"tcam_region_ipv6_racl_size"`
+	TcamRegionIpv6SpanL2Size                            types.Int64                            `tfsdk:"tcam_region_ipv6_span_l2_size"`
+	TcamRegionIpv6SpanSize                              types.Int64                            `tfsdk:"tcam_region_ipv6_span_size"`
+	TcamRegionIpv6SupSize                               types.Int64                            `tfsdk:"tcam_region_ipv6_sup_size"`
+	TcamRegionIpv6VaclSize                              types.Int64                            `tfsdk:"tcam_region_ipv6_vacl_size"`
+	TcamRegionIpv6VlanQosSize                           types.Int64                            `tfsdk:"tcam_region_ipv6_vlan_qos_size"`
+	TcamRegionL3QosIntraLiteSize                        types.Int64                            `tfsdk:"tcam_region_l3_qos_intra_lite_size"`
+	TcamRegionMacInterfaceAclSize                       types.Int64                            `tfsdk:"tcam_region_mac_interface_acl_size"`
+	TcamRegionMacL3QosSize                              types.Int64                            `tfsdk:"tcam_region_mac_l3_qos_size"`
+	TcamRegionMacQosSize                                types.Int64                            `tfsdk:"tcam_region_mac_qos_size"`
+	TcamRegionMacVaclSize                               types.Int64                            `tfsdk:"tcam_region_mac_vacl_size"`
+	TcamRegionMacVlanQosSize                            types.Int64                            `tfsdk:"tcam_region_mac_vlan_qos_size"`
+	TcamRegionMulticastBidirSize                        types.Int64                            `tfsdk:"tcam_region_multicast_bidir_size"`
+	TcamRegionMplsDoublewide                            types.Bool                             `tfsdk:"tcam_region_mpls_doublewide"`
+	TcamRegionMplsSize                                  types.Int64                            `tfsdk:"tcam_region_mpls_size"`
+	TcamRegionMvpnSize                                  types.Int64                            `tfsdk:"tcam_region_mvpn_size"`
+	TcamRegionN9kArpAclSize                             types.Int64                            `tfsdk:"tcam_region_n9k_arp_acl_size"`
+	TcamRegionNatSize                                   types.Int64                            `tfsdk:"tcam_region_nat_size"`
+	TcamRegionOpenflowDoublewide                        types.Bool                             `tfsdk:"tcam_region_openflow_doublewide"`
+	TcamRegionOpenflowLiteSize                          types.Int64                            `tfsdk:"tcam_region_openflow_lite_size"`
+	TcamRegionOpenflowSize                              types.Int64                            `tfsdk:"tcam_region_openflow_size"`
+	TcamRegionPbrSize                                   types.Int64                            `tfsdk:"tcam_region_pbr_size"`
+	TcamRegionQosIntraLiteSize                          types.Int64                            `tfsdk:"tcam_region_qos_intra_lite_size"`
+	TcamRegionQosSize                                   types.Int64                            `tfsdk:"tcam_region_qos_size"`
+	TcamRegionQosLabelSize                              types.Int64                            `tfsdk:"tcam_region_qos_label_size"`
+	TcamRegionRaclLiteSize                              types.Int64                            `tfsdk:"tcam_region_racl_lite_size"`
+	TcamRegionRaclSize                                  types.Int64                            `tfsdk:"tcam_region_racl_size"`
+	TcamRegionRaclUdfSize                               types.Int64                            `tfsdk:"tcam_region_racl_udf_size"`
+	TcamRegionSupSize                                   types.Int64                            `tfsdk:"tcam_region_sup_size"`
+	TcamRegionSviSize                                   types.Int64                            `tfsdk:"tcam_region_svi_size"`
+	TcamRegionTcpNatSize                                types.Int64                            `tfsdk:"tcam_region_tcp_nat_size"`
+	TcamRegionVaclLiteSize                              types.Int64                            `tfsdk:"tcam_region_vacl_lite_size"`
+	TcamRegionVaclSize                                  types.Int64                            `tfsdk:"tcam_region_vacl_size"`
+	TcamRegionVpcConvergenceSize                        types.Int64                            `tfsdk:"tcam_region_vpc_convergence_size"`
+	TcamRegionVlanQosIntraLiteSize                      types.Int64                            `tfsdk:"tcam_region_vlan_qos_intra_lite_size"`
+	TcamRegionVlanQosSize                               types.Int64                            `tfsdk:"tcam_region_vlan_qos_size"`
+	TcamRegionVxlanP2pSize                              types.Int64                            `tfsdk:"tcam_region_vxlan_p2p_size"`
+	TcamRegionExtendedEgressInterfaceAclAllPerPortStats types.Bool                             `tfsdk:"tcam_region_extended_egress_interface_acl_all_per_port_stats"`
+	TcamRegionExtendedEgressInterfaceAclAllSize         types.Int64                            `tfsdk:"tcam_region_extended_egress_interface_acl_all_size"`
+	TcamRegionExtendedEgressIpv6RaclPerPortStats        types.Bool                             `tfsdk:"tcam_region_extended_egress_ipv6_racl_per_port_stats"`
+	TcamRegionExtendedEgressRaclPerPortStats            types.Bool                             `tfsdk:"tcam_region_extended_egress_racl_per_port_stats"`
+	TcamRegionExtendedEgressCoppSize                    types.Int64                            `tfsdk:"tcam_region_extended_egress_copp_size"`
+	TcamRegionExtendedEgressFlowSize                    types.Int64                            `tfsdk:"tcam_region_extended_egress_flow_size"`
+	TcamRegionExtendedEgressHardwareTelemetrySize       types.Int64                            `tfsdk:"tcam_region_extended_egress_hardware_telemetry_size"`
+	TcamRegionExtendedEgressInterfaceAclSize            types.Int64                            `tfsdk:"tcam_region_extended_egress_interface_acl_size"`
+	TcamRegionExtendedEgressL2QosSize                   types.Int64                            `tfsdk:"tcam_region_extended_egress_l2_qos_size"`
+	TcamRegionExtendedEgressL3VlanQosSize               types.Int64                            `tfsdk:"tcam_region_extended_egress_l3_vlan_qos_size"`
+	TcamRegionExtendedEgressRaclSize                    types.Int64                            `tfsdk:"tcam_region_extended_egress_racl_size"`
+	TcamRegionExtendedEgressSupSize                     types.Int64                            `tfsdk:"tcam_region_extended_egress_sup_size"`
+	TcamRegionExtendedHardwareTelemetrySize             types.Int64                            `tfsdk:"tcam_region_extended_hardware_telemetry_size"`
+	TcamRegionExtendedInterfaceAclAllPerPortStats       types.Bool                             `tfsdk:"tcam_region_extended_interface_acl_all_per_port_stats"`
+	TcamRegionExtendedInterfaceAclAllProfile            types.Int64                            `tfsdk:"tcam_region_extended_interface_acl_all_profile"`
+	TcamRegionExtendedInterfaceAclAllSize               types.Int64                            `tfsdk:"tcam_region_extended_interface_acl_all_size"`
+	TcamRegionExtendedInterfaceAclPerPortStats          types.Bool                             `tfsdk:"tcam_region_extended_interface_acl_per_port_stats"`
+	TcamRegionExtendedIngressDaclSize                   types.Int64                            `tfsdk:"tcam_region_extended_ingress_dacl_size"`
+	TcamRegionExtendedIngressInterfaceAclSize           types.Int64                            `tfsdk:"tcam_region_extended_ingress_interface_acl_size"`
+	TcamRegionExtendedIngressInterfaceAclWideSize       types.Int64                            `tfsdk:"tcam_region_extended_ingress_interface_acl_wide_size"`
+	TcamRegionExtendedIngressIpv6InterfaceAclLiteSize   types.Int64                            `tfsdk:"tcam_region_extended_ingress_ipv6_interface_acl_lite_size"`
+	TcamRegionExtendedIngressL2L3QosSize                types.Int64                            `tfsdk:"tcam_region_extended_ingress_l2_l3_qos_size"`
+	TcamRegionExtendedIngressL2QosSize                  types.Int64                            `tfsdk:"tcam_region_extended_ingress_l2_qos_size"`
+	TcamRegionExtendedIngressL2SpanFilterSize           types.Int64                            `tfsdk:"tcam_region_extended_ingress_l2_span_filter_size"`
+	TcamRegionExtendedIngressL3SpanFilterSize           types.Int64                            `tfsdk:"tcam_region_extended_ingress_l3_span_filter_size"`
+	TcamRegionExtendedIngressPaclSbSize                 types.Int64                            `tfsdk:"tcam_region_extended_ingress_pacl_sb_size"`
+	TcamRegionExtendedIngressRaclSize                   types.Int64                            `tfsdk:"tcam_region_extended_ingress_racl_size"`
+	TcamRegionExtendedIngressRbaclSize                  types.Int64                            `tfsdk:"tcam_region_extended_ingress_rbacl_size"`
+	TcamRegionExtendedIngressRedirectSize               types.Int64                            `tfsdk:"tcam_region_extended_ingress_redirect_size"`
+	TcamRegionExtendedIngressStormControlSize           types.Int64                            `tfsdk:"tcam_region_extended_ingress_storm_control_size"`
+	TcamRegionExtendedIngressSupSize                    types.Int64                            `tfsdk:"tcam_region_extended_ingress_sup_size"`
+	TcamRegionExtendedIngressVaclNhSize                 types.Int64                            `tfsdk:"tcam_region_extended_ingress_vacl_nh_size"`
+	TcamRegionExtendedIngressVlanQosSize                types.Int64                            `tfsdk:"tcam_region_extended_ingress_vlan_qos_size"`
+	TcamRegionExtendedIpv6InterfaceAclPerPortStats      types.Bool                             `tfsdk:"tcam_region_extended_ipv6_interface_acl_per_port_stats"`
+	TcamRegionExtendedIpv6RaclPerPortStats              types.Bool                             `tfsdk:"tcam_region_extended_ipv6_racl_per_port_stats"`
+	TcamRegionExtendedMacInterfaceAclPerPortStats       types.Bool                             `tfsdk:"tcam_region_extended_mac_interface_acl_per_port_stats"`
+	TcamRegionExtendedMulticastNatSize                  types.Int64                            `tfsdk:"tcam_region_extended_multicast_nat_size"`
+	TcamRegionExtendedMulticastNbmSize                  types.Int64                            `tfsdk:"tcam_region_extended_multicast_nbm_size"`
+	TcamRegionExtendedRaclAllPerPortStats               types.Bool                             `tfsdk:"tcam_region_extended_racl_all_per_port_stats"`
+	TcamRegionExtendedRaclAllProfile                    types.Int64                            `tfsdk:"tcam_region_extended_racl_all_profile"`
+	TcamRegionExtendedRaclAllSize                       types.Int64                            `tfsdk:"tcam_region_extended_racl_all_size"`
+	TcamRegionExtendedRaclPerPortStats                  types.Bool                             `tfsdk:"tcam_region_extended_racl_per_port_stats"`
+	TcamRegionExtendedRedirectV4Size                    types.Int64                            `tfsdk:"tcam_region_extended_redirect_v4_size"`
+	TcamRegionExtendedSpanSize                          types.Int64                            `tfsdk:"tcam_region_extended_span_size"`
+	TcamRegionExtendedSpanTahoeSize                     types.Int64                            `tfsdk:"tcam_region_extended_span_tahoe_size"`
+	PlatformNveInterfaces                               map[string]SystemPlatformNveInterfaces `tfsdk:"platform_nve_interfaces"`
+	ManagementInterfaces                                map[string]SystemManagementInterfaces  `tfsdk:"management_interfaces"`
+	LldpAdminState                                      types.String                           `tfsdk:"lldp_admin_state"`
+	LldpInstanceAdminState                              types.String                           `tfsdk:"lldp_instance_admin_state"`
+	LldpAdvertiseSystemChassisId                        types.String                           `tfsdk:"lldp_advertise_system_chassis_id"`
+	LldpControl                                         types.String                           `tfsdk:"lldp_control"`
+	LldpHoldTime                                        types.Int64                            `tfsdk:"lldp_hold_time"`
+	LldpInfraVlan                                       types.Int64                            `tfsdk:"lldp_infra_vlan"`
+	LldpInitDelayTime                                   types.Int64                            `tfsdk:"lldp_init_delay_time"`
+	LldpMultiPeer                                       types.String                           `tfsdk:"lldp_multi_peer"`
+	LldpOptionalTlvSelect                               types.String                           `tfsdk:"lldp_optional_tlv_select"`
+	LldpOptionalTlvSelectHidden                         types.String                           `tfsdk:"lldp_optional_tlv_select_hidden"`
+	LldpPortChannel                                     types.String                           `tfsdk:"lldp_port_channel"`
+	LldpPortIdSubType                                   types.String                           `tfsdk:"lldp_port_id_sub_type"`
+	LldpSystemDescription                               types.String                           `tfsdk:"lldp_system_description"`
+	LldpTransmitFrequency                               types.Int64                            `tfsdk:"lldp_transmit_frequency"`
+	LldpInterfaces                                      map[string]SystemLldpInterfaces        `tfsdk:"lldp_interfaces"`
+	CdpAdminState                                       types.String                           `tfsdk:"cdp_admin_state"`
+	CdpDeviceIdType                                     types.String                           `tfsdk:"cdp_device_id_type"`
+	CdpHoldInterval                                     types.Int64                            `tfsdk:"cdp_hold_interval"`
+	CdpPnpStartupVlan                                   types.Int64                            `tfsdk:"cdp_pnp_startup_vlan"`
+	CdpTransmitFrequency                                types.Int64                            `tfsdk:"cdp_transmit_frequency"`
+	CdpVersion                                          types.String                           `tfsdk:"cdp_version"`
+	CdpInterfaces                                       map[string]SystemCdpInterfaces         `tfsdk:"cdp_interfaces"`
+	CoppAdminState                                      types.String                           `tfsdk:"copp_admin_state"`
+	CoppRateLimiter                                     types.Bool                             `tfsdk:"copp_rate_limiter"`
+	CoppProfileType                                     types.String                           `tfsdk:"copp_profile_type"`
+	ConsoleExecTimeout                                  types.Int64                            `tfsdk:"console_exec_timeout"`
+	VtyExecTimeout                                      types.Int64                            `tfsdk:"vty_exec_timeout"`
+	VtySessionLimit                                     types.Int64                            `tfsdk:"vty_session_limit"`
+	IcamMonitorInterval                                 types.Int64                            `tfsdk:"icam_monitor_interval"`
+	IcamNumberOfIntervals                               types.Int64                            `tfsdk:"icam_number_of_intervals"`
+	IcamScaleCriticalThreshold                          types.Int64                            `tfsdk:"icam_scale_critical_threshold"`
+	IcamScaleInfoThreshold                              types.Int64                            `tfsdk:"icam_scale_info_threshold"`
+	IcamScaleConfiguration                              types.Bool                             `tfsdk:"icam_scale_configuration"`
+	IcamScaleWarningThreshold                           types.Int64                            `tfsdk:"icam_scale_warning_threshold"`
+	NxapiVrf                                            types.String                           `tfsdk:"nxapi_vrf"`
+	NxapiHttpPort                                       types.Int64                            `tfsdk:"nxapi_http_port"`
+	NxapiHttpsPort                                      types.Int64                            `tfsdk:"nxapi_https_port"`
+	NxapiIdleTimeout                                    types.Int64                            `tfsdk:"nxapi_idle_timeout"`
+	NxapiCertificateEnable                              types.Bool                             `tfsdk:"nxapi_certificate_enable"`
+	NxapiCertificateFile                                types.String                           `tfsdk:"nxapi_certificate_file"`
+	NxapiKeyFile                                        types.String                           `tfsdk:"nxapi_key_file"`
+	NxapiEncryptedKeyPassphrase                         types.String                           `tfsdk:"nxapi_encrypted_key_passphrase"`
+	NxapiEncryptedKeyPassphraseWo                       types.String                           `tfsdk:"nxapi_encrypted_key_passphrase_wo"`
+	NxapiEncryptedKeyPassphraseWoVersion                types.Int64                            `tfsdk:"nxapi_encrypted_key_passphrase_wo_version"`
+	NxapiTrustpoint                                     types.String                           `tfsdk:"nxapi_trustpoint"`
+	NxapiSslProtocols                                   types.String                           `tfsdk:"nxapi_ssl_protocols"`
+	NxapiSslCiphersWeak                                 types.Bool                             `tfsdk:"nxapi_ssl_ciphers_weak"`
+	NxapiClientCertificateAuthentication                types.String                           `tfsdk:"nxapi_client_certificate_authentication"`
+	NxapiSudi                                           types.Bool                             `tfsdk:"nxapi_sudi"`
+	BreakoutModules                                     map[string]SystemBreakoutModules       `tfsdk:"breakout_modules"`
+	ServiceInstances                                    map[string]SystemServiceInstances      `tfsdk:"service_instances"`
+	SshAdminState                                       types.String                           `tfsdk:"ssh_admin_state"`
+	SshCiphers                                          types.String                           `tfsdk:"ssh_ciphers"`
+	SshDescription                                      types.String                           `tfsdk:"ssh_description"`
+	SshEnableWeakCiphers                                types.String                           `tfsdk:"ssh_enable_weak_ciphers"`
+	SshKeyExchangeAlgorithms                            types.String                           `tfsdk:"ssh_key_exchange_algorithms"`
+	SshKeyTypes                                         types.String                           `tfsdk:"ssh_key_types"`
+	SshLoginAttempts                                    types.Int64                            `tfsdk:"ssh_login_attempts"`
+	SshLoginGraceTime                                   types.Int64                            `tfsdk:"ssh_login_grace_time"`
+	SshMessageAuthenticationCodes                       types.String                           `tfsdk:"ssh_message_authentication_codes"`
+	SshPort                                             types.Int64                            `tfsdk:"ssh_port"`
+	SshKeys                                             map[string]SystemSshKeys               `tfsdk:"ssh_keys"`
+	ErspanOriginIpIsGlobal                              types.Bool                             `tfsdk:"erspan_origin_ip_is_global"`
+	ErspanOriginIpIsGlobalIpv6                          types.Bool                             `tfsdk:"erspan_origin_ip_is_global_ipv6"`
+	ErspanOriginIpAddress                               types.String                           `tfsdk:"erspan_origin_ip_address"`
+	ErspanOriginIpv6Address                             types.String                           `tfsdk:"erspan_origin_ipv6_address"`
+	TtagMarkerInterval                                  types.Int64                            `tfsdk:"ttag_marker_interval"`
+	TtagInterfaces                                      map[string]SystemTtagInterfaces        `tfsdk:"ttag_interfaces"`
 }
 
 type SystemArpVpcDomains struct {
@@ -442,6 +443,16 @@ type SystemUdldInterfaces struct {
 	AdminState             types.String `tfsdk:"admin_state"`
 	Aggressive             types.String `tfsdk:"aggressive"`
 	BidirectionalDetection types.String `tfsdk:"bidirectional_detection"`
+}
+
+type SystemPlatformNveInterfaces struct {
+	IpmcIndexSize types.Int64                                      `tfsdk:"ipmc_index_size"`
+	OverlayVlanId types.String                                     `tfsdk:"overlay_vlan_id"`
+	InfraVlans    map[string]SystemPlatformNveInterfacesInfraVlans `tfsdk:"infra_vlans"`
+}
+
+type SystemPlatformNveInterfacesInfraVlans struct {
+	Force types.String `tfsdk:"force"`
 }
 
 type SystemManagementInterfaces struct {
@@ -567,6 +578,14 @@ func (data SystemCliAliases) getRn(key string) string {
 
 func (data SystemUdldInterfaces) getRn(key string) string {
 	return fmt.Sprintf("physif-[%s]", key)
+}
+
+func (data SystemPlatformNveInterfaces) getRn(key string) string {
+	return fmt.Sprintf("nve-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data SystemPlatformNveInterfacesInfraVlans) getRn(key string) string {
+	return fmt.Sprintf("infravlan-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
 func (data SystemManagementInterfaces) getRn(key string) string {
@@ -1918,6 +1937,36 @@ func (data System) toBody(config System) nxos.Body {
 				body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 			}
 		}
+		for key, child := range data.PlatformNveInterfaces {
+			configChild, configChildOk := config.PlatformNveInterfaces[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			if configChildOk && !child.IpmcIndexSize.IsUnknown() && !child.IpmcIndexSize.IsNull() && !configChild.IpmcIndexSize.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ipmcIndexSize", strconv.FormatInt(child.IpmcIndexSize.ValueInt64(), 10))
+			}
+			if configChildOk && !child.OverlayVlanId.IsUnknown() && !child.OverlayVlanId.IsNull() && !configChild.OverlayVlanId.IsNull() {
+				attrs, _ = sjson.Set(attrs, "overlayVlanId", child.OverlayVlanId.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.platformNVE.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".platformNVE.children"
+				_ = nestedChildrenPath
+				for key, child := range child.InfraVlans {
+					configChild, configChildOk := configChild.InfraVlans[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "id", key)
+					if configChildOk && !child.Force.IsUnknown() && !child.Force.IsNull() && !configChild.Force.IsNull() {
+						attrs, _ = sjson.Set(attrs, "force", child.Force.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.platformInfraVlan.attributes", attrs)
+				}
+			}
+		}
 		childBody = body
 		body = prevBody
 		if parentAttrs != "{}" || gjson.Get(childBody, "platformEntity.children").Exists() {
@@ -3237,7 +3286,7 @@ func (data *System) fromBody(res gjson.Result) {
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
 				rnValue := v.Get("platformEntity.attributes.rn").String()
-				if rnValue == "platform" {
+				if rnValue == "pltfm" {
 					rplatformEntity = v
 					return false
 				}
@@ -3433,6 +3482,45 @@ func (data *System) fromBody(res gjson.Result) {
 				data.TcamRegionExtendedSpanTahoeSize = types.Int64Value(rplatformTcamRegionExtended.Get("platformTcamRegionExtended.attributes.spanTahSize").Int())
 			}
 		}
+		rplatformEntity.Get("platformEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "platformNVE" {
+							var child SystemPlatformNveInterfaces
+							child.IpmcIndexSize = types.Int64Value(value.Get("attributes.ipmcIndexSize").Int())
+							child.OverlayVlanId = types.StringValue(value.Get("attributes.overlayVlanId").String())
+							mapKey := value.Get("attributes.id").String()
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "platformInfraVlan" {
+												var nestedChildplatformInfraVlan SystemPlatformNveInterfacesInfraVlans
+												nestedChildplatformInfraVlan.Force = types.StringValue(nestedValue.Get("attributes.force").String())
+												nestedMapKey := nestedValue.Get("attributes.id").String()
+												if child.InfraVlans == nil {
+													child.InfraVlans = make(map[string]SystemPlatformNveInterfacesInfraVlans)
+												}
+												child.InfraVlans[nestedMapKey] = nestedChildplatformInfraVlan
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							if data.PlatformNveInterfaces == nil {
+								data.PlatformNveInterfaces = make(map[string]SystemPlatformNveInterfaces)
+							}
+							data.PlatformNveInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
 	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -5159,7 +5247,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			rnValue := v.Get("platformEntity.attributes.rn").String()
-			if rnValue == "platform" {
+			if rnValue == "pltfm" {
 				rplatformEntity = v
 				return false
 			}
@@ -6006,6 +6094,56 @@ func (data *System) updateFromBody(res gjson.Result) {
 				data.TcamRegionExtendedSpanTahoeSize = types.Int64Null()
 			}
 		}
+	}
+	for key, item := range data.PlatformNveInterfaces {
+		var rplatformNVE gjson.Result
+		rplatformEntity.Get("platformEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("platformNVE.attributes.id").String() == key {
+					rplatformNVE = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rplatformNVE.Exists() {
+			delete(data.PlatformNveInterfaces, key)
+			continue
+		}
+		if !item.IpmcIndexSize.IsNull() {
+			item.IpmcIndexSize = types.Int64Value(rplatformNVE.Get("platformNVE.attributes.ipmcIndexSize").Int())
+		} else {
+			item.IpmcIndexSize = types.Int64Null()
+		}
+		if !item.OverlayVlanId.IsNull() {
+			item.OverlayVlanId = types.StringValue(rplatformNVE.Get("platformNVE.attributes.overlayVlanId").String())
+		} else {
+			item.OverlayVlanId = types.StringNull()
+		}
+		for nc := range item.InfraVlans {
+			ncItem := item.InfraVlans[nc]
+			var rplatformInfraVlan gjson.Result
+			rplatformNVE.Get("platformNVE.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("platformInfraVlan.attributes.id").String() == nc {
+						rplatformInfraVlan = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rplatformInfraVlan.Exists() {
+				delete(item.InfraVlans, nc)
+				continue
+			}
+			if !ncItem.Force.IsNull() {
+				ncItem.Force = types.StringValue(rplatformInfraVlan.Get("platformInfraVlan.attributes.force").String())
+			} else {
+				ncItem.Force = types.StringNull()
+			}
+			item.InfraVlans[nc] = ncItem
+		}
+		data.PlatformNveInterfaces[key] = item
 	}
 	for key, item := range data.ManagementInterfaces {
 		var rmgmtMgmtIf gjson.Result
@@ -7614,6 +7752,9 @@ func (data System) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "wrrUnicastBw", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		if len(data.PlatformNveInterfaces) > 0 {
+			hasNestedChildren = true
+		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformEntity"
@@ -7959,6 +8100,13 @@ func (data System) toDeleteBody() nxos.Body {
 						}
 					}
 				}
+			}
+			for key, child := range data.PlatformNveInterfaces {
+				childBody := ""
+				childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+				childBody, _ = sjson.Set(childBody, "ipmcIndexSize", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "overlayVlanId", "DME_UNSET_PROPERTY_MARKER")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.platformNVE.attributes", childBody)
 			}
 		}
 	}
@@ -8563,6 +8711,42 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.udldEntity.children"+".0.udldInst.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.PlatformNveInterfaces {
+		if _, found := data.PlatformNveInterfaces[stateKey]; !found {
+			stateChild := state.PlatformNveInterfaces[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "platformNVE.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "platformNVE.attributes.ipmcIndexSize", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "platformNVE.attributes.overlayVlanId", "DME_UNSET_PROPERTY_MARKER")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.platformEntity.children"+".-1", deleteBody)
+		}
+	}
+	for di := range state.PlatformNveInterfaces {
+		if _, found := data.PlatformNveInterfaces[di]; !found {
+			continue
+		}
+		stateItemdi := state.PlatformNveInterfaces[di]
+		planItemdi := data.PlatformNveInterfaces[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.platformEntity.children").Array() {
+			if mv.Get("platformNVE.attributes.rn").String() == stateItemdi.getRn(di) {
+				matchBodyPathdi = bodyPath + ".0.platformEntity.children" + "." + strconv.Itoa(mi) + ".platformNVE.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateChildKey := range stateItemdi.InfraVlans {
+			if _, found := planItemdi.InfraVlans[stateChildKey]; !found {
+				stateChild := stateItemdi.InfraVlans[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "platformInfraVlan.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "platformInfraVlan.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
 		}
 	}
 	for stateKey := range state.ManagementInterfaces {

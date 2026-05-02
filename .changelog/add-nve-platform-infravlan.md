@@ -1,0 +1,1 @@
+- Add NVE platform and InfraVlan configuration to `nxos_system` resource and data source

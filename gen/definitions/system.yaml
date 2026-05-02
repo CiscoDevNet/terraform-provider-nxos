@@ -2725,7 +2725,6 @@ child_classes:
         no_delete: true
         tf_name: platform_nve_interfaces
         description: 'NVE platform configuration.'
-        test_tags: [NVE]
         attributes:
           - nxos_name: id
             tf_name: id
@@ -2755,7 +2754,6 @@ child_classes:
             type: list
             tf_name: infra_vlans
             description: 'InfraVlan configuration.'
-            test_tags: [NVE]
             attributes:
               - nxos_name: id
                 tf_name: id

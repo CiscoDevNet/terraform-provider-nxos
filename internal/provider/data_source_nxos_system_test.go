@@ -132,12 +132,8 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_message_interval", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_interfaces.eth1/9.aggressive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_interfaces.eth1/9.bidirectional_detection", "port-enabled"))
-	if os.Getenv("NVE") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "platform_nve_interfaces.1.ipmc_index_size", "4000"))
-		if os.Getenv("NVE") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "platform_nve_interfaces.1.infra_vlans.100.force", "Enable"))
-		}
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "platform_nve_interfaces.1.ipmc_index_size", "4000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "platform_nve_interfaces.1.infra_vlans.100.force", "Enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.admin_state", "up"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.auto_negotiation", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.description", "My Description"))
@@ -406,20 +402,16 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `			bidirectional_detection = "port-enabled"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	if os.Getenv("NVE") != "" {
-		config += `	platform_nve_interfaces = {` + "\n"
-		config += `		"1" = {` + "\n"
-		config += `			ipmc_index_size = 4000` + "\n"
-		if os.Getenv("NVE") != "" {
-			config += `			infra_vlans = {` + "\n"
-			config += `				"100" = {` + "\n"
-			config += `					force = "Enable"` + "\n"
-			config += `				}` + "\n"
-			config += `			}` + "\n"
-		}
-		config += `		}` + "\n"
-		config += `	}` + "\n"
-	}
+	config += `	platform_nve_interfaces = {` + "\n"
+	config += `		"1" = {` + "\n"
+	config += `			ipmc_index_size = 4000` + "\n"
+	config += `			infra_vlans = {` + "\n"
+	config += `				"100" = {` + "\n"
+	config += `					force = "Enable"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	management_interfaces = {` + "\n"
 	config += `		"mgmt0" = {` + "\n"
 	config += `			admin_state = "up"` + "\n"

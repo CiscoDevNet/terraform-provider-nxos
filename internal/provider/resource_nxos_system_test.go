@@ -212,6 +212,17 @@ func TestAccNxosSystem(t *testing.T) {
 			checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "service_instances.hypershield.vrfs.vrf1.affinity", "1"))
 		}
 	}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_ciphers", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_description", "SSH access"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_enable_weak_ciphers", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_key_exchange_algorithms", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_key_types", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_login_attempts", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_login_grace_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_message_authentication_codes", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_port", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_keys.rsa.key_length", "2048"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "erspan_origin_ip_is_global", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "erspan_origin_ip_address", "10.0.0.1"))
 	var tfVersion *goversion.Version
@@ -510,6 +521,21 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 		config += `		}` + "\n"
 		config += `	}` + "\n"
 	}
+	config += `	ssh_admin_state = "enabled"` + "\n"
+	config += `	ssh_ciphers = "no"` + "\n"
+	config += `	ssh_description = "SSH access"` + "\n"
+	config += `	ssh_enable_weak_ciphers = "no"` + "\n"
+	config += `	ssh_key_exchange_algorithms = "no"` + "\n"
+	config += `	ssh_key_types = "no"` + "\n"
+	config += `	ssh_login_attempts = 4` + "\n"
+	config += `	ssh_login_grace_time = 60` + "\n"
+	config += `	ssh_message_authentication_codes = "no"` + "\n"
+	config += `	ssh_port = 22` + "\n"
+	config += `	ssh_keys = {` + "\n"
+	config += `		"rsa" = {` + "\n"
+	config += `			key_length = 2048` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	erspan_origin_ip_is_global = true` + "\n"
 	config += `	erspan_origin_ip_address = "10.0.0.1"` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"

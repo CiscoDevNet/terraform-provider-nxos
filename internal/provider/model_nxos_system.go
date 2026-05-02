@@ -249,6 +249,17 @@ type System struct {
 	NxapiSudi                                     types.Bool                            `tfsdk:"nxapi_sudi"`
 	BreakoutModules                               map[string]SystemBreakoutModules      `tfsdk:"breakout_modules"`
 	ServiceInstances                              map[string]SystemServiceInstances     `tfsdk:"service_instances"`
+	SshAdminState                                 types.String                          `tfsdk:"ssh_admin_state"`
+	SshCiphers                                    types.String                          `tfsdk:"ssh_ciphers"`
+	SshDescription                                types.String                          `tfsdk:"ssh_description"`
+	SshEnableWeakCiphers                          types.String                          `tfsdk:"ssh_enable_weak_ciphers"`
+	SshKeyExchangeAlgorithms                      types.String                          `tfsdk:"ssh_key_exchange_algorithms"`
+	SshKeyTypes                                   types.String                          `tfsdk:"ssh_key_types"`
+	SshLoginAttempts                              types.Int64                           `tfsdk:"ssh_login_attempts"`
+	SshLoginGraceTime                             types.Int64                           `tfsdk:"ssh_login_grace_time"`
+	SshMessageAuthenticationCodes                 types.String                          `tfsdk:"ssh_message_authentication_codes"`
+	SshPort                                       types.Int64                           `tfsdk:"ssh_port"`
+	SshKeys                                       map[string]SystemSshKeys              `tfsdk:"ssh_keys"`
 	ErspanOriginIpIsGlobal                        types.Bool                            `tfsdk:"erspan_origin_ip_is_global"`
 	ErspanOriginIpIsGlobalIpv6                    types.Bool                            `tfsdk:"erspan_origin_ip_is_global_ipv6"`
 	ErspanOriginIpAddress                         types.String                          `tfsdk:"erspan_origin_ip_address"`
@@ -380,6 +391,10 @@ type SystemServiceInstancesVrfs struct {
 	Affinity types.Int64 `tfsdk:"affinity"`
 }
 
+type SystemSshKeys struct {
+	KeyLength types.Int64 `tfsdk:"key_length"`
+}
+
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -466,6 +481,10 @@ func (data SystemServiceInstances) getRn(key string) string {
 
 func (data SystemServiceInstancesVrfs) getRn(key string) string {
 	return fmt.Sprintf("dom-[%s]", key)
+}
+
+func (data SystemSshKeys) getRn(key string) string {
+	return fmt.Sprintf("key-[%s]", key)
 }
 
 func (data System) getClassName() string {
@@ -1727,6 +1746,61 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".commEntity"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".commSsh"
+			attrs = "{}"
+			if !data.SshAdminState.IsUnknown() && !data.SshAdminState.IsNull() && !config.SshAdminState.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminSt", data.SshAdminState.ValueString())
+			}
+			if !data.SshCiphers.IsUnknown() && !data.SshCiphers.IsNull() && !config.SshCiphers.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ciphers", data.SshCiphers.ValueString())
+			}
+			if !data.SshDescription.IsUnknown() && !data.SshDescription.IsNull() && !config.SshDescription.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", data.SshDescription.ValueString())
+			}
+			if !data.SshEnableWeakCiphers.IsUnknown() && !data.SshEnableWeakCiphers.IsNull() && !config.SshEnableWeakCiphers.IsNull() {
+				attrs, _ = sjson.Set(attrs, "enWeakCiphers", data.SshEnableWeakCiphers.ValueString())
+			}
+			if !data.SshKeyExchangeAlgorithms.IsUnknown() && !data.SshKeyExchangeAlgorithms.IsNull() && !config.SshKeyExchangeAlgorithms.IsNull() {
+				attrs, _ = sjson.Set(attrs, "keyExchangeAlgorithms", data.SshKeyExchangeAlgorithms.ValueString())
+			}
+			if !data.SshKeyTypes.IsUnknown() && !data.SshKeyTypes.IsNull() && !config.SshKeyTypes.IsNull() {
+				attrs, _ = sjson.Set(attrs, "keyTypes", data.SshKeyTypes.ValueString())
+			}
+			if !data.SshLoginAttempts.IsUnknown() && !data.SshLoginAttempts.IsNull() && !config.SshLoginAttempts.IsNull() {
+				attrs, _ = sjson.Set(attrs, "loginAttempts", strconv.FormatInt(data.SshLoginAttempts.ValueInt64(), 10))
+			}
+			if !data.SshLoginGraceTime.IsUnknown() && !data.SshLoginGraceTime.IsNull() && !config.SshLoginGraceTime.IsNull() {
+				attrs, _ = sjson.Set(attrs, "loginGraceTime", strconv.FormatInt(data.SshLoginGraceTime.ValueInt64(), 10))
+			}
+			if !data.SshMessageAuthenticationCodes.IsUnknown() && !data.SshMessageAuthenticationCodes.IsNull() && !config.SshMessageAuthenticationCodes.IsNull() {
+				attrs, _ = sjson.Set(attrs, "messageAuthCodes", data.SshMessageAuthenticationCodes.ValueString())
+			}
+			if !data.SshPort.IsUnknown() && !data.SshPort.IsNull() && !config.SshPort.IsNull() {
+				attrs, _ = sjson.Set(attrs, "port", strconv.FormatInt(data.SshPort.ValueInt64(), 10))
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			for key, child := range data.SshKeys {
+				configChild, configChildOk := config.SshKeys[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "type", key)
+				if configChildOk && !child.KeyLength.IsUnknown() && !child.KeyLength.IsNull() && !configChild.KeyLength.IsNull() {
+					attrs, _ = sjson.Set(attrs, "keyLen", strconv.FormatInt(child.KeyLength.ValueInt64(), 10))
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.commSshKey.attributes", attrs)
+			}
+		}
+	}
 	attrs = "{}"
 	if !data.ErspanOriginIpIsGlobal.IsUnknown() && !data.ErspanOriginIpIsGlobal.IsNull() && !config.ErspanOriginIpIsGlobal.IsNull() {
 		attrs, _ = sjson.Set(attrs, "isGlobal", strconv.FormatBool(data.ErspanOriginIpIsGlobal.ValueBool()))
@@ -2905,6 +2979,61 @@ func (data *System) fromBody(res gjson.Result) {
 									data.ServiceInstances = make(map[string]SystemServiceInstances)
 								}
 								data.ServiceInstances[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
+		}
+	}
+	{
+		var rcommEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("commEntity.attributes.rn").String()
+				if rnValue == "comm" {
+					rcommEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rcommSsh gjson.Result
+			rcommEntity.Get("commEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("commSsh.attributes.rn").String()
+					if rnValue == "ssh" {
+						rcommSsh = v
+						return false
+					}
+					return true
+				},
+			)
+			data.SshAdminState = types.StringValue(rcommSsh.Get("commSsh.attributes.adminSt").String())
+			data.SshCiphers = types.StringValue(rcommSsh.Get("commSsh.attributes.ciphers").String())
+			data.SshDescription = types.StringValue(rcommSsh.Get("commSsh.attributes.descr").String())
+			data.SshEnableWeakCiphers = types.StringValue(rcommSsh.Get("commSsh.attributes.enWeakCiphers").String())
+			data.SshKeyExchangeAlgorithms = types.StringValue(rcommSsh.Get("commSsh.attributes.keyExchangeAlgorithms").String())
+			data.SshKeyTypes = types.StringValue(rcommSsh.Get("commSsh.attributes.keyTypes").String())
+			data.SshLoginAttempts = types.Int64Value(rcommSsh.Get("commSsh.attributes.loginAttempts").Int())
+			data.SshLoginGraceTime = types.Int64Value(rcommSsh.Get("commSsh.attributes.loginGraceTime").Int())
+			data.SshMessageAuthenticationCodes = types.StringValue(rcommSsh.Get("commSsh.attributes.messageAuthCodes").String())
+			data.SshPort = types.Int64Value(rcommSsh.Get("commSsh.attributes.port").Int())
+			rcommSsh.Get("commSsh.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "commSshKey" {
+								var child SystemSshKeys
+								child.KeyLength = types.Int64Value(value.Get("attributes.keyLen").Int())
+								mapKey := value.Get("attributes.type").String()
+								if data.SshKeys == nil {
+									data.SshKeys = make(map[string]SystemSshKeys)
+								}
+								data.SshKeys[mapKey] = child
 							}
 							return true
 						},
@@ -5124,6 +5253,102 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.ServiceInstances[key] = item
 		}
 	}
+	var rcommEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("commEntity.attributes.rn").String()
+			if rnValue == "comm" {
+				rcommEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rcommSsh gjson.Result
+		rcommEntity.Get("commEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("commSsh.attributes.rn").String()
+				if rnValue == "ssh" {
+					rcommSsh = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.SshAdminState.IsNull() {
+			data.SshAdminState = types.StringValue(rcommSsh.Get("commSsh.attributes.adminSt").String())
+		} else {
+			data.SshAdminState = types.StringNull()
+		}
+		if !data.SshCiphers.IsNull() {
+			data.SshCiphers = types.StringValue(rcommSsh.Get("commSsh.attributes.ciphers").String())
+		} else {
+			data.SshCiphers = types.StringNull()
+		}
+		if !data.SshDescription.IsNull() {
+			data.SshDescription = types.StringValue(rcommSsh.Get("commSsh.attributes.descr").String())
+		} else {
+			data.SshDescription = types.StringNull()
+		}
+		if !data.SshEnableWeakCiphers.IsNull() {
+			data.SshEnableWeakCiphers = types.StringValue(rcommSsh.Get("commSsh.attributes.enWeakCiphers").String())
+		} else {
+			data.SshEnableWeakCiphers = types.StringNull()
+		}
+		if !data.SshKeyExchangeAlgorithms.IsNull() {
+			data.SshKeyExchangeAlgorithms = types.StringValue(rcommSsh.Get("commSsh.attributes.keyExchangeAlgorithms").String())
+		} else {
+			data.SshKeyExchangeAlgorithms = types.StringNull()
+		}
+		if !data.SshKeyTypes.IsNull() {
+			data.SshKeyTypes = types.StringValue(rcommSsh.Get("commSsh.attributes.keyTypes").String())
+		} else {
+			data.SshKeyTypes = types.StringNull()
+		}
+		if !data.SshLoginAttempts.IsNull() {
+			data.SshLoginAttempts = types.Int64Value(rcommSsh.Get("commSsh.attributes.loginAttempts").Int())
+		} else {
+			data.SshLoginAttempts = types.Int64Null()
+		}
+		if !data.SshLoginGraceTime.IsNull() {
+			data.SshLoginGraceTime = types.Int64Value(rcommSsh.Get("commSsh.attributes.loginGraceTime").Int())
+		} else {
+			data.SshLoginGraceTime = types.Int64Null()
+		}
+		if !data.SshMessageAuthenticationCodes.IsNull() {
+			data.SshMessageAuthenticationCodes = types.StringValue(rcommSsh.Get("commSsh.attributes.messageAuthCodes").String())
+		} else {
+			data.SshMessageAuthenticationCodes = types.StringNull()
+		}
+		if !data.SshPort.IsNull() {
+			data.SshPort = types.Int64Value(rcommSsh.Get("commSsh.attributes.port").Int())
+		} else {
+			data.SshPort = types.Int64Null()
+		}
+		for key, item := range data.SshKeys {
+			var rcommSshKey gjson.Result
+			rcommSsh.Get("commSsh.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("commSshKey.attributes.type").String() == key {
+						rcommSshKey = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rcommSshKey.Exists() {
+				delete(data.SshKeys, key)
+				continue
+			}
+			if !item.KeyLength.IsNull() {
+				item.KeyLength = types.Int64Value(rcommSshKey.Get("commSshKey.attributes.keyLen").Int())
+			} else {
+				item.KeyLength = types.Int64Null()
+			}
+			data.SshKeys[key] = item
+		}
+	}
 	var rspanErspanOriginIp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -6008,6 +6233,56 @@ func (data System) toDeleteBody() nxos.Body {
 		}
 	}
 	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".commEntity"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".commSsh"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			if !data.SshAdminState.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SshCiphers.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"ciphers", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SshDescription.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SshEnableWeakCiphers.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"enWeakCiphers", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SshKeyExchangeAlgorithms.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"keyExchangeAlgorithms", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SshKeyTypes.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"keyTypes", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SshLoginAttempts.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"loginAttempts", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SshLoginGraceTime.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"loginGraceTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SshMessageAuthenticationCodes.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"messageAuthCodes", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SshPort.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
+			}
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.SshKeys {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
+	}
+	{
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.rn", "originip")
 		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.status", "deleted")
@@ -6256,6 +6531,15 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				deleteBody, _ = sjson.Set(deleteBody, "sasDom.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.sasFwSvcPolicy.children"+".0.sasIpVrf.children"+".-1", deleteBody)
 			}
+		}
+	}
+	for stateKey := range state.SshKeys {
+		if _, found := data.SshKeys[stateKey]; !found {
+			stateChild := state.SshKeys[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.commEntity.children"+".0.commSsh.children"+".-1", deleteBody)
 		}
 	}
 	return body

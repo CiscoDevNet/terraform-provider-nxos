@@ -365,6 +365,10 @@ type System struct {
 	SshMessageAuthenticationCodes                       types.String                          `tfsdk:"ssh_message_authentication_codes"`
 	SshPort                                             types.Int64                           `tfsdk:"ssh_port"`
 	SshKeys                                             map[string]SystemSshKeys              `tfsdk:"ssh_keys"`
+	ErspanOriginIpIsGlobal                              types.Bool                            `tfsdk:"erspan_origin_ip_is_global"`
+	ErspanOriginIpIsGlobalIpv6                          types.Bool                            `tfsdk:"erspan_origin_ip_is_global_ipv6"`
+	ErspanOriginIpAddress                               types.String                          `tfsdk:"erspan_origin_ip_address"`
+	ErspanOriginIpv6Address                             types.String                          `tfsdk:"erspan_origin_ipv6_address"`
 }
 
 type SystemArpVpcDomains struct {
@@ -2231,6 +2235,22 @@ func (data System) toBody(config System) nxos.Body {
 			}
 		}
 	}
+	attrs = "{}"
+	if !data.ErspanOriginIpIsGlobal.IsUnknown() && !data.ErspanOriginIpIsGlobal.IsNull() && !config.ErspanOriginIpIsGlobal.IsNull() {
+		attrs, _ = sjson.Set(attrs, "isGlobal", strconv.FormatBool(data.ErspanOriginIpIsGlobal.ValueBool()))
+	}
+	if !data.ErspanOriginIpIsGlobalIpv6.IsUnknown() && !data.ErspanOriginIpIsGlobalIpv6.IsNull() && !config.ErspanOriginIpIsGlobalIpv6.IsNull() {
+		attrs, _ = sjson.Set(attrs, "isGlobalv6", strconv.FormatBool(data.ErspanOriginIpIsGlobalIpv6.ValueBool()))
+	}
+	if !data.ErspanOriginIpAddress.IsUnknown() && !data.ErspanOriginIpAddress.IsNull() && !config.ErspanOriginIpAddress.IsNull() {
+		attrs, _ = sjson.Set(attrs, "originIp", data.ErspanOriginIpAddress.ValueString())
+	}
+	if !data.ErspanOriginIpv6Address.IsUnknown() && !data.ErspanOriginIpv6Address.IsNull() && !config.ErspanOriginIpv6Address.IsNull() {
+		attrs, _ = sjson.Set(attrs, "originIpv6", data.ErspanOriginIpv6Address.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.spanErspanOriginIp.attributes", attrs)
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -3587,6 +3607,23 @@ func (data *System) fromBody(res gjson.Result) {
 				},
 			)
 		}
+	}
+	{
+		var rspanErspanOriginIp gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("spanErspanOriginIp.attributes.rn").String()
+				if rnValue == "originip" {
+					rspanErspanOriginIp = v
+					return false
+				}
+				return true
+			},
+		)
+		data.ErspanOriginIpIsGlobal = types.BoolValue(helpers.ParseNxosBoolean(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.isGlobal").String()))
+		data.ErspanOriginIpIsGlobalIpv6 = types.BoolValue(helpers.ParseNxosBoolean(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.isGlobalv6").String()))
+		data.ErspanOriginIpAddress = types.StringValue(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.originIp").String())
+		data.ErspanOriginIpv6Address = types.StringValue(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.originIpv6").String())
 	}
 }
 
@@ -6428,6 +6465,37 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.SshKeys[key] = item
 		}
 	}
+	var rspanErspanOriginIp gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("spanErspanOriginIp.attributes.rn").String()
+			if rnValue == "originip" {
+				rspanErspanOriginIp = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.ErspanOriginIpIsGlobal.IsNull() {
+		data.ErspanOriginIpIsGlobal = types.BoolValue(helpers.ParseNxosBoolean(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.isGlobal").String()))
+	} else {
+		data.ErspanOriginIpIsGlobal = types.BoolNull()
+	}
+	if !data.ErspanOriginIpIsGlobalIpv6.IsNull() {
+		data.ErspanOriginIpIsGlobalIpv6 = types.BoolValue(helpers.ParseNxosBoolean(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.isGlobalv6").String()))
+	} else {
+		data.ErspanOriginIpIsGlobalIpv6 = types.BoolNull()
+	}
+	if !data.ErspanOriginIpAddress.IsNull() {
+		data.ErspanOriginIpAddress = types.StringValue(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.originIp").String())
+	} else {
+		data.ErspanOriginIpAddress = types.StringNull()
+	}
+	if !data.ErspanOriginIpv6Address.IsNull() {
+		data.ErspanOriginIpv6Address = types.StringValue(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.originIpv6").String())
+	} else {
+		data.ErspanOriginIpv6Address = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -7658,6 +7726,12 @@ func (data System) toDeleteBody() nxos.Body {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
 		}
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.rn", "originip")
+		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
 	return nxos.Body{Str: body}

@@ -1,0 +1,244 @@
+---
+name: SPAN
+class_name: spanEntity
+dn: sys/span
+ds_description: 'This data source can read the SPAN configuration on NX-OS devices, including SPAN monitor sessions, source interfaces, source VLANs, and filter VLANs.'
+res_description: 'This resource can manage the SPAN configuration on NX-OS devices, including SPAN monitor sessions, source interfaces, source VLANs, and filter VLANs.'
+doc_path: Flow/span:Entity/
+doc_category: System
+child_classes:
+  - class_name: spanMonitor
+    doc_path: Flow/span:Monitor/
+    rn: monitor-[%d]
+    type: list
+    tf_name: sessions
+    description: 'SPAN monitor sessions.'
+    attributes:
+      - nxos_name: id
+        tf_name: session_id
+        type: Int64
+        id: true
+        min_int: 1
+        max_int: 32
+        description: 'Session identification number for current monitor session.'
+        example: 1
+      - nxos_name: aclName
+        tf_name: acl_name
+        type: String
+        description: 'Name of the Access Control List applied on the current monitor session.'
+        example: 'myacl'
+        exclude_test: true
+      - nxos_name: allowSharing
+        tf_name: allow_sharing
+        type: Bool
+        description: 'Denotes whether sharing is enabled for the given filter ACL.'
+        example: false
+        exclude_test: true
+      - nxos_name: configState
+        tf_name: config_state
+        type: String
+        description: 'State of the current session as configured by the user.'
+        enum_values:
+          - up
+          - down
+        example: up
+      - nxos_name: description
+        tf_name: description
+        type: String
+        description: 'Description for the current monitor session.'
+        example: 'My SPAN session'
+      - nxos_name: destinationIp
+        tf_name: destination_ip
+        type: String
+        description: 'Destination IP address for the current erspan session.'
+        example: '10.1.1.1'
+        exclude_test: true
+      - nxos_name: destinationIpv6
+        tf_name: destination_ipv6
+        type: String
+        description: 'Destination IPv6 address for the current erspan session.'
+        example: '2001:db8::1'
+        exclude_test: true
+      - nxos_name: destinationPorts
+        tf_name: destination_ports
+        type: String
+        description: 'Destination ports for the current session.'
+        example: 'eth1/2'
+        exclude_test: true
+      - nxos_name: erspanId
+        tf_name: erspan_id
+        type: Int64
+        min_int: 0
+        max_int: 1023
+        description: 'ERSPAN identification number.'
+        example: 100
+        exclude_test: true
+      - nxos_name: fwdDropsDirection
+        tf_name: forwarding_drops_direction
+        type: String
+        description: 'Denotes forwarding drop direction for the given erspan-source session None, Rx, Tx, Both.'
+        enum_values:
+          - none
+          - rx
+          - tx
+          - both
+        example: rx
+        exclude_test: true
+      - nxos_name: headerType
+        tf_name: header_type
+        type: String
+        description: 'Denotes header type ver is enabled for the given erspan session.'
+        enum_values:
+          - v2
+          - v3
+          - v3-rfc-compliant
+        example: v3
+        exclude_test: true
+      - nxos_name: ipDscp
+        tf_name: ip_dscp
+        type: Int64
+        min_int: 0
+        max_int: 63
+        description: 'ERSPAN IP DSCP value.'
+        example: 10
+        exclude_test: true
+      - nxos_name: ipTtl
+        tf_name: ip_ttl
+        type: Int64
+        min_int: 1
+        max_int: 255
+        description: 'ERSPAN IP time-to-live value.'
+        example: 64
+        exclude_test: true
+      - nxos_name: isFwdDropsRx
+        tf_name: forwarding_drops_receive
+        type: Bool
+        description: 'Denotes whether source forwarding drops rx is enabled for the given erspan-source session.'
+        example: true
+        exclude_test: true
+      - nxos_name: isFwdDropsRxLowPriority
+        tf_name: forwarding_drops_receive_low_priority
+        type: Bool
+        description: 'Denotes whether source forwarding drops rx has low priority for the given erspan-source session.'
+        example: false
+        exclude_test: true
+      - nxos_name: isMarkerMilliSeconds
+        tf_name: marker_milliseconds
+        type: Bool
+        description: 'Denotes whether marker value given in millis seconds.'
+        example: false
+        exclude_test: true
+      - nxos_name: isMarkerPacket
+        tf_name: marker_packet
+        type: Bool
+        description: 'Denotes whether marker packet is enabled for the given erspan-source session.'
+        example: true
+        exclude_test: true
+      - nxos_name: markerPktInt
+        tf_name: marker_packet_interval
+        type: Int64
+        min_int: 1
+        max_int: 1000
+        description: 'ERSPAN session send marker packet interval value.'
+        example: 200
+        exclude_test: true
+      - nxos_name: mtu
+        tf_name: mtu
+        type: Int64
+        min_int: 64
+        max_int: 10240
+        description: 'Value of Maximum transmission unit truncation size for SPAN packets.'
+        example: 9000
+        exclude_test: true
+      - nxos_name: sourceIp
+        tf_name: source_ip
+        type: String
+        description: 'Source IP address for the current erspan destination session.'
+        example: '10.2.2.2'
+        exclude_test: true
+      - nxos_name: sourceIpv6
+        tf_name: source_ipv6
+        type: String
+        description: 'Source IPv6 address for the current erspan destination session.'
+        example: '2001:db8::2'
+        exclude_test: true
+      - nxos_name: type
+        tf_name: type
+        type: String
+        description: 'Type of the current monitor session.'
+        enum_values:
+          - local
+          - erspan-source
+          - erspanDst
+          - warp
+        example: local
+      - nxos_name: vrfName
+        tf_name: vrf_name
+        type: String
+        description: 'VRF name for the erspan-source session.(user specified name / default / manangement).'
+        example: 'default'
+        exclude_test: true
+    child_classes:
+      - class_name: spanSourceIntf
+        doc_path: Flow/span:SourceIntf/
+        rn: srcintf-[%s]
+        type: list
+        tf_name: source_interfaces
+        description: 'SPAN source interface configuration.'
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'The interface id for the session.'
+            example: 'eth1/1'
+          - nxos_name: allowPfc
+            tf_name: allow_pfc
+            type: Bool
+            description: 'Denotes whether allow-pfc is enabled for the given source.'
+            example: false
+            exclude_test: true
+          - nxos_name: direction
+            tf_name: direction
+            type: String
+            description: 'The direction of the source interface - Rx, Tx, Both.'
+            enum_values:
+              - rx
+              - tx
+              - both
+            example: rx
+      - class_name: spanSourceVlan
+        doc_path: Flow/span:SourceVlan/
+        rn: src-[%s]
+        type: list
+        tf_name: source_vlans
+        description: 'SPAN source VLAN configuration.'
+        attributes:
+          - nxos_name: vlan
+            tf_name: vlan
+            type: String
+            id: true
+            description: 'VLAN id for Source VLAN.'
+            example: 'vlan-100'
+          - nxos_name: direction
+            tf_name: direction
+            type: String
+            description: 'The direction of the source VLAN - Rx, Tx, Both.'
+            enum_values:
+              - rx
+              - tx
+              - both
+            example: rx
+      - class_name: spanFilterVlan
+        doc_path: Flow/span:FilterVlan/
+        rn: filter-[%s]
+        type: list
+        tf_name: filter_vlans
+        description: 'Range of Filter VLANs specified for the current monitor session.'
+        attributes:
+          - nxos_name: vlan
+            tf_name: vlan
+            type: String
+            id: true
+            description: 'VLAN id for Filter VLAN.'
+            example: 'vlan-200'

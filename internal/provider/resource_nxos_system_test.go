@@ -223,6 +223,8 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_message_authentication_codes", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_port", "22"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_keys.rsa.key_length", "2048"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "erspan_origin_ip_is_global", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "erspan_origin_ip_address", "10.0.0.1"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
@@ -534,6 +536,8 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config += `			key_length = 2048` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	erspan_origin_ip_is_global = true` + "\n"
+	config += `	erspan_origin_ip_address = "10.0.0.1"` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

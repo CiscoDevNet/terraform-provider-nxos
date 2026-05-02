@@ -232,4 +232,6 @@ resource "nxos_system" "example" {
       key_length = 2048
     }
   }
+  erspan_origin_ip_is_global = true
+  erspan_origin_ip_address   = "10.0.0.1"
 }

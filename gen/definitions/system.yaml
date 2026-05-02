@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, and SSH server configuration.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, and SSH server configuration.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, and ERSPAN origin IP settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, and ERSPAN origin IP settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -3698,6 +3698,35 @@ child_classes:
                 min_int: 0
                 max_int: 4096
                 example: 2048
+  - class_name: spanErspanOriginIp
+    doc_path: Flow/span:ErspanOriginIp/
+    rn: originip
+    type: single
+    tf_name: erspan_origin_ip
+    description: 'Global origin IP address for every ERSPAN session.'
+    attributes:
+      - nxos_name: isGlobal
+        tf_name: erspan_origin_ip_is_global
+        type: Bool
+        description: 'Denotes whether origin ip is global across all erspan sessions.'
+        example: true
+      - nxos_name: isGlobalv6
+        tf_name: erspan_origin_ip_is_global_ipv6
+        type: Bool
+        description: 'Denotes whether origin ipv6 is global across all erspan sessions.'
+        example: false
+        exclude_test: true
+      - nxos_name: originIp
+        tf_name: erspan_origin_ip_address
+        type: String
+        description: 'Global origin IP address for all erspan sessions.'
+        example: '10.0.0.1'
+      - nxos_name: originIpv6
+        tf_name: erspan_origin_ipv6_address
+        type: String
+        description: 'Global origin IPv6 address for all erspan sessions.'
+        example: '2001:db8::1'
+        exclude_test: true
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld

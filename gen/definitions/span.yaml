@@ -5,7 +5,7 @@ dn: sys/span
 ds_description: 'This data source can read the SPAN configuration on NX-OS devices, including SPAN monitor sessions, source interfaces, source VLANs, and filter VLANs.'
 res_description: 'This resource can manage the SPAN configuration on NX-OS devices, including SPAN monitor sessions, source interfaces, source VLANs, and filter VLANs.'
 doc_path: Flow/span:Entity/
-doc_category: System
+doc_category: Monitoring
 child_classes:
   - class_name: spanMonitor
     doc_path: Flow/span:Monitor/

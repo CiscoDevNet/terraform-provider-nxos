@@ -5,7 +5,7 @@ dn: sys
 no_delete: true
 ds_description: This data source can read the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.
 res_description: This resource can manage the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.
-doc_category: System
+doc_category: Monitoring
 child_classes:
   - class_name: loggingLogging
     doc_path: System/logging:Logging/

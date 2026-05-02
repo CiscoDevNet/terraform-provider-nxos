@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.
 res_description: This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.
 doc_path: System/snmp:Entity/
-doc_category: System
+doc_category: Monitoring
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

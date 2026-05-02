@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.
 res_description: This resource can manage the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.
 doc_path: Streaming%20Telemetry/telemetry:Entity/
-doc_category: System
+doc_category: Monitoring
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

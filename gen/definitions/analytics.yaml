@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.
 res_description: This resource can manage the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.
 doc_path: System/analytics:Entity/
-doc_category: System
+doc_category: Monitoring
 test_tags: [ANALYTICS]
 child_classes:
   - class_name: analyticsInst

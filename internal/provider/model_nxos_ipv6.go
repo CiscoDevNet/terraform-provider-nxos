@@ -156,8 +156,6 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6Inst"
 		attrs = "{}"
 		if !data.AccessListMatchLocal.IsUnknown() && !data.AccessListMatchLocal.IsNull() && !config.AccessListMatchLocal.IsNull() {
 			attrs, _ = sjson.Set(attrs, "accessListMatchLocal", data.AccessListMatchLocal.ValueString())
@@ -180,6 +178,8 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 		if !data.SwitchPackets.IsUnknown() && !data.SwitchPackets.IsNull() && !config.SwitchPackets.IsNull() {
 			attrs, _ = sjson.Set(attrs, "switchPackets", data.SwitchPackets.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6Inst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Vrfs {

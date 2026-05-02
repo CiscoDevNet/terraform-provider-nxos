@@ -104,8 +104,6 @@ func (data HMM) toBody(config HMM) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".hmmFwdInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -125,6 +123,8 @@ func (data HMM) toBody(config HMM) nxos.Body {
 		if !data.SelectiveHostProbe.IsUnknown() && !data.SelectiveHostProbe.IsNull() && !config.SelectiveHostProbe.IsNull() {
 			attrs, _ = sjson.Set(attrs, "selHostProbe", data.SelectiveHostProbe.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".hmmFwdInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Interfaces {

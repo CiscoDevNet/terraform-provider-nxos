@@ -154,9 +154,9 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosCMapEntity"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.ClassMaps {
@@ -184,9 +184,9 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 		}
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosPMapEntity"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.PolicyMaps {
@@ -304,15 +304,15 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 		}
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
+			attrs = "{}"
 			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosIngress"
-			attrs = "{}"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.PolicyInterfaceIn {

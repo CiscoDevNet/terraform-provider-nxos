@@ -423,10 +423,10 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".aaaUser.children"
 			{
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaUserDomain"
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "name", "all")
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaUserDomain"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range child.Roles {
@@ -447,8 +447,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaTacacsPlusEp"
 		attrs = "{}"
 		if !data.TacacsDeadtime.IsUnknown() && !data.TacacsDeadtime.IsNull() && !config.TacacsDeadtime.IsNull() {
 			attrs, _ = sjson.Set(attrs, "deadtime", strconv.FormatInt(data.TacacsDeadtime.ValueInt64(), 10))
@@ -485,6 +483,8 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		if !data.TacacsTimeout.IsUnknown() && !data.TacacsTimeout.IsNull() && !config.TacacsTimeout.IsNull() {
 			attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(data.TacacsTimeout.ValueInt64(), 10))
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaTacacsPlusEp"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.TacacsProviders {
@@ -593,8 +593,6 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaAuthRealm"
 		attrs = "{}"
 		if !data.AuthenticationRealmDefaultRolePolicy.IsUnknown() && !data.AuthenticationRealmDefaultRolePolicy.IsNull() && !config.AuthenticationRealmDefaultRolePolicy.IsNull() {
 			attrs, _ = sjson.Set(attrs, "defRolePolicy", data.AuthenticationRealmDefaultRolePolicy.ValueString())
@@ -617,6 +615,8 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		if !data.AuthenticationRealmTacacsDirectedRequest.IsUnknown() && !data.AuthenticationRealmTacacsDirectedRequest.IsNull() && !config.AuthenticationRealmTacacsDirectedRequest.IsNull() {
 			attrs, _ = sjson.Set(attrs, "tacDirectedReq", data.AuthenticationRealmTacacsDirectedRequest.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaAuthRealm"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"

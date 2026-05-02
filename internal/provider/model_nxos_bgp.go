@@ -415,8 +415,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".bgpInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -466,6 +464,8 @@ func (data BGP) toBody(config BGP) nxos.Body {
 		if !data.RdDualId.IsUnknown() && !data.RdDualId.IsNull() && !config.RdDualId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "rdDualId", strconv.FormatInt(data.RdDualId.ValueInt64(), 10))
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".bgpInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Vrfs {

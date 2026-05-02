@@ -142,8 +142,6 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".dhcpInst"
 		attrs = "{}"
 		if !data.Ipv6RelayInformationOptionVpn.IsUnknown() && !data.Ipv6RelayInformationOptionVpn.IsNull() && !config.Ipv6RelayInformationOptionVpn.IsNull() {
 			attrs, _ = sjson.Set(attrs, "Ipv6RelayInformationOptionVpnEnabled", strconv.FormatBool(data.Ipv6RelayInformationOptionVpn.ValueBool()))
@@ -232,6 +230,8 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 		if !data.V6SmartRelayGlobal.IsUnknown() && !data.V6SmartRelayGlobal.IsNull() && !config.V6SmartRelayGlobal.IsNull() {
 			attrs, _ = sjson.Set(attrs, "v6SmartRelayGlobalEnabled", strconv.FormatBool(data.V6SmartRelayGlobal.ValueBool()))
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".dhcpInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.RelayInterfaces {

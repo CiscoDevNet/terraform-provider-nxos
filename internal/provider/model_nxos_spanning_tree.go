@@ -134,8 +134,6 @@ func (data SpanningTree) toBody(config SpanningTree) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".stpInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -164,6 +162,8 @@ func (data SpanningTree) toBody(config SpanningTree) nxos.Body {
 		if !data.PathcostOption.IsUnknown() && !data.PathcostOption.IsNull() && !config.PathcostOption.IsNull() {
 			attrs, _ = sjson.Set(attrs, "pathcostOp", data.PathcostOption.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".stpInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Interfaces {

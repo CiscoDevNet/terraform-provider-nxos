@@ -102,8 +102,6 @@ func (data ICMPv6) toBody(config ICMPv6) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icmpv6Inst"
 		attrs = "{}"
 		if !data.AdjacencyStaleTimer.IsUnknown() && !data.AdjacencyStaleTimer.IsNull() && !config.AdjacencyStaleTimer.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adjStaleTimer", strconv.FormatInt(data.AdjacencyStaleTimer.ValueInt64(), 10))
@@ -123,6 +121,8 @@ func (data ICMPv6) toBody(config ICMPv6) nxos.Body {
 		if !data.RedirectSyslogInterval.IsUnknown() && !data.RedirectSyslogInterval.IsNull() && !config.RedirectSyslogInterval.IsNull() {
 			attrs, _ = sjson.Set(attrs, "redirectSyslogInterval", strconv.FormatInt(data.RedirectSyslogInterval.ValueInt64(), 10))
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icmpv6Inst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Interfaces {

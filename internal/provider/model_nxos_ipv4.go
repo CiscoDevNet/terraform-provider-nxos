@@ -163,8 +163,6 @@ func (data IPv4) toBody(config IPv4) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv4Inst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -196,6 +194,8 @@ func (data IPv4) toBody(config IPv4) nxos.Body {
 		if !data.SourceRoute.IsUnknown() && !data.SourceRoute.IsNull() && !config.SourceRoute.IsNull() {
 			attrs, _ = sjson.Set(attrs, "sourceRoute", data.SourceRoute.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv4Inst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Vrfs {

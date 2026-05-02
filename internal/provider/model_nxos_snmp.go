@@ -247,8 +247,6 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".snmpInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -274,6 +272,8 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 		if !data.UnknownUser.IsUnknown() && !data.UnknownUser.IsNull() && !config.UnknownUser.IsNull() {
 			attrs, _ = sjson.Set(attrs, "unknownUser", data.UnknownUser.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".snmpInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
@@ -290,8 +290,6 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpSysInfo.attributes", attrs)
 		}
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpGlobals"
 			attrs = "{}"
 			if !data.PacketSize.IsUnknown() && !data.PacketSize.IsNull() && !config.PacketSize.IsNull() {
 				attrs, _ = sjson.Set(attrs, "pktSize", strconv.FormatInt(data.PacketSize.ValueInt64(), 10))
@@ -305,6 +303,8 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 			if !data.TcpSessionAuthentication.IsUnknown() && !data.TcpSessionAuthentication.IsNull() && !config.TcpSessionAuthentication.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tcpSessionAuth", data.TcpSessionAuthentication.ValueString())
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpGlobals"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			attrs = "{}"
@@ -410,18 +410,18 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 			}
 		}
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTraps"
 			attrs = "{}"
 			if !data.EnableAll.IsUnknown() && !data.EnableAll.IsNull() && !config.EnableAll.IsNull() {
 				attrs, _ = sjson.Set(attrs, "enableAllViaCLI", data.EnableAll.ValueString())
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTraps"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTaaa"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -433,9 +433,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTbfd"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -454,9 +454,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTbridge"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -475,9 +475,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTcallhome"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -496,9 +496,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTcfs"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -517,9 +517,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTconfig"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -531,9 +531,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTentity"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -608,9 +608,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfcdomain"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -652,9 +652,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTfdmi.attributes", attrs)
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfeaturecontrol"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -677,9 +677,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTfspf.attributes", attrs)
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTgeneric"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -698,9 +698,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpThsrp"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -716,9 +716,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTip.attributes", attrs)
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlicense"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -751,9 +751,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlink"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -828,9 +828,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlldp"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -842,9 +842,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmmode"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -863,18 +863,18 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmpls"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				{
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdp"
 					attrs = "{}"
 					if !data.MplsLdpTrapStatus.IsUnknown() && !data.MplsLdpTrapStatus.IsNull() && !config.MplsLdpTrapStatus.IsNull() {
 						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsLdpTrapStatus.ValueString())
 					}
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdp"
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
 					attrs = "{}"
@@ -893,12 +893,12 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 					}
 				}
 				{
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpn"
 					attrs = "{}"
 					if !data.MplsVpnTrapStatus.IsUnknown() && !data.MplsVpnTrapStatus.IsNull() && !config.MplsVpnTrapStatus.IsNull() {
 						attrs, _ = sjson.Set(attrs, "trapstatus", data.MplsVpnTrapStatus.ValueString())
 					}
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpn"
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
 					attrs = "{}"
@@ -939,9 +939,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmsdp"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -953,9 +953,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTpim"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -971,9 +971,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTpoe.attributes", attrs)
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTportsecurity"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -992,9 +992,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrf"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1006,9 +1006,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrmon"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1049,9 +1049,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTscsi.attributes", attrs)
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsnmp"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1063,9 +1063,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTstormControl"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1077,9 +1077,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTstpx"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1105,9 +1105,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsyslog"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1119,9 +1119,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsysmgr"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1133,9 +1133,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsystem"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1147,9 +1147,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTupgrade"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1172,9 +1172,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpTvsan.attributes", attrs)
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTvtp"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1205,9 +1205,9 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 			}
 		}
 		{
+			attrs = "{}"
 			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRmon"
-			attrs = "{}"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.RmonEvents {

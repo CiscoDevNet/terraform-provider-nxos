@@ -424,9 +424,9 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtmapEntry.children"
 					{
+						attrs = "{}"
 						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapMatchRtDst"
-						attrs = "{}"
 						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 						nestedChildrenPath := childBodyPath + ".children"
 						for key := range child.MatchRoutePrefixLists {
@@ -447,8 +447,6 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						}
 					}
 					{
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapSetRegComm"
 						attrs = "{}"
 						if !child.SetRegularCommunityAdditive.IsUnknown() && !child.SetRegularCommunityAdditive.IsNull() && !configChild.SetRegularCommunityAdditive.IsNull() {
 							attrs, _ = sjson.Set(attrs, "additive", child.SetRegularCommunityAdditive.ValueString())
@@ -459,6 +457,8 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						if !child.SetRegularCommunityCriteria.IsUnknown() && !child.SetRegularCommunityCriteria.IsNull() && !configChild.SetRegularCommunityCriteria.IsNull() {
 							attrs, _ = sjson.Set(attrs, "setCriteria", child.SetRegularCommunityCriteria.ValueString())
 						}
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapSetRegComm"
 						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 						nestedChildrenPath := childBodyPath + ".children"
 						for key, child := range child.SetRegularCommunityItems {
@@ -560,9 +560,9 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetEvpn.attributes", attrs)
 					}
 					{
+						attrs = "{}"
 						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapMatchRtNh"
-						attrs = "{}"
 						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 						nestedChildrenPath := childBodyPath + ".children"
 						for key := range child.MatchNextHopPrefixLists {
@@ -575,12 +575,12 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						}
 					}
 					{
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapMatchRegComm"
 						attrs = "{}"
 						if !child.MatchRegularCommunityCriteria.IsUnknown() && !child.MatchRegularCommunityCriteria.IsNull() && !configChild.MatchRegularCommunityCriteria.IsNull() {
 							attrs, _ = sjson.Set(attrs, "criteria", child.MatchRegularCommunityCriteria.ValueString())
 						}
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapMatchRegComm"
 						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 						nestedChildrenPath := childBodyPath + ".children"
 						for key := range child.MatchRegularCommunityLists {

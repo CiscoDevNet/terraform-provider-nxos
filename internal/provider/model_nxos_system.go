@@ -369,6 +369,8 @@ type System struct {
 	ErspanOriginIpIsGlobalIpv6                          types.Bool                            `tfsdk:"erspan_origin_ip_is_global_ipv6"`
 	ErspanOriginIpAddress                               types.String                          `tfsdk:"erspan_origin_ip_address"`
 	ErspanOriginIpv6Address                             types.String                          `tfsdk:"erspan_origin_ipv6_address"`
+	TtagMarkerInterval                                  types.Int64                           `tfsdk:"ttag_marker_interval"`
+	TtagInterfaces                                      map[string]SystemTtagInterfaces       `tfsdk:"ttag_interfaces"`
 }
 
 type SystemArpVpcDomains struct {
@@ -500,6 +502,13 @@ type SystemSshKeys struct {
 	KeyLength types.Int64 `tfsdk:"key_length"`
 }
 
+type SystemTtagInterfaces struct {
+	Ttag       types.Bool `tfsdk:"ttag"`
+	TtagInner  types.Bool `tfsdk:"ttag_inner"`
+	TtagMarker types.Bool `tfsdk:"ttag_marker"`
+	TtagStrip  types.Bool `tfsdk:"ttag_strip"`
+}
+
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -592,6 +601,10 @@ func (data SystemSshKeys) getRn(key string) string {
 	return fmt.Sprintf("key-[%s]", key)
 }
 
+func (data SystemTtagInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
+}
+
 func (data System) getClassName() string {
 	return "topSystem"
 }
@@ -609,9 +622,9 @@ func (data System) toBody(config System) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ethpmEntity"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
@@ -680,17 +693,15 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".arpEntity"
 		attrs = "{}"
 		if !data.ArpAdminState.IsUnknown() && !data.ArpAdminState.IsNull() && !config.ArpAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.ArpAdminState.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".arpEntity"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".arpInst"
 			attrs = "{}"
 			if !data.ArpInstanceAdminState.IsUnknown() && !data.ArpInstanceAdminState.IsNull() && !config.ArpInstanceAdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", data.ArpInstanceAdminState.ValueString())
@@ -740,12 +751,14 @@ func (data System) toBody(config System) nxos.Body {
 			if !data.ArpTimeout.IsUnknown() && !data.ArpTimeout.IsNull() && !config.ArpTimeout.IsNull() {
 				attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(data.ArpTimeout.ValueInt64(), 10))
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".arpInst"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".arpVpc"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range data.ArpVpcDomains {
@@ -763,17 +776,15 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ndEntity"
 		attrs = "{}"
 		if !data.NdAdminState.IsUnknown() && !data.NdAdminState.IsNull() && !config.NdAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.NdAdminState.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ndEntity"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ndInst"
 			attrs = "{}"
 			if !data.NdAcceptSolicitNeighborEntry.IsUnknown() && !data.NdAcceptSolicitNeighborEntry.IsNull() && !config.NdAcceptSolicitNeighborEntry.IsNull() {
 				attrs, _ = sjson.Set(attrs, "acceptSolicitNghbrEntry", data.NdAcceptSolicitNeighborEntry.ValueString())
@@ -805,6 +816,8 @@ func (data System) toBody(config System) nxos.Body {
 			if !data.NdSolicitNeighborAdvertisement.IsUnknown() && !data.NdSolicitNeighborAdvertisement.IsNull() && !config.NdSolicitNeighborAdvertisement.IsNull() {
 				attrs, _ = sjson.Set(attrs, "solicitNghbrAdvertisement", data.NdSolicitNeighborAdvertisement.ValueString())
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ndInst"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.NdVrfs {
@@ -885,9 +898,9 @@ func (data System) toBody(config System) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ndVpc"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				for key, child := range data.NdVpcDomains {
@@ -905,8 +918,6 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".datetimeClock"
 		attrs = "{}"
 		if !data.ClockAdminState.IsUnknown() && !data.ClockAdminState.IsNull() && !config.ClockAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.ClockAdminState.ValueString())
@@ -926,6 +937,8 @@ func (data System) toBody(config System) nxos.Body {
 		if !data.ClockProtocol.IsUnknown() && !data.ClockProtocol.IsNull() && !config.ClockProtocol.IsNull() {
 			attrs, _ = sjson.Set(attrs, "protocol", data.ClockProtocol.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".datetimeClock"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
@@ -977,12 +990,12 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".dnsEntity"
 		attrs = "{}"
 		if !data.DnsAdminState.IsUnknown() && !data.DnsAdminState.IsNull() && !config.DnsAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.DnsAdminState.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".dnsEntity"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.DnsProfiles {
@@ -1093,24 +1106,24 @@ func (data System) toBody(config System) nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.vshdCliAlias.attributes", attrs)
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerLicenseManager"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
+			attrs = "{}"
 			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerInst"
-			attrs = "{}"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			{
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerSmartLicensing"
 				attrs = "{}"
 				if !data.SmartLicensingTransportMode.IsUnknown() && !data.SmartLicensingTransportMode.IsNull() && !config.SmartLicensingTransportMode.IsNull() {
 					attrs, _ = sjson.Set(attrs, "transportMode", data.SmartLicensingTransportMode.ValueString())
 				}
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerSmartLicensing"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1124,8 +1137,6 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".bootBoot"
 		attrs = "{}"
 		if !data.BootAci.IsUnknown() && !data.BootAci.IsNull() && !config.BootAci.IsNull() {
 			attrs, _ = sjson.Set(attrs, "aci", data.BootAci.ValueString())
@@ -1151,6 +1162,8 @@ func (data System) toBody(config System) nxos.Body {
 		if !data.BootPoap.IsUnknown() && !data.BootPoap.IsNull() && !config.BootPoap.IsNull() {
 			attrs, _ = sjson.Set(attrs, "poap", data.BootPoap.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".bootBoot"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
@@ -1168,12 +1181,12 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".cfsEntity"
 		attrs = "{}"
 		if !data.CfsAdminState.IsUnknown() && !data.CfsAdminState.IsNull() && !config.CfsAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.CfsAdminState.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".cfsEntity"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
@@ -1200,17 +1213,15 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".udldEntity"
 		attrs = "{}"
 		if !data.UdldAdminState.IsUnknown() && !data.UdldAdminState.IsNull() && !config.UdldAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.UdldAdminState.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".udldEntity"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".udldInst"
 			attrs = "{}"
 			if !data.UdldAggressive.IsUnknown() && !data.UdldAggressive.IsNull() && !config.UdldAggressive.IsNull() {
 				attrs, _ = sjson.Set(attrs, "aggressive", data.UdldAggressive.ValueString())
@@ -1218,6 +1229,8 @@ func (data System) toBody(config System) nxos.Body {
 			if !data.UdldMessageInterval.IsUnknown() && !data.UdldMessageInterval.IsNull() && !config.UdldMessageInterval.IsNull() {
 				attrs, _ = sjson.Set(attrs, "msgIntvl", strconv.FormatInt(data.UdldMessageInterval.ValueInt64(), 10))
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".udldInst"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.UdldInterfaces {
@@ -1240,8 +1253,6 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformEntity"
 		attrs = "{}"
 		if !data.PlatformAccessListMatchInnerHeader.IsUnknown() && !data.PlatformAccessListMatchInnerHeader.IsNull() && !config.PlatformAccessListMatchInnerHeader.IsNull() {
 			attrs, _ = sjson.Set(attrs, "accessListMatchInnerHeader", data.PlatformAccessListMatchInnerHeader.ValueString())
@@ -1417,11 +1428,11 @@ func (data System) toBody(config System) nxos.Body {
 		if !data.PlatformWrrUnicastBandwidth.IsUnknown() && !data.PlatformWrrUnicastBandwidth.IsNull() && !config.PlatformWrrUnicastBandwidth.IsNull() {
 			attrs, _ = sjson.Set(attrs, "wrrUnicastBw", strconv.FormatInt(data.PlatformWrrUnicastBandwidth.ValueInt64(), 10))
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformEntity"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".platformTcamRegion"
 			attrs = "{}"
 			if !data.TcamRegionArpAclSize.IsUnknown() && !data.TcamRegionArpAclSize.IsNull() && !config.TcamRegionArpAclSize.IsNull() {
 				attrs, _ = sjson.Set(attrs, "arpaclSize", strconv.FormatInt(data.TcamRegionArpAclSize.ValueInt64(), 10))
@@ -1603,6 +1614,8 @@ func (data System) toBody(config System) nxos.Body {
 			if !data.TcamRegionVxlanP2pSize.IsUnknown() && !data.TcamRegionVxlanP2pSize.IsNull() && !config.TcamRegionVxlanP2pSize.IsNull() {
 				attrs, _ = sjson.Set(attrs, "vxlanp2pSize", strconv.FormatInt(data.TcamRegionVxlanP2pSize.ValueInt64(), 10))
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".platformTcamRegion"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			attrs = "{}"
@@ -1785,17 +1798,15 @@ func (data System) toBody(config System) nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.mgmtMgmtIf.attributes", attrs)
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".lldpEntity"
 		attrs = "{}"
 		if !data.LldpAdminState.IsUnknown() && !data.LldpAdminState.IsNull() && !config.LldpAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.LldpAdminState.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".lldpEntity"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".lldpInst"
 			attrs = "{}"
 			if !data.LldpInstanceAdminState.IsUnknown() && !data.LldpInstanceAdminState.IsNull() && !config.LldpInstanceAdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", data.LldpInstanceAdminState.ValueString())
@@ -1836,6 +1847,8 @@ func (data System) toBody(config System) nxos.Body {
 			if !data.LldpTransmitFrequency.IsUnknown() && !data.LldpTransmitFrequency.IsNull() && !config.LldpTransmitFrequency.IsNull() {
 				attrs, _ = sjson.Set(attrs, "txFreq", strconv.FormatInt(data.LldpTransmitFrequency.ValueInt64(), 10))
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".lldpInst"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.LldpInterfaces {
@@ -1879,14 +1892,12 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".cdpEntity"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".cdpInst"
 			attrs = "{}"
 			if !data.CdpAdminState.IsUnknown() && !data.CdpAdminState.IsNull() && !config.CdpAdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", data.CdpAdminState.ValueString())
@@ -1906,6 +1917,8 @@ func (data System) toBody(config System) nxos.Body {
 			if !data.CdpVersion.IsUnknown() && !data.CdpVersion.IsNull() && !config.CdpVersion.IsNull() {
 				attrs, _ = sjson.Set(attrs, "ver", data.CdpVersion.ValueString())
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".cdpInst"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.CdpInterfaces {
@@ -1925,8 +1938,6 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".coppEntity"
 		attrs = "{}"
 		if !data.CoppAdminState.IsUnknown() && !data.CoppAdminState.IsNull() && !config.CoppAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.CoppAdminState.ValueString())
@@ -1934,6 +1945,8 @@ func (data System) toBody(config System) nxos.Body {
 		if !data.CoppRateLimiter.IsUnknown() && !data.CoppRateLimiter.IsNull() && !config.CoppRateLimiter.IsNull() {
 			attrs, _ = sjson.Set(attrs, "enableFlag", strconv.FormatBool(data.CoppRateLimiter.ValueBool()))
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".coppEntity"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
@@ -1945,21 +1958,21 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".terminalTerminal"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
+			attrs = "{}"
 			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalLine"
-			attrs = "{}"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalConsole"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1971,9 +1984,9 @@ func (data System) toBody(config System) nxos.Body {
 				}
 			}
 			{
+				attrs = "{}"
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalVty"
-				attrs = "{}"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
@@ -1994,14 +2007,12 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icamEntity"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".icamInst"
 			attrs = "{}"
 			if !data.IcamMonitorInterval.IsUnknown() && !data.IcamMonitorInterval.IsNull() && !config.IcamMonitorInterval.IsNull() {
 				attrs, _ = sjson.Set(attrs, "interval", strconv.FormatInt(data.IcamMonitorInterval.ValueInt64(), 10))
@@ -2009,6 +2020,8 @@ func (data System) toBody(config System) nxos.Body {
 			if !data.IcamNumberOfIntervals.IsUnknown() && !data.IcamNumberOfIntervals.IsNull() && !config.IcamNumberOfIntervals.IsNull() {
 				attrs, _ = sjson.Set(attrs, "numinterval", strconv.FormatInt(data.IcamNumberOfIntervals.ValueInt64(), 10))
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".icamInst"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			attrs = "{}"
@@ -2075,9 +2088,9 @@ func (data System) toBody(config System) nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.nxapiInst.attributes", attrs)
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".imBreakout"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.BreakoutModules {
@@ -2105,15 +2118,15 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".sasSas"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
+			attrs = "{}"
 			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sasSvc"
-			attrs = "{}"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.ServiceInstances {
@@ -2149,18 +2162,18 @@ func (data System) toBody(config System) nxos.Body {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.sasSController.attributes", attrs)
 					}
 					{
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sasFwSvcPolicy"
 						attrs = "{}"
 						if !child.FirewallPolicyAdminState.IsUnknown() && !child.FirewallPolicyAdminState.IsNull() && !configChild.FirewallPolicyAdminState.IsNull() {
 							attrs, _ = sjson.Set(attrs, "adminState", child.FirewallPolicyAdminState.ValueString())
 						}
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sasFwSvcPolicy"
 						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 						nestedChildrenPath := childBodyPath + ".children"
 						{
+							attrs = "{}"
 							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sasIpVrf"
-							attrs = "{}"
 							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 							nestedChildrenPath := childBodyPath + ".children"
 							for key, child := range child.Vrfs {
@@ -2181,14 +2194,12 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".commEntity"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".commSsh"
 			attrs = "{}"
 			if !data.SshAdminState.IsUnknown() && !data.SshAdminState.IsNull() && !config.SshAdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", data.SshAdminState.ValueString())
@@ -2220,6 +2231,8 @@ func (data System) toBody(config System) nxos.Body {
 			if !data.SshPort.IsUnknown() && !data.SshPort.IsNull() && !config.SshPort.IsNull() {
 				attrs, _ = sjson.Set(attrs, "port", strconv.FormatInt(data.SshPort.ValueInt64(), 10))
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".commSsh"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.SshKeys {
@@ -2250,6 +2263,43 @@ func (data System) toBody(config System) nxos.Body {
 	}
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.spanErspanOriginIp.attributes", attrs)
+	}
+	{
+		attrs = "{}"
+		if !data.TtagMarkerInterval.IsUnknown() && !data.TtagMarkerInterval.IsNull() && !config.TtagMarkerInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ttagMarkerInterval", strconv.FormatInt(data.TtagMarkerInterval.ValueInt64(), 10))
+		}
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "ttagTtagEntity.attributes", attrs)
+		nestedChildrenPath := "ttagTtagEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		for key, child := range data.TtagInterfaces {
+			configChild, configChildOk := config.TtagInterfaces[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			if configChildOk && !child.Ttag.IsUnknown() && !child.Ttag.IsNull() && !configChild.Ttag.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ttag", strconv.FormatBool(child.Ttag.ValueBool()))
+			}
+			if configChildOk && !child.TtagInner.IsUnknown() && !child.TtagInner.IsNull() && !configChild.TtagInner.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ttagInner", strconv.FormatBool(child.TtagInner.ValueBool()))
+			}
+			if configChildOk && !child.TtagMarker.IsUnknown() && !child.TtagMarker.IsNull() && !configChild.TtagMarker.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ttagMarker", strconv.FormatBool(child.TtagMarker.ValueBool()))
+			}
+			if configChildOk && !child.TtagStrip.IsUnknown() && !child.TtagStrip.IsNull() && !configChild.TtagStrip.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ttagStrip", strconv.FormatBool(child.TtagStrip.ValueBool()))
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ttagTtagIf.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if attrs != "{}" || gjson.Get(childBody, "ttagTtagEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, childrenPath+".-1", childBody)
+		}
 	}
 
 	return nxos.Body{Str: body}
@@ -3624,6 +3674,42 @@ func (data *System) fromBody(res gjson.Result) {
 		data.ErspanOriginIpIsGlobalIpv6 = types.BoolValue(helpers.ParseNxosBoolean(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.isGlobalv6").String()))
 		data.ErspanOriginIpAddress = types.StringValue(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.originIp").String())
 		data.ErspanOriginIpv6Address = types.StringValue(rspanErspanOriginIp.Get("spanErspanOriginIp.attributes.originIpv6").String())
+	}
+	{
+		var rttagTtagEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("ttagTtagEntity.attributes.rn").String()
+				if rnValue == "ttag" {
+					rttagTtagEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.TtagMarkerInterval = types.Int64Value(rttagTtagEntity.Get("ttagTtagEntity.attributes.ttagMarkerInterval").Int())
+		rttagTtagEntity.Get("ttagTtagEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "ttagTtagIf" {
+							var child SystemTtagInterfaces
+							child.Ttag = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.ttag").String()))
+							child.TtagInner = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.ttagInner").String()))
+							child.TtagMarker = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.ttagMarker").String()))
+							child.TtagStrip = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.ttagStrip").String()))
+							mapKey := value.Get("attributes.id").String()
+							if data.TtagInterfaces == nil {
+								data.TtagInterfaces = make(map[string]SystemTtagInterfaces)
+							}
+							data.TtagInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
 	}
 }
 
@@ -6496,6 +6582,59 @@ func (data *System) updateFromBody(res gjson.Result) {
 	} else {
 		data.ErspanOriginIpv6Address = types.StringNull()
 	}
+	var rttagTtagEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("ttagTtagEntity.attributes.rn").String()
+			if rnValue == "ttag" {
+				rttagTtagEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.TtagMarkerInterval.IsNull() {
+		data.TtagMarkerInterval = types.Int64Value(rttagTtagEntity.Get("ttagTtagEntity.attributes.ttagMarkerInterval").Int())
+	} else {
+		data.TtagMarkerInterval = types.Int64Null()
+	}
+	for key, item := range data.TtagInterfaces {
+		var rttagTtagIf gjson.Result
+		rttagTtagEntity.Get("ttagTtagEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("ttagTtagIf.attributes.id").String() == key {
+					rttagTtagIf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rttagTtagIf.Exists() {
+			delete(data.TtagInterfaces, key)
+			continue
+		}
+		if !item.Ttag.IsNull() {
+			item.Ttag = types.BoolValue(helpers.ParseNxosBoolean(rttagTtagIf.Get("ttagTtagIf.attributes.ttag").String()))
+		} else {
+			item.Ttag = types.BoolNull()
+		}
+		if !item.TtagInner.IsNull() {
+			item.TtagInner = types.BoolValue(helpers.ParseNxosBoolean(rttagTtagIf.Get("ttagTtagIf.attributes.ttagInner").String()))
+		} else {
+			item.TtagInner = types.BoolNull()
+		}
+		if !item.TtagMarker.IsNull() {
+			item.TtagMarker = types.BoolValue(helpers.ParseNxosBoolean(rttagTtagIf.Get("ttagTtagIf.attributes.ttagMarker").String()))
+		} else {
+			item.TtagMarker = types.BoolNull()
+		}
+		if !item.TtagStrip.IsNull() {
+			item.TtagStrip = types.BoolValue(helpers.ParseNxosBoolean(rttagTtagIf.Get("ttagTtagIf.attributes.ttagStrip").String()))
+		} else {
+			item.TtagStrip = types.BoolNull()
+		}
+		data.TtagInterfaces[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -7733,6 +7872,32 @@ func (data System) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
+	{
+		childBody := ""
+		if !data.TtagMarkerInterval.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ttagMarkerInterval", "DME_UNSET_PROPERTY_MARKER")
+		}
+		hasNestedChildren := false
+		if len(data.TtagInterfaces) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ttagTtagEntity"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.TtagInterfaces {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ttagTtagIf.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "ttagTtagIf.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -7985,6 +8150,15 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.commEntity.children"+".0.commSsh.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.TtagInterfaces {
+		if _, found := data.TtagInterfaces[stateKey]; !found {
+			stateChild := state.TtagInterfaces[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "ttagTtagIf.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "ttagTtagIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.ttagTtagEntity.children"+".-1", deleteBody)
 		}
 	}
 	return body

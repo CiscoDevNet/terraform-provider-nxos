@@ -182,9 +182,9 @@ func (data ESG) toBody(config ESG) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".esgGroupEntity"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.SecurityGroups {
@@ -201,9 +201,9 @@ func (data ESG) toBody(config ESG) nxos.Body {
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".esgGroupInst.children"
 				{
+					attrs = "{}"
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".esgSelectorEntity"
-					attrs = "{}"
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
 					for key := range child.SelectorConnectedEndpointsIpv4 {
@@ -239,9 +239,9 @@ func (data ESG) toBody(config ESG) nxos.Body {
 		}
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".esgClassMapEntity"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.ClassMaps {
@@ -296,9 +296,9 @@ func (data ESG) toBody(config ESG) nxos.Body {
 		}
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".esgPolicyMapEntity"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.PolicyMaps {

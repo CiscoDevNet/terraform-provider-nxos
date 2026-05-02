@@ -96,9 +96,9 @@ func (data HardwareTelemetry) toBody(config HardwareTelemetry) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".sflowSflow"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"

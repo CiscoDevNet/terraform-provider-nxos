@@ -140,8 +140,6 @@ func (data VPC) toBody(config VPC) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".vpcInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -149,11 +147,11 @@ func (data VPC) toBody(config VPC) nxos.Body {
 		if !data.Control.IsUnknown() && !data.Control.IsNull() && !config.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".vpcInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".vpcDom"
 			attrs = "{}"
 			if !data.DomainAdminState.IsUnknown() && !data.DomainAdminState.IsNull() && !config.DomainAdminState.IsNull() {
 				attrs, _ = sjson.Set(attrs, "adminSt", data.DomainAdminState.ValueString())
@@ -230,11 +228,11 @@ func (data VPC) toBody(config VPC) nxos.Body {
 			if !data.PeerGatewayExcludeVlan.IsUnknown() && !data.PeerGatewayExcludeVlan.IsNull() && !config.PeerGatewayExcludeVlan.IsNull() {
 				attrs, _ = sjson.Set(attrs, "peerGWExcludeVLAN", data.PeerGatewayExcludeVlan.ValueString())
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".vpcDom"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			{
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".vpcKeepalive"
 				attrs = "{}"
 				if !data.KeepaliveDestinationIp.IsUnknown() && !data.KeepaliveDestinationIp.IsNull() && !config.KeepaliveDestinationIp.IsNull() {
 					attrs, _ = sjson.Set(attrs, "destIp", data.KeepaliveDestinationIp.ValueString())
@@ -275,6 +273,8 @@ func (data VPC) toBody(config VPC) nxos.Body {
 				if !data.KeepaliveVrf.IsUnknown() && !data.KeepaliveVrf.IsNull() && !config.KeepaliveVrf.IsNull() {
 					attrs, _ = sjson.Set(attrs, "vrf", data.KeepaliveVrf.ValueString())
 				}
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".vpcKeepalive"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"

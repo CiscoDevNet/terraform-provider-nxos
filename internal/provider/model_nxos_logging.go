@@ -126,14 +126,12 @@ func (data Logging) toBody(config Logging) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogging"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
 			attrs = "{}"
 			if !data.All.IsUnknown() && !data.All.IsNull() && !config.All.IsNull() {
 				attrs, _ = sjson.Set(attrs, "all", data.All.ValueString())
@@ -141,6 +139,8 @@ func (data Logging) toBody(config Logging) nxos.Body {
 			if !data.Level.IsUnknown() && !data.Level.IsNull() && !config.Level.IsNull() {
 				attrs, _ = sjson.Set(attrs, "severityLevel", data.Level.ValueString())
 			}
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			for key, child := range data.Facilities {
@@ -157,9 +157,9 @@ func (data Logging) toBody(config Logging) nxos.Body {
 		}
 	}
 	{
+		attrs = "{}"
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".syslogSyslog"
-		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"

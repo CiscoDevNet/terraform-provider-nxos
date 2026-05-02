@@ -182,8 +182,6 @@ func (data PIM) toBody(config PIM) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -209,6 +207,8 @@ func (data PIM) toBody(config PIM) nxos.Body {
 		if !data.RegisterStop.IsUnknown() && !data.RegisterStop.IsNull() && !config.RegisterStop.IsNull() {
 			attrs, _ = sjson.Set(attrs, "regStop", strconv.FormatBool(data.RegisterStop.ValueBool()))
 		}
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for key, child := range data.Vrfs {
@@ -311,8 +311,6 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimIf.attributes", attrs)
 				}
 				{
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimSSMPatP"
 					attrs = "{}"
 					if !child.SsmPolicyName.IsUnknown() && !child.SsmPolicyName.IsNull() && !configChild.SsmPolicyName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.SsmPolicyName.ValueString())
@@ -320,6 +318,8 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					if !child.SsmPolicyDescription.IsUnknown() && !child.SsmPolicyDescription.IsNull() && !configChild.SsmPolicyDescription.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.SsmPolicyDescription.ValueString())
 					}
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimSSMPatP"
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
 					attrs = "{}"
@@ -349,8 +349,6 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					}
 				}
 				{
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimStaticRPP"
 					attrs = "{}"
 					if !child.StaticRpPolicyName.IsUnknown() && !child.StaticRpPolicyName.IsNull() && !configChild.StaticRpPolicyName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.StaticRpPolicyName.ValueString())
@@ -358,6 +356,8 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					if !child.StaticRpPolicyDescription.IsUnknown() && !child.StaticRpPolicyDescription.IsNull() && !configChild.StaticRpPolicyDescription.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.StaticRpPolicyDescription.ValueString())
 					}
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimStaticRPP"
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
 					for key, child := range child.StaticRps {
@@ -388,8 +388,6 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					}
 				}
 				{
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimAcastRPFuncP"
 					attrs = "{}"
 					if !child.AnycastRpLocalInterface.IsUnknown() && !child.AnycastRpLocalInterface.IsNull() && !configChild.AnycastRpLocalInterface.IsNull() {
 						attrs, _ = sjson.Set(attrs, "localIf", child.AnycastRpLocalInterface.ValueString())
@@ -403,6 +401,8 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					if !child.AnycastRpName.IsUnknown() && !child.AnycastRpName.IsNull() && !configChild.AnycastRpName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.AnycastRpName.ValueString())
 					}
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimAcastRPFuncP"
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
 					for key := range child.AnycastRpPeers {

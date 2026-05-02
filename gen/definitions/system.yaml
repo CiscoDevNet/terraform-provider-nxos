@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, and ERSPAN origin IP settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, and ERSPAN origin IP settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, ERSPAN origin IP settings, and PTP ttag settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, ERSPAN origin IP settings, and PTP ttag settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -3727,6 +3727,63 @@ child_classes:
         description: 'Global origin IPv6 address for all erspan sessions.'
         example: '2001:db8::1'
         exclude_test: true
+  - class_name: ttagTtagEntity
+    doc_path: Interfaces/ttag:TtagEntity/
+    rn: ttag
+    type: single
+    no_delete: true
+    optional: true
+    tf_name: ttag
+    description: 'PTP ttag configuration.'
+    attributes:
+      - nxos_name: ttagMarkerInterval
+        tf_name: ttag_marker_interval
+        type: Int64
+        description: 'PTP ttag marker interval in seconds.'
+        min_int: 1
+        max_int: 25200
+        example: 120
+        exclude_test: true
+    child_classes:
+      - class_name: ttagTtagIf
+        doc_path: Interfaces/ttag:TtagIf/
+        rn: if-[%s]
+        type: list
+        tf_name: ttag_interfaces
+        description: 'Per-interface PTP ttag configuration and management.'
+        test_tags: [TTAG]
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Interface id of port with PTP configuration.'
+            example: eth1/10
+            test_tags: [TTAG]
+          - nxos_name: ttag
+            tf_name: ttag
+            type: Bool
+            description: 'TTAG header for underlay traffic (outer) on interface.'
+            example: true
+            test_tags: [TTAG]
+          - nxos_name: ttagInner
+            tf_name: ttag_inner
+            type: Bool
+            description: 'TTAG header for overlay traffic (inner) on interface.'
+            example: false
+            test_tags: [TTAG]
+          - nxos_name: ttagMarker
+            tf_name: ttag_marker
+            type: Bool
+            description: 'Ttag marker packet on interface.'
+            example: false
+            test_tags: [TTAG]
+          - nxos_name: ttagStrip
+            tf_name: ttag_strip
+            type: Bool
+            description: 'Strip ttag from egress packet on this interface.'
+            example: false
+            test_tags: [TTAG]
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld

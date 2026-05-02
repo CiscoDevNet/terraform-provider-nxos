@@ -3732,7 +3732,6 @@ child_classes:
     rn: ttag
     type: single
     no_delete: true
-    optional: true
     exclude_test: true
     tf_name: ttag
     description: 'PTP ttag configuration.'

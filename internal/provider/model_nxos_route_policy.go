@@ -286,6 +286,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtpfxRuleV4.children"
+			_ = nestedChildrenPath
 			for key, child := range child.Entries {
 				configChild, configChildOk := configChild.Entries[key]
 				_ = configChild
@@ -330,6 +331,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtpfxRuleV6.children"
+			_ = nestedChildrenPath
 			for key, child := range child.Entries {
 				configChild, configChildOk := configChild.Entries[key]
 				_ = configChild
@@ -371,6 +373,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtmapRule.children"
+			_ = nestedChildrenPath
 			for key, child := range child.Entries {
 				configChild, configChildOk := configChild.Entries[key]
 				_ = configChild
@@ -423,12 +426,17 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtmapEntry.children"
+					_ = nestedChildrenPath
 					{
 						attrs = "{}"
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapMatchRtDst"
-						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-						nestedChildrenPath := childBodyPath + ".children"
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "rtmapMatchRtDst.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "rtmapMatchRtDst.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
 						for key := range child.MatchRoutePrefixLists {
 							configChild, configChildOk := configChild.MatchRoutePrefixLists[key]
 							_ = configChild
@@ -445,6 +453,11 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 							attrs, _ = sjson.Set(attrs, "tDn", key)
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapRsRtDstAccAtt.attributes", attrs)
 						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapMatchRtDst.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
 					}
 					{
 						attrs = "{}"
@@ -457,10 +470,14 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						if !child.SetRegularCommunityCriteria.IsUnknown() && !child.SetRegularCommunityCriteria.IsNull() && !configChild.SetRegularCommunityCriteria.IsNull() {
 							attrs, _ = sjson.Set(attrs, "setCriteria", child.SetRegularCommunityCriteria.ValueString())
 						}
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapSetRegComm"
-						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-						nestedChildrenPath := childBodyPath + ".children"
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "rtmapSetRegComm.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "rtmapSetRegComm.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
 						for key, child := range child.SetRegularCommunityItems {
 							configChild, configChildOk := configChild.SetRegularCommunityItems[key]
 							_ = configChild
@@ -474,6 +491,11 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 								attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 							}
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtregcomItem.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapSetRegComm.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 						}
 					}
 					for key := range child.MatchTags {
@@ -561,10 +583,14 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 					}
 					{
 						attrs = "{}"
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapMatchRtNh"
-						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-						nestedChildrenPath := childBodyPath + ".children"
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "rtmapMatchRtNh.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "rtmapMatchRtNh.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
 						for key := range child.MatchNextHopPrefixLists {
 							configChild, configChildOk := configChild.MatchNextHopPrefixLists[key]
 							_ = configChild
@@ -573,16 +599,25 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 							attrs, _ = sjson.Set(attrs, "tDn", key)
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapRsRtNhAtt.attributes", attrs)
 						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapMatchRtNh.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
 					}
 					{
 						attrs = "{}"
 						if !child.MatchRegularCommunityCriteria.IsUnknown() && !child.MatchRegularCommunityCriteria.IsNull() && !configChild.MatchRegularCommunityCriteria.IsNull() {
 							attrs, _ = sjson.Set(attrs, "criteria", child.MatchRegularCommunityCriteria.ValueString())
 						}
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapMatchRegComm"
-						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-						nestedChildrenPath := childBodyPath + ".children"
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "rtmapMatchRegComm.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "rtmapMatchRegComm.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
 						for key := range child.MatchRegularCommunityLists {
 							configChild, configChildOk := configChild.MatchRegularCommunityLists[key]
 							_ = configChild
@@ -590,6 +625,11 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 							attrs = "{}"
 							attrs, _ = sjson.Set(attrs, "tDn", key)
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapRsRegCommAtt.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapMatchRegComm.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 						}
 					}
 				}
@@ -615,6 +655,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtregcomRule.children"
+			_ = nestedChildrenPath
 			for key, child := range child.Entries {
 				configChild, configChildOk := configChild.Entries[key]
 				_ = configChild
@@ -637,6 +678,7 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtregcomEntry.children"
+					_ = nestedChildrenPath
 					for key, child := range child.Items {
 						configChild, configChildOk := configChild.Items[key]
 						_ = configChild

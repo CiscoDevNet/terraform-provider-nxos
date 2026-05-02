@@ -110,10 +110,14 @@ func (data Keychain) toBody(config Keychain) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	{
 		attrs = "{}"
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".kcmgrKeychains"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "kcmgrKeychains.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "kcmgrKeychains.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.Keychains {
 			configChild, configChildOk := config.Keychains[key]
 			_ = configChild
@@ -124,6 +128,7 @@ func (data Keychain) toBody(config Keychain) nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".kcmgrClassicKeychain.children"
+				_ = nestedChildrenPath
 				for key, child := range child.Keys {
 					configChild, configChildOk := configChild.Keys[key]
 					_ = configChild
@@ -144,6 +149,11 @@ func (data Keychain) toBody(config Keychain) nxos.Body {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.kcmgrKey.attributes", attrs)
 				}
 			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "kcmgrKeychains.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 

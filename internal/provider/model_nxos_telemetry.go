@@ -172,6 +172,7 @@ func (data Telemetry) toBody(config Telemetry) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".telemetryDestGroup.children"
+			_ = nestedChildrenPath
 			for key, child := range child.Destinations {
 				configChild, configChildOk := configChild.Destinations[key]
 				_ = configChild
@@ -206,6 +207,7 @@ func (data Telemetry) toBody(config Telemetry) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".telemetrySensorGroup.children"
+			_ = nestedChildrenPath
 			for key, child := range child.SensorPaths {
 				configChild, configChildOk := configChild.SensorPaths[key]
 				_ = configChild
@@ -238,6 +240,7 @@ func (data Telemetry) toBody(config Telemetry) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".telemetrySubscription.children"
+			_ = nestedChildrenPath
 			for key, child := range child.SensorGroupRelationships {
 				configChild, configChildOk := configChild.SensorGroupRelationships[key]
 				_ = configChild

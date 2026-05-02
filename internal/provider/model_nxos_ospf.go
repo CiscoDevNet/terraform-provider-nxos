@@ -208,6 +208,7 @@ func (data OSPF) toBody(config OSPF) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfInst.children"
+			_ = nestedChildrenPath
 			for key, child := range child.Vrfs {
 				configChild, configChildOk := configChild.Vrfs[key]
 				_ = configChild
@@ -266,6 +267,7 @@ func (data OSPF) toBody(config OSPF) nxos.Body {
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfDom.children"
+					_ = nestedChildrenPath
 					for key, child := range child.Areas {
 						configChild, configChildOk := configChild.Areas[key]
 						_ = configChild
@@ -363,6 +365,7 @@ func (data OSPF) toBody(config OSPF) nxos.Body {
 						{
 							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfIf.children"
+							_ = nestedChildrenPath
 							attrs = "{}"
 							if !configChild.AuthenticationKeyWo.IsNull() {
 								attrs, _ = sjson.Set(attrs, "key", configChild.AuthenticationKeyWo.ValueString())

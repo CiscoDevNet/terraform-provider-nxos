@@ -133,6 +133,7 @@ func (data EVPN) toBody(config EVPN) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlBDEvi.children"
+			_ = nestedChildrenPath
 			for key, child := range child.RouteTargetDirections {
 				configChild, configChildOk := configChild.RouteTargetDirections[key]
 				_ = configChild
@@ -143,6 +144,7 @@ func (data EVPN) toBody(config EVPN) nxos.Body {
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlRttP.children"
+					_ = nestedChildrenPath
 					for key := range child.RouteTargets {
 						configChild, configChildOk := configChild.RouteTargets[key]
 						_ = configChild

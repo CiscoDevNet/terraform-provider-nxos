@@ -182,10 +182,14 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	{
 		attrs = "{}"
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv4aclAF"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "ipv4aclAF.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "ipv4aclAF.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.AccessLists {
 			configChild, configChildOk := config.AccessLists[key]
 			_ = configChild
@@ -208,6 +212,7 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv4aclACL.children"
+				_ = nestedChildrenPath
 				for key, child := range child.Entries {
 					configChild, configChildOk := configChild.Entries[key]
 					_ = configChild
@@ -392,16 +397,24 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 		}
 		{
 			attrs = "{}"
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aclPolicy"
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-			nestedChildrenPath := childBodyPath + ".children"
+			childBody := ""
+			childBody, _ = sjson.SetRaw(childBody, "aclPolicy.attributes", attrs)
+			parentAttrs := attrs
+			parentPath := nestedChildrenPath
+			nestedChildrenPath := "aclPolicy.children"
+			_ = nestedChildrenPath
+			prevBody := body
+			body = childBody
 			{
 				attrs = "{}"
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aclIngress"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-				nestedChildrenPath := childBodyPath + ".children"
+				childBody := ""
+				childBody, _ = sjson.SetRaw(childBody, "aclIngress.attributes", attrs)
+				parentAttrs := attrs
+				parentPath := nestedChildrenPath
+				nestedChildrenPath := "aclIngress.children"
+				_ = nestedChildrenPath
+				prevBody := body
+				body = childBody
 				for key, child := range data.IngressInterfaces {
 					configChild, configChildOk := config.IngressInterfaces[key]
 					_ = configChild
@@ -412,6 +425,7 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".aclIf.children"
+						_ = nestedChildrenPath
 						attrs = "{}"
 						if !child.AccessListName.IsUnknown() && !child.AccessListName.IsNull() && !configChild.AccessListName.IsNull() {
 							attrs, _ = sjson.Set(attrs, "name", child.AccessListName.ValueString())
@@ -423,10 +437,14 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 				}
 				{
 					attrs = "{}"
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aclVty"
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-					nestedChildrenPath := childBodyPath + ".children"
+					childBody := ""
+					childBody, _ = sjson.SetRaw(childBody, "aclVty.attributes", attrs)
+					parentAttrs := attrs
+					parentPath := nestedChildrenPath
+					nestedChildrenPath := "aclVty.children"
+					_ = nestedChildrenPath
+					prevBody := body
+					body = childBody
 					attrs = "{}"
 					if !data.IngressVtyAccessListName.IsUnknown() && !data.IngressVtyAccessListName.IsNull() && !config.IngressVtyAccessListName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", data.IngressVtyAccessListName.ValueString())
@@ -434,14 +452,28 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 					if attrs != "{}" {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aclInst.attributes", attrs)
 					}
+					childBody = body
+					body = prevBody
+					if parentAttrs != "{}" || gjson.Get(childBody, "aclVty.children").Exists() {
+						body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+					}
+				}
+				childBody = body
+				body = prevBody
+				if parentAttrs != "{}" || gjson.Get(childBody, "aclIngress.children").Exists() {
+					body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 				}
 			}
 			{
 				attrs = "{}"
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aclEgress"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-				nestedChildrenPath := childBodyPath + ".children"
+				childBody := ""
+				childBody, _ = sjson.SetRaw(childBody, "aclEgress.attributes", attrs)
+				parentAttrs := attrs
+				parentPath := nestedChildrenPath
+				nestedChildrenPath := "aclEgress.children"
+				_ = nestedChildrenPath
+				prevBody := body
+				body = childBody
 				for key, child := range data.EgressInterfaces {
 					configChild, configChildOk := config.EgressInterfaces[key]
 					_ = configChild
@@ -452,6 +484,7 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".aclIf.children"
+						_ = nestedChildrenPath
 						attrs = "{}"
 						if !child.AccessListName.IsUnknown() && !child.AccessListName.IsNull() && !configChild.AccessListName.IsNull() {
 							attrs, _ = sjson.Set(attrs, "name", child.AccessListName.ValueString())
@@ -463,10 +496,14 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 				}
 				{
 					attrs = "{}"
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aclVty"
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-					nestedChildrenPath := childBodyPath + ".children"
+					childBody := ""
+					childBody, _ = sjson.SetRaw(childBody, "aclVty.attributes", attrs)
+					parentAttrs := attrs
+					parentPath := nestedChildrenPath
+					nestedChildrenPath := "aclVty.children"
+					_ = nestedChildrenPath
+					prevBody := body
+					body = childBody
 					attrs = "{}"
 					if !data.EgressVtyAccessListName.IsUnknown() && !data.EgressVtyAccessListName.IsNull() && !config.EgressVtyAccessListName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", data.EgressVtyAccessListName.ValueString())
@@ -474,8 +511,28 @@ func (data AccessList) toBody(config AccessList) nxos.Body {
 					if attrs != "{}" {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aclInst.attributes", attrs)
 					}
+					childBody = body
+					body = prevBody
+					if parentAttrs != "{}" || gjson.Get(childBody, "aclVty.children").Exists() {
+						body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+					}
+				}
+				childBody = body
+				body = prevBody
+				if parentAttrs != "{}" || gjson.Get(childBody, "aclEgress.children").Exists() {
+					body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 				}
 			}
+			childBody = body
+			body = prevBody
+			if parentAttrs != "{}" || gjson.Get(childBody, "aclPolicy.children").Exists() {
+				body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "ipv4aclAF.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 
@@ -1296,22 +1353,32 @@ func (data AccessList) toDeleteBody() nxos.Body {
 	}
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv4aclAF"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-		nestedChildrenPath := childBodyPath + ".children"
-		_ = nestedChildrenPath
-		for key, child := range data.AccessLists {
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.rn", child.getRn(key))
-			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		childBody := ""
+		hasNestedChildren := false
+		if len(data.AccessLists) > 0 {
+			hasNestedChildren = true
 		}
-		{
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.rn", "policy")
-			deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv4aclAF"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.AccessLists {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.rn", "policy")
+				deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 		}
 	}
 

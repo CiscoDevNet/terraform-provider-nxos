@@ -127,10 +127,14 @@ func (data Logging) toBody(config Logging) nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	{
 		attrs = "{}"
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogging"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "loggingLogging.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "loggingLogging.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		{
 			attrs = "{}"
 			if !data.All.IsUnknown() && !data.All.IsNull() && !config.All.IsNull() {
@@ -139,10 +143,14 @@ func (data Logging) toBody(config Logging) nxos.Body {
 			if !data.Level.IsUnknown() && !data.Level.IsNull() && !config.Level.IsNull() {
 				attrs, _ = sjson.Set(attrs, "severityLevel", data.Level.ValueString())
 			}
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-			nestedChildrenPath := childBodyPath + ".children"
+			childBody := ""
+			childBody, _ = sjson.SetRaw(childBody, "loggingLogLevel.attributes", attrs)
+			parentAttrs := attrs
+			parentPath := nestedChildrenPath
+			nestedChildrenPath := "loggingLogLevel.children"
+			_ = nestedChildrenPath
+			prevBody := body
+			body = childBody
 			for key, child := range data.Facilities {
 				configChild, configChildOk := config.Facilities[key]
 				_ = configChild
@@ -154,14 +162,28 @@ func (data Logging) toBody(config Logging) nxos.Body {
 				}
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", attrs)
 			}
+			childBody = body
+			body = prevBody
+			if parentAttrs != "{}" || gjson.Get(childBody, "loggingLogLevel.children").Exists() {
+				body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "loggingLogging.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 	{
 		attrs = "{}"
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".syslogSyslog"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "syslogSyslog.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "syslogSyslog.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		attrs = "{}"
 		if !data.FileAdminState.IsUnknown() && !data.FileAdminState.IsNull() && !config.FileAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminState", data.FileAdminState.ValueString())
@@ -265,6 +287,11 @@ func (data Logging) toBody(config Logging) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogOriginid.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "syslogSyslog.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 
@@ -746,78 +773,105 @@ func (data Logging) toDeleteBody() nxos.Body {
 	}
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogging"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-		nestedChildrenPath := childBodyPath + ".children"
-		_ = nestedChildrenPath
-		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-			if !data.All.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"all", "DME_UNSET_PROPERTY_MARKER")
+		childBody := ""
+		hasNestedChildren := false
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogging"
+			if childBody == "" {
+				childBody = "{}"
 			}
-			if !data.Level.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"severityLevel", "DME_UNSET_PROPERTY_MARKER")
-			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			for key, child := range data.Facilities {
+			{
 				childBody := ""
-				childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
-				childBody, _ = sjson.Set(childBody, "severityLevel", "DME_UNSET_PROPERTY_MARKER")
-				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", childBody)
+				if !data.All.IsNull() {
+					childBody, _ = sjson.Set(childBody, "all", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.Level.IsNull() {
+					childBody, _ = sjson.Set(childBody, "severityLevel", "DME_UNSET_PROPERTY_MARKER")
+				}
+				hasNestedChildren := false
+				if len(data.Facilities) > 0 {
+					hasNestedChildren = true
+				}
+				if childBody != "" || hasNestedChildren {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
+					if childBody == "" {
+						childBody = "{}"
+					}
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					nestedChildrenPath := childBodyPath + ".children"
+					_ = nestedChildrenPath
+					for key, child := range data.Facilities {
+						childBody := ""
+						childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+						childBody, _ = sjson.Set(childBody, "severityLevel", "DME_UNSET_PROPERTY_MARKER")
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", childBody)
+					}
+				}
 			}
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".syslogSyslog"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-		nestedChildrenPath := childBodyPath + ".children"
-		_ = nestedChildrenPath
-		{
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "syslogFile.attributes.rn", "file")
-			deleteBody, _ = sjson.Set(deleteBody, "syslogFile.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		childBody := ""
+		hasNestedChildren := false
+		if len(data.RemoteDestinations) > 0 {
+			hasNestedChildren = true
 		}
-		for key, child := range data.RemoteDestinations {
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "syslogRemoteDest.attributes.rn", child.getRn(key))
-			deleteBody, _ = sjson.Set(deleteBody, "syslogRemoteDest.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-		}
-		{
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "syslogSourceInterface.attributes.rn", "source")
-			deleteBody, _ = sjson.Set(deleteBody, "syslogSourceInterface.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-		}
-		{
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "syslogTimeStamp.attributes.rn", "timestamp")
-			deleteBody, _ = sjson.Set(deleteBody, "syslogTimeStamp.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-		}
-		{
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "syslogTermMonitor.attributes.rn", "monitor")
-			deleteBody, _ = sjson.Set(deleteBody, "syslogTermMonitor.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-		}
-		{
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "syslogConsole.attributes.rn", "console")
-			deleteBody, _ = sjson.Set(deleteBody, "syslogConsole.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-		}
-		{
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "syslogOriginid.attributes.rn", "originid")
-			deleteBody, _ = sjson.Set(deleteBody, "syslogOriginid.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".syslogSyslog"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "syslogFile.attributes.rn", "file")
+				deleteBody, _ = sjson.Set(deleteBody, "syslogFile.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.RemoteDestinations {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "syslogRemoteDest.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "syslogRemoteDest.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "syslogSourceInterface.attributes.rn", "source")
+				deleteBody, _ = sjson.Set(deleteBody, "syslogSourceInterface.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "syslogTimeStamp.attributes.rn", "timestamp")
+				deleteBody, _ = sjson.Set(deleteBody, "syslogTimeStamp.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "syslogTermMonitor.attributes.rn", "monitor")
+				deleteBody, _ = sjson.Set(deleteBody, "syslogTermMonitor.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "syslogConsole.attributes.rn", "console")
+				deleteBody, _ = sjson.Set(deleteBody, "syslogConsole.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "syslogOriginid.attributes.rn", "originid")
+				deleteBody, _ = sjson.Set(deleteBody, "syslogOriginid.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 		}
 	}
 

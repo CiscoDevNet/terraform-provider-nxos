@@ -129,6 +129,7 @@ func (data ManagementInterface) toBody(config ManagementInterface) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".mgmtMgmtIf.children"
+			_ = nestedChildrenPath
 			attrs = "{}"
 			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() && !configChild.VrfDn.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())

@@ -422,13 +422,18 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".aaaUser.children"
+			_ = nestedChildrenPath
 			{
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "name", "all")
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaUserDomain"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-				nestedChildrenPath := childBodyPath + ".children"
+				childBody := ""
+				childBody, _ = sjson.SetRaw(childBody, "aaaUserDomain.attributes", attrs)
+				parentAttrs := attrs
+				parentPath := nestedChildrenPath
+				nestedChildrenPath := "aaaUserDomain.children"
+				_ = nestedChildrenPath
+				prevBody := body
+				body = childBody
 				for key, child := range child.Roles {
 					configChild, configChildOk := configChild.Roles[key]
 					_ = configChild
@@ -442,6 +447,11 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 						attrs, _ = sjson.Set(attrs, "privType", child.PrivilegeType.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaUserRole.attributes", attrs)
+				}
+				childBody = body
+				body = prevBody
+				if parentAttrs != "{}" || gjson.Get(childBody, "aaaUserDomain.children").Exists() {
+					body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 				}
 			}
 		}
@@ -483,10 +493,14 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		if !data.TacacsTimeout.IsUnknown() && !data.TacacsTimeout.IsNull() && !config.TacacsTimeout.IsNull() {
 			attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(data.TacacsTimeout.ValueInt64(), 10))
 		}
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaTacacsPlusEp"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "aaaTacacsPlusEp.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "aaaTacacsPlusEp.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.TacacsProviders {
 			configChild, configChildOk := config.TacacsProviders[key]
 			_ = configChild
@@ -569,6 +583,7 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".aaaTacacsPlusProviderGroup.children"
+				_ = nestedChildrenPath
 				for key, child := range child.Servers {
 					configChild, configChildOk := configChild.Servers[key]
 					_ = configChild
@@ -590,6 +605,11 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaProviderRef.attributes", attrs)
 				}
 			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "aaaTacacsPlusEp.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 	{
@@ -615,10 +635,14 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		if !data.AuthenticationRealmTacacsDirectedRequest.IsUnknown() && !data.AuthenticationRealmTacacsDirectedRequest.IsNull() && !config.AuthenticationRealmTacacsDirectedRequest.IsNull() {
 			attrs, _ = sjson.Set(attrs, "tacDirectedReq", data.AuthenticationRealmTacacsDirectedRequest.ValueString())
 		}
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaAuthRealm"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "aaaAuthRealm.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "aaaAuthRealm.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		attrs = "{}"
 		if !data.DefaultAuthenticationProtocol.IsUnknown() && !data.DefaultAuthenticationProtocol.IsNull() && !config.DefaultAuthenticationProtocol.IsNull() {
 			attrs, _ = sjson.Set(attrs, "authProtocol", data.DefaultAuthenticationProtocol.ValueString())
@@ -827,6 +851,11 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaDefaultAcc.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "aaaAuthRealm.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 
@@ -2207,274 +2236,297 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaTacacsPlusEp"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		childBody := ""
 		if !data.TacacsDeadtime.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"deadtime", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "deadtime", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsDescription.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsKey.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"key", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "key", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsKeyEncryption.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"keyEnc", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "keyEnc", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsLoggingLevel.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "loggingLevel", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsName.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsOwnerKey.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsOwnerTag.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsRetries.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"retries", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "retries", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsSourceInterface.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "srcIf", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.TacacsTimeout.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
 		}
-		nestedChildrenPath := childBodyPath + ".children"
-		_ = nestedChildrenPath
-		for key, child := range data.TacacsProviders {
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProvider.attributes.rn", child.getRn(key))
-			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProvider.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		hasNestedChildren := false
+		if len(data.TacacsProviders) > 0 {
+			hasNestedChildren = true
 		}
-		for key, child := range data.TacacsProviderGroups {
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.rn", child.getRn(key))
-			deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		if len(data.TacacsProviderGroups) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaTacacsPlusEp"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.TacacsProviders {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProvider.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProvider.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.TacacsProviderGroups {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "aaaTacacsPlusProviderGroup.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 		}
 	}
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaAuthRealm"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		childBody := ""
 		if !data.AuthenticationRealmDefaultRolePolicy.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"defRolePolicy", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "defRolePolicy", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.AuthenticationRealmDescription.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.AuthenticationRealmLoggingLevel.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "loggingLevel", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.AuthenticationRealmOwnerKey.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.AuthenticationRealmOwnerTag.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.AuthenticationRealmRadiusDirectedRequest.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"radDirectedReq", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "radDirectedReq", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.AuthenticationRealmTacacsDirectedRequest.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"tacDirectedReq", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "tacDirectedReq", "DME_UNSET_PROPERTY_MARKER")
 		}
-		nestedChildrenPath := childBodyPath + ".children"
-		_ = nestedChildrenPath
-		{
-			childBody := ""
-			if !data.DefaultAuthenticationProtocol.IsNull() {
-				childBody, _ = sjson.Set(childBody, "authProtocol", "DME_UNSET_PROPERTY_MARKER")
+		hasNestedChildren := false
+		if len(data.DefaultAuthorizations) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaAuthRealm"
+			if childBody == "" {
+				childBody = "{}"
 			}
-			if !data.DefaultAuthenticationDescription.IsNull() {
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				childBody := ""
+				if !data.DefaultAuthenticationProtocol.IsNull() {
+					childBody, _ = sjson.Set(childBody, "authProtocol", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationDescription.IsNull() {
+					childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationErrorEnable.IsNull() {
+					childBody, _ = sjson.Set(childBody, "errEn", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationFallback.IsNull() {
+					childBody, _ = sjson.Set(childBody, "fallback", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationInvalidUserLog.IsNull() {
+					childBody, _ = sjson.Set(childBody, "invalidUserLog", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationLocal.IsNull() {
+					childBody, _ = sjson.Set(childBody, "local", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationNone.IsNull() {
+					childBody, _ = sjson.Set(childBody, "none", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationOwnerKey.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationOwnerTag.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationProviderGroup.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationProviderGroup2.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationProviderGroup3.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationProviderGroup4.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationProviderGroup5.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationProviderGroup6.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationProviderGroup7.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationProviderGroup8.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAuthenticationRealm.IsNull() {
+					childBody, _ = sjson.Set(childBody, "realm", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaDefaultAuth"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childBody := ""
+				if !data.ConsoleAuthenticationProtocol.IsNull() {
+					childBody, _ = sjson.Set(childBody, "authProtocol", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationDescription.IsNull() {
+					childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationErrorEnable.IsNull() {
+					childBody, _ = sjson.Set(childBody, "errEn", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationFallback.IsNull() {
+					childBody, _ = sjson.Set(childBody, "fallback", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationInvalidUserLog.IsNull() {
+					childBody, _ = sjson.Set(childBody, "invalidUserLog", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationLocal.IsNull() {
+					childBody, _ = sjson.Set(childBody, "local", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationNone.IsNull() {
+					childBody, _ = sjson.Set(childBody, "none", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationOwnerKey.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationOwnerTag.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationProviderGroup.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationProviderGroup2.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationProviderGroup3.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationProviderGroup4.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationProviderGroup5.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationProviderGroup6.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationProviderGroup7.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationProviderGroup8.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.ConsoleAuthenticationRealm.IsNull() {
+					childBody, _ = sjson.Set(childBody, "realm", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaConsoleAuth"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			for key, child := range data.DefaultAuthorizations {
+				childBody := ""
+				childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+				childBody, _ = sjson.Set(childBody, "authorMethodNone", "DME_UNSET_PROPERTY_MARKER")
 				childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationErrorEnable.IsNull() {
-				childBody, _ = sjson.Set(childBody, "errEn", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationFallback.IsNull() {
-				childBody, _ = sjson.Set(childBody, "fallback", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationInvalidUserLog.IsNull() {
-				childBody, _ = sjson.Set(childBody, "invalidUserLog", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationLocal.IsNull() {
-				childBody, _ = sjson.Set(childBody, "local", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationNone.IsNull() {
-				childBody, _ = sjson.Set(childBody, "none", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationOwnerKey.IsNull() {
-				childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationOwnerTag.IsNull() {
-				childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationProviderGroup.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationProviderGroup2.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationProviderGroup3.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationProviderGroup4.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationProviderGroup5.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationProviderGroup6.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationProviderGroup7.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationProviderGroup8.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAuthenticationRealm.IsNull() {
-				childBody, _ = sjson.Set(childBody, "realm", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if childBody != "" {
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaDefaultAuth"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-			}
-		}
-		{
-			childBody := ""
-			if !data.ConsoleAuthenticationProtocol.IsNull() {
-				childBody, _ = sjson.Set(childBody, "authProtocol", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationDescription.IsNull() {
-				childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationErrorEnable.IsNull() {
-				childBody, _ = sjson.Set(childBody, "errEn", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationFallback.IsNull() {
-				childBody, _ = sjson.Set(childBody, "fallback", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationInvalidUserLog.IsNull() {
-				childBody, _ = sjson.Set(childBody, "invalidUserLog", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationLocal.IsNull() {
-				childBody, _ = sjson.Set(childBody, "local", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationNone.IsNull() {
-				childBody, _ = sjson.Set(childBody, "none", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationOwnerKey.IsNull() {
-				childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationOwnerTag.IsNull() {
-				childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationProviderGroup.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationProviderGroup2.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationProviderGroup3.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationProviderGroup4.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationProviderGroup5.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationProviderGroup6.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationProviderGroup7.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationProviderGroup8.IsNull() {
-				childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.ConsoleAuthenticationRealm.IsNull() {
-				childBody, _ = sjson.Set(childBody, "realm", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if childBody != "" {
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaConsoleAuth"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-			}
-		}
-		for key, child := range data.DefaultAuthorizations {
-			childBody := ""
-			childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
-			childBody, _ = sjson.Set(childBody, "authorMethodNone", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "localRbac", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
-			childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaDefaultAuthor.attributes", childBody)
-		}
-		{
-			childBody := ""
-			if !data.DefaultAccountingMethodNone.IsNull() {
-				childBody, _ = sjson.Set(childBody, "accMethodNone", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingDescription.IsNull() {
-				childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingLocalRbac.IsNull() {
 				childBody, _ = sjson.Set(childBody, "localRbac", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingOwnerKey.IsNull() {
 				childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingOwnerTag.IsNull() {
 				childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingProviderGroup.IsNull() {
 				childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingProviderGroup2.IsNull() {
 				childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingProviderGroup3.IsNull() {
 				childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingProviderGroup4.IsNull() {
 				childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingProviderGroup5.IsNull() {
 				childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingProviderGroup6.IsNull() {
 				childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingProviderGroup7.IsNull() {
 				childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !data.DefaultAccountingProviderGroup8.IsNull() {
 				childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaDefaultAuthor.attributes", childBody)
 			}
-			if !data.DefaultAccountingRealm.IsNull() {
-				childBody, _ = sjson.Set(childBody, "realm", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if childBody != "" {
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaDefaultAcc"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			{
+				childBody := ""
+				if !data.DefaultAccountingMethodNone.IsNull() {
+					childBody, _ = sjson.Set(childBody, "accMethodNone", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingDescription.IsNull() {
+					childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingLocalRbac.IsNull() {
+					childBody, _ = sjson.Set(childBody, "localRbac", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingOwnerKey.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingOwnerTag.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingProviderGroup.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingProviderGroup2.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingProviderGroup3.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingProviderGroup4.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingProviderGroup5.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingProviderGroup6.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingProviderGroup7.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingProviderGroup8.IsNull() {
+					childBody, _ = sjson.Set(childBody, "providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.DefaultAccountingRealm.IsNull() {
+					childBody, _ = sjson.Set(childBody, "realm", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaDefaultAcc"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
 			}
 		}
 	}

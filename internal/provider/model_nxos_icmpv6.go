@@ -121,10 +121,14 @@ func (data ICMPv6) toBody(config ICMPv6) nxos.Body {
 		if !data.RedirectSyslogInterval.IsUnknown() && !data.RedirectSyslogInterval.IsNull() && !config.RedirectSyslogInterval.IsNull() {
 			attrs, _ = sjson.Set(attrs, "redirectSyslogInterval", strconv.FormatInt(data.RedirectSyslogInterval.ValueInt64(), 10))
 		}
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icmpv6Inst"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "icmpv6Inst.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "icmpv6Inst.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.Interfaces {
 			configChild, configChildOk := config.Interfaces[key]
 			_ = configChild
@@ -135,6 +139,11 @@ func (data ICMPv6) toBody(config ICMPv6) nxos.Body {
 				attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.icmpv6If.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "icmpv6Inst.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 
@@ -276,34 +285,44 @@ func (data ICMPv6) toDeleteBody() nxos.Body {
 	}
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icmpv6Inst"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		childBody := ""
 		if !data.AdjacencyStaleTimer.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adjStaleTimer", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "adjStaleTimer", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.AdjacencyStaleTimerIcmp.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adjStaleTimerIcmp", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "adjStaleTimerIcmp", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.InstanceAdminState.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Control.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ctrl", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RedirectSyslog.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"redirectSyslog", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "redirectSyslog", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RedirectSyslogInterval.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"redirectSyslogInterval", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "redirectSyslogInterval", "DME_UNSET_PROPERTY_MARKER")
 		}
-		nestedChildrenPath := childBodyPath + ".children"
-		_ = nestedChildrenPath
-		for key, child := range data.Interfaces {
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "icmpv6If.attributes.rn", child.getRn(key))
-			deleteBody, _ = sjson.Set(deleteBody, "icmpv6If.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		hasNestedChildren := false
+		if len(data.Interfaces) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icmpv6Inst"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.Interfaces {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "icmpv6If.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "icmpv6If.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 		}
 	}
 

@@ -163,6 +163,7 @@ func (data VRF) toBody(config VRF) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".l3Inst.children"
+			_ = nestedChildrenPath
 			{
 				attrs = "{}"
 				attrs, _ = sjson.Set(attrs, "name", key)
@@ -172,10 +173,14 @@ func (data VRF) toBody(config VRF) nxos.Body {
 				if !child.RouteDistinguisher.IsUnknown() && !child.RouteDistinguisher.IsNull() && !configChild.RouteDistinguisher.IsNull() {
 					attrs, _ = sjson.Set(attrs, "rd", child.RouteDistinguisher.ValueString())
 				}
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtctrlDom"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-				nestedChildrenPath := childBodyPath + ".children"
+				childBody := ""
+				childBody, _ = sjson.SetRaw(childBody, "rtctrlDom.attributes", attrs)
+				parentAttrs := attrs
+				parentPath := nestedChildrenPath
+				nestedChildrenPath := "rtctrlDom.children"
+				_ = nestedChildrenPath
+				prevBody := body
+				body = childBody
 				for key, child := range child.AddressFamilies {
 					configChild, configChildOk := configChild.AddressFamilies[key]
 					_ = configChild
@@ -186,6 +191,7 @@ func (data VRF) toBody(config VRF) nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlDomAf.children"
+						_ = nestedChildrenPath
 						for key, child := range child.RouteTargetAddressFamilies {
 							configChild, configChildOk := configChild.RouteTargetAddressFamilies[key]
 							_ = configChild
@@ -196,6 +202,7 @@ func (data VRF) toBody(config VRF) nxos.Body {
 							{
 								nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 								nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlAfCtrl.children"
+								_ = nestedChildrenPath
 								for key, child := range child.RouteTargetDirections {
 									configChild, configChildOk := configChild.RouteTargetDirections[key]
 									_ = configChild
@@ -206,6 +213,7 @@ func (data VRF) toBody(config VRF) nxos.Body {
 									{
 										nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 										nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlRttP.children"
+										_ = nestedChildrenPath
 										for key := range child.RouteTargets {
 											configChild, configChildOk := configChild.RouteTargets[key]
 											_ = configChild
@@ -219,6 +227,11 @@ func (data VRF) toBody(config VRF) nxos.Body {
 							}
 						}
 					}
+				}
+				childBody = body
+				body = prevBody
+				if parentAttrs != "{}" || gjson.Get(childBody, "rtctrlDom.children").Exists() {
+					body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 				}
 			}
 		}

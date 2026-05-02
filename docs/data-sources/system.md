@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, and ERSPAN origin IP settings.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/ndVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpc/ndVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpcDom/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/cfsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Entity/cfsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Inst/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/cdpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AEntity/cdpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AInst/cdpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AIf/coppEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Entity/coppProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Profile/terminalTerminal https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Terminal/terminalLine https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Line/terminalConsole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Console/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Vty/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalSesLmt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:SesLmt/icamEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Entity/icamInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Inst/icamScale https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Scale/nxapiInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/nxapi:Inst/imBreakout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Breakout/imMod https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Mod/imFpP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:FpP/sasSas https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Sas/sasSvc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Svc/sasSvcInstance https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SvcInstance/sasSController https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SController/sasFwSvcPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:FwSvcPolicy/sasIpVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:IpVrf/sasDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Dom/commEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Entity/commSsh https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Ssh/commSshKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:SshKey/spanErspanOriginIp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:ErspanOriginIp/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/ndVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpc/ndVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpcDom/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/cfsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Entity/cfsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Inst/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegionExtended/mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/cdpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AEntity/cdpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AInst/cdpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AIf/coppEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Entity/coppProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Profile/terminalTerminal https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Terminal/terminalLine https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Line/terminalConsole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Console/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Vty/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalSesLmt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:SesLmt/icamEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Entity/icamInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Inst/icamScale https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Scale/nxapiInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/nxapi:Inst/imBreakout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Breakout/imMod https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Mod/imFpP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:FpP/sasSas https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Sas/sasSvc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Svc/sasSvcInstance https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SvcInstance/sasSController https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SController/sasFwSvcPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:FwSvcPolicy/sasIpVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:IpVrf/sasDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Dom/commEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Entity/commSsh https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Ssh/commSshKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:SshKey/spanErspanOriginIp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:ErspanOriginIp/
 ---
 
 # nxos_system (Data Source)
@@ -48,6 +48,8 @@ This data source can read the system configuration on NX-OS devices, including t
 - [udldInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/)
 - [udldPhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/)
 - [platformEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/)
+- [platformTcamRegion](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegion/)
+- [platformTcamRegionExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegionExtended/)
 - [mgmtMgmtIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/)
 - [lldpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/)
 - [lldpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/)
@@ -332,6 +334,111 @@ data "nxos_system" "example" {
 - `ssh_login_grace_time` (Number) Maximum grace time of SSH login.
 - `ssh_message_authentication_codes` (String) Enable Or Disable All Message Authentication Codes.
 - `ssh_port` (Number) SSH port.
+- `tcam_region_arp_acl_size` (Number) ARP ACL TCAM region size.
+- `tcam_region_copp_size` (Number) Ingress Copp TCAM region size.
+- `tcam_region_copp_system_size` (Number) Copp System TCAM region size.
+- `tcam_region_egress_ipv6_qos_size` (Number) Egress IPV6 Qos TCAM region size.
+- `tcam_region_egress_ipv6_racl_size` (Number) Egress IPv6 RACL TCAM region size.
+- `tcam_region_egress_mac_qos_size` (Number) Egress Mac Qos TCAM region size.
+- `tcam_region_egress_qos_lite_size` (Number) Egress Qos Lite TCAM region size.
+- `tcam_region_egress_qos_size` (Number) Egress Qos TCAM region size.
+- `tcam_region_egress_racl_size` (Number) Egress RACL TCAM region size.
+- `tcam_region_egress_vacl_size` (Number) Egress VACL TCAM region size.
+- `tcam_region_extended_egress_copp_size` (Number) Egress CoPP TCAM region size.
+- `tcam_region_extended_egress_flow_size` (Number) Egress Flow TCAM region size.
+- `tcam_region_extended_egress_hardware_telemetry_size` (Number) e-hw-telemetry TCAM region size.
+- `tcam_region_extended_egress_interface_acl_all_per_port_stats` (Boolean) e-ifacl-all region with per-port-stats.
+- `tcam_region_extended_egress_interface_acl_all_size` (Number) e-pacl-all TCAM region size.
+- `tcam_region_extended_egress_interface_acl_size` (Number) Egress Interface ACL TCAM region size.
+- `tcam_region_extended_egress_ipv6_racl_per_port_stats` (Boolean) e-ipv6-racl region with per-port-stats.
+- `tcam_region_extended_egress_l2_qos_size` (Number) egr-l2-qos TCAM region size.
+- `tcam_region_extended_egress_l3_vlan_qos_size` (Number) egr-l3-vlan-qos TCAM region size.
+- `tcam_region_extended_egress_racl_per_port_stats` (Boolean) e-racl region with per-port-stats.
+- `tcam_region_extended_egress_racl_size` (Number) egr-racl TCAM region size.
+- `tcam_region_extended_egress_sup_size` (Number) Egress SUP TCAM region size.
+- `tcam_region_extended_hardware_telemetry_size` (Number) hw-telemetry TCAM region size.
+- `tcam_region_extended_ingress_dacl_size` (Number) ing-dacl TCAM region size.
+- `tcam_region_extended_ingress_interface_acl_size` (Number) Ingress Ifacl TCAM region size.
+- `tcam_region_extended_ingress_interface_acl_wide_size` (Number) Ingress Ifacl Wide TCAM region size.
+- `tcam_region_extended_ingress_ipv6_interface_acl_lite_size` (Number) IPv6 Interface ACL Lite TCAM region size.
+- `tcam_region_extended_ingress_l2_l3_qos_size` (Number) ing-l2-l3-qos TCAM region size.
+- `tcam_region_extended_ingress_l2_qos_size` (Number) ing-l2-qos TCAM region size.
+- `tcam_region_extended_ingress_l2_span_filter_size` (Number) ing-l2-span-filter TCAM region size.
+- `tcam_region_extended_ingress_l3_span_filter_size` (Number) ing-l3-span-filter TCAM region size.
+- `tcam_region_extended_ingress_pacl_sb_size` (Number) ing-pacl-sb TCAM region size.
+- `tcam_region_extended_ingress_racl_size` (Number) Ingress Racl TCAM region size.
+- `tcam_region_extended_ingress_rbacl_size` (Number) ing-rbacl TCAM region size.
+- `tcam_region_extended_ingress_redirect_size` (Number) Size of Ingress redirect region in ACX.
+- `tcam_region_extended_ingress_storm_control_size` (Number) Ingress Storm Control TCAM region size.
+- `tcam_region_extended_ingress_sup_size` (Number) Ingress SUP TCAM region size.
+- `tcam_region_extended_ingress_vacl_nh_size` (Number) ing-vacl-nh TCAM region size.
+- `tcam_region_extended_ingress_vlan_qos_size` (Number) Ingress L3VlanQos TCAM region size.
+- `tcam_region_extended_interface_acl_all_per_port_stats` (Boolean) ifacl-all region with per-port-stats.
+- `tcam_region_extended_interface_acl_all_profile` (Number) ifacl-all region match profile.
+- `tcam_region_extended_interface_acl_all_size` (Number) pacl-all TCAM region size.
+- `tcam_region_extended_interface_acl_per_port_stats` (Boolean) ifacl region with per-port-stats.
+- `tcam_region_extended_ipv6_interface_acl_per_port_stats` (Boolean) ipv6-ifacl region with per-port-stats.
+- `tcam_region_extended_ipv6_racl_per_port_stats` (Boolean) ipv6-racl region with per-port-stats.
+- `tcam_region_extended_mac_interface_acl_per_port_stats` (Boolean) mac-ifacl region with per-port-stats.
+- `tcam_region_extended_multicast_nat_size` (Number) multicast NAT TCAM region size.
+- `tcam_region_extended_multicast_nbm_size` (Number) Multicast NBM TCAM region size.
+- `tcam_region_extended_racl_all_per_port_stats` (Boolean) racl-all region with per-port-stats.
+- `tcam_region_extended_racl_all_profile` (Number) racl-all region match profile.
+- `tcam_region_extended_racl_all_size` (Number) racl-all TCAM region size.
+- `tcam_region_extended_racl_per_port_stats` (Boolean) racl region with per-port-stats.
+- `tcam_region_extended_redirect_v4_size` (Number) redirect_v4 TCAM region size.
+- `tcam_region_extended_span_size` (Number) span TCAM region size.
+- `tcam_region_extended_span_tahoe_size` (Number) span Tahoe TCAM region size.
+- `tcam_region_fcoe_egress_size` (Number) Egress FCoE Counters size.
+- `tcam_region_fcoe_ingress_size` (Number) Ingress FCoE Counters size.
+- `tcam_region_fhs_size` (Number) FHS TCAM region size.
+- `tcam_region_ingress_flow_redirect_size` (Number) Size of Egress region in ACX.
+- `tcam_region_ingress_flow_size` (Number) Ingress Flow TCAM region size.
+- `tcam_region_interface_acl_lite_size` (Number) Interface ACL Lite TCAM region size.
+- `tcam_region_interface_acl_size` (Number) Interface ACL TCAM region size.
+- `tcam_region_interface_acl_udf_size` (Number) IPV4 IFACL SPAN UDF size.
+- `tcam_region_ipsg_size` (Number) IPSG TCAM region size.
+- `tcam_region_ipv6_interface_acl_size` (Number) IPv6 Interface ACL TCAM region size.
+- `tcam_region_ipv6_l3_qos_size` (Number) IPV6 L3 QoS TCAM region size.
+- `tcam_region_ipv6_pbr_size` (Number) IPV6 PBR TCAM region size.
+- `tcam_region_ipv6_qos_size` (Number) IPV6 QoS TCAM region size.
+- `tcam_region_ipv6_racl_size` (Number) IPV6 RACL TCAM region size.
+- `tcam_region_ipv6_span_l2_size` (Number) IPV6 L2 SPAN TCAM region size.
+- `tcam_region_ipv6_span_size` (Number) IPV6 SPAN TCAM region size.
+- `tcam_region_ipv6_sup_size` (Number) IPV6 SUP TCAM region size.
+- `tcam_region_ipv6_vacl_size` (Number) IPV6 VACL TCAM region size.
+- `tcam_region_ipv6_vlan_qos_size` (Number) IPV6 VLAN QoS TCAM region size.
+- `tcam_region_l3_qos_intra_lite_size` (Number) L3 QoS Intra Lite TCAM region size.
+- `tcam_region_mac_interface_acl_size` (Number) MAC Interface ACL TCAM region size.
+- `tcam_region_mac_l3_qos_size` (Number) MAC L3 QoS TCAM region size.
+- `tcam_region_mac_qos_size` (Number) MAC QoS TCAM region size.
+- `tcam_region_mac_vacl_size` (Number) MAC VACL TCAM region size.
+- `tcam_region_mac_vlan_qos_size` (Number) MAC VLAN QoS TCAM region size.
+- `tcam_region_mpls_doublewide` (Boolean) MPLS double-wide TCAM region.
+- `tcam_region_mpls_size` (Number) MPLS TCAM region size.
+- `tcam_region_multicast_bidir_size` (Number) MCAST BIDIR TCAM region size.
+- `tcam_region_mvpn_size` (Number) MVPN TCAM region size.
+- `tcam_region_n9k_arp_acl_size` (Number) n9k-arp-acl TCAM region size.
+- `tcam_region_nat_size` (Number) NAT TCAM region size.
+- `tcam_region_openflow_doublewide` (Boolean) Openflow double-wide TCAM region.
+- `tcam_region_openflow_lite_size` (Number) OPENFLOW Lite TCAM region size.
+- `tcam_region_openflow_size` (Number) OPENFLOW TCAM region size.
+- `tcam_region_pbr_size` (Number) IPV4 PBR TCAM region size.
+- `tcam_region_qos_intra_lite_size` (Number) QoS Intra Lite TCAM region size.
+- `tcam_region_qos_label_size` (Number) Qos Label TCAM region size.
+- `tcam_region_qos_size` (Number) QOS TCAM region size.
+- `tcam_region_racl_lite_size` (Number) RACL TCAM region size.
+- `tcam_region_racl_size` (Number) RACL TCAM region size.
+- `tcam_region_racl_udf_size` (Number) IPV4 RACL SPAN UDF TCAM region size.
+- `tcam_region_sup_size` (Number) SUP TCAM region size.
+- `tcam_region_svi_size` (Number) Ingress SVI Counters TCAM region size.
+- `tcam_region_tcp_nat_size` (Number) TCP NAT TCAM region size.
+- `tcam_region_vacl_lite_size` (Number) VACL Lite TCAM region size.
+- `tcam_region_vacl_size` (Number) Virtual ACL TCAM region size.
+- `tcam_region_vlan_qos_intra_lite_size` (Number) VLAN QoS Intra Lite TCAM region size.
+- `tcam_region_vlan_qos_size` (Number) VLAN QoS TCAM region size.
+- `tcam_region_vpc_convergence_size` (Number) VPC TCAM region size.
+- `tcam_region_vxlan_p2p_size` (Number) VXLAN P2P TCAM region size.
 - `udld_admin_state` (String) The administrative state of the object or policy.
 - `udld_aggressive` (String) Global Aggressive Mode.
 - `udld_interfaces` (Attributes Map) List of UDLD interfaces.

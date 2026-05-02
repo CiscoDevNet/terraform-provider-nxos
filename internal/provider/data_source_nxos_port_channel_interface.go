@@ -57,7 +57,7 @@ func (d *PortChannelInterfaceDataSource) Metadata(_ context.Context, req datasou
 func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -265,6 +265,26 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 							MarkdownDescription: "Configure EVPN multisite tracking for DCI/Fabric interface.",
 							Computed:            true,
 						},
+						"priority_flow_control_mode": schema.StringAttribute{
+							MarkdownDescription: "Priority-flow-control mode on/off/auto.",
+							Computed:            true,
+						},
+						"priority_flow_control_send_tlv": schema.BoolAttribute{
+							MarkdownDescription: "Send_tlv used for sending dcbx pfc tlv when pfc mode is on.",
+							Computed:            true,
+						},
+						"priority_flow_control_watchdog_disable_action": schema.BoolAttribute{
+							MarkdownDescription: "Only generate syslog for stuck queue, no action.",
+							Computed:            true,
+						},
+						"priority_flow_control_watchdog_interface_multiplier": schema.Int64Attribute{
+							MarkdownDescription: "Shutdown mutlipler value.",
+							Computed:            true,
+						},
+						"priority_flow_control_watchdog_interval": schema.StringAttribute{
+							MarkdownDescription: "Watch dog internal on/off.",
+							Computed:            true,
+						},
 						"allow_multi_tag": schema.StringAttribute{
 							MarkdownDescription: "Allow Multitag.",
 							Computed:            true,
@@ -468,7 +488,7 @@ func (d *PortChannelInterfaceDataSource) Read(ctx context.Context, req datasourc
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "pcAggrIf,nwRtVrfMbr,l1StormCtrlP,nvoMultisiteIfTracking,pcAggrIfExtended,pcRsMbrIfs")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "pcAggrIf,nwRtVrfMbr,l1StormCtrlP,nvoMultisiteIfTracking,ipqosPriorFlowCtrl,ipqosPriorFlowCtrlWd,pcAggrIfExtended,pcRsMbrIfs")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

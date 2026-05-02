@@ -1,0 +1,276 @@
+---
+name: Network QoS
+class_name: ipqosNwQoS
+dn: sys/ipqos/nw
+no_delete: true
+ds_description: This data source can read the network QoS configuration on NX-OS devices, including class maps and policy maps with MTU and pause settings.
+res_description: This resource can manage the network QoS configuration on NX-OS devices, including class maps and policy maps with MTU and pause settings.
+doc_path: Qos/ipqos:NwQoS/
+doc_category: System
+child_classes:
+  - class_name: ipqosCMapEntity
+    doc_path: Qos/ipqos:CMapEntity/
+    rn: c
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ipqosCMapInst
+        doc_path: Qos/ipqos:CMapInst/
+        rn: name-%s
+        type: list
+        tf_name: class_maps
+        description: 'List of class maps.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of class-map.'
+            example: Voice
+          - nxos_name: matchType
+            tf_name: match_type
+            type: String
+            description: 'Match-any, match-all or match-first.'
+            enum_values:
+              - match-any
+              - match-all
+              - match-first
+            example: match-any
+        child_classes:
+          - class_name: ipqosCos
+            rn: cos-%v
+            type: list
+            tf_name: cos_values
+            description: 'List of CoS values to match.'
+            doc_path: Qos/ipqos:Cos/
+            attributes:
+              - nxos_name: val
+                tf_name: value
+                type: Int64
+                id: true
+                description: 'Cos value.'
+                min_int: 0
+                max_int: 7
+                example: 4
+                exclude_test: true
+  - class_name: ipqosPMapEntity
+    doc_path: Qos/ipqos:PMapEntity/
+    rn: p
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ipqosPMapInst
+        doc_path: Qos/ipqos:PMapInst/
+        rn: name-%s
+        type: list
+        tf_name: policy_maps
+        description: 'List of policy maps.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of policy-map.'
+            example: PM1
+          - nxos_name: matchType
+            tf_name: match_type
+            type: String
+            description: 'Match-any, match-all or match-first.'
+            enum_values:
+              - match-any
+              - match-all
+              - match-first
+            example: match-any
+        child_classes:
+          - class_name: ipqosMatchCMap
+            doc_path: Qos/ipqos:MatchCMap/
+            rn: cmap-%s
+            type: list
+            tf_name: match_class_maps
+            description: 'List of match class maps.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Match using class-map.'
+                example: Voice
+              - nxos_name: nextCMap
+                tf_name: next_class_map
+                type: String
+                description: 'Insert before the given class-map.'
+                example: Voice
+                exclude_test: true
+              - nxos_name: prevCMap
+                tf_name: previous_class_map
+                type: String
+                description: 'Insert after the given class-map.'
+                example: Voice
+                exclude_test: true
+            child_classes:
+              - class_name: ipqosSetMTU
+                doc_path: Qos/ipqos:SetMTU/
+                rn: mtu
+                type: single
+                tf_name: mtu
+                description: 'Set MTU configuration.'
+                attributes:
+                  - nxos_name: value
+                    tf_name: mtu_value
+                    type: Int64
+                    description: 'Set MTU value.'
+                    min_int: 576
+                    max_int: 9216
+                    example: 9216
+              - class_name: ipqosPause
+                doc_path: Qos/ipqos:Pause/
+                rn: pause
+                type: single
+                tf_name: pause
+                description: 'Pause PFC CoS configuration.'
+                attributes:
+                  - nxos_name: bufferSize
+                    tf_name: pause_buffer_size
+                    type: Int64
+                    description: 'Size in bytes.'
+                    min_int: 5000
+                    max_int: 268435456
+                    example: 12582913
+                    exclude_test: true
+                  - nxos_name: headroom
+                    tf_name: pause_headroom
+                    type: Int64
+                    description: 'Headroom size.'
+                    min_int: 0
+                    max_int: 268435456
+                    example: 0
+                    exclude_test: true
+                  - nxos_name: noDrop
+                    tf_name: pause_no_drop
+                    type: Bool
+                    description: 'Configure pause no-drop mode.'
+                    example: true
+                    exclude_test: true
+                  - nxos_name: pauseDynamic
+                    tf_name: pause_dynamic
+                    type: Int64
+                    description: 'Pause dynamic alpha.'
+                    min_int: 0
+                    max_int: 255
+                    example: 0
+                    exclude_test: true
+                  - nxos_name: pauseThreshold
+                    tf_name: pause_threshold
+                    type: Int64
+                    description: 'Xoff bytes.'
+                    min_int: 0
+                    max_int: 268435456
+                    example: 0
+                    exclude_test: true
+                  - nxos_name: pfcCos0
+                    tf_name: pause_pfc_cos_0
+                    type: Bool
+                    description: 'Configure pfc-cos 0 value.'
+                    example: false
+                    exclude_test: true
+                  - nxos_name: pfcCos1
+                    tf_name: pause_pfc_cos_1
+                    type: Bool
+                    description: 'Configure pfc-cos 1 value.'
+                    example: false
+                    exclude_test: true
+                  - nxos_name: pfcCos2
+                    tf_name: pause_pfc_cos_2
+                    type: Bool
+                    description: 'Configure pfc-cos 2 value.'
+                    example: false
+                    exclude_test: true
+                  - nxos_name: pfcCos3
+                    tf_name: pause_pfc_cos_3
+                    type: Bool
+                    description: 'Configure pfc-cos 3 value.'
+                    example: false
+                    exclude_test: true
+                  - nxos_name: pfcCos4
+                    tf_name: pause_pfc_cos_4
+                    type: Bool
+                    description: 'Configure pfc-cos 4 value.'
+                    example: false
+                    exclude_test: true
+                  - nxos_name: pfcCos5
+                    tf_name: pause_pfc_cos_5
+                    type: Bool
+                    description: 'Configure pfc-cos 5 value.'
+                    example: false
+                    exclude_test: true
+                  - nxos_name: pfcCos6
+                    tf_name: pause_pfc_cos_6
+                    type: Bool
+                    description: 'Configure pfc-cos 6 value.'
+                    example: false
+                    exclude_test: true
+                  - nxos_name: pfcCos7
+                    tf_name: pause_pfc_cos_7
+                    type: Bool
+                    description: 'Configure pfc-cos 7 value.'
+                    example: false
+                    exclude_test: true
+                  - nxos_name: receive
+                    tf_name: pause_receive
+                    type: Bool
+                    description: 'Configure pause receive only mode.'
+                    example: false
+                    exclude_test: true
+                  - nxos_name: resumeOffset
+                    tf_name: pause_resume_offset
+                    type: Int64
+                    description: 'Xon offset.'
+                    min_int: 0
+                    max_int: 268435456
+                    example: 0
+                    exclude_test: true
+                  - nxos_name: resumeThreshold
+                    tf_name: pause_resume_threshold
+                    type: Int64
+                    description: 'Xon bytes.'
+                    min_int: 0
+                    max_int: 268435456
+                    example: 0
+                    exclude_test: true
+  - class_name: ipqosServPol
+    doc_path: Qos/ipqos:ServPol/
+    rn: policy
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ipqosIngress
+        doc_path: Qos/ipqos:Ingress/
+        rn: in
+        type: single
+        no_delete: true
+        child_classes:
+          - class_name: ipqosSystem
+            doc_path: Qos/ipqos:System/
+            rn: sys
+            type: single
+            tf_name: policy_system_in
+            description: 'Ingress system QoS policy assignment.'
+            child_classes:
+              - class_name: ipqosInst
+                doc_path: Qos/ipqos:Inst/
+                rn: pmap
+                type: single
+                tf_name: policy_map
+                description: 'Network QoS policy system in policy map assignment.'
+                attributes:
+                  - nxos_name: name
+                    tf_name: system_in_policy_map_name
+                    type: String
+                    description: 'Policy-map Name.'
+                    example: PM1
+                  - nxos_name: stats
+                    tf_name: policy_map_statistics
+                    type: Bool
+                    description: 'Turn on/off statistics.'
+                    example: false
+

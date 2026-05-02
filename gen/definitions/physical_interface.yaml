@@ -553,6 +553,57 @@ child_classes:
               - dci
               - fabric
             example: dci
+      - class_name: ipqosPriorFlowCtrl
+        rn: priorflowctrl
+        type: single
+        tf_name: priority_flow_control
+        description: 'Priority Flow Control configuration.'
+        doc_path: Qos/ipqos:PriorFlowCtrl/
+        attributes:
+          - nxos_name: mode
+            tf_name: priority_flow_control_mode
+            type: String
+            description: 'Priority-flow-control mode on/off/auto.'
+            enum_values:
+              - auto
+              - 'on'
+              - 'off'
+            example: 'on'
+          - nxos_name: send_tlv
+            tf_name: priority_flow_control_send_tlv
+            type: Bool
+            description: 'Send_tlv used for sending dcbx pfc tlv when pfc mode is on.'
+            example: true
+      - class_name: ipqosPriorFlowCtrlWd
+        rn: priorflowctrlwd
+        type: single
+        tf_name: priority_flow_control_watchdog
+        description: 'Priority Flow Control Watchdog configuration.'
+        doc_path: Qos/ipqos:PriorFlowCtrlWd/
+        attributes:
+          - nxos_name: disableAction
+            tf_name: priority_flow_control_watchdog_disable_action
+            type: Bool
+            description: 'Only generate syslog for stuck queue, no action.'
+            example: true
+            exclude_test: true
+          - nxos_name: interfaceMutiplier
+            tf_name: priority_flow_control_watchdog_interface_multiplier
+            type: Int64
+            description: 'Shutdown mutlipler value.'
+            min_int: 0
+            max_int: 40
+            example: 5
+            exclude_test: true
+          - nxos_name: watchDogInterval
+            tf_name: priority_flow_control_watchdog_interval
+            type: String
+            description: 'Watch dog internal on/off.'
+            enum_values:
+              - 'on'
+              - 'off'
+            example: 'off'
+            exclude_test: true
       - class_name: l1PhysIfExtended
         rn: physExtd
         type: single

@@ -63,7 +63,7 @@ func (r *PhysicalInterfaceResource) Metadata(ctx context.Context, req resource.M
 func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "System/l1:PhysIfExtended/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:PhysIfExtended/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -479,6 +479,35 @@ func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.Sch
 								stringvalidator.OneOf("unknown", "dci", "fabric"),
 							},
 						},
+						"priority_flow_control_mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Priority-flow-control mode on/off/auto.").AddStringEnumDescription("auto", "on", "off").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("auto", "on", "off"),
+							},
+						},
+						"priority_flow_control_send_tlv": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Send_tlv used for sending dcbx pfc tlv when pfc mode is on.").String,
+							Optional:            true,
+						},
+						"priority_flow_control_watchdog_disable_action": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Only generate syslog for stuck queue, no action.").String,
+							Optional:            true,
+						},
+						"priority_flow_control_watchdog_interface_multiplier": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Shutdown mutlipler value.").AddIntegerRangeDescription(0, 40).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 40),
+							},
+						},
+						"priority_flow_control_watchdog_interval": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Watch dog internal on/off.").AddStringEnumDescription("on", "off").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("on", "off"),
+							},
+						},
 						"allow_multi_tag": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Allow Multitag.").AddStringEnumDescription("disable", "enable").String,
 							Optional:            true,
@@ -794,7 +823,7 @@ func (r *PhysicalInterfaceResource) Read(ctx context.Context, req resource.ReadR
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l1PhysIf,nwRtVrfMbr,l1StormCtrlP,nvoMultisiteIfTracking,l1PhysIfExtended")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l1PhysIf,nwRtVrfMbr,l1StormCtrlP,nvoMultisiteIfTracking,ipqosPriorFlowCtrl,ipqosPriorFlowCtrlWd,l1PhysIfExtended")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

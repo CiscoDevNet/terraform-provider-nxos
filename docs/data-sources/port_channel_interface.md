@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
   API Documentation
-  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
+  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Data Source)
@@ -18,6 +18,8 @@ This data source can read the configuration of port-channel interfaces on NX-OS 
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
 - [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
+- [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/)
+- [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
 - [pcAggrIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/)
 - [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/)
 
@@ -95,6 +97,11 @@ Read-Only:
 - `port_type` (String) Type of the port: Fabric vs Leaf.
 - `port_type_external` (String) Identifies if or not the port is a external-facing port.
 - `port_type_fabric` (String) Identifies if or not the port is a fabric-facing port.
+- `priority_flow_control_mode` (String) Priority-flow-control mode on/off/auto.
+- `priority_flow_control_send_tlv` (Boolean) Send_tlv used for sending dcbx pfc tlv when pfc mode is on.
+- `priority_flow_control_watchdog_disable_action` (Boolean) Only generate syslog for stuck queue, no action.
+- `priority_flow_control_watchdog_interface_multiplier` (Number) Shutdown mutlipler value.
+- `priority_flow_control_watchdog_interval` (String) Watch dog internal on/off.
 - `pxe_transition_timeout` (Number) PXE Individual Transition Timeout.
 - `router_mac` (String) The administrative router MAC address.
 - `router_mac_ipv6_extract` (String) Disable/enable switchport ipv6 extract.

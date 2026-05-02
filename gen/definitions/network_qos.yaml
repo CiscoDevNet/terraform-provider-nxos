@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the network QoS configuration on NX-OS devices, including class maps and policy maps with MTU and pause settings.
 res_description: This resource can manage the network QoS configuration on NX-OS devices, including class maps and policy maps with MTU and pause settings.
 doc_path: Qos/ipqos:NwQoS/
-doc_category: System
+doc_category: Quality of Service
 child_classes:
   - class_name: ipqosCMapEntity
     doc_path: Qos/ipqos:CMapEntity/

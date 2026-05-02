@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the default QoS configuration on NX-OS devices, including class maps with DSCP matching and policy maps with policing and QoS group settings.
 res_description: This resource can manage the default QoS configuration on NX-OS devices, including class maps with DSCP matching and policy maps with policing and QoS group settings.
 doc_path: Qos/ipqos:DefaultQoS/
-doc_category: System
+doc_category: Quality of Service
 child_classes:
   - class_name: ipqosCMapEntity
     doc_path: Qos/ipqos:CMapEntity/

@@ -2,3 +2,4 @@
 - Add Priority Flow Control Watchdog configuration to `nxos_physical_interface` resource and data source
 - Add Priority Flow Control (PFC) configuration to `nxos_port_channel_interface` resource and data source
 - Add Priority Flow Control Watchdog configuration to `nxos_port_channel_interface` resource and data source
+- Add new `nxos_network_qos` resource and data source

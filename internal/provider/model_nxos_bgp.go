@@ -415,8 +415,6 @@ func (data BGP) toBody(config BGP) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".bgpInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -466,8 +464,14 @@ func (data BGP) toBody(config BGP) nxos.Body {
 		if !data.RdDualId.IsUnknown() && !data.RdDualId.IsNull() && !config.RdDualId.IsNull() {
 			attrs, _ = sjson.Set(attrs, "rdDualId", strconv.FormatInt(data.RdDualId.ValueInt64(), 10))
 		}
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "bgpInst.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "bgpInst.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.Vrfs {
 			configChild, configChildOk := config.Vrfs[key]
 			_ = configChild
@@ -526,6 +530,7 @@ func (data BGP) toBody(config BGP) nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bgpDom.children"
+				_ = nestedChildrenPath
 				attrs = "{}"
 				if !child.RouteControlEnforceFirstAs.IsUnknown() && !child.RouteControlEnforceFirstAs.IsNull() && !configChild.RouteControlEnforceFirstAs.IsNull() {
 					attrs, _ = sjson.Set(attrs, "enforceFirstAs", child.RouteControlEnforceFirstAs.ValueString())
@@ -688,6 +693,7 @@ func (data BGP) toBody(config BGP) nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bgpDomAf.children"
+						_ = nestedChildrenPath
 						for key, child := range child.AdvertisedPrefixes {
 							configChild, configChildOk := configChild.AdvertisedPrefixes[key]
 							_ = configChild
@@ -843,6 +849,7 @@ func (data BGP) toBody(config BGP) nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bgpPeerCont.children"
+						_ = nestedChildrenPath
 						for key, child := range child.PeerTemplateAddressFamilies {
 							configChild, configChildOk := configChild.PeerTemplateAddressFamilies[key]
 							_ = configChild
@@ -913,6 +920,7 @@ func (data BGP) toBody(config BGP) nxos.Body {
 							{
 								nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 								nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bgpPeerAf.children"
+								_ = nestedChildrenPath
 								attrs = "{}"
 								if !child.MaxPrefixAction.IsUnknown() && !child.MaxPrefixAction.IsNull() && !configChild.MaxPrefixAction.IsNull() {
 									attrs, _ = sjson.Set(attrs, "action", child.MaxPrefixAction.ValueString())
@@ -1020,6 +1028,7 @@ func (data BGP) toBody(config BGP) nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bgpPeer.children"
+						_ = nestedChildrenPath
 						attrs = "{}"
 						if !child.LocalAsnPropagation.IsUnknown() && !child.LocalAsnPropagation.IsNull() && !configChild.LocalAsnPropagation.IsNull() {
 							attrs, _ = sjson.Set(attrs, "asnPropagate", child.LocalAsnPropagation.ValueString())
@@ -1100,6 +1109,7 @@ func (data BGP) toBody(config BGP) nxos.Body {
 							{
 								nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 								nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bgpPeerAf.children"
+								_ = nestedChildrenPath
 								attrs = "{}"
 								if !child.MaxPrefixAction.IsUnknown() && !child.MaxPrefixAction.IsNull() && !configChild.MaxPrefixAction.IsNull() {
 									attrs, _ = sjson.Set(attrs, "action", child.MaxPrefixAction.ValueString())
@@ -1240,6 +1250,11 @@ func (data BGP) toBody(config BGP) nxos.Body {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpPeerIf.attributes", attrs)
 				}
 			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "bgpInst.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 

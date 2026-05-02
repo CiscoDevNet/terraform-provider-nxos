@@ -145,8 +145,6 @@ func (data HSRP) toBody(config HSRP) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".hsrpInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -163,8 +161,14 @@ func (data HSRP) toBody(config HSRP) nxos.Body {
 		if !data.ExtendedHoldIntervalConfiguration.IsUnknown() && !data.ExtendedHoldIntervalConfiguration.IsNull() && !config.ExtendedHoldIntervalConfiguration.IsNull() {
 			attrs, _ = sjson.Set(attrs, "extendedHoldIntvlCfg", data.ExtendedHoldIntervalConfiguration.ValueString())
 		}
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "hsrpInst.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "hsrpInst.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.Interfaces {
 			configChild, configChildOk := config.Interfaces[key]
 			_ = configChild
@@ -208,6 +212,7 @@ func (data HSRP) toBody(config HSRP) nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".hsrpIf.children"
+				_ = nestedChildrenPath
 				for key, child := range child.Groups {
 					configChild, configChildOk := configChild.Groups[key]
 					_ = configChild
@@ -284,6 +289,11 @@ func (data HSRP) toBody(config HSRP) nxos.Body {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.hsrpGroup.attributes", attrs)
 				}
 			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "hsrpInst.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 

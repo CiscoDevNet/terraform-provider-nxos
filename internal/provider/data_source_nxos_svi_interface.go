@@ -57,7 +57,7 @@ func (d *SVIInterfaceDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.").AddApiDocumentation("interfaceEntity", "", []string{"sviIf", "nwRtVrfMbr"}, []string{"Interfaces/svi:If/", "Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.").AddApiDocumentation("interfaceEntity", "", []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking"}, []string{"Interfaces/svi:If/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "Network%20Virtualization/nvo:MultisiteIfTracking/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -141,6 +141,10 @@ func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "DN of VRF. For example: `sys/inst-VRF1`.",
 							Computed:            true,
 						},
+						"multisite_interface_tracking": schema.StringAttribute{
+							MarkdownDescription: "Configure EVPN multisite tracking for DCI/Fabric interface.",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -176,7 +180,7 @@ func (d *SVIInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "sviIf,nwRtVrfMbr")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "sviIf,nwRtVrfMbr,nvoMultisiteIfTracking")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

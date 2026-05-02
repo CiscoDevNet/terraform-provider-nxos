@@ -218,6 +218,7 @@ func (data Netflow) toBody(config Netflow) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".flowMonitor.children"
+			_ = nestedChildrenPath
 			for key, child := range child.ExporterBuckets {
 				configChild, configChildOk := configChild.ExporterBuckets[key]
 				_ = configChild
@@ -273,6 +274,7 @@ func (data Netflow) toBody(config Netflow) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".flowClassMap.children"
+			_ = nestedChildrenPath
 			for key := range child.MatchAcls {
 				configChild, configChildOk := configChild.MatchAcls[key]
 				_ = configChild

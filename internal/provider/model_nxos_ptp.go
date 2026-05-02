@@ -438,6 +438,7 @@ func (data PTP) toBody(config PTP) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".ptpPtpIf.children"
+			_ = nestedChildrenPath
 			for key, child := range child.Peers {
 				configChild, configChildOk := configChild.Peers[key]
 				_ = configChild

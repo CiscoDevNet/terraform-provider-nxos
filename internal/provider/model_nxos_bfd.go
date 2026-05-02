@@ -123,8 +123,6 @@ func (data BFD) toBody(config BFD) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".bfdInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -144,8 +142,14 @@ func (data BFD) toBody(config BFD) nxos.Body {
 		if !data.StartupInterval.IsUnknown() && !data.StartupInterval.IsNull() && !config.StartupInterval.IsNull() {
 			attrs, _ = sjson.Set(attrs, "startupIntvl", strconv.FormatInt(data.StartupInterval.ValueInt64(), 10))
 		}
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "bfdInst.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "bfdInst.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.Interfaces {
 			configChild, configChildOk := config.Interfaces[key]
 			_ = configChild
@@ -180,6 +184,7 @@ func (data BFD) toBody(config BFD) nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".bfdIf.children"
+				_ = nestedChildrenPath
 				attrs = "{}"
 				if !child.DetectMultiplier.IsUnknown() && !child.DetectMultiplier.IsNull() && !configChild.DetectMultiplier.IsNull() {
 					attrs, _ = sjson.Set(attrs, "detectMult", strconv.FormatInt(child.DetectMultiplier.ValueInt64(), 10))
@@ -223,6 +228,11 @@ func (data BFD) toBody(config BFD) nxos.Body {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bfdAuthP.attributes", attrs)
 				}
 			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "bfdInst.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 

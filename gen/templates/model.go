@@ -224,8 +224,6 @@ func (data {{camelCase .Name}}) getClassName() string {
 {{- if eq .Type "single"}}
 {{- if .ChildClasses}}
 	{
-	childIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array())
-	childBodyPath := {{$childrenPathVar}} + "." + strconv.Itoa(childIndex) + ".{{$childClassName}}"
 	attrs = "{}"
 	{{- if rnHasDynamicSegment $childRn}}
 	attrs, _ = sjson.Set(attrs, "name", {{$rnArgs}})
@@ -253,9 +251,20 @@ func (data {{camelCase .Name}}) getClassName() string {
 	{{- end}}
 	{{- end}}
 	{{- end}}
-	body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-	nestedChildrenPath := childBodyPath + ".children"
+	childBody := ""
+	childBody, _ = sjson.SetRaw(childBody, "{{$childClassName}}.attributes", attrs)
+	parentAttrs := attrs
+	parentPath := {{$childrenPathVar}}
+	nestedChildrenPath := "{{$childClassName}}.children"
+	_ = nestedChildrenPath
+	prevBody := body
+	body = childBody
 	{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" $dataVar "ConfigVar" $configVar "ChildrenPathVar" "nestedChildrenPath" "RnArgs" $rnArgs)}}
+	childBody = body
+	body = prevBody
+	if parentAttrs != "{}" || gjson.Get(childBody, "{{$childClassName}}.children").Exists() {
+		body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+	}
 	}
 {{- else}}
 	attrs = "{}"
@@ -332,6 +341,7 @@ func (data {{camelCase .Name}}) getClassName() string {
 		{
 		nestedIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array()) - 1
 		nestedChildrenPath := {{$childrenPathVar}} + "." + strconv.Itoa(nestedIndex) + ".{{$childClassName}}.children"
+		_ = nestedChildrenPath
 		{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "child" "ConfigVar" "configChild" "ChildrenPathVar" "nestedChildrenPath" "RnArgs" (mapKeyRnFormatArgs "key" .Attributes))}}
 		}
 		{{- end}}
@@ -916,19 +926,33 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- if eq .Type "single"}}
 {{- if .ChildClasses}}
 	{
-	childIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array())
-	childBodyPath := {{$childrenPathVar}} + "." + strconv.Itoa(childIndex) + ".{{$childClassName}}"
-	body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+	childBody := ""
 {{- range .Attributes}}
 {{- if and (not .Id) (eq .Value "")}}
 	if !data.{{toGoName .TfName}}.IsNull() {
-		body, _ = sjson.Set(body, childBodyPath+".attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 	}
 {{- end}}
 {{- end}}
-	nestedChildrenPath := childBodyPath + ".children"
-	_ = nestedChildrenPath
-	{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "ChildrenPathVar" "nestedChildrenPath")}}
+	hasNestedChildren := false
+	{{- range .ChildClasses}}
+	{{- if eq .Type "list"}}
+	if len(data.{{toGoName .TfName}}) > 0 {
+		hasNestedChildren = true
+	}
+	{{- end}}
+	{{- end}}
+	if childBody != "" || hasNestedChildren {
+		childIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array())
+		childBodyPath := {{$childrenPathVar}} + "." + strconv.Itoa(childIndex) + ".{{$childClassName}}"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "ChildrenPathVar" "nestedChildrenPath")}}
+	}
 	}
 {{- else}}
 	{

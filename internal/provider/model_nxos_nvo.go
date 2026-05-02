@@ -241,12 +241,17 @@ func (data NVO) toBody(config NVO) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".nvoEp.children"
+			_ = nestedChildrenPath
 			{
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".nvoNws"
 				attrs = "{}"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-				nestedChildrenPath := childBodyPath + ".children"
+				childBody := ""
+				childBody, _ = sjson.SetRaw(childBody, "nvoNws.attributes", attrs)
+				parentAttrs := attrs
+				parentPath := nestedChildrenPath
+				nestedChildrenPath := "nvoNws.children"
+				_ = nestedChildrenPath
+				prevBody := body
+				body = childBody
 				for key, child := range child.Vnis {
 					configChild, configChildOk := configChild.Vnis[key]
 					_ = configChild
@@ -278,6 +283,7 @@ func (data NVO) toBody(config NVO) nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".nvoNw.children"
+						_ = nestedChildrenPath
 						attrs = "{}"
 						if !child.IngressReplicationProtocol.IsUnknown() && !child.IngressReplicationProtocol.IsNull() && !configChild.IngressReplicationProtocol.IsNull() {
 							attrs, _ = sjson.Set(attrs, "proto", child.IngressReplicationProtocol.ValueString())
@@ -286,6 +292,11 @@ func (data NVO) toBody(config NVO) nxos.Body {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoIngRepl.attributes", attrs)
 						}
 					}
+				}
+				childBody = body
+				body = prevBody
+				if parentAttrs != "{}" || gjson.Get(childBody, "nvoNws.children").Exists() {
+					body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 				}
 			}
 		}

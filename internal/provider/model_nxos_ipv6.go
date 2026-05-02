@@ -156,8 +156,6 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6Inst"
 		attrs = "{}"
 		if !data.AccessListMatchLocal.IsUnknown() && !data.AccessListMatchLocal.IsNull() && !config.AccessListMatchLocal.IsNull() {
 			attrs, _ = sjson.Set(attrs, "accessListMatchLocal", data.AccessListMatchLocal.ValueString())
@@ -180,8 +178,14 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 		if !data.SwitchPackets.IsUnknown() && !data.SwitchPackets.IsNull() && !config.SwitchPackets.IsNull() {
 			attrs, _ = sjson.Set(attrs, "switchPackets", data.SwitchPackets.ValueString())
 		}
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "ipv6Inst.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "ipv6Inst.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.Vrfs {
 			configChild, configChildOk := config.Vrfs[key]
 			_ = configChild
@@ -192,6 +196,7 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv6Dom.children"
+				_ = nestedChildrenPath
 				for key, child := range child.StaticRoutes {
 					configChild, configChildOk := configChild.StaticRoutes[key]
 					_ = configChild
@@ -214,6 +219,7 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv6Route.children"
+						_ = nestedChildrenPath
 						for key, child := range child.NextHops {
 							configChild, configChildOk := configChild.NextHops[key]
 							_ = configChild
@@ -276,6 +282,7 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv6If.children"
+						_ = nestedChildrenPath
 						for key, child := range child.Addresses {
 							configChild, configChildOk := configChild.Addresses[key]
 							_ = configChild
@@ -308,6 +315,11 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 					}
 				}
 			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "ipv6Inst.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 
@@ -731,37 +743,47 @@ func (data IPv6) toDeleteBody() nxos.Body {
 	}
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6Inst"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		childBody := ""
 		if !data.AccessListMatchLocal.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"accessListMatchLocal", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "accessListMatchLocal", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.AdminState.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Control.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ctrl", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.DropNdFragments.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"dropNdFragments", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "dropNdFragments", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.QueuePackets.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"queuePackets", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "queuePackets", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.StaticNeighborOutsideSubnet.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"staticNeighborOutsideSubnet", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "staticNeighborOutsideSubnet", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.SwitchPackets.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"switchPackets", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "switchPackets", "DME_UNSET_PROPERTY_MARKER")
 		}
-		nestedChildrenPath := childBodyPath + ".children"
-		_ = nestedChildrenPath
-		for key, child := range data.Vrfs {
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.rn", child.getRn(key))
-			deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		hasNestedChildren := false
+		if len(data.Vrfs) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6Inst"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.Vrfs {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 		}
 	}
 

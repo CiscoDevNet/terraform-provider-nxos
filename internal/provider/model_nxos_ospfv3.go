@@ -183,6 +183,7 @@ func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfv3Inst.children"
+			_ = nestedChildrenPath
 			for key, child := range child.Vrfs {
 				configChild, configChildOk := configChild.Vrfs[key]
 				_ = configChild
@@ -223,6 +224,7 @@ func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfv3Dom.children"
+					_ = nestedChildrenPath
 					for key, child := range child.Areas {
 						configChild, configChildOk := configChild.Areas[key]
 						_ = configChild

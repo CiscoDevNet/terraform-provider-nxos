@@ -104,8 +104,6 @@ func (data HMM) toBody(config HMM) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".hmmFwdInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -125,8 +123,14 @@ func (data HMM) toBody(config HMM) nxos.Body {
 		if !data.SelectiveHostProbe.IsUnknown() && !data.SelectiveHostProbe.IsNull() && !config.SelectiveHostProbe.IsNull() {
 			attrs, _ = sjson.Set(attrs, "selHostProbe", data.SelectiveHostProbe.ValueString())
 		}
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "hmmFwdInst.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "hmmFwdInst.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.Interfaces {
 			configChild, configChildOk := config.Interfaces[key]
 			_ = configChild
@@ -143,6 +147,11 @@ func (data HMM) toBody(config HMM) nxos.Body {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.hmmFwdIf.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "hmmFwdInst.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 

@@ -134,6 +134,23 @@ child_classes:
             type: String
             description: 'DN of VRF. For example: `sys/inst-VRF1`.'
             example: sys/inst-VRF123
+      - class_name: nvoMultisiteIfTracking
+        doc_path: Network%20Virtualization/nvo:MultisiteIfTracking/
+        rn: multisiteiftracking
+        type: single
+        tf_name: multisite_interface_tracking
+        description: 'Tracking for Multisite DCI and Fabric Interfaces.'
+        attributes:
+          - nxos_name: tracking
+            tf_name: multisite_interface_tracking
+            type: String
+            description: 'Configure EVPN multisite tracking for DCI/Fabric interface.'
+            exclude_test: true
+            enum_values:
+              - unknown
+              - dci
+              - fabric
+            example: dci
 test_prerequisites:
   - dn: sys/fm/ifvlan
     class_name: fmInterfaceVlan

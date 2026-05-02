@@ -106,8 +106,6 @@ func (data ICMPv4) toBody(config ICMPv4) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icmpv4Inst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -115,8 +113,14 @@ func (data ICMPv4) toBody(config ICMPv4) nxos.Body {
 		if !data.Control.IsUnknown() && !data.Control.IsNull() && !config.Control.IsNull() {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "icmpv4Inst.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "icmpv4Inst.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.Vrfs {
 			configChild, configChildOk := config.Vrfs[key]
 			_ = configChild
@@ -127,6 +131,7 @@ func (data ICMPv4) toBody(config ICMPv4) nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".icmpv4Dom.children"
+				_ = nestedChildrenPath
 				for key, child := range child.Interfaces {
 					configChild, configChildOk := configChild.Interfaces[key]
 					_ = configChild
@@ -139,6 +144,11 @@ func (data ICMPv4) toBody(config ICMPv4) nxos.Body {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.icmpv4If.attributes", attrs)
 				}
 			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "icmpv4Inst.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 

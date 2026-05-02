@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
   API Documentation
-  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
+  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Data Source)
@@ -17,6 +17,7 @@ This data source can read the configuration of port-channel interfaces on NX-OS 
 - [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
+- [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
 - [pcAggrIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/)
 - [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/)
 
@@ -86,6 +87,7 @@ Read-Only:
 - `minimum_links` (Number) minimum links.
 - `mode` (String) Administrative port mode.
 - `mtu` (Number) Administrative port mtu.
+- `multisite_interface_tracking` (String) Configure EVPN multisite tracking for DCI/Fabric interface.
 - `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `optics_loopback` (String) Configured Loopback.
 - `port_channel_mode` (String) The aggregated interface protocol channel mode.

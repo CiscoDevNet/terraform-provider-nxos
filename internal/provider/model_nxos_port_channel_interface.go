@@ -91,6 +91,7 @@ type PortChannelInterfacePortChannelInterfaces struct {
 	StormControlRate                      types.String                                                `tfsdk:"storm_control_rate"`
 	StormControlRatePacketsPerSecond      types.Int64                                                 `tfsdk:"storm_control_rate_packets_per_second"`
 	StormControlPacketType                types.String                                                `tfsdk:"storm_control_packet_type"`
+	MultisiteInterfaceTracking            types.String                                                `tfsdk:"multisite_interface_tracking"`
 	AllowMultiTag                         types.String                                                `tfsdk:"allow_multi_tag"`
 	AutoExcludeVlans                      types.String                                                `tfsdk:"auto_exclude_vlans"`
 	BufferBoost                           types.String                                                `tfsdk:"buffer_boost"`
@@ -319,6 +320,7 @@ func (data PortChannelInterface) toBody(config PortChannelInterface) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".pcAggrIf.children"
+			_ = nestedChildrenPath
 			attrs = "{}"
 			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() && !configChild.VrfDn.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())
@@ -344,6 +346,13 @@ func (data PortChannelInterface) toBody(config PortChannelInterface) nxos.Body {
 			}
 			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.l1StormCtrlP.attributes", attrs)
+			}
+			attrs = "{}"
+			if !child.MultisiteInterfaceTracking.IsUnknown() && !child.MultisiteInterfaceTracking.IsNull() && !configChild.MultisiteInterfaceTracking.IsNull() {
+				attrs, _ = sjson.Set(attrs, "tracking", child.MultisiteInterfaceTracking.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoMultisiteIfTracking.attributes", attrs)
 			}
 			attrs = "{}"
 			if !child.AllowMultiTag.IsUnknown() && !child.AllowMultiTag.IsNull() && !configChild.AllowMultiTag.IsNull() {
@@ -567,6 +576,20 @@ func (data *PortChannelInterface) fromBody(res gjson.Result) {
 							child.StormControlRate = types.StringValue(rl1StormCtrlP.Get("l1StormCtrlP.attributes.rate").String())
 							child.StormControlRatePacketsPerSecond = types.Int64Value(rl1StormCtrlP.Get("l1StormCtrlP.attributes.ratePps").Int())
 							child.StormControlPacketType = types.StringValue(rl1StormCtrlP.Get("l1StormCtrlP.attributes.type").String())
+						}
+						{
+							var rnvoMultisiteIfTracking gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("nvoMultisiteIfTracking.attributes.rn").String()
+									if rnValue == "multisiteiftracking" {
+										rnvoMultisiteIfTracking = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.MultisiteInterfaceTracking = types.StringValue(rnvoMultisiteIfTracking.Get("nvoMultisiteIfTracking.attributes.tracking").String())
 						}
 						{
 							var rpcAggrIfExtended gjson.Result
@@ -931,6 +954,24 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 				item.StormControlPacketType = types.StringValue(rl1StormCtrlP.Get("l1StormCtrlP.attributes.type").String())
 			} else {
 				item.StormControlPacketType = types.StringNull()
+			}
+		}
+		{
+			var rnvoMultisiteIfTracking gjson.Result
+			rpcAggrIf.Get("pcAggrIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("nvoMultisiteIfTracking.attributes.rn").String()
+					if rnValue == "multisiteiftracking" {
+						rnvoMultisiteIfTracking = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.MultisiteInterfaceTracking.IsNull() {
+				item.MultisiteInterfaceTracking = types.StringValue(rnvoMultisiteIfTracking.Get("nvoMultisiteIfTracking.attributes.tracking").String())
+			} else {
+				item.MultisiteInterfaceTracking = types.StringNull()
 			}
 		}
 		{

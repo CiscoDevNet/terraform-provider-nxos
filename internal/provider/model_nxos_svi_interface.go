@@ -44,23 +44,24 @@ type SVIInterface struct {
 }
 
 type SVIInterfaceSviInterfaces struct {
-	AdminState           types.String `tfsdk:"admin_state"`
-	Autostate            types.Bool   `tfsdk:"autostate"`
-	Bandwidth            types.Int64  `tfsdk:"bandwidth"`
-	CarrierDelay         types.Int64  `tfsdk:"carrier_delay"`
-	Delay                types.Int64  `tfsdk:"delay"`
-	Description          types.String `tfsdk:"description"`
-	InbandManagement     types.Bool   `tfsdk:"inband_management"`
-	LoadIntervalCounter1 types.Int64  `tfsdk:"load_interval_counter_1"`
-	LoadIntervalCounter2 types.Int64  `tfsdk:"load_interval_counter_2"`
-	LoadIntervalCounter3 types.Int64  `tfsdk:"load_interval_counter_3"`
-	MacAddress           types.String `tfsdk:"mac_address"`
-	Medium               types.String `tfsdk:"medium"`
-	Mtu                  types.Int64  `tfsdk:"mtu"`
-	MtuInherit           types.Bool   `tfsdk:"mtu_inherit"`
-	SnmpTrapLinkStatus   types.Bool   `tfsdk:"snmp_trap_link_status"`
-	VlanId               types.Int64  `tfsdk:"vlan_id"`
-	VrfDn                types.String `tfsdk:"vrf_dn"`
+	AdminState                 types.String `tfsdk:"admin_state"`
+	Autostate                  types.Bool   `tfsdk:"autostate"`
+	Bandwidth                  types.Int64  `tfsdk:"bandwidth"`
+	CarrierDelay               types.Int64  `tfsdk:"carrier_delay"`
+	Delay                      types.Int64  `tfsdk:"delay"`
+	Description                types.String `tfsdk:"description"`
+	InbandManagement           types.Bool   `tfsdk:"inband_management"`
+	LoadIntervalCounter1       types.Int64  `tfsdk:"load_interval_counter_1"`
+	LoadIntervalCounter2       types.Int64  `tfsdk:"load_interval_counter_2"`
+	LoadIntervalCounter3       types.Int64  `tfsdk:"load_interval_counter_3"`
+	MacAddress                 types.String `tfsdk:"mac_address"`
+	Medium                     types.String `tfsdk:"medium"`
+	Mtu                        types.Int64  `tfsdk:"mtu"`
+	MtuInherit                 types.Bool   `tfsdk:"mtu_inherit"`
+	SnmpTrapLinkStatus         types.Bool   `tfsdk:"snmp_trap_link_status"`
+	VlanId                     types.Int64  `tfsdk:"vlan_id"`
+	VrfDn                      types.String `tfsdk:"vrf_dn"`
+	MultisiteInterfaceTracking types.String `tfsdk:"multisite_interface_tracking"`
 }
 
 type SVIInterfaceIdentity struct {
@@ -166,12 +167,20 @@ func (data SVIInterface) toBody(config SVIInterface) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".sviIf.children"
+			_ = nestedChildrenPath
 			attrs = "{}"
 			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() && !configChild.VrfDn.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())
 			}
 			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+			}
+			attrs = "{}"
+			if !child.MultisiteInterfaceTracking.IsUnknown() && !child.MultisiteInterfaceTracking.IsNull() && !configChild.MultisiteInterfaceTracking.IsNull() {
+				attrs, _ = sjson.Set(attrs, "tracking", child.MultisiteInterfaceTracking.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoMultisiteIfTracking.attributes", attrs)
 			}
 		}
 	}
@@ -220,6 +229,20 @@ func (data *SVIInterface) fromBody(res gjson.Result) {
 								},
 							)
 							child.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+						}
+						{
+							var rnvoMultisiteIfTracking gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("nvoMultisiteIfTracking.attributes.rn").String()
+									if rnValue == "multisiteiftracking" {
+										rnvoMultisiteIfTracking = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.MultisiteInterfaceTracking = types.StringValue(rnvoMultisiteIfTracking.Get("nvoMultisiteIfTracking.attributes.tracking").String())
 						}
 						if data.SviInterfaces == nil {
 							data.SviInterfaces = make(map[string]SVIInterfaceSviInterfaces)
@@ -350,6 +373,24 @@ func (data *SVIInterface) updateFromBody(res gjson.Result) {
 				item.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
 			} else {
 				item.VrfDn = types.StringNull()
+			}
+		}
+		{
+			var rnvoMultisiteIfTracking gjson.Result
+			rsviIf.Get("sviIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("nvoMultisiteIfTracking.attributes.rn").String()
+					if rnValue == "multisiteiftracking" {
+						rnvoMultisiteIfTracking = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.MultisiteInterfaceTracking.IsNull() {
+				item.MultisiteInterfaceTracking = types.StringValue(rnvoMultisiteIfTracking.Get("nvoMultisiteIfTracking.attributes.tracking").String())
+			} else {
+				item.MultisiteInterfaceTracking = types.StringNull()
 			}
 		}
 		data.SviInterfaces[key] = item

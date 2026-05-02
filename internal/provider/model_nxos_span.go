@@ -216,6 +216,7 @@ func (data SPAN) toBody(config SPAN) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".spanMonitor.children"
+			_ = nestedChildrenPath
 			for key, child := range child.SourceInterfaces {
 				configChild, configChildOk := configChild.SourceInterfaces[key]
 				_ = configChild

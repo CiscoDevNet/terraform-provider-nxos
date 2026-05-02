@@ -181,6 +181,7 @@ func (data Analytics) toBody(config Analytics) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".analyticsInst.children"
+			_ = nestedChildrenPath
 			for key, child := range child.Profiles {
 				configChild, configChildOk := configChild.Profiles[key]
 				_ = configChild

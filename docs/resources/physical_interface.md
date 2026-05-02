@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
 ---
 
 # nxos_physical_interface (Resource)
@@ -17,6 +17,7 @@ This resource can manage physical interfaces on NX-OS devices, including setting
 - [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
+- [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
 - [l1PhysIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/)
 
 ## Example Usage
@@ -189,6 +190,8 @@ Optional:
   - Choices: `access`, `trunk`, `fex-fabric`, `dot1q-tunnel`, `promiscuous`, `host`, `trunk_secondary`, `trunk_promiscuous`, `vntag`
 - `mtu` (Number) Administrative port mtu.
   - Range: `576`-`9216`
+- `multisite_interface_tracking` (String) Configure EVPN multisite tracking for DCI/Fabric interface.
+  - Choices: `unknown`, `dci`, `fabric`
 - `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `optics_loopback` (String) Configured Loopback.
   - Choices: `disable`, `internal`, `line`

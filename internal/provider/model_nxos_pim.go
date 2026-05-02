@@ -182,8 +182,6 @@ func (data PIM) toBody(config PIM) nxos.Body {
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
 		attrs = "{}"
 		if !data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull() && !config.InstanceAdminState.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
@@ -209,8 +207,14 @@ func (data PIM) toBody(config PIM) nxos.Body {
 		if !data.RegisterStop.IsUnknown() && !data.RegisterStop.IsNull() && !config.RegisterStop.IsNull() {
 			attrs, _ = sjson.Set(attrs, "regStop", strconv.FormatBool(data.RegisterStop.ValueBool()))
 		}
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "pimInst.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "pimInst.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
 		for key, child := range data.Vrfs {
 			configChild, configChildOk := config.Vrfs[key]
 			_ = configChild
@@ -254,6 +258,7 @@ func (data PIM) toBody(config PIM) nxos.Body {
 			{
 				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".pimDom.children"
+				_ = nestedChildrenPath
 				for key, child := range child.Interfaces {
 					configChild, configChildOk := configChild.Interfaces[key]
 					_ = configChild
@@ -311,8 +316,6 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimIf.attributes", attrs)
 				}
 				{
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimSSMPatP"
 					attrs = "{}"
 					if !child.SsmPolicyName.IsUnknown() && !child.SsmPolicyName.IsNull() && !configChild.SsmPolicyName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.SsmPolicyName.ValueString())
@@ -320,8 +323,14 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					if !child.SsmPolicyDescription.IsUnknown() && !child.SsmPolicyDescription.IsNull() && !configChild.SsmPolicyDescription.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.SsmPolicyDescription.ValueString())
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-					nestedChildrenPath := childBodyPath + ".children"
+					childBody := ""
+					childBody, _ = sjson.SetRaw(childBody, "pimSSMPatP.attributes", attrs)
+					parentAttrs := attrs
+					parentPath := nestedChildrenPath
+					nestedChildrenPath := "pimSSMPatP.children"
+					_ = nestedChildrenPath
+					prevBody := body
+					body = childBody
 					attrs = "{}"
 					if !child.SsmRangeGroupList1.IsUnknown() && !child.SsmRangeGroupList1.IsNull() && !configChild.SsmRangeGroupList1.IsNull() {
 						attrs, _ = sjson.Set(attrs, "grpList", child.SsmRangeGroupList1.ValueString())
@@ -347,10 +356,13 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					if attrs != "{}" {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimSSMRangeP.attributes", attrs)
 					}
+					childBody = body
+					body = prevBody
+					if parentAttrs != "{}" || gjson.Get(childBody, "pimSSMPatP.children").Exists() {
+						body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+					}
 				}
 				{
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimStaticRPP"
 					attrs = "{}"
 					if !child.StaticRpPolicyName.IsUnknown() && !child.StaticRpPolicyName.IsNull() && !configChild.StaticRpPolicyName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.StaticRpPolicyName.ValueString())
@@ -358,8 +370,14 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					if !child.StaticRpPolicyDescription.IsUnknown() && !child.StaticRpPolicyDescription.IsNull() && !configChild.StaticRpPolicyDescription.IsNull() {
 						attrs, _ = sjson.Set(attrs, "descr", child.StaticRpPolicyDescription.ValueString())
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-					nestedChildrenPath := childBodyPath + ".children"
+					childBody := ""
+					childBody, _ = sjson.SetRaw(childBody, "pimStaticRPP.attributes", attrs)
+					parentAttrs := attrs
+					parentPath := nestedChildrenPath
+					nestedChildrenPath := "pimStaticRPP.children"
+					_ = nestedChildrenPath
+					prevBody := body
+					body = childBody
 					for key, child := range child.StaticRps {
 						configChild, configChildOk := configChild.StaticRps[key]
 						_ = configChild
@@ -370,6 +388,7 @@ func (data PIM) toBody(config PIM) nxos.Body {
 						{
 							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".pimStaticRP.children"
+							_ = nestedChildrenPath
 							for key, child := range child.GroupLists {
 								configChild, configChildOk := configChild.GroupLists[key]
 								_ = configChild
@@ -386,10 +405,13 @@ func (data PIM) toBody(config PIM) nxos.Body {
 							}
 						}
 					}
+					childBody = body
+					body = prevBody
+					if parentAttrs != "{}" || gjson.Get(childBody, "pimStaticRPP.children").Exists() {
+						body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+					}
 				}
 				{
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimAcastRPFuncP"
 					attrs = "{}"
 					if !child.AnycastRpLocalInterface.IsUnknown() && !child.AnycastRpLocalInterface.IsNull() && !configChild.AnycastRpLocalInterface.IsNull() {
 						attrs, _ = sjson.Set(attrs, "localIf", child.AnycastRpLocalInterface.ValueString())
@@ -403,8 +425,14 @@ func (data PIM) toBody(config PIM) nxos.Body {
 					if !child.AnycastRpName.IsUnknown() && !child.AnycastRpName.IsNull() && !configChild.AnycastRpName.IsNull() {
 						attrs, _ = sjson.Set(attrs, "name", child.AnycastRpName.ValueString())
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-					nestedChildrenPath := childBodyPath + ".children"
+					childBody := ""
+					childBody, _ = sjson.SetRaw(childBody, "pimAcastRPFuncP.attributes", attrs)
+					parentAttrs := attrs
+					parentPath := nestedChildrenPath
+					nestedChildrenPath := "pimAcastRPFuncP.children"
+					_ = nestedChildrenPath
+					prevBody := body
+					body = childBody
 					for key := range child.AnycastRpPeers {
 						configChild, configChildOk := configChild.AnycastRpPeers[key]
 						_ = configChild
@@ -415,8 +443,18 @@ func (data PIM) toBody(config PIM) nxos.Body {
 						attrs, _ = sjson.Set(attrs, "rpSetAddr", keyParts[1])
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimAcastRPPeer.attributes", attrs)
 					}
+					childBody = body
+					body = prevBody
+					if parentAttrs != "{}" || gjson.Get(childBody, "pimAcastRPFuncP.children").Exists() {
+						body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+					}
 				}
 			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "pimInst.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 
@@ -1078,40 +1116,50 @@ func (data PIM) toDeleteBody() nxos.Body {
 	}
 	childrenPath := data.getClassName() + ".children"
 	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		childBody := ""
 		if !data.InstanceAdminState.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.Control.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "ctrl", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.EvpnBorderLeaf.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"evpnBorderLeaf", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "evpnBorderLeaf", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.ExtraNet.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"extraNet", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "extraNet", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.JoinPruneDelay.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"jpDelay", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "jpDelay", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.NullRegisterDelay.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"nrDelay", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "nrDelay", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.NullRegisterNumberOfRoutes.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"nrNumRt", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "nrNumRt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !data.RegisterStop.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"regStop", "DME_UNSET_PROPERTY_MARKER")
+			childBody, _ = sjson.Set(childBody, "regStop", "DME_UNSET_PROPERTY_MARKER")
 		}
-		nestedChildrenPath := childBodyPath + ".children"
-		_ = nestedChildrenPath
-		for key, child := range data.Vrfs {
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "pimDom.attributes.rn", child.getRn(key))
-			deleteBody, _ = sjson.Set(deleteBody, "pimDom.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		hasNestedChildren := false
+		if len(data.Vrfs) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.Vrfs {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pimDom.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "pimDom.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 		}
 	}
 

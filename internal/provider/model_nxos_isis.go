@@ -237,6 +237,7 @@ func (data ISIS) toBody(config ISIS) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".isisInst.children"
+			_ = nestedChildrenPath
 			for key, child := range child.Vrfs {
 				configChild, configChildOk := configChild.Vrfs[key]
 				_ = configChild
@@ -302,6 +303,7 @@ func (data ISIS) toBody(config ISIS) nxos.Body {
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".isisDom.children"
+					_ = nestedChildrenPath
 					for key, child := range child.AddressFamilies {
 						configChild, configChildOk := configChild.AddressFamilies[key]
 						_ = configChild

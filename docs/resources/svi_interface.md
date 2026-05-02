@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.
   API Documentation
-  sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/
 ---
 
 # nxos_svi_interface (Resource)
@@ -16,6 +16,7 @@ This resource can manage SVI (Switch Virtual Interface) configurations on NX-OS 
 
 - [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
 
 ## Example Usage
 
@@ -85,6 +86,8 @@ Optional:
 - `mtu` (Number) The administrative MTU port on the aggregated interface.
   - Range: `64`-`9216`
 - `mtu_inherit` (Boolean) A property for specifying if the MTU is inherited from global policy.
+- `multisite_interface_tracking` (String) Configure EVPN multisite tracking for DCI/Fabric interface.
+  - Choices: `unknown`, `dci`, `fabric`
 - `snmp_trap_link_status` (Boolean) SNMP Trap Link Status Enabled?
 - `vlan_id` (Number) The VLAN ID associated with the SVI.
   - Range: `0`-`4095`

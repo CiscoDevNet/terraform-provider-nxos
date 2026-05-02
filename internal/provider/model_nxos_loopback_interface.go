@@ -113,6 +113,7 @@ func (data LoopbackInterface) toBody(config LoopbackInterface) nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".l3LbRtdIf.children"
+			_ = nestedChildrenPath
 			attrs = "{}"
 			if !child.VrfDn.IsUnknown() && !child.VrfDn.IsNull() && !configChild.VrfDn.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tDn", child.VrfDn.ValueString())

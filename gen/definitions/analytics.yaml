@@ -1,0 +1,308 @@
+---
+name: Analytics
+class_name: analyticsEntity
+dn: sys/analytics
+no_delete: true
+ds_description: This data source can read the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.
+res_description: This resource can manage the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.
+doc_path: System/analytics:Entity/
+doc_category: System
+test_tags: [ANALYTICS]
+child_classes:
+  - class_name: analyticsInst
+    rn: inst-[%s]
+    type: list
+    tf_name: instances
+    description: 'Holds the Analytics instance information.'
+    doc_path: System/analytics:Inst/
+    attributes:
+      - nxos_name: mode
+        tf_name: mode
+        type: String
+        id: true
+        description: 'Mode Select to represent the feature.'
+        enum_values:
+          - analytics
+          - netflow
+        example: analytics
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: collectTunnelHeader
+        tf_name: collect_tunnel_header
+        type: Bool
+        description: 'Enable collection of tunnel header data on QP_AR.'
+        example: true
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        enum_values:
+          - stateful-ha
+        allow_non_enum_values: true
+        example: stateful-ha
+      - nxos_name: enableAnalyticsSubmode
+        tf_name: enable_analytics_submode
+        type: Bool
+        description: 'Enable Analytics Submode funxtionality.'
+        example: true
+      - nxos_name: geneveEnable
+        tf_name: geneve_enable
+        type: Bool
+        description: 'Enable parsing of Geneve header mentioned in RFC8926.'
+        example: true
+      - nxos_name: timeOut
+        tf_name: timeout
+        type: Int64
+        min_int: 5
+        max_int: 60
+        description: 'Flow timeout in seconds.'
+        example: 30
+    child_classes:
+      - class_name: analyticsProfile
+        rn: prof-[%s]
+        type: list
+        tf_name: profiles
+        description: 'Profile.'
+        doc_path: System/analytics:Profile/
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Object name.'
+            example: 'PROFILE1'
+          - nxos_name: burstIntvlShift
+            tf_name: burst_interval_shift
+            type: Int64
+            min_int: 0
+            max_int: 255
+            description: 'Timestamp Shift Value for Burst Interval.'
+            example: 10
+          - nxos_name: collectIntvl
+            tf_name: collect_interval
+            type: Int64
+            min_int: 100
+            max_int: 64000
+            description: 'Collect Interval in Milliseconds.'
+            example: 200
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My profile'
+          - nxos_name: ipPktIdShift
+            tf_name: ip_packet_id_shift
+            type: Int64
+            min_int: 0
+            max_int: 255
+            description: 'Analytics IP Packet Id Shift.'
+            example: 10
+          - nxos_name: mtu
+            tf_name: mtu
+            type: Int64
+            min_int: 576
+            max_int: 9216
+            description: 'MTU for the Analytics flow record packets.'
+            example: 1500
+          - nxos_name: seqNumGuessThreshHi
+            tf_name: sequence_number_guess_threshold_high
+            type: Int64
+            min_int: 0
+            max_int: 4294967295
+            description: 'Sequence Number Guess Threshold High.'
+            example: 100
+          - nxos_name: seqNumGuessThreshLo
+            tf_name: sequence_number_guess_threshold_low
+            type: Int64
+            min_int: 0
+            max_int: 4294967295
+            description: 'Sequence Number Guess Threshold Low.'
+            example: 50
+          - nxos_name: srcPort
+            tf_name: source_port
+            type: Int64
+            min_int: 1
+            max_int: 65535
+            description: 'Source L4 Port for the Analytics packets.'
+            example: 10000
+      - class_name: analyticsEvents
+        rn: events-[%s]
+        type: list
+        tf_name: events
+        description: 'Configure FTE Events Information.'
+        doc_path: System/analytics:Events/
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Object name.'
+            example: 'EVENTS1'
+          - nxos_name: aclDrops
+            tf_name: acl_drops
+            type: Bool
+            description: 'Configure the capture acl-drops in fte-event-drop-events mode for FTE Event.'
+            example: true
+          - nxos_name: blackHole
+            tf_name: black_hole
+            type: Bool
+            description: 'Configure the capture blackhole in fte-event-drop-events mode for FTE Record.'
+            example: true
+          - nxos_name: bufferDrops
+            tf_name: buffer_drops
+            type: Bool
+            description: 'Configure the capture buffer-drops in fte-event-drop-events mode for FTE Record.'
+            example: true
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My events'
+          - nxos_name: eventExportMax
+            tf_name: event_export_max
+            type: Int64
+            min_int: 0
+            max_int: 32000
+            description: 'Configure FTE Event Export Max Value.'
+            example: 10
+          - nxos_name: fwdDrops
+            tf_name: forward_drops
+            type: Bool
+            description: 'Configure the capture forward-drops in fte-event-drop-events mode for FTE Record.'
+            example: true
+          - nxos_name: groupDropEvents
+            tf_name: group_drop_events
+            type: Bool
+            description: 'Configure the group drop events for FTE Event.'
+            example: true
+          - nxos_name: groupLatencyEvents
+            tf_name: group_latency_events
+            type: Bool
+            description: 'Configure the group latency events for FTE Event.'
+            example: true
+          - nxos_name: groupPacketEvents
+            tf_name: group_packet_events
+            type: Bool
+            description: 'Configure the group packet events for FT Event.'
+            example: true
+          - nxos_name: ipDf
+            tf_name: ip_dont_fragment
+            type: Bool
+            description: 'Configuration to capture events with IP: Don''t Fragment flag.'
+            example: true
+          - nxos_name: latencyThreshold
+            tf_name: latency_threshold
+            type: Int64
+            min_int: 0
+            max_int: 65535
+            description: 'Configure FTE Latency Threshold limit.'
+            example: 100
+          - nxos_name: latencyThresholdUnit
+            tf_name: latency_threshold_unit
+            type: String
+            description: 'Configure FTE Latency Threshold Unit.'
+            enum_values:
+              - micro-sec
+              - milli-sec
+            example: milli-sec
+          - nxos_name: receiveWindowZero
+            tf_name: receive_window_zero
+            type: Bool
+            description: 'Configuration to capture events for TCP receive window zero.'
+            example: true
+          - nxos_name: tos
+            tf_name: tos
+            type: Int64
+            min_int: 0
+            max_int: 255
+            description: 'Configuration to capture events with given IP DSCP values.'
+            example: 10
+          - nxos_name: tosEnable
+            tf_name: tos_enable
+            type: Bool
+            description: 'Configuration to enable events with given IP DSCP values.'
+            example: true
+          - nxos_name: ttlMatchEnable
+            tf_name: ttl_match_enable
+            type: Bool
+            description: 'Configuration to enable ttl match events.'
+            example: true
+          - nxos_name: ttlMatchValue
+            tf_name: ttl_match_value
+            type: Int64
+            min_int: 0
+            max_int: 255
+            description: 'Configuration to capture events for given ttl value.'
+            example: 10
+      - class_name: analyticsPolicy
+        rn: policy-[%s]
+        type: list
+        tf_name: policies
+        description: 'Policy.'
+        doc_path: System/analytics:Policy/
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Object name.'
+            example: 'POLICY1'
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My policy'
+      - class_name: analyticsTrafficAnalytics
+        rn: trafficanalytics
+        type: single
+        tf_name: traffic_analytics
+        description: 'Traffic Analytics.'
+        doc_path: System/analytics:TrafficAnalytics/
+        attributes:
+          - nxos_name: descr
+            tf_name: traffic_analytics_description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My traffic analytics'
+          - nxos_name: interfaceMode
+            tf_name: traffic_analytics_interface_mode
+            type: Bool
+            description: 'Enable interface traffic analytics.'
+            example: true
+          - nxos_name: name
+            tf_name: traffic_analytics_name
+            type: String
+            description: 'Object name.'
+            example: 'TA1'
+          - nxos_name: serviceDbSize
+            tf_name: traffic_analytics_service_database_size
+            type: Int64
+            min_int: 1
+            max_int: 5000
+            description: 'Maximum number of flows.'
+            example: 1000
+          - nxos_name: troubleshootExportInterval
+            tf_name: traffic_analytics_troubleshoot_export_interval
+            type: Int64
+            min_int: 10
+            max_int: 60
+            description: 'Troubleshoot flows export interval.'
+            example: 30
+          - nxos_name: udpPortList
+            tf_name: traffic_analytics_udp_port_list
+            type: String
+            description: 'UDP Port List.'
+            example: '1234'
+test_prerequisites:
+  - dn: sys/fm/analytics
+    class_name: fmAnalytics
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

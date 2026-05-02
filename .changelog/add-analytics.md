@@ -1,0 +1,1 @@
+- Add `nxos_analytics` resource and data source

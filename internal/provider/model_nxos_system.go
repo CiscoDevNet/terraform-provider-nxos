@@ -8318,12 +8318,6 @@ func (data System) toDeleteBody() nxos.Body {
 		}
 	}
 	{
-		deleteBody := ""
-		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.rn", "originip")
-		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
-	}
-	{
 		childBody := ""
 		hasNestedChildren := false
 		if childBody != "" || hasNestedChildren {
@@ -8409,6 +8403,12 @@ func (data System) toDeleteBody() nxos.Body {
 				}
 			}
 		}
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.rn", "originip")
+		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 	{
 		childBody := ""

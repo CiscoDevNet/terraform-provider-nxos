@@ -44,7 +44,6 @@ import (
 {{- $name := .Name}}
 {{- $prefix := .Prefix}}
 {{- range .Children}}
-{{- if not .ExcludeTest}}
 {{- $list := .TfName}}
 {{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
@@ -83,7 +82,6 @@ import (
 {{- end}}
 {{- if len .TestTags}}
 	}
-{{- end}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -225,7 +223,6 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- define "testConfigChildrenTemplate"}}
 {{- $indent := .Indent}}
 {{- range .Children}}
-{{- if not .ExcludeTest}}
 {{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 {{- end}}
@@ -301,7 +298,6 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- end}}
 {{- if len .TestTags}}
 	}
-{{- end}}
 {{- end}}
 {{- end}}
 {{- end}}

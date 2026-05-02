@@ -41,7 +41,6 @@ child_classes:
   mandatory: bool(required=False) # Set to true if the child class(es) are mandatory
   no_delete: bool(required=False) # Set to true if the child class should not be deleted
   status_replace: bool(required=False) # Set to true to emit DME `status: "replaced"` for each list child on update, ensuring duplicates on key collisions are overwritten rather than rejected. Use with caution: `replaced` resets unmodeled properties to defaults and deletes unmodeled children.
-  exclude_test: bool(required=False) # Set to true to exclude this child class and all its children from acceptance tests
   test_tags: list(str(), required=False) # List of test tags, child class only included in test if env var is set
   attributes: list(include('attribute'), required=False) # List of child class attributes
   child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline

@@ -3733,6 +3733,7 @@ child_classes:
     type: single
     no_delete: true
     optional: true
+    exclude_test: true
     tf_name: ttag
     description: 'PTP ttag configuration.'
     attributes:
@@ -3743,7 +3744,6 @@ child_classes:
         min_int: 1
         max_int: 25200
         example: 120
-        exclude_test: true
     child_classes:
       - class_name: ttagTtagIf
         doc_path: Interfaces/ttag:TtagIf/
@@ -3751,7 +3751,6 @@ child_classes:
         type: list
         tf_name: ttag_interfaces
         description: 'Per-interface PTP ttag configuration and management.'
-        test_tags: [TTAG]
         attributes:
           - nxos_name: id
             tf_name: interface_id
@@ -3759,31 +3758,26 @@ child_classes:
             id: true
             description: 'Interface id of port with PTP configuration.'
             example: eth1/10
-            test_tags: [TTAG]
           - nxos_name: ttag
             tf_name: ttag
             type: Bool
             description: 'TTAG header for underlay traffic (outer) on interface.'
             example: true
-            test_tags: [TTAG]
           - nxos_name: ttagInner
             tf_name: ttag_inner
             type: Bool
             description: 'TTAG header for overlay traffic (inner) on interface.'
             example: false
-            test_tags: [TTAG]
           - nxos_name: ttagMarker
             tf_name: ttag_marker
             type: Bool
             description: 'Ttag marker packet on interface.'
             example: false
-            test_tags: [TTAG]
           - nxos_name: ttagStrip
             tf_name: ttag_strip
             type: Bool
             description: 'Strip ttag from egress packet on this interface.'
             example: false
-            test_tags: [TTAG]
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld

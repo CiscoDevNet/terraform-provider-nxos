@@ -206,20 +206,6 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_keys.rsa.key_length", "2048"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "erspan_origin_ip_is_global", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "erspan_origin_ip_address", "10.0.0.1"))
-	if os.Getenv("TTAG") != "" {
-		if os.Getenv("TTAG") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ttag_interfaces.eth1/10.ttag", "true"))
-		}
-		if os.Getenv("TTAG") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ttag_interfaces.eth1/10.ttag_inner", "false"))
-		}
-		if os.Getenv("TTAG") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ttag_interfaces.eth1/10.ttag_marker", "false"))
-		}
-		if os.Getenv("TTAG") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ttag_interfaces.eth1/10.ttag_strip", "false"))
-		}
-	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -496,24 +482,6 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `	}` + "\n"
 	config += `	erspan_origin_ip_is_global = true` + "\n"
 	config += `	erspan_origin_ip_address = "10.0.0.1"` + "\n"
-	if os.Getenv("TTAG") != "" {
-		config += `	ttag_interfaces = {` + "\n"
-		config += `		"eth1/10" = {` + "\n"
-		if os.Getenv("TTAG") != "" {
-			config += `			ttag = true` + "\n"
-		}
-		if os.Getenv("TTAG") != "" {
-			config += `			ttag_inner = false` + "\n"
-		}
-		if os.Getenv("TTAG") != "" {
-			config += `			ttag_marker = false` + "\n"
-		}
-		if os.Getenv("TTAG") != "" {
-			config += `			ttag_strip = false` + "\n"
-		}
-		config += `		}` + "\n"
-		config += `	}` + "\n"
-	}
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

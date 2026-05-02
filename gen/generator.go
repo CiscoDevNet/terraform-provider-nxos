@@ -150,6 +150,7 @@ type YamlConfigChildClass struct {
 	NoDelete       bool                   `yaml:"no_delete"`
 	StatusReplace  bool                   `yaml:"status_replace"`
 	Optional       bool                   `yaml:"optional"`
+	ExcludeTest    bool                   `yaml:"exclude_test"`
 	TestTags       []string               `yaml:"test_tags"`
 	Attributes     []YamlConfigAttribute  `yaml:"attributes"`
 	ChildClasses   []YamlConfigChildClass `yaml:"child_classes"`

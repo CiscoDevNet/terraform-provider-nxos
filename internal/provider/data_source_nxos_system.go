@@ -57,7 +57,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, and SSH server configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Acceleration/sas:Sas/", "Service%20Acceleration/sas:Svc/", "Service%20Acceleration/sas:SvcInstance/", "Service%20Acceleration/sas:SController/", "Service%20Acceleration/sas:FwSvcPolicy/", "Service%20Acceleration/sas:IpVrf/", "Service%20Acceleration/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, and SSH server configuration.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "platformTcamRegion", "platformTcamRegionExtended", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Acceleration/sas:Sas/", "Service%20Acceleration/sas:Svc/", "Service%20Acceleration/sas:SvcInstance/", "Service%20Acceleration/sas:SController/", "Service%20Acceleration/sas:FwSvcPolicy/", "Service%20Acceleration/sas:IpVrf/", "Service%20Acceleration/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -916,6 +916,426 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "WRR Unicast Bandwidth Value.",
 				Computed:            true,
 			},
+			"tcam_region_arp_acl_size": schema.Int64Attribute{
+				MarkdownDescription: "ARP ACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_copp_size": schema.Int64Attribute{
+				MarkdownDescription: "Ingress Copp TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_copp_system_size": schema.Int64Attribute{
+				MarkdownDescription: "Copp System TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_egress_ipv6_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress IPV6 Qos TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_egress_ipv6_racl_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress IPv6 RACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_egress_mac_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress Mac Qos TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_egress_qos_lite_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress Qos Lite TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_egress_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress Qos TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_egress_racl_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress RACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_egress_vacl_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress VACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_fcoe_egress_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress FCoE Counters size.",
+				Computed:            true,
+			},
+			"tcam_region_fcoe_ingress_size": schema.Int64Attribute{
+				MarkdownDescription: "Ingress FCoE Counters size.",
+				Computed:            true,
+			},
+			"tcam_region_fhs_size": schema.Int64Attribute{
+				MarkdownDescription: "FHS TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_interface_acl_lite_size": schema.Int64Attribute{
+				MarkdownDescription: "Interface ACL Lite TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_interface_acl_size": schema.Int64Attribute{
+				MarkdownDescription: "Interface ACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_interface_acl_udf_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV4 IFACL SPAN UDF size.",
+				Computed:            true,
+			},
+			"tcam_region_ingress_flow_redirect_size": schema.Int64Attribute{
+				MarkdownDescription: "Size of Egress region in ACX.",
+				Computed:            true,
+			},
+			"tcam_region_ingress_flow_size": schema.Int64Attribute{
+				MarkdownDescription: "Ingress Flow TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipsg_size": schema.Int64Attribute{
+				MarkdownDescription: "IPSG TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipv6_interface_acl_size": schema.Int64Attribute{
+				MarkdownDescription: "IPv6 Interface ACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipv6_l3_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV6 L3 QoS TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipv6_pbr_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV6 PBR TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipv6_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV6 QoS TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipv6_racl_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV6 RACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipv6_span_l2_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV6 L2 SPAN TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipv6_span_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV6 SPAN TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipv6_sup_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV6 SUP TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipv6_vacl_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV6 VACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_ipv6_vlan_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV6 VLAN QoS TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_l3_qos_intra_lite_size": schema.Int64Attribute{
+				MarkdownDescription: "L3 QoS Intra Lite TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_mac_interface_acl_size": schema.Int64Attribute{
+				MarkdownDescription: "MAC Interface ACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_mac_l3_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "MAC L3 QoS TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_mac_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "MAC QoS TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_mac_vacl_size": schema.Int64Attribute{
+				MarkdownDescription: "MAC VACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_mac_vlan_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "MAC VLAN QoS TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_multicast_bidir_size": schema.Int64Attribute{
+				MarkdownDescription: "MCAST BIDIR TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_mpls_doublewide": schema.BoolAttribute{
+				MarkdownDescription: "MPLS double-wide TCAM region.",
+				Computed:            true,
+			},
+			"tcam_region_mpls_size": schema.Int64Attribute{
+				MarkdownDescription: "MPLS TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_mvpn_size": schema.Int64Attribute{
+				MarkdownDescription: "MVPN TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_n9k_arp_acl_size": schema.Int64Attribute{
+				MarkdownDescription: "n9k-arp-acl TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_nat_size": schema.Int64Attribute{
+				MarkdownDescription: "NAT TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_openflow_doublewide": schema.BoolAttribute{
+				MarkdownDescription: "Openflow double-wide TCAM region.",
+				Computed:            true,
+			},
+			"tcam_region_openflow_lite_size": schema.Int64Attribute{
+				MarkdownDescription: "OPENFLOW Lite TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_openflow_size": schema.Int64Attribute{
+				MarkdownDescription: "OPENFLOW TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_pbr_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV4 PBR TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_qos_intra_lite_size": schema.Int64Attribute{
+				MarkdownDescription: "QoS Intra Lite TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "QOS TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_qos_label_size": schema.Int64Attribute{
+				MarkdownDescription: "Qos Label TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_racl_lite_size": schema.Int64Attribute{
+				MarkdownDescription: "RACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_racl_size": schema.Int64Attribute{
+				MarkdownDescription: "RACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_racl_udf_size": schema.Int64Attribute{
+				MarkdownDescription: "IPV4 RACL SPAN UDF TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_sup_size": schema.Int64Attribute{
+				MarkdownDescription: "SUP TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_svi_size": schema.Int64Attribute{
+				MarkdownDescription: "Ingress SVI Counters TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_tcp_nat_size": schema.Int64Attribute{
+				MarkdownDescription: "TCP NAT TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_vacl_lite_size": schema.Int64Attribute{
+				MarkdownDescription: "VACL Lite TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_vacl_size": schema.Int64Attribute{
+				MarkdownDescription: "Virtual ACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_vpc_convergence_size": schema.Int64Attribute{
+				MarkdownDescription: "VPC TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_vlan_qos_intra_lite_size": schema.Int64Attribute{
+				MarkdownDescription: "VLAN QoS Intra Lite TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_vlan_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "VLAN QoS TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_vxlan_p2p_size": schema.Int64Attribute{
+				MarkdownDescription: "VXLAN P2P TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_interface_acl_all_per_port_stats": schema.BoolAttribute{
+				MarkdownDescription: "e-ifacl-all region with per-port-stats.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_interface_acl_all_size": schema.Int64Attribute{
+				MarkdownDescription: "e-pacl-all TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_ipv6_racl_per_port_stats": schema.BoolAttribute{
+				MarkdownDescription: "e-ipv6-racl region with per-port-stats.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_racl_per_port_stats": schema.BoolAttribute{
+				MarkdownDescription: "e-racl region with per-port-stats.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_copp_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress CoPP TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_flow_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress Flow TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_hardware_telemetry_size": schema.Int64Attribute{
+				MarkdownDescription: "e-hw-telemetry TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_interface_acl_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress Interface ACL TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_l2_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "egr-l2-qos TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_l3_vlan_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "egr-l3-vlan-qos TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_racl_size": schema.Int64Attribute{
+				MarkdownDescription: "egr-racl TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_egress_sup_size": schema.Int64Attribute{
+				MarkdownDescription: "Egress SUP TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_hardware_telemetry_size": schema.Int64Attribute{
+				MarkdownDescription: "hw-telemetry TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_interface_acl_all_per_port_stats": schema.BoolAttribute{
+				MarkdownDescription: "ifacl-all region with per-port-stats.",
+				Computed:            true,
+			},
+			"tcam_region_extended_interface_acl_all_profile": schema.Int64Attribute{
+				MarkdownDescription: "ifacl-all region match profile.",
+				Computed:            true,
+			},
+			"tcam_region_extended_interface_acl_all_size": schema.Int64Attribute{
+				MarkdownDescription: "pacl-all TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_interface_acl_per_port_stats": schema.BoolAttribute{
+				MarkdownDescription: "ifacl region with per-port-stats.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_dacl_size": schema.Int64Attribute{
+				MarkdownDescription: "ing-dacl TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_interface_acl_size": schema.Int64Attribute{
+				MarkdownDescription: "Ingress Ifacl TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_interface_acl_wide_size": schema.Int64Attribute{
+				MarkdownDescription: "Ingress Ifacl Wide TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_ipv6_interface_acl_lite_size": schema.Int64Attribute{
+				MarkdownDescription: "IPv6 Interface ACL Lite TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_l2_l3_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "ing-l2-l3-qos TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_l2_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "ing-l2-qos TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_l2_span_filter_size": schema.Int64Attribute{
+				MarkdownDescription: "ing-l2-span-filter TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_l3_span_filter_size": schema.Int64Attribute{
+				MarkdownDescription: "ing-l3-span-filter TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_pacl_sb_size": schema.Int64Attribute{
+				MarkdownDescription: "ing-pacl-sb TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_racl_size": schema.Int64Attribute{
+				MarkdownDescription: "Ingress Racl TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_rbacl_size": schema.Int64Attribute{
+				MarkdownDescription: "ing-rbacl TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_redirect_size": schema.Int64Attribute{
+				MarkdownDescription: "Size of Ingress redirect region in ACX.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_storm_control_size": schema.Int64Attribute{
+				MarkdownDescription: "Ingress Storm Control TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_sup_size": schema.Int64Attribute{
+				MarkdownDescription: "Ingress SUP TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_vacl_nh_size": schema.Int64Attribute{
+				MarkdownDescription: "ing-vacl-nh TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ingress_vlan_qos_size": schema.Int64Attribute{
+				MarkdownDescription: "Ingress L3VlanQos TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ipv6_interface_acl_per_port_stats": schema.BoolAttribute{
+				MarkdownDescription: "ipv6-ifacl region with per-port-stats.",
+				Computed:            true,
+			},
+			"tcam_region_extended_ipv6_racl_per_port_stats": schema.BoolAttribute{
+				MarkdownDescription: "ipv6-racl region with per-port-stats.",
+				Computed:            true,
+			},
+			"tcam_region_extended_mac_interface_acl_per_port_stats": schema.BoolAttribute{
+				MarkdownDescription: "mac-ifacl region with per-port-stats.",
+				Computed:            true,
+			},
+			"tcam_region_extended_multicast_nat_size": schema.Int64Attribute{
+				MarkdownDescription: "multicast NAT TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_multicast_nbm_size": schema.Int64Attribute{
+				MarkdownDescription: "Multicast NBM TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_racl_all_per_port_stats": schema.BoolAttribute{
+				MarkdownDescription: "racl-all region with per-port-stats.",
+				Computed:            true,
+			},
+			"tcam_region_extended_racl_all_profile": schema.Int64Attribute{
+				MarkdownDescription: "racl-all region match profile.",
+				Computed:            true,
+			},
+			"tcam_region_extended_racl_all_size": schema.Int64Attribute{
+				MarkdownDescription: "racl-all TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_racl_per_port_stats": schema.BoolAttribute{
+				MarkdownDescription: "racl region with per-port-stats.",
+				Computed:            true,
+			},
+			"tcam_region_extended_redirect_v4_size": schema.Int64Attribute{
+				MarkdownDescription: "redirect_v4 TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_span_size": schema.Int64Attribute{
+				MarkdownDescription: "span TCAM region size.",
+				Computed:            true,
+			},
+			"tcam_region_extended_span_tahoe_size": schema.Int64Attribute{
+				MarkdownDescription: "span Tahoe TCAM region size.",
+				Computed:            true,
+			},
 			"management_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Management interface configuration.\n  - Map key: `interface_id` - An identifier.").String,
 				Computed:            true,
@@ -1369,7 +1789,7 @@ func (d *SystemDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,ndVpc,ndVpcDom,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,cfsEntity,cfsInst,udldEntity,udldInst,udldPhysIf,platformEntity,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,cdpEntity,cdpInst,cdpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt,icamEntity,icamInst,icamScale,nxapiInst,imBreakout,imMod,imFpP,sasSas,sasSvc,sasSvcInstance,sasSController,sasFwSvcPolicy,sasIpVrf,sasDom,commEntity,commSsh,commSshKey")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,ndVpc,ndVpcDom,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,cfsEntity,cfsInst,udldEntity,udldInst,udldPhysIf,platformEntity,platformTcamRegion,platformTcamRegionExtended,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,cdpEntity,cdpInst,cdpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt,icamEntity,icamInst,icamScale,nxapiInst,imBreakout,imMod,imFpP,sasSas,sasSvc,sasSvcInstance,sasSController,sasFwSvcPolicy,sasIpVrf,sasDom,commEntity,commSsh,commSshKey")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

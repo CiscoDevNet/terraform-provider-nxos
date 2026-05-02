@@ -41,7 +41,7 @@ func TestAccDataSourceNxosNetworkQoS(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosNetworkQoSPrerequisitesConfig + testAccDataSourceNxosNetworkQoSConfig(),
+				Config: testAccDataSourceNxosNetworkQoSConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -51,43 +51,6 @@ func TestAccDataSourceNxosNetworkQoS(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceNxosNetworkQoSPrerequisitesConfig = `
-resource "nxos_dme" "PreReq0" {
-  dn = "sys/ipqos/nw/c/name-[Voice]"
-  class_name = "ipqosCMapInst"
-  content = {
-      name = "Voice"
-  }
-}
-
-resource "nxos_dme" "PreReq1" {
-  dn = "sys/ipqos/nw/p/name-[PM1]"
-  class_name = "ipqosPMapInst"
-  content = {
-      name = "PM1"
-  }
-}
-
-resource "nxos_dme" "PreReq2" {
-  dn = "sys/ipqos/nw/p/name-[PM1]/cmap-[Voice]"
-  class_name = "ipqosMatchCMap"
-  content = {
-      name = "Voice"
-  }
-  depends_on = [nxos_dme.PreReq1, ]
-}
-
-resource "nxos_dme" "PreReq3" {
-  dn = "sys/ipqos/nw/p/name-[PM1]/cmap-[Voice]/mtu"
-  class_name = "ipqosSetMTU"
-  delete = false
-  content = {
-      value = "9216"
-  }
-  depends_on = [nxos_dme.PreReq2, ]
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
@@ -111,7 +74,6 @@ func testAccDataSourceNxosNetworkQoSConfig() string {
 	config += `	}` + "\n"
 	config += `	system_in_policy_map_name = "PM1"` + "\n"
 	config += `	policy_map_statistics = false` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

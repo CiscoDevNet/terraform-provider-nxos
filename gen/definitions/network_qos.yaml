@@ -273,27 +273,4 @@ child_classes:
                     type: Bool
                     description: 'Turn on/off statistics.'
                     example: false
-test_prerequisites:
-  - dn: sys/ipqos/nw/c/name-[Voice]
-    class_name: ipqosCMapInst
-    attributes:
-      - name: name
-        value: Voice
-  - dn: sys/ipqos/nw/p/name-[PM1]
-    class_name: ipqosPMapInst
-    attributes:
-      - name: name
-        value: PM1
-  - dn: sys/ipqos/nw/p/name-[PM1]/cmap-[Voice]
-    class_name: ipqosMatchCMap
-    attributes:
-      - name: name
-        value: Voice
-    dependencies: [1]
-  - dn: sys/ipqos/nw/p/name-[PM1]/cmap-[Voice]/mtu
-    class_name: ipqosSetMTU
-    no_delete: true
-    attributes:
-      - name: value
-        value: 9216
-    dependencies: [2]
+

@@ -303,6 +303,51 @@ type System struct {
 	TcamRegionExtendedSpanSize                          types.Int64                            `tfsdk:"tcam_region_extended_span_size"`
 	TcamRegionExtendedSpanTahoeSize                     types.Int64                            `tfsdk:"tcam_region_extended_span_tahoe_size"`
 	PlatformNveInterfaces                               map[string]SystemPlatformNveInterfaces `tfsdk:"platform_nve_interfaces"`
+	EntityExtendedAclDisableRedirectShare               types.String                           `tfsdk:"entity_extended_acl_disable_redirect_share"`
+	EntityExtendedAtomicUpdate                          types.String                           `tfsdk:"entity_extended_atomic_update"`
+	EntityExtendedAtomicUpdateStrict                    types.String                           `tfsdk:"entity_extended_atomic_update_strict"`
+	EntityExtendedCounterManagerBfdScale                types.Int64                            `tfsdk:"entity_extended_counter_manager_bfd_scale"`
+	EntityExtendedCounterManagerEcnScale                types.Int64                            `tfsdk:"entity_extended_counter_manager_ecn_scale"`
+	EntityExtendedCounterManagerEgressAclScale          types.Int64                            `tfsdk:"entity_extended_counter_manager_egress_acl_scale"`
+	EntityExtendedCounterManagerFeatureBfd              types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_bfd"`
+	EntityExtendedCounterManagerFeatureEcn              types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_ecn"`
+	EntityExtendedCounterManagerFeatureEgressAcl        types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_egress_acl"`
+	EntityExtendedCounterManagerFeatureIngressAcl       types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_ingress_acl"`
+	EntityExtendedCounterManagerFeatureL2vni            types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_l2vni"`
+	EntityExtendedCounterManagerFeatureL3vni            types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_l3vni"`
+	EntityExtendedCounterManagerFeatureSi               types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_si"`
+	EntityExtendedCounterManagerFeatureSvi              types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_svi"`
+	EntityExtendedCounterManagerFeatureTunnel           types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_tunnel"`
+	EntityExtendedCounterManagerFeatureVlan             types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_vlan"`
+	EntityExtendedCounterManagerFeatureVoq              types.Int64                            `tfsdk:"entity_extended_counter_manager_feature_voq"`
+	EntityExtendedCounterManagerIngressAclScale         types.Int64                            `tfsdk:"entity_extended_counter_manager_ingress_acl_scale"`
+	EntityExtendedCounterManagerL2vniScale              types.Int64                            `tfsdk:"entity_extended_counter_manager_l2vni_scale"`
+	EntityExtendedCounterManagerL3vniScale              types.Int64                            `tfsdk:"entity_extended_counter_manager_l3vni_scale"`
+	EntityExtendedCounterManagerSiScale                 types.Int64                            `tfsdk:"entity_extended_counter_manager_si_scale"`
+	EntityExtendedCounterManagerSviScale                types.Int64                            `tfsdk:"entity_extended_counter_manager_svi_scale"`
+	EntityExtendedCounterManagerTunnelScale             types.Int64                            `tfsdk:"entity_extended_counter_manager_tunnel_scale"`
+	EntityExtendedCounterManagerVlanScale               types.Int64                            `tfsdk:"entity_extended_counter_manager_vlan_scale"`
+	EntityExtendedCounterManagerVoqScale                types.Int64                            `tfsdk:"entity_extended_counter_manager_voq_scale"`
+	EntityExtendedDmeLoadInterval                       types.Int64                            `tfsdk:"entity_extended_dme_load_interval"`
+	EntityExtendedEgressL2QosIfaclLabelSize             types.String                           `tfsdk:"entity_extended_egress_l2_qos_ifacl_label_size"`
+	EntityExtendedGpe5TimerEnable                       types.Bool                             `tfsdk:"entity_extended_gpe5_timer_enable"`
+	EntityExtendedHardwareQosLatencyOptimized           types.Bool                             `tfsdk:"entity_extended_hardware_qos_latency_optimized"`
+	EntityExtendedIngressPaclIfaclLabelSize             types.String                           `tfsdk:"entity_extended_ingress_pacl_ifacl_label_size"`
+	EntityExtendedIngressVrfNatBdLabelWidth             types.Int64                            `tfsdk:"entity_extended_ingress_vrf_nat_bd_label_width"`
+	EntityExtendedMulticastNlbStickPortChannel          types.String                           `tfsdk:"entity_extended_multicast_nlb_stick_port_channel"`
+	EntityExtendedMulticastStatsDisable                 types.String                           `tfsdk:"entity_extended_multicast_stats_disable"`
+	EntityExtendedMplsQosPipeMode                       types.String                           `tfsdk:"entity_extended_mpls_qos_pipe_mode"`
+	EntityExtendedMulticastPriority                     types.Int64                            `tfsdk:"entity_extended_multicast_priority"`
+	EntityExtendedPbrEcmpPaths                          types.Int64                            `tfsdk:"entity_extended_pbr_ecmp_paths"`
+	EntityExtendedPbrFastConvergence                    types.String                           `tfsdk:"entity_extended_pbr_fast_convergence"`
+	EntityExtendedPbrMatchDefaultRoute                  types.String                           `tfsdk:"entity_extended_pbr_match_default_route"`
+	EntityExtendedPtpCorrectionHardware                 types.Bool                             `tfsdk:"entity_extended_ptp_correction_hardware"`
+	EntityExtendedSiFlexStats                           types.String                           `tfsdk:"entity_extended_si_flex_stats"`
+	EntityExtendedStatsTemplate                         types.String                           `tfsdk:"entity_extended_stats_template"`
+	EntityExtendedStormControlPriority                  types.String                           `tfsdk:"entity_extended_storm_control_priority"`
+	EntityExtendedTcamDefaultResult                     types.String                           `tfsdk:"entity_extended_tcam_default_result"`
+	EntityExtendedUdfNetflowRtpMulticastEnabled         types.Bool                             `tfsdk:"entity_extended_udf_netflow_rtp_multicast_enabled"`
+	EntityExtendedVrfAwareNatEnable                     types.String                           `tfsdk:"entity_extended_vrf_aware_nat_enable"`
 	ManagementInterfaces                                map[string]SystemManagementInterfaces  `tfsdk:"management_interfaces"`
 	LldpAdminState                                      types.String                           `tfsdk:"lldp_admin_state"`
 	LldpInstanceAdminState                              types.String                           `tfsdk:"lldp_instance_admin_state"`
@@ -1967,6 +2012,145 @@ func (data System) toBody(config System) nxos.Body {
 				}
 			}
 		}
+		attrs = "{}"
+		if !data.EntityExtendedAclDisableRedirectShare.IsUnknown() && !data.EntityExtendedAclDisableRedirectShare.IsNull() && !config.EntityExtendedAclDisableRedirectShare.IsNull() {
+			attrs, _ = sjson.Set(attrs, "aclDisableRedirectShare", data.EntityExtendedAclDisableRedirectShare.ValueString())
+		}
+		if !data.EntityExtendedAtomicUpdate.IsUnknown() && !data.EntityExtendedAtomicUpdate.IsNull() && !config.EntityExtendedAtomicUpdate.IsNull() {
+			attrs, _ = sjson.Set(attrs, "atomicUpdate", data.EntityExtendedAtomicUpdate.ValueString())
+		}
+		if !data.EntityExtendedAtomicUpdateStrict.IsUnknown() && !data.EntityExtendedAtomicUpdateStrict.IsNull() && !config.EntityExtendedAtomicUpdateStrict.IsNull() {
+			attrs, _ = sjson.Set(attrs, "atomicUpdateStrict", data.EntityExtendedAtomicUpdateStrict.ValueString())
+		}
+		if !data.EntityExtendedCounterManagerBfdScale.IsUnknown() && !data.EntityExtendedCounterManagerBfdScale.IsNull() && !config.EntityExtendedCounterManagerBfdScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrBfdScale", strconv.FormatInt(data.EntityExtendedCounterManagerBfdScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerEcnScale.IsUnknown() && !data.EntityExtendedCounterManagerEcnScale.IsNull() && !config.EntityExtendedCounterManagerEcnScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrEcnScale", strconv.FormatInt(data.EntityExtendedCounterManagerEcnScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerEgressAclScale.IsUnknown() && !data.EntityExtendedCounterManagerEgressAclScale.IsNull() && !config.EntityExtendedCounterManagerEgressAclScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrEgrACLScale", strconv.FormatInt(data.EntityExtendedCounterManagerEgressAclScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureBfd.IsUnknown() && !data.EntityExtendedCounterManagerFeatureBfd.IsNull() && !config.EntityExtendedCounterManagerFeatureBfd.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureBfd", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureBfd.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureEcn.IsUnknown() && !data.EntityExtendedCounterManagerFeatureEcn.IsNull() && !config.EntityExtendedCounterManagerFeatureEcn.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureEcn", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureEcn.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureEgressAcl.IsUnknown() && !data.EntityExtendedCounterManagerFeatureEgressAcl.IsNull() && !config.EntityExtendedCounterManagerFeatureEgressAcl.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureEgrACL", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureEgressAcl.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureIngressAcl.IsUnknown() && !data.EntityExtendedCounterManagerFeatureIngressAcl.IsNull() && !config.EntityExtendedCounterManagerFeatureIngressAcl.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureIngrACL", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureIngressAcl.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureL2vni.IsUnknown() && !data.EntityExtendedCounterManagerFeatureL2vni.IsNull() && !config.EntityExtendedCounterManagerFeatureL2vni.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureL2VNI", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureL2vni.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureL3vni.IsUnknown() && !data.EntityExtendedCounterManagerFeatureL3vni.IsNull() && !config.EntityExtendedCounterManagerFeatureL3vni.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureL3VNI", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureL3vni.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureSi.IsUnknown() && !data.EntityExtendedCounterManagerFeatureSi.IsNull() && !config.EntityExtendedCounterManagerFeatureSi.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureSI", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureSi.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureSvi.IsUnknown() && !data.EntityExtendedCounterManagerFeatureSvi.IsNull() && !config.EntityExtendedCounterManagerFeatureSvi.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureSVI", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureSvi.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureTunnel.IsUnknown() && !data.EntityExtendedCounterManagerFeatureTunnel.IsNull() && !config.EntityExtendedCounterManagerFeatureTunnel.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureTunnel", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureTunnel.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureVlan.IsUnknown() && !data.EntityExtendedCounterManagerFeatureVlan.IsNull() && !config.EntityExtendedCounterManagerFeatureVlan.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureVlan", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureVlan.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerFeatureVoq.IsUnknown() && !data.EntityExtendedCounterManagerFeatureVoq.IsNull() && !config.EntityExtendedCounterManagerFeatureVoq.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrFeatureVoq", strconv.FormatInt(data.EntityExtendedCounterManagerFeatureVoq.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerIngressAclScale.IsUnknown() && !data.EntityExtendedCounterManagerIngressAclScale.IsNull() && !config.EntityExtendedCounterManagerIngressAclScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrIngrACLScale", strconv.FormatInt(data.EntityExtendedCounterManagerIngressAclScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerL2vniScale.IsUnknown() && !data.EntityExtendedCounterManagerL2vniScale.IsNull() && !config.EntityExtendedCounterManagerL2vniScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrL2VNIScale", strconv.FormatInt(data.EntityExtendedCounterManagerL2vniScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerL3vniScale.IsUnknown() && !data.EntityExtendedCounterManagerL3vniScale.IsNull() && !config.EntityExtendedCounterManagerL3vniScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrL3VNIScale", strconv.FormatInt(data.EntityExtendedCounterManagerL3vniScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerSiScale.IsUnknown() && !data.EntityExtendedCounterManagerSiScale.IsNull() && !config.EntityExtendedCounterManagerSiScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrSIScale", strconv.FormatInt(data.EntityExtendedCounterManagerSiScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerSviScale.IsUnknown() && !data.EntityExtendedCounterManagerSviScale.IsNull() && !config.EntityExtendedCounterManagerSviScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrSVIScale", strconv.FormatInt(data.EntityExtendedCounterManagerSviScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerTunnelScale.IsUnknown() && !data.EntityExtendedCounterManagerTunnelScale.IsNull() && !config.EntityExtendedCounterManagerTunnelScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrTunnelScale", strconv.FormatInt(data.EntityExtendedCounterManagerTunnelScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerVlanScale.IsUnknown() && !data.EntityExtendedCounterManagerVlanScale.IsNull() && !config.EntityExtendedCounterManagerVlanScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrVlanScale", strconv.FormatInt(data.EntityExtendedCounterManagerVlanScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedCounterManagerVoqScale.IsUnknown() && !data.EntityExtendedCounterManagerVoqScale.IsNull() && !config.EntityExtendedCounterManagerVoqScale.IsNull() {
+			attrs, _ = sjson.Set(attrs, "counterMgrVoqScale", strconv.FormatInt(data.EntityExtendedCounterManagerVoqScale.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedDmeLoadInterval.IsUnknown() && !data.EntityExtendedDmeLoadInterval.IsNull() && !config.EntityExtendedDmeLoadInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dmeLoadInterval", strconv.FormatInt(data.EntityExtendedDmeLoadInterval.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedEgressL2QosIfaclLabelSize.IsUnknown() && !data.EntityExtendedEgressL2QosIfaclLabelSize.IsNull() && !config.EntityExtendedEgressL2QosIfaclLabelSize.IsNull() {
+			attrs, _ = sjson.Set(attrs, "egrL2QosIfaclLabelSize", data.EntityExtendedEgressL2QosIfaclLabelSize.ValueString())
+		}
+		if !data.EntityExtendedGpe5TimerEnable.IsUnknown() && !data.EntityExtendedGpe5TimerEnable.IsNull() && !config.EntityExtendedGpe5TimerEnable.IsNull() {
+			attrs, _ = sjson.Set(attrs, "gpe5TimerEnable", strconv.FormatBool(data.EntityExtendedGpe5TimerEnable.ValueBool()))
+		}
+		if !data.EntityExtendedHardwareQosLatencyOptimized.IsUnknown() && !data.EntityExtendedHardwareQosLatencyOptimized.IsNull() && !config.EntityExtendedHardwareQosLatencyOptimized.IsNull() {
+			attrs, _ = sjson.Set(attrs, "hwQosLatencyOptimized", strconv.FormatBool(data.EntityExtendedHardwareQosLatencyOptimized.ValueBool()))
+		}
+		if !data.EntityExtendedIngressPaclIfaclLabelSize.IsUnknown() && !data.EntityExtendedIngressPaclIfaclLabelSize.IsNull() && !config.EntityExtendedIngressPaclIfaclLabelSize.IsNull() {
+			attrs, _ = sjson.Set(attrs, "iPaclIfaclLabelSize", data.EntityExtendedIngressPaclIfaclLabelSize.ValueString())
+		}
+		if !data.EntityExtendedIngressVrfNatBdLabelWidth.IsUnknown() && !data.EntityExtendedIngressVrfNatBdLabelWidth.IsNull() && !config.EntityExtendedIngressVrfNatBdLabelWidth.IsNull() {
+			attrs, _ = sjson.Set(attrs, "iVrfNatBdLabelWidth", strconv.FormatInt(data.EntityExtendedIngressVrfNatBdLabelWidth.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedMulticastNlbStickPortChannel.IsUnknown() && !data.EntityExtendedMulticastNlbStickPortChannel.IsNull() && !config.EntityExtendedMulticastNlbStickPortChannel.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mcastNlbStickPc", data.EntityExtendedMulticastNlbStickPortChannel.ValueString())
+		}
+		if !data.EntityExtendedMulticastStatsDisable.IsUnknown() && !data.EntityExtendedMulticastStatsDisable.IsNull() && !config.EntityExtendedMulticastStatsDisable.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mcastStatsDisable", data.EntityExtendedMulticastStatsDisable.ValueString())
+		}
+		if !data.EntityExtendedMplsQosPipeMode.IsUnknown() && !data.EntityExtendedMplsQosPipeMode.IsNull() && !config.EntityExtendedMplsQosPipeMode.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mplsQosPipeMode", data.EntityExtendedMplsQosPipeMode.ValueString())
+		}
+		if !data.EntityExtendedMulticastPriority.IsUnknown() && !data.EntityExtendedMulticastPriority.IsNull() && !config.EntityExtendedMulticastPriority.IsNull() {
+			attrs, _ = sjson.Set(attrs, "multicastPriority", strconv.FormatInt(data.EntityExtendedMulticastPriority.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedPbrEcmpPaths.IsUnknown() && !data.EntityExtendedPbrEcmpPaths.IsNull() && !config.EntityExtendedPbrEcmpPaths.IsNull() {
+			attrs, _ = sjson.Set(attrs, "pbrEcmpPaths", strconv.FormatInt(data.EntityExtendedPbrEcmpPaths.ValueInt64(), 10))
+		}
+		if !data.EntityExtendedPbrFastConvergence.IsUnknown() && !data.EntityExtendedPbrFastConvergence.IsNull() && !config.EntityExtendedPbrFastConvergence.IsNull() {
+			attrs, _ = sjson.Set(attrs, "pbrFastConvergence", data.EntityExtendedPbrFastConvergence.ValueString())
+		}
+		if !data.EntityExtendedPbrMatchDefaultRoute.IsUnknown() && !data.EntityExtendedPbrMatchDefaultRoute.IsNull() && !config.EntityExtendedPbrMatchDefaultRoute.IsNull() {
+			attrs, _ = sjson.Set(attrs, "pbrMatchDefaultRoute", data.EntityExtendedPbrMatchDefaultRoute.ValueString())
+		}
+		if !data.EntityExtendedPtpCorrectionHardware.IsUnknown() && !data.EntityExtendedPtpCorrectionHardware.IsNull() && !config.EntityExtendedPtpCorrectionHardware.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ptpCorrHw", strconv.FormatBool(data.EntityExtendedPtpCorrectionHardware.ValueBool()))
+		}
+		if !data.EntityExtendedSiFlexStats.IsUnknown() && !data.EntityExtendedSiFlexStats.IsNull() && !config.EntityExtendedSiFlexStats.IsNull() {
+			attrs, _ = sjson.Set(attrs, "siFlexStats", data.EntityExtendedSiFlexStats.ValueString())
+		}
+		if !data.EntityExtendedStatsTemplate.IsUnknown() && !data.EntityExtendedStatsTemplate.IsNull() && !config.EntityExtendedStatsTemplate.IsNull() {
+			attrs, _ = sjson.Set(attrs, "statsTemplate", data.EntityExtendedStatsTemplate.ValueString())
+		}
+		if !data.EntityExtendedStormControlPriority.IsUnknown() && !data.EntityExtendedStormControlPriority.IsNull() && !config.EntityExtendedStormControlPriority.IsNull() {
+			attrs, _ = sjson.Set(attrs, "stormControlPriority", data.EntityExtendedStormControlPriority.ValueString())
+		}
+		if !data.EntityExtendedTcamDefaultResult.IsUnknown() && !data.EntityExtendedTcamDefaultResult.IsNull() && !config.EntityExtendedTcamDefaultResult.IsNull() {
+			attrs, _ = sjson.Set(attrs, "tcamDefaultResult", data.EntityExtendedTcamDefaultResult.ValueString())
+		}
+		if !data.EntityExtendedUdfNetflowRtpMulticastEnabled.IsUnknown() && !data.EntityExtendedUdfNetflowRtpMulticastEnabled.IsNull() && !config.EntityExtendedUdfNetflowRtpMulticastEnabled.IsNull() {
+			attrs, _ = sjson.Set(attrs, "udfNetflowrtpMcEnabled", strconv.FormatBool(data.EntityExtendedUdfNetflowRtpMulticastEnabled.ValueBool()))
+		}
+		if !data.EntityExtendedVrfAwareNatEnable.IsUnknown() && !data.EntityExtendedVrfAwareNatEnable.IsNull() && !config.EntityExtendedVrfAwareNatEnable.IsNull() {
+			attrs, _ = sjson.Set(attrs, "vrfAwareNatEnable", data.EntityExtendedVrfAwareNatEnable.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.platformEntityExtended.attributes", attrs)
+		}
 		childBody = body
 		body = prevBody
 		if parentAttrs != "{}" || gjson.Get(childBody, "platformEntity.children").Exists() {
@@ -3521,6 +3705,64 @@ func (data *System) fromBody(res gjson.Result) {
 				return true
 			},
 		)
+		{
+			var rplatformEntityExtended gjson.Result
+			rplatformEntity.Get("platformEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("platformEntityExtended.attributes.rn").String()
+					if rnValue == "entityextd" {
+						rplatformEntityExtended = v
+						return false
+					}
+					return true
+				},
+			)
+			data.EntityExtendedAclDisableRedirectShare = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.aclDisableRedirectShare").String())
+			data.EntityExtendedAtomicUpdate = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.atomicUpdate").String())
+			data.EntityExtendedAtomicUpdateStrict = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.atomicUpdateStrict").String())
+			data.EntityExtendedCounterManagerBfdScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrBfdScale").Int())
+			data.EntityExtendedCounterManagerEcnScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrEcnScale").Int())
+			data.EntityExtendedCounterManagerEgressAclScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrEgrACLScale").Int())
+			data.EntityExtendedCounterManagerFeatureBfd = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureBfd").Int())
+			data.EntityExtendedCounterManagerFeatureEcn = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureEcn").Int())
+			data.EntityExtendedCounterManagerFeatureEgressAcl = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureEgrACL").Int())
+			data.EntityExtendedCounterManagerFeatureIngressAcl = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureIngrACL").Int())
+			data.EntityExtendedCounterManagerFeatureL2vni = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureL2VNI").Int())
+			data.EntityExtendedCounterManagerFeatureL3vni = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureL3VNI").Int())
+			data.EntityExtendedCounterManagerFeatureSi = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureSI").Int())
+			data.EntityExtendedCounterManagerFeatureSvi = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureSVI").Int())
+			data.EntityExtendedCounterManagerFeatureTunnel = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureTunnel").Int())
+			data.EntityExtendedCounterManagerFeatureVlan = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureVlan").Int())
+			data.EntityExtendedCounterManagerFeatureVoq = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureVoq").Int())
+			data.EntityExtendedCounterManagerIngressAclScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrIngrACLScale").Int())
+			data.EntityExtendedCounterManagerL2vniScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrL2VNIScale").Int())
+			data.EntityExtendedCounterManagerL3vniScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrL3VNIScale").Int())
+			data.EntityExtendedCounterManagerSiScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrSIScale").Int())
+			data.EntityExtendedCounterManagerSviScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrSVIScale").Int())
+			data.EntityExtendedCounterManagerTunnelScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrTunnelScale").Int())
+			data.EntityExtendedCounterManagerVlanScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrVlanScale").Int())
+			data.EntityExtendedCounterManagerVoqScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrVoqScale").Int())
+			data.EntityExtendedDmeLoadInterval = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.dmeLoadInterval").Int())
+			data.EntityExtendedEgressL2QosIfaclLabelSize = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.egrL2QosIfaclLabelSize").String())
+			data.EntityExtendedGpe5TimerEnable = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntityExtended.Get("platformEntityExtended.attributes.gpe5TimerEnable").String()))
+			data.EntityExtendedHardwareQosLatencyOptimized = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntityExtended.Get("platformEntityExtended.attributes.hwQosLatencyOptimized").String()))
+			data.EntityExtendedIngressPaclIfaclLabelSize = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.iPaclIfaclLabelSize").String())
+			data.EntityExtendedIngressVrfNatBdLabelWidth = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.iVrfNatBdLabelWidth").Int())
+			data.EntityExtendedMulticastNlbStickPortChannel = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.mcastNlbStickPc").String())
+			data.EntityExtendedMulticastStatsDisable = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.mcastStatsDisable").String())
+			data.EntityExtendedMplsQosPipeMode = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.mplsQosPipeMode").String())
+			data.EntityExtendedMulticastPriority = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.multicastPriority").Int())
+			data.EntityExtendedPbrEcmpPaths = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.pbrEcmpPaths").Int())
+			data.EntityExtendedPbrFastConvergence = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.pbrFastConvergence").String())
+			data.EntityExtendedPbrMatchDefaultRoute = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.pbrMatchDefaultRoute").String())
+			data.EntityExtendedPtpCorrectionHardware = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntityExtended.Get("platformEntityExtended.attributes.ptpCorrHw").String()))
+			data.EntityExtendedSiFlexStats = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.siFlexStats").String())
+			data.EntityExtendedStatsTemplate = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.statsTemplate").String())
+			data.EntityExtendedStormControlPriority = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.stormControlPriority").String())
+			data.EntityExtendedTcamDefaultResult = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.tcamDefaultResult").String())
+			data.EntityExtendedUdfNetflowRtpMulticastEnabled = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntityExtended.Get("platformEntityExtended.attributes.udfNetflowrtpMcEnabled").String()))
+			data.EntityExtendedVrfAwareNatEnable = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.vrfAwareNatEnable").String())
+		}
 	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -6145,6 +6387,244 @@ func (data *System) updateFromBody(res gjson.Result) {
 		}
 		data.PlatformNveInterfaces[key] = item
 	}
+	{
+		var rplatformEntityExtended gjson.Result
+		rplatformEntity.Get("platformEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("platformEntityExtended.attributes.rn").String()
+				if rnValue == "entityextd" {
+					rplatformEntityExtended = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.EntityExtendedAclDisableRedirectShare.IsNull() {
+			data.EntityExtendedAclDisableRedirectShare = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.aclDisableRedirectShare").String())
+		} else {
+			data.EntityExtendedAclDisableRedirectShare = types.StringNull()
+		}
+		if !data.EntityExtendedAtomicUpdate.IsNull() {
+			data.EntityExtendedAtomicUpdate = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.atomicUpdate").String())
+		} else {
+			data.EntityExtendedAtomicUpdate = types.StringNull()
+		}
+		if !data.EntityExtendedAtomicUpdateStrict.IsNull() {
+			data.EntityExtendedAtomicUpdateStrict = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.atomicUpdateStrict").String())
+		} else {
+			data.EntityExtendedAtomicUpdateStrict = types.StringNull()
+		}
+		if !data.EntityExtendedCounterManagerBfdScale.IsNull() {
+			data.EntityExtendedCounterManagerBfdScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrBfdScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerBfdScale = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerEcnScale.IsNull() {
+			data.EntityExtendedCounterManagerEcnScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrEcnScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerEcnScale = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerEgressAclScale.IsNull() {
+			data.EntityExtendedCounterManagerEgressAclScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrEgrACLScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerEgressAclScale = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureBfd.IsNull() {
+			data.EntityExtendedCounterManagerFeatureBfd = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureBfd").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureBfd = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureEcn.IsNull() {
+			data.EntityExtendedCounterManagerFeatureEcn = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureEcn").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureEcn = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureEgressAcl.IsNull() {
+			data.EntityExtendedCounterManagerFeatureEgressAcl = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureEgrACL").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureEgressAcl = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureIngressAcl.IsNull() {
+			data.EntityExtendedCounterManagerFeatureIngressAcl = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureIngrACL").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureIngressAcl = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureL2vni.IsNull() {
+			data.EntityExtendedCounterManagerFeatureL2vni = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureL2VNI").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureL2vni = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureL3vni.IsNull() {
+			data.EntityExtendedCounterManagerFeatureL3vni = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureL3VNI").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureL3vni = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureSi.IsNull() {
+			data.EntityExtendedCounterManagerFeatureSi = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureSI").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureSi = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureSvi.IsNull() {
+			data.EntityExtendedCounterManagerFeatureSvi = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureSVI").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureSvi = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureTunnel.IsNull() {
+			data.EntityExtendedCounterManagerFeatureTunnel = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureTunnel").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureTunnel = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureVlan.IsNull() {
+			data.EntityExtendedCounterManagerFeatureVlan = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureVlan").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureVlan = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerFeatureVoq.IsNull() {
+			data.EntityExtendedCounterManagerFeatureVoq = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrFeatureVoq").Int())
+		} else {
+			data.EntityExtendedCounterManagerFeatureVoq = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerIngressAclScale.IsNull() {
+			data.EntityExtendedCounterManagerIngressAclScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrIngrACLScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerIngressAclScale = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerL2vniScale.IsNull() {
+			data.EntityExtendedCounterManagerL2vniScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrL2VNIScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerL2vniScale = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerL3vniScale.IsNull() {
+			data.EntityExtendedCounterManagerL3vniScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrL3VNIScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerL3vniScale = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerSiScale.IsNull() {
+			data.EntityExtendedCounterManagerSiScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrSIScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerSiScale = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerSviScale.IsNull() {
+			data.EntityExtendedCounterManagerSviScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrSVIScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerSviScale = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerTunnelScale.IsNull() {
+			data.EntityExtendedCounterManagerTunnelScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrTunnelScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerTunnelScale = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerVlanScale.IsNull() {
+			data.EntityExtendedCounterManagerVlanScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrVlanScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerVlanScale = types.Int64Null()
+		}
+		if !data.EntityExtendedCounterManagerVoqScale.IsNull() {
+			data.EntityExtendedCounterManagerVoqScale = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.counterMgrVoqScale").Int())
+		} else {
+			data.EntityExtendedCounterManagerVoqScale = types.Int64Null()
+		}
+		if !data.EntityExtendedDmeLoadInterval.IsNull() {
+			data.EntityExtendedDmeLoadInterval = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.dmeLoadInterval").Int())
+		} else {
+			data.EntityExtendedDmeLoadInterval = types.Int64Null()
+		}
+		if !data.EntityExtendedEgressL2QosIfaclLabelSize.IsNull() {
+			data.EntityExtendedEgressL2QosIfaclLabelSize = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.egrL2QosIfaclLabelSize").String())
+		} else {
+			data.EntityExtendedEgressL2QosIfaclLabelSize = types.StringNull()
+		}
+		if !data.EntityExtendedGpe5TimerEnable.IsNull() {
+			data.EntityExtendedGpe5TimerEnable = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntityExtended.Get("platformEntityExtended.attributes.gpe5TimerEnable").String()))
+		} else {
+			data.EntityExtendedGpe5TimerEnable = types.BoolNull()
+		}
+		if !data.EntityExtendedHardwareQosLatencyOptimized.IsNull() {
+			data.EntityExtendedHardwareQosLatencyOptimized = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntityExtended.Get("platformEntityExtended.attributes.hwQosLatencyOptimized").String()))
+		} else {
+			data.EntityExtendedHardwareQosLatencyOptimized = types.BoolNull()
+		}
+		if !data.EntityExtendedIngressPaclIfaclLabelSize.IsNull() {
+			data.EntityExtendedIngressPaclIfaclLabelSize = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.iPaclIfaclLabelSize").String())
+		} else {
+			data.EntityExtendedIngressPaclIfaclLabelSize = types.StringNull()
+		}
+		if !data.EntityExtendedIngressVrfNatBdLabelWidth.IsNull() {
+			data.EntityExtendedIngressVrfNatBdLabelWidth = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.iVrfNatBdLabelWidth").Int())
+		} else {
+			data.EntityExtendedIngressVrfNatBdLabelWidth = types.Int64Null()
+		}
+		if !data.EntityExtendedMulticastNlbStickPortChannel.IsNull() {
+			data.EntityExtendedMulticastNlbStickPortChannel = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.mcastNlbStickPc").String())
+		} else {
+			data.EntityExtendedMulticastNlbStickPortChannel = types.StringNull()
+		}
+		if !data.EntityExtendedMulticastStatsDisable.IsNull() {
+			data.EntityExtendedMulticastStatsDisable = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.mcastStatsDisable").String())
+		} else {
+			data.EntityExtendedMulticastStatsDisable = types.StringNull()
+		}
+		if !data.EntityExtendedMplsQosPipeMode.IsNull() {
+			data.EntityExtendedMplsQosPipeMode = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.mplsQosPipeMode").String())
+		} else {
+			data.EntityExtendedMplsQosPipeMode = types.StringNull()
+		}
+		if !data.EntityExtendedMulticastPriority.IsNull() {
+			data.EntityExtendedMulticastPriority = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.multicastPriority").Int())
+		} else {
+			data.EntityExtendedMulticastPriority = types.Int64Null()
+		}
+		if !data.EntityExtendedPbrEcmpPaths.IsNull() {
+			data.EntityExtendedPbrEcmpPaths = types.Int64Value(rplatformEntityExtended.Get("platformEntityExtended.attributes.pbrEcmpPaths").Int())
+		} else {
+			data.EntityExtendedPbrEcmpPaths = types.Int64Null()
+		}
+		if !data.EntityExtendedPbrFastConvergence.IsNull() {
+			data.EntityExtendedPbrFastConvergence = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.pbrFastConvergence").String())
+		} else {
+			data.EntityExtendedPbrFastConvergence = types.StringNull()
+		}
+		if !data.EntityExtendedPbrMatchDefaultRoute.IsNull() {
+			data.EntityExtendedPbrMatchDefaultRoute = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.pbrMatchDefaultRoute").String())
+		} else {
+			data.EntityExtendedPbrMatchDefaultRoute = types.StringNull()
+		}
+		if !data.EntityExtendedPtpCorrectionHardware.IsNull() {
+			data.EntityExtendedPtpCorrectionHardware = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntityExtended.Get("platformEntityExtended.attributes.ptpCorrHw").String()))
+		} else {
+			data.EntityExtendedPtpCorrectionHardware = types.BoolNull()
+		}
+		if !data.EntityExtendedSiFlexStats.IsNull() {
+			data.EntityExtendedSiFlexStats = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.siFlexStats").String())
+		} else {
+			data.EntityExtendedSiFlexStats = types.StringNull()
+		}
+		if !data.EntityExtendedStatsTemplate.IsNull() {
+			data.EntityExtendedStatsTemplate = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.statsTemplate").String())
+		} else {
+			data.EntityExtendedStatsTemplate = types.StringNull()
+		}
+		if !data.EntityExtendedStormControlPriority.IsNull() {
+			data.EntityExtendedStormControlPriority = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.stormControlPriority").String())
+		} else {
+			data.EntityExtendedStormControlPriority = types.StringNull()
+		}
+		if !data.EntityExtendedTcamDefaultResult.IsNull() {
+			data.EntityExtendedTcamDefaultResult = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.tcamDefaultResult").String())
+		} else {
+			data.EntityExtendedTcamDefaultResult = types.StringNull()
+		}
+		if !data.EntityExtendedUdfNetflowRtpMulticastEnabled.IsNull() {
+			data.EntityExtendedUdfNetflowRtpMulticastEnabled = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntityExtended.Get("platformEntityExtended.attributes.udfNetflowrtpMcEnabled").String()))
+		} else {
+			data.EntityExtendedUdfNetflowRtpMulticastEnabled = types.BoolNull()
+		}
+		if !data.EntityExtendedVrfAwareNatEnable.IsNull() {
+			data.EntityExtendedVrfAwareNatEnable = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.vrfAwareNatEnable").String())
+		} else {
+			data.EntityExtendedVrfAwareNatEnable = types.StringNull()
+		}
+	}
 	for key, item := range data.ManagementInterfaces {
 		var rmgmtMgmtIf gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -8117,6 +8597,149 @@ func (data System) toDeleteBody() nxos.Body {
 				childBody, _ = sjson.Set(childBody, "ipmcIndexSize", "DME_UNSET_PROPERTY_MARKER")
 				childBody, _ = sjson.Set(childBody, "overlayVlanId", "DME_UNSET_PROPERTY_MARKER")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.platformNVE.attributes", childBody)
+			}
+			{
+				childBody := ""
+				if !data.EntityExtendedAclDisableRedirectShare.IsNull() {
+					childBody, _ = sjson.Set(childBody, "aclDisableRedirectShare", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedAtomicUpdate.IsNull() {
+					childBody, _ = sjson.Set(childBody, "atomicUpdate", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedAtomicUpdateStrict.IsNull() {
+					childBody, _ = sjson.Set(childBody, "atomicUpdateStrict", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerBfdScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrBfdScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerEcnScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrEcnScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerEgressAclScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrEgrACLScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureBfd.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureBfd", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureEcn.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureEcn", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureEgressAcl.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureEgrACL", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureIngressAcl.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureIngrACL", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureL2vni.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureL2VNI", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureL3vni.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureL3VNI", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureSi.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureSI", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureSvi.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureSVI", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureTunnel.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureTunnel", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureVlan.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureVlan", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerFeatureVoq.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrFeatureVoq", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerIngressAclScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrIngrACLScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerL2vniScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrL2VNIScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerL3vniScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrL3VNIScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerSiScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrSIScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerSviScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrSVIScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerTunnelScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrTunnelScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerVlanScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrVlanScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedCounterManagerVoqScale.IsNull() {
+					childBody, _ = sjson.Set(childBody, "counterMgrVoqScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedDmeLoadInterval.IsNull() {
+					childBody, _ = sjson.Set(childBody, "dmeLoadInterval", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedEgressL2QosIfaclLabelSize.IsNull() {
+					childBody, _ = sjson.Set(childBody, "egrL2QosIfaclLabelSize", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedGpe5TimerEnable.IsNull() {
+					childBody, _ = sjson.Set(childBody, "gpe5TimerEnable", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedHardwareQosLatencyOptimized.IsNull() {
+					childBody, _ = sjson.Set(childBody, "hwQosLatencyOptimized", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedIngressPaclIfaclLabelSize.IsNull() {
+					childBody, _ = sjson.Set(childBody, "iPaclIfaclLabelSize", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedIngressVrfNatBdLabelWidth.IsNull() {
+					childBody, _ = sjson.Set(childBody, "iVrfNatBdLabelWidth", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedMulticastNlbStickPortChannel.IsNull() {
+					childBody, _ = sjson.Set(childBody, "mcastNlbStickPc", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedMulticastStatsDisable.IsNull() {
+					childBody, _ = sjson.Set(childBody, "mcastStatsDisable", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedMplsQosPipeMode.IsNull() {
+					childBody, _ = sjson.Set(childBody, "mplsQosPipeMode", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedMulticastPriority.IsNull() {
+					childBody, _ = sjson.Set(childBody, "multicastPriority", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedPbrEcmpPaths.IsNull() {
+					childBody, _ = sjson.Set(childBody, "pbrEcmpPaths", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedPbrFastConvergence.IsNull() {
+					childBody, _ = sjson.Set(childBody, "pbrFastConvergence", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedPbrMatchDefaultRoute.IsNull() {
+					childBody, _ = sjson.Set(childBody, "pbrMatchDefaultRoute", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedPtpCorrectionHardware.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ptpCorrHw", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedSiFlexStats.IsNull() {
+					childBody, _ = sjson.Set(childBody, "siFlexStats", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedStatsTemplate.IsNull() {
+					childBody, _ = sjson.Set(childBody, "statsTemplate", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedStormControlPriority.IsNull() {
+					childBody, _ = sjson.Set(childBody, "stormControlPriority", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedTcamDefaultResult.IsNull() {
+					childBody, _ = sjson.Set(childBody, "tcamDefaultResult", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedUdfNetflowRtpMulticastEnabled.IsNull() {
+					childBody, _ = sjson.Set(childBody, "udfNetflowrtpMcEnabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.EntityExtendedVrfAwareNatEnable.IsNull() {
+					childBody, _ = sjson.Set(childBody, "vrfAwareNatEnable", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".platformEntityExtended"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
 			}
 		}
 	}

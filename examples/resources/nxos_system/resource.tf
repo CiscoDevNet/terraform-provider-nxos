@@ -144,6 +144,7 @@ resource "nxos_system" "example" {
       }
     }
   }
+  entity_extended_dme_load_interval = 300
   management_interfaces = {
     "mgmt0" = {
       admin_state      = "up"

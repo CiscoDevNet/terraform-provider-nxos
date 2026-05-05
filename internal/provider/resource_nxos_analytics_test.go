@@ -77,6 +77,19 @@ func TestAccNxosAnalytics(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.traffic_analytics_service_database_size", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.traffic_analytics_troubleshoot_export_interval", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.traffic_analytics_udp_port_list", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.monitors.MONITOR1.description", "My monitor"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.default_policy", "deny"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.collector_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.direction", "out"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.filter_type", "ipv6"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.instance_name", "Ethernet1/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.switch_latency", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.system_exporter_id", "201"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.traffic_analytics_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.monitor_attachment_target_dn", "sys/analytics/inst-[analytics]/monitor-[MONITOR1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.profile_attachment_target_dn", "sys/analytics/inst-[analytics]/prof-[PROFILE1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.events_attachment_target_dn", "sys/analytics/inst-[analytics]/events-[EVENTS1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.policy_attachment_target_dn", "sys/analytics/inst-[analytics]/policy-[POLICY1]"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -197,6 +210,27 @@ func testAccNxosAnalyticsConfig_all() string {
 	config += `			traffic_analytics_service_database_size = 1000` + "\n"
 	config += `			traffic_analytics_troubleshoot_export_interval = 30` + "\n"
 	config += `			traffic_analytics_udp_port_list = "1234"` + "\n"
+	config += `			monitors = {` + "\n"
+	config += `				"MONITOR1" = {` + "\n"
+	config += `					description = "My monitor"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			forward_instance_targets = {` + "\n"
+	config += `				"1" = {` + "\n"
+	config += `					default_policy = "deny"` + "\n"
+	config += `					collector_id = 1` + "\n"
+	config += `					direction = "out"` + "\n"
+	config += `					filter_type = "ipv6"` + "\n"
+	config += `					instance_name = "Ethernet1/1"` + "\n"
+	config += `					switch_latency = true` + "\n"
+	config += `					system_exporter_id = 201` + "\n"
+	config += `					traffic_analytics_enabled = true` + "\n"
+	config += `					monitor_attachment_target_dn = "sys/analytics/inst-[analytics]/monitor-[MONITOR1]"` + "\n"
+	config += `					profile_attachment_target_dn = "sys/analytics/inst-[analytics]/prof-[PROFILE1]"` + "\n"
+	config += `					events_attachment_target_dn = "sys/analytics/inst-[analytics]/events-[EVENTS1]"` + "\n"
+	config += `					policy_attachment_target_dn = "sys/analytics/inst-[analytics]/policy-[POLICY1]"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"

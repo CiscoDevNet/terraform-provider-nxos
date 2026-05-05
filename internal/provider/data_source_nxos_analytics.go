@@ -57,7 +57,7 @@ func (d *AnalyticsDataSource) Metadata(_ context.Context, req datasource.Metadat
 func (d *AnalyticsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.").AddApiDocumentation("analyticsEntity", "System/analytics:Entity/", []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsTrafficAnalytics"}, []string{"System/analytics:Inst/", "System/analytics:Profile/", "System/analytics:Events/", "System/analytics:Policy/", "System/analytics:TrafficAnalytics/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.").AddApiDocumentation("analyticsEntity", "System/analytics:Entity/", []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsTrafficAnalytics", "analyticsMonitor", "analyticsFwdInstTarget", "analyticsRsMonitorAtt", "analyticsRsProfAtt", "analyticsRsEventsAtt", "analyticsRsPolicyAtt"}, []string{"System/analytics:Inst/", "System/analytics:Profile/", "System/analytics:Events/", "System/analytics:Policy/", "System/analytics:TrafficAnalytics/", "System/analytics:Monitor/", "System/analytics:FwdInstTarget/", "System/analytics:RsMonitorAtt/", "System/analytics:RsProfAtt/", "System/analytics:RsEventsAtt/", "System/analytics:RsPolicyAtt/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -249,6 +249,74 @@ func (d *AnalyticsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							MarkdownDescription: "UDP Port List.",
 							Computed:            true,
 						},
+						"monitors": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flow Monitor.\n  - Map key: `name` - Object name.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description of the specified attribute.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"forward_instance_targets": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Forward Instance Target.\n  - Map key: `id` - Analytics Target identifier.\n  - Key range: `0`-`16777215`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"default_policy": schema.StringAttribute{
+										MarkdownDescription: "Default Filtering Policy.",
+										Computed:            true,
+									},
+									"collector_id": schema.Int64Attribute{
+										MarkdownDescription: "Analytics exporter Id to identify the exporting hardware instance.",
+										Computed:            true,
+									},
+									"direction": schema.StringAttribute{
+										MarkdownDescription: "Analytics profile direction.",
+										Computed:            true,
+									},
+									"filter_type": schema.StringAttribute{
+										MarkdownDescription: "Analytics Target filter type.",
+										Computed:            true,
+									},
+									"instance_name": schema.StringAttribute{
+										MarkdownDescription: "Interface details to identify the hardware instance.",
+										Computed:            true,
+									},
+									"switch_latency": schema.BoolAttribute{
+										MarkdownDescription: "Switch latency mode is applied at system level.",
+										Computed:            true,
+									},
+									"system_exporter_id": schema.Int64Attribute{
+										MarkdownDescription: "Base exporter Id applied at system level.",
+										Computed:            true,
+									},
+									"traffic_analytics_enabled": schema.BoolAttribute{
+										MarkdownDescription: "Traffic Analytics mode is applied at system level.",
+										Computed:            true,
+									},
+									"monitor_attachment_target_dn": schema.StringAttribute{
+										MarkdownDescription: "Target Monitor DN. For example: `sys/analytics/inst-[analytics]/monitor-[MONITOR1]`.",
+										Computed:            true,
+									},
+									"profile_attachment_target_dn": schema.StringAttribute{
+										MarkdownDescription: "Target Profile DN. For example: `sys/analytics/inst-[analytics]/prof-[PROFILE1]`.",
+										Computed:            true,
+									},
+									"events_attachment_target_dn": schema.StringAttribute{
+										MarkdownDescription: "Target Events DN. For example: `sys/analytics/inst-[analytics]/events-[EVENTS1]`.",
+										Computed:            true,
+									},
+									"policy_attachment_target_dn": schema.StringAttribute{
+										MarkdownDescription: "Target Policy DN. For example: `sys/analytics/inst-[analytics]/policy-[POLICY1]`.",
+										Computed:            true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -284,7 +352,7 @@ func (d *AnalyticsDataSource) Read(ctx context.Context, req datasource.ReadReque
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "analyticsInst,analyticsProfile,analyticsEvents,analyticsPolicy,analyticsTrafficAnalytics")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "analyticsInst,analyticsProfile,analyticsEvents,analyticsPolicy,analyticsTrafficAnalytics,analyticsMonitor,analyticsFwdInstTarget,analyticsRsMonitorAtt,analyticsRsProfAtt,analyticsRsEventsAtt,analyticsRsPolicyAtt")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

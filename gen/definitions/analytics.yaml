@@ -299,6 +299,143 @@ child_classes:
             type: String
             description: 'UDP Port List.'
             example: '1234'
+      - class_name: analyticsMonitor
+        rn: monitor-[%s]
+        type: list
+        tf_name: monitors
+        description: 'Flow Monitor.'
+        doc_path: System/analytics:Monitor/
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Object name.'
+            example: 'MONITOR1'
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My monitor'
+      - class_name: analyticsFwdInstTarget
+        rn: fwdinst-[%v]
+        type: list
+        tf_name: forward_instance_targets
+        description: 'Forward Instance Target.'
+        doc_path: System/analytics:FwdInstTarget/
+        attributes:
+          - nxos_name: id
+            tf_name: id
+            type: Int64
+            id: true
+            min_int: 0
+            max_int: 16777215
+            description: 'Analytics Target identifier.'
+            example: 1
+          - nxos_name: DefPolicy
+            tf_name: default_policy
+            type: String
+            description: 'Default Filtering Policy.'
+            enum_values:
+              - permit
+              - deny
+            example: deny
+          - nxos_name: collectorId
+            tf_name: collector_id
+            type: Int64
+            min_int: 0
+            max_int: 4294967295
+            description: 'Analytics exporter Id to identify the exporting hardware instance.'
+            example: 1
+          - nxos_name: dir
+            tf_name: direction
+            type: String
+            description: 'Analytics profile direction.'
+            enum_values:
+              - in
+              - out
+              - both
+            example: out
+          - nxos_name: fltType
+            tf_name: filter_type
+            type: String
+            description: 'Analytics Target filter type.'
+            enum_values:
+              - ipv4
+              - ipv6
+              - ce
+            example: ipv6
+          - nxos_name: instanceName
+            tf_name: instance_name
+            type: String
+            description: 'Interface details to identify the hardware instance.'
+            example: 'Ethernet1/1'
+          - nxos_name: switchLatency
+            tf_name: switch_latency
+            type: Bool
+            description: 'Switch latency mode is applied at system level.'
+            example: true
+          - nxos_name: systemExporterId
+            tf_name: system_exporter_id
+            type: Int64
+            min_int: 0
+            max_int: 4294967295
+            description: 'Base exporter Id applied at system level.'
+            example: 201
+          - nxos_name: trafficAnalytics
+            tf_name: traffic_analytics_enabled
+            type: Bool
+            description: 'Traffic Analytics mode is applied at system level.'
+            example: true
+        child_classes:
+          - class_name: analyticsRsMonitorAtt
+            rn: rtmonitorAtt
+            type: single
+            tf_name: monitor_attachment
+            description: 'Reference to Monitor.'
+            doc_path: System/analytics:RsMonitorAtt/
+            attributes:
+              - nxos_name: tDn
+                tf_name: monitor_attachment_target_dn
+                type: String
+                description: 'Target Monitor DN. For example: `sys/analytics/inst-[analytics]/monitor-[MONITOR1]`.'
+                example: sys/analytics/inst-[analytics]/monitor-[MONITOR1]
+          - class_name: analyticsRsProfAtt
+            rn: rtprofAtt
+            type: single
+            tf_name: profile_attachment
+            description: 'Reference to profile.'
+            doc_path: System/analytics:RsProfAtt/
+            attributes:
+              - nxos_name: tDn
+                tf_name: profile_attachment_target_dn
+                type: String
+                description: 'Target Profile DN. For example: `sys/analytics/inst-[analytics]/prof-[PROFILE1]`.'
+                example: sys/analytics/inst-[analytics]/prof-[PROFILE1]
+          - class_name: analyticsRsEventsAtt
+            rn: rteventsAtt
+            type: single
+            tf_name: events_attachment
+            description: 'Reference to FTE Events.'
+            doc_path: System/analytics:RsEventsAtt/
+            attributes:
+              - nxos_name: tDn
+                tf_name: events_attachment_target_dn
+                type: String
+                description: 'Target Events DN. For example: `sys/analytics/inst-[analytics]/events-[EVENTS1]`.'
+                example: sys/analytics/inst-[analytics]/events-[EVENTS1]
+          - class_name: analyticsRsPolicyAtt
+            rn: rtpolicyAtt
+            type: single
+            tf_name: policy_attachment
+            description: 'Reference to policy.'
+            doc_path: System/analytics:RsPolicyAtt/
+            attributes:
+              - nxos_name: tDn
+                tf_name: policy_attachment_target_dn
+                type: String
+                description: 'Target Policy DN. For example: `sys/analytics/inst-[analytics]/policy-[POLICY1]`.'
+                example: sys/analytics/inst-[analytics]/policy-[POLICY1]
 test_prerequisites:
   - dn: sys/fm/analytics
     class_name: fmAnalytics

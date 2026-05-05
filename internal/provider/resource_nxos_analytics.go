@@ -63,7 +63,7 @@ func (r *AnalyticsResource) Metadata(ctx context.Context, req resource.MetadataR
 func (r *AnalyticsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.").AddApiDocumentation("analyticsEntity", "System/analytics:Entity/", []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsTrafficAnalytics"}, []string{"System/analytics:Inst/", "System/analytics:Profile/", "System/analytics:Events/", "System/analytics:Policy/", "System/analytics:TrafficAnalytics/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.").AddApiDocumentation("analyticsEntity", "System/analytics:Entity/", []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsTrafficAnalytics", "analyticsMonitor", "analyticsFwdInstTarget", "analyticsRsMonitorAtt", "analyticsRsProfAtt", "analyticsRsEventsAtt", "analyticsRsPolicyAtt"}, []string{"System/analytics:Inst/", "System/analytics:Profile/", "System/analytics:Events/", "System/analytics:Policy/", "System/analytics:TrafficAnalytics/", "System/analytics:Monitor/", "System/analytics:FwdInstTarget/", "System/analytics:RsMonitorAtt/", "System/analytics:RsProfAtt/", "System/analytics:RsEventsAtt/", "System/analytics:RsPolicyAtt/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -306,6 +306,89 @@ func (r *AnalyticsResource) Schema(ctx context.Context, req resource.SchemaReque
 							MarkdownDescription: helpers.NewAttributeDescription("UDP Port List.").String,
 							Optional:            true,
 						},
+						"monitors": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flow Monitor.\n  - Map key: `name` - Object name.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+						"forward_instance_targets": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Forward Instance Target.\n  - Map key: `id` - Analytics Target identifier.\n  - Key range: `0`-`16777215`").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"default_policy": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Default Filtering Policy.").AddStringEnumDescription("permit", "deny").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("permit", "deny"),
+										},
+									},
+									"collector_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Analytics exporter Id to identify the exporting hardware instance.").AddIntegerRangeDescription(0, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+									"direction": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Analytics profile direction.").AddStringEnumDescription("in", "out", "both").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("in", "out", "both"),
+										},
+									},
+									"filter_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Analytics Target filter type.").AddStringEnumDescription("ipv4", "ipv6", "ce").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4", "ipv6", "ce"),
+										},
+									},
+									"instance_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Interface details to identify the hardware instance.").String,
+										Optional:            true,
+									},
+									"switch_latency": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Switch latency mode is applied at system level.").String,
+										Optional:            true,
+									},
+									"system_exporter_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Base exporter Id applied at system level.").AddIntegerRangeDescription(0, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+									"traffic_analytics_enabled": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Traffic Analytics mode is applied at system level.").String,
+										Optional:            true,
+									},
+									"monitor_attachment_target_dn": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Target Monitor DN. For example: `sys/analytics/inst-[analytics]/monitor-[MONITOR1]`.").String,
+										Optional:            true,
+									},
+									"profile_attachment_target_dn": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Target Profile DN. For example: `sys/analytics/inst-[analytics]/prof-[PROFILE1]`.").String,
+										Optional:            true,
+									},
+									"events_attachment_target_dn": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Target Events DN. For example: `sys/analytics/inst-[analytics]/events-[EVENTS1]`.").String,
+										Optional:            true,
+									},
+									"policy_attachment_target_dn": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Target Policy DN. For example: `sys/analytics/inst-[analytics]/policy-[POLICY1]`.").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -418,7 +501,7 @@ func (r *AnalyticsResource) Read(ctx context.Context, req resource.ReadRequest, 
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "analyticsInst,analyticsProfile,analyticsEvents,analyticsPolicy,analyticsTrafficAnalytics")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "analyticsInst,analyticsProfile,analyticsEvents,analyticsPolicy,analyticsTrafficAnalytics,analyticsMonitor,analyticsFwdInstTarget,analyticsRsMonitorAtt,analyticsRsProfAtt,analyticsRsEventsAtt,analyticsRsPolicyAtt")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

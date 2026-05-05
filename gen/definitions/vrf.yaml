@@ -158,6 +158,30 @@ child_classes:
                           - export
                         example: import
                     child_classes:
+                      - class_name: rtctrlMapP
+                        doc_path: Routing%20and%20Forwarding/rtctrl:MapP/
+                        rn: rtctrlmap
+                        type: single
+                        tf_name: route_map
+                        description: 'Route Control Map Policy.'
+                        attributes:
+                          - nxos_name: name
+                            tf_name: name
+                            type: String
+                            description: 'Object name.'
+                            example: map1
+                            exclude_test: true
+                          - nxos_name: descr
+                            tf_name: description
+                            type: String
+                            description: 'Description of the specified attribute.'
+                            example: 'My description'
+                            exclude_test: true
+                          - nxos_name: rtMap
+                            tf_name: route_map
+                            type: String
+                            description: 'Route Map.'
+                            example: ABC
                       - class_name: rtctrlRttEntry
                         doc_path: Routing%20and%20Forwarding/rtctrl:RttEntry/
                         rn: ent-[%s]

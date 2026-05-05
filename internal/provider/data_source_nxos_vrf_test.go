@@ -38,6 +38,7 @@ func TestAccDataSourceNxosVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "vrfs.VRF1.l3vni", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "vrfs.VRF1.routing_encap", "unknown"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "vrfs.VRF1.route_distinguisher", "rd:unknown:0:0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "vrfs.VRF1.address_families.ipv4-ucast.route_target_address_families.ipv4-ucast.route_target_directions.import.route_map", "ABC"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -85,6 +86,7 @@ func testAccDataSourceNxosVRFConfig() string {
 	config += `						"ipv4-ucast" = {` + "\n"
 	config += `							route_target_directions = {` + "\n"
 	config += `								"import" = {` + "\n"
+	config += `									route_map = "ABC"` + "\n"
 	config += `									route_targets = {` + "\n"
 	config += `										"route-target:as2-nn2:2:2" = {` + "\n"
 	config += `										}` + "\n"

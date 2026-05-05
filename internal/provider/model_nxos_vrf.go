@@ -65,6 +65,9 @@ type VRFVrfsAddressFamiliesRouteTargetAddressFamilies struct {
 }
 
 type VRFVrfsAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirections struct {
+	Name         types.String                                                                                 `tfsdk:"name"`
+	Description  types.String                                                                                 `tfsdk:"description"`
+	RouteMap     types.String                                                                                 `tfsdk:"route_map"`
 	RouteTargets map[string]VRFVrfsAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirectionsRouteTargets `tfsdk:"route_targets"`
 }
 
@@ -214,6 +217,19 @@ func (data VRF) toBody(config VRF) nxos.Body {
 										nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 										nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlRttP.children"
 										_ = nestedChildrenPath
+										attrs = "{}"
+										if !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
+											attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+										}
+										if !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+											attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+										}
+										if !child.RouteMap.IsUnknown() && !child.RouteMap.IsNull() && !configChild.RouteMap.IsNull() {
+											attrs, _ = sjson.Set(attrs, "rtMap", child.RouteMap.ValueString())
+										}
+										if attrs != "{}" {
+											body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlMapP.attributes", attrs)
+										}
 										for key := range child.RouteTargets {
 											configChild, configChildOk := configChild.RouteTargets[key]
 											_ = configChild
@@ -294,6 +310,22 @@ func (data *VRF) fromBody(res gjson.Result) {
 																					if nestedClassname.String() == "rtctrlRttP" {
 																						var nestedChildrtctrlRttP VRFVrfsAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirections
 																						nestedMapKey := nestedValue.Get("attributes.type").String()
+																						{
+																							var rrtctrlMapP gjson.Result
+																							nestedValue.Get("children").ForEach(
+																								func(_, nestedV gjson.Result) bool {
+																									rnValue := nestedV.Get("rtctrlMapP.attributes.rn").String()
+																									if rnValue == "rtctrlmap" {
+																										rrtctrlMapP = nestedV
+																										return false
+																									}
+																									return true
+																								},
+																							)
+																							nestedChildrtctrlRttP.Name = types.StringValue(rrtctrlMapP.Get("rtctrlMapP.attributes.name").String())
+																							nestedChildrtctrlRttP.Description = types.StringValue(rrtctrlMapP.Get("rtctrlMapP.attributes.descr").String())
+																							nestedChildrtctrlRttP.RouteMap = types.StringValue(rrtctrlMapP.Get("rtctrlMapP.attributes.rtMap").String())
+																						}
 																						nestedValue.Get("children").ForEach(
 																							func(_, nestedV gjson.Result) bool {
 																								nestedV.ForEach(
@@ -483,6 +515,34 @@ func (data *VRF) updateFromBody(res gjson.Result) {
 						if !rrtctrlRttP.Exists() {
 							delete(nc_Item.RouteTargetDirections, nc__)
 							continue
+						}
+						{
+							var rrtctrlMapP gjson.Result
+							rrtctrlRttP.Get("rtctrlRttP.children").ForEach(
+								func(_, v gjson.Result) bool {
+									rnValue := v.Get("rtctrlMapP.attributes.rn").String()
+									if rnValue == "rtctrlmap" {
+										rrtctrlMapP = v
+										return false
+									}
+									return true
+								},
+							)
+							if !nc__Item.Name.IsNull() {
+								nc__Item.Name = types.StringValue(rrtctrlMapP.Get("rtctrlMapP.attributes.name").String())
+							} else {
+								nc__Item.Name = types.StringNull()
+							}
+							if !nc__Item.Description.IsNull() {
+								nc__Item.Description = types.StringValue(rrtctrlMapP.Get("rtctrlMapP.attributes.descr").String())
+							} else {
+								nc__Item.Description = types.StringNull()
+							}
+							if !nc__Item.RouteMap.IsNull() {
+								nc__Item.RouteMap = types.StringValue(rrtctrlMapP.Get("rtctrlMapP.attributes.rtMap").String())
+							} else {
+								nc__Item.RouteMap = types.StringNull()
+							}
 						}
 						for nc___ := range nc__Item.RouteTargets {
 							nc___Item := nc__Item.RouteTargets[nc___]

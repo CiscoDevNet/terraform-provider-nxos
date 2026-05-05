@@ -14,6 +14,7 @@ resource "nxos_vrf" "example" {
             "ipv4-ucast" = {
               route_target_directions = {
                 "import" = {
+                  route_map = "ABC"
                   route_targets = {
                     "route-target:as2-nn2:2:2" = {}
                   }

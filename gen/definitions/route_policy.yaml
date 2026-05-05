@@ -356,8 +356,8 @@ child_classes:
                   - nxos_name: tDn
                     tf_name: access_list_dn
                     type: String
-                    description: 'DN of Access List. For example: `sys/acl/ipv4/name-[ACL1]`.'
-                    example: sys/acl/ipv4/name-[ACL1]
+                    description: 'DN of Access List. For example: `sys/acl/ipv4/name-[ACL1]` or `sys/rpm/accesslist-[1.2.3.4/32]`.'
+                    example: sys/rpm/accesslist-[1.2.3.4/32]
                     id: true
                     exclude_test: true
           - class_name: rtmapSetRegComm

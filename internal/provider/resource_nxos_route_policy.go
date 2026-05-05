@@ -330,7 +330,7 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 										},
 									},
 									"match_route_access_lists": schema.MapNestedAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("List of Match Route Access Lists.\n  - Map key: `access_list_dn` - DN of Access List. For example: `sys/acl/ipv4/name-[ACL1]`.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("List of Match Route Access Lists.\n  - Map key: `access_list_dn` - DN of Access List. For example: `sys/acl/ipv4/name-[ACL1]` or `sys/rpm/accesslist-[1.2.3.4/32]`.").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{},

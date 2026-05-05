@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This data source can read the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.
   API Documentation
-  analyticsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Entity/analyticsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Inst/analyticsProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Profile/analyticsEvents https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/analyticsPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/analyticsTrafficAnalytics https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/analyticsMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Monitor/analyticsFwdInstTarget https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:FwdInstTarget/analyticsRsMonitorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsMonitorAtt/analyticsRsProfAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsProfAtt/analyticsRsEventsAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsEventsAtt/analyticsRsPolicyAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsPolicyAtt/
+  analyticsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Entity/analyticsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Inst/analyticsProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Profile/analyticsEvents https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/analyticsPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/analyticsRecordP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RecordP/analyticsCollector https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Collector/analyticsMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Monitor/analyticsRsRecordPAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsRecordPAtt/analyticsCollectorBucket https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:CollectorBucket/analyticsRsCollectorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsCollectorAtt/analyticsTrafficAnalytics https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/analyticsFwdInstTarget https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:FwdInstTarget/analyticsRsMonitorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsMonitorAtt/analyticsRsProfAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsProfAtt/analyticsRsEventsAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsEventsAtt/analyticsRsPolicyAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsPolicyAtt/
 ---
 
 # nxos_analytics (Data Source)
@@ -19,8 +19,13 @@ This data source can read the Analytics configuration on NX-OS devices, includin
 - [analyticsProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Profile/)
 - [analyticsEvents](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/)
 - [analyticsPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/)
-- [analyticsTrafficAnalytics](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/)
+- [analyticsRecordP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RecordP/)
+- [analyticsCollector](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Collector/)
 - [analyticsMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Monitor/)
+- [analyticsRsRecordPAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsRecordPAtt/)
+- [analyticsCollectorBucket](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:CollectorBucket/)
+- [analyticsRsCollectorAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsCollectorAtt/)
+- [analyticsTrafficAnalytics](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/)
 - [analyticsFwdInstTarget](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:FwdInstTarget/)
 - [analyticsRsMonitorAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsMonitorAtt/)
 - [analyticsRsProfAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsProfAtt/)
@@ -55,6 +60,8 @@ Read-Only:
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `collect_tunnel_header` (Boolean) Enable collection of tunnel header data on QP_AR.
+- `collectors` (Attributes Map) Collector entry.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--instances--collectors))
 - `control` (String) The control state.
 - `enable_analytics_submode` (Boolean) Enable Analytics Submode funxtionality.
 - `events` (Attributes Map) Configure FTE Events Information.
@@ -69,6 +76,8 @@ Read-Only:
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--instances--policies))
 - `profiles` (Attributes Map) Profile.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--instances--profiles))
+- `records` (Attributes Map) Flow Record.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--instances--records))
 - `timeout` (Number) Flow timeout in seconds.
 - `traffic_analytics_description` (String) Description of the specified attribute.
 - `traffic_analytics_interface_mode` (Boolean) Enable interface traffic analytics.
@@ -76,6 +85,24 @@ Read-Only:
 - `traffic_analytics_service_database_size` (Number) Maximum number of flows.
 - `traffic_analytics_troubleshoot_export_interval` (Number) Troubleshoot flows export interval.
 - `traffic_analytics_udp_port_list` (String) UDP Port List.
+
+<a id="nestedatt--instances--collectors"></a>
+### Nested Schema for `instances.collectors`
+
+Read-Only:
+
+- `description` (String) Description of the specified attribute.
+- `destination_address` (String) Destination IP of the Remote Collector.
+- `destination_port` (Number) L4 Port of the Remote Collector.
+- `dscp` (Number) DSCP value of the Remote Collector.
+- `event_destination_port` (Number) Event L4 Port of the Remote Collector.
+- `inband_interface` (Boolean) Inband interface for exporter.
+- `source_address` (String) Source IP Address for Analytics packets.
+- `source_interface` (String) Source Interface that contains the Source IP for Analytics packets.
+- `v9` (Boolean) Export FT and FTE data in V9 format.
+- `version` (String) Collector Version Format.
+- `vrf_name` (String) VRF to connect to the Remote Collector.
+
 
 <a id="nestedatt--instances--events"></a>
 ### Nested Schema for `instances.events`
@@ -125,7 +152,27 @@ Read-Only:
 
 Read-Only:
 
+- `collector_buckets` (Attributes Map) Flow Collector Bucket Entry.
+  - Map key: `id` - Flow Collector Bucket Id.
+  - Key range: `1`-`255` (see [below for nested schema](#nestedatt--instances--monitors--collector_buckets))
 - `description` (String) Description of the specified attribute.
+- `record_target_dn` (String) Target distinguished name of the record.
+
+<a id="nestedatt--instances--monitors--collector_buckets"></a>
+### Nested Schema for `instances.monitors.collector_buckets`
+
+Read-Only:
+
+- `collectors` (Attributes Map) Reference to Collector.
+  - Map key: `target_dn` - Target distinguished name of the collector. (see [below for nested schema](#nestedatt--instances--monitors--collector_buckets--collectors))
+- `description` (String) Description of the specified attribute.
+- `hash_high` (Number) Collector Bucket Hash High Value.
+- `hash_low` (Number) Collector Bucket Hash Low Value.
+
+<a id="nestedatt--instances--monitors--collector_buckets--collectors"></a>
+### Nested Schema for `instances.monitors.collector_buckets.collectors`
+
+
 
 
 <a id="nestedatt--instances--policies"></a>
@@ -149,3 +196,13 @@ Read-Only:
 - `sequence_number_guess_threshold_high` (Number) Sequence Number Guess Threshold High.
 - `sequence_number_guess_threshold_low` (Number) Sequence Number Guess Threshold Low.
 - `source_port` (Number) Source L4 Port for the Analytics packets.
+
+
+<a id="nestedatt--instances--records"></a>
+### Nested Schema for `instances.records`
+
+Read-Only:
+
+- `collect` (String) Analytics Record parameters to collect in the flows.
+- `description` (String) Description of the specified attribute.
+- `match` (String) Analytics Record profile parameters to match flows on.

@@ -45,17 +45,50 @@ resource "nxos_analytics" "example" {
           description = "My policy"
         }
       }
+      records = {
+        "RECORD1" = {
+          collect     = "count-bytes"
+          description = "My record"
+          match       = "src-ipv4"
+        }
+      }
+      collectors = {
+        "COLLECTOR1" = {
+          description            = "My collector"
+          dscp                   = 46
+          destination_address    = "10.1.1.1"
+          destination_port       = 5640
+          event_destination_port = 5695
+          inband_interface       = false
+          source_address         = "10.1.1.2"
+          source_interface       = "lo0"
+          v9                     = false
+          version                = "v9"
+          vrf_name               = "default"
+        }
+      }
+      monitors = {
+        "MONITOR1" = {
+          description      = "My monitor"
+          record_target_dn = "sys/analytics/inst-analytics/recordp-RECORD1"
+          collector_buckets = {
+            "1" = {
+              description = "My bucket"
+              hash_high   = 4294967295
+              hash_low    = 0
+              collectors = {
+                "sys/analytics/inst-analytics/collector-COLLECTOR1" = {}
+              }
+            }
+          }
+        }
+      }
       traffic_analytics_description                  = "My traffic analytics"
       traffic_analytics_interface_mode               = true
       traffic_analytics_name                         = "TA1"
       traffic_analytics_service_database_size        = 1000
       traffic_analytics_troubleshoot_export_interval = 30
       traffic_analytics_udp_port_list                = "1234"
-      monitors = {
-        "MONITOR1" = {
-          description = "My monitor"
-        }
-      }
       forward_instance_targets = {
         "1" = {
           default_policy               = "deny"

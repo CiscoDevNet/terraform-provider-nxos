@@ -53,13 +53,15 @@ type AnalyticsInstances struct {
 	Profiles                                   map[string]AnalyticsInstancesProfiles               `tfsdk:"profiles"`
 	Events                                     map[string]AnalyticsInstancesEvents                 `tfsdk:"events"`
 	Policies                                   map[string]AnalyticsInstancesPolicies               `tfsdk:"policies"`
+	Records                                    map[string]AnalyticsInstancesRecords                `tfsdk:"records"`
+	Collectors                                 map[string]AnalyticsInstancesCollectors             `tfsdk:"collectors"`
+	Monitors                                   map[string]AnalyticsInstancesMonitors               `tfsdk:"monitors"`
 	TrafficAnalyticsDescription                types.String                                        `tfsdk:"traffic_analytics_description"`
 	TrafficAnalyticsInterfaceMode              types.Bool                                          `tfsdk:"traffic_analytics_interface_mode"`
 	TrafficAnalyticsName                       types.String                                        `tfsdk:"traffic_analytics_name"`
 	TrafficAnalyticsServiceDatabaseSize        types.Int64                                         `tfsdk:"traffic_analytics_service_database_size"`
 	TrafficAnalyticsTroubleshootExportInterval types.Int64                                         `tfsdk:"traffic_analytics_troubleshoot_export_interval"`
 	TrafficAnalyticsUdpPortList                types.String                                        `tfsdk:"traffic_analytics_udp_port_list"`
-	Monitors                                   map[string]AnalyticsInstancesMonitors               `tfsdk:"monitors"`
 	ForwardInstanceTargets                     map[string]AnalyticsInstancesForwardInstanceTargets `tfsdk:"forward_instance_targets"`
 }
 
@@ -98,8 +100,40 @@ type AnalyticsInstancesPolicies struct {
 	Description types.String `tfsdk:"description"`
 }
 
-type AnalyticsInstancesMonitors struct {
+type AnalyticsInstancesRecords struct {
+	Collect     types.String `tfsdk:"collect"`
 	Description types.String `tfsdk:"description"`
+	Match       types.String `tfsdk:"match"`
+}
+
+type AnalyticsInstancesCollectors struct {
+	Description          types.String `tfsdk:"description"`
+	Dscp                 types.Int64  `tfsdk:"dscp"`
+	DestinationAddress   types.String `tfsdk:"destination_address"`
+	DestinationPort      types.Int64  `tfsdk:"destination_port"`
+	EventDestinationPort types.Int64  `tfsdk:"event_destination_port"`
+	InbandInterface      types.Bool   `tfsdk:"inband_interface"`
+	SourceAddress        types.String `tfsdk:"source_address"`
+	SourceInterface      types.String `tfsdk:"source_interface"`
+	V9                   types.Bool   `tfsdk:"v9"`
+	Version              types.String `tfsdk:"version"`
+	VrfName              types.String `tfsdk:"vrf_name"`
+}
+
+type AnalyticsInstancesMonitors struct {
+	Description      types.String                                          `tfsdk:"description"`
+	RecordTargetDn   types.String                                          `tfsdk:"record_target_dn"`
+	CollectorBuckets map[string]AnalyticsInstancesMonitorsCollectorBuckets `tfsdk:"collector_buckets"`
+}
+
+type AnalyticsInstancesMonitorsCollectorBuckets struct {
+	Description types.String                                                    `tfsdk:"description"`
+	HashHigh    types.Int64                                                     `tfsdk:"hash_high"`
+	HashLow     types.Int64                                                     `tfsdk:"hash_low"`
+	Collectors  map[string]AnalyticsInstancesMonitorsCollectorBucketsCollectors `tfsdk:"collectors"`
+}
+
+type AnalyticsInstancesMonitorsCollectorBucketsCollectors struct {
 }
 
 type AnalyticsInstancesForwardInstanceTargets struct {
@@ -161,8 +195,24 @@ func (data AnalyticsInstancesPolicies) getRn(key string) string {
 	return fmt.Sprintf("policy-[%s]", key)
 }
 
+func (data AnalyticsInstancesRecords) getRn(key string) string {
+	return fmt.Sprintf("recordp-[%s]", key)
+}
+
+func (data AnalyticsInstancesCollectors) getRn(key string) string {
+	return fmt.Sprintf("collector-[%s]", key)
+}
+
 func (data AnalyticsInstancesMonitors) getRn(key string) string {
 	return fmt.Sprintf("monitor-[%s]", key)
+}
+
+func (data AnalyticsInstancesMonitorsCollectorBuckets) getRn(key string) string {
+	return fmt.Sprintf("collectorbucket-[%v]", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data AnalyticsInstancesMonitorsCollectorBucketsCollectors) getRn(key string) string {
+	return fmt.Sprintf("rtcollectorAtt-[%s]", key)
 }
 
 func (data AnalyticsInstancesForwardInstanceTargets) getRn(key string) string {
@@ -313,6 +363,117 @@ func (data Analytics) toBody(config Analytics) nxos.Body {
 				}
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsPolicy.attributes", attrs)
 			}
+			for key, child := range child.Records {
+				configChild, configChildOk := configChild.Records[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "name", key)
+				if configChildOk && !child.Collect.IsUnknown() && !child.Collect.IsNull() && !configChild.Collect.IsNull() {
+					attrs, _ = sjson.Set(attrs, "collect", child.Collect.ValueString())
+				}
+				if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+					attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+				}
+				if configChildOk && !child.Match.IsUnknown() && !child.Match.IsNull() && !configChild.Match.IsNull() {
+					attrs, _ = sjson.Set(attrs, "match", child.Match.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsRecordP.attributes", attrs)
+			}
+			for key, child := range child.Collectors {
+				configChild, configChildOk := configChild.Collectors[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "name", key)
+				if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+					attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+				}
+				if configChildOk && !child.Dscp.IsUnknown() && !child.Dscp.IsNull() && !configChild.Dscp.IsNull() {
+					attrs, _ = sjson.Set(attrs, "dscp", strconv.FormatInt(child.Dscp.ValueInt64(), 10))
+				}
+				if configChildOk && !child.DestinationAddress.IsUnknown() && !child.DestinationAddress.IsNull() && !configChild.DestinationAddress.IsNull() {
+					attrs, _ = sjson.Set(attrs, "dstAddr", child.DestinationAddress.ValueString())
+				}
+				if configChildOk && !child.DestinationPort.IsUnknown() && !child.DestinationPort.IsNull() && !configChild.DestinationPort.IsNull() {
+					attrs, _ = sjson.Set(attrs, "dstPort", strconv.FormatInt(child.DestinationPort.ValueInt64(), 10))
+				}
+				if configChildOk && !child.EventDestinationPort.IsUnknown() && !child.EventDestinationPort.IsNull() && !configChild.EventDestinationPort.IsNull() {
+					attrs, _ = sjson.Set(attrs, "eventDstPort", strconv.FormatInt(child.EventDestinationPort.ValueInt64(), 10))
+				}
+				if configChildOk && !child.InbandInterface.IsUnknown() && !child.InbandInterface.IsNull() && !configChild.InbandInterface.IsNull() {
+					attrs, _ = sjson.Set(attrs, "inbandInterface", strconv.FormatBool(child.InbandInterface.ValueBool()))
+				}
+				if configChildOk && !child.SourceAddress.IsUnknown() && !child.SourceAddress.IsNull() && !configChild.SourceAddress.IsNull() {
+					attrs, _ = sjson.Set(attrs, "srcAddr", child.SourceAddress.ValueString())
+				}
+				if configChildOk && !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
+					attrs, _ = sjson.Set(attrs, "srcIf", child.SourceInterface.ValueString())
+				}
+				if configChildOk && !child.V9.IsUnknown() && !child.V9.IsNull() && !configChild.V9.IsNull() {
+					attrs, _ = sjson.Set(attrs, "v9", strconv.FormatBool(child.V9.ValueBool()))
+				}
+				if configChildOk && !child.Version.IsUnknown() && !child.Version.IsNull() && !configChild.Version.IsNull() {
+					attrs, _ = sjson.Set(attrs, "ver", child.Version.ValueString())
+				}
+				if configChildOk && !child.VrfName.IsUnknown() && !child.VrfName.IsNull() && !configChild.VrfName.IsNull() {
+					attrs, _ = sjson.Set(attrs, "vrfName", child.VrfName.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsCollector.attributes", attrs)
+			}
+			for key, child := range child.Monitors {
+				configChild, configChildOk := configChild.Monitors[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "name", key)
+				if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+					attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsMonitor.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".analyticsMonitor.children"
+					_ = nestedChildrenPath
+					attrs = "{}"
+					if !child.RecordTargetDn.IsUnknown() && !child.RecordTargetDn.IsNull() && !configChild.RecordTargetDn.IsNull() {
+						attrs, _ = sjson.Set(attrs, "tDn", child.RecordTargetDn.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsRsRecordPAtt.attributes", attrs)
+					}
+					for key, child := range child.CollectorBuckets {
+						configChild, configChildOk := configChild.CollectorBuckets[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "id", key)
+						if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+							attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+						}
+						if configChildOk && !child.HashHigh.IsUnknown() && !child.HashHigh.IsNull() && !configChild.HashHigh.IsNull() {
+							attrs, _ = sjson.Set(attrs, "hashHi", strconv.FormatInt(child.HashHigh.ValueInt64(), 10))
+						}
+						if configChildOk && !child.HashLow.IsUnknown() && !child.HashLow.IsNull() && !configChild.HashLow.IsNull() {
+							attrs, _ = sjson.Set(attrs, "hashLo", strconv.FormatInt(child.HashLow.ValueInt64(), 10))
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsCollectorBucket.attributes", attrs)
+						{
+							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".analyticsCollectorBucket.children"
+							_ = nestedChildrenPath
+							for key := range child.Collectors {
+								configChild, configChildOk := configChild.Collectors[key]
+								_ = configChild
+								_ = configChildOk
+								attrs = "{}"
+								attrs, _ = sjson.Set(attrs, "tDn", key)
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsRsCollectorAtt.attributes", attrs)
+							}
+						}
+					}
+				}
+			}
 			attrs = "{}"
 			if !child.TrafficAnalyticsDescription.IsUnknown() && !child.TrafficAnalyticsDescription.IsNull() && !configChild.TrafficAnalyticsDescription.IsNull() {
 				attrs, _ = sjson.Set(attrs, "descr", child.TrafficAnalyticsDescription.ValueString())
@@ -334,17 +495,6 @@ func (data Analytics) toBody(config Analytics) nxos.Body {
 			}
 			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsTrafficAnalytics.attributes", attrs)
-			}
-			for key, child := range child.Monitors {
-				configChild, configChildOk := configChild.Monitors[key]
-				_ = configChild
-				_ = configChildOk
-				attrs = "{}"
-				attrs, _ = sjson.Set(attrs, "name", key)
-				if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
-					attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
-				}
-				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsMonitor.attributes", attrs)
 			}
 			for key, child := range child.ForwardInstanceTargets {
 				configChild, configChildOk := configChild.ForwardInstanceTargets[key]
@@ -515,6 +665,128 @@ func (data *Analytics) fromBody(res gjson.Result) {
 								return true
 							},
 						)
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "analyticsRecordP" {
+											var nestedChildanalyticsRecordP AnalyticsInstancesRecords
+											nestedChildanalyticsRecordP.Collect = types.StringValue(nestedValue.Get("attributes.collect").String())
+											nestedChildanalyticsRecordP.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+											nestedChildanalyticsRecordP.Match = types.StringValue(nestedValue.Get("attributes.match").String())
+											nestedMapKey := nestedValue.Get("attributes.name").String()
+											if child.Records == nil {
+												child.Records = make(map[string]AnalyticsInstancesRecords)
+											}
+											child.Records[nestedMapKey] = nestedChildanalyticsRecordP
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "analyticsCollector" {
+											var nestedChildanalyticsCollector AnalyticsInstancesCollectors
+											nestedChildanalyticsCollector.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+											nestedChildanalyticsCollector.Dscp = types.Int64Value(nestedValue.Get("attributes.dscp").Int())
+											nestedChildanalyticsCollector.DestinationAddress = types.StringValue(nestedValue.Get("attributes.dstAddr").String())
+											nestedChildanalyticsCollector.DestinationPort = types.Int64Value(nestedValue.Get("attributes.dstPort").Int())
+											nestedChildanalyticsCollector.EventDestinationPort = types.Int64Value(nestedValue.Get("attributes.eventDstPort").Int())
+											nestedChildanalyticsCollector.InbandInterface = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.inbandInterface").String()))
+											nestedChildanalyticsCollector.SourceAddress = types.StringValue(nestedValue.Get("attributes.srcAddr").String())
+											nestedChildanalyticsCollector.SourceInterface = types.StringValue(nestedValue.Get("attributes.srcIf").String())
+											nestedChildanalyticsCollector.V9 = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.v9").String()))
+											nestedChildanalyticsCollector.Version = types.StringValue(nestedValue.Get("attributes.ver").String())
+											nestedChildanalyticsCollector.VrfName = types.StringValue(nestedValue.Get("attributes.vrfName").String())
+											nestedMapKey := nestedValue.Get("attributes.name").String()
+											if child.Collectors == nil {
+												child.Collectors = make(map[string]AnalyticsInstancesCollectors)
+											}
+											child.Collectors[nestedMapKey] = nestedChildanalyticsCollector
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "analyticsMonitor" {
+											var nestedChildanalyticsMonitor AnalyticsInstancesMonitors
+											nestedChildanalyticsMonitor.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+											nestedMapKey := nestedValue.Get("attributes.name").String()
+											{
+												var ranalyticsRsRecordPAtt gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("analyticsRsRecordPAtt.attributes.rn").String()
+														if rnValue == "rtrecordPAtt" {
+															ranalyticsRsRecordPAtt = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildanalyticsMonitor.RecordTargetDn = types.StringValue(ranalyticsRsRecordPAtt.Get("analyticsRsRecordPAtt.attributes.tDn").String())
+											}
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "analyticsCollectorBucket" {
+																var nestedChildanalyticsCollectorBucket AnalyticsInstancesMonitorsCollectorBuckets
+																nestedChildanalyticsCollectorBucket.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+																nestedChildanalyticsCollectorBucket.HashHigh = types.Int64Value(nestedValue.Get("attributes.hashHi").Int())
+																nestedChildanalyticsCollectorBucket.HashLow = types.Int64Value(nestedValue.Get("attributes.hashLo").Int())
+																nestedMapKey := nestedValue.Get("attributes.id").String()
+																nestedValue.Get("children").ForEach(
+																	func(_, nestedV gjson.Result) bool {
+																		nestedV.ForEach(
+																			func(nestedClassname, nestedValue gjson.Result) bool {
+																				if nestedClassname.String() == "analyticsRsCollectorAtt" {
+																					var nestedChildanalyticsRsCollectorAtt AnalyticsInstancesMonitorsCollectorBucketsCollectors
+																					nestedMapKey := nestedValue.Get("attributes.tDn").String()
+																					if nestedChildanalyticsCollectorBucket.Collectors == nil {
+																						nestedChildanalyticsCollectorBucket.Collectors = make(map[string]AnalyticsInstancesMonitorsCollectorBucketsCollectors)
+																					}
+																					nestedChildanalyticsCollectorBucket.Collectors[nestedMapKey] = nestedChildanalyticsRsCollectorAtt
+																				}
+																				return true
+																			},
+																		)
+																		return true
+																	},
+																)
+																if nestedChildanalyticsMonitor.CollectorBuckets == nil {
+																	nestedChildanalyticsMonitor.CollectorBuckets = make(map[string]AnalyticsInstancesMonitorsCollectorBuckets)
+																}
+																nestedChildanalyticsMonitor.CollectorBuckets[nestedMapKey] = nestedChildanalyticsCollectorBucket
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											if child.Monitors == nil {
+												child.Monitors = make(map[string]AnalyticsInstancesMonitors)
+											}
+											child.Monitors[nestedMapKey] = nestedChildanalyticsMonitor
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
 						{
 							var ranalyticsTrafficAnalytics gjson.Result
 							value.Get("children").ForEach(
@@ -534,25 +806,6 @@ func (data *Analytics) fromBody(res gjson.Result) {
 							child.TrafficAnalyticsTroubleshootExportInterval = types.Int64Value(ranalyticsTrafficAnalytics.Get("analyticsTrafficAnalytics.attributes.troubleshootExportInterval").Int())
 							child.TrafficAnalyticsUdpPortList = types.StringValue(ranalyticsTrafficAnalytics.Get("analyticsTrafficAnalytics.attributes.udpPortList").String())
 						}
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								nestedV.ForEach(
-									func(nestedClassname, nestedValue gjson.Result) bool {
-										if nestedClassname.String() == "analyticsMonitor" {
-											var nestedChildanalyticsMonitor AnalyticsInstancesMonitors
-											nestedChildanalyticsMonitor.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
-											nestedMapKey := nestedValue.Get("attributes.name").String()
-											if child.Monitors == nil {
-												child.Monitors = make(map[string]AnalyticsInstancesMonitors)
-											}
-											child.Monitors[nestedMapKey] = nestedChildanalyticsMonitor
-										}
-										return true
-									},
-								)
-								return true
-							},
-						)
 						value.Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
 								nestedV.ForEach(
@@ -882,6 +1135,204 @@ func (data *Analytics) updateFromBody(res gjson.Result) {
 			}
 			item.Policies[nc] = ncItem
 		}
+		for nc := range item.Records {
+			ncItem := item.Records[nc]
+			var ranalyticsRecordP gjson.Result
+			ranalyticsInst.Get("analyticsInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("analyticsRecordP.attributes.name").String() == nc {
+						ranalyticsRecordP = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ranalyticsRecordP.Exists() {
+				delete(item.Records, nc)
+				continue
+			}
+			if !ncItem.Collect.IsNull() {
+				ncItem.Collect = types.StringValue(ranalyticsRecordP.Get("analyticsRecordP.attributes.collect").String())
+			} else {
+				ncItem.Collect = types.StringNull()
+			}
+			if !ncItem.Description.IsNull() {
+				ncItem.Description = types.StringValue(ranalyticsRecordP.Get("analyticsRecordP.attributes.descr").String())
+			} else {
+				ncItem.Description = types.StringNull()
+			}
+			if !ncItem.Match.IsNull() {
+				ncItem.Match = types.StringValue(ranalyticsRecordP.Get("analyticsRecordP.attributes.match").String())
+			} else {
+				ncItem.Match = types.StringNull()
+			}
+			item.Records[nc] = ncItem
+		}
+		for nc := range item.Collectors {
+			ncItem := item.Collectors[nc]
+			var ranalyticsCollector gjson.Result
+			ranalyticsInst.Get("analyticsInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("analyticsCollector.attributes.name").String() == nc {
+						ranalyticsCollector = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ranalyticsCollector.Exists() {
+				delete(item.Collectors, nc)
+				continue
+			}
+			if !ncItem.Description.IsNull() {
+				ncItem.Description = types.StringValue(ranalyticsCollector.Get("analyticsCollector.attributes.descr").String())
+			} else {
+				ncItem.Description = types.StringNull()
+			}
+			if !ncItem.Dscp.IsNull() {
+				ncItem.Dscp = types.Int64Value(ranalyticsCollector.Get("analyticsCollector.attributes.dscp").Int())
+			} else {
+				ncItem.Dscp = types.Int64Null()
+			}
+			if !ncItem.DestinationAddress.IsNull() {
+				ncItem.DestinationAddress = types.StringValue(ranalyticsCollector.Get("analyticsCollector.attributes.dstAddr").String())
+			} else {
+				ncItem.DestinationAddress = types.StringNull()
+			}
+			if !ncItem.DestinationPort.IsNull() {
+				ncItem.DestinationPort = types.Int64Value(ranalyticsCollector.Get("analyticsCollector.attributes.dstPort").Int())
+			} else {
+				ncItem.DestinationPort = types.Int64Null()
+			}
+			if !ncItem.EventDestinationPort.IsNull() {
+				ncItem.EventDestinationPort = types.Int64Value(ranalyticsCollector.Get("analyticsCollector.attributes.eventDstPort").Int())
+			} else {
+				ncItem.EventDestinationPort = types.Int64Null()
+			}
+			if !ncItem.InbandInterface.IsNull() {
+				ncItem.InbandInterface = types.BoolValue(helpers.ParseNxosBoolean(ranalyticsCollector.Get("analyticsCollector.attributes.inbandInterface").String()))
+			} else {
+				ncItem.InbandInterface = types.BoolNull()
+			}
+			if !ncItem.SourceAddress.IsNull() {
+				ncItem.SourceAddress = types.StringValue(ranalyticsCollector.Get("analyticsCollector.attributes.srcAddr").String())
+			} else {
+				ncItem.SourceAddress = types.StringNull()
+			}
+			if !ncItem.SourceInterface.IsNull() {
+				ncItem.SourceInterface = types.StringValue(ranalyticsCollector.Get("analyticsCollector.attributes.srcIf").String())
+			} else {
+				ncItem.SourceInterface = types.StringNull()
+			}
+			if !ncItem.V9.IsNull() {
+				ncItem.V9 = types.BoolValue(helpers.ParseNxosBoolean(ranalyticsCollector.Get("analyticsCollector.attributes.v9").String()))
+			} else {
+				ncItem.V9 = types.BoolNull()
+			}
+			if !ncItem.Version.IsNull() {
+				ncItem.Version = types.StringValue(ranalyticsCollector.Get("analyticsCollector.attributes.ver").String())
+			} else {
+				ncItem.Version = types.StringNull()
+			}
+			if !ncItem.VrfName.IsNull() {
+				ncItem.VrfName = types.StringValue(ranalyticsCollector.Get("analyticsCollector.attributes.vrfName").String())
+			} else {
+				ncItem.VrfName = types.StringNull()
+			}
+			item.Collectors[nc] = ncItem
+		}
+		for nc := range item.Monitors {
+			ncItem := item.Monitors[nc]
+			var ranalyticsMonitor gjson.Result
+			ranalyticsInst.Get("analyticsInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("analyticsMonitor.attributes.name").String() == nc {
+						ranalyticsMonitor = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ranalyticsMonitor.Exists() {
+				delete(item.Monitors, nc)
+				continue
+			}
+			if !ncItem.Description.IsNull() {
+				ncItem.Description = types.StringValue(ranalyticsMonitor.Get("analyticsMonitor.attributes.descr").String())
+			} else {
+				ncItem.Description = types.StringNull()
+			}
+			{
+				var ranalyticsRsRecordPAtt gjson.Result
+				ranalyticsMonitor.Get("analyticsMonitor.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("analyticsRsRecordPAtt.attributes.rn").String()
+						if rnValue == "rtrecordPAtt" {
+							ranalyticsRsRecordPAtt = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.RecordTargetDn.IsNull() {
+					ncItem.RecordTargetDn = types.StringValue(ranalyticsRsRecordPAtt.Get("analyticsRsRecordPAtt.attributes.tDn").String())
+				} else {
+					ncItem.RecordTargetDn = types.StringNull()
+				}
+			}
+			for nc_ := range ncItem.CollectorBuckets {
+				nc_Item := ncItem.CollectorBuckets[nc_]
+				var ranalyticsCollectorBucket gjson.Result
+				ranalyticsMonitor.Get("analyticsMonitor.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("analyticsCollectorBucket.attributes.id").String() == nc_ {
+							ranalyticsCollectorBucket = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ranalyticsCollectorBucket.Exists() {
+					delete(ncItem.CollectorBuckets, nc_)
+					continue
+				}
+				if !nc_Item.Description.IsNull() {
+					nc_Item.Description = types.StringValue(ranalyticsCollectorBucket.Get("analyticsCollectorBucket.attributes.descr").String())
+				} else {
+					nc_Item.Description = types.StringNull()
+				}
+				if !nc_Item.HashHigh.IsNull() {
+					nc_Item.HashHigh = types.Int64Value(ranalyticsCollectorBucket.Get("analyticsCollectorBucket.attributes.hashHi").Int())
+				} else {
+					nc_Item.HashHigh = types.Int64Null()
+				}
+				if !nc_Item.HashLow.IsNull() {
+					nc_Item.HashLow = types.Int64Value(ranalyticsCollectorBucket.Get("analyticsCollectorBucket.attributes.hashLo").Int())
+				} else {
+					nc_Item.HashLow = types.Int64Null()
+				}
+				for nc__ := range nc_Item.Collectors {
+					nc__Item := nc_Item.Collectors[nc__]
+					var ranalyticsRsCollectorAtt gjson.Result
+					ranalyticsCollectorBucket.Get("analyticsCollectorBucket.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("analyticsRsCollectorAtt.attributes.tDn").String() == nc__ {
+								ranalyticsRsCollectorAtt = v
+								return false
+							}
+							return true
+						},
+					)
+					if !ranalyticsRsCollectorAtt.Exists() {
+						delete(nc_Item.Collectors, nc__)
+						continue
+					}
+					nc_Item.Collectors[nc__] = nc__Item
+				}
+				ncItem.CollectorBuckets[nc_] = nc_Item
+			}
+			item.Monitors[nc] = ncItem
+		}
 		{
 			var ranalyticsTrafficAnalytics gjson.Result
 			ranalyticsInst.Get("analyticsInst.children").ForEach(
@@ -924,29 +1375,6 @@ func (data *Analytics) updateFromBody(res gjson.Result) {
 			} else {
 				item.TrafficAnalyticsUdpPortList = types.StringNull()
 			}
-		}
-		for nc := range item.Monitors {
-			ncItem := item.Monitors[nc]
-			var ranalyticsMonitor gjson.Result
-			ranalyticsInst.Get("analyticsInst.children").ForEach(
-				func(_, v gjson.Result) bool {
-					if v.Get("analyticsMonitor.attributes.name").String() == nc {
-						ranalyticsMonitor = v
-						return false
-					}
-					return true
-				},
-			)
-			if !ranalyticsMonitor.Exists() {
-				delete(item.Monitors, nc)
-				continue
-			}
-			if !ncItem.Description.IsNull() {
-				ncItem.Description = types.StringValue(ranalyticsMonitor.Get("analyticsMonitor.attributes.descr").String())
-			} else {
-				ncItem.Description = types.StringNull()
-			}
-			item.Monitors[nc] = ncItem
 		}
 		for nc := range item.ForwardInstanceTargets {
 			ncItem := item.ForwardInstanceTargets[nc]
@@ -1158,6 +1586,24 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 			}
 		}
+		for stateChildKey := range stateItemdi.Records {
+			if _, found := planItemdi.Records[stateChildKey]; !found {
+				stateChild := stateItemdi.Records[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "analyticsRecordP.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "analyticsRecordP.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for stateChildKey := range stateItemdi.Collectors {
+			if _, found := planItemdi.Collectors[stateChildKey]; !found {
+				stateChild := stateItemdi.Collectors[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "analyticsCollector.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "analyticsCollector.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
 		for stateChildKey := range stateItemdi.Monitors {
 			if _, found := planItemdi.Monitors[stateChildKey]; !found {
 				stateChild := stateItemdi.Monitors[stateChildKey]
@@ -1165,6 +1611,58 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 				deleteBody, _ = sjson.Set(deleteBody, "analyticsMonitor.attributes.rn", stateChild.getRn(stateChildKey))
 				deleteBody, _ = sjson.Set(deleteBody, "analyticsMonitor.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for di_ := range stateItemdi.Monitors {
+			if _, found := planItemdi.Monitors[di_]; !found {
+				continue
+			}
+			stateItemdi_ := stateItemdi.Monitors[di_]
+			planItemdi_ := planItemdi.Monitors[di_]
+			matchBodyPathdi_ := ""
+			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+				if mv.Get("analyticsMonitor.attributes.rn").String() == stateItemdi_.getRn(di_) {
+					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".analyticsMonitor.children"
+					break
+				}
+			}
+			if matchBodyPathdi_ == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi_.CollectorBuckets {
+				if _, found := planItemdi_.CollectorBuckets[stateChildKey]; !found {
+					stateChild := stateItemdi_.CollectorBuckets[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "analyticsCollectorBucket.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "analyticsCollectorBucket.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+				}
+			}
+			for di__ := range stateItemdi_.CollectorBuckets {
+				if _, found := planItemdi_.CollectorBuckets[di__]; !found {
+					continue
+				}
+				stateItemdi__ := stateItemdi_.CollectorBuckets[di__]
+				planItemdi__ := planItemdi_.CollectorBuckets[di__]
+				matchBodyPathdi__ := ""
+				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+					if mv.Get("analyticsCollectorBucket.attributes.rn").String() == stateItemdi__.getRn(di__) {
+						matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".analyticsCollectorBucket.children"
+						break
+					}
+				}
+				if matchBodyPathdi__ == "" {
+					continue
+				}
+				for stateChildKey := range stateItemdi__.Collectors {
+					if _, found := planItemdi__.Collectors[stateChildKey]; !found {
+						stateChild := stateItemdi__.Collectors[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "analyticsRsCollectorAtt.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "analyticsRsCollectorAtt.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
+					}
+				}
 			}
 		}
 		for stateChildKey := range stateItemdi.ForwardInstanceTargets {

@@ -26,6 +26,33 @@ attributes:
     description: 'Subscriptions merging enabled or disabled.'
     example: true
 child_classes:
+  - class_name: telemetryDestProfile
+    rn: destprof
+    type: single
+    tf_name: destination_profile
+    description: 'Default Destination Profile.'
+    doc_path: Streaming%20Telemetry/telemetry:DestProfile/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: destination_profile_admin_state
+        type: String
+        description: 'Admin state.'
+        enum_values:
+          - enabled
+        example: enabled
+    child_classes:
+      - class_name: telemetryDestOptVrf
+        rn: vrf
+        type: single
+        tf_name: use_vrf
+        description: 'Destination option for vrf.'
+        doc_path: Streaming%20Telemetry/telemetry:DestOptVrf/
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: 'VRF name.'
+            example: management
   - class_name: telemetryDestGroup
     rn: dest-[%s]
     type: list

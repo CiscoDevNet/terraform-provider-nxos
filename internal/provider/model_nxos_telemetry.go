@@ -39,14 +39,16 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type Telemetry struct {
-	Device             types.String                          `tfsdk:"device"`
-	Dn                 types.String                          `tfsdk:"id"`
-	AdminState         types.String                          `tfsdk:"admin_state"`
-	BatchDmeEvents     types.Bool                            `tfsdk:"batch_dme_events"`
-	MergeSubscriptions types.Bool                            `tfsdk:"merge_subscriptions"`
-	DestinationGroups  map[string]TelemetryDestinationGroups `tfsdk:"destination_groups"`
-	SensorGroups       map[string]TelemetrySensorGroups      `tfsdk:"sensor_groups"`
-	Subscriptions      map[string]TelemetrySubscriptions     `tfsdk:"subscriptions"`
+	Device                       types.String                          `tfsdk:"device"`
+	Dn                           types.String                          `tfsdk:"id"`
+	AdminState                   types.String                          `tfsdk:"admin_state"`
+	BatchDmeEvents               types.Bool                            `tfsdk:"batch_dme_events"`
+	MergeSubscriptions           types.Bool                            `tfsdk:"merge_subscriptions"`
+	DestinationProfileAdminState types.String                          `tfsdk:"destination_profile_admin_state"`
+	Name                         types.String                          `tfsdk:"name"`
+	DestinationGroups            map[string]TelemetryDestinationGroups `tfsdk:"destination_groups"`
+	SensorGroups                 map[string]TelemetrySensorGroups      `tfsdk:"sensor_groups"`
+	Subscriptions                map[string]TelemetrySubscriptions     `tfsdk:"subscriptions"`
 }
 
 type TelemetryDestinationGroups struct {
@@ -162,6 +164,32 @@ func (data Telemetry) toBody(config Telemetry) nxos.Body {
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
+	{
+		attrs = "{}"
+		if !data.DestinationProfileAdminState.IsUnknown() && !data.DestinationProfileAdminState.IsNull() && !config.DestinationProfileAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.DestinationProfileAdminState.ValueString())
+		}
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "telemetryDestProfile.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "telemetryDestProfile.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		attrs = "{}"
+		if !data.Name.IsUnknown() && !data.Name.IsNull() && !config.Name.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", data.Name.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestOptVrf.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "telemetryDestProfile.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
 	for key, child := range data.DestinationGroups {
 		configChild, configChildOk := config.DestinationGroups[key]
 		_ = configChild
@@ -274,6 +302,34 @@ func (data *Telemetry) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	data.BatchDmeEvents = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.batchDmeEvt").String()))
 	data.MergeSubscriptions = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mergeSubs").String()))
+	{
+		var rtelemetryDestProfile gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("telemetryDestProfile.attributes.rn").String()
+				if rnValue == "destprof" {
+					rtelemetryDestProfile = v
+					return false
+				}
+				return true
+			},
+		)
+		data.DestinationProfileAdminState = types.StringValue(rtelemetryDestProfile.Get("telemetryDestProfile.attributes.adminSt").String())
+		{
+			var rtelemetryDestOptVrf gjson.Result
+			rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestOptVrf.attributes.rn").String()
+					if rnValue == "vrf" {
+						rtelemetryDestOptVrf = v
+						return false
+					}
+					return true
+				},
+			)
+			data.Name = types.StringValue(rtelemetryDestOptVrf.Get("telemetryDestOptVrf.attributes.name").String())
+		}
+	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -430,6 +486,40 @@ func (data *Telemetry) updateFromBody(res gjson.Result) {
 		data.MergeSubscriptions = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mergeSubs").String()))
 	} else {
 		data.MergeSubscriptions = types.BoolNull()
+	}
+	var rtelemetryDestProfile gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("telemetryDestProfile.attributes.rn").String()
+			if rnValue == "destprof" {
+				rtelemetryDestProfile = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.DestinationProfileAdminState.IsNull() {
+		data.DestinationProfileAdminState = types.StringValue(rtelemetryDestProfile.Get("telemetryDestProfile.attributes.adminSt").String())
+	} else {
+		data.DestinationProfileAdminState = types.StringNull()
+	}
+	{
+		var rtelemetryDestOptVrf gjson.Result
+		rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("telemetryDestOptVrf.attributes.rn").String()
+				if rnValue == "vrf" {
+					rtelemetryDestOptVrf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Name.IsNull() {
+			data.Name = types.StringValue(rtelemetryDestOptVrf.Get("telemetryDestOptVrf.attributes.name").String())
+		} else {
+			data.Name = types.StringNull()
+		}
 	}
 	for key, item := range data.DestinationGroups {
 		var rtelemetryDestGroup gjson.Result
@@ -622,6 +712,12 @@ func (data Telemetry) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
 	childrenPath := data.getClassName() + ".children"
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "telemetryDestProfile.attributes.rn", "destprof")
+		deleteBody, _ = sjson.Set(deleteBody, "telemetryDestProfile.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 	for key, child := range data.DestinationGroups {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "telemetryDestGroup.attributes.rn", child.getRn(key))

@@ -57,7 +57,7 @@ func (d *TelemetryDataSource) Metadata(_ context.Context, req datasource.Metadat
 func (d *TelemetryDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.").AddApiDocumentation("telemetryEntity", "Streaming%20Telemetry/telemetry:Entity/", []string{"telemetryDestGroup", "telemetryDest", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, []string{"Streaming%20Telemetry/telemetry:DestGroup/", "Streaming%20Telemetry/telemetry:Dest/", "Streaming%20Telemetry/telemetry:SensorGroup/", "Streaming%20Telemetry/telemetry:SensorPath/", "Streaming%20Telemetry/telemetry:Subscription/", "Streaming%20Telemetry/telemetry:RsSensorGroupRel/", "Streaming%20Telemetry/telemetry:RsDestGroupRel/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.").AddApiDocumentation("telemetryEntity", "Streaming%20Telemetry/telemetry:Entity/", []string{"telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestGroup", "telemetryDest", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, []string{"Streaming%20Telemetry/telemetry:DestProfile/", "Streaming%20Telemetry/telemetry:DestOptVrf/", "Streaming%20Telemetry/telemetry:DestGroup/", "Streaming%20Telemetry/telemetry:Dest/", "Streaming%20Telemetry/telemetry:SensorGroup/", "Streaming%20Telemetry/telemetry:SensorPath/", "Streaming%20Telemetry/telemetry:Subscription/", "Streaming%20Telemetry/telemetry:RsSensorGroupRel/", "Streaming%20Telemetry/telemetry:RsDestGroupRel/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -78,6 +78,14 @@ func (d *TelemetryDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			},
 			"merge_subscriptions": schema.BoolAttribute{
 				MarkdownDescription: "Subscriptions merging enabled or disabled.",
+				Computed:            true,
+			},
+			"destination_profile_admin_state": schema.StringAttribute{
+				MarkdownDescription: "Admin state.",
+				Computed:            true,
+			},
+			"destination_profile_vrf": schema.StringAttribute{
+				MarkdownDescription: "VRF name.",
 				Computed:            true,
 			},
 			"destination_groups": schema.MapNestedAttribute{
@@ -203,7 +211,7 @@ func (d *TelemetryDataSource) Read(ctx context.Context, req datasource.ReadReque
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "telemetryDestGroup,telemetryDest,telemetrySensorGroup,telemetrySensorPath,telemetrySubscription,telemetryRsSensorGroupRel,telemetryRsDestGroupRel")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "telemetryDestProfile,telemetryDestOptVrf,telemetryDestGroup,telemetryDest,telemetrySensorGroup,telemetrySensorPath,telemetrySubscription,telemetryRsSensorGroupRel,telemetryRsDestGroupRel")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

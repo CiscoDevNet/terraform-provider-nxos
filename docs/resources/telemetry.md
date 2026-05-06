@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This resource can manage the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.
   API Documentation
-  telemetryEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Entity/telemetryDestGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestGroup/telemetryDest https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Dest/telemetrySensorGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/telemetrySensorPath https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:SensorPath/telemetrySubscription https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Subscription/telemetryRsSensorGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:RsSensorGroupRel/telemetryRsDestGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:RsDestGroupRel/
+  telemetryEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Entity/telemetryDestProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestProfile/telemetryDestOptVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestOptVrf/telemetryDestGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestGroup/telemetryDest https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Dest/telemetrySensorGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/telemetrySensorPath https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:SensorPath/telemetrySubscription https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Subscription/telemetryRsSensorGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:RsSensorGroupRel/telemetryRsDestGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:RsDestGroupRel/
 ---
 
 # nxos_telemetry (Resource)
@@ -15,6 +15,8 @@ This resource can manage the streaming telemetry configuration on NX-OS devices,
 ### API Documentation
 
 - [telemetryEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Entity/)
+- [telemetryDestProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestProfile/)
+- [telemetryDestOptVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestOptVrf/)
 - [telemetryDestGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestGroup/)
 - [telemetryDest](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Dest/)
 - [telemetrySensorGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/)
@@ -27,9 +29,11 @@ This resource can manage the streaming telemetry configuration on NX-OS devices,
 
 ```terraform
 resource "nxos_telemetry" "example" {
-  admin_state         = "enabled"
-  batch_dme_events    = false
-  merge_subscriptions = true
+  admin_state                     = "enabled"
+  batch_dme_events                = false
+  merge_subscriptions             = true
+  destination_profile_admin_state = "enabled"
+  destination_profile_vrf         = "management"
   destination_groups = {
     "1" = {
       destinations = {
@@ -79,6 +83,9 @@ resource "nxos_telemetry" "example" {
 - `batch_dme_events` (Boolean) DME events batching is enabled or disabled.
 - `destination_groups` (Attributes Map) Destination Group.
   - Map key: `id` - Destination group ID. (see [below for nested schema](#nestedatt--destination_groups))
+- `destination_profile_admin_state` (String) Admin state.
+  - Choices: `enabled`
+- `destination_profile_vrf` (String) VRF name.
 - `device` (String) A device name from the provider configuration.
 - `merge_subscriptions` (Boolean) Subscriptions merging enabled or disabled.
 - `sensor_groups` (Attributes Map) Sensor Group.

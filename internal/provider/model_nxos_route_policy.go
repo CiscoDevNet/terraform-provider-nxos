@@ -97,6 +97,7 @@ type RoutePolicyRouteMapsEntries struct {
 	SetVrfV6                       types.String                                                     `tfsdk:"set_vrf_v6"`
 	VerifyAvailabilityV4           types.String                                                     `tfsdk:"verify_availability_v4"`
 	VerifyAvailabilityV6           types.String                                                     `tfsdk:"verify_availability_v6"`
+	SetPolicyTag                   types.Int64                                                      `tfsdk:"set_policy_tag"`
 	MatchRoutePrefixLists          map[string]RoutePolicyRouteMapsEntriesMatchRoutePrefixLists      `tfsdk:"match_route_prefix_lists"`
 	MatchRouteAccessLists          map[string]RoutePolicyRouteMapsEntriesMatchRouteAccessLists      `tfsdk:"match_route_access_lists"`
 	SetRegularCommunityAdditive    types.String                                                     `tfsdk:"set_regular_community_additive"`
@@ -427,6 +428,13 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtmapEntry.children"
 					_ = nestedChildrenPath
+					attrs = "{}"
+					if !child.SetPolicyTag.IsUnknown() && !child.SetPolicyTag.IsNull() && !configChild.SetPolicyTag.IsNull() {
+						attrs, _ = sjson.Set(attrs, "policyTag", strconv.FormatInt(child.SetPolicyTag.ValueInt64(), 10))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetPolicyTag.attributes", attrs)
+					}
 					{
 						attrs = "{}"
 						childBody := ""

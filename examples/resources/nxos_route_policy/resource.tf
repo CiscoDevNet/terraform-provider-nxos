@@ -50,6 +50,7 @@ resource "nxos_route_policy" "example" {
           set_vrf_v6              = "disabled"
           verify_availability_v4  = "disabled"
           verify_availability_v6  = "disabled"
+          set_policy_tag          = 100
           match_route_prefix_lists = {
             "sys/rpm/pfxlistv4-[PREFIX_LIST1]" = {}
           }

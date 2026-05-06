@@ -66,6 +66,7 @@ func TestAccNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_vrf_v6", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.verify_availability_v4", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.verify_availability_v6", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_policy_tag", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_additive", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_no_community", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_criteria", "none"))
@@ -194,6 +195,7 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config += `					set_vrf_v6 = "disabled"` + "\n"
 	config += `					verify_availability_v4 = "disabled"` + "\n"
 	config += `					verify_availability_v6 = "disabled"` + "\n"
+	config += `					set_policy_tag = 100` + "\n"
 	config += `					match_route_prefix_lists = {` + "\n"
 	config += `						"sys/rpm/pfxlistv4-[PREFIX_LIST1]" = {` + "\n"
 	config += `						}` + "\n"

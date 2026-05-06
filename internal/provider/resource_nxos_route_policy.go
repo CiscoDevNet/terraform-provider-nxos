@@ -63,7 +63,7 @@ func (r *RoutePolicyResource) Metadata(ctx context.Context, req resource.Metadat
 func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the route policy configuration on NX-OS devices, including IPv4 and IPv6 prefix lists and route maps with match and set criteria.").AddApiDocumentation("rpmEntity", "Routing%20and%20Forwarding/rpm:Entity/", []string{"rtpfxRuleV4", "rtpfxEntry", "rtpfxRuleV6", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapRsRtDstAccAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtmapSetPref", "rtmapSetPathSelection", "rtmapSetEvpn", "rtmapMatchRtNh", "rtmapRsRtNhAtt", "rtmapMatchRegComm", "rtmapRsRegCommAtt", "rtregcomRule", "rtregcomEntry", "rtregcomItem"}, []string{"Routing%20and%20Forwarding/rtpfx:RuleV4/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtpfx:RuleV6/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtmap:Rule/", "Routing%20and%20Forwarding/rtmap:Entry/", "Routing%20and%20Forwarding/rtmap:MatchRtDst/", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/", "Routing%20and%20Forwarding/rtmap:RsRtDstAccAtt/", "Routing%20and%20Forwarding/rtmap:SetRegComm/", "Routing%20and%20Forwarding/rtregcom:Item/", "Routing%20and%20Forwarding/rtmap:MatchRtTag/", "Routing%20and%20Forwarding/rtmap:SetMetric/", "Routing%20and%20Forwarding/rtmap:SetMetricType/", "Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/", "Routing%20and%20Forwarding/rtmap:SetPref/", "Routing%20and%20Forwarding/rtmap:SetPathSelection/", "Routing%20and%20Forwarding/rtmap:SetEvpn/", "Routing%20and%20Forwarding/rtmap:MatchRtNh/", "Routing%20and%20Forwarding/rtmap:RsRtNhAtt/", "Routing%20and%20Forwarding/rtmap:MatchRegComm/", "Routing%20and%20Forwarding/rtmap:RsRegCommAtt/", "Routing%20and%20Forwarding/rtregcom:Rule/", "Routing%20and%20Forwarding/rtregcom:Entry/", "Routing%20and%20Forwarding/rtregcom:Item/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the route policy configuration on NX-OS devices, including IPv4 and IPv6 prefix lists and route maps with match and set criteria.").AddApiDocumentation("rpmEntity", "Routing%20and%20Forwarding/rpm:Entity/", []string{"rtpfxRuleV4", "rtpfxEntry", "rtpfxRuleV6", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapSetPolicyTag", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapRsRtDstAccAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtmapSetPref", "rtmapSetPathSelection", "rtmapSetEvpn", "rtmapMatchRtNh", "rtmapRsRtNhAtt", "rtmapMatchRegComm", "rtmapRsRegCommAtt", "rtregcomRule", "rtregcomEntry", "rtregcomItem"}, []string{"Routing%20and%20Forwarding/rtpfx:RuleV4/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtpfx:RuleV6/", "Routing%20and%20Forwarding/rtpfx:Entry/", "Routing%20and%20Forwarding/rtmap:Rule/", "Routing%20and%20Forwarding/rtmap:Entry/", "Routing%20and%20Forwarding/rtmap:SetPolicyTag/", "Routing%20and%20Forwarding/rtmap:MatchRtDst/", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/", "Routing%20and%20Forwarding/rtmap:RsRtDstAccAtt/", "Routing%20and%20Forwarding/rtmap:SetRegComm/", "Routing%20and%20Forwarding/rtregcom:Item/", "Routing%20and%20Forwarding/rtmap:MatchRtTag/", "Routing%20and%20Forwarding/rtmap:SetMetric/", "Routing%20and%20Forwarding/rtmap:SetMetricType/", "Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/", "Routing%20and%20Forwarding/rtmap:SetPref/", "Routing%20and%20Forwarding/rtmap:SetPathSelection/", "Routing%20and%20Forwarding/rtmap:SetEvpn/", "Routing%20and%20Forwarding/rtmap:MatchRtNh/", "Routing%20and%20Forwarding/rtmap:RsRtNhAtt/", "Routing%20and%20Forwarding/rtmap:MatchRegComm/", "Routing%20and%20Forwarding/rtmap:RsRegCommAtt/", "Routing%20and%20Forwarding/rtregcom:Rule/", "Routing%20and%20Forwarding/rtregcom:Entry/", "Routing%20and%20Forwarding/rtregcom:Item/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -320,6 +320,13 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"set_policy_tag": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Policy Classifier Tag.").AddIntegerRangeDescription(0, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
 										},
 									},
 									"match_route_prefix_lists": schema.MapNestedAttribute{
@@ -695,7 +702,7 @@ func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "rtpfxRuleV4,rtpfxEntry,rtpfxRuleV6,rtpfxEntry,rtmapRule,rtmapEntry,rtmapMatchRtDst,rtmapRsRtDstAtt,rtmapRsRtDstAccAtt,rtmapSetRegComm,rtregcomItem,rtmapMatchRtTag,rtmapSetMetric,rtmapSetMetricType,rtmapSetNhPeerAddr,rtmapSetPref,rtmapSetPathSelection,rtmapSetEvpn,rtmapMatchRtNh,rtmapRsRtNhAtt,rtmapMatchRegComm,rtmapRsRegCommAtt,rtregcomRule,rtregcomEntry,rtregcomItem")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "rtpfxRuleV4,rtpfxEntry,rtpfxRuleV6,rtpfxEntry,rtmapRule,rtmapEntry,rtmapSetPolicyTag,rtmapMatchRtDst,rtmapRsRtDstAtt,rtmapRsRtDstAccAtt,rtmapSetRegComm,rtregcomItem,rtmapMatchRtTag,rtmapSetMetric,rtmapSetMetricType,rtmapSetNhPeerAddr,rtmapSetPref,rtmapSetPathSelection,rtmapSetEvpn,rtmapMatchRtNh,rtmapRsRtNhAtt,rtmapMatchRegComm,rtmapRsRegCommAtt,rtregcomRule,rtregcomEntry,rtregcomItem")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

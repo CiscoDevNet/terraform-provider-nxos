@@ -33,7 +33,7 @@ resource "nxos_telemetry" "example" {
   batch_dme_events                = false
   merge_subscriptions             = true
   destination_profile_admin_state = "enabled"
-  name                            = "management"
+  destination_profile_vrf         = "management"
   destination_groups = {
     "1" = {
       destinations = {
@@ -85,9 +85,9 @@ resource "nxos_telemetry" "example" {
   - Map key: `id` - Destination group ID. (see [below for nested schema](#nestedatt--destination_groups))
 - `destination_profile_admin_state` (String) Admin state.
   - Choices: `enabled`
+- `destination_profile_vrf` (String) VRF name.
 - `device` (String) A device name from the provider configuration.
 - `merge_subscriptions` (Boolean) Subscriptions merging enabled or disabled.
-- `name` (String) VRF name.
 - `sensor_groups` (Attributes Map) Sensor Group.
   - Map key: `id` - Sensor group identifier. (see [below for nested schema](#nestedatt--sensor_groups))
 - `subscriptions` (Attributes Map) Subscription.

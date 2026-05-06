@@ -84,7 +84,7 @@ func (d *TelemetryDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Admin state.",
 				Computed:            true,
 			},
-			"name": schema.StringAttribute{
+			"destination_profile_vrf": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
 				Computed:            true,
 			},

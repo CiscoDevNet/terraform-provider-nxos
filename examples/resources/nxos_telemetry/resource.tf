@@ -3,7 +3,7 @@ resource "nxos_telemetry" "example" {
   batch_dme_events                = false
   merge_subscriptions             = true
   destination_profile_admin_state = "enabled"
-  name                            = "management"
+  destination_profile_vrf         = "management"
   destination_groups = {
     "1" = {
       destinations = {

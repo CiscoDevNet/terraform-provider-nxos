@@ -46,9 +46,9 @@ data "nxos_telemetry" "example" {
 - `destination_groups` (Attributes Map) Destination Group.
   - Map key: `id` - Destination group ID. (see [below for nested schema](#nestedatt--destination_groups))
 - `destination_profile_admin_state` (String) Admin state.
+- `destination_profile_vrf` (String) VRF name.
 - `id` (String) The distinguished name of the object.
 - `merge_subscriptions` (Boolean) Subscriptions merging enabled or disabled.
-- `name` (String) VRF name.
 - `sensor_groups` (Attributes Map) Sensor Group.
   - Map key: `id` - Sensor group identifier. (see [below for nested schema](#nestedatt--sensor_groups))
 - `subscriptions` (Attributes Map) Subscription.

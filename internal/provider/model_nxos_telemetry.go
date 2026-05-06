@@ -45,7 +45,7 @@ type Telemetry struct {
 	BatchDmeEvents               types.Bool                            `tfsdk:"batch_dme_events"`
 	MergeSubscriptions           types.Bool                            `tfsdk:"merge_subscriptions"`
 	DestinationProfileAdminState types.String                          `tfsdk:"destination_profile_admin_state"`
-	Name                         types.String                          `tfsdk:"name"`
+	DestinationProfileVrf        types.String                          `tfsdk:"destination_profile_vrf"`
 	DestinationGroups            map[string]TelemetryDestinationGroups `tfsdk:"destination_groups"`
 	SensorGroups                 map[string]TelemetrySensorGroups      `tfsdk:"sensor_groups"`
 	Subscriptions                map[string]TelemetrySubscriptions     `tfsdk:"subscriptions"`
@@ -178,8 +178,8 @@ func (data Telemetry) toBody(config Telemetry) nxos.Body {
 		prevBody := body
 		body = childBody
 		attrs = "{}"
-		if !data.Name.IsUnknown() && !data.Name.IsNull() && !config.Name.IsNull() {
-			attrs, _ = sjson.Set(attrs, "name", data.Name.ValueString())
+		if !data.DestinationProfileVrf.IsUnknown() && !data.DestinationProfileVrf.IsNull() && !config.DestinationProfileVrf.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", data.DestinationProfileVrf.ValueString())
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestOptVrf.attributes", attrs)
@@ -327,7 +327,7 @@ func (data *Telemetry) fromBody(res gjson.Result) {
 					return true
 				},
 			)
-			data.Name = types.StringValue(rtelemetryDestOptVrf.Get("telemetryDestOptVrf.attributes.name").String())
+			data.DestinationProfileVrf = types.StringValue(rtelemetryDestOptVrf.Get("telemetryDestOptVrf.attributes.name").String())
 		}
 	}
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -515,10 +515,10 @@ func (data *Telemetry) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
-		if !data.Name.IsNull() {
-			data.Name = types.StringValue(rtelemetryDestOptVrf.Get("telemetryDestOptVrf.attributes.name").String())
+		if !data.DestinationProfileVrf.IsNull() {
+			data.DestinationProfileVrf = types.StringValue(rtelemetryDestOptVrf.Get("telemetryDestOptVrf.attributes.name").String())
 		} else {
-			data.Name = types.StringNull()
+			data.DestinationProfileVrf = types.StringNull()
 		}
 	}
 	for key, item := range data.DestinationGroups {

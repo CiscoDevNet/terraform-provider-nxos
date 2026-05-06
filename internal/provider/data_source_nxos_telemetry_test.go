@@ -35,7 +35,7 @@ func TestAccDataSourceNxosTelemetry(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "batch_dme_events", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "merge_subscriptions", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_profile_admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "name", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_profile_vrf", "management"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.encoding", "GPB"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.node_id", "host1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.protocol", "gRPC"))
@@ -81,7 +81,7 @@ func testAccDataSourceNxosTelemetryConfig() string {
 	config += `	batch_dme_events = false` + "\n"
 	config += `	merge_subscriptions = true` + "\n"
 	config += `	destination_profile_admin_state = "enabled"` + "\n"
-	config += `	name = "management"` + "\n"
+	config += `	destination_profile_vrf = "management"` + "\n"
 	config += `	destination_groups = {` + "\n"
 	config += `		"1" = {` + "\n"
 	config += `			destinations = {` + "\n"

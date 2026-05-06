@@ -99,7 +99,7 @@ func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringvalidator.OneOf("enabled"),
 				},
 			},
-			"name": schema.StringAttribute{
+			"destination_profile_vrf": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Optional:            true,
 			},

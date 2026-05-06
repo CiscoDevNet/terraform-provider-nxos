@@ -499,6 +499,9 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 {{- $childClassName := .ClassName}}
 {{- $childRn := .Rn}}
 {{- if eq .Type "single"}}
+{{- $hasNonRefAttribs := false}}
+{{- range .Attributes}}{{- if and (not .Value) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
+{{- if or $hasNonRefAttribs .ChildClasses}}
 						{
 						var r{{$childClassName}} gjson.Result
 						{{$valueVar}}.Get("children").ForEach(
@@ -515,6 +518,7 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 								return true
 							},
 						)
+{{- end}}
 						{{- range .Attributes}}
 						{{- if and (not .Value) (not .WriteOnly)}}
 						{{- if eq .Type "Int64"}}
@@ -529,7 +533,9 @@ func (data {{camelCase .Name}}) toBody(config {{camelCase .Name}}) nxos.Body {
 						{{- if .ChildClasses}}
 						{{- template "fromBodyListChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" (printf "r%s.Get(\"%s\")" $childClassName $childClassName) "ParentVar" $parentVar "RnArgs" $rnArgs)}}
 						{{- end}}
+{{- if or $hasNonRefAttribs .ChildClasses}}
 						}
+{{- end}}
 {{- else if eq .Type "list"}}
 						{{$valueVar}}.Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
@@ -716,6 +722,9 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 {{- $childRn := .Rn}}
 {{- $list := (toGoName .TfName)}}
 {{- if eq .Type "single"}}
+{{- $hasNonRefAttribs := false}}
+{{- range .Attributes}}{{- if and (not .Value) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
+{{- if or $hasNonRefAttribs .ChildClasses}}
 	{
 	var r{{$childClassName}} gjson.Result
 	{{$resExpr}}.ForEach(
@@ -732,6 +741,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 			return true
 		},
 	)
+{{- end}}
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .WriteOnly)}}
 	if !{{$dataListExpr}}.{{toGoName .TfName}}.IsNull() {
@@ -750,7 +760,9 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- if .ChildClasses}}
 	{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" $dataListExpr "IndexVar" $indexVar "RnArgs" $rnArgs)}}
 	{{- end}}
+{{- if or $hasNonRefAttribs .ChildClasses}}
 	}
+{{- end}}
 {{- else if eq .Type "list"}}
 	for {{$indexVar}} := range {{$dataListExpr}}.{{$list}} {
 		{{$indexVar}}Item := {{$dataListExpr}}.{{$list}}[{{$indexVar}}]

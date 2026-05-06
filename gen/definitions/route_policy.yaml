@@ -326,6 +326,21 @@ child_classes:
               - disabled
             example: disabled
         child_classes:
+          - class_name: rtmapSetPolicyTag
+            doc_path: Routing%20and%20Forwarding/rtmap:SetPolicyTag/
+            rn: spctag
+            type: single
+            tf_name: set_policy_tag
+            description: 'Set Policy Tag.'
+            attributes:
+              - nxos_name: policyTag
+                tf_name: set_policy_tag
+                type: Int64
+                write_only: true
+                description: 'Policy Classifier Tag.'
+                min_int: 0
+                max_int: 65535
+                example: 100
           - class_name: rtmapMatchRtDst
             doc_path: Routing%20and%20Forwarding/rtmap:MatchRtDst/
             rn: mrtdst

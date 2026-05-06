@@ -155,6 +155,7 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `					set_vrf_v6 = "disabled"` + "\n"
 	config += `					verify_availability_v4 = "disabled"` + "\n"
 	config += `					verify_availability_v6 = "disabled"` + "\n"
+	config += `					set_policy_tag = 100` + "\n"
 	config += `					match_route_prefix_lists = {` + "\n"
 	config += `						"sys/rpm/pfxlistv4-[PREFIX_LIST1]" = {` + "\n"
 	config += `						}` + "\n"

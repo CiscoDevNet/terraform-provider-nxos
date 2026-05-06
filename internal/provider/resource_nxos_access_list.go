@@ -63,7 +63,7 @@ func (r *AccessListResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *AccessListResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage IPv4 access control lists (ACLs) on NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports applying ACLs to interfaces in ingress or egress direction.").AddApiDocumentation("aclEntity", "Security%20and%20Policing/acl:Entity/", []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage IPv4 and IPv6 access control lists (ACLs) on NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports applying ACLs to interfaces in ingress or egress direction.").AddApiDocumentation("aclEntity", "Security%20and%20Policing/acl:Entity/", []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "ipv6aclAF", "ipv6aclACL", "ipv6aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/ipv6acl:AF/", "Security%20and%20Policing/ipv6acl:ACL/", "Security%20and%20Policing/ipv6acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -423,6 +423,337 @@ func (r *AccessListResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Access Control List name.").String,
 				Optional:            true,
 			},
+			"ipv6_access_lists": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 Access Lists.\n  - Map key: `name` - Name of Access lists.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"extension_header": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 Extension header rule.").AddStringEnumDescription("disabled", "deny-all", "permit-all").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disabled", "deny-all", "permit-all"),
+							},
+						},
+						"fragments": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fragments type for IPv4 and IPv6.").AddStringEnumDescription("disabled", "deny-all", "permit-all").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disabled", "deny-all", "permit-all"),
+							},
+						},
+						"ignore_routable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ignore Multicast Routed ACLs.").String,
+							Optional:            true,
+						},
+						"per_ace_statistics": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Per Access Control Entries statistics.").AddStringEnumDescription("off", "on").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("off", "on"),
+							},
+						},
+						"entries": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access list entries.\n  - Map key: `sequence_number` - Sequence number.\n  - Key range: `0`-`4294967295`").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ack": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP ACK flag.").String,
+										Optional:            true,
+									},
+									"action": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify packets to forward or reject.").AddStringEnumDescription("invalid", "permit", "deny").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("invalid", "permit", "deny"),
+										},
+									},
+									"dscp": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Match DSCP.").AddIntegerRangeDescription(0, 63).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 63),
+										},
+									},
+									"destination_address_group": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination address group.").String,
+										Optional:            true,
+									},
+									"destination_port_1": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("First destination port number.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
+										Optional:            true,
+									},
+									"destination_port_2": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Second destination port number.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
+										Optional:            true,
+									},
+									"destination_port_group": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination port group.").String,
+										Optional:            true,
+									},
+									"destination_port_mask": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination Port Mask.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
+										Optional:            true,
+									},
+									"destination_port_operator": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination port operator.").AddStringEnumDescription("none", "lt", "gt", "eq", "neq", "range").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "lt", "gt", "eq", "neq", "range"),
+										},
+									},
+									"destination_prefix": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination IPv6 prefix.").String,
+										Optional:            true,
+									},
+									"destination_prefix_length": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination IPv6 prefix length.").String,
+										Optional:            true,
+									},
+									"destination_prefix_mask": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination IPv6 prefix mask.").String,
+										Optional:            true,
+									},
+									"established": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP EST flag.").String,
+										Optional:            true,
+									},
+									"fin": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP FIN flag.").String,
+										Optional:            true,
+									},
+									"flow_label": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 flow label.").AddIntegerRangeDescription(0, 1048576).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 1048576),
+										},
+									},
+									"fragment": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Non-initial fragment.").String,
+										Optional:            true,
+									},
+									"http_option_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("HTTP option method.").AddStringEnumDescription("invalid", "get", "put", "head", "post", "delete", "trace", "connect").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("invalid", "get", "put", "head", "post", "delete", "trace", "connect"),
+										},
+									},
+									"icmp_code": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ICMPv6 code.").AddIntegerRangeDescription(0, 256).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 256),
+										},
+									},
+									"icmp_type": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ICMPv6 type.").AddIntegerRangeDescription(0, 256).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 256),
+										},
+									},
+									"log": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Log matches against ACL entry.").String,
+										Optional:            true,
+									},
+									"packet_length_1": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("First packet length. Either `invalid` or a number between 19 and 9210.").String,
+										Optional:            true,
+									},
+									"packet_length_2": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Second packet length. Either `invalid` or a number between 19 and 9210.").String,
+										Optional:            true,
+									},
+									"packet_length_operator": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Packet length operator.").AddStringEnumDescription("none", "lt", "gt", "eq", "neq", "range").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "lt", "gt", "eq", "neq", "range"),
+										},
+									},
+									"protocol": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Protocol for access-list entry.").AddStringEnumDescription("ipv6", "tcp", "udp", "gre", "esp", "ahp", "icmp", "eigrp", "ospf", "nos", "pim", "pcp", "sctp", "udf").String,
+										Optional:            true,
+									},
+									"protocol_mask": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Defines the Protocol Mask.").AddStringEnumDescription("ipv6", "tcp", "udp", "gre", "esp", "ahp", "icmp", "eigrp", "ospf", "nos", "pim", "pcp", "sctp", "udf").String,
+										Optional:            true,
+									},
+									"psh": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP PSH flag.").String,
+										Optional:            true,
+									},
+									"redirect": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Redirect action.").String,
+										Optional:            true,
+									},
+									"remark": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Access-list entry comment.").String,
+										Optional:            true,
+									},
+									"rev": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP reversed flag.").String,
+										Optional:            true,
+									},
+									"rst": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP RST flag.").String,
+										Optional:            true,
+									},
+									"source_address_group": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source address group.").String,
+										Optional:            true,
+									},
+									"source_port_1": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("First source port.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
+										Optional:            true,
+									},
+									"source_port_2": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Second source port.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
+										Optional:            true,
+									},
+									"source_port_group": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source port group.").String,
+										Optional:            true,
+									},
+									"source_port_mask": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Defines the Source Port Mask.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
+										Optional:            true,
+									},
+									"source_port_operator": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source port operator.").AddStringEnumDescription("none", "lt", "gt", "eq", "neq", "range").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "lt", "gt", "eq", "neq", "range"),
+										},
+									},
+									"source_prefix": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source IPv6 prefix.").String,
+										Optional:            true,
+									},
+									"source_prefix_length": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source IPv6 prefix length.").String,
+										Optional:            true,
+									},
+									"source_prefix_mask": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source IPv6 prefix mask.").String,
+										Optional:            true,
+									},
+									"syn": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP SYN flag.").String,
+										Optional:            true,
+									},
+									"time_range": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Time range name.").String,
+										Optional:            true,
+									},
+									"urg": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP URG flag.").String,
+										Optional:            true,
+									},
+									"vlan": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("VLAN ID.").AddIntegerRangeDescription(0, 4095).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4095),
+										},
+									},
+									"vni": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("NVE VNI ID. Either `invalid` or a number between 0 and 16777216.").String,
+										Optional:            true,
+									},
+									"capture_session": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Capture session.").AddIntegerRangeDescription(0, 48).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 48),
+										},
+									},
+									"dscp_mask": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Match DSCP mask.").AddIntegerRangeDescription(0, 63).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 63),
+										},
+									},
+									"icmp_string": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ICMPv6 type.").AddStringEnumDescription("unreachable", "no-route", "no-admin", "beyond-scope", "destination-unreachable", "port-unreachable", "packet-too-big", "time-exceeded", "hop-limit", "reassembly-timeout", "parameter-problem", "header", "next-header", "parameter-option", "echo-request", "echo-reply", "mld-query", "mld-report", "mld-reduction", "router-solicitation", "router-advertisement", "nd-ns", "nd-na", "redirect", "router-renumbering", "renum-command", "renum-result", "renum-seq-number", "mldv2").String,
+										Optional:            true,
+									},
+									"load_share": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Load share across redirect ports.").String,
+										Optional:            true,
+									},
+									"priority_all": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increases priority of IPv4/v6 ACE action.").String,
+										Optional:            true,
+									},
+									"redirect_all": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPV4/V6 Redirect all action.").String,
+										Optional:            true,
+									},
+									"tcp_flags_mask": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP flags mask.").AddIntegerRangeDescription(0, 64).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 64),
+										},
+									},
+									"tcp_option_length": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP options length.").AddIntegerRangeDescription(0, 41).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 41),
+										},
+									},
+									"telemetry_path": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Telemetry path action.").String,
+										Optional:            true,
+									},
+									"telemetry_queue": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Telemetry queue action.").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ipv6_ingress_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv6 ingress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"access_list_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Control List name.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"ipv6_ingress_vty_access_list_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access Control List name.").String,
+				Optional:            true,
+			},
+			"ipv6_egress_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv6 egress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"access_list_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Control List name.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"ipv6_egress_vty_access_list_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access Control List name.").String,
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -532,7 +863,7 @@ func (r *AccessListResource) Read(ctx context.Context, req resource.ReadRequest,
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ipv4aclAF,ipv4aclACL,ipv4aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ipv4aclAF,ipv4aclACL,ipv4aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst,ipv6aclAF,ipv6aclACL,ipv6aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

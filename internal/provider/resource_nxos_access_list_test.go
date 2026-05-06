@@ -79,6 +79,49 @@ func TestAccNxosAccessList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ingress_vty_access_list_name", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "egress_interfaces.eth1/10.access_list_name", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "egress_vty_access_list_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.extension_header", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.fragments", "permit-all"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.ignore_routable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.per_ace_statistics", "off"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.ack", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.dscp", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.destination_port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.destination_port_2", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.destination_port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.destination_prefix", "2001:db8:1::0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.destination_prefix_length", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.established", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.fin", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.flow_label", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.fragment", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.http_option_type", "invalid"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.icmp_code", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.icmp_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.log", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.protocol", "tcp"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.psh", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.rev", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.rst", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.source_port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.source_port_2", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.source_port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.source_prefix", "2001:db8:2::0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.source_prefix_length", "48"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.syn", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.urg", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.capture_session", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.dscp_mask", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.load_share", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.priority_all", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.tcp_flags_mask", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.tcp_option_length", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.telemetry_path", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.telemetry_queue", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_ingress_interfaces.eth1/10.access_list_name", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_ingress_vty_access_list_name", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_egress_interfaces.eth1/10.access_list_name", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_egress_vty_access_list_name", "ACL2"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -206,6 +249,65 @@ func testAccNxosAccessListConfig_all() string {
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	egress_vty_access_list_name = "ACL1"` + "\n"
+	config += `	ipv6_access_lists = {` + "\n"
+	config += `		"ACL2" = {` + "\n"
+	config += `			extension_header = "disabled"` + "\n"
+	config += `			fragments = "permit-all"` + "\n"
+	config += `			ignore_routable = false` + "\n"
+	config += `			per_ace_statistics = "off"` + "\n"
+	config += `			entries = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					ack = false` + "\n"
+	config += `					action = "permit"` + "\n"
+	config += `					dscp = 46` + "\n"
+	config += `					destination_port_1 = "443"` + "\n"
+	config += `					destination_port_2 = "0"` + "\n"
+	config += `					destination_port_operator = "eq"` + "\n"
+	config += `					destination_prefix = "2001:db8:1::0"` + "\n"
+	config += `					destination_prefix_length = "64"` + "\n"
+	config += `					established = false` + "\n"
+	config += `					fin = false` + "\n"
+	config += `					flow_label = 0` + "\n"
+	config += `					fragment = false` + "\n"
+	config += `					http_option_type = "invalid"` + "\n"
+	config += `					icmp_code = 0` + "\n"
+	config += `					icmp_type = 0` + "\n"
+	config += `					log = false` + "\n"
+	config += `					protocol = "tcp"` + "\n"
+	config += `					psh = false` + "\n"
+	config += `					rev = false` + "\n"
+	config += `					rst = false` + "\n"
+	config += `					source_port_1 = "443"` + "\n"
+	config += `					source_port_2 = "0"` + "\n"
+	config += `					source_port_operator = "eq"` + "\n"
+	config += `					source_prefix = "2001:db8:2::0"` + "\n"
+	config += `					source_prefix_length = "48"` + "\n"
+	config += `					syn = false` + "\n"
+	config += `					urg = false` + "\n"
+	config += `					capture_session = 1` + "\n"
+	config += `					dscp_mask = 16` + "\n"
+	config += `					load_share = false` + "\n"
+	config += `					priority_all = false` + "\n"
+	config += `					tcp_flags_mask = 0` + "\n"
+	config += `					tcp_option_length = 0` + "\n"
+	config += `					telemetry_path = false` + "\n"
+	config += `					telemetry_queue = false` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ipv6_ingress_interfaces = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `			access_list_name = "ACL2"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ipv6_ingress_vty_access_list_name = "ACL2"` + "\n"
+	config += `	ipv6_egress_interfaces = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `			access_list_name = "ACL2"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ipv6_egress_vty_access_list_name = "ACL2"` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

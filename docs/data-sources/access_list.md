@@ -3,14 +3,14 @@
 page_title: "nxos_access_list Data Source - terraform-provider-nxos"
 subcategory: "Security"
 description: |-
-  This data source can read IPv4 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.
+  This data source can read IPv4 and IPv6 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.
   API Documentation
-  aclEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Entity/ipv4aclAF https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AF/ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACL/ipv4aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACE/aclPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/aclIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/
+  aclEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Entity/ipv4aclAF https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AF/ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACL/ipv4aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACE/aclPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/aclIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/ipv6aclAF https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:AF/ipv6aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:ACL/ipv6aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:ACE/aclPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/aclIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/
 ---
 
 # nxos_access_list (Data Source)
 
-This data source can read IPv4 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.
+This data source can read IPv4 and IPv6 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.
 
 ### API Documentation
 
@@ -18,6 +18,20 @@ This data source can read IPv4 access control lists (ACLs) from NX-OS devices, i
 - [ipv4aclAF](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AF/)
 - [ipv4aclACL](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACL/)
 - [ipv4aclACE](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACE/)
+- [aclPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/)
+- [aclIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/)
+- [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/)
+- [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/)
+- [aclVty](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/)
+- [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/)
+- [aclEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/)
+- [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/)
+- [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/)
+- [aclVty](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/)
+- [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/)
+- [ipv6aclAF](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:AF/)
+- [ipv6aclACL](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:ACL/)
+- [ipv6aclACE](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:ACE/)
 - [aclPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/)
 - [aclIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/)
 - [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/)
@@ -55,6 +69,14 @@ data "nxos_access_list" "example" {
 - `ingress_interfaces` (Attributes Map) List of interfaces with IPv4 ingress access list policy.
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--ingress_interfaces))
 - `ingress_vty_access_list_name` (String) Access Control List name.
+- `ipv6_access_lists` (Attributes Map) List of IPv6 Access Lists.
+  - Map key: `name` - Name of Access lists. (see [below for nested schema](#nestedatt--ipv6_access_lists))
+- `ipv6_egress_interfaces` (Attributes Map) List of interfaces with IPv6 egress access list policy.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--ipv6_egress_interfaces))
+- `ipv6_egress_vty_access_list_name` (String) Access Control List name.
+- `ipv6_ingress_interfaces` (Attributes Map) List of interfaces with IPv6 ingress access list policy.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--ipv6_ingress_interfaces))
+- `ipv6_ingress_vty_access_list_name` (String) Access Control List name.
 
 <a id="nestedatt--access_lists"></a>
 ### Nested Schema for `access_lists`
@@ -144,6 +166,97 @@ Read-Only:
 
 <a id="nestedatt--ingress_interfaces"></a>
 ### Nested Schema for `ingress_interfaces`
+
+Read-Only:
+
+- `access_list_name` (String) Access Control List name.
+
+
+<a id="nestedatt--ipv6_access_lists"></a>
+### Nested Schema for `ipv6_access_lists`
+
+Read-Only:
+
+- `entries` (Attributes Map) Access list entries.
+  - Map key: `sequence_number` - Sequence number.
+  - Key range: `0`-`4294967295` (see [below for nested schema](#nestedatt--ipv6_access_lists--entries))
+- `extension_header` (String) IPv6 Extension header rule.
+- `fragments` (String) Fragments type for IPv4 and IPv6.
+- `ignore_routable` (Boolean) Ignore Multicast Routed ACLs.
+- `per_ace_statistics` (String) Per Access Control Entries statistics.
+
+<a id="nestedatt--ipv6_access_lists--entries"></a>
+### Nested Schema for `ipv6_access_lists.entries`
+
+Read-Only:
+
+- `ack` (Boolean) TCP ACK flag.
+- `action` (String) Specify packets to forward or reject.
+- `capture_session` (Number) Capture session.
+- `destination_address_group` (String) Destination address group.
+- `destination_port_1` (String) First destination port number.
+- `destination_port_2` (String) Second destination port number.
+- `destination_port_group` (String) Destination port group.
+- `destination_port_mask` (String) Destination Port Mask.
+- `destination_port_operator` (String) Destination port operator.
+- `destination_prefix` (String) Destination IPv6 prefix.
+- `destination_prefix_length` (String) Destination IPv6 prefix length.
+- `destination_prefix_mask` (String) Destination IPv6 prefix mask.
+- `dscp` (Number) Match DSCP.
+- `dscp_mask` (Number) Match DSCP mask.
+- `established` (Boolean) TCP EST flag.
+- `fin` (Boolean) TCP FIN flag.
+- `flow_label` (Number) IPv6 flow label.
+- `fragment` (Boolean) Non-initial fragment.
+- `http_option_type` (String) HTTP option method.
+- `icmp_code` (Number) ICMPv6 code.
+- `icmp_string` (String) ICMPv6 type.
+- `icmp_type` (Number) ICMPv6 type.
+- `load_share` (Boolean) Load share across redirect ports.
+- `log` (Boolean) Log matches against ACL entry.
+- `packet_length_1` (String) First packet length. Either `invalid` or a number between 19 and 9210.
+- `packet_length_2` (String) Second packet length. Either `invalid` or a number between 19 and 9210.
+- `packet_length_operator` (String) Packet length operator.
+- `priority_all` (Boolean) Increases priority of IPv4/v6 ACE action.
+- `protocol` (String) Protocol for access-list entry.
+- `protocol_mask` (String) Defines the Protocol Mask.
+- `psh` (Boolean) TCP PSH flag.
+- `redirect` (String) Redirect action.
+- `redirect_all` (String) IPV4/V6 Redirect all action.
+- `remark` (String) Access-list entry comment.
+- `rev` (Boolean) TCP reversed flag.
+- `rst` (Boolean) TCP RST flag.
+- `source_address_group` (String) Source address group.
+- `source_port_1` (String) First source port.
+- `source_port_2` (String) Second source port.
+- `source_port_group` (String) Source port group.
+- `source_port_mask` (String) Defines the Source Port Mask.
+- `source_port_operator` (String) Source port operator.
+- `source_prefix` (String) Source IPv6 prefix.
+- `source_prefix_length` (String) Source IPv6 prefix length.
+- `source_prefix_mask` (String) Source IPv6 prefix mask.
+- `syn` (Boolean) TCP SYN flag.
+- `tcp_flags_mask` (Number) TCP flags mask.
+- `tcp_option_length` (Number) TCP options length.
+- `telemetry_path` (Boolean) Telemetry path action.
+- `telemetry_queue` (Boolean) Telemetry queue action.
+- `time_range` (String) Time range name.
+- `urg` (Boolean) TCP URG flag.
+- `vlan` (Number) VLAN ID.
+- `vni` (String) NVE VNI ID. Either `invalid` or a number between 0 and 16777216.
+
+
+
+<a id="nestedatt--ipv6_egress_interfaces"></a>
+### Nested Schema for `ipv6_egress_interfaces`
+
+Read-Only:
+
+- `access_list_name` (String) Access Control List name.
+
+
+<a id="nestedatt--ipv6_ingress_interfaces"></a>
+### Nested Schema for `ipv6_ingress_interfaces`
 
 Read-Only:
 

@@ -57,7 +57,7 @@ func (d *AccessListDataSource) Metadata(_ context.Context, req datasource.Metada
 func (d *AccessListDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read IPv4 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.").AddApiDocumentation("aclEntity", "Security%20and%20Policing/acl:Entity/", []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read IPv4 and IPv6 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.").AddApiDocumentation("aclEntity", "Security%20and%20Policing/acl:Entity/", []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "ipv6aclAF", "ipv6aclACL", "ipv6aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/ipv6acl:AF/", "Security%20and%20Policing/ipv6acl:ACL/", "Security%20and%20Policing/ipv6acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -360,6 +360,286 @@ func (d *AccessListDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Access Control List name.",
 				Computed:            true,
 			},
+			"ipv6_access_lists": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 Access Lists.\n  - Map key: `name` - Name of Access lists.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"extension_header": schema.StringAttribute{
+							MarkdownDescription: "IPv6 Extension header rule.",
+							Computed:            true,
+						},
+						"fragments": schema.StringAttribute{
+							MarkdownDescription: "Fragments type for IPv4 and IPv6.",
+							Computed:            true,
+						},
+						"ignore_routable": schema.BoolAttribute{
+							MarkdownDescription: "Ignore Multicast Routed ACLs.",
+							Computed:            true,
+						},
+						"per_ace_statistics": schema.StringAttribute{
+							MarkdownDescription: "Per Access Control Entries statistics.",
+							Computed:            true,
+						},
+						"entries": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access list entries.\n  - Map key: `sequence_number` - Sequence number.\n  - Key range: `0`-`4294967295`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ack": schema.BoolAttribute{
+										MarkdownDescription: "TCP ACK flag.",
+										Computed:            true,
+									},
+									"action": schema.StringAttribute{
+										MarkdownDescription: "Specify packets to forward or reject.",
+										Computed:            true,
+									},
+									"dscp": schema.Int64Attribute{
+										MarkdownDescription: "Match DSCP.",
+										Computed:            true,
+									},
+									"destination_address_group": schema.StringAttribute{
+										MarkdownDescription: "Destination address group.",
+										Computed:            true,
+									},
+									"destination_port_1": schema.StringAttribute{
+										MarkdownDescription: "First destination port number.",
+										Computed:            true,
+									},
+									"destination_port_2": schema.StringAttribute{
+										MarkdownDescription: "Second destination port number.",
+										Computed:            true,
+									},
+									"destination_port_group": schema.StringAttribute{
+										MarkdownDescription: "Destination port group.",
+										Computed:            true,
+									},
+									"destination_port_mask": schema.StringAttribute{
+										MarkdownDescription: "Destination Port Mask.",
+										Computed:            true,
+									},
+									"destination_port_operator": schema.StringAttribute{
+										MarkdownDescription: "Destination port operator.",
+										Computed:            true,
+									},
+									"destination_prefix": schema.StringAttribute{
+										MarkdownDescription: "Destination IPv6 prefix.",
+										Computed:            true,
+									},
+									"destination_prefix_length": schema.StringAttribute{
+										MarkdownDescription: "Destination IPv6 prefix length.",
+										Computed:            true,
+									},
+									"destination_prefix_mask": schema.StringAttribute{
+										MarkdownDescription: "Destination IPv6 prefix mask.",
+										Computed:            true,
+									},
+									"established": schema.BoolAttribute{
+										MarkdownDescription: "TCP EST flag.",
+										Computed:            true,
+									},
+									"fin": schema.BoolAttribute{
+										MarkdownDescription: "TCP FIN flag.",
+										Computed:            true,
+									},
+									"flow_label": schema.Int64Attribute{
+										MarkdownDescription: "IPv6 flow label.",
+										Computed:            true,
+									},
+									"fragment": schema.BoolAttribute{
+										MarkdownDescription: "Non-initial fragment.",
+										Computed:            true,
+									},
+									"http_option_type": schema.StringAttribute{
+										MarkdownDescription: "HTTP option method.",
+										Computed:            true,
+									},
+									"icmp_code": schema.Int64Attribute{
+										MarkdownDescription: "ICMPv6 code.",
+										Computed:            true,
+									},
+									"icmp_type": schema.Int64Attribute{
+										MarkdownDescription: "ICMPv6 type.",
+										Computed:            true,
+									},
+									"log": schema.BoolAttribute{
+										MarkdownDescription: "Log matches against ACL entry.",
+										Computed:            true,
+									},
+									"packet_length_1": schema.StringAttribute{
+										MarkdownDescription: "First packet length. Either `invalid` or a number between 19 and 9210.",
+										Computed:            true,
+									},
+									"packet_length_2": schema.StringAttribute{
+										MarkdownDescription: "Second packet length. Either `invalid` or a number between 19 and 9210.",
+										Computed:            true,
+									},
+									"packet_length_operator": schema.StringAttribute{
+										MarkdownDescription: "Packet length operator.",
+										Computed:            true,
+									},
+									"protocol": schema.StringAttribute{
+										MarkdownDescription: "Protocol for access-list entry.",
+										Computed:            true,
+									},
+									"protocol_mask": schema.StringAttribute{
+										MarkdownDescription: "Defines the Protocol Mask.",
+										Computed:            true,
+									},
+									"psh": schema.BoolAttribute{
+										MarkdownDescription: "TCP PSH flag.",
+										Computed:            true,
+									},
+									"redirect": schema.StringAttribute{
+										MarkdownDescription: "Redirect action.",
+										Computed:            true,
+									},
+									"remark": schema.StringAttribute{
+										MarkdownDescription: "Access-list entry comment.",
+										Computed:            true,
+									},
+									"rev": schema.BoolAttribute{
+										MarkdownDescription: "TCP reversed flag.",
+										Computed:            true,
+									},
+									"rst": schema.BoolAttribute{
+										MarkdownDescription: "TCP RST flag.",
+										Computed:            true,
+									},
+									"source_address_group": schema.StringAttribute{
+										MarkdownDescription: "Source address group.",
+										Computed:            true,
+									},
+									"source_port_1": schema.StringAttribute{
+										MarkdownDescription: "First source port.",
+										Computed:            true,
+									},
+									"source_port_2": schema.StringAttribute{
+										MarkdownDescription: "Second source port.",
+										Computed:            true,
+									},
+									"source_port_group": schema.StringAttribute{
+										MarkdownDescription: "Source port group.",
+										Computed:            true,
+									},
+									"source_port_mask": schema.StringAttribute{
+										MarkdownDescription: "Defines the Source Port Mask.",
+										Computed:            true,
+									},
+									"source_port_operator": schema.StringAttribute{
+										MarkdownDescription: "Source port operator.",
+										Computed:            true,
+									},
+									"source_prefix": schema.StringAttribute{
+										MarkdownDescription: "Source IPv6 prefix.",
+										Computed:            true,
+									},
+									"source_prefix_length": schema.StringAttribute{
+										MarkdownDescription: "Source IPv6 prefix length.",
+										Computed:            true,
+									},
+									"source_prefix_mask": schema.StringAttribute{
+										MarkdownDescription: "Source IPv6 prefix mask.",
+										Computed:            true,
+									},
+									"syn": schema.BoolAttribute{
+										MarkdownDescription: "TCP SYN flag.",
+										Computed:            true,
+									},
+									"time_range": schema.StringAttribute{
+										MarkdownDescription: "Time range name.",
+										Computed:            true,
+									},
+									"urg": schema.BoolAttribute{
+										MarkdownDescription: "TCP URG flag.",
+										Computed:            true,
+									},
+									"vlan": schema.Int64Attribute{
+										MarkdownDescription: "VLAN ID.",
+										Computed:            true,
+									},
+									"vni": schema.StringAttribute{
+										MarkdownDescription: "NVE VNI ID. Either `invalid` or a number between 0 and 16777216.",
+										Computed:            true,
+									},
+									"capture_session": schema.Int64Attribute{
+										MarkdownDescription: "Capture session.",
+										Computed:            true,
+									},
+									"dscp_mask": schema.Int64Attribute{
+										MarkdownDescription: "Match DSCP mask.",
+										Computed:            true,
+									},
+									"icmp_string": schema.StringAttribute{
+										MarkdownDescription: "ICMPv6 type.",
+										Computed:            true,
+									},
+									"load_share": schema.BoolAttribute{
+										MarkdownDescription: "Load share across redirect ports.",
+										Computed:            true,
+									},
+									"priority_all": schema.BoolAttribute{
+										MarkdownDescription: "Increases priority of IPv4/v6 ACE action.",
+										Computed:            true,
+									},
+									"redirect_all": schema.StringAttribute{
+										MarkdownDescription: "IPV4/V6 Redirect all action.",
+										Computed:            true,
+									},
+									"tcp_flags_mask": schema.Int64Attribute{
+										MarkdownDescription: "TCP flags mask.",
+										Computed:            true,
+									},
+									"tcp_option_length": schema.Int64Attribute{
+										MarkdownDescription: "TCP options length.",
+										Computed:            true,
+									},
+									"telemetry_path": schema.BoolAttribute{
+										MarkdownDescription: "Telemetry path action.",
+										Computed:            true,
+									},
+									"telemetry_queue": schema.BoolAttribute{
+										MarkdownDescription: "Telemetry queue action.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ipv6_ingress_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv6 ingress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"access_list_name": schema.StringAttribute{
+							MarkdownDescription: "Access Control List name.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv6_ingress_vty_access_list_name": schema.StringAttribute{
+				MarkdownDescription: "Access Control List name.",
+				Computed:            true,
+			},
+			"ipv6_egress_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv6 egress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"access_list_name": schema.StringAttribute{
+							MarkdownDescription: "Access Control List name.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv6_egress_vty_access_list_name": schema.StringAttribute{
+				MarkdownDescription: "Access Control List name.",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -392,7 +672,7 @@ func (d *AccessListDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ipv4aclAF,ipv4aclACL,ipv4aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ipv4aclAF,ipv4aclACL,ipv4aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst,ipv6aclAF,ipv6aclACL,ipv6aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

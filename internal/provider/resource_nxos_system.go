@@ -2135,303 +2135,303 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
-			"entity_extended_acl_disable_redirect_share": schema.StringAttribute{
+			"platform_extended_acl_disable_redirect_share": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable acl redirect share.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"entity_extended_atomic_update": schema.StringAttribute{
+			"platform_extended_atomic_update": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("To optimize enable/disable atomic update.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"entity_extended_atomic_update_strict": schema.StringAttribute{
+			"platform_extended_atomic_update_strict": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Strict check on TCAM size for using mutliple features.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"entity_extended_counter_manager_bfd_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_bfd_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile BFD feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_ecn_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_ecn_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile ECN feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_egress_acl_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_egress_acl_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile EgrACL feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_bfd": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_bfd": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile BFD feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_ecn": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_ecn": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile ECN feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_egress_acl": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_egress_acl": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile EgrACL feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_ingress_acl": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_ingress_acl": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile IngrACL feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_l2vni": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_l2vni": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile L2VNI feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_l3vni": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_l3vni": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile L3VNI feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_si": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_si": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile SI feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_svi": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_svi": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile SVI feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_tunnel": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_tunnel": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile Tunnel feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_vlan": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_vlan": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile VLAN feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_feature_voq": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_voq": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile Voq feature.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_ingress_acl_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_ingress_acl_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile IngrACL feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_l2vni_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_l2vni_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile L2VNI feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_l3vni_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_l3vni_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile L3VNI feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_si_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_si_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile SI feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_svi_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_svi_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile SVI feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_tunnel_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_tunnel_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile Tunnel feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_vlan_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_vlan_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile VLAN feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_counter_manager_voq_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_voq_scale": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile Voq feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_dme_load_interval": schema.Int64Attribute{
+			"platform_extended_dme_load_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DME Load Interval.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"entity_extended_egress_l2_qos_ifacl_label_size": schema.StringAttribute{
+			"platform_extended_egress_l2_qos_ifacl_label_size": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("To set the EGRESS IFACL QOS label size to 6 bits and the default value is 5 bits.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"entity_extended_gpe5_timer_enable": schema.BoolAttribute{
+			"platform_extended_gpe5_timer_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Gpe-5-timer enable/disable.").String,
 				Optional:            true,
 			},
-			"entity_extended_hardware_qos_latency_optimized": schema.BoolAttribute{
+			"platform_extended_hardware_qos_latency_optimized": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable/Disable latency optimization.").String,
 				Optional:            true,
 			},
-			"entity_extended_ingress_pacl_ifacl_label_size": schema.StringAttribute{
+			"platform_extended_ingress_pacl_ifacl_label_size": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("To set the ingress IFACL TCAM label size to 6 bits and the default value is 5 bits.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"entity_extended_ingress_vrf_nat_bd_label_width": schema.Int64Attribute{
+			"platform_extended_ingress_vrf_nat_bd_label_width": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("To set the ingress Vrf NAT TCAM label size to user configured width of 0-6 bits.").AddIntegerRangeDescription(0, 6).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 6),
 				},
 			},
-			"entity_extended_multicast_nlb_stick_port_channel": schema.StringAttribute{
+			"platform_extended_multicast_nlb_stick_port_channel": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware profile multicast nlb on a stick Port Channel configuration.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"entity_extended_multicast_stats_disable": schema.StringAttribute{
+			"platform_extended_multicast_stats_disable": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware profile multicast stats-disable.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"entity_extended_mpls_qos_pipe_mode": schema.StringAttribute{
+			"platform_extended_mpls_qos_pipe_mode": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Fretta MPLS QoS Pipe Mode.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"entity_extended_multicast_priority": schema.Int64Attribute{
+			"platform_extended_multicast_priority": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("set mcast priority range based on user choice.").AddIntegerRangeDescription(0, 15).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 15),
 				},
 			},
-			"entity_extended_pbr_ecmp_paths": schema.Int64Attribute{
+			"platform_extended_pbr_ecmp_paths": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Policy Based Routing ECMP Paths limit.").AddIntegerRangeDescription(1, 64).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 64),
 				},
 			},
-			"entity_extended_pbr_fast_convergence": schema.StringAttribute{
+			"platform_extended_pbr_fast_convergence": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Policy-Based Routing Fast Convergence.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"entity_extended_pbr_match_default_route": schema.StringAttribute{
+			"platform_extended_pbr_match_default_route": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("set pbr match default route.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"entity_extended_ptp_correction_hardware": schema.BoolAttribute{
+			"platform_extended_ptp_correction_hardware": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Ptp frequnecy correction from hardware or software.").String,
 				Optional:            true,
 			},
-			"entity_extended_si_flex_stats": schema.StringAttribute{
+			"platform_extended_si_flex_stats": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware profile sub-interface flex-stats.").AddStringEnumDescription("disable", "l3", "l2").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "l3", "l2"),
 				},
 			},
-			"entity_extended_stats_template": schema.StringAttribute{
+			"platform_extended_stats_template": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Used to enable stats on given template on S1.").AddStringEnumDescription("l3qos", "racl", "span-acl", "pbr").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("l3qos", "racl", "span-acl", "pbr"),
 				},
 			},
-			"entity_extended_storm_control_priority": schema.StringAttribute{
+			"platform_extended_storm_control_priority": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("storm control priority.").AddStringEnumDescription("default", "drop-l3", "drop-l2", "drop-all").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("default", "drop-l3", "drop-l2", "drop-all"),
 				},
 			},
-			"entity_extended_tcam_default_result": schema.StringAttribute{
+			"platform_extended_tcam_default_result": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Default access-list result during non-atomic hardware update.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"entity_extended_udf_netflow_rtp_multicast_enabled": schema.BoolAttribute{
+			"platform_extended_udf_netflow_rtp_multicast_enabled": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable/Disable RTP for Munticast-flow on enable/disable.").String,
 				Optional:            true,
 			},
-			"entity_extended_vrf_aware_nat_enable": schema.StringAttribute{
+			"platform_extended_vrf_aware_nat_enable": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure Vrf Aware Nat.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{

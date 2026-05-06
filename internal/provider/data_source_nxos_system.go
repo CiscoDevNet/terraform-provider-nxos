@@ -1364,183 +1364,183 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
-			"entity_extended_acl_disable_redirect_share": schema.StringAttribute{
+			"platform_extended_acl_disable_redirect_share": schema.StringAttribute{
 				MarkdownDescription: "Disable acl redirect share.",
 				Computed:            true,
 			},
-			"entity_extended_atomic_update": schema.StringAttribute{
+			"platform_extended_atomic_update": schema.StringAttribute{
 				MarkdownDescription: "To optimize enable/disable atomic update.",
 				Computed:            true,
 			},
-			"entity_extended_atomic_update_strict": schema.StringAttribute{
+			"platform_extended_atomic_update_strict": schema.StringAttribute{
 				MarkdownDescription: "Strict check on TCAM size for using mutliple features.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_bfd_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_bfd_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile BFD feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_ecn_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_ecn_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile ECN feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_egress_acl_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_egress_acl_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile EgrACL feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_bfd": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_bfd": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile BFD feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_ecn": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_ecn": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile ECN feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_egress_acl": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_egress_acl": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile EgrACL feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_ingress_acl": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_ingress_acl": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile IngrACL feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_l2vni": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_l2vni": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile L2VNI feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_l3vni": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_l3vni": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile L3VNI feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_si": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_si": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile SI feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_svi": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_svi": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile SVI feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_tunnel": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_tunnel": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile Tunnel feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_vlan": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_vlan": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile VLAN feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_feature_voq": schema.Int64Attribute{
+			"platform_extended_counter_manager_feature_voq": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile Voq feature.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_ingress_acl_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_ingress_acl_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile IngrACL feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_l2vni_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_l2vni_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile L2VNI feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_l3vni_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_l3vni_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile L3VNI feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_si_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_si_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile SI feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_svi_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_svi_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile SVI feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_tunnel_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_tunnel_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile Tunnel feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_vlan_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_vlan_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile VLAN feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_counter_manager_voq_scale": schema.Int64Attribute{
+			"platform_extended_counter_manager_voq_scale": schema.Int64Attribute{
 				MarkdownDescription: "Used to configure hardware profile Voq feature-scale.",
 				Computed:            true,
 			},
-			"entity_extended_dme_load_interval": schema.Int64Attribute{
+			"platform_extended_dme_load_interval": schema.Int64Attribute{
 				MarkdownDescription: "DME Load Interval.",
 				Computed:            true,
 			},
-			"entity_extended_egress_l2_qos_ifacl_label_size": schema.StringAttribute{
+			"platform_extended_egress_l2_qos_ifacl_label_size": schema.StringAttribute{
 				MarkdownDescription: "To set the EGRESS IFACL QOS label size to 6 bits and the default value is 5 bits.",
 				Computed:            true,
 			},
-			"entity_extended_gpe5_timer_enable": schema.BoolAttribute{
+			"platform_extended_gpe5_timer_enable": schema.BoolAttribute{
 				MarkdownDescription: "Gpe-5-timer enable/disable.",
 				Computed:            true,
 			},
-			"entity_extended_hardware_qos_latency_optimized": schema.BoolAttribute{
+			"platform_extended_hardware_qos_latency_optimized": schema.BoolAttribute{
 				MarkdownDescription: "Enable/Disable latency optimization.",
 				Computed:            true,
 			},
-			"entity_extended_ingress_pacl_ifacl_label_size": schema.StringAttribute{
+			"platform_extended_ingress_pacl_ifacl_label_size": schema.StringAttribute{
 				MarkdownDescription: "To set the ingress IFACL TCAM label size to 6 bits and the default value is 5 bits.",
 				Computed:            true,
 			},
-			"entity_extended_ingress_vrf_nat_bd_label_width": schema.Int64Attribute{
+			"platform_extended_ingress_vrf_nat_bd_label_width": schema.Int64Attribute{
 				MarkdownDescription: "To set the ingress Vrf NAT TCAM label size to user configured width of 0-6 bits.",
 				Computed:            true,
 			},
-			"entity_extended_multicast_nlb_stick_port_channel": schema.StringAttribute{
+			"platform_extended_multicast_nlb_stick_port_channel": schema.StringAttribute{
 				MarkdownDescription: "Used to enable/disable hardware profile multicast nlb on a stick Port Channel configuration.",
 				Computed:            true,
 			},
-			"entity_extended_multicast_stats_disable": schema.StringAttribute{
+			"platform_extended_multicast_stats_disable": schema.StringAttribute{
 				MarkdownDescription: "Used to enable/disable hardware profile multicast stats-disable.",
 				Computed:            true,
 			},
-			"entity_extended_mpls_qos_pipe_mode": schema.StringAttribute{
+			"platform_extended_mpls_qos_pipe_mode": schema.StringAttribute{
 				MarkdownDescription: "Fretta MPLS QoS Pipe Mode.",
 				Computed:            true,
 			},
-			"entity_extended_multicast_priority": schema.Int64Attribute{
+			"platform_extended_multicast_priority": schema.Int64Attribute{
 				MarkdownDescription: "set mcast priority range based on user choice.",
 				Computed:            true,
 			},
-			"entity_extended_pbr_ecmp_paths": schema.Int64Attribute{
+			"platform_extended_pbr_ecmp_paths": schema.Int64Attribute{
 				MarkdownDescription: "Policy Based Routing ECMP Paths limit.",
 				Computed:            true,
 			},
-			"entity_extended_pbr_fast_convergence": schema.StringAttribute{
+			"platform_extended_pbr_fast_convergence": schema.StringAttribute{
 				MarkdownDescription: "Policy-Based Routing Fast Convergence.",
 				Computed:            true,
 			},
-			"entity_extended_pbr_match_default_route": schema.StringAttribute{
+			"platform_extended_pbr_match_default_route": schema.StringAttribute{
 				MarkdownDescription: "set pbr match default route.",
 				Computed:            true,
 			},
-			"entity_extended_ptp_correction_hardware": schema.BoolAttribute{
+			"platform_extended_ptp_correction_hardware": schema.BoolAttribute{
 				MarkdownDescription: "Ptp frequnecy correction from hardware or software.",
 				Computed:            true,
 			},
-			"entity_extended_si_flex_stats": schema.StringAttribute{
+			"platform_extended_si_flex_stats": schema.StringAttribute{
 				MarkdownDescription: "Used to enable/disable hardware profile sub-interface flex-stats.",
 				Computed:            true,
 			},
-			"entity_extended_stats_template": schema.StringAttribute{
+			"platform_extended_stats_template": schema.StringAttribute{
 				MarkdownDescription: "Used to enable stats on given template on S1.",
 				Computed:            true,
 			},
-			"entity_extended_storm_control_priority": schema.StringAttribute{
+			"platform_extended_storm_control_priority": schema.StringAttribute{
 				MarkdownDescription: "storm control priority.",
 				Computed:            true,
 			},
-			"entity_extended_tcam_default_result": schema.StringAttribute{
+			"platform_extended_tcam_default_result": schema.StringAttribute{
 				MarkdownDescription: "Default access-list result during non-atomic hardware update.",
 				Computed:            true,
 			},
-			"entity_extended_udf_netflow_rtp_multicast_enabled": schema.BoolAttribute{
+			"platform_extended_udf_netflow_rtp_multicast_enabled": schema.BoolAttribute{
 				MarkdownDescription: "Enable/Disable RTP for Munticast-flow on enable/disable.",
 				Computed:            true,
 			},
-			"entity_extended_vrf_aware_nat_enable": schema.StringAttribute{
+			"platform_extended_vrf_aware_nat_enable": schema.StringAttribute{
 				MarkdownDescription: "Configure Vrf Aware Nat.",
 				Computed:            true,
 			},

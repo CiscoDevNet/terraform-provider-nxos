@@ -65,13 +65,16 @@ type NetflowRecords struct {
 
 type NetflowMonitors struct {
 	Description     types.String                              `tfsdk:"description"`
+	RecordTargetDn  types.String                              `tfsdk:"record_target_dn"`
 	ExporterBuckets map[string]NetflowMonitorsExporterBuckets `tfsdk:"exporter_buckets"`
 }
 
 type NetflowMonitorsExporterBuckets struct {
-	Description types.String `tfsdk:"description"`
-	HashHigh    types.Int64  `tfsdk:"hash_high"`
-	HashLow     types.Int64  `tfsdk:"hash_low"`
+	Description       types.String `tfsdk:"description"`
+	HashHigh          types.Int64  `tfsdk:"hash_high"`
+	HashLow           types.Int64  `tfsdk:"hash_low"`
+	Exporter1TargetDn types.String `tfsdk:"exporter1_target_dn"`
+	Exporter2TargetDn types.String `tfsdk:"exporter2_target_dn"`
 }
 
 type NetflowHardwareProfiles struct {
@@ -219,6 +222,13 @@ func (data Netflow) toBody(config Netflow) nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".flowMonitor.children"
 			_ = nestedChildrenPath
+			attrs = "{}"
+			if !child.RecordTargetDn.IsUnknown() && !child.RecordTargetDn.IsNull() && !configChild.RecordTargetDn.IsNull() {
+				attrs, _ = sjson.Set(attrs, "tDn", child.RecordTargetDn.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.flowRsRecord.attributes", attrs)
+			}
 			for key, child := range child.ExporterBuckets {
 				configChild, configChildOk := configChild.ExporterBuckets[key]
 				_ = configChild
@@ -235,6 +245,25 @@ func (data Netflow) toBody(config Netflow) nxos.Body {
 					attrs, _ = sjson.Set(attrs, "hashLo", strconv.FormatInt(child.HashLow.ValueInt64(), 10))
 				}
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.flowExporterBucket.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".flowExporterBucket.children"
+					_ = nestedChildrenPath
+					attrs = "{}"
+					if !child.Exporter1TargetDn.IsUnknown() && !child.Exporter1TargetDn.IsNull() && !configChild.Exporter1TargetDn.IsNull() {
+						attrs, _ = sjson.Set(attrs, "tDn", child.Exporter1TargetDn.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.flowRsExporter1.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.Exporter2TargetDn.IsUnknown() && !child.Exporter2TargetDn.IsNull() && !configChild.Exporter2TargetDn.IsNull() {
+						attrs, _ = sjson.Set(attrs, "tDn", child.Exporter2TargetDn.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.flowRsExporter2.attributes", attrs)
+					}
+				}
 			}
 		}
 	}
@@ -348,6 +377,20 @@ func (data *Netflow) fromBody(res gjson.Result) {
 						var child NetflowMonitors
 						child.Description = types.StringValue(value.Get("attributes.description").String())
 						mapKey := value.Get("attributes.name").String()
+						{
+							var rflowRsRecord gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("flowRsRecord.attributes.rn").String()
+									if rnValue == "rtrecord" {
+										rflowRsRecord = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.RecordTargetDn = types.StringValue(rflowRsRecord.Get("flowRsRecord.attributes.tDn").String())
+						}
 						value.Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
 								nestedV.ForEach(
@@ -358,6 +401,34 @@ func (data *Netflow) fromBody(res gjson.Result) {
 											nestedChildflowExporterBucket.HashHigh = types.Int64Value(nestedValue.Get("attributes.hashHi").Int())
 											nestedChildflowExporterBucket.HashLow = types.Int64Value(nestedValue.Get("attributes.hashLo").Int())
 											nestedMapKey := nestedValue.Get("attributes.id").String()
+											{
+												var rflowRsExporter1 gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("flowRsExporter1.attributes.rn").String()
+														if rnValue == "rtexporter1" {
+															rflowRsExporter1 = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildflowExporterBucket.Exporter1TargetDn = types.StringValue(rflowRsExporter1.Get("flowRsExporter1.attributes.tDn").String())
+											}
+											{
+												var rflowRsExporter2 gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("flowRsExporter2.attributes.rn").String()
+														if rnValue == "rtexporter2" {
+															rflowRsExporter2 = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildflowExporterBucket.Exporter2TargetDn = types.StringValue(rflowRsExporter2.Get("flowRsExporter2.attributes.tDn").String())
+											}
 											if child.ExporterBuckets == nil {
 												child.ExporterBuckets = make(map[string]NetflowMonitorsExporterBuckets)
 											}
@@ -551,6 +622,24 @@ func (data *Netflow) updateFromBody(res gjson.Result) {
 		} else {
 			item.Description = types.StringNull()
 		}
+		{
+			var rflowRsRecord gjson.Result
+			rflowMonitor.Get("flowMonitor.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("flowRsRecord.attributes.rn").String()
+					if rnValue == "rtrecord" {
+						rflowRsRecord = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.RecordTargetDn.IsNull() {
+				item.RecordTargetDn = types.StringValue(rflowRsRecord.Get("flowRsRecord.attributes.tDn").String())
+			} else {
+				item.RecordTargetDn = types.StringNull()
+			}
+		}
 		for nc := range item.ExporterBuckets {
 			ncItem := item.ExporterBuckets[nc]
 			var rflowExporterBucket gjson.Result
@@ -581,6 +670,42 @@ func (data *Netflow) updateFromBody(res gjson.Result) {
 				ncItem.HashLow = types.Int64Value(rflowExporterBucket.Get("flowExporterBucket.attributes.hashLo").Int())
 			} else {
 				ncItem.HashLow = types.Int64Null()
+			}
+			{
+				var rflowRsExporter1 gjson.Result
+				rflowExporterBucket.Get("flowExporterBucket.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("flowRsExporter1.attributes.rn").String()
+						if rnValue == "rtexporter1" {
+							rflowRsExporter1 = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.Exporter1TargetDn.IsNull() {
+					ncItem.Exporter1TargetDn = types.StringValue(rflowRsExporter1.Get("flowRsExporter1.attributes.tDn").String())
+				} else {
+					ncItem.Exporter1TargetDn = types.StringNull()
+				}
+			}
+			{
+				var rflowRsExporter2 gjson.Result
+				rflowExporterBucket.Get("flowExporterBucket.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("flowRsExporter2.attributes.rn").String()
+						if rnValue == "rtexporter2" {
+							rflowRsExporter2 = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.Exporter2TargetDn.IsNull() {
+					ncItem.Exporter2TargetDn = types.StringValue(rflowRsExporter2.Get("flowRsExporter2.attributes.tDn").String())
+				} else {
+					ncItem.Exporter2TargetDn = types.StringNull()
+				}
 			}
 			item.ExporterBuckets[nc] = ncItem
 		}
@@ -768,6 +893,22 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 				deleteBody, _ = sjson.Set(deleteBody, "flowExporterBucket.attributes.rn", stateChild.getRn(stateChildKey))
 				deleteBody, _ = sjson.Set(deleteBody, "flowExporterBucket.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for di_ := range stateItemdi.ExporterBuckets {
+			if _, found := planItemdi.ExporterBuckets[di_]; !found {
+				continue
+			}
+			stateItemdi_ := stateItemdi.ExporterBuckets[di_]
+			matchBodyPathdi_ := ""
+			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+				if mv.Get("flowExporterBucket.attributes.rn").String() == stateItemdi_.getRn(di_) {
+					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".flowExporterBucket.children"
+					break
+				}
+			}
+			if matchBodyPathdi_ == "" {
+				continue
 			}
 		}
 	}

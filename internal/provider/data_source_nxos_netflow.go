@@ -57,7 +57,7 @@ func (d *NetflowDataSource) Metadata(_ context.Context, req datasource.MetadataR
 func (d *NetflowDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Netflow configuration on NX-OS devices, including exporters, records, monitors, hardware profiles, and class maps.").AddApiDocumentation("flowEntity", "Flow/flow:Entity/", []string{"flowExporter", "flowRecord", "flowMonitor", "flowExporterBucket", "flowHwProfile", "flowClassMap", "flowMatchAcl"}, []string{"Flow/flow:Exporter/", "Flow/flow:Record/", "Flow/flow:Monitor/", "Flow/flow:ExporterBucket/", "Flow/flow:HwProfile/", "Flow/flow:ClassMap/", "Flow/flow:MatchAcl/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Netflow configuration on NX-OS devices, including exporters, records, monitors, hardware profiles, and class maps.").AddApiDocumentation("flowEntity", "Flow/flow:Entity/", []string{"flowExporter", "flowRecord", "flowMonitor", "flowRsRecord", "flowExporterBucket", "flowRsExporter1", "flowRsExporter2", "flowHwProfile", "flowClassMap", "flowMatchAcl"}, []string{"Flow/flow:Exporter/", "Flow/flow:Record/", "Flow/flow:Monitor/", "Flow/flow:RsRecord/", "Flow/flow:ExporterBucket/", "Flow/flow:RsExporter1/", "Flow/flow:RsExporter2/", "Flow/flow:HwProfile/", "Flow/flow:ClassMap/", "Flow/flow:MatchAcl/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -133,6 +133,10 @@ func (d *NetflowDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 							MarkdownDescription: "Flow monitor description.",
 							Computed:            true,
 						},
+						"record_target_dn": schema.StringAttribute{
+							MarkdownDescription: "Target record DN. For example: `sys/flow/fr-[RECORD1]`.",
+							Computed:            true,
+						},
 						"exporter_buckets": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Flow exporter bucket configuration.\n  - Map key: `id` - Flow exporter bucket ID.\n  - Key range: `0`-`255`").String,
 							Computed:            true,
@@ -148,6 +152,14 @@ func (d *NetflowDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									},
 									"hash_low": schema.Int64Attribute{
 										MarkdownDescription: "Hash low.",
+										Computed:            true,
+									},
+									"exporter1_target_dn": schema.StringAttribute{
+										MarkdownDescription: "Target exporter DN. For example: `sys/flow/fe-[EXPORTER1]`.",
+										Computed:            true,
+									},
+									"exporter2_target_dn": schema.StringAttribute{
+										MarkdownDescription: "Target exporter DN. For example: `sys/flow/fe-[EXPORTER2]`.",
 										Computed:            true,
 									},
 								},
@@ -235,7 +247,7 @@ func (d *NetflowDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "flowExporter,flowRecord,flowMonitor,flowExporterBucket,flowHwProfile,flowClassMap,flowMatchAcl")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "flowExporter,flowRecord,flowMonitor,flowRsRecord,flowExporterBucket,flowRsExporter1,flowRsExporter2,flowHwProfile,flowClassMap,flowMatchAcl")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

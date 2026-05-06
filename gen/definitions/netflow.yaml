@@ -140,6 +140,18 @@ child_classes:
         description: 'Flow monitor description.'
         example: 'Netflow monitor'
     child_classes:
+      - class_name: flowRsRecord
+        doc_path: Flow/flow:RsRecord/
+        rn: rtrecord
+        type: single
+        tf_name: record
+        description: 'Reference to flow record.'
+        attributes:
+          - nxos_name: tDn
+            tf_name: record_target_dn
+            type: String
+            description: 'Target record DN. For example: `sys/flow/fr-[RECORD1]`.'
+            example: sys/flow/fr-[RECORD1]
       - class_name: flowExporterBucket
         doc_path: Flow/flow:ExporterBucket/
         rn: feb-[%v]
@@ -174,6 +186,31 @@ child_classes:
             min_int: 0
             max_int: 4294967295
             example: 0
+        child_classes:
+          - class_name: flowRsExporter1
+            doc_path: Flow/flow:RsExporter1/
+            rn: rtexporter1
+            type: single
+            tf_name: exporter1
+            description: 'Reference to flow exporter 1.'
+            attributes:
+              - nxos_name: tDn
+                tf_name: exporter1_target_dn
+                type: String
+                description: 'Target exporter DN. For example: `sys/flow/fe-[EXPORTER1]`.'
+                example: sys/flow/fe-[EXPORTER1]
+          - class_name: flowRsExporter2
+            doc_path: Flow/flow:RsExporter2/
+            rn: rtexporter2
+            type: single
+            tf_name: exporter2
+            description: 'Reference to flow exporter 2.'
+            attributes:
+              - nxos_name: tDn
+                tf_name: exporter2_target_dn
+                type: String
+                description: 'Target exporter DN. For example: `sys/flow/fe-[EXPORTER2]`.'
+                example: sys/flow/fe-[EXPORTER2]
   - class_name: flowHwProfile
     doc_path: Flow/flow:HwProfile/
     rn: hp-[%s]

@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This resource can manage the Netflow configuration on NX-OS devices, including exporters, records, monitors, hardware profiles, and class maps.
   API Documentation
-  flowEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Entity/flowExporter https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Exporter/flowRecord https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Record/flowMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Monitor/flowExporterBucket https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:ExporterBucket/flowHwProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:HwProfile/flowClassMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:ClassMap/flowMatchAcl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:MatchAcl/
+  flowEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Entity/flowExporter https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Exporter/flowRecord https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Record/flowMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Monitor/flowRsRecord https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsRecord/flowExporterBucket https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:ExporterBucket/flowRsExporter1 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsExporter1/flowRsExporter2 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsExporter2/flowHwProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:HwProfile/flowClassMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:ClassMap/flowMatchAcl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:MatchAcl/
 ---
 
 # nxos_netflow (Resource)
@@ -18,7 +18,10 @@ This resource can manage the Netflow configuration on NX-OS devices, including e
 - [flowExporter](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Exporter/)
 - [flowRecord](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Record/)
 - [flowMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Monitor/)
+- [flowRsRecord](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsRecord/)
 - [flowExporterBucket](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:ExporterBucket/)
+- [flowRsExporter1](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsExporter1/)
+- [flowRsExporter2](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsExporter2/)
 - [flowHwProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:HwProfile/)
 - [flowClassMap](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:ClassMap/)
 - [flowMatchAcl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:MatchAcl/)
@@ -47,12 +50,15 @@ resource "nxos_netflow" "example" {
   }
   monitors = {
     "MONITOR1" = {
-      description = "Netflow monitor"
+      description      = "Netflow monitor"
+      record_target_dn = "sys/flow/fr-[RECORD1]"
       exporter_buckets = {
         "1" = {
-          description = "Bucket 1"
-          hash_high   = 4294967295
-          hash_low    = 0
+          description         = "Bucket 1"
+          hash_high           = 4294967295
+          hash_low            = 0
+          exporter1_target_dn = "sys/flow/fe-[EXPORTER1]"
+          exporter2_target_dn = "sys/flow/fe-[EXPORTER2]"
         }
       }
     }
@@ -155,6 +161,7 @@ Optional:
 - `exporter_buckets` (Attributes Map) Flow exporter bucket configuration.
   - Map key: `id` - Flow exporter bucket ID.
   - Key range: `0`-`255` (see [below for nested schema](#nestedatt--monitors--exporter_buckets))
+- `record_target_dn` (String) Target record DN. For example: `sys/flow/fr-[RECORD1]`.
 
 <a id="nestedatt--monitors--exporter_buckets"></a>
 ### Nested Schema for `monitors.exporter_buckets`
@@ -162,6 +169,8 @@ Optional:
 Optional:
 
 - `description` (String) Flow exporter bucket description.
+- `exporter1_target_dn` (String) Target exporter DN. For example: `sys/flow/fe-[EXPORTER1]`.
+- `exporter2_target_dn` (String) Target exporter DN. For example: `sys/flow/fe-[EXPORTER2]`.
 - `hash_high` (Number) Hash high.
   - Range: `0`-`4294967295`
 - `hash_low` (Number) Hash low.

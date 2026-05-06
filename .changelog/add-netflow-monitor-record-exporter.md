@@ -1,0 +1,1 @@
+- Add monitor record reference, exporter bucket exporter references to `nxos_netflow` resource and data source

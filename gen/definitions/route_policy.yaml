@@ -359,7 +359,6 @@ child_classes:
                     description: 'DN of Access List. For example: `sys/acl/ipv4/name-[ACL1]` or `sys/rpm/accesslist-[1.2.3.4/32]`.'
                     example: sys/rpm/accesslist-[1.2.3.4/32]
                     id: true
-                    exclude_test: true
           - class_name: rtmapSetRegComm
             doc_path: Routing%20and%20Forwarding/rtmap:SetRegComm/
             rn: sregcomm

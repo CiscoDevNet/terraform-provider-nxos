@@ -1,1 +1,0 @@
-- Add destination profile and use-vrf configuration to `nxos_telemetry` resource and data source

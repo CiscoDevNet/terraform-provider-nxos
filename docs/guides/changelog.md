@@ -7,6 +7,17 @@ description: |-
 
 # Changelog
 
+## 0.11.2
+
+- Add flow monitor, record, collector, and collector bucket configuration to `nxos_analytics` resource and data source
+- Add forward instance target configuration to `nxos_analytics` resource and data source
+- Add support for analytics match ACL configuration to `nxos_analytics` resource and data source
+- Add monitor record reference, exporter bucket exporter references to `nxos_netflow` resource and data source
+- Add extended platform entity configuration to `nxos_system` resource and data source
+- Add set policy tag configuration to `nxos_route_policy` resource and data source
+- Add destination profile and use-vrf configuration to `nxos_telemetry` resource and data source
+- Add route map policy configuration to `nxos_vrf` resource and data source
+
 ## 0.11.1
 
 - Add Priority Flow Control (PFC) configuration to `nxos_physical_interface` resource and data source

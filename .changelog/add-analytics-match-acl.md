@@ -1,1 +1,0 @@
-- Add `analyticsMatchAcl` child class to `nxos_analytics` resource and data source

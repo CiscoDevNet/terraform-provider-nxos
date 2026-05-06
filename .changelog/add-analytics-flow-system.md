@@ -1,2 +1,0 @@
-- Add flow monitor configuration to `nxos_analytics` resource and data source
-- Add forward instance target configuration to `nxos_analytics` resource and data source

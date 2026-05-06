@@ -97,6 +97,13 @@ type AnalyticsInstancesEvents struct {
 }
 
 type AnalyticsInstancesPolicies struct {
+	Description types.String                                   `tfsdk:"description"`
+	MatchAcls   map[string]AnalyticsInstancesPoliciesMatchAcls `tfsdk:"match_acls"`
+}
+
+type AnalyticsInstancesPoliciesMatchAcls struct {
+	AclName     types.String `tfsdk:"acl_name"`
+	FilterType  types.String `tfsdk:"filter_type"`
 	Description types.String `tfsdk:"description"`
 }
 
@@ -193,6 +200,10 @@ func (data AnalyticsInstancesEvents) getRn(key string) string {
 
 func (data AnalyticsInstancesPolicies) getRn(key string) string {
 	return fmt.Sprintf("policy-[%s]", key)
+}
+
+func (data AnalyticsInstancesPoliciesMatchAcls) getRn(key string) string {
+	return fmt.Sprintf("acl-[%s]", key)
 }
 
 func (data AnalyticsInstancesRecords) getRn(key string) string {
@@ -362,6 +373,28 @@ func (data Analytics) toBody(config Analytics) nxos.Body {
 					attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 				}
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsPolicy.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".analyticsPolicy.children"
+					_ = nestedChildrenPath
+					for key, child := range child.MatchAcls {
+						configChild, configChildOk := configChild.MatchAcls[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "name", key)
+						if configChildOk && !child.AclName.IsUnknown() && !child.AclName.IsNull() && !configChild.AclName.IsNull() {
+							attrs, _ = sjson.Set(attrs, "aclName", child.AclName.ValueString())
+						}
+						if configChildOk && !child.FilterType.IsUnknown() && !child.FilterType.IsNull() && !configChild.FilterType.IsNull() {
+							attrs, _ = sjson.Set(attrs, "fltType", child.FilterType.ValueString())
+						}
+						if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+							attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsMatchAcl.attributes", attrs)
+					}
+				}
 			}
 			for key, child := range child.Records {
 				configChild, configChildOk := configChild.Records[key]
@@ -654,6 +687,27 @@ func (data *Analytics) fromBody(res gjson.Result) {
 											var nestedChildanalyticsPolicy AnalyticsInstancesPolicies
 											nestedChildanalyticsPolicy.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
 											nestedMapKey := nestedValue.Get("attributes.name").String()
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "analyticsMatchAcl" {
+																var nestedChildanalyticsMatchAcl AnalyticsInstancesPoliciesMatchAcls
+																nestedChildanalyticsMatchAcl.AclName = types.StringValue(nestedValue.Get("attributes.aclName").String())
+																nestedChildanalyticsMatchAcl.FilterType = types.StringValue(nestedValue.Get("attributes.fltType").String())
+																nestedChildanalyticsMatchAcl.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+																nestedMapKey := nestedValue.Get("attributes.name").String()
+																if nestedChildanalyticsPolicy.MatchAcls == nil {
+																	nestedChildanalyticsPolicy.MatchAcls = make(map[string]AnalyticsInstancesPoliciesMatchAcls)
+																}
+																nestedChildanalyticsPolicy.MatchAcls[nestedMapKey] = nestedChildanalyticsMatchAcl
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
 											if child.Policies == nil {
 												child.Policies = make(map[string]AnalyticsInstancesPolicies)
 											}
@@ -1133,6 +1187,39 @@ func (data *Analytics) updateFromBody(res gjson.Result) {
 			} else {
 				ncItem.Description = types.StringNull()
 			}
+			for nc_ := range ncItem.MatchAcls {
+				nc_Item := ncItem.MatchAcls[nc_]
+				var ranalyticsMatchAcl gjson.Result
+				ranalyticsPolicy.Get("analyticsPolicy.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("analyticsMatchAcl.attributes.name").String() == nc_ {
+							ranalyticsMatchAcl = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ranalyticsMatchAcl.Exists() {
+					delete(ncItem.MatchAcls, nc_)
+					continue
+				}
+				if !nc_Item.AclName.IsNull() {
+					nc_Item.AclName = types.StringValue(ranalyticsMatchAcl.Get("analyticsMatchAcl.attributes.aclName").String())
+				} else {
+					nc_Item.AclName = types.StringNull()
+				}
+				if !nc_Item.FilterType.IsNull() {
+					nc_Item.FilterType = types.StringValue(ranalyticsMatchAcl.Get("analyticsMatchAcl.attributes.fltType").String())
+				} else {
+					nc_Item.FilterType = types.StringNull()
+				}
+				if !nc_Item.Description.IsNull() {
+					nc_Item.Description = types.StringValue(ranalyticsMatchAcl.Get("analyticsMatchAcl.attributes.descr").String())
+				} else {
+					nc_Item.Description = types.StringNull()
+				}
+				ncItem.MatchAcls[nc_] = nc_Item
+			}
 			item.Policies[nc] = ncItem
 		}
 		for nc := range item.Records {
@@ -1584,6 +1671,32 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 				deleteBody, _ = sjson.Set(deleteBody, "analyticsPolicy.attributes.rn", stateChild.getRn(stateChildKey))
 				deleteBody, _ = sjson.Set(deleteBody, "analyticsPolicy.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for di_ := range stateItemdi.Policies {
+			if _, found := planItemdi.Policies[di_]; !found {
+				continue
+			}
+			stateItemdi_ := stateItemdi.Policies[di_]
+			planItemdi_ := planItemdi.Policies[di_]
+			matchBodyPathdi_ := ""
+			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+				if mv.Get("analyticsPolicy.attributes.rn").String() == stateItemdi_.getRn(di_) {
+					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".analyticsPolicy.children"
+					break
+				}
+			}
+			if matchBodyPathdi_ == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi_.MatchAcls {
+				if _, found := planItemdi_.MatchAcls[stateChildKey]; !found {
+					stateChild := stateItemdi_.MatchAcls[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "analyticsMatchAcl.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "analyticsMatchAcl.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+				}
 			}
 		}
 		for stateChildKey := range stateItemdi.Records {

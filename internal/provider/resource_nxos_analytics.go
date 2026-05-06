@@ -63,7 +63,7 @@ func (r *AnalyticsResource) Metadata(ctx context.Context, req resource.MetadataR
 func (r *AnalyticsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.").AddApiDocumentation("analyticsEntity", "System/analytics:Entity/", []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsRecordP", "analyticsCollector", "analyticsMonitor", "analyticsRsRecordPAtt", "analyticsCollectorBucket", "analyticsRsCollectorAtt", "analyticsTrafficAnalytics", "analyticsFwdInstTarget", "analyticsRsMonitorAtt", "analyticsRsProfAtt", "analyticsRsEventsAtt", "analyticsRsPolicyAtt"}, []string{"System/analytics:Inst/", "System/analytics:Profile/", "System/analytics:Events/", "System/analytics:Policy/", "System/analytics:RecordP/", "System/analytics:Collector/", "System/analytics:Monitor/", "System/analytics:RsRecordPAtt/", "System/analytics:CollectorBucket/", "System/analytics:RsCollectorAtt/", "System/analytics:TrafficAnalytics/", "System/analytics:FwdInstTarget/", "System/analytics:RsMonitorAtt/", "System/analytics:RsProfAtt/", "System/analytics:RsEventsAtt/", "System/analytics:RsPolicyAtt/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.").AddApiDocumentation("analyticsEntity", "System/analytics:Entity/", []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsMatchAcl", "analyticsRecordP", "analyticsCollector", "analyticsMonitor", "analyticsRsRecordPAtt", "analyticsCollectorBucket", "analyticsRsCollectorAtt", "analyticsTrafficAnalytics", "analyticsFwdInstTarget", "analyticsRsMonitorAtt", "analyticsRsProfAtt", "analyticsRsEventsAtt", "analyticsRsPolicyAtt"}, []string{"System/analytics:Inst/", "System/analytics:Profile/", "System/analytics:Events/", "System/analytics:Policy/", "System/analytics:MatchAcl/", "System/analytics:RecordP/", "System/analytics:Collector/", "System/analytics:Monitor/", "System/analytics:RsRecordPAtt/", "System/analytics:CollectorBucket/", "System/analytics:RsCollectorAtt/", "System/analytics:TrafficAnalytics/", "System/analytics:FwdInstTarget/", "System/analytics:RsMonitorAtt/", "System/analytics:RsProfAtt/", "System/analytics:RsEventsAtt/", "System/analytics:RsPolicyAtt/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -272,6 +272,29 @@ func (r *AnalyticsResource) Schema(ctx context.Context, req resource.SchemaReque
 									"description": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
 										Optional:            true,
+									},
+									"match_acls": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Match ACL.\n  - Map key: `name` - Object name.").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"acl_name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Match using ACL.").String,
+													Optional:            true,
+												},
+												"filter_type": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("ACL Filter Type.").AddStringEnumDescription("ipv4", "ipv6", "ce").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("ipv4", "ipv6", "ce"),
+													},
+												},
+												"description": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+													Optional:            true,
+												},
+											},
+										},
 									},
 								},
 							},
@@ -622,7 +645,7 @@ func (r *AnalyticsResource) Read(ctx context.Context, req resource.ReadRequest, 
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "analyticsInst,analyticsProfile,analyticsEvents,analyticsPolicy,analyticsRecordP,analyticsCollector,analyticsMonitor,analyticsRsRecordPAtt,analyticsCollectorBucket,analyticsRsCollectorAtt,analyticsTrafficAnalytics,analyticsFwdInstTarget,analyticsRsMonitorAtt,analyticsRsProfAtt,analyticsRsEventsAtt,analyticsRsPolicyAtt")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "analyticsInst,analyticsProfile,analyticsEvents,analyticsPolicy,analyticsMatchAcl,analyticsRecordP,analyticsCollector,analyticsMonitor,analyticsRsRecordPAtt,analyticsCollectorBucket,analyticsRsCollectorAtt,analyticsTrafficAnalytics,analyticsFwdInstTarget,analyticsRsMonitorAtt,analyticsRsProfAtt,analyticsRsEventsAtt,analyticsRsPolicyAtt")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

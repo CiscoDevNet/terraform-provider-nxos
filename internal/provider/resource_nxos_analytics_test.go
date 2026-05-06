@@ -71,6 +71,9 @@ func TestAccNxosAnalytics(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.events.EVENTS1.ttl_match_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.events.EVENTS1.ttl_match_value", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.policies.POLICY1.description", "My policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.policies.POLICY1.match_acls.ACL1.acl_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.policies.POLICY1.match_acls.ACL1.filter_type", "ipv6"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.policies.POLICY1.match_acls.ACL1.description", "My match ACL"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.records.RECORD1.collect", "count-bytes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.records.RECORD1.description", "My record"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.records.RECORD1.match", "src-ipv4"))
@@ -220,6 +223,13 @@ func testAccNxosAnalyticsConfig_all() string {
 	config += `			policies = {` + "\n"
 	config += `				"POLICY1" = {` + "\n"
 	config += `					description = "My policy"` + "\n"
+	config += `					match_acls = {` + "\n"
+	config += `						"ACL1" = {` + "\n"
+	config += `							acl_name = "ACL1"` + "\n"
+	config += `							filter_type = "ipv6"` + "\n"
+	config += `							description = "My match ACL"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `			records = {` + "\n"

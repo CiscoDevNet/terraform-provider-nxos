@@ -79,7 +79,6 @@ func TestAccNxosAccessList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ingress_vty_access_list_name", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "egress_interfaces.eth1/10.access_list_name", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "egress_vty_access_list_name", "ACL1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.extension_header", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.fragments", "permit-all"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.ignore_routable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.per_ace_statistics", "off"))
@@ -115,7 +114,6 @@ func TestAccNxosAccessList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.load_share", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.priority_all", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.tcp_flags_mask", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.tcp_option_length", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.telemetry_path", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.telemetry_queue", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_ingress_interfaces.eth1/10.access_list_name", "ACL2"))
@@ -251,7 +249,6 @@ func testAccNxosAccessListConfig_all() string {
 	config += `	egress_vty_access_list_name = "ACL1"` + "\n"
 	config += `	ipv6_access_lists = {` + "\n"
 	config += `		"ACL2" = {` + "\n"
-	config += `			extension_header = "disabled"` + "\n"
 	config += `			fragments = "permit-all"` + "\n"
 	config += `			ignore_routable = false` + "\n"
 	config += `			per_ace_statistics = "off"` + "\n"
@@ -289,7 +286,6 @@ func testAccNxosAccessListConfig_all() string {
 	config += `					load_share = false` + "\n"
 	config += `					priority_all = false` + "\n"
 	config += `					tcp_flags_mask = 0` + "\n"
-	config += `					tcp_option_length = 0` + "\n"
 	config += `					telemetry_path = false` + "\n"
 	config += `					telemetry_queue = false` + "\n"
 	config += `				}` + "\n"

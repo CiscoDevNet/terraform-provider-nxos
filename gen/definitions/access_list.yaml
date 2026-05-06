@@ -961,6 +961,7 @@ child_classes:
               - disabled
               - deny-all
               - permit-all
+            exclude_test: true
             example: disabled
           - nxos_name: fragments
             tf_name: fragments
@@ -1718,6 +1719,7 @@ child_classes:
                 min_int: 0
                 max_int: 41
                 description: "TCP options length."
+                exclude_test: true
                 example: 0
               - nxos_name: telemetryPath
                 tf_name: telemetry_path

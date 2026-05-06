@@ -110,7 +110,6 @@ resource "nxos_access_list" "example" {
   egress_vty_access_list_name = "ACL1"
   ipv6_access_lists = {
     "ACL2" = {
-      extension_header   = "disabled"
       fragments          = "permit-all"
       ignore_routable    = false
       per_ace_statistics = "off"
@@ -148,7 +147,6 @@ resource "nxos_access_list" "example" {
           load_share                = false
           priority_all              = false
           tcp_flags_mask            = 0
-          tcp_option_length         = 0
           telemetry_path            = false
           telemetry_queue           = false
         }

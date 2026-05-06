@@ -19,12 +19,15 @@ resource "nxos_netflow" "example" {
   }
   monitors = {
     "MONITOR1" = {
-      description = "Netflow monitor"
+      description      = "Netflow monitor"
+      record_target_dn = "sys/flow/fr-[RECORD1]"
       exporter_buckets = {
         "1" = {
-          description = "Bucket 1"
-          hash_high   = 4294967295
-          hash_low    = 0
+          description         = "Bucket 1"
+          hash_high           = 4294967295
+          hash_low            = 0
+          exporter1_target_dn = "sys/flow/fe-[EXPORTER1]"
+          exporter2_target_dn = "sys/flow/fe-[EXPORTER2]"
         }
       }
     }

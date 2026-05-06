@@ -46,9 +46,12 @@ func TestAccDataSourceNxosNetflow(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "records.RECORD1.collect_parameters", "count-bytes"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "records.RECORD1.match_parameters", "src-ipv4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.description", "Netflow monitor"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.record_target_dn", "sys/flow/fr-[RECORD1]"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.exporter_buckets.1.description", "Bucket 1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.exporter_buckets.1.hash_high", "4294967295"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.exporter_buckets.1.hash_low", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.exporter_buckets.1.exporter1_target_dn", "sys/flow/fe-[EXPORTER1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.exporter_buckets.1.exporter2_target_dn", "sys/flow/fe-[EXPORTER2]"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "hardware_profiles.HWPROFILE1.description", "Hardware profile"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "hardware_profiles.HWPROFILE1.burst_interval_shift", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "hardware_profiles.HWPROFILE1.export_interval", "200"))
@@ -108,11 +111,14 @@ func testAccDataSourceNxosNetflowConfig() string {
 	config += `	monitors = {` + "\n"
 	config += `		"MONITOR1" = {` + "\n"
 	config += `			description = "Netflow monitor"` + "\n"
+	config += `			record_target_dn = "sys/flow/fr-[RECORD1]"` + "\n"
 	config += `			exporter_buckets = {` + "\n"
 	config += `				"1" = {` + "\n"
 	config += `					description = "Bucket 1"` + "\n"
 	config += `					hash_high = 4294967295` + "\n"
 	config += `					hash_low = 0` + "\n"
+	config += `					exporter1_target_dn = "sys/flow/fe-[EXPORTER1]"` + "\n"
+	config += `					exporter2_target_dn = "sys/flow/fe-[EXPORTER2]"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

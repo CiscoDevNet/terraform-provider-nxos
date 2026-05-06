@@ -51,6 +51,27 @@ resource "nxos_analytics" "example" {
       traffic_analytics_service_database_size        = 1000
       traffic_analytics_troubleshoot_export_interval = 30
       traffic_analytics_udp_port_list                = "1234"
+      monitors = {
+        "MONITOR1" = {
+          description = "My monitor"
+        }
+      }
+      forward_instance_targets = {
+        "1" = {
+          default_policy               = "deny"
+          collector_id                 = 1
+          direction                    = "out"
+          filter_type                  = "ipv6"
+          instance_name                = "Ethernet1/1"
+          switch_latency               = true
+          system_exporter_id           = 201
+          traffic_analytics_enabled    = true
+          monitor_attachment_target_dn = "sys/analytics/inst-[analytics]/monitor-[MONITOR1]"
+          profile_attachment_target_dn = "sys/analytics/inst-[analytics]/prof-[PROFILE1]"
+          events_attachment_target_dn  = "sys/analytics/inst-[analytics]/events-[EVENTS1]"
+          policy_attachment_target_dn  = "sys/analytics/inst-[analytics]/policy-[POLICY1]"
+        }
+      }
     }
   }
 }

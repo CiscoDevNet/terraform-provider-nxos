@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This data source can read the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.
   API Documentation
-  analyticsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Entity/analyticsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Inst/analyticsProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Profile/analyticsEvents https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/analyticsPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/analyticsTrafficAnalytics https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/
+  analyticsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Entity/analyticsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Inst/analyticsProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Profile/analyticsEvents https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/analyticsPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/analyticsTrafficAnalytics https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/analyticsMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Monitor/analyticsFwdInstTarget https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:FwdInstTarget/analyticsRsMonitorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsMonitorAtt/analyticsRsProfAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsProfAtt/analyticsRsEventsAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsEventsAtt/analyticsRsPolicyAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsPolicyAtt/
 ---
 
 # nxos_analytics (Data Source)
@@ -20,6 +20,12 @@ This data source can read the Analytics configuration on NX-OS devices, includin
 - [analyticsEvents](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/)
 - [analyticsPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/)
 - [analyticsTrafficAnalytics](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/)
+- [analyticsMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Monitor/)
+- [analyticsFwdInstTarget](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:FwdInstTarget/)
+- [analyticsRsMonitorAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsMonitorAtt/)
+- [analyticsRsProfAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsProfAtt/)
+- [analyticsRsEventsAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsEventsAtt/)
+- [analyticsRsPolicyAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsPolicyAtt/)
 
 ## Example Usage
 
@@ -53,7 +59,12 @@ Read-Only:
 - `enable_analytics_submode` (Boolean) Enable Analytics Submode funxtionality.
 - `events` (Attributes Map) Configure FTE Events Information.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--instances--events))
+- `forward_instance_targets` (Attributes Map) Forward Instance Target.
+  - Map key: `id` - Analytics Target identifier.
+  - Key range: `0`-`16777215` (see [below for nested schema](#nestedatt--instances--forward_instance_targets))
 - `geneve_enable` (Boolean) Enable parsing of Geneve header mentioned in RFC8926.
+- `monitors` (Attributes Map) Flow Monitor.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--instances--monitors))
 - `policies` (Attributes Map) Policy.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--instances--policies))
 - `profiles` (Attributes Map) Profile.
@@ -88,6 +99,33 @@ Read-Only:
 - `tos_enable` (Boolean) Configuration to enable events with given IP DSCP values.
 - `ttl_match_enable` (Boolean) Configuration to enable ttl match events.
 - `ttl_match_value` (Number) Configuration to capture events for given ttl value.
+
+
+<a id="nestedatt--instances--forward_instance_targets"></a>
+### Nested Schema for `instances.forward_instance_targets`
+
+Read-Only:
+
+- `collector_id` (Number) Analytics exporter Id to identify the exporting hardware instance.
+- `default_policy` (String) Default Filtering Policy.
+- `direction` (String) Analytics profile direction.
+- `events_attachment_target_dn` (String) Target Events DN. For example: `sys/analytics/inst-[analytics]/events-[EVENTS1]`.
+- `filter_type` (String) Analytics Target filter type.
+- `instance_name` (String) Interface details to identify the hardware instance.
+- `monitor_attachment_target_dn` (String) Target Monitor DN. For example: `sys/analytics/inst-[analytics]/monitor-[MONITOR1]`.
+- `policy_attachment_target_dn` (String) Target Policy DN. For example: `sys/analytics/inst-[analytics]/policy-[POLICY1]`.
+- `profile_attachment_target_dn` (String) Target Profile DN. For example: `sys/analytics/inst-[analytics]/prof-[PROFILE1]`.
+- `switch_latency` (Boolean) Switch latency mode is applied at system level.
+- `system_exporter_id` (Number) Base exporter Id applied at system level.
+- `traffic_analytics_enabled` (Boolean) Traffic Analytics mode is applied at system level.
+
+
+<a id="nestedatt--instances--monitors"></a>
+### Nested Schema for `instances.monitors`
+
+Read-Only:
+
+- `description` (String) Description of the specified attribute.
 
 
 <a id="nestedatt--instances--policies"></a>

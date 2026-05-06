@@ -44,21 +44,23 @@ type Analytics struct {
 }
 
 type AnalyticsInstances struct {
-	AdminState                                 types.String                          `tfsdk:"admin_state"`
-	CollectTunnelHeader                        types.Bool                            `tfsdk:"collect_tunnel_header"`
-	Control                                    types.String                          `tfsdk:"control"`
-	EnableAnalyticsSubmode                     types.Bool                            `tfsdk:"enable_analytics_submode"`
-	GeneveEnable                               types.Bool                            `tfsdk:"geneve_enable"`
-	Timeout                                    types.Int64                           `tfsdk:"timeout"`
-	Profiles                                   map[string]AnalyticsInstancesProfiles `tfsdk:"profiles"`
-	Events                                     map[string]AnalyticsInstancesEvents   `tfsdk:"events"`
-	Policies                                   map[string]AnalyticsInstancesPolicies `tfsdk:"policies"`
-	TrafficAnalyticsDescription                types.String                          `tfsdk:"traffic_analytics_description"`
-	TrafficAnalyticsInterfaceMode              types.Bool                            `tfsdk:"traffic_analytics_interface_mode"`
-	TrafficAnalyticsName                       types.String                          `tfsdk:"traffic_analytics_name"`
-	TrafficAnalyticsServiceDatabaseSize        types.Int64                           `tfsdk:"traffic_analytics_service_database_size"`
-	TrafficAnalyticsTroubleshootExportInterval types.Int64                           `tfsdk:"traffic_analytics_troubleshoot_export_interval"`
-	TrafficAnalyticsUdpPortList                types.String                          `tfsdk:"traffic_analytics_udp_port_list"`
+	AdminState                                 types.String                                        `tfsdk:"admin_state"`
+	CollectTunnelHeader                        types.Bool                                          `tfsdk:"collect_tunnel_header"`
+	Control                                    types.String                                        `tfsdk:"control"`
+	EnableAnalyticsSubmode                     types.Bool                                          `tfsdk:"enable_analytics_submode"`
+	GeneveEnable                               types.Bool                                          `tfsdk:"geneve_enable"`
+	Timeout                                    types.Int64                                         `tfsdk:"timeout"`
+	Profiles                                   map[string]AnalyticsInstancesProfiles               `tfsdk:"profiles"`
+	Events                                     map[string]AnalyticsInstancesEvents                 `tfsdk:"events"`
+	Policies                                   map[string]AnalyticsInstancesPolicies               `tfsdk:"policies"`
+	TrafficAnalyticsDescription                types.String                                        `tfsdk:"traffic_analytics_description"`
+	TrafficAnalyticsInterfaceMode              types.Bool                                          `tfsdk:"traffic_analytics_interface_mode"`
+	TrafficAnalyticsName                       types.String                                        `tfsdk:"traffic_analytics_name"`
+	TrafficAnalyticsServiceDatabaseSize        types.Int64                                         `tfsdk:"traffic_analytics_service_database_size"`
+	TrafficAnalyticsTroubleshootExportInterval types.Int64                                         `tfsdk:"traffic_analytics_troubleshoot_export_interval"`
+	TrafficAnalyticsUdpPortList                types.String                                        `tfsdk:"traffic_analytics_udp_port_list"`
+	Monitors                                   map[string]AnalyticsInstancesMonitors               `tfsdk:"monitors"`
+	ForwardInstanceTargets                     map[string]AnalyticsInstancesForwardInstanceTargets `tfsdk:"forward_instance_targets"`
 }
 
 type AnalyticsInstancesProfiles struct {
@@ -94,6 +96,25 @@ type AnalyticsInstancesEvents struct {
 
 type AnalyticsInstancesPolicies struct {
 	Description types.String `tfsdk:"description"`
+}
+
+type AnalyticsInstancesMonitors struct {
+	Description types.String `tfsdk:"description"`
+}
+
+type AnalyticsInstancesForwardInstanceTargets struct {
+	DefaultPolicy             types.String `tfsdk:"default_policy"`
+	CollectorId               types.Int64  `tfsdk:"collector_id"`
+	Direction                 types.String `tfsdk:"direction"`
+	FilterType                types.String `tfsdk:"filter_type"`
+	InstanceName              types.String `tfsdk:"instance_name"`
+	SwitchLatency             types.Bool   `tfsdk:"switch_latency"`
+	SystemExporterId          types.Int64  `tfsdk:"system_exporter_id"`
+	TrafficAnalyticsEnabled   types.Bool   `tfsdk:"traffic_analytics_enabled"`
+	MonitorAttachmentTargetDn types.String `tfsdk:"monitor_attachment_target_dn"`
+	ProfileAttachmentTargetDn types.String `tfsdk:"profile_attachment_target_dn"`
+	EventsAttachmentTargetDn  types.String `tfsdk:"events_attachment_target_dn"`
+	PolicyAttachmentTargetDn  types.String `tfsdk:"policy_attachment_target_dn"`
 }
 
 type AnalyticsIdentity struct {
@@ -138,6 +159,14 @@ func (data AnalyticsInstancesEvents) getRn(key string) string {
 
 func (data AnalyticsInstancesPolicies) getRn(key string) string {
 	return fmt.Sprintf("policy-[%s]", key)
+}
+
+func (data AnalyticsInstancesMonitors) getRn(key string) string {
+	return fmt.Sprintf("monitor-[%s]", key)
+}
+
+func (data AnalyticsInstancesForwardInstanceTargets) getRn(key string) string {
+	return fmt.Sprintf("fwdinst-[%v]", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
 func (data Analytics) getClassName() string {
@@ -306,6 +335,82 @@ func (data Analytics) toBody(config Analytics) nxos.Body {
 			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsTrafficAnalytics.attributes", attrs)
 			}
+			for key, child := range child.Monitors {
+				configChild, configChildOk := configChild.Monitors[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "name", key)
+				if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+					attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsMonitor.attributes", attrs)
+			}
+			for key, child := range child.ForwardInstanceTargets {
+				configChild, configChildOk := configChild.ForwardInstanceTargets[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "id", key)
+				if configChildOk && !child.DefaultPolicy.IsUnknown() && !child.DefaultPolicy.IsNull() && !configChild.DefaultPolicy.IsNull() {
+					attrs, _ = sjson.Set(attrs, "DefPolicy", child.DefaultPolicy.ValueString())
+				}
+				if configChildOk && !child.CollectorId.IsUnknown() && !child.CollectorId.IsNull() && !configChild.CollectorId.IsNull() {
+					attrs, _ = sjson.Set(attrs, "collectorId", strconv.FormatInt(child.CollectorId.ValueInt64(), 10))
+				}
+				if configChildOk && !child.Direction.IsUnknown() && !child.Direction.IsNull() && !configChild.Direction.IsNull() {
+					attrs, _ = sjson.Set(attrs, "dir", child.Direction.ValueString())
+				}
+				if configChildOk && !child.FilterType.IsUnknown() && !child.FilterType.IsNull() && !configChild.FilterType.IsNull() {
+					attrs, _ = sjson.Set(attrs, "fltType", child.FilterType.ValueString())
+				}
+				if configChildOk && !child.InstanceName.IsUnknown() && !child.InstanceName.IsNull() && !configChild.InstanceName.IsNull() {
+					attrs, _ = sjson.Set(attrs, "instanceName", child.InstanceName.ValueString())
+				}
+				if configChildOk && !child.SwitchLatency.IsUnknown() && !child.SwitchLatency.IsNull() && !configChild.SwitchLatency.IsNull() {
+					attrs, _ = sjson.Set(attrs, "switchLatency", strconv.FormatBool(child.SwitchLatency.ValueBool()))
+				}
+				if configChildOk && !child.SystemExporterId.IsUnknown() && !child.SystemExporterId.IsNull() && !configChild.SystemExporterId.IsNull() {
+					attrs, _ = sjson.Set(attrs, "systemExporterId", strconv.FormatInt(child.SystemExporterId.ValueInt64(), 10))
+				}
+				if configChildOk && !child.TrafficAnalyticsEnabled.IsUnknown() && !child.TrafficAnalyticsEnabled.IsNull() && !configChild.TrafficAnalyticsEnabled.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trafficAnalytics", strconv.FormatBool(child.TrafficAnalyticsEnabled.ValueBool()))
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsFwdInstTarget.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".analyticsFwdInstTarget.children"
+					_ = nestedChildrenPath
+					attrs = "{}"
+					if !child.MonitorAttachmentTargetDn.IsUnknown() && !child.MonitorAttachmentTargetDn.IsNull() && !configChild.MonitorAttachmentTargetDn.IsNull() {
+						attrs, _ = sjson.Set(attrs, "tDn", child.MonitorAttachmentTargetDn.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsRsMonitorAtt.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.ProfileAttachmentTargetDn.IsUnknown() && !child.ProfileAttachmentTargetDn.IsNull() && !configChild.ProfileAttachmentTargetDn.IsNull() {
+						attrs, _ = sjson.Set(attrs, "tDn", child.ProfileAttachmentTargetDn.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsRsProfAtt.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.EventsAttachmentTargetDn.IsUnknown() && !child.EventsAttachmentTargetDn.IsNull() && !configChild.EventsAttachmentTargetDn.IsNull() {
+						attrs, _ = sjson.Set(attrs, "tDn", child.EventsAttachmentTargetDn.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsRsEventsAtt.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.PolicyAttachmentTargetDn.IsUnknown() && !child.PolicyAttachmentTargetDn.IsNull() && !configChild.PolicyAttachmentTargetDn.IsNull() {
+						attrs, _ = sjson.Set(attrs, "tDn", child.PolicyAttachmentTargetDn.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.analyticsRsPolicyAtt.attributes", attrs)
+					}
+				}
+			}
 		}
 	}
 
@@ -429,6 +534,107 @@ func (data *Analytics) fromBody(res gjson.Result) {
 							child.TrafficAnalyticsTroubleshootExportInterval = types.Int64Value(ranalyticsTrafficAnalytics.Get("analyticsTrafficAnalytics.attributes.troubleshootExportInterval").Int())
 							child.TrafficAnalyticsUdpPortList = types.StringValue(ranalyticsTrafficAnalytics.Get("analyticsTrafficAnalytics.attributes.udpPortList").String())
 						}
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "analyticsMonitor" {
+											var nestedChildanalyticsMonitor AnalyticsInstancesMonitors
+											nestedChildanalyticsMonitor.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+											nestedMapKey := nestedValue.Get("attributes.name").String()
+											if child.Monitors == nil {
+												child.Monitors = make(map[string]AnalyticsInstancesMonitors)
+											}
+											child.Monitors[nestedMapKey] = nestedChildanalyticsMonitor
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "analyticsFwdInstTarget" {
+											var nestedChildanalyticsFwdInstTarget AnalyticsInstancesForwardInstanceTargets
+											nestedChildanalyticsFwdInstTarget.DefaultPolicy = types.StringValue(nestedValue.Get("attributes.DefPolicy").String())
+											nestedChildanalyticsFwdInstTarget.CollectorId = types.Int64Value(nestedValue.Get("attributes.collectorId").Int())
+											nestedChildanalyticsFwdInstTarget.Direction = types.StringValue(nestedValue.Get("attributes.dir").String())
+											nestedChildanalyticsFwdInstTarget.FilterType = types.StringValue(nestedValue.Get("attributes.fltType").String())
+											nestedChildanalyticsFwdInstTarget.InstanceName = types.StringValue(nestedValue.Get("attributes.instanceName").String())
+											nestedChildanalyticsFwdInstTarget.SwitchLatency = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.switchLatency").String()))
+											nestedChildanalyticsFwdInstTarget.SystemExporterId = types.Int64Value(nestedValue.Get("attributes.systemExporterId").Int())
+											nestedChildanalyticsFwdInstTarget.TrafficAnalyticsEnabled = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.trafficAnalytics").String()))
+											nestedMapKey := nestedValue.Get("attributes.id").String()
+											{
+												var ranalyticsRsMonitorAtt gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("analyticsRsMonitorAtt.attributes.rn").String()
+														if rnValue == "rtmonitorAtt" {
+															ranalyticsRsMonitorAtt = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildanalyticsFwdInstTarget.MonitorAttachmentTargetDn = types.StringValue(ranalyticsRsMonitorAtt.Get("analyticsRsMonitorAtt.attributes.tDn").String())
+											}
+											{
+												var ranalyticsRsProfAtt gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("analyticsRsProfAtt.attributes.rn").String()
+														if rnValue == "rtprofAtt" {
+															ranalyticsRsProfAtt = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildanalyticsFwdInstTarget.ProfileAttachmentTargetDn = types.StringValue(ranalyticsRsProfAtt.Get("analyticsRsProfAtt.attributes.tDn").String())
+											}
+											{
+												var ranalyticsRsEventsAtt gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("analyticsRsEventsAtt.attributes.rn").String()
+														if rnValue == "rteventsAtt" {
+															ranalyticsRsEventsAtt = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildanalyticsFwdInstTarget.EventsAttachmentTargetDn = types.StringValue(ranalyticsRsEventsAtt.Get("analyticsRsEventsAtt.attributes.tDn").String())
+											}
+											{
+												var ranalyticsRsPolicyAtt gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("analyticsRsPolicyAtt.attributes.rn").String()
+														if rnValue == "rtpolicyAtt" {
+															ranalyticsRsPolicyAtt = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildanalyticsFwdInstTarget.PolicyAttachmentTargetDn = types.StringValue(ranalyticsRsPolicyAtt.Get("analyticsRsPolicyAtt.attributes.tDn").String())
+											}
+											if child.ForwardInstanceTargets == nil {
+												child.ForwardInstanceTargets = make(map[string]AnalyticsInstancesForwardInstanceTargets)
+											}
+											child.ForwardInstanceTargets[nestedMapKey] = nestedChildanalyticsFwdInstTarget
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
 						if data.Instances == nil {
 							data.Instances = make(map[string]AnalyticsInstances)
 						}
@@ -719,6 +925,159 @@ func (data *Analytics) updateFromBody(res gjson.Result) {
 				item.TrafficAnalyticsUdpPortList = types.StringNull()
 			}
 		}
+		for nc := range item.Monitors {
+			ncItem := item.Monitors[nc]
+			var ranalyticsMonitor gjson.Result
+			ranalyticsInst.Get("analyticsInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("analyticsMonitor.attributes.name").String() == nc {
+						ranalyticsMonitor = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ranalyticsMonitor.Exists() {
+				delete(item.Monitors, nc)
+				continue
+			}
+			if !ncItem.Description.IsNull() {
+				ncItem.Description = types.StringValue(ranalyticsMonitor.Get("analyticsMonitor.attributes.descr").String())
+			} else {
+				ncItem.Description = types.StringNull()
+			}
+			item.Monitors[nc] = ncItem
+		}
+		for nc := range item.ForwardInstanceTargets {
+			ncItem := item.ForwardInstanceTargets[nc]
+			var ranalyticsFwdInstTarget gjson.Result
+			ranalyticsInst.Get("analyticsInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("analyticsFwdInstTarget.attributes.id").String() == nc {
+						ranalyticsFwdInstTarget = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ranalyticsFwdInstTarget.Exists() {
+				delete(item.ForwardInstanceTargets, nc)
+				continue
+			}
+			if !ncItem.DefaultPolicy.IsNull() {
+				ncItem.DefaultPolicy = types.StringValue(ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.attributes.DefPolicy").String())
+			} else {
+				ncItem.DefaultPolicy = types.StringNull()
+			}
+			if !ncItem.CollectorId.IsNull() {
+				ncItem.CollectorId = types.Int64Value(ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.attributes.collectorId").Int())
+			} else {
+				ncItem.CollectorId = types.Int64Null()
+			}
+			if !ncItem.Direction.IsNull() {
+				ncItem.Direction = types.StringValue(ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.attributes.dir").String())
+			} else {
+				ncItem.Direction = types.StringNull()
+			}
+			if !ncItem.FilterType.IsNull() {
+				ncItem.FilterType = types.StringValue(ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.attributes.fltType").String())
+			} else {
+				ncItem.FilterType = types.StringNull()
+			}
+			if !ncItem.InstanceName.IsNull() {
+				ncItem.InstanceName = types.StringValue(ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.attributes.instanceName").String())
+			} else {
+				ncItem.InstanceName = types.StringNull()
+			}
+			if !ncItem.SwitchLatency.IsNull() {
+				ncItem.SwitchLatency = types.BoolValue(helpers.ParseNxosBoolean(ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.attributes.switchLatency").String()))
+			} else {
+				ncItem.SwitchLatency = types.BoolNull()
+			}
+			if !ncItem.SystemExporterId.IsNull() {
+				ncItem.SystemExporterId = types.Int64Value(ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.attributes.systemExporterId").Int())
+			} else {
+				ncItem.SystemExporterId = types.Int64Null()
+			}
+			if !ncItem.TrafficAnalyticsEnabled.IsNull() {
+				ncItem.TrafficAnalyticsEnabled = types.BoolValue(helpers.ParseNxosBoolean(ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.attributes.trafficAnalytics").String()))
+			} else {
+				ncItem.TrafficAnalyticsEnabled = types.BoolNull()
+			}
+			{
+				var ranalyticsRsMonitorAtt gjson.Result
+				ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("analyticsRsMonitorAtt.attributes.rn").String()
+						if rnValue == "rtmonitorAtt" {
+							ranalyticsRsMonitorAtt = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.MonitorAttachmentTargetDn.IsNull() {
+					ncItem.MonitorAttachmentTargetDn = types.StringValue(ranalyticsRsMonitorAtt.Get("analyticsRsMonitorAtt.attributes.tDn").String())
+				} else {
+					ncItem.MonitorAttachmentTargetDn = types.StringNull()
+				}
+			}
+			{
+				var ranalyticsRsProfAtt gjson.Result
+				ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("analyticsRsProfAtt.attributes.rn").String()
+						if rnValue == "rtprofAtt" {
+							ranalyticsRsProfAtt = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.ProfileAttachmentTargetDn.IsNull() {
+					ncItem.ProfileAttachmentTargetDn = types.StringValue(ranalyticsRsProfAtt.Get("analyticsRsProfAtt.attributes.tDn").String())
+				} else {
+					ncItem.ProfileAttachmentTargetDn = types.StringNull()
+				}
+			}
+			{
+				var ranalyticsRsEventsAtt gjson.Result
+				ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("analyticsRsEventsAtt.attributes.rn").String()
+						if rnValue == "rteventsAtt" {
+							ranalyticsRsEventsAtt = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.EventsAttachmentTargetDn.IsNull() {
+					ncItem.EventsAttachmentTargetDn = types.StringValue(ranalyticsRsEventsAtt.Get("analyticsRsEventsAtt.attributes.tDn").String())
+				} else {
+					ncItem.EventsAttachmentTargetDn = types.StringNull()
+				}
+			}
+			{
+				var ranalyticsRsPolicyAtt gjson.Result
+				ranalyticsFwdInstTarget.Get("analyticsFwdInstTarget.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("analyticsRsPolicyAtt.attributes.rn").String()
+						if rnValue == "rtpolicyAtt" {
+							ranalyticsRsPolicyAtt = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.PolicyAttachmentTargetDn.IsNull() {
+					ncItem.PolicyAttachmentTargetDn = types.StringValue(ranalyticsRsPolicyAtt.Get("analyticsRsPolicyAtt.attributes.tDn").String())
+				} else {
+					ncItem.PolicyAttachmentTargetDn = types.StringNull()
+				}
+			}
+			item.ForwardInstanceTargets[nc] = ncItem
+		}
 		data.Instances[key] = item
 	}
 }
@@ -797,6 +1156,40 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 				deleteBody, _ = sjson.Set(deleteBody, "analyticsPolicy.attributes.rn", stateChild.getRn(stateChildKey))
 				deleteBody, _ = sjson.Set(deleteBody, "analyticsPolicy.attributes.status", "deleted")
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for stateChildKey := range stateItemdi.Monitors {
+			if _, found := planItemdi.Monitors[stateChildKey]; !found {
+				stateChild := stateItemdi.Monitors[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "analyticsMonitor.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "analyticsMonitor.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for stateChildKey := range stateItemdi.ForwardInstanceTargets {
+			if _, found := planItemdi.ForwardInstanceTargets[stateChildKey]; !found {
+				stateChild := stateItemdi.ForwardInstanceTargets[stateChildKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "analyticsFwdInstTarget.attributes.rn", stateChild.getRn(stateChildKey))
+				deleteBody, _ = sjson.Set(deleteBody, "analyticsFwdInstTarget.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+			}
+		}
+		for di_ := range stateItemdi.ForwardInstanceTargets {
+			if _, found := planItemdi.ForwardInstanceTargets[di_]; !found {
+				continue
+			}
+			stateItemdi_ := stateItemdi.ForwardInstanceTargets[di_]
+			matchBodyPathdi_ := ""
+			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+				if mv.Get("analyticsFwdInstTarget.attributes.rn").String() == stateItemdi_.getRn(di_) {
+					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".analyticsFwdInstTarget.children"
+					break
+				}
+			}
+			if matchBodyPathdi_ == "" {
+				continue
 			}
 		}
 	}

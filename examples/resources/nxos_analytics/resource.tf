@@ -43,6 +43,13 @@ resource "nxos_analytics" "example" {
       policies = {
         "POLICY1" = {
           description = "My policy"
+          match_acls = {
+            "ACL1" = {
+              acl_name    = "ACL1"
+              filter_type = "ipv6"
+              description = "My match ACL"
+            }
+          }
         }
       }
       records = {

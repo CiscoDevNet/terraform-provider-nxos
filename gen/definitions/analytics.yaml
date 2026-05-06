@@ -258,6 +258,39 @@ child_classes:
             type: String
             description: 'Description of the specified attribute.'
             example: 'My policy'
+        child_classes:
+          - class_name: analyticsMatchAcl
+            rn: acl-[%s]
+            type: list
+            tf_name: match_acls
+            description: 'Match ACL.'
+            doc_path: System/analytics:MatchAcl/
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Object name.'
+                example: 'ACL1'
+              - nxos_name: aclName
+                tf_name: acl_name
+                type: String
+                description: 'Match using ACL.'
+                example: 'ACL1'
+              - nxos_name: fltType
+                tf_name: filter_type
+                type: String
+                description: 'ACL Filter Type.'
+                enum_values:
+                  - ipv4
+                  - ipv6
+                  - ce
+                example: ipv6
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: 'My match ACL'
       - class_name: analyticsRecordP
         rn: recordp-[%s]
         type: list

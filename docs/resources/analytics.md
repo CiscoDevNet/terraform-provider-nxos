@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This resource can manage the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.
   API Documentation
-  analyticsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Entity/analyticsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Inst/analyticsProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Profile/analyticsEvents https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/analyticsPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/analyticsRecordP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RecordP/analyticsCollector https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Collector/analyticsMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Monitor/analyticsRsRecordPAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsRecordPAtt/analyticsCollectorBucket https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:CollectorBucket/analyticsRsCollectorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsCollectorAtt/analyticsTrafficAnalytics https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/analyticsFwdInstTarget https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:FwdInstTarget/analyticsRsMonitorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsMonitorAtt/analyticsRsProfAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsProfAtt/analyticsRsEventsAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsEventsAtt/analyticsRsPolicyAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsPolicyAtt/
+  analyticsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Entity/analyticsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Inst/analyticsProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Profile/analyticsEvents https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/analyticsPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/analyticsMatchAcl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:MatchAcl/analyticsRecordP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RecordP/analyticsCollector https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Collector/analyticsMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Monitor/analyticsRsRecordPAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsRecordPAtt/analyticsCollectorBucket https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:CollectorBucket/analyticsRsCollectorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsCollectorAtt/analyticsTrafficAnalytics https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/analyticsFwdInstTarget https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:FwdInstTarget/analyticsRsMonitorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsMonitorAtt/analyticsRsProfAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsProfAtt/analyticsRsEventsAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsEventsAtt/analyticsRsPolicyAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsPolicyAtt/
 ---
 
 # nxos_analytics (Resource)
@@ -19,6 +19,7 @@ This resource can manage the Analytics configuration on NX-OS devices, including
 - [analyticsProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Profile/)
 - [analyticsEvents](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/)
 - [analyticsPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/)
+- [analyticsMatchAcl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:MatchAcl/)
 - [analyticsRecordP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RecordP/)
 - [analyticsCollector](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Collector/)
 - [analyticsMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Monitor/)
@@ -80,6 +81,13 @@ resource "nxos_analytics" "example" {
       policies = {
         "POLICY1" = {
           description = "My policy"
+          match_acls = {
+            "ACL1" = {
+              acl_name    = "ACL1"
+              filter_type = "ipv6"
+              description = "My match ACL"
+            }
+          }
         }
       }
       records = {
@@ -310,6 +318,19 @@ Optional:
 Optional:
 
 - `description` (String) Description of the specified attribute.
+- `match_acls` (Attributes Map) Match ACL.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--instances--policies--match_acls))
+
+<a id="nestedatt--instances--policies--match_acls"></a>
+### Nested Schema for `instances.policies.match_acls`
+
+Optional:
+
+- `acl_name` (String) Match using ACL.
+- `description` (String) Description of the specified attribute.
+- `filter_type` (String) ACL Filter Type.
+  - Choices: `ipv4`, `ipv6`, `ce`
+
 
 
 <a id="nestedatt--instances--profiles"></a>

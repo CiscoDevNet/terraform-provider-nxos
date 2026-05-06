@@ -258,6 +258,218 @@ child_classes:
             type: String
             description: 'Description of the specified attribute.'
             example: 'My policy'
+      - class_name: analyticsRecordP
+        rn: recordp-[%s]
+        type: list
+        tf_name: records
+        description: 'Flow Record.'
+        doc_path: System/analytics:RecordP/
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Object name.'
+            example: 'RECORD1'
+          - nxos_name: collect
+            tf_name: collect
+            type: String
+            description: 'Analytics Record parameters to collect in the flows.'
+            enum_values:
+              - count-bytes
+              - count-pkts
+              - sampler-id
+              - pkt-disp
+              - ts-first
+              - ts-recent
+              - tcp-flags
+              - src-intf
+              - ingress-vrf-id
+            allow_non_enum_values: true
+            example: count-bytes
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My record'
+          - nxos_name: match
+            tf_name: match
+            type: String
+            description: 'Analytics Record profile parameters to match flows on.'
+            enum_values:
+              - ethertype
+              - dst-mac
+              - src-mac
+              - vlan
+              - proto
+              - tos
+              - src-ipv4
+              - dst-ipv4
+              - src-ipv6
+              - dst-ipv6
+              - src-port
+              - dst-port
+              - src-ip
+              - dst-ip
+            allow_non_enum_values: true
+            example: src-ipv4
+      - class_name: analyticsCollector
+        rn: collector-[%s]
+        type: list
+        tf_name: collectors
+        description: 'Collector entry.'
+        doc_path: System/analytics:Collector/
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Object name.'
+            example: 'COLLECTOR1'
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My collector'
+          - nxos_name: dscp
+            tf_name: dscp
+            type: Int64
+            min_int: 0
+            max_int: 63
+            description: 'DSCP value of the Remote Collector.'
+            example: 46
+          - nxos_name: dstAddr
+            tf_name: destination_address
+            type: String
+            description: 'Destination IP of the Remote Collector.'
+            example: '10.1.1.1'
+          - nxos_name: dstPort
+            tf_name: destination_port
+            type: Int64
+            min_int: 0
+            max_int: 65535
+            description: 'L4 Port of the Remote Collector.'
+            example: 5640
+          - nxos_name: eventDstPort
+            tf_name: event_destination_port
+            type: Int64
+            min_int: 0
+            max_int: 65535
+            description: 'Event L4 Port of the Remote Collector.'
+            example: 5695
+          - nxos_name: inbandInterface
+            tf_name: inband_interface
+            type: Bool
+            description: 'Inband interface for exporter.'
+            example: false
+          - nxos_name: srcAddr
+            tf_name: source_address
+            type: String
+            description: 'Source IP Address for Analytics packets.'
+            example: '10.1.1.2'
+          - nxos_name: srcIf
+            tf_name: source_interface
+            type: String
+            description: 'Source Interface that contains the Source IP for Analytics packets.'
+            example: 'lo0'
+          - nxos_name: v9
+            tf_name: v9
+            type: Bool
+            description: 'Export FT and FTE data in V9 format.'
+            example: false
+          - nxos_name: ver
+            tf_name: version
+            type: String
+            description: 'Collector Version Format.'
+            enum_values:
+              - v5
+              - v9
+              - cisco-v1
+            example: v9
+          - nxos_name: vrfName
+            tf_name: vrf_name
+            type: String
+            description: 'VRF to connect to the Remote Collector.'
+            example: 'default'
+      - class_name: analyticsMonitor
+        rn: monitor-[%s]
+        type: list
+        tf_name: monitors
+        description: 'Flow Monitor.'
+        doc_path: System/analytics:Monitor/
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Object name.'
+            example: 'MONITOR1'
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My monitor'
+        child_classes:
+          - class_name: analyticsRsRecordPAtt
+            rn: rtrecordPAtt
+            type: single
+            tf_name: record
+            description: 'Record Policy Attachment.'
+            doc_path: System/analytics:RsRecordPAtt/
+            attributes:
+              - nxos_name: tDn
+                tf_name: record_target_dn
+                type: String
+                description: 'Target distinguished name of the record.'
+                example: 'sys/analytics/inst-analytics/recordp-RECORD1'
+          - class_name: analyticsCollectorBucket
+            rn: collectorbucket-[%v]
+            type: list
+            tf_name: collector_buckets
+            description: 'Flow Collector Bucket Entry.'
+            doc_path: System/analytics:CollectorBucket/
+            attributes:
+              - nxos_name: id
+                tf_name: id
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 255
+                description: 'Flow Collector Bucket Id.'
+                example: 1
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: 'My bucket'
+              - nxos_name: hashHi
+                tf_name: hash_high
+                type: Int64
+                min_int: 0
+                max_int: 4294967295
+                description: 'Collector Bucket Hash High Value.'
+                example: 4294967295
+              - nxos_name: hashLo
+                tf_name: hash_low
+                type: Int64
+                min_int: 0
+                max_int: 4294967295
+                description: 'Collector Bucket Hash Low Value.'
+                example: 0
+            child_classes:
+              - class_name: analyticsRsCollectorAtt
+                rn: rtcollectorAtt-[%s]
+                type: list
+                tf_name: collectors
+                description: 'Reference to Collector.'
+                doc_path: System/analytics:RsCollectorAtt/
+                attributes:
+                  - nxos_name: tDn
+                    tf_name: target_dn
+                    type: String
+                    id: true
+                    description: 'Target distinguished name of the collector.'
+                    example: 'sys/analytics/inst-analytics/collector-COLLECTOR1'
       - class_name: analyticsTrafficAnalytics
         rn: trafficanalytics
         type: single
@@ -299,24 +511,6 @@ child_classes:
             type: String
             description: 'UDP Port List.'
             example: '1234'
-      - class_name: analyticsMonitor
-        rn: monitor-[%s]
-        type: list
-        tf_name: monitors
-        description: 'Flow Monitor.'
-        doc_path: System/analytics:Monitor/
-        attributes:
-          - nxos_name: name
-            tf_name: name
-            type: String
-            id: true
-            description: 'Object name.'
-            example: 'MONITOR1'
-          - nxos_name: descr
-            tf_name: description
-            type: String
-            description: 'Description of the specified attribute.'
-            example: 'My monitor'
       - class_name: analyticsFwdInstTarget
         rn: fwdinst-[%v]
         type: list

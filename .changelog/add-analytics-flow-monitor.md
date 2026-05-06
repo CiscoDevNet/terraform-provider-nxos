@@ -1,0 +1,1 @@
+- Add flow monitor, record, collector, and collector bucket configuration to `nxos_analytics` resource and data source

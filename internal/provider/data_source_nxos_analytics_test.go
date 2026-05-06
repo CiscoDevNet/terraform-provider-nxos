@@ -67,13 +67,31 @@ func TestAccDataSourceNxosAnalytics(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.ttl_match_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.ttl_match_value", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.policies.POLICY1.description", "My policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.records.RECORD1.collect", "count-bytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.records.RECORD1.description", "My record"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.records.RECORD1.match", "src-ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.description", "My collector"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.dscp", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.destination_address", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.destination_port", "5640"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.event_destination_port", "5695"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.inband_interface", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.source_address", "10.1.1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.v9", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.version", "v9"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.description", "My monitor"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.record_target_dn", "sys/analytics/inst-analytics/recordp-RECORD1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.collector_buckets.1.description", "My bucket"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.collector_buckets.1.hash_high", "4294967295"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.collector_buckets.1.hash_low", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_description", "My traffic analytics"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_interface_mode", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_name", "TA1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_service_database_size", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_troubleshoot_export_interval", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_udp_port_list", "1234"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.description", "My monitor"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.default_policy", "deny"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.collector_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.direction", "out"))
@@ -164,17 +182,51 @@ func testAccDataSourceNxosAnalyticsConfig() string {
 	config += `					description = "My policy"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
+	config += `			records = {` + "\n"
+	config += `				"RECORD1" = {` + "\n"
+	config += `					collect = "count-bytes"` + "\n"
+	config += `					description = "My record"` + "\n"
+	config += `					match = "src-ipv4"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			collectors = {` + "\n"
+	config += `				"COLLECTOR1" = {` + "\n"
+	config += `					description = "My collector"` + "\n"
+	config += `					dscp = 46` + "\n"
+	config += `					destination_address = "10.1.1.1"` + "\n"
+	config += `					destination_port = 5640` + "\n"
+	config += `					event_destination_port = 5695` + "\n"
+	config += `					inband_interface = false` + "\n"
+	config += `					source_address = "10.1.1.2"` + "\n"
+	config += `					source_interface = "lo0"` + "\n"
+	config += `					v9 = false` + "\n"
+	config += `					version = "v9"` + "\n"
+	config += `					vrf_name = "default"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			monitors = {` + "\n"
+	config += `				"MONITOR1" = {` + "\n"
+	config += `					description = "My monitor"` + "\n"
+	config += `					record_target_dn = "sys/analytics/inst-analytics/recordp-RECORD1"` + "\n"
+	config += `					collector_buckets = {` + "\n"
+	config += `						"1" = {` + "\n"
+	config += `							description = "My bucket"` + "\n"
+	config += `							hash_high = 4294967295` + "\n"
+	config += `							hash_low = 0` + "\n"
+	config += `							collectors = {` + "\n"
+	config += `								"sys/analytics/inst-analytics/collector-COLLECTOR1" = {` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `			traffic_analytics_description = "My traffic analytics"` + "\n"
 	config += `			traffic_analytics_interface_mode = true` + "\n"
 	config += `			traffic_analytics_name = "TA1"` + "\n"
 	config += `			traffic_analytics_service_database_size = 1000` + "\n"
 	config += `			traffic_analytics_troubleshoot_export_interval = 30` + "\n"
 	config += `			traffic_analytics_udp_port_list = "1234"` + "\n"
-	config += `			monitors = {` + "\n"
-	config += `				"MONITOR1" = {` + "\n"
-	config += `					description = "My monitor"` + "\n"
-	config += `				}` + "\n"
-	config += `			}` + "\n"
 	config += `			forward_instance_targets = {` + "\n"
 	config += `				"1" = {` + "\n"
 	config += `					default_policy = "deny"` + "\n"

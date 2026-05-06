@@ -57,7 +57,7 @@ func (d *AnalyticsDataSource) Metadata(_ context.Context, req datasource.Metadat
 func (d *AnalyticsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.").AddApiDocumentation("analyticsEntity", "System/analytics:Entity/", []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsTrafficAnalytics", "analyticsMonitor", "analyticsFwdInstTarget", "analyticsRsMonitorAtt", "analyticsRsProfAtt", "analyticsRsEventsAtt", "analyticsRsPolicyAtt"}, []string{"System/analytics:Inst/", "System/analytics:Profile/", "System/analytics:Events/", "System/analytics:Policy/", "System/analytics:TrafficAnalytics/", "System/analytics:Monitor/", "System/analytics:FwdInstTarget/", "System/analytics:RsMonitorAtt/", "System/analytics:RsProfAtt/", "System/analytics:RsEventsAtt/", "System/analytics:RsPolicyAtt/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.").AddApiDocumentation("analyticsEntity", "System/analytics:Entity/", []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsRecordP", "analyticsCollector", "analyticsMonitor", "analyticsRsRecordPAtt", "analyticsCollectorBucket", "analyticsRsCollectorAtt", "analyticsTrafficAnalytics", "analyticsFwdInstTarget", "analyticsRsMonitorAtt", "analyticsRsProfAtt", "analyticsRsEventsAtt", "analyticsRsPolicyAtt"}, []string{"System/analytics:Inst/", "System/analytics:Profile/", "System/analytics:Events/", "System/analytics:Policy/", "System/analytics:RecordP/", "System/analytics:Collector/", "System/analytics:Monitor/", "System/analytics:RsRecordPAtt/", "System/analytics:CollectorBucket/", "System/analytics:RsCollectorAtt/", "System/analytics:TrafficAnalytics/", "System/analytics:FwdInstTarget/", "System/analytics:RsMonitorAtt/", "System/analytics:RsProfAtt/", "System/analytics:RsEventsAtt/", "System/analytics:RsPolicyAtt/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -225,6 +225,121 @@ func (d *AnalyticsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 								},
 							},
 						},
+						"records": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flow Record.\n  - Map key: `name` - Object name.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"collect": schema.StringAttribute{
+										MarkdownDescription: "Analytics Record parameters to collect in the flows.",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description of the specified attribute.",
+										Computed:            true,
+									},
+									"match": schema.StringAttribute{
+										MarkdownDescription: "Analytics Record profile parameters to match flows on.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"collectors": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Collector entry.\n  - Map key: `name` - Object name.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description of the specified attribute.",
+										Computed:            true,
+									},
+									"dscp": schema.Int64Attribute{
+										MarkdownDescription: "DSCP value of the Remote Collector.",
+										Computed:            true,
+									},
+									"destination_address": schema.StringAttribute{
+										MarkdownDescription: "Destination IP of the Remote Collector.",
+										Computed:            true,
+									},
+									"destination_port": schema.Int64Attribute{
+										MarkdownDescription: "L4 Port of the Remote Collector.",
+										Computed:            true,
+									},
+									"event_destination_port": schema.Int64Attribute{
+										MarkdownDescription: "Event L4 Port of the Remote Collector.",
+										Computed:            true,
+									},
+									"inband_interface": schema.BoolAttribute{
+										MarkdownDescription: "Inband interface for exporter.",
+										Computed:            true,
+									},
+									"source_address": schema.StringAttribute{
+										MarkdownDescription: "Source IP Address for Analytics packets.",
+										Computed:            true,
+									},
+									"source_interface": schema.StringAttribute{
+										MarkdownDescription: "Source Interface that contains the Source IP for Analytics packets.",
+										Computed:            true,
+									},
+									"v9": schema.BoolAttribute{
+										MarkdownDescription: "Export FT and FTE data in V9 format.",
+										Computed:            true,
+									},
+									"version": schema.StringAttribute{
+										MarkdownDescription: "Collector Version Format.",
+										Computed:            true,
+									},
+									"vrf_name": schema.StringAttribute{
+										MarkdownDescription: "VRF to connect to the Remote Collector.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"monitors": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flow Monitor.\n  - Map key: `name` - Object name.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description of the specified attribute.",
+										Computed:            true,
+									},
+									"record_target_dn": schema.StringAttribute{
+										MarkdownDescription: "Target distinguished name of the record.",
+										Computed:            true,
+									},
+									"collector_buckets": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Flow Collector Bucket Entry.\n  - Map key: `id` - Flow Collector Bucket Id.\n  - Key range: `1`-`255`").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"description": schema.StringAttribute{
+													MarkdownDescription: "Description of the specified attribute.",
+													Computed:            true,
+												},
+												"hash_high": schema.Int64Attribute{
+													MarkdownDescription: "Collector Bucket Hash High Value.",
+													Computed:            true,
+												},
+												"hash_low": schema.Int64Attribute{
+													MarkdownDescription: "Collector Bucket Hash Low Value.",
+													Computed:            true,
+												},
+												"collectors": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Reference to Collector.\n  - Map key: `target_dn` - Target distinguished name of the collector.").String,
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 						"traffic_analytics_description": schema.StringAttribute{
 							MarkdownDescription: "Description of the specified attribute.",
 							Computed:            true,
@@ -248,18 +363,6 @@ func (d *AnalyticsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 						"traffic_analytics_udp_port_list": schema.StringAttribute{
 							MarkdownDescription: "UDP Port List.",
 							Computed:            true,
-						},
-						"monitors": schema.MapNestedAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Flow Monitor.\n  - Map key: `name` - Object name.").String,
-							Computed:            true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"description": schema.StringAttribute{
-										MarkdownDescription: "Description of the specified attribute.",
-										Computed:            true,
-									},
-								},
-							},
 						},
 						"forward_instance_targets": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Forward Instance Target.\n  - Map key: `id` - Analytics Target identifier.\n  - Key range: `0`-`16777215`").String,
@@ -352,7 +455,7 @@ func (d *AnalyticsDataSource) Read(ctx context.Context, req datasource.ReadReque
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "analyticsInst,analyticsProfile,analyticsEvents,analyticsPolicy,analyticsTrafficAnalytics,analyticsMonitor,analyticsFwdInstTarget,analyticsRsMonitorAtt,analyticsRsProfAtt,analyticsRsEventsAtt,analyticsRsPolicyAtt")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "analyticsInst,analyticsProfile,analyticsEvents,analyticsPolicy,analyticsRecordP,analyticsCollector,analyticsMonitor,analyticsRsRecordPAtt,analyticsCollectorBucket,analyticsRsCollectorAtt,analyticsTrafficAnalytics,analyticsFwdInstTarget,analyticsRsMonitorAtt,analyticsRsProfAtt,analyticsRsEventsAtt,analyticsRsPolicyAtt")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, ERSPAN origin IP settings, and PTP ttag settings.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/ndVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpc/ndVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpcDom/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/cfsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Entity/cfsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Inst/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AInfraVlan/mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/cdpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AEntity/cdpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AInst/cdpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AIf/coppEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Entity/coppProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Profile/terminalTerminal https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Terminal/terminalLine https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Line/terminalConsole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Console/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Vty/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalSesLmt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:SesLmt/icamEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Entity/icamInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Inst/icamScale https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Scale/nxapiInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/nxapi:Inst/imBreakout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Breakout/imMod https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Mod/imFpP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:FpP/sasSas https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Sas/sasSvc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Svc/sasSvcInstance https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SvcInstance/sasSController https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SController/sasFwSvcPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:FwSvcPolicy/sasIpVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:IpVrf/sasDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Dom/commEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Entity/commSsh https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Ssh/commSshKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:SshKey/spanErspanOriginIp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:ErspanOriginIp/ttagTtagEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ttag:TtagEntity/ttagTtagIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ttag:TtagIf/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/ndVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpc/ndVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AVpcDom/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DNS/dns:Dom/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/boot:Image/cfsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Entity/cfsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Fabric/cfs:Inst/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/udld:PhysIf/platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntityExtended/mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AIf/cdpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AEntity/cdpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AInst/cdpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/cdp%3AIf/coppEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Entity/coppProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/copp:Profile/terminalTerminal https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Terminal/terminalLine https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Line/terminalConsole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Console/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:Vty/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:ExecTimeout/terminalSesLmt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/terminal:SesLmt/icamEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Entity/icamInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Inst/icamScale https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/icam:Scale/nxapiInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/nxapi:Inst/imBreakout https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Breakout/imMod https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:Mod/imFpP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/im:FpP/sasSas https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Sas/sasSvc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Svc/sasSvcInstance https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SvcInstance/sasSController https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:SController/sasFwSvcPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:FwSvcPolicy/sasIpVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:IpVrf/sasDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Service%20Acceleration/sas:Dom/commEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Entity/commSsh https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:Ssh/commSshKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Communication/comm:SshKey/spanErspanOriginIp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:ErspanOriginIp/ttagTtagEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ttag:TtagEntity/ttagTtagIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ttag:TtagIf/
 ---
 
 # nxos_system (Resource)
@@ -52,6 +52,7 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [platformTcamRegionExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegionExtended/)
 - [platformNVE](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ANVE/)
 - [platformInfraVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AInfraVlan/)
+- [platformEntityExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntityExtended/)
 - [mgmtMgmtIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt%3AMgmtIf/)
 - [lldpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AEntity/)
 - [lldpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/lldp%3AInst/)
@@ -238,6 +239,7 @@ resource "nxos_system" "example" {
       }
     }
   }
+  platform_extended_dme_load_interval = 300
   management_interfaces = {
     "mgmt0" = {
       admin_state      = "up"
@@ -617,6 +619,92 @@ resource "nxos_system" "example" {
 - `platform_description` (String) Container to hold platform data of apps.
 - `platform_disable_parse_error` (String) Used to disable/enable hardware profile disable parse-err.
   - Choices: `disable`, `enable`
+- `platform_extended_acl_disable_redirect_share` (String) Disable acl redirect share.
+  - Choices: `disable`, `enable`
+- `platform_extended_atomic_update` (String) To optimize enable/disable atomic update.
+  - Choices: `disable`, `enable`
+- `platform_extended_atomic_update_strict` (String) Strict check on TCAM size for using mutliple features.
+  - Choices: `disable`, `enable`
+- `platform_extended_counter_manager_bfd_scale` (Number) Used to configure hardware profile BFD feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_ecn_scale` (Number) Used to configure hardware profile ECN feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_egress_acl_scale` (Number) Used to configure hardware profile EgrACL feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_bfd` (Number) Used to configure hardware profile BFD feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_ecn` (Number) Used to configure hardware profile ECN feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_egress_acl` (Number) Used to configure hardware profile EgrACL feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_ingress_acl` (Number) Used to configure hardware profile IngrACL feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_l2vni` (Number) Used to configure hardware profile L2VNI feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_l3vni` (Number) Used to configure hardware profile L3VNI feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_si` (Number) Used to configure hardware profile SI feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_svi` (Number) Used to configure hardware profile SVI feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_tunnel` (Number) Used to configure hardware profile Tunnel feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_vlan` (Number) Used to configure hardware profile VLAN feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_feature_voq` (Number) Used to configure hardware profile Voq feature.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_ingress_acl_scale` (Number) Used to configure hardware profile IngrACL feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_l2vni_scale` (Number) Used to configure hardware profile L2VNI feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_l3vni_scale` (Number) Used to configure hardware profile L3VNI feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_si_scale` (Number) Used to configure hardware profile SI feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_svi_scale` (Number) Used to configure hardware profile SVI feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_tunnel_scale` (Number) Used to configure hardware profile Tunnel feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_vlan_scale` (Number) Used to configure hardware profile VLAN feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_counter_manager_voq_scale` (Number) Used to configure hardware profile Voq feature-scale.
+  - Range: `0`-`4294967295`
+- `platform_extended_dme_load_interval` (Number) DME Load Interval.
+  - Range: `0`-`4294967295`
+- `platform_extended_egress_l2_qos_ifacl_label_size` (String) To set the EGRESS IFACL QOS label size to 6 bits and the default value is 5 bits.
+  - Choices: `disable`, `enable`
+- `platform_extended_gpe5_timer_enable` (Boolean) Gpe-5-timer enable/disable.
+- `platform_extended_hardware_qos_latency_optimized` (Boolean) Enable/Disable latency optimization.
+- `platform_extended_ingress_pacl_ifacl_label_size` (String) To set the ingress IFACL TCAM label size to 6 bits and the default value is 5 bits.
+  - Choices: `disable`, `enable`
+- `platform_extended_ingress_vrf_nat_bd_label_width` (Number) To set the ingress Vrf NAT TCAM label size to user configured width of 0-6 bits.
+  - Range: `0`-`6`
+- `platform_extended_mpls_qos_pipe_mode` (String) Fretta MPLS QoS Pipe Mode.
+  - Choices: `enabled`, `disabled`
+- `platform_extended_multicast_nlb_stick_port_channel` (String) Used to enable/disable hardware profile multicast nlb on a stick Port Channel configuration.
+  - Choices: `disable`, `enable`
+- `platform_extended_multicast_priority` (Number) set mcast priority range based on user choice.
+  - Range: `0`-`15`
+- `platform_extended_multicast_stats_disable` (String) Used to enable/disable hardware profile multicast stats-disable.
+  - Choices: `disable`, `enable`
+- `platform_extended_pbr_ecmp_paths` (Number) Policy Based Routing ECMP Paths limit.
+  - Range: `1`-`64`
+- `platform_extended_pbr_fast_convergence` (String) Policy-Based Routing Fast Convergence.
+  - Choices: `disable`, `enable`
+- `platform_extended_pbr_match_default_route` (String) set pbr match default route.
+  - Choices: `disable`, `enable`
+- `platform_extended_ptp_correction_hardware` (Boolean) Ptp frequnecy correction from hardware or software.
+- `platform_extended_si_flex_stats` (String) Used to enable/disable hardware profile sub-interface flex-stats.
+  - Choices: `disable`, `l3`, `l2`
+- `platform_extended_stats_template` (String) Used to enable stats on given template on S1.
+  - Choices: `l3qos`, `racl`, `span-acl`, `pbr`
+- `platform_extended_storm_control_priority` (String) storm control priority.
+  - Choices: `default`, `drop-l3`, `drop-l2`, `drop-all`
+- `platform_extended_tcam_default_result` (String) Default access-list result during non-atomic hardware update.
+  - Choices: `disable`, `enable`
+- `platform_extended_udf_netflow_rtp_multicast_enabled` (Boolean) Enable/Disable RTP for Munticast-flow on enable/disable.
+- `platform_extended_vrf_aware_nat_enable` (String) Configure Vrf Aware Nat.
+  - Choices: `enabled`, `disabled`
 - `platform_global_tx_span` (String) Used to enable/disable hardware multicast global tx span.
   - Choices: `disable`, `enable`
 - `platform_hardware_lou_resource_threshold` (Number) Hardware Lou Resource Threshold value.

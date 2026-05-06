@@ -63,7 +63,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, ERSPAN origin IP settings, and PTP ttag settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Acceleration/sas:Sas/", "Service%20Acceleration/sas:Svc/", "Service%20Acceleration/sas:SvcInstance/", "Service%20Acceleration/sas:SController/", "Service%20Acceleration/sas:FwSvcPolicy/", "Service%20Acceleration/sas:IpVrf/", "Service%20Acceleration/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/", "Flow/span:ErspanOriginIp/", "Interfaces/ttag:TtagEntity/", "Interfaces/ttag:TtagIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, ERSPAN origin IP settings, and PTP ttag settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "platformEntity", "platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/platform%3AEntity/", "System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Acceleration/sas:Sas/", "Service%20Acceleration/sas:Svc/", "Service%20Acceleration/sas:SvcInstance/", "Service%20Acceleration/sas:SController/", "Service%20Acceleration/sas:FwSvcPolicy/", "Service%20Acceleration/sas:IpVrf/", "Service%20Acceleration/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/", "Flow/span:ErspanOriginIp/", "Interfaces/ttag:TtagEntity/", "Interfaces/ttag:TtagIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -2135,6 +2135,309 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
+			"platform_extended_acl_disable_redirect_share": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable acl redirect share.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_extended_atomic_update": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To optimize enable/disable atomic update.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_extended_atomic_update_strict": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Strict check on TCAM size for using mutliple features.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_extended_counter_manager_bfd_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile BFD feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_ecn_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile ECN feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_egress_acl_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile EgrACL feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_bfd": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile BFD feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_ecn": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile ECN feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_egress_acl": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile EgrACL feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_ingress_acl": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile IngrACL feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_l2vni": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile L2VNI feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_l3vni": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile L3VNI feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_si": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile SI feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_svi": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile SVI feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_tunnel": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile Tunnel feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_vlan": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile VLAN feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_feature_voq": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile Voq feature.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_ingress_acl_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile IngrACL feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_l2vni_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile L2VNI feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_l3vni_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile L3VNI feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_si_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile SI feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_svi_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile SVI feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_tunnel_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile Tunnel feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_vlan_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile VLAN feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_counter_manager_voq_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure hardware profile Voq feature-scale.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_dme_load_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DME Load Interval.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"platform_extended_egress_l2_qos_ifacl_label_size": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To set the EGRESS IFACL QOS label size to 6 bits and the default value is 5 bits.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_extended_gpe5_timer_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Gpe-5-timer enable/disable.").String,
+				Optional:            true,
+			},
+			"platform_extended_hardware_qos_latency_optimized": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable/Disable latency optimization.").String,
+				Optional:            true,
+			},
+			"platform_extended_ingress_pacl_ifacl_label_size": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To set the ingress IFACL TCAM label size to 6 bits and the default value is 5 bits.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_extended_ingress_vrf_nat_bd_label_width": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To set the ingress Vrf NAT TCAM label size to user configured width of 0-6 bits.").AddIntegerRangeDescription(0, 6).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 6),
+				},
+			},
+			"platform_extended_multicast_nlb_stick_port_channel": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware profile multicast nlb on a stick Port Channel configuration.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_extended_multicast_stats_disable": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware profile multicast stats-disable.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_extended_mpls_qos_pipe_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Fretta MPLS QoS Pipe Mode.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"platform_extended_multicast_priority": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("set mcast priority range based on user choice.").AddIntegerRangeDescription(0, 15).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 15),
+				},
+			},
+			"platform_extended_pbr_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Policy Based Routing ECMP Paths limit.").AddIntegerRangeDescription(1, 64).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 64),
+				},
+			},
+			"platform_extended_pbr_fast_convergence": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Policy-Based Routing Fast Convergence.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_extended_pbr_match_default_route": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("set pbr match default route.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_extended_ptp_correction_hardware": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ptp frequnecy correction from hardware or software.").String,
+				Optional:            true,
+			},
+			"platform_extended_si_flex_stats": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable/disable hardware profile sub-interface flex-stats.").AddStringEnumDescription("disable", "l3", "l2").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "l3", "l2"),
+				},
+			},
+			"platform_extended_stats_template": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to enable stats on given template on S1.").AddStringEnumDescription("l3qos", "racl", "span-acl", "pbr").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("l3qos", "racl", "span-acl", "pbr"),
+				},
+			},
+			"platform_extended_storm_control_priority": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("storm control priority.").AddStringEnumDescription("default", "drop-l3", "drop-l2", "drop-all").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("default", "drop-l3", "drop-l2", "drop-all"),
+				},
+			},
+			"platform_extended_tcam_default_result": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default access-list result during non-atomic hardware update.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"platform_extended_udf_netflow_rtp_multicast_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable/Disable RTP for Munticast-flow on enable/disable.").String,
+				Optional:            true,
+			},
+			"platform_extended_vrf_aware_nat_enable": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure Vrf Aware Nat.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
 			"management_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Management interface configuration.\n  - Map key: `interface_id` - An identifier.").String,
 				Optional:            true,
@@ -2884,7 +3187,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,ndVpc,ndVpcDom,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,cfsEntity,cfsInst,udldEntity,udldInst,udldPhysIf,platformEntity,platformTcamRegion,platformTcamRegionExtended,platformNVE,platformInfraVlan,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,cdpEntity,cdpInst,cdpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt,icamEntity,icamInst,icamScale,nxapiInst,imBreakout,imMod,imFpP,sasSas,sasSvc,sasSvcInstance,sasSController,sasFwSvcPolicy,sasIpVrf,sasDom,commEntity,commSsh,commSshKey,spanErspanOriginIp,ttagTtagEntity,ttagTtagIf")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,ndVpc,ndVpcDom,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,cfsEntity,cfsInst,udldEntity,udldInst,udldPhysIf,platformEntity,platformTcamRegion,platformTcamRegionExtended,platformNVE,platformInfraVlan,platformEntityExtended,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,cdpEntity,cdpInst,cdpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt,icamEntity,icamInst,icamScale,nxapiInst,imBreakout,imMod,imFpP,sasSas,sasSvc,sasSvcInstance,sasSController,sasFwSvcPolicy,sasIpVrf,sasDom,commEntity,commSsh,commSshKey,spanErspanOriginIp,ttagTtagEntity,ttagTtagIf")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

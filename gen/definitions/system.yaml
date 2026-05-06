@@ -2771,6 +2771,385 @@ child_classes:
                   - Disable
                   - Enable
                 example: Enable
+      - class_name: platformEntityExtended
+        doc_path: System/platform%3AEntityExtended/
+        rn: entityextd
+        type: single
+        tf_name: platform_extended
+        no_delete: true
+        description: 'Extended platform entity configuration.'
+        attributes:
+          - nxos_name: aclDisableRedirectShare
+            tf_name: platform_extended_acl_disable_redirect_share
+            type: String
+            description: 'Disable acl redirect share.'
+            enum_values:
+              - disable
+              - enable
+            example: enable
+            exclude_test: true
+          - nxos_name: atomicUpdate
+            tf_name: platform_extended_atomic_update
+            type: String
+            description: 'To optimize enable/disable atomic update.'
+            enum_values:
+              - disable
+              - enable
+            example: disable
+            exclude_test: true
+          - nxos_name: atomicUpdateStrict
+            tf_name: platform_extended_atomic_update_strict
+            type: String
+            description: 'Strict check on TCAM size for using mutliple features.'
+            enum_values:
+              - disable
+              - enable
+            example: enable
+            exclude_test: true
+          - nxos_name: counterMgrBfdScale
+            tf_name: platform_extended_counter_manager_bfd_scale
+            type: Int64
+            description: 'Used to configure hardware profile BFD feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrEcnScale
+            tf_name: platform_extended_counter_manager_ecn_scale
+            type: Int64
+            description: 'Used to configure hardware profile ECN feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrEgrACLScale
+            tf_name: platform_extended_counter_manager_egress_acl_scale
+            type: Int64
+            description: 'Used to configure hardware profile EgrACL feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureBfd
+            tf_name: platform_extended_counter_manager_feature_bfd
+            type: Int64
+            description: 'Used to configure hardware profile BFD feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureEcn
+            tf_name: platform_extended_counter_manager_feature_ecn
+            type: Int64
+            description: 'Used to configure hardware profile ECN feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureEgrACL
+            tf_name: platform_extended_counter_manager_feature_egress_acl
+            type: Int64
+            description: 'Used to configure hardware profile EgrACL feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureIngrACL
+            tf_name: platform_extended_counter_manager_feature_ingress_acl
+            type: Int64
+            description: 'Used to configure hardware profile IngrACL feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureL2VNI
+            tf_name: platform_extended_counter_manager_feature_l2vni
+            type: Int64
+            description: 'Used to configure hardware profile L2VNI feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureL3VNI
+            tf_name: platform_extended_counter_manager_feature_l3vni
+            type: Int64
+            description: 'Used to configure hardware profile L3VNI feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureSI
+            tf_name: platform_extended_counter_manager_feature_si
+            type: Int64
+            description: 'Used to configure hardware profile SI feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureSVI
+            tf_name: platform_extended_counter_manager_feature_svi
+            type: Int64
+            description: 'Used to configure hardware profile SVI feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureTunnel
+            tf_name: platform_extended_counter_manager_feature_tunnel
+            type: Int64
+            description: 'Used to configure hardware profile Tunnel feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureVlan
+            tf_name: platform_extended_counter_manager_feature_vlan
+            type: Int64
+            description: 'Used to configure hardware profile VLAN feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrFeatureVoq
+            tf_name: platform_extended_counter_manager_feature_voq
+            type: Int64
+            description: 'Used to configure hardware profile Voq feature.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrIngrACLScale
+            tf_name: platform_extended_counter_manager_ingress_acl_scale
+            type: Int64
+            description: 'Used to configure hardware profile IngrACL feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrL2VNIScale
+            tf_name: platform_extended_counter_manager_l2vni_scale
+            type: Int64
+            description: 'Used to configure hardware profile L2VNI feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrL3VNIScale
+            tf_name: platform_extended_counter_manager_l3vni_scale
+            type: Int64
+            description: 'Used to configure hardware profile L3VNI feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrSIScale
+            tf_name: platform_extended_counter_manager_si_scale
+            type: Int64
+            description: 'Used to configure hardware profile SI feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrSVIScale
+            tf_name: platform_extended_counter_manager_svi_scale
+            type: Int64
+            description: 'Used to configure hardware profile SVI feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrTunnelScale
+            tf_name: platform_extended_counter_manager_tunnel_scale
+            type: Int64
+            description: 'Used to configure hardware profile Tunnel feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrVlanScale
+            tf_name: platform_extended_counter_manager_vlan_scale
+            type: Int64
+            description: 'Used to configure hardware profile VLAN feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: counterMgrVoqScale
+            tf_name: platform_extended_counter_manager_voq_scale
+            type: Int64
+            description: 'Used to configure hardware profile Voq feature-scale.'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
+            exclude_test: true
+          - nxos_name: dmeLoadInterval
+            tf_name: platform_extended_dme_load_interval
+            type: Int64
+            description: 'DME Load Interval.'
+            min_int: 0
+            max_int: 4294967295
+            example: 300
+          - nxos_name: egrL2QosIfaclLabelSize
+            tf_name: platform_extended_egress_l2_qos_ifacl_label_size
+            type: String
+            description: 'To set the EGRESS IFACL QOS label size to 6 bits and the default value is 5 bits.'
+            enum_values:
+              - disable
+              - enable
+            example: enable
+            exclude_test: true
+          - nxos_name: gpe5TimerEnable
+            tf_name: platform_extended_gpe5_timer_enable
+            type: Bool
+            description: 'Gpe-5-timer enable/disable.'
+            example: "true"
+            exclude_test: true
+          - nxos_name: hwQosLatencyOptimized
+            tf_name: platform_extended_hardware_qos_latency_optimized
+            type: Bool
+            description: 'Enable/Disable latency optimization.'
+            example: "true"
+            exclude_test: true
+          - nxos_name: iPaclIfaclLabelSize
+            tf_name: platform_extended_ingress_pacl_ifacl_label_size
+            type: String
+            description: 'To set the ingress IFACL TCAM label size to 6 bits and the default value is 5 bits.'
+            enum_values:
+              - disable
+              - enable
+            example: enable
+            exclude_test: true
+          - nxos_name: iVrfNatBdLabelWidth
+            tf_name: platform_extended_ingress_vrf_nat_bd_label_width
+            type: Int64
+            description: 'To set the ingress Vrf NAT TCAM label size to user configured width of 0-6 bits.'
+            min_int: 0
+            max_int: 6
+            example: 3
+            exclude_test: true
+          - nxos_name: mcastNlbStickPc
+            tf_name: platform_extended_multicast_nlb_stick_port_channel
+            type: String
+            description: 'Used to enable/disable hardware profile multicast nlb on a stick Port Channel configuration.'
+            enum_values:
+              - disable
+              - enable
+            example: enable
+            exclude_test: true
+          - nxos_name: mcastStatsDisable
+            tf_name: platform_extended_multicast_stats_disable
+            type: String
+            description: 'Used to enable/disable hardware profile multicast stats-disable.'
+            enum_values:
+              - disable
+              - enable
+            example: enable
+            exclude_test: true
+          - nxos_name: mplsQosPipeMode
+            tf_name: platform_extended_mpls_qos_pipe_mode
+            type: String
+            description: 'Fretta MPLS QoS Pipe Mode.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+            exclude_test: true
+          - nxos_name: multicastPriority
+            tf_name: platform_extended_multicast_priority
+            type: Int64
+            description: 'set mcast priority range based on user choice.'
+            min_int: 0
+            max_int: 15
+            example: 5
+            exclude_test: true
+          - nxos_name: pbrEcmpPaths
+            tf_name: platform_extended_pbr_ecmp_paths
+            type: Int64
+            description: 'Policy Based Routing ECMP Paths limit.'
+            min_int: 1
+            max_int: 64
+            example: 16
+            exclude_test: true
+          - nxos_name: pbrFastConvergence
+            tf_name: platform_extended_pbr_fast_convergence
+            type: String
+            description: 'Policy-Based Routing Fast Convergence.'
+            enum_values:
+              - disable
+              - enable
+            example: enable
+            exclude_test: true
+          - nxos_name: pbrMatchDefaultRoute
+            tf_name: platform_extended_pbr_match_default_route
+            type: String
+            description: 'set pbr match default route.'
+            enum_values:
+              - disable
+              - enable
+            example: enable
+            exclude_test: true
+          - nxos_name: ptpCorrHw
+            tf_name: platform_extended_ptp_correction_hardware
+            type: Bool
+            description: 'Ptp frequnecy correction from hardware or software.'
+            example: "false"
+            exclude_test: true
+          - nxos_name: siFlexStats
+            tf_name: platform_extended_si_flex_stats
+            type: String
+            description: 'Used to enable/disable hardware profile sub-interface flex-stats.'
+            enum_values:
+              - disable
+              - l3
+              - l2
+            example: l3
+            exclude_test: true
+          - nxos_name: statsTemplate
+            tf_name: platform_extended_stats_template
+            type: String
+            description: 'Used to enable stats on given template on S1.'
+            enum_values:
+              - l3qos
+              - racl
+              - span-acl
+              - pbr
+            example: racl
+            exclude_test: true
+          - nxos_name: stormControlPriority
+            tf_name: platform_extended_storm_control_priority
+            type: String
+            description: 'storm control priority.'
+            enum_values:
+              - default
+              - drop-l3
+              - drop-l2
+              - drop-all
+            example: drop-l3
+            exclude_test: true
+          - nxos_name: tcamDefaultResult
+            tf_name: platform_extended_tcam_default_result
+            type: String
+            description: 'Default access-list result during non-atomic hardware update.'
+            enum_values:
+              - disable
+              - enable
+            example: enable
+            exclude_test: true
+          - nxos_name: udfNetflowrtpMcEnabled
+            tf_name: platform_extended_udf_netflow_rtp_multicast_enabled
+            type: Bool
+            description: 'Enable/Disable RTP for Munticast-flow on enable/disable.'
+            example: "true"
+            exclude_test: true
+          - nxos_name: vrfAwareNatEnable
+            tf_name: platform_extended_vrf_aware_nat_enable
+            type: String
+            description: 'Configure Vrf Aware Nat.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+            exclude_test: true
   - class_name: mgmtMgmtIf
     doc_path: System/mgmt%3AMgmtIf/
     rn: mgmt-[%s]

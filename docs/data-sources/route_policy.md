@@ -182,7 +182,7 @@ Read-Only:
 - `match_regular_community_lists` (Attributes Map) List of Match Regular Community Lists.
   - Map key: `community_list_dn` - DN of Community List. For example: `sys/rpm/rtregcom-[COMMUNITY_LIST1]`. (see [below for nested schema](#nestedatt--route_maps--entries--match_regular_community_lists))
 - `match_route_access_lists` (Attributes Map) List of Match Route Access Lists.
-  - Map key: `access_list_dn` - DN of Access List. For example: `sys/acl/ipv4/name-[ACL1]`. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_access_lists))
+  - Map key: `access_list_dn` - DN of Access List. For example: `sys/acl/ipv4/name-[ACL1]` or `sys/rpm/accesslist-[1.2.3.4/32]`. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_access_lists))
 - `match_route_prefix_lists` (Attributes Map) List of Match Route Prefix Lists.
   - Map key: `prefix_list_dn` - DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]` (see [below for nested schema](#nestedatt--route_maps--entries--match_route_prefix_lists))
 - `match_tags` (Attributes Map) List of Match Tags.

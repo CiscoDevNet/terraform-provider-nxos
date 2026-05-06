@@ -54,7 +54,7 @@ resource "nxos_route_policy" "example" {
             "sys/rpm/pfxlistv4-[PREFIX_LIST1]" = {}
           }
           match_route_access_lists = {
-            "sys/acl/ipv4/name-[ACL1]" = {}
+            "sys/rpm/accesslist-[1.2.3.4/32]" = {}
           }
           set_regular_community_additive     = "disabled"
           set_regular_community_no_community = "disabled"

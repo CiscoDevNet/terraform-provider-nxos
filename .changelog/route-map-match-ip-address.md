@@ -1,0 +1,1 @@
+- Update `nxos_route_policy` resource and data source: update `match_route_access_lists` description and example to support `match ip address` with direct IP/mask via `sys/rpm/accesslist-[<ip>/<mask>]` DN

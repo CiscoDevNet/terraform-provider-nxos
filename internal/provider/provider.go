@@ -22,7 +22,7 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin provider
 import (
 	"context"
-	"errors"
+
 	"os"
 	"slices"
 	"strconv"
@@ -312,23 +312,6 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-	// Test device reachability and credentials
-	if err := c.Login(); err != nil {
-		var authErr *nxos.AuthenticationError
-		if errors.As(err, &authErr) {
-			resp.Diagnostics.AddError(
-				"Unable to authenticate",
-				"Unable to authenticate to nxos device at "+url+":\n\n"+err.Error(),
-			)
-		} else {
-			resp.Diagnostics.AddError(
-				"Unable to connect",
-				"Unable to connect to nxos device at "+url+":\n\n"+err.Error(),
-			)
-		}
-		return
-	}
-
 	data.Devices[""] = &NxosProviderDataDevice{Client: c, Managed: true}
 
 	for _, device := range config.Devices {
@@ -362,24 +345,6 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 				"Unable to create nxos client:\n\n"+err.Error(),
 			)
 			return
-		}
-
-		if managed {
-			if err := c.Login(); err != nil {
-				var authErr *nxos.AuthenticationError
-				if errors.As(err, &authErr) {
-					resp.Diagnostics.AddError(
-						"Unable to authenticate",
-						"Unable to authenticate to nxos device '"+device.Name.ValueString()+"' at "+device.URL.ValueString()+":\n\n"+err.Error(),
-					)
-				} else {
-					resp.Diagnostics.AddError(
-						"Unable to connect",
-						"Unable to connect to nxos device '"+device.Name.ValueString()+"' at "+device.URL.ValueString()+":\n\n"+err.Error(),
-					)
-				}
-				return
-			}
 		}
 
 		data.Devices[device.Name.ValueString()] = &NxosProviderDataDevice{Client: c, Managed: managed}

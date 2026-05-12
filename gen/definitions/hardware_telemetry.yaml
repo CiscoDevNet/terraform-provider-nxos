@@ -102,7 +102,7 @@ child_classes:
             doc_path: Flow/sflow:Transport/
             child_classes:
               - class_name: sflowReceiver
-                rn: receiver-[rcvrVrfName]-[rcvrAddress]
+                rn: receiver-[%s]-[%s]
                 type: list
                 tf_name: receivers
                 description: 'sFlow receiver configuration.'

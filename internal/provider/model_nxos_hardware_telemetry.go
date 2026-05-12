@@ -23,6 +23,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -86,7 +87,8 @@ func (data HardwareTelemetry) getDn() string {
 }
 
 func (data HardwareTelemetryReceivers) getRn(key string) string {
-	return "receiver-[rcvrVrfName]-[rcvrAddress]"
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("receiver-[%s]-[%s]", keyParts[0], keyParts[1])
 }
 
 func (data HardwareTelemetry) getClassName() string {

@@ -1,1 +1,0 @@
-- BREAKING CHANGE: Replace `sflow_receiver_address`, `sflow_receiver_source_address`, and `sflow_receiver_vrf_name` attributes on `nxos_hardware_telemetry` resource and data source with a `receivers` list supporting multiple sFlow collectors and full read support

@@ -7,6 +7,11 @@ description: |-
 
 # Changelog
 
+## 0.12.0
+
+- BREAKING CHANGE: Replace `sflow_receiver_address`, `sflow_receiver_source_address`, and `sflow_receiver_vrf_name` attributes on `nxos_hardware_telemetry` resource and data source with a `receivers` list supporting multiple sFlow collectors and full read support
+- Remove eager device login during provider configuration so that `terraform plan` no longer fails when a device is unreachable
+
 ## 0.11.2
 
 - Add flow monitor, record, collector, and collector bucket configuration to `nxos_analytics` resource and data source

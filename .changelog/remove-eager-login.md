@@ -1,1 +1,0 @@
-- Remove eager device login during provider configuration so that `terraform plan` no longer fails when a device is unreachable

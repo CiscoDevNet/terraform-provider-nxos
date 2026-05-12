@@ -1,1 +1,0 @@
-- Fix `nxos_hardware_telemetry`: destroying sFlow receiver configuration could fail due to malformed DN

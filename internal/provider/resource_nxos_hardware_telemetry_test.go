@@ -41,11 +41,9 @@ func TestAccNxosHardwareTelemetry(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_max_header_size", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_packet_sampling_rate", "4096"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_address", "10.92.198.113"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_max_datagram_size", "1400"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_port", "2055"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_source_address", "10.0.0.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_vrf_name", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receivers.management;10.92.198.113.source_address", "10.0.0.1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -120,11 +118,13 @@ func testAccNxosHardwareTelemetryConfig_all() string {
 	config += `	sflow_control = "stateful-ha"` + "\n"
 	config += `	sflow_max_header_size = 64` + "\n"
 	config += `	sflow_packet_sampling_rate = 4096` + "\n"
-	config += `	sflow_receiver_address = "10.92.198.113"` + "\n"
 	config += `	sflow_receiver_max_datagram_size = 1400` + "\n"
 	config += `	sflow_receiver_port = 2055` + "\n"
-	config += `	sflow_receiver_source_address = "10.0.0.1"` + "\n"
-	config += `	sflow_receiver_vrf_name = "management"` + "\n"
+	config += `	receivers = {` + "\n"
+	config += `		"management;10.92.198.113" = {` + "\n"
+	config += `			source_address = "10.0.0.1"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

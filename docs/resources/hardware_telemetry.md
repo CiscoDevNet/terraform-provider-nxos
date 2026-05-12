@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This resource can manage the hardware telemetry configuration on NX-OS devices, including sFlow.
   API Documentation
-  analyticsHwTelemetry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:HwTelemetry/sflowSflow https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Sflow/sflowInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Inst/
+  analyticsHwTelemetry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:HwTelemetry/sflowSflow https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Sflow/sflowInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Inst/sflowTransport https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Transport/sflowReceiver https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Receiver/
 ---
 
 # nxos_hardware_telemetry (Resource)
@@ -17,6 +17,8 @@ This resource can manage the hardware telemetry configuration on NX-OS devices, 
 - [analyticsHwTelemetry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:HwTelemetry/)
 - [sflowSflow](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Sflow/)
 - [sflowInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Inst/)
+- [sflowTransport](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Transport/)
+- [sflowReceiver](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Receiver/)
 
 ## Example Usage
 
@@ -28,11 +30,13 @@ resource "nxos_hardware_telemetry" "example" {
   sflow_control                    = "stateful-ha"
   sflow_max_header_size            = 64
   sflow_packet_sampling_rate       = 4096
-  sflow_receiver_address           = "10.92.198.113"
   sflow_receiver_max_datagram_size = 1400
   sflow_receiver_port              = 2055
-  sflow_receiver_source_address    = "10.0.0.1"
-  sflow_receiver_vrf_name          = "management"
+  receivers = {
+    "management;10.92.198.113" = {
+      source_address = "10.0.0.1"
+    }
+  }
 }
 ```
 
@@ -42,6 +46,10 @@ resource "nxos_hardware_telemetry" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `receivers` (Attributes Map) sFlow receiver configuration.
+  - Map key format: `<vrf_name>;<address>`
+  - Key component `vrf_name`: The collector VRF name.
+  - Key component `address`: The IP address of the sFlow collector. (see [below for nested schema](#nestedatt--receivers))
 - `sflow_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `sflow_agent_address` (String) The IP address associated with this agent. In the case of a multi-homed agent, this should be the loopback address of the agent.The address should be an invariant that does not change as interfaces are reconfigured, enabled, disabled, added or removed.
@@ -55,17 +63,21 @@ resource "nxos_hardware_telemetry" "example" {
   - Range: `64`-`256`
 - `sflow_packet_sampling_rate` (Number) The statistical sampling rate for packet sampling from this source.
   - Range: `0`-`4294967295`
-- `sflow_receiver_address` (String) The IP address of the sFlow collector. If set to 0.0.0.0 not sFlow datagrams will be sent.
 - `sflow_receiver_max_datagram_size` (Number) The maximum number of data bytes that can be sent in a single sample datagram.
   - Range: `200`-`9000`
 - `sflow_receiver_port` (Number) The destination port for sFlow datagrams.
   - Range: `1`-`65535`
-- `sflow_receiver_source_address` (String) The source ip-address option causes the sent sFlow datagram to use the source IP address as the IP packet source address.
-- `sflow_receiver_vrf_name` (String) It holds collector vrf name.
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--receivers"></a>
+### Nested Schema for `receivers`
+
+Optional:
+
+- `source_address` (String) The source IP address for sent sFlow datagrams.
 
 ## Import
 

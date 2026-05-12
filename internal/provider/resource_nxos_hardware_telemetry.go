@@ -63,7 +63,7 @@ func (r *HardwareTelemetryResource) Metadata(ctx context.Context, req resource.M
 func (r *HardwareTelemetryResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the hardware telemetry configuration on NX-OS devices, including sFlow.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the hardware telemetry configuration on NX-OS devices, including sFlow.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst", "sflowTransport", "sflowReceiver"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/", "Flow/sflow:Transport/", "Flow/sflow:Receiver/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -121,10 +121,6 @@ func (r *HardwareTelemetryResource) Schema(ctx context.Context, req resource.Sch
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"sflow_receiver_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The IP address of the sFlow collector. If set to 0.0.0.0 not sFlow datagrams will be sent.").String,
-				Optional:            true,
-			},
 			"sflow_receiver_max_datagram_size": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The maximum number of data bytes that can be sent in a single sample datagram.").AddIntegerRangeDescription(200, 9000).String,
 				Optional:            true,
@@ -139,13 +135,17 @@ func (r *HardwareTelemetryResource) Schema(ctx context.Context, req resource.Sch
 					int64validator.Between(1, 65535),
 				},
 			},
-			"sflow_receiver_source_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The source ip-address option causes the sent sFlow datagram to use the source IP address as the IP packet source address.").String,
+			"receivers": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("sFlow receiver configuration.\n  - Map key format: `<vrf_name>;<address>`\n  - Key component `vrf_name`: The collector VRF name.\n  - Key component `address`: The IP address of the sFlow collector.").String,
 				Optional:            true,
-			},
-			"sflow_receiver_vrf_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("It holds collector vrf name.").String,
-				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"source_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The source IP address for sent sFlow datagrams.").String,
+							Optional:            true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -256,7 +256,7 @@ func (r *HardwareTelemetryResource) Read(ctx context.Context, req resource.ReadR
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "sflowSflow,sflowInst")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "sflowSflow,sflowInst,sflowTransport,sflowReceiver")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -312,6 +312,14 @@ func (r *HardwareTelemetryResource) Update(ctx context.Context, req resource.Upd
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state HardwareTelemetry
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -322,7 +330,7 @@ func (r *HardwareTelemetryResource) Update(ctx context.Context, req resource.Upd
 	}
 
 	if device.Managed {
-		body := plan.toBody(config)
+		body := plan.toBodyWithDeletes(ctx, state, config)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

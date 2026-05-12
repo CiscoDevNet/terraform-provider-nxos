@@ -57,7 +57,7 @@ func (d *HardwareTelemetryDataSource) Metadata(_ context.Context, req datasource
 func (d *HardwareTelemetryDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the hardware telemetry configuration on NX-OS devices, including sFlow.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the hardware telemetry configuration on NX-OS devices, including sFlow.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst", "sflowTransport", "sflowReceiver"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/", "Flow/sflow:Transport/", "Flow/sflow:Receiver/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -100,10 +100,6 @@ func (d *HardwareTelemetryDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "The statistical sampling rate for packet sampling from this source.",
 				Computed:            true,
 			},
-			"sflow_receiver_address": schema.StringAttribute{
-				MarkdownDescription: "The IP address of the sFlow collector. If set to 0.0.0.0 not sFlow datagrams will be sent.",
-				Computed:            true,
-			},
 			"sflow_receiver_max_datagram_size": schema.Int64Attribute{
 				MarkdownDescription: "The maximum number of data bytes that can be sent in a single sample datagram.",
 				Computed:            true,
@@ -112,13 +108,17 @@ func (d *HardwareTelemetryDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "The destination port for sFlow datagrams.",
 				Computed:            true,
 			},
-			"sflow_receiver_source_address": schema.StringAttribute{
-				MarkdownDescription: "The source ip-address option causes the sent sFlow datagram to use the source IP address as the IP packet source address.",
+			"receivers": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("sFlow receiver configuration.\n  - Map key format: `<vrf_name>;<address>`\n  - Key component `vrf_name`: The collector VRF name.\n  - Key component `address`: The IP address of the sFlow collector.").String,
 				Computed:            true,
-			},
-			"sflow_receiver_vrf_name": schema.StringAttribute{
-				MarkdownDescription: "It holds collector vrf name.",
-				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"source_address": schema.StringAttribute{
+							MarkdownDescription: "The source IP address for sent sFlow datagrams.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -152,7 +152,7 @@ func (d *HardwareTelemetryDataSource) Read(ctx context.Context, req datasource.R
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "sflowSflow,sflowInst")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "sflowSflow,sflowInst,sflowTransport,sflowReceiver")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

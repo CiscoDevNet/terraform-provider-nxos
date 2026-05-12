@@ -78,12 +78,6 @@ child_classes:
             max_int: 4294967295
             description: 'The statistical sampling rate for packet sampling from this source.'
             example: 4096
-          - nxos_name: rcvrAddress
-            tf_name: sflow_receiver_address
-            type: String
-            write_only: true
-            description: 'The IP address of the sFlow collector. If set to 0.0.0.0 not sFlow datagrams will be sent.'
-            example: 10.92.198.113
           - nxos_name: rcvrMaxDatagramSize
             tf_name: sflow_receiver_max_datagram_size
             type: Int64
@@ -98,18 +92,39 @@ child_classes:
             max_int: 65535
             description: 'The destination port for sFlow datagrams.'
             example: 2055
-          - nxos_name: rcvrSrcAddress
-            tf_name: sflow_receiver_source_address
-            type: String
-            write_only: true
-            description: 'The source ip-address option causes the sent sFlow datagram to use the source IP address as the IP packet source address.'
-            example: 10.0.0.1
-          - nxos_name: rcvrVrfName
-            tf_name: sflow_receiver_vrf_name
-            type: String
-            write_only: true
-            description: 'It holds collector vrf name.'
-            example: management
+        child_classes:
+          - class_name: sflowTransport
+            rn: transport
+            type: single
+            no_delete: true
+            tf_name: transport
+            description: 'sFlow transport configuration.'
+            doc_path: Flow/sflow:Transport/
+            child_classes:
+              - class_name: sflowReceiver
+                rn: receiver-[rcvrVrfName]-[rcvrAddress]
+                type: list
+                tf_name: receivers
+                description: 'sFlow receiver configuration.'
+                doc_path: Flow/sflow:Receiver/
+                attributes:
+                  - nxos_name: rcvrVrfName
+                    tf_name: vrf_name
+                    type: String
+                    id: true
+                    description: 'The collector VRF name.'
+                    example: management
+                  - nxos_name: rcvrAddress
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'The IP address of the sFlow collector.'
+                    example: 10.92.198.113
+                  - nxos_name: rcvrSrcAddress
+                    tf_name: source_address
+                    type: String
+                    description: 'The source IP address for sent sFlow datagrams.'
+                    example: 10.0.0.1
 test_prerequisites:
   - dn: sys/fm/sflow
     class_name: fmSflow

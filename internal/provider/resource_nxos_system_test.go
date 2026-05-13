@@ -139,9 +139,6 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.admin_state", "port-enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.aggressive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.bidirectional_detection", "port-enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "platform_nve_interfaces.1.ipmc_index_size", "4000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "platform_nve_interfaces.1.infra_vlans.100.force", "Enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "platform_extended_dme_load_interval", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.admin_state", "up"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.auto_negotiation", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.description", "My Description"))
@@ -294,35 +291,6 @@ resource "nxos_dme" "PreReq1" {
   }
 }
 
-resource "nxos_dme" "PreReq2" {
-  dn = "sys/fm/nvo"
-  class_name = "fmNvo"
-  delete = false
-  content = {
-      adminSt = "enabled"
-  }
-}
-
-resource "nxos_dme" "PreReq3" {
-  dn = "sys/fm/evpn"
-  class_name = "fmEvpn"
-  delete = false
-  content = {
-      adminSt = "enabled"
-  }
-  depends_on = [nxos_dme.PreReq2, ]
-}
-
-resource "nxos_dme" "PreReq4" {
-  dn = "sys/eps/epId-1"
-  class_name = "nvoEp"
-  delete = false
-  content = {
-      adminSt = "enabled"
-  }
-  depends_on = [nxos_dme.PreReq3, ]
-}
-
 `
 
 // End of section. //template:end testPrerequisites
@@ -330,7 +298,7 @@ resource "nxos_dme" "PreReq4" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSystemConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -459,17 +427,6 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config += `			bidirectional_detection = "port-enabled"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	platform_nve_interfaces = {` + "\n"
-	config += `		"1" = {` + "\n"
-	config += `			ipmc_index_size = 4000` + "\n"
-	config += `			infra_vlans = {` + "\n"
-	config += `				"100" = {` + "\n"
-	config += `					force = "Enable"` + "\n"
-	config += `				}` + "\n"
-	config += `			}` + "\n"
-	config += `		}` + "\n"
-	config += `	}` + "\n"
-	config += `	platform_extended_dme_load_interval = 300` + "\n"
 	config += `	management_interfaces = {` + "\n"
 	config += `		"mgmt0" = {` + "\n"
 	config += `			admin_state = "up"` + "\n"
@@ -599,7 +556,7 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 		config += `		}` + "\n"
 		config += `	}` + "\n"
 	}
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

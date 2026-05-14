@@ -7,6 +7,11 @@ description: |-
 
 # Changelog
 
+## 0.13.0
+
+- Fix nested child list entries not being deleted from the device when a parent list item key changes during updates
+- BREAKING CHANGE: Extract platform configuration from `nxos_system` into a new `nxos_platform` resource and data source. All `platform_*`, `platform_extended_*`, `platform_nve_*`, and `tcam_region_*` attributes have been removed from `nxos_system`. Users must create a new `nxos_platform` resource and import existing state with `terraform import nxos_platform.example ""`. Attribute names on the new resource drop the `platform_` prefix (e.g., `platform_access_list_match_inner_header` becomes `access_list_match_inner_header`, `platform_extended_dme_load_interval` becomes `extended_dme_load_interval`). The `platform_nve_interfaces` attribute is renamed to `nve_interfaces`.
+
 ## 0.12.1
 
 - Fix `nxos_hardware_telemetry`: destroying sFlow receiver configuration could fail due to malformed DN

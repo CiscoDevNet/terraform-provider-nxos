@@ -1935,7 +1935,7 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 		planItemdi := data.Ipv4PrefixLists[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("rtpfxRuleV4.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("rtpfxRuleV4.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtpfxRuleV4.children"
 				break
 			}
@@ -1970,7 +1970,7 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 		planItemdi := data.Ipv6PrefixLists[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("rtpfxRuleV6.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("rtpfxRuleV6.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtpfxRuleV6.children"
 				break
 			}
@@ -2005,7 +2005,7 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 		planItemdi := data.RouteMaps[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("rtmapRule.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("rtmapRule.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtmapRule.children"
 				break
 			}
@@ -2030,7 +2030,7 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 			planItemdi_ := planItemdi.Entries[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("rtmapEntry.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("rtmapEntry.attributes.order").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".rtmapEntry.children"
 					break
 				}
@@ -2111,7 +2111,7 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 		planItemdi := data.CommunityLists[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("rtregcomRule.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("rtregcomRule.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtregcomRule.children"
 				break
 			}
@@ -2136,7 +2136,7 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 			planItemdi_ := planItemdi.Entries[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("rtregcomEntry.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("rtregcomEntry.attributes.order").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".rtregcomEntry.children"
 					break
 				}

@@ -3246,7 +3246,7 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 		planItemdi := data.Vrfs[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.bgpInst.children").Array() {
-			if mv.Get("bgpDom.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("bgpDom.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.bgpInst.children" + "." + strconv.Itoa(mi) + ".bgpDom.children"
 				break
 			}
@@ -3271,7 +3271,7 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 			planItemdi_ := planItemdi.AddressFamilies[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("bgpDomAf.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("bgpDomAf.attributes.type").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".bgpDomAf.children"
 					break
 				}
@@ -3324,7 +3324,7 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 			planItemdi_ := planItemdi.PeerTemplates[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("bgpPeerCont.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("bgpPeerCont.attributes.name").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".bgpPeerCont.children"
 					break
 				}
@@ -3345,10 +3345,9 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 				if _, found := planItemdi_.PeerTemplateAddressFamilies[di__]; !found {
 					continue
 				}
-				stateItemdi__ := stateItemdi_.PeerTemplateAddressFamilies[di__]
 				matchBodyPathdi__ := ""
 				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
-					if mv.Get("bgpPeerAf.attributes.rn").String() == stateItemdi__.getRn(di__) {
+					if mv.Get("bgpPeerAf.attributes.type").String() == di__ {
 						matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".bgpPeerAf.children"
 						break
 					}
@@ -3375,7 +3374,7 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 			planItemdi_ := planItemdi.Peers[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("bgpPeer.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("bgpPeer.attributes.addr").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".bgpPeer.children"
 					break
 				}
@@ -3400,7 +3399,7 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 				planItemdi__ := planItemdi_.PeerAddressFamilies[di__]
 				matchBodyPathdi__ := ""
 				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
-					if mv.Get("bgpPeerAf.attributes.rn").String() == stateItemdi__.getRn(di__) {
+					if mv.Get("bgpPeerAf.attributes.type").String() == di__ {
 						matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".bgpPeerAf.children"
 						break
 					}

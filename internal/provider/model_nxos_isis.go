@@ -1239,7 +1239,7 @@ func (data ISIS) toBodyWithDeletes(ctx context.Context, state ISIS, config ISIS)
 		planItemdi := data.Instances[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("isisInst.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("isisInst.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".isisInst.children"
 				break
 			}
@@ -1264,7 +1264,7 @@ func (data ISIS) toBodyWithDeletes(ctx context.Context, state ISIS, config ISIS)
 			planItemdi_ := planItemdi.Vrfs[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("isisDom.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("isisDom.attributes.name").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".isisDom.children"
 					break
 				}

@@ -1027,7 +1027,7 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF)
 		planItemdi := data.Instances[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("ospfInst.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("ospfInst.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".ospfInst.children"
 				break
 			}
@@ -1052,7 +1052,7 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF)
 			planItemdi_ := planItemdi.Vrfs[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("ospfDom.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("ospfDom.attributes.name").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ospfDom.children"
 					break
 				}
@@ -1082,10 +1082,9 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF)
 				if _, found := planItemdi_.Interfaces[di__]; !found {
 					continue
 				}
-				stateItemdi__ := stateItemdi_.Interfaces[di__]
 				matchBodyPathdi__ := ""
 				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
-					if mv.Get("ospfIf.attributes.rn").String() == stateItemdi__.getRn(di__) {
+					if mv.Get("ospfIf.attributes.id").String() == di__ {
 						matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".ospfIf.children"
 						break
 					}

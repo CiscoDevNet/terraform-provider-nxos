@@ -338,7 +338,7 @@ func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN)
 		planItemdi := data.Vnis[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("rtctrlBDEvi.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("rtctrlBDEvi.attributes.encap").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtctrlBDEvi.children"
 				break
 			}
@@ -363,7 +363,7 @@ func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN)
 			planItemdi_ := planItemdi.RouteTargetDirections[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("rtctrlRttP.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("rtctrlRttP.attributes.type").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".rtctrlRttP.children"
 					break
 				}

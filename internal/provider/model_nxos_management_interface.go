@@ -315,10 +315,9 @@ func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state Man
 		if _, found := data.ManagementInterfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.ManagementInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("mgmtMgmtIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("mgmtMgmtIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".mgmtMgmtIf.children"
 				break
 			}

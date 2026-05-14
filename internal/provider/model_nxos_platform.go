@@ -3114,7 +3114,7 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 		planItemdi := data.NveInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("platformNVE.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("platformNVE.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".platformNVE.children"
 				break
 			}

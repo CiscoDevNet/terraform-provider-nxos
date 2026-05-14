@@ -530,10 +530,9 @@ func (data BFD) toBodyWithDeletes(ctx context.Context, state BFD, config BFD) nx
 		if _, found := data.Interfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.Interfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.bfdInst.children").Array() {
-			if mv.Get("bfdIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("bfdIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + ".0.bfdInst.children" + "." + strconv.Itoa(mi) + ".bfdIf.children"
 				break
 			}

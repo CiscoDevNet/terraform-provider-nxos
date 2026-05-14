@@ -1360,7 +1360,7 @@ func (data PortChannelInterface) toBodyWithDeletes(ctx context.Context, state Po
 		planItemdi := data.PortChannelInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("pcAggrIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("pcAggrIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".pcAggrIf.children"
 				break
 			}

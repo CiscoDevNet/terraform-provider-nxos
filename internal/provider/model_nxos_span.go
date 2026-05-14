@@ -595,7 +595,7 @@ func (data SPAN) toBodyWithDeletes(ctx context.Context, state SPAN, config SPAN)
 		planItemdi := data.Sessions[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("spanMonitor.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("spanMonitor.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".spanMonitor.children"
 				break
 			}

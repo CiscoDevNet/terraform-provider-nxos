@@ -320,7 +320,7 @@ func (data ICMPv4) toBodyWithDeletes(ctx context.Context, state ICMPv4, config I
 		planItemdi := data.Vrfs[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.icmpv4Inst.children").Array() {
-			if mv.Get("icmpv4Dom.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("icmpv4Dom.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.icmpv4Inst.children" + "." + strconv.Itoa(mi) + ".icmpv4Dom.children"
 				break
 			}

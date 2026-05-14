@@ -380,6 +380,7 @@ var functions = template.FuncMap{
 	"mapKeyParse":               MapKeyParse,
 	"mapKeySjsonSetStmts":       MapKeySjsonSetStmts,
 	"mapKeyMatchExpr":           MapKeyMatchExpr,
+	"mapKeyMatchExprVar":        MapKeyMatchExprVar,
 	"mapKeyRnFormatArgs":        MapKeyRnFormatArgs,
 	"mapKeyDescription":         MapKeyDescription,
 }
@@ -514,6 +515,23 @@ func MapKeyMatchExpr(keyVar string, className string, attrs []YamlConfigAttribut
 	var parts []string
 	for i, a := range ids {
 		parts = append(parts, fmt.Sprintf(`v.Get("%s.attributes.%s").String() == keyParts[%d]`, className, a.NxosName, i))
+	}
+	return strings.Join(parts, " &&\n\t\t\t\t\t")
+}
+
+// MapKeyMatchExprVar is like MapKeyMatchExpr but uses a caller-supplied gjson
+// result variable name instead of the hardcoded "v".
+func MapKeyMatchExprVar(resultVar, keyVar, className string, attrs []YamlConfigAttribute) string {
+	ids := idAttrs(attrs)
+	if len(ids) == 0 {
+		return "true"
+	}
+	if len(ids) == 1 {
+		return resultVar + `.Get("` + className + `.attributes.` + ids[0].NxosName + `").String() == ` + keyVar
+	}
+	var parts []string
+	for i, a := range ids {
+		parts = append(parts, fmt.Sprintf(`%s.Get("%s.attributes.%s").String() == keyParts[%d]`, resultVar, className, a.NxosName, i))
 	}
 	return strings.Join(parts, " &&\n\t\t\t\t\t")
 }

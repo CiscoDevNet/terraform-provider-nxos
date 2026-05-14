@@ -2648,7 +2648,7 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 		planItemdi := data.AccessLists[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv4aclAF.children").Array() {
-			if mv.Get("ipv4aclACL.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("ipv4aclACL.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.ipv4aclAF.children" + "." + strconv.Itoa(mi) + ".ipv4aclACL.children"
 				break
 			}
@@ -2679,10 +2679,9 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 		if _, found := data.IngressInterfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.IngressInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv4aclAF.children"+".0.aclPolicy.children"+".0.aclIngress.children").Array() {
-			if mv.Get("aclIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("aclIf.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.ipv4aclAF.children" + ".0.aclPolicy.children" + ".0.aclIngress.children" + "." + strconv.Itoa(mi) + ".aclIf.children"
 				break
 			}
@@ -2704,10 +2703,9 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 		if _, found := data.EgressInterfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.EgressInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv4aclAF.children"+".0.aclPolicy.children"+".0.aclEgress.children").Array() {
-			if mv.Get("aclIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("aclIf.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.ipv4aclAF.children" + ".0.aclPolicy.children" + ".0.aclEgress.children" + "." + strconv.Itoa(mi) + ".aclIf.children"
 				break
 			}
@@ -2733,7 +2731,7 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 		planItemdi := data.Ipv6AccessLists[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv6aclAF.children").Array() {
-			if mv.Get("ipv6aclACL.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("ipv6aclACL.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.ipv6aclAF.children" + "." + strconv.Itoa(mi) + ".ipv6aclACL.children"
 				break
 			}
@@ -2764,10 +2762,9 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 		if _, found := data.Ipv6IngressInterfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.Ipv6IngressInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv6aclAF.children"+".0.aclPolicy.children"+".0.aclIngress.children").Array() {
-			if mv.Get("aclIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("aclIf.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.ipv6aclAF.children" + ".0.aclPolicy.children" + ".0.aclIngress.children" + "." + strconv.Itoa(mi) + ".aclIf.children"
 				break
 			}
@@ -2789,10 +2786,9 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 		if _, found := data.Ipv6EgressInterfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.Ipv6EgressInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv6aclAF.children"+".0.aclPolicy.children"+".0.aclEgress.children").Array() {
-			if mv.Get("aclIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("aclIf.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.ipv6aclAF.children" + ".0.aclPolicy.children" + ".0.aclEgress.children" + "." + strconv.Itoa(mi) + ".aclIf.children"
 				break
 			}

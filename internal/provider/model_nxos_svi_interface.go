@@ -434,10 +434,9 @@ func (data SVIInterface) toBodyWithDeletes(ctx context.Context, state SVIInterfa
 		if _, found := data.SviInterfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.SviInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("sviIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("sviIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".sviIf.children"
 				break
 			}

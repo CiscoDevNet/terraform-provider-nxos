@@ -1187,7 +1187,7 @@ func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM) nx
 		planItemdi := data.Vrfs[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.pimInst.children").Array() {
-			if mv.Get("pimDom.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("pimDom.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.pimInst.children" + "." + strconv.Itoa(mi) + ".pimDom.children"
 				break
 			}
@@ -1221,7 +1221,7 @@ func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM) nx
 			planItemdi__ := planItemdi.StaticRps[di__]
 			matchBodyPathdi__ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi+".0.pimStaticRPP.children").Array() {
-				if mv.Get("pimStaticRP.attributes.rn").String() == stateItemdi__.getRn(di__) {
+				if mv.Get("pimStaticRP.attributes.addr").String() == di__ {
 					matchBodyPathdi__ = matchBodyPathdi + ".0.pimStaticRPP.children" + "." + strconv.Itoa(mi) + ".pimStaticRP.children"
 					break
 				}

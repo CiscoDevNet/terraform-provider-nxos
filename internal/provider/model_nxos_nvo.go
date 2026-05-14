@@ -747,7 +747,7 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO) nx
 		planItemdi := data.NveInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("nvoEp.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("nvoEp.attributes.epId").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".nvoEp.children"
 				break
 			}
@@ -768,10 +768,9 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO) nx
 			if _, found := planItemdi.Vnis[di__]; !found {
 				continue
 			}
-			stateItemdi__ := stateItemdi.Vnis[di__]
 			matchBodyPathdi__ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi+".0.nvoNws.children").Array() {
-				if mv.Get("nvoNw.attributes.rn").String() == stateItemdi__.getRn(di__) {
+				if mv.Get("nvoNw.attributes.vni").String() == di__ {
 					matchBodyPathdi__ = matchBodyPathdi + ".0.nvoNws.children" + "." + strconv.Itoa(mi) + ".nvoNw.children"
 					break
 				}

@@ -1520,10 +1520,9 @@ func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state Physi
 		if _, found := data.PhysicalInterfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.PhysicalInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("l1PhysIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("l1PhysIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".l1PhysIf.children"
 				break
 			}

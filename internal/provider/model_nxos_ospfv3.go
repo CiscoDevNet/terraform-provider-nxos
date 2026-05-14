@@ -781,7 +781,7 @@ func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config O
 		planItemdi := data.Instances[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("ospfv3Inst.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("ospfv3Inst.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".ospfv3Inst.children"
 				break
 			}
@@ -806,7 +806,7 @@ func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config O
 			planItemdi_ := planItemdi.Vrfs[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("ospfv3Dom.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("ospfv3Dom.attributes.name").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ospfv3Dom.children"
 					break
 				}

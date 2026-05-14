@@ -2555,7 +2555,7 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 		planItemdi := data.Users[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("aaaUser.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("aaaUser.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".aaaUser.children"
 				break
 			}
@@ -2599,7 +2599,7 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 		planItemdi := data.TacacsProviderGroups[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.aaaTacacsPlusEp.children").Array() {
-			if mv.Get("aaaTacacsPlusProviderGroup.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("aaaTacacsPlusProviderGroup.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.aaaTacacsPlusEp.children" + "." + strconv.Itoa(mi) + ".aaaTacacsPlusProviderGroup.children"
 				break
 			}

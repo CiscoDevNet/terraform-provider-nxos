@@ -6869,7 +6869,7 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP)
 		planItemdi := data.LocalUsers[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.snmpInst.children").Array() {
-			if mv.Get("snmpLocalUser.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("snmpLocalUser.attributes.userName").String() == di {
 				matchBodyPathdi = bodyPath + ".0.snmpInst.children" + "." + strconv.Itoa(mi) + ".snmpLocalUser.children"
 				break
 			}
@@ -6903,8 +6903,10 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP)
 		stateItemdi := state.Hosts[di]
 		planItemdi := data.Hosts[di]
 		matchBodyPathdi := ""
+		keyParts := strings.SplitN(di, ";", 2)
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.snmpInst.children").Array() {
-			if mv.Get("snmpHost.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("snmpHost.attributes.hostName").String() == keyParts[0] &&
+				mv.Get("snmpHost.attributes.udpPortID").String() == keyParts[1] {
 				matchBodyPathdi = bodyPath + ".0.snmpInst.children" + "." + strconv.Itoa(mi) + ".snmpHost.children"
 				break
 			}

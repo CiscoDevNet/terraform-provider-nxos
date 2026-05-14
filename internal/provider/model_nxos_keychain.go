@@ -319,7 +319,7 @@ func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, conf
 		planItemdi := data.Keychains[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.kcmgrKeychains.children").Array() {
-			if mv.Get("kcmgrClassicKeychain.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("kcmgrClassicKeychain.attributes.keychainName").String() == di {
 				matchBodyPathdi = bodyPath + ".0.kcmgrKeychains.children" + "." + strconv.Itoa(mi) + ".kcmgrClassicKeychain.children"
 				break
 			}

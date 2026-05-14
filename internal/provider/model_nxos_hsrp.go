@@ -665,7 +665,7 @@ func (data HSRP) toBodyWithDeletes(ctx context.Context, state HSRP, config HSRP)
 		planItemdi := data.Interfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.hsrpInst.children").Array() {
-			if mv.Get("hsrpIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("hsrpIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + ".0.hsrpInst.children" + "." + strconv.Itoa(mi) + ".hsrpIf.children"
 				break
 			}

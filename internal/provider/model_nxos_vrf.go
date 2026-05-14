@@ -614,7 +614,7 @@ func (data VRF) toBodyWithDeletes(ctx context.Context, state VRF, config VRF) nx
 		planItemdi := data.Vrfs[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("l3Inst.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("l3Inst.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".l3Inst.children"
 				break
 			}
@@ -639,7 +639,7 @@ func (data VRF) toBodyWithDeletes(ctx context.Context, state VRF, config VRF) nx
 			planItemdi__ := planItemdi.AddressFamilies[di__]
 			matchBodyPathdi__ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi+".0.rtctrlDom.children").Array() {
-				if mv.Get("rtctrlDomAf.attributes.rn").String() == stateItemdi__.getRn(di__) {
+				if mv.Get("rtctrlDomAf.attributes.type").String() == di__ {
 					matchBodyPathdi__ = matchBodyPathdi + ".0.rtctrlDom.children" + "." + strconv.Itoa(mi) + ".rtctrlDomAf.children"
 					break
 				}
@@ -664,7 +664,7 @@ func (data VRF) toBodyWithDeletes(ctx context.Context, state VRF, config VRF) nx
 				planItemdi___ := planItemdi__.RouteTargetAddressFamilies[di___]
 				matchBodyPathdi___ := ""
 				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi__).Array() {
-					if mv.Get("rtctrlAfCtrl.attributes.rn").String() == stateItemdi___.getRn(di___) {
+					if mv.Get("rtctrlAfCtrl.attributes.type").String() == di___ {
 						matchBodyPathdi___ = matchBodyPathdi__ + "." + strconv.Itoa(mi) + ".rtctrlAfCtrl.children"
 						break
 					}
@@ -689,7 +689,7 @@ func (data VRF) toBodyWithDeletes(ctx context.Context, state VRF, config VRF) nx
 					planItemdi____ := planItemdi___.RouteTargetDirections[di____]
 					matchBodyPathdi____ := ""
 					for mi, mv := range gjson.Get(body.Str, matchBodyPathdi___).Array() {
-						if mv.Get("rtctrlRttP.attributes.rn").String() == stateItemdi____.getRn(di____) {
+						if mv.Get("rtctrlRttP.attributes.type").String() == di____ {
 							matchBodyPathdi____ = matchBodyPathdi___ + "." + strconv.Itoa(mi) + ".rtctrlRttP.children"
 							break
 						}

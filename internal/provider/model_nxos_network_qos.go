@@ -963,7 +963,7 @@ func (data NetworkQoS) toBodyWithDeletes(ctx context.Context, state NetworkQoS, 
 		planItemdi := data.ClassMaps[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipqosCMapEntity.children").Array() {
-			if mv.Get("ipqosCMapInst.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("ipqosCMapInst.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.ipqosCMapEntity.children" + "." + strconv.Itoa(mi) + ".ipqosCMapInst.children"
 				break
 			}
@@ -998,7 +998,7 @@ func (data NetworkQoS) toBodyWithDeletes(ctx context.Context, state NetworkQoS, 
 		planItemdi := data.PolicyMaps[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipqosPMapEntity.children").Array() {
-			if mv.Get("ipqosPMapInst.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("ipqosPMapInst.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.ipqosPMapEntity.children" + "." + strconv.Itoa(mi) + ".ipqosPMapInst.children"
 				break
 			}
@@ -1019,10 +1019,9 @@ func (data NetworkQoS) toBodyWithDeletes(ctx context.Context, state NetworkQoS, 
 			if _, found := planItemdi.MatchClassMaps[di_]; !found {
 				continue
 			}
-			stateItemdi_ := stateItemdi.MatchClassMaps[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("ipqosMatchCMap.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("ipqosMatchCMap.attributes.name").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ipqosMatchCMap.children"
 					break
 				}

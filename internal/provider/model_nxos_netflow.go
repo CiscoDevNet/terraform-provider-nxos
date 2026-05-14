@@ -878,7 +878,7 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 		planItemdi := data.Monitors[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("flowMonitor.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("flowMonitor.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".flowMonitor.children"
 				break
 			}
@@ -899,10 +899,9 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 			if _, found := planItemdi.ExporterBuckets[di_]; !found {
 				continue
 			}
-			stateItemdi_ := stateItemdi.ExporterBuckets[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("flowExporterBucket.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("flowExporterBucket.attributes.id").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".flowExporterBucket.children"
 					break
 				}
@@ -938,7 +937,7 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 		planItemdi := data.ClassMaps[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("flowClassMap.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("flowClassMap.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".flowClassMap.children"
 				break
 			}

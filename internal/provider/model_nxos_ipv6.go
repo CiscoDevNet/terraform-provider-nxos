@@ -811,7 +811,7 @@ func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6)
 		planItemdi := data.Vrfs[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipv6Inst.children").Array() {
-			if mv.Get("ipv6Dom.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("ipv6Dom.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.ipv6Inst.children" + "." + strconv.Itoa(mi) + ".ipv6Dom.children"
 				break
 			}
@@ -836,7 +836,7 @@ func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6)
 			planItemdi_ := planItemdi.StaticRoutes[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("ipv6Route.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("ipv6Route.attributes.prefix").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ipv6Route.children"
 					break
 				}
@@ -871,7 +871,7 @@ func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6)
 			planItemdi_ := planItemdi.Interfaces[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("ipv6If.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("ipv6If.attributes.id").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ipv6If.children"
 					break
 				}

@@ -819,10 +819,9 @@ func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC, config VPC) nx
 		if _, found := data.Interfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.Interfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.vpcInst.children"+".0.vpcDom.children").Array() {
-			if mv.Get("vpcIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("vpcIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + ".0.vpcInst.children" + ".0.vpcDom.children" + "." + strconv.Itoa(mi) + ".vpcIf.children"
 				break
 			}

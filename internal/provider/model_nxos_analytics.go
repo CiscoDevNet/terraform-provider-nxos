@@ -1638,7 +1638,7 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 		planItemdi := data.Instances[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("analyticsInst.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("analyticsInst.attributes.mode").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".analyticsInst.children"
 				break
 			}
@@ -1681,7 +1681,7 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 			planItemdi_ := planItemdi.Policies[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("analyticsPolicy.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("analyticsPolicy.attributes.name").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".analyticsPolicy.children"
 					break
 				}
@@ -1734,7 +1734,7 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 			planItemdi_ := planItemdi.Monitors[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("analyticsMonitor.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("analyticsMonitor.attributes.name").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".analyticsMonitor.children"
 					break
 				}
@@ -1759,7 +1759,7 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 				planItemdi__ := planItemdi_.CollectorBuckets[di__]
 				matchBodyPathdi__ := ""
 				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
-					if mv.Get("analyticsCollectorBucket.attributes.rn").String() == stateItemdi__.getRn(di__) {
+					if mv.Get("analyticsCollectorBucket.attributes.id").String() == di__ {
 						matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".analyticsCollectorBucket.children"
 						break
 					}
@@ -1791,10 +1791,9 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 			if _, found := planItemdi.ForwardInstanceTargets[di_]; !found {
 				continue
 			}
-			stateItemdi_ := stateItemdi.ForwardInstanceTargets[di_]
 			matchBodyPathdi_ := ""
 			for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-				if mv.Get("analyticsFwdInstTarget.attributes.rn").String() == stateItemdi_.getRn(di_) {
+				if mv.Get("analyticsFwdInstTarget.attributes.id").String() == di_ {
 					matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".analyticsFwdInstTarget.children"
 					break
 				}

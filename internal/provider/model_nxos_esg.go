@@ -985,7 +985,7 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG) nx
 		planItemdi := data.SecurityGroups[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.esgGroupEntity.children").Array() {
-			if mv.Get("esgGroupInst.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("esgGroupInst.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + ".0.esgGroupEntity.children" + "." + strconv.Itoa(mi) + ".esgGroupInst.children"
 				break
 			}
@@ -1038,7 +1038,7 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG) nx
 		planItemdi := data.ClassMaps[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.esgClassMapEntity.children").Array() {
-			if mv.Get("esgClassMapInst.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("esgClassMapInst.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.esgClassMapEntity.children" + "." + strconv.Itoa(mi) + ".esgClassMapInst.children"
 				break
 			}
@@ -1073,7 +1073,7 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG) nx
 		planItemdi := data.PolicyMaps[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.esgPolicyMapEntity.children").Array() {
-			if mv.Get("esgPolicyMapInst.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("esgPolicyMapInst.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.esgPolicyMapEntity.children" + "." + strconv.Itoa(mi) + ".esgPolicyMapInst.children"
 				break
 			}

@@ -6219,7 +6219,7 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		planItemdi := data.NdVrfs[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ndEntity.children"+".0.ndInst.children").Array() {
-			if mv.Get("ndDom.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("ndDom.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.ndEntity.children" + ".0.ndInst.children" + "." + strconv.Itoa(mi) + ".ndDom.children"
 				break
 			}
@@ -6259,10 +6259,9 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		if _, found := data.DnsProfiles[di]; !found {
 			continue
 		}
-		stateItemdi := state.DnsProfiles[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.dnsEntity.children").Array() {
-			if mv.Get("dnsProf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("dnsProf.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.dnsEntity.children" + "." + strconv.Itoa(mi) + ".dnsProf.children"
 				break
 			}
@@ -6284,10 +6283,9 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		if _, found := data.Vdcs[di]; !found {
 			continue
 		}
-		stateItemdi := state.Vdcs[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("nwVdc.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("nwVdc.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".nwVdc.children"
 				break
 			}
@@ -6377,7 +6375,7 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		planItemdi := data.BreakoutModules[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.imBreakout.children").Array() {
-			if mv.Get("imMod.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("imMod.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + ".0.imBreakout.children" + "." + strconv.Itoa(mi) + ".imMod.children"
 				break
 			}
@@ -6412,7 +6410,7 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		planItemdi := data.ServiceInstances[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.sasSas.children"+".0.sasSvc.children").Array() {
-			if mv.Get("sasSvcInstance.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("sasSvcInstance.attributes.name").String() == di {
 				matchBodyPathdi = bodyPath + ".0.sasSas.children" + ".0.sasSvc.children" + "." + strconv.Itoa(mi) + ".sasSvcInstance.children"
 				break
 			}

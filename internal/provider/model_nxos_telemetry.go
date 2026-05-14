@@ -761,7 +761,7 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 		planItemdi := data.DestinationGroups[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("telemetryDestGroup.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("telemetryDestGroup.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".telemetryDestGroup.children"
 				break
 			}
@@ -796,7 +796,7 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 		planItemdi := data.SensorGroups[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("telemetrySensorGroup.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("telemetrySensorGroup.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".telemetrySensorGroup.children"
 				break
 			}
@@ -831,7 +831,7 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 		planItemdi := data.Subscriptions[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("telemetrySubscription.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("telemetrySubscription.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".telemetrySubscription.children"
 				break
 			}

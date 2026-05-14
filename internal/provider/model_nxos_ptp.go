@@ -1268,7 +1268,7 @@ func (data PTP) toBodyWithDeletes(ctx context.Context, state PTP, config PTP) nx
 		planItemdi := data.Interfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("ptpPtpIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("ptpPtpIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".ptpPtpIf.children"
 				break
 			}

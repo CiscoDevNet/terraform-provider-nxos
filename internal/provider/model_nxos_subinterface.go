@@ -354,10 +354,9 @@ func (data Subinterface) toBodyWithDeletes(ctx context.Context, state Subinterfa
 		if _, found := data.Subinterfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.Subinterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("l3EncRtdIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("l3EncRtdIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".l3EncRtdIf.children"
 				break
 			}

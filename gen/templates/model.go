@@ -1106,13 +1106,16 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 		if _, found := {{$planListExpr}}[{{$indexVar}}]; !found {
 			continue
 		}
-		stateItem{{$indexVar}} := {{$stateListExpr}}[{{$indexVar}}]
 		{{- if needsPlanItem .Children}}
+		stateItem{{$indexVar}} := {{$stateListExpr}}[{{$indexVar}}]
 		planItem{{$indexVar}} := {{$planListExpr}}[{{$indexVar}}]
 		{{- end}}
 		matchBodyPath{{$indexVar}} := ""
+		{{- if gt (idCount $idAttributes) 1}}
+		{{mapKeyParse $indexVar $idAttributes}}
+		{{- end}}
 		for mi, mv := range gjson.Get(body.Str, {{$parentBodyPath}}).Array() {
-			if mv.Get("{{$parentClassName}}.attributes.rn").String() == stateItem{{$indexVar}}.getRn({{$indexVar}}) {
+			if {{mapKeyMatchExprVar "mv" $indexVar $parentClassName $idAttributes}} {
 				matchBodyPath{{$indexVar}} = {{$parentBodyPath}} + "." + strconv.Itoa(mi) + ".{{$parentClassName}}.children"
 				break
 			}

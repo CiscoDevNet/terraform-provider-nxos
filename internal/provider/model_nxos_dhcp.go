@@ -773,7 +773,7 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP)
 		planItemdi := data.RelayInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.dhcpInst.children").Array() {
-			if mv.Get("dhcpRelayIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("dhcpRelayIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + ".0.dhcpInst.children" + "." + strconv.Itoa(mi) + ".dhcpRelayIf.children"
 				break
 			}

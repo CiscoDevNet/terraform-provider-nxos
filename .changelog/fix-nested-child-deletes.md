@@ -1,0 +1,1 @@
+- Fix nested child list entries not being deleted from the device when a parent list item key changes during updates

@@ -263,10 +263,9 @@ func (data LoopbackInterface) toBodyWithDeletes(ctx context.Context, state Loopb
 		if _, found := data.LoopbackInterfaces[di]; !found {
 			continue
 		}
-		stateItemdi := state.LoopbackInterfaces[di]
 		matchBodyPathdi := ""
 		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("l3LbRtdIf.attributes.rn").String() == stateItemdi.getRn(di) {
+			if mv.Get("l3LbRtdIf.attributes.id").String() == di {
 				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".l3LbRtdIf.children"
 				break
 			}

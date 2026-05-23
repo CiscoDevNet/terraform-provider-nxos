@@ -274,6 +274,47 @@ func (data LoopbackInterface) toBodyWithDeletes(ctx context.Context, state Loopb
 			continue
 		}
 	}
+	for key := range state.LoopbackInterfaces {
+		if configChild, ok := config.LoopbackInterfaces[key]; ok {
+			stateChild := state.LoopbackInterfaces[key]
+			_ = stateChild
+			_ = configChild
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("l3LbRtdIf.attributes.id").String() == key {
+					if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l3LbRtdIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l3LbRtdIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.LinkLogging.IsNull() && configChild.LinkLogging.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l3LbRtdIf.attributes."+"linkLog", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+			{
+				listChildPath := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("l3LbRtdIf.attributes.id").String() == key {
+						listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".l3LbRtdIf.children"
+						break
+					}
+				}
+				if listChildPath != "" {
+					for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+						if sv.Get("nwRtVrfMbr").Exists() {
+							if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nwRtVrfMbr.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return body
 }
 

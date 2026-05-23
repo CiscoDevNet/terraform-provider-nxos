@@ -1803,6 +1803,435 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 			}
 		}
 	}
+	for key := range state.Instances {
+		if configChild, ok := config.Instances[key]; ok {
+			stateChild := state.Instances[key]
+			_ = stateChild
+			_ = configChild
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("analyticsInst.attributes.mode").String() == key {
+					if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".analyticsInst.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.CollectTunnelHeader.IsNull() && configChild.CollectTunnelHeader.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".analyticsInst.attributes."+"collectTunnelHeader", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".analyticsInst.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.EnableAnalyticsSubmode.IsNull() && configChild.EnableAnalyticsSubmode.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".analyticsInst.attributes."+"enableAnalyticsSubmode", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.GeneveEnable.IsNull() && configChild.GeneveEnable.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".analyticsInst.attributes."+"geneveEnable", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.Timeout.IsNull() && configChild.Timeout.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".analyticsInst.attributes."+"timeOut", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+			{
+				listChildPath := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("analyticsInst.attributes.mode").String() == key {
+						listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".analyticsInst.children"
+						break
+					}
+				}
+				if listChildPath != "" {
+					for key := range stateChild.Profiles {
+						if configChild, ok := configChild.Profiles[key]; ok {
+							stateChild := stateChild.Profiles[key]
+							_ = stateChild
+							_ = configChild
+							for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+								if mv.Get("analyticsProfile.attributes.name").String() == key {
+									if !stateChild.BurstIntervalShift.IsNull() && configChild.BurstIntervalShift.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsProfile.attributes."+"burstIntvlShift", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.CollectInterval.IsNull() && configChild.CollectInterval.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsProfile.attributes."+"collectIntvl", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsProfile.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.IpPacketIdShift.IsNull() && configChild.IpPacketIdShift.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsProfile.attributes."+"ipPktIdShift", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.Mtu.IsNull() && configChild.Mtu.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsProfile.attributes."+"mtu", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.SequenceNumberGuessThresholdHigh.IsNull() && configChild.SequenceNumberGuessThresholdHigh.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsProfile.attributes."+"seqNumGuessThreshHi", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.SequenceNumberGuessThresholdLow.IsNull() && configChild.SequenceNumberGuessThresholdLow.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsProfile.attributes."+"seqNumGuessThreshLo", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.SourcePort.IsNull() && configChild.SourcePort.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsProfile.attributes."+"srcPort", "DME_UNSET_PROPERTY_MARKER")
+									}
+									break
+								}
+							}
+						}
+					}
+					for key := range stateChild.Events {
+						if configChild, ok := configChild.Events[key]; ok {
+							stateChild := stateChild.Events[key]
+							_ = stateChild
+							_ = configChild
+							for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+								if mv.Get("analyticsEvents.attributes.name").String() == key {
+									if !stateChild.AclDrops.IsNull() && configChild.AclDrops.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"aclDrops", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.BlackHole.IsNull() && configChild.BlackHole.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"blackHole", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.BufferDrops.IsNull() && configChild.BufferDrops.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"bufferDrops", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.EventExportMax.IsNull() && configChild.EventExportMax.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"eventExportMax", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.ForwardDrops.IsNull() && configChild.ForwardDrops.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"fwdDrops", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.GroupDropEvents.IsNull() && configChild.GroupDropEvents.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"groupDropEvents", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.GroupLatencyEvents.IsNull() && configChild.GroupLatencyEvents.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"groupLatencyEvents", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.GroupPacketEvents.IsNull() && configChild.GroupPacketEvents.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"groupPacketEvents", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.IpDontFragment.IsNull() && configChild.IpDontFragment.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"ipDf", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.LatencyThreshold.IsNull() && configChild.LatencyThreshold.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"latencyThreshold", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.LatencyThresholdUnit.IsNull() && configChild.LatencyThresholdUnit.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"latencyThresholdUnit", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.ReceiveWindowZero.IsNull() && configChild.ReceiveWindowZero.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"receiveWindowZero", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.Tos.IsNull() && configChild.Tos.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"tos", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.TosEnable.IsNull() && configChild.TosEnable.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"tosEnable", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.TtlMatchEnable.IsNull() && configChild.TtlMatchEnable.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"ttlMatchEnable", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.TtlMatchValue.IsNull() && configChild.TtlMatchValue.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsEvents.attributes."+"ttlMatchValue", "DME_UNSET_PROPERTY_MARKER")
+									}
+									break
+								}
+							}
+						}
+					}
+					for key := range stateChild.Policies {
+						if configChild, ok := configChild.Policies[key]; ok {
+							stateChild := stateChild.Policies[key]
+							_ = stateChild
+							_ = configChild
+							for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+								if mv.Get("analyticsPolicy.attributes.name").String() == key {
+									if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsPolicy.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									break
+								}
+							}
+							{
+								listChildPath := ""
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("analyticsPolicy.attributes.name").String() == key {
+										listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".analyticsPolicy.children"
+										break
+									}
+								}
+								if listChildPath != "" {
+									for key := range stateChild.MatchAcls {
+										if configChild, ok := configChild.MatchAcls[key]; ok {
+											stateChild := stateChild.MatchAcls[key]
+											_ = stateChild
+											_ = configChild
+											for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+												if mv.Get("analyticsMatchAcl.attributes.name").String() == key {
+													if !stateChild.AclName.IsNull() && configChild.AclName.IsNull() {
+														body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsMatchAcl.attributes."+"aclName", "DME_UNSET_PROPERTY_MARKER")
+													}
+													if !stateChild.FilterType.IsNull() && configChild.FilterType.IsNull() {
+														body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsMatchAcl.attributes."+"fltType", "DME_UNSET_PROPERTY_MARKER")
+													}
+													if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+														body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsMatchAcl.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+													}
+													break
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					for key := range stateChild.Records {
+						if configChild, ok := configChild.Records[key]; ok {
+							stateChild := stateChild.Records[key]
+							_ = stateChild
+							_ = configChild
+							for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+								if mv.Get("analyticsRecordP.attributes.name").String() == key {
+									if !stateChild.Collect.IsNull() && configChild.Collect.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsRecordP.attributes."+"collect", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsRecordP.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.Match.IsNull() && configChild.Match.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsRecordP.attributes."+"match", "DME_UNSET_PROPERTY_MARKER")
+									}
+									break
+								}
+							}
+						}
+					}
+					for key := range stateChild.Collectors {
+						if configChild, ok := configChild.Collectors[key]; ok {
+							stateChild := stateChild.Collectors[key]
+							_ = stateChild
+							_ = configChild
+							for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+								if mv.Get("analyticsCollector.attributes.name").String() == key {
+									if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.Dscp.IsNull() && configChild.Dscp.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"dscp", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.DestinationAddress.IsNull() && configChild.DestinationAddress.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"dstAddr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.DestinationPort.IsNull() && configChild.DestinationPort.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"dstPort", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.EventDestinationPort.IsNull() && configChild.EventDestinationPort.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"eventDstPort", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.InbandInterface.IsNull() && configChild.InbandInterface.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"inbandInterface", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.SourceAddress.IsNull() && configChild.SourceAddress.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"srcAddr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.V9.IsNull() && configChild.V9.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"v9", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.Version.IsNull() && configChild.Version.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"ver", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.VrfName.IsNull() && configChild.VrfName.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollector.attributes."+"vrfName", "DME_UNSET_PROPERTY_MARKER")
+									}
+									break
+								}
+							}
+						}
+					}
+					for key := range stateChild.Monitors {
+						if configChild, ok := configChild.Monitors[key]; ok {
+							stateChild := stateChild.Monitors[key]
+							_ = stateChild
+							_ = configChild
+							for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+								if mv.Get("analyticsMonitor.attributes.name").String() == key {
+									if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsMonitor.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									break
+								}
+							}
+							{
+								listChildPath := ""
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("analyticsMonitor.attributes.name").String() == key {
+										listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".analyticsMonitor.children"
+										break
+									}
+								}
+								if listChildPath != "" {
+									for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+										if sv.Get("analyticsRsRecordPAtt").Exists() {
+											if !stateChild.RecordTargetDn.IsNull() && configChild.RecordTargetDn.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsRsRecordPAtt.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+									for key := range stateChild.CollectorBuckets {
+										if configChild, ok := configChild.CollectorBuckets[key]; ok {
+											stateChild := stateChild.CollectorBuckets[key]
+											_ = stateChild
+											_ = configChild
+											for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+												if mv.Get("analyticsCollectorBucket.attributes.id").String() == key {
+													if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+														body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollectorBucket.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+													}
+													if !stateChild.HashHigh.IsNull() && configChild.HashHigh.IsNull() {
+														body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollectorBucket.attributes."+"hashHi", "DME_UNSET_PROPERTY_MARKER")
+													}
+													if !stateChild.HashLow.IsNull() && configChild.HashLow.IsNull() {
+														body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollectorBucket.attributes."+"hashLo", "DME_UNSET_PROPERTY_MARKER")
+													}
+													break
+												}
+											}
+											{
+												listChildPath := ""
+												for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+													if mv.Get("analyticsCollectorBucket.attributes.id").String() == key {
+														listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".analyticsCollectorBucket.children"
+														break
+													}
+												}
+												if listChildPath != "" {
+													for key := range stateChild.Collectors {
+														if configChild, ok := configChild.Collectors[key]; ok {
+															stateChild := stateChild.Collectors[key]
+															_ = stateChild
+															_ = configChild
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+						if sv.Get("analyticsTrafficAnalytics").Exists() {
+							if !stateChild.TrafficAnalyticsDescription.IsNull() && configChild.TrafficAnalyticsDescription.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrafficAnalyticsInterfaceMode.IsNull() && configChild.TrafficAnalyticsInterfaceMode.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"interfaceMode", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrafficAnalyticsName.IsNull() && configChild.TrafficAnalyticsName.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrafficAnalyticsServiceDatabaseSize.IsNull() && configChild.TrafficAnalyticsServiceDatabaseSize.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"serviceDbSize", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() && configChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"troubleshootExportInterval", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrafficAnalyticsUdpPortList.IsNull() && configChild.TrafficAnalyticsUdpPortList.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"udpPortList", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+					for key := range stateChild.ForwardInstanceTargets {
+						if configChild, ok := configChild.ForwardInstanceTargets[key]; ok {
+							stateChild := stateChild.ForwardInstanceTargets[key]
+							_ = stateChild
+							_ = configChild
+							for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+								if mv.Get("analyticsFwdInstTarget.attributes.id").String() == key {
+									if !stateChild.DefaultPolicy.IsNull() && configChild.DefaultPolicy.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsFwdInstTarget.attributes."+"DefPolicy", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.CollectorId.IsNull() && configChild.CollectorId.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsFwdInstTarget.attributes."+"collectorId", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.Direction.IsNull() && configChild.Direction.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsFwdInstTarget.attributes."+"dir", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.FilterType.IsNull() && configChild.FilterType.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsFwdInstTarget.attributes."+"fltType", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.InstanceName.IsNull() && configChild.InstanceName.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsFwdInstTarget.attributes."+"instanceName", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.SwitchLatency.IsNull() && configChild.SwitchLatency.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsFwdInstTarget.attributes."+"switchLatency", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.SystemExporterId.IsNull() && configChild.SystemExporterId.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsFwdInstTarget.attributes."+"systemExporterId", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.TrafficAnalyticsEnabled.IsNull() && configChild.TrafficAnalyticsEnabled.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsFwdInstTarget.attributes."+"trafficAnalytics", "DME_UNSET_PROPERTY_MARKER")
+									}
+									break
+								}
+							}
+							{
+								listChildPath := ""
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("analyticsFwdInstTarget.attributes.id").String() == key {
+										listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".analyticsFwdInstTarget.children"
+										break
+									}
+								}
+								if listChildPath != "" {
+									for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+										if sv.Get("analyticsRsMonitorAtt").Exists() {
+											if !stateChild.MonitorAttachmentTargetDn.IsNull() && configChild.MonitorAttachmentTargetDn.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsRsMonitorAtt.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+									for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+										if sv.Get("analyticsRsProfAtt").Exists() {
+											if !stateChild.ProfileAttachmentTargetDn.IsNull() && configChild.ProfileAttachmentTargetDn.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsRsProfAtt.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+									for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+										if sv.Get("analyticsRsEventsAtt").Exists() {
+											if !stateChild.EventsAttachmentTargetDn.IsNull() && configChild.EventsAttachmentTargetDn.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsRsEventsAtt.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+									for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+										if sv.Get("analyticsRsPolicyAtt").Exists() {
+											if !stateChild.PolicyAttachmentTargetDn.IsNull() && configChild.PolicyAttachmentTargetDn.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsRsPolicyAtt.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return body
 }
 

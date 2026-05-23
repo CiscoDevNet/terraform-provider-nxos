@@ -879,6 +879,7 @@ func (r *PhysicalInterfaceResource) Update(ctx context.Context, req resource.Upd
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state PhysicalInterface
 
 	// Read state

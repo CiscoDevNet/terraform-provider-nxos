@@ -326,6 +326,7 @@ func (r *BridgeDomainResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state BridgeDomain
 
 	// Read state

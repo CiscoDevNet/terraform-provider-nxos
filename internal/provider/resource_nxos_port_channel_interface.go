@@ -807,6 +807,7 @@ func (r *PortChannelInterfaceResource) Update(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state PortChannelInterface
 
 	// Read state

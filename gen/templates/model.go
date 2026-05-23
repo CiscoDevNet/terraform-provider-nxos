@@ -1188,16 +1188,120 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- end}}
 {{- /* ==================== end toBodyDeletedChildrenTemplate ==================== */}}
 
-{{- if hasListChildClasses .ChildClasses}}
+{{- /* ==================== toBodyUnsetChildAttrsTemplate ====================
+       Emits DME_UNSET_PROPERTY_MARKER for child-class attributes that were
+       non-null in state but are now null in config.
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "StateVar" (string) - Go variable for state
+         "ConfigVar" (string) - Go variable for config
+         "BodyPathExpr" (string) - Go expression for the body path to children array
+       ========================================================= */}}
+{{- define "toBodyUnsetChildAttrsTemplate"}}
+{{- $stateVar := .StateVar}}
+{{- $configVar := .ConfigVar}}
+{{- $bodyPathExpr := .BodyPathExpr}}
+{{- range .Children}}
+{{- $childClassName := .ClassName}}
+{{- if eq .Type "single"}}
+{{- $hasUnsetAttrs := false}}
+{{- range .Attributes}}{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}{{$hasUnsetAttrs = true}}{{end}}{{end}}
+{{- if $hasUnsetAttrs}}
+	for si, sv := range gjson.Get(body.Str, {{$bodyPathExpr}}).Array() {
+		if sv.Get("{{$childClassName}}").Exists() {
+			{{- range .Attributes}}
+			{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
+			if !{{$stateVar}}.{{toGoName .TfName}}.IsNull() && {{$configVar}}.{{toGoName .TfName}}.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, {{$bodyPathExpr}}+"."+strconv.Itoa(si)+".{{$childClassName}}.attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+			}
+			{{- end}}
+			{{- end}}
+			break
+		}
+	}
+{{- end}}
+{{- if .ChildClasses}}
+	{
+	singleChildPath := ""
+	for si, sv := range gjson.Get(body.Str, {{$bodyPathExpr}}).Array() {
+		if sv.Get("{{$childClassName}}").Exists() {
+			singleChildPath = {{$bodyPathExpr}} + "." + strconv.Itoa(si) + ".{{$childClassName}}.children"
+			break
+		}
+	}
+	if singleChildPath != "" {
+		{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" $stateVar "ConfigVar" $configVar "BodyPathExpr" "singleChildPath")}}
+	}
+	}
+{{- end}}
+{{- else if eq .Type "list"}}
+	for key := range {{$stateVar}}.{{toGoName .TfName}} {
+		if configChild, ok := {{$configVar}}.{{toGoName .TfName}}[key]; ok {
+			stateChild := {{$stateVar}}.{{toGoName .TfName}}[key]
+			_ = stateChild
+			_ = configChild
+			{{- $hasUnsetAttrs := false}}
+			{{- range .Attributes}}{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}{{$hasUnsetAttrs = true}}{{end}}{{end}}
+			{{- if $hasUnsetAttrs}}
+			{{- if gt (idCount .Attributes) 1}}
+			{{mapKeyParse "key" .Attributes}}
+			{{- end}}
+			for mi, mv := range gjson.Get(body.Str, {{$bodyPathExpr}}).Array() {
+				if {{mapKeyMatchExprVar "mv" "key" $childClassName .Attributes}} {
+					{{- range .Attributes}}
+					{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
+					if !stateChild.{{toGoName .TfName}}.IsNull() && configChild.{{toGoName .TfName}}.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, {{$bodyPathExpr}}+"."+strconv.Itoa(mi)+".{{$childClassName}}.attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+					}
+					{{- end}}
+					{{- end}}
+					break
+				}
+			}
+			{{- end}}
+			{{- if .ChildClasses}}
+			{
+			listChildPath := ""
+			for mi, mv := range gjson.Get(body.Str, {{$bodyPathExpr}}).Array() {
+				if {{mapKeyMatchExprVar "mv" "key" $childClassName .Attributes}} {
+					listChildPath = {{$bodyPathExpr}} + "." + strconv.Itoa(mi) + ".{{$childClassName}}.children"
+					break
+				}
+			}
+			if listChildPath != "" {
+				{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" "stateChild" "ConfigVar" "configChild" "BodyPathExpr" "listChildPath")}}
+			}
+			}
+			{{- end}}
+		}
+	}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end toBodyUnsetChildAttrsTemplate ==================== */}}
 
 func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}) nxos.Body {
 	body := data.toBody(config)
+	{{- if .ChildClasses}}
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	{{- template "toBodyDeletedChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPath" "bodyPath")}}
+	{{- end}}
+
+	{{- range .Attributes}}
+	{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
+	if !state.{{toGoName .TfName}}.IsNull() && config.{{toGoName .TfName}}.IsNull() {
+		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+	}
+	{{- end}}
+	{{- end}}
+
+	{{- if .ChildClasses}}
+	{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" "state" "ConfigVar" "config" "BodyPathExpr" "bodyPath")}}
+	{{- end}}
+
 	return body
 }
-{{- end}}
 
 // End of section. //template:end toDeleteBody
 

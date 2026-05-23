@@ -292,6 +292,7 @@ func (r *KeychainResource) Update(ctx context.Context, req resource.UpdateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state Keychain
 
 	// Read state

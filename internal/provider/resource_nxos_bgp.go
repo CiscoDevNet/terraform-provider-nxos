@@ -1735,6 +1735,7 @@ func (r *BGPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state BGP
 
 	// Read state

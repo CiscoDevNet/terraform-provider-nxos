@@ -383,6 +383,7 @@ func (r *NTPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state NTP
 
 	// Read state

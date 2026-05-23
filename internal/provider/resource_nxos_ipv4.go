@@ -491,6 +491,7 @@ func (r *IPv4Resource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state IPv4
 
 	// Read state

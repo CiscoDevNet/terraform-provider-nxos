@@ -758,6 +758,7 @@ func (r *RoutePolicyResource) Update(ctx context.Context, req resource.UpdateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state RoutePolicy
 
 	// Read state

@@ -526,6 +526,7 @@ func (r *VPCResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state VPC
 
 	// Read state

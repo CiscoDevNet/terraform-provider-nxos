@@ -498,6 +498,7 @@ func (r *HSRPResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state HSRP
 
 	// Read state

@@ -374,6 +374,7 @@ func (r *TelemetryResource) Update(ctx context.Context, req resource.UpdateReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state Telemetry
 
 	// Read state

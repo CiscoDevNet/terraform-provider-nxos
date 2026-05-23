@@ -494,6 +494,7 @@ func (r *OSPFv3Resource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state OSPFv3
 
 	// Read state

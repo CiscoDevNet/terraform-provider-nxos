@@ -300,6 +300,7 @@ func (r *ICMPv6Resource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state ICMPv6
 
 	// Read state

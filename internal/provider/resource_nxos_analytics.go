@@ -701,6 +701,7 @@ func (r *AnalyticsResource) Update(ctx context.Context, req resource.UpdateReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state Analytics
 
 	// Read state

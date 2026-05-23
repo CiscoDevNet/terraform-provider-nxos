@@ -380,7 +380,6 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	{{- if hasListChildClasses .ChildClasses}}
 	var state {{camelCase .Name}}
 
 	// Read state
@@ -389,7 +388,6 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	{{- end}}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -400,11 +398,7 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 	}
 
 	if device.Managed {
-		{{- if hasListChildClasses .ChildClasses}}
 		body := plan.toBodyWithDeletes(ctx, state, config)
-		{{- else}}
-		body := plan.toBody(config)
-		{{- end}}
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

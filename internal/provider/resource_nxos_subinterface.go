@@ -326,6 +326,7 @@ func (r *SubinterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state Subinterface
 
 	// Read state

@@ -312,6 +312,7 @@ func (r *HardwareTelemetryResource) Update(ctx context.Context, req resource.Upd
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state HardwareTelemetry
 
 	// Read state

@@ -907,6 +907,169 @@ func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging, config
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.syslogSyslog.children"+".-1", deleteBody)
 		}
 	}
+	{
+		singleChildPath := ""
+		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+			if sv.Get("loggingLogging").Exists() {
+				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".loggingLogging.children"
+				break
+			}
+		}
+		if singleChildPath != "" {
+			{
+				singleChildPath := ""
+				for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+					if sv.Get("loggingLogLevel").Exists() {
+						singleChildPath = singleChildPath + "." + strconv.Itoa(si) + ".loggingLogLevel.children"
+						break
+					}
+				}
+				if singleChildPath != "" {
+					for key := range state.Facilities {
+						if configChild, ok := config.Facilities[key]; ok {
+							stateChild := state.Facilities[key]
+							_ = stateChild
+							_ = configChild
+							for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+								if mv.Get("loggingFacility.attributes.facilityName").String() == key {
+									if !stateChild.Level.IsNull() && configChild.Level.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".loggingFacility.attributes."+"severityLevel", "DME_UNSET_PROPERTY_MARKER")
+									}
+									break
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	{
+		singleChildPath := ""
+		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+			if sv.Get("syslogSyslog").Exists() {
+				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".syslogSyslog.children"
+				break
+			}
+		}
+		if singleChildPath != "" {
+			for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+				if sv.Get("syslogFile").Exists() {
+					if !state.FileAdminState.IsNull() && config.FileAdminState.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogFile.attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.FileDescription.IsNull() && config.FileDescription.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogFile.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.FileName.IsNull() && config.FileName.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogFile.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.FilePersistentThreshold.IsNull() && config.FilePersistentThreshold.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogFile.attributes."+"persistentThreshold", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.FileSeverity.IsNull() && config.FileSeverity.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogFile.attributes."+"severity", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.FileSize.IsNull() && config.FileSize.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogFile.attributes."+"size", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+			for key := range state.RemoteDestinations {
+				if configChild, ok := config.RemoteDestinations[key]; ok {
+					stateChild := state.RemoteDestinations[key]
+					_ = stateChild
+					_ = configChild
+					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+						if mv.Get("syslogRemoteDest.attributes.host").String() == key {
+							if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".syslogRemoteDest.attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".syslogRemoteDest.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".syslogRemoteDest.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Port.IsNull() && configChild.Port.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".syslogRemoteDest.attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Transport.IsNull() && configChild.Transport.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".syslogRemoteDest.attributes."+"transport", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrustpointClientIdentity.IsNull() && configChild.TrustpointClientIdentity.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".syslogRemoteDest.attributes."+"trustpointClientIdentity", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.VrfName.IsNull() && configChild.VrfName.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".syslogRemoteDest.attributes."+"vrfName", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Severity.IsNull() && configChild.Severity.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".syslogRemoteDest.attributes."+"severity", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ForwardingFacility.IsNull() && configChild.ForwardingFacility.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".syslogRemoteDest.attributes."+"forwardingFacility", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+				}
+			}
+			for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+				if sv.Get("syslogSourceInterface").Exists() {
+					if !state.SourceInterfaceAdminState.IsNull() && config.SourceInterfaceAdminState.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogSourceInterface.attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.SourceInterfaceName.IsNull() && config.SourceInterfaceName.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogSourceInterface.attributes."+"ifName", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+			for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+				if sv.Get("syslogTimeStamp").Exists() {
+					if !state.TimestampFormat.IsNull() && config.TimestampFormat.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogTimeStamp.attributes."+"format", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+			for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+				if sv.Get("syslogTermMonitor").Exists() {
+					if !state.MonitorAdminState.IsNull() && config.MonitorAdminState.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogTermMonitor.attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.MonitorSeverity.IsNull() && config.MonitorSeverity.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogTermMonitor.attributes."+"severity", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+			for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+				if sv.Get("syslogConsole").Exists() {
+					if !state.ConsoleAdminState.IsNull() && config.ConsoleAdminState.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogConsole.attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.ConsoleSeverity.IsNull() && config.ConsoleSeverity.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogConsole.attributes."+"severity", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+			for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+				if sv.Get("syslogOriginid").Exists() {
+					if !state.OriginIdType.IsNull() && config.OriginIdType.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogOriginid.attributes."+"idtype", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.OriginIdValue.IsNull() && config.OriginIdValue.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".syslogOriginid.attributes."+"idvalue", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+		}
+	}
+
 	return body
 }
 

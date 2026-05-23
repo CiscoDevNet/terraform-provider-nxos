@@ -742,6 +742,7 @@ func (r *PTPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state PTP
 
 	// Read state

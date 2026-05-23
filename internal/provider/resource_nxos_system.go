@@ -1810,6 +1810,7 @@ func (r *SystemResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state System
 
 	// Read state

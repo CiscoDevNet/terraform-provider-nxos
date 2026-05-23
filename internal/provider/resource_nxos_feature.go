@@ -508,6 +508,7 @@ func (r *FeatureResource) Update(ctx context.Context, req resource.UpdateRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state Feature
 
 	// Read state

@@ -295,6 +295,7 @@ func (r *QueuingQoSResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state QueuingQoS
 
 	// Read state

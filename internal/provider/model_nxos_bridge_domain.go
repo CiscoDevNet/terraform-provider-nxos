@@ -328,6 +328,61 @@ func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDoma
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
+	if !state.SviAutostate.IsNull() && config.SviAutostate.IsNull() {
+		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"sysDefaultSVIAutostate", "DME_UNSET_PROPERTY_MARKER")
+	}
+	for key := range state.BridgeDomains {
+		if configChild, ok := config.BridgeDomains[key]; ok {
+			stateChild := state.BridgeDomains[key]
+			_ = stateChild
+			_ = configChild
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("l2BD.attributes.fabEncap").String() == key {
+					if !stateChild.AccessEncap.IsNull() && configChild.AccessEncap.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"accEncap", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.BridgeDomainState.IsNull() && configChild.BridgeDomainState.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"BdState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.BridgeMode.IsNull() && configChild.BridgeMode.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"bridgeMode", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.ForwardingControl.IsNull() && configChild.ForwardingControl.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"fwdCtrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.ForwardingMode.IsNull() && configChild.ForwardingMode.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"fwdMode", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.LongName.IsNull() && configChild.LongName.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"longName", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.MacPacketClassify.IsNull() && configChild.MacPacketClassify.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"macPacketClassify", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.Mode.IsNull() && configChild.Mode.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.VrfName.IsNull() && configChild.VrfName.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"vrfName", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.CrossConnect.IsNull() && configChild.CrossConnect.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"xConnect", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+		}
+	}
+
 	return body
 }
 

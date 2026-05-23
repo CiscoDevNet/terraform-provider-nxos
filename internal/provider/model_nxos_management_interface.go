@@ -326,6 +326,59 @@ func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state Man
 			continue
 		}
 	}
+	for key := range state.ManagementInterfaces {
+		if configChild, ok := config.ManagementInterfaces[key]; ok {
+			stateChild := state.ManagementInterfaces[key]
+			_ = stateChild
+			_ = configChild
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("mgmtMgmtIf.attributes.id").String() == key {
+					if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.AutoNegotiation.IsNull() && configChild.AutoNegotiation.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"autoNeg", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.Duplex.IsNull() && configChild.Duplex.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"duplex", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.Mtu.IsNull() && configChild.Mtu.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"mtu", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.SnmpTrapState.IsNull() && configChild.SnmpTrapState.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.Speed.IsNull() && configChild.Speed.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"speed", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+			{
+				listChildPath := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("mgmtMgmtIf.attributes.id").String() == key {
+						listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".mgmtMgmtIf.children"
+						break
+					}
+				}
+				if listChildPath != "" {
+					for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+						if sv.Get("nwRtVrfMbr").Exists() {
+							if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nwRtVrfMbr.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return body
 }
 

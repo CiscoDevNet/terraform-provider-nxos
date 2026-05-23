@@ -463,6 +463,7 @@ func (r *SpanningTreeResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state SpanningTree
 
 	// Read state

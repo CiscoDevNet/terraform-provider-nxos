@@ -1,0 +1,1 @@
+- Fix issue where removing an optional attribute from the configuration would not reset the value on the device during updates

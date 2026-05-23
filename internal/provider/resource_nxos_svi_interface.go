@@ -355,6 +355,7 @@ func (r *SVIInterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state SVIInterface
 
 	// Read state

@@ -392,6 +392,7 @@ func (r *NetworkQoSResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state NetworkQoS
 
 	// Read state

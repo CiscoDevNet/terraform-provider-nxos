@@ -1038,6 +1038,7 @@ func (r *SNMPResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state SNMP
 
 	// Read state

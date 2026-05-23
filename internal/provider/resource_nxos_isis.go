@@ -834,6 +834,7 @@ func (r *ISISResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state ISIS
 
 	// Read state

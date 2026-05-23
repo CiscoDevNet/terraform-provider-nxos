@@ -423,6 +423,7 @@ func (r *LoggingResource) Update(ctx context.Context, req resource.UpdateRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state Logging
 
 	// Read state

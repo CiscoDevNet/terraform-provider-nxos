@@ -382,6 +382,67 @@ func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN)
 			}
 		}
 	}
+	if !state.AdminState.IsNull() && config.AdminState.IsNull() {
+		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	for key := range state.Vnis {
+		if configChild, ok := config.Vnis[key]; ok {
+			stateChild := state.Vnis[key]
+			_ = stateChild
+			_ = configChild
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("rtctrlBDEvi.attributes.encap").String() == key {
+					if !stateChild.RouteDistinguisher.IsNull() && configChild.RouteDistinguisher.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".rtctrlBDEvi.attributes."+"rd", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.TableMap.IsNull() && configChild.TableMap.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".rtctrlBDEvi.attributes."+"tblMap", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.TableMapFilter.IsNull() && configChild.TableMapFilter.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".rtctrlBDEvi.attributes."+"tblMapFltr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+			{
+				listChildPath := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("rtctrlBDEvi.attributes.encap").String() == key {
+						listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".rtctrlBDEvi.children"
+						break
+					}
+				}
+				if listChildPath != "" {
+					for key := range stateChild.RouteTargetDirections {
+						if configChild, ok := configChild.RouteTargetDirections[key]; ok {
+							stateChild := stateChild.RouteTargetDirections[key]
+							_ = stateChild
+							_ = configChild
+							{
+								listChildPath := ""
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("rtctrlRttP.attributes.type").String() == key {
+										listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".rtctrlRttP.children"
+										break
+									}
+								}
+								if listChildPath != "" {
+									for key := range stateChild.RouteTargets {
+										if configChild, ok := configChild.RouteTargets[key]; ok {
+											stateChild := stateChild.RouteTargets[key]
+											_ = stateChild
+											_ = configChild
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return body
 }
 

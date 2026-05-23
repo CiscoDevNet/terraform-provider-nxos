@@ -300,6 +300,7 @@ func (r *ManagementInterfaceResource) Update(ctx context.Context, req resource.U
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state ManagementInterface
 
 	// Read state

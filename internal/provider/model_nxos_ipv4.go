@@ -942,6 +942,224 @@ func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4)
 			}
 		}
 	}
+	if !state.AdminState.IsNull() && config.AdminState.IsNull() {
+		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+		if sv.Get("ipv4Inst").Exists() {
+			if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ipv4Inst.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.AccessListMatchLocal.IsNull() && config.AccessListMatchLocal.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ipv4Inst.attributes."+"accessListMatchLocal", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.Control.IsNull() && config.Control.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ipv4Inst.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.HardwareEcmpHashOffsetConcatenation.IsNull() && config.HardwareEcmpHashOffsetConcatenation.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ipv4Inst.attributes."+"hardwareEcmpHashOffsetConcat", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.HardwareEcmpHashOffsetValue.IsNull() && config.HardwareEcmpHashOffsetValue.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ipv4Inst.attributes."+"hardwareEcmpHashOffsetValue", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.HardwareEcmpHashPolynomial.IsNull() && config.HardwareEcmpHashPolynomial.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ipv4Inst.attributes."+"hardwareEcmpHashPolynomial", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoggingLevel.IsNull() && config.LoggingLevel.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ipv4Inst.attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.RedirectSyslog.IsNull() && config.RedirectSyslog.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ipv4Inst.attributes."+"redirectSyslog", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.RedirectSyslogInterval.IsNull() && config.RedirectSyslogInterval.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ipv4Inst.attributes."+"redirectSyslogInterval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.SourceRoute.IsNull() && config.SourceRoute.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ipv4Inst.attributes."+"sourceRoute", "DME_UNSET_PROPERTY_MARKER")
+			}
+			break
+		}
+	}
+	{
+		singleChildPath := ""
+		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+			if sv.Get("ipv4Inst").Exists() {
+				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".ipv4Inst.children"
+				break
+			}
+		}
+		if singleChildPath != "" {
+			for key := range state.Vrfs {
+				if configChild, ok := config.Vrfs[key]; ok {
+					stateChild := state.Vrfs[key]
+					_ = stateChild
+					_ = configChild
+					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+						if mv.Get("ipv4Dom.attributes.name").String() == key {
+							if !stateChild.AutoDiscard.IsNull() && configChild.AutoDiscard.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".ipv4Dom.attributes."+"autoDiscard", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.IcmpErrorsSourceInterface.IsNull() && configChild.IcmpErrorsSourceInterface.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".ipv4Dom.attributes."+"ipIcmpErrorsSrcIntf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+					{
+						listChildPath := ""
+						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+							if mv.Get("ipv4Dom.attributes.name").String() == key {
+								listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".ipv4Dom.children"
+								break
+							}
+						}
+						if listChildPath != "" {
+							for key := range stateChild.StaticRoutes {
+								if configChild, ok := configChild.StaticRoutes[key]; ok {
+									stateChild := stateChild.StaticRoutes[key]
+									_ = stateChild
+									_ = configChild
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("ipv4Route.attributes.prefix").String() == key {
+											if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Route.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Route.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Preference.IsNull() && configChild.Preference.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Route.attributes."+"pref", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Tag.IsNull() && configChild.Tag.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Route.attributes."+"tag", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+									{
+										listChildPath := ""
+										for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+											if mv.Get("ipv4Route.attributes.prefix").String() == key {
+												listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".ipv4Route.children"
+												break
+											}
+										}
+										if listChildPath != "" {
+											for key := range stateChild.NextHops {
+												if configChild, ok := configChild.NextHops[key]; ok {
+													stateChild := stateChild.NextHops[key]
+													_ = stateChild
+													_ = configChild
+													keyParts := strings.SplitN(key, ";", 3)
+													for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+														if mv.Get("ipv4Nexthop.attributes.nhIf").String() == keyParts[0] &&
+															mv.Get("ipv4Nexthop.attributes.nhAddr").String() == keyParts[1] &&
+															mv.Get("ipv4Nexthop.attributes.nhVrf").String() == keyParts[2] {
+															if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Nexthop.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.Object.IsNull() && configChild.Object.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Nexthop.attributes."+"object", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.Preference.IsNull() && configChild.Preference.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Nexthop.attributes."+"pref", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.Tag.IsNull() && configChild.Tag.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Nexthop.attributes."+"tag", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Nexthop.attributes."+"rtname", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.RewriteEncapsulation.IsNull() && configChild.RewriteEncapsulation.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Nexthop.attributes."+"rwEncap", "DME_UNSET_PROPERTY_MARKER")
+															}
+															break
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							for key := range stateChild.Interfaces {
+								if configChild, ok := configChild.Interfaces[key]; ok {
+									stateChild := stateChild.Interfaces[key]
+									_ = stateChild
+									_ = configChild
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("ipv4If.attributes.id").String() == key {
+											if !stateChild.DropGlean.IsNull() && configChild.DropGlean.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4If.attributes."+"dropGlean", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Forward.IsNull() && configChild.Forward.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4If.attributes."+"forward", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Unnumbered.IsNull() && configChild.Unnumbered.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4If.attributes."+"unnumbered", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Urpf.IsNull() && configChild.Urpf.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4If.attributes."+"urpf", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.DirectedBroadcastAcl.IsNull() && configChild.DirectedBroadcastAcl.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4If.attributes."+"acl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.DirectedBroadcast.IsNull() && configChild.DirectedBroadcast.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4If.attributes."+"directedBroadcast", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+									{
+										listChildPath := ""
+										for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+											if mv.Get("ipv4If.attributes.id").String() == key {
+												listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".ipv4If.children"
+												break
+											}
+										}
+										if listChildPath != "" {
+											for key := range stateChild.Addresses {
+												if configChild, ok := configChild.Addresses[key]; ok {
+													stateChild := stateChild.Addresses[key]
+													_ = stateChild
+													_ = configChild
+													for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+														if mv.Get("ipv4Addr.attributes.addr").String() == key {
+															if !stateChild.Type.IsNull() && configChild.Type.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Addr.attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.Tag.IsNull() && configChild.Tag.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Addr.attributes."+"tag", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Addr.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.Preference.IsNull() && configChild.Preference.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Addr.attributes."+"pref", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.UseBia.IsNull() && configChild.UseBia.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Addr.attributes."+"useBia", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.VpcPeer.IsNull() && configChild.VpcPeer.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ipv4Addr.attributes."+"vpcPeer", "DME_UNSET_PROPERTY_MARKER")
+															}
+															break
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return body
 }
 

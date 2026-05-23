@@ -1067,6 +1067,7 @@ func (r *UserManagementResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state UserManagement
 
 	// Read state

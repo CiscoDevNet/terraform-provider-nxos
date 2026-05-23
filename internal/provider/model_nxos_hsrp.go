@@ -683,6 +683,171 @@ func (data HSRP) toBodyWithDeletes(ctx context.Context, state HSRP, config HSRP)
 			}
 		}
 	}
+	if !state.AdminState.IsNull() && config.AdminState.IsNull() {
+		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+		if sv.Get("hsrpInst").Exists() {
+			if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hsrpInst.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.Bfd.IsNull() && config.Bfd.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hsrpInst.attributes."+"bfd", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.Control.IsNull() && config.Control.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hsrpInst.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.ExtendedHoldInterval.IsNull() && config.ExtendedHoldInterval.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hsrpInst.attributes."+"extendedHoldIntvl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.ExtendedHoldIntervalConfiguration.IsNull() && config.ExtendedHoldIntervalConfiguration.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hsrpInst.attributes."+"extendedHoldIntvlCfg", "DME_UNSET_PROPERTY_MARKER")
+			}
+			break
+		}
+	}
+	{
+		singleChildPath := ""
+		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+			if sv.Get("hsrpInst").Exists() {
+				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".hsrpInst.children"
+				break
+			}
+		}
+		if singleChildPath != "" {
+			for key := range state.Interfaces {
+				if configChild, ok := config.Interfaces[key]; ok {
+					stateChild := state.Interfaces[key]
+					_ = stateChild
+					_ = configChild
+					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+						if mv.Get("hsrpIf.attributes.id").String() == key {
+							if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Bfd.IsNull() && configChild.Bfd.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"bfd", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.BiaScope.IsNull() && configChild.BiaScope.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"biaScope", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.DelayMinimum.IsNull() && configChild.DelayMinimum.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"delayIntfMin", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.MacRefreshInterval.IsNull() && configChild.MacRefreshInterval.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"macRefreshIntvl", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.MacRefreshIntervalConfiguration.IsNull() && configChild.MacRefreshIntervalConfiguration.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"macRefreshIntvlCfg", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ReloadDelay.IsNull() && configChild.ReloadDelay.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"reloadDelay", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Version.IsNull() && configChild.Version.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hsrpIf.attributes."+"version", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+					{
+						listChildPath := ""
+						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+							if mv.Get("hsrpIf.attributes.id").String() == key {
+								listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".hsrpIf.children"
+								break
+							}
+						}
+						if listChildPath != "" {
+							for key := range stateChild.Groups {
+								if configChild, ok := configChild.Groups[key]; ok {
+									stateChild := stateChild.Groups[key]
+									_ = stateChild
+									_ = configChild
+									keyParts := strings.SplitN(key, ";", 2)
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("hsrpGroup.attributes.id").String() == keyParts[0] &&
+											mv.Get("hsrpGroup.attributes.af").String() == keyParts[1] {
+											if !stateChild.AuthenticationMd5CompatibilityMode.IsNull() && configChild.AuthenticationMd5CompatibilityMode.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"authMd5CompatibilityMode", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AuthenticationMd5KeyChainName.IsNull() && configChild.AuthenticationMd5KeyChainName.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"authMd5KeyChainName", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AuthenticationMd5KeyName.IsNull() && configChild.AuthenticationMd5KeyName.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"authMd5KeyName", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AuthenticationMd5KeyStringType.IsNull() && configChild.AuthenticationMd5KeyStringType.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"authMd5KeyStringType", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AuthenticationMd5Timeout.IsNull() && configChild.AuthenticationMd5Timeout.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"authMd5Timeout", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AuthenticationMd5Type.IsNull() && configChild.AuthenticationMd5Type.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"authMd5Type", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AuthenticationType.IsNull() && configChild.AuthenticationType.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"authType", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Follow.IsNull() && configChild.Follow.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"follow", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ForwardingLowerThreshold.IsNull() && configChild.ForwardingLowerThreshold.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"fwdLwrThrld", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.HelloInterval.IsNull() && configChild.HelloInterval.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"helloIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.HoldInterval.IsNull() && configChild.HoldInterval.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"holdIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.IpAddress.IsNull() && configChild.IpAddress.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"ip", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.IpObtainMode.IsNull() && configChild.IpObtainMode.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"ipObtainMode", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.MacAddress.IsNull() && configChild.MacAddress.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"mac", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PreemptDelayMinimum.IsNull() && configChild.PreemptDelayMinimum.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"preemptDelayMin", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PreemptDelayReload.IsNull() && configChild.PreemptDelayReload.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"preemptDelayReload", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PreemptDelaySync.IsNull() && configChild.PreemptDelaySync.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"preemptDelaySync", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Priority.IsNull() && configChild.Priority.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".hsrpGroup.attributes."+"prio", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return body
 }
 

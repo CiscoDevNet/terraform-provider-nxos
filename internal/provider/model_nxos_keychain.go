@@ -337,6 +337,57 @@ func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, conf
 			}
 		}
 	}
+	if !state.AdminState.IsNull() && config.AdminState.IsNull() {
+		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	{
+		singleChildPath := ""
+		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+			if sv.Get("kcmgrKeychains").Exists() {
+				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".kcmgrKeychains.children"
+				break
+			}
+		}
+		if singleChildPath != "" {
+			for key := range state.Keychains {
+				if configChild, ok := config.Keychains[key]; ok {
+					stateChild := state.Keychains[key]
+					_ = stateChild
+					_ = configChild
+					{
+						listChildPath := ""
+						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+							if mv.Get("kcmgrClassicKeychain.attributes.keychainName").String() == key {
+								listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".kcmgrClassicKeychain.children"
+								break
+							}
+						}
+						if listChildPath != "" {
+							for key := range stateChild.Keys {
+								if configChild, ok := configChild.Keys[key]; ok {
+									stateChild := stateChild.Keys[key]
+									_ = stateChild
+									_ = configChild
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("kcmgrKey.attributes.keyId").String() == key {
+											if !stateChild.CryptographicAlgorithm.IsNull() && configChild.CryptographicAlgorithm.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".kcmgrKey.attributes."+"cryptoAlgo", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.EncryptionType.IsNull() && configChild.EncryptionType.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".kcmgrKey.attributes."+"encryptType", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return body
 }
 

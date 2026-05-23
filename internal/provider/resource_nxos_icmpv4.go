@@ -279,6 +279,7 @@ func (r *ICMPv4Resource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state ICMPv4
 
 	// Read state

@@ -919,6 +919,7 @@ func (r *AccessListResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state AccessList
 
 	// Read state

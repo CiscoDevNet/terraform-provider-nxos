@@ -271,6 +271,7 @@ func (r *LoopbackInterfaceResource) Update(ctx context.Context, req resource.Upd
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state LoopbackInterface
 
 	// Read state

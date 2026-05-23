@@ -472,6 +472,7 @@ func (r *IPv6Resource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	var state IPv6
 
 	// Read state

@@ -1,3 +1,7 @@
+## 0.13.1
+
+- Fix issue where removing an optional attribute from the configuration would not reset the value on the device during updates
+
 ## 0.13.0
 
 - Fix nested child list entries not being deleted from the device when a parent list item key changes during updates

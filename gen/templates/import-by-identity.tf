@@ -3,7 +3,7 @@ import {
   {{- if importAttributes .}}
   identity = {
     {{- range (importAttributes .)}}
-    "{{.TfName}}": "<{{.TfName}}>"
+    {{.TfName}} = "<{{.TfName}}>"
     {{- end}}
   }
   {{- else}}

@@ -74,6 +74,7 @@ child_classes:
                   - type6
                 example: type7
                 exclude_test: true
+                write_only: true
               - nxos_name: keyString
                 tf_name: key_string
                 description: 'keyString provided by user for the keychain.'

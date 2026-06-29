@@ -1514,7 +1514,6 @@ func (data *BGP) fromBody(res gjson.Result) {
 												nestedChildbgpPeerCont.LogNeighborChanges = types.StringValue(nestedValue.Get("attributes.logNbrChgs").String())
 												nestedChildbgpPeerCont.LowMemoryExempt = types.StringValue(nestedValue.Get("attributes.lowMemExempt").String())
 												nestedChildbgpPeerCont.MaxPeerCount = types.Int64Value(nestedValue.Get("attributes.maxPeerCnt").Int())
-												nestedChildbgpPeerCont.PasswordType = types.StringValue(nestedValue.Get("attributes.passwdType").String())
 												nestedChildbgpPeerCont.PrivateAsControl = types.StringValue(nestedValue.Get("attributes.privateASctrl").String())
 												nestedChildbgpPeerCont.SessionTemplate = types.StringValue(nestedValue.Get("attributes.sessionContImp").String())
 												nestedChildbgpPeerCont.EbgpMultihopTtl = types.Int64Value(nestedValue.Get("attributes.ttl").Int())
@@ -1601,7 +1600,6 @@ func (data *BGP) fromBody(res gjson.Result) {
 												nestedChildbgpPeer.KeepaliveInterval = types.Int64Value(nestedValue.Get("attributes.kaIntvl").Int())
 												nestedChildbgpPeer.EbgpMultihopTtl = types.Int64Value(nestedValue.Get("attributes.ttl").Int())
 												nestedChildbgpPeer.PeerControl = types.StringValue(nestedValue.Get("attributes.ctrl").String())
-												nestedChildbgpPeer.PasswordType = types.StringValue(nestedValue.Get("attributes.passwdType").String())
 												nestedChildbgpPeer.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
 												nestedChildbgpPeer.AffinityGroup = types.Int64Value(nestedValue.Get("attributes.affGrp").Int())
 												nestedChildbgpPeer.AsnType = types.StringValue(nestedValue.Get("attributes.asnType").String())
@@ -1764,7 +1762,6 @@ func (data *BGP) fromBody(res gjson.Result) {
 												nestedChildbgpPeerIf.LogNeighborChanges = types.StringValue(nestedValue.Get("attributes.logNbrChgs").String())
 												nestedChildbgpPeerIf.LowMemoryExempt = types.StringValue(nestedValue.Get("attributes.lowMemExempt").String())
 												nestedChildbgpPeerIf.MaxPeerCount = types.Int64Value(nestedValue.Get("attributes.maxPeerCnt").Int())
-												nestedChildbgpPeerIf.PasswordType = types.StringValue(nestedValue.Get("attributes.passwdType").String())
 												nestedChildbgpPeerIf.PrivateAsControl = types.StringValue(nestedValue.Get("attributes.privateASctrl").String())
 												nestedChildbgpPeerIf.SessionTemplate = types.StringValue(nestedValue.Get("attributes.sessionContImp").String())
 												nestedChildbgpPeerIf.EbgpMultihopTtl = types.Int64Value(nestedValue.Get("attributes.ttl").Int())
@@ -2516,11 +2513,6 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			} else {
 				ncItem.MaxPeerCount = types.Int64Null()
 			}
-			if !ncItem.PasswordType.IsNull() {
-				ncItem.PasswordType = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.passwdType").String())
-			} else {
-				ncItem.PasswordType = types.StringNull()
-			}
 			if !ncItem.PrivateAsControl.IsNull() {
 				ncItem.PrivateAsControl = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.privateASctrl").String())
 			} else {
@@ -2754,11 +2746,6 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				ncItem.PeerControl = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.ctrl").String())
 			} else {
 				ncItem.PeerControl = types.StringNull()
-			}
-			if !ncItem.PasswordType.IsNull() {
-				ncItem.PasswordType = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.passwdType").String())
-			} else {
-				ncItem.PasswordType = types.StringNull()
 			}
 			if !ncItem.AdminState.IsNull() {
 				ncItem.AdminState = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.adminSt").String())
@@ -3177,11 +3164,6 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				ncItem.MaxPeerCount = types.Int64Value(rbgpPeerIf.Get("bgpPeerIf.attributes.maxPeerCnt").Int())
 			} else {
 				ncItem.MaxPeerCount = types.Int64Null()
-			}
-			if !ncItem.PasswordType.IsNull() {
-				ncItem.PasswordType = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.passwdType").String())
-			} else {
-				ncItem.PasswordType = types.StringNull()
 			}
 			if !ncItem.PrivateAsControl.IsNull() {
 				ncItem.PrivateAsControl = types.StringValue(rbgpPeerIf.Get("bgpPeerIf.attributes.privateASctrl").String())
@@ -3889,9 +3871,6 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 											if !stateChild.MaxPeerCount.IsNull() && configChild.MaxPeerCount.IsNull() {
 												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".bgpPeerCont.attributes."+"maxPeerCnt", "DME_UNSET_PROPERTY_MARKER")
 											}
-											if !stateChild.PasswordType.IsNull() && configChild.PasswordType.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".bgpPeerCont.attributes."+"passwdType", "DME_UNSET_PROPERTY_MARKER")
-											}
 											if !stateChild.PrivateAsControl.IsNull() && configChild.PrivateAsControl.IsNull() {
 												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".bgpPeerCont.attributes."+"privateASctrl", "DME_UNSET_PROPERTY_MARKER")
 											}
@@ -4053,9 +4032,6 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 											}
 											if !stateChild.PeerControl.IsNull() && configChild.PeerControl.IsNull() {
 												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".bgpPeer.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.PasswordType.IsNull() && configChild.PasswordType.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".bgpPeer.attributes."+"passwdType", "DME_UNSET_PROPERTY_MARKER")
 											}
 											if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
 												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".bgpPeer.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
@@ -4328,9 +4304,6 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP) nx
 											}
 											if !stateChild.MaxPeerCount.IsNull() && configChild.MaxPeerCount.IsNull() {
 												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".bgpPeerIf.attributes."+"maxPeerCnt", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.PasswordType.IsNull() && configChild.PasswordType.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".bgpPeerIf.attributes."+"passwdType", "DME_UNSET_PROPERTY_MARKER")
 											}
 											if !stateChild.PrivateAsControl.IsNull() && configChild.PrivateAsControl.IsNull() {
 												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".bgpPeerIf.attributes."+"privateASctrl", "DME_UNSET_PROPERTY_MARKER")

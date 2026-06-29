@@ -192,7 +192,6 @@ func (data *Keychain) fromBody(res gjson.Result) {
 											if nestedClassname.String() == "kcmgrKey" {
 												var nestedChildkcmgrKey KeychainKeychainsKeys
 												nestedChildkcmgrKey.CryptographicAlgorithm = types.StringValue(nestedValue.Get("attributes.cryptoAlgo").String())
-												nestedChildkcmgrKey.EncryptionType = types.StringValue(nestedValue.Get("attributes.encryptType").String())
 												nestedMapKey := nestedValue.Get("attributes.keyId").String()
 												if child.Keys == nil {
 													child.Keys = make(map[string]KeychainKeychainsKeys)
@@ -275,11 +274,6 @@ func (data *Keychain) updateFromBody(res gjson.Result) {
 				ncItem.CryptographicAlgorithm = types.StringValue(rkcmgrKey.Get("kcmgrKey.attributes.cryptoAlgo").String())
 			} else {
 				ncItem.CryptographicAlgorithm = types.StringNull()
-			}
-			if !ncItem.EncryptionType.IsNull() {
-				ncItem.EncryptionType = types.StringValue(rkcmgrKey.Get("kcmgrKey.attributes.encryptType").String())
-			} else {
-				ncItem.EncryptionType = types.StringNull()
 			}
 			item.Keys[nc] = ncItem
 		}
@@ -372,9 +366,6 @@ func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, conf
 										if mv.Get("kcmgrKey.attributes.keyId").String() == key {
 											if !stateChild.CryptographicAlgorithm.IsNull() && configChild.CryptographicAlgorithm.IsNull() {
 												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".kcmgrKey.attributes."+"cryptoAlgo", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.EncryptionType.IsNull() && configChild.EncryptionType.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".kcmgrKey.attributes."+"encryptType", "DME_UNSET_PROPERTY_MARKER")
 											}
 											break
 										}

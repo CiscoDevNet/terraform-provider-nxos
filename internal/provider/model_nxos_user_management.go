@@ -995,7 +995,6 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 		)
 		data.TacacsDeadtime = types.Int64Value(raaaTacacsPlusEp.Get("aaaTacacsPlusEp.attributes.deadtime").Int())
 		data.TacacsDescription = types.StringValue(raaaTacacsPlusEp.Get("aaaTacacsPlusEp.attributes.descr").String())
-		data.TacacsKeyEncryption = types.StringValue(raaaTacacsPlusEp.Get("aaaTacacsPlusEp.attributes.keyEnc").String())
 		data.TacacsLoggingLevel = types.Int64Value(raaaTacacsPlusEp.Get("aaaTacacsPlusEp.attributes.loggingLevel").Int())
 		data.TacacsName = types.StringValue(raaaTacacsPlusEp.Get("aaaTacacsPlusEp.attributes.name").String())
 		data.TacacsOwnerKey = types.StringValue(raaaTacacsPlusEp.Get("aaaTacacsPlusEp.attributes.ownerKey").String())
@@ -1011,9 +1010,7 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 							var child UserManagementTacacsProviders
 							child.AuthenticationProtocol = types.StringValue(value.Get("attributes.authProtocol").String())
 							child.Description = types.StringValue(value.Get("attributes.descr").String())
-							child.KeyEncryption = types.StringValue(value.Get("attributes.keyEnc").String())
 							child.MonitoringIdleTime = types.Int64Value(value.Get("attributes.monitoringIdleTime").Int())
-							child.MonitoringPasswordType = types.StringValue(value.Get("attributes.monitoringPasswordType").String())
 							child.MonitoringUser = types.StringValue(value.Get("attributes.monitoringUser").String())
 							child.OwnerKey = types.StringValue(value.Get("attributes.ownerKey").String())
 							child.OwnerTag = types.StringValue(value.Get("attributes.ownerTag").String())
@@ -1513,11 +1510,6 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 	} else {
 		data.TacacsDescription = types.StringNull()
 	}
-	if !data.TacacsKeyEncryption.IsNull() {
-		data.TacacsKeyEncryption = types.StringValue(raaaTacacsPlusEp.Get("aaaTacacsPlusEp.attributes.keyEnc").String())
-	} else {
-		data.TacacsKeyEncryption = types.StringNull()
-	}
 	if !data.TacacsLoggingLevel.IsNull() {
 		data.TacacsLoggingLevel = types.Int64Value(raaaTacacsPlusEp.Get("aaaTacacsPlusEp.attributes.loggingLevel").Int())
 	} else {
@@ -1578,20 +1570,10 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 		} else {
 			item.Description = types.StringNull()
 		}
-		if !item.KeyEncryption.IsNull() {
-			item.KeyEncryption = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.keyEnc").String())
-		} else {
-			item.KeyEncryption = types.StringNull()
-		}
 		if !item.MonitoringIdleTime.IsNull() {
 			item.MonitoringIdleTime = types.Int64Value(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.monitoringIdleTime").Int())
 		} else {
 			item.MonitoringIdleTime = types.Int64Null()
-		}
-		if !item.MonitoringPasswordType.IsNull() {
-			item.MonitoringPasswordType = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.monitoringPasswordType").String())
-		} else {
-			item.MonitoringPasswordType = types.StringNull()
 		}
 		if !item.MonitoringUser.IsNull() {
 			item.MonitoringUser = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.monitoringUser").String())
@@ -2819,9 +2801,6 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 			if !state.TacacsDescription.IsNull() && config.TacacsDescription.IsNull() {
 				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".aaaTacacsPlusEp.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
 			}
-			if !state.TacacsKeyEncryption.IsNull() && config.TacacsKeyEncryption.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".aaaTacacsPlusEp.attributes."+"keyEnc", "DME_UNSET_PROPERTY_MARKER")
-			}
 			if !state.TacacsLoggingLevel.IsNull() && config.TacacsLoggingLevel.IsNull() {
 				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".aaaTacacsPlusEp.attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
 			}
@@ -2868,14 +2847,8 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 							if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
 								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".aaaTacacsPlusProvider.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
 							}
-							if !stateChild.KeyEncryption.IsNull() && configChild.KeyEncryption.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".aaaTacacsPlusProvider.attributes."+"keyEnc", "DME_UNSET_PROPERTY_MARKER")
-							}
 							if !stateChild.MonitoringIdleTime.IsNull() && configChild.MonitoringIdleTime.IsNull() {
 								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".aaaTacacsPlusProvider.attributes."+"monitoringIdleTime", "DME_UNSET_PROPERTY_MARKER")
-							}
-							if !stateChild.MonitoringPasswordType.IsNull() && configChild.MonitoringPasswordType.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".aaaTacacsPlusProvider.attributes."+"monitoringPasswordType", "DME_UNSET_PROPERTY_MARKER")
 							}
 							if !stateChild.MonitoringUser.IsNull() && configChild.MonitoringUser.IsNull() {
 								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".aaaTacacsPlusProvider.attributes."+"monitoringUser", "DME_UNSET_PROPERTY_MARKER")

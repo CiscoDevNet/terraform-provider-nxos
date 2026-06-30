@@ -1,0 +1,91 @@
+---
+name: IGMP Snooping
+class_name: igmpsnoopEntity
+dn: sys/igmpsnoop
+ds_description: This data source can read the global IGMP snooping configuration on NX-OS devices, including admin state, instance controls, domain controls (querier, optimized multicast flood, routing), VXLAN snooping, and NVE static router port settings.
+res_description: This resource can manage the global IGMP snooping configuration on NX-OS devices, including admin state, instance controls, domain controls (querier, optimized multicast flood, routing), VXLAN snooping, and NVE static router port settings.
+doc_path: Layer 3/igmpsnoop:Entity/
+doc_category: Layer 3
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of IGMP snooping.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+child_classes:
+  - class_name: igmpsnoopInst
+    doc_path: Layer 3/igmpsnoop:Inst/
+    rn: inst
+    type: single
+    tf_name: instance
+    description: 'Per IGMP snooping instance information.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'The administrative state of the IGMP snooping instance.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: ctrl
+        tf_name: instance_control
+        type: String
+        description: 'IGMP snooping instance control flags.'
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+    child_classes:
+      - class_name: igmpsnoopDom
+        doc_path: Layer 3/igmpsnoop:Dom/
+        rn: dom
+        type: single
+        tf_name: domain
+        description: 'IGMP snooping domain (global default domain) configuration.'
+        attributes:
+          - nxos_name: ctrl
+            tf_name: domain_control
+            type: String
+            description: 'IGMP snooping domain controls (querier, opt-flood, routing).'
+            enum_values:
+              - querier
+              - opt-flood
+              - routing
+            allow_non_enum_values: true
+            example: opt-flood
+          - nxos_name: name
+            tf_name: domain_name
+            type: String
+            description: 'IGMP snooping domain object name.'
+            example: default
+        child_classes:
+          - class_name: igmpsnoopGl
+            doc_path: Layer 3/igmpsnoop:Gl/
+            rn: gl
+            type: single
+            child_classes:
+              - class_name: igmpsnoopGVlan
+                doc_path: Layer 3/igmpsnoop:GVlan/
+                rn: gvlan
+                type: single
+                tf_name: global_vlan
+                description: 'IGMP snooping VLAN-specific global configuration including VXLAN snooping.'
+                attributes:
+                  - nxos_name: vxlan
+                    tf_name: global_vlan_vxlan
+                    type: Bool
+                    description: 'Enable IGMP snooping on all VXLAN VLANs.'
+                    example: true
+                  - nxos_name: disableNveStRtrPort
+                    tf_name: global_vlan_disable_nve_static_router_port
+                    type: Bool
+                    description: 'Disable NVE static router port for IGMP snooping.'
+                    example: false
+                  - nxos_name: vxlanUmcDropVlan
+                    tf_name: global_vlan_vxlan_umc_drop_vlan
+                    type: String
+                    description: 'Drop unknown multicast traffic on VXLAN VLAN range (e.g. 1-3967).'
+                    example: '100-200'

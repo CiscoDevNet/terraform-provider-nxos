@@ -1,0 +1,53 @@
+---
+name: ACL Log
+class_name: acllogLogCache
+dn: sys/acllog/inst/log
+no_delete: true
+ds_description: This data source can read the ACL logging configuration on NX-OS devices, including the match log level severity, log update interval, and detailed/MAC/SGT/threshold logging options.
+res_description: This resource can manage the ACL logging configuration on NX-OS devices, including the match log level severity, log update interval, and detailed/MAC/SGT/threshold logging options.
+doc_path: Security and Policing/acllog:LogCache/
+doc_category: Security and Policing
+attributes:
+  - nxos_name: detailed
+    tf_name: detailed
+    type: Bool
+    description: 'Include detailed ACL information.'
+    example: true
+  - nxos_name: entries
+    tf_name: entries
+    type: Int64
+    description: 'Maximum number of flows to be monitored by logging process.'
+    min_int: 0
+    max_int: 1048576
+    example: 8000
+  - nxos_name: includeMac
+    tf_name: include_mac
+    type: Bool
+    description: 'Include Mac info in syslogs.'
+    example: true
+  - nxos_name: includeSgt
+    tf_name: include_sgt
+    type: Bool
+    description: 'Include source group tag info in syslogs.'
+    example: true
+  - nxos_name: interval
+    tf_name: interval
+    type: Int64
+    description: 'Log update interval in seconds.'
+    min_int: 5
+    max_int: 86400
+    example: 300
+  - nxos_name: matchLevel
+    tf_name: match_log_level
+    type: Int64
+    description: 'Acllog logging level severity.'
+    min_int: 0
+    max_int: 7
+    example: 3
+  - nxos_name: threshold
+    tf_name: threshold
+    type: Int64
+    description: 'Number of packets are logged before the expiry of the alert interval the system generates a Syslog message.'
+    min_int: 0
+    max_int: 1000000
+    example: 100

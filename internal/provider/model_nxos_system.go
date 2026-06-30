@@ -204,6 +204,8 @@ type System struct {
 	SshKeys                                       map[string]SystemSshKeys              `tfsdk:"ssh_keys"`
 	SshSourceInterfaces                           map[string]SystemSshSourceInterfaces  `tfsdk:"ssh_source_interfaces"`
 	FtpSourceInterfaces                           map[string]SystemFtpSourceInterfaces  `tfsdk:"ftp_source_interfaces"`
+	PasswordEncryptionAdminState                  types.String                          `tfsdk:"password_encryption_admin_state"`
+	PasswordEncryptionUseTam                      types.String                          `tfsdk:"password_encryption_use_tam"`
 	ErspanOriginIpIsGlobal                        types.Bool                            `tfsdk:"erspan_origin_ip_is_global"`
 	ErspanOriginIpIsGlobalIpv6                    types.Bool                            `tfsdk:"erspan_origin_ip_is_global_ipv6"`
 	ErspanOriginIpAddress                         types.String                          `tfsdk:"erspan_origin_ip_address"`
@@ -1946,6 +1948,16 @@ func (data System) toBody(config System) nxos.Body {
 		}
 	}
 	attrs = "{}"
+	if !data.PasswordEncryptionAdminState.IsUnknown() && !data.PasswordEncryptionAdminState.IsNull() && !config.PasswordEncryptionAdminState.IsNull() {
+		attrs, _ = sjson.Set(attrs, "adminSt", data.PasswordEncryptionAdminState.ValueString())
+	}
+	if !data.PasswordEncryptionUseTam.IsUnknown() && !data.PasswordEncryptionUseTam.IsNull() && !config.PasswordEncryptionUseTam.IsNull() {
+		attrs, _ = sjson.Set(attrs, "useTam", data.PasswordEncryptionUseTam.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.smartcardPasswdEncrypt.attributes", attrs)
+	}
+	attrs = "{}"
 	if !data.ErspanOriginIpIsGlobal.IsUnknown() && !data.ErspanOriginIpIsGlobal.IsNull() && !config.ErspanOriginIpIsGlobal.IsNull() {
 		attrs, _ = sjson.Set(attrs, "isGlobal", strconv.FormatBool(data.ErspanOriginIpIsGlobal.ValueBool()))
 	}
@@ -3205,6 +3217,21 @@ func (data *System) fromBody(res gjson.Result) {
 				return true
 			},
 		)
+	}
+	{
+		var rsmartcardPasswdEncrypt gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("smartcardPasswdEncrypt.attributes.rn").String()
+				if rnValue == "passwdenc" {
+					rsmartcardPasswdEncrypt = v
+					return false
+				}
+				return true
+			},
+		)
+		data.PasswordEncryptionAdminState = types.StringValue(rsmartcardPasswdEncrypt.Get("smartcardPasswdEncrypt.attributes.adminSt").String())
+		data.PasswordEncryptionUseTam = types.StringValue(rsmartcardPasswdEncrypt.Get("smartcardPasswdEncrypt.attributes.useTam").String())
 	}
 	{
 		var rspanErspanOriginIp gjson.Result
@@ -5302,6 +5329,27 @@ func (data *System) updateFromBody(res gjson.Result) {
 		}
 		data.FtpSourceInterfaces[key] = item
 	}
+	var rsmartcardPasswdEncrypt gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("smartcardPasswdEncrypt.attributes.rn").String()
+			if rnValue == "passwdenc" {
+				rsmartcardPasswdEncrypt = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.PasswordEncryptionAdminState.IsNull() {
+		data.PasswordEncryptionAdminState = types.StringValue(rsmartcardPasswdEncrypt.Get("smartcardPasswdEncrypt.attributes.adminSt").String())
+	} else {
+		data.PasswordEncryptionAdminState = types.StringNull()
+	}
+	if !data.PasswordEncryptionUseTam.IsNull() {
+		data.PasswordEncryptionUseTam = types.StringValue(rsmartcardPasswdEncrypt.Get("smartcardPasswdEncrypt.attributes.useTam").String())
+	} else {
+		data.PasswordEncryptionUseTam = types.StringNull()
+	}
 	var rspanErspanOriginIp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -6319,6 +6367,12 @@ func (data System) toDeleteBody() nxos.Body {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "srcintfEntity.attributes.rn", "ipSrcIf")
 		deleteBody, _ = sjson.Set(deleteBody, "srcintfEntity.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "smartcardPasswdEncrypt.attributes.rn", "passwdenc")
+		deleteBody, _ = sjson.Set(deleteBody, "smartcardPasswdEncrypt.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 	{
@@ -8100,6 +8154,17 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 					}
 				}
 			}
+		}
+	}
+	for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+		if sv.Get("smartcardPasswdEncrypt").Exists() {
+			if !state.PasswordEncryptionAdminState.IsNull() && config.PasswordEncryptionAdminState.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".smartcardPasswdEncrypt.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.PasswordEncryptionUseTam.IsNull() && config.PasswordEncryptionUseTam.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".smartcardPasswdEncrypt.attributes."+"useTam", "DME_UNSET_PROPERTY_MARKER")
+			}
+			break
 		}
 	}
 	for si, sv := range gjson.Get(body.Str, bodyPath).Array() {

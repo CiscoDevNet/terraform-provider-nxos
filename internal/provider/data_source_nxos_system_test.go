@@ -206,6 +206,8 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_keys.rsa.key_length", "2048"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_source_interfaces.management.source_interface", "mgmt0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ftp_source_interfaces.management.source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "password_encryption_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "password_encryption_use_tam", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "erspan_origin_ip_is_global", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "erspan_origin_ip_address", "10.0.0.1"))
 	if os.Getenv("TTAG") != "" {
@@ -499,6 +501,8 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `			source_interface = "mgmt0"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	password_encryption_admin_state = "enabled"` + "\n"
+	config += `	password_encryption_use_tam = "disabled"` + "\n"
 	config += `	erspan_origin_ip_is_global = true` + "\n"
 	config += `	erspan_origin_ip_address = "10.0.0.1"` + "\n"
 	if os.Getenv("TTAG") != "" {

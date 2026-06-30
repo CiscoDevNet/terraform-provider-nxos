@@ -242,9 +242,11 @@ resource "nxos_system" "example" {
       source_interface = "mgmt0"
     }
   }
-  erspan_origin_ip_is_global = true
-  erspan_origin_ip_address   = "10.0.0.1"
-  ttag_marker_interval       = 120
+  password_encryption_admin_state = "enabled"
+  password_encryption_use_tam     = "disabled"
+  erspan_origin_ip_is_global      = true
+  erspan_origin_ip_address        = "10.0.0.1"
+  ttag_marker_interval            = 120
   ttag_interfaces = {
     "eth1/10" = {
       ttag        = true

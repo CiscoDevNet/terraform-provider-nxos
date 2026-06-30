@@ -2336,6 +2336,29 @@ child_classes:
             type: String
             description: 'Source Interface. Must match first field in the output of `show intf brief`.'
             example: mgmt0
+  - class_name: smartcardPasswdEncrypt
+    doc_path: Security and Policing/smartcard:PasswdEncrypt/
+    rn: passwdenc
+    type: single
+    tf_name: password_encryption
+    description: 'AES password encryption feature configuration.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: password_encryption_admin_state
+        type: String
+        description: 'The administrative state of the AES password encryption feature.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: useTam
+        tf_name: password_encryption_use_tam
+        type: String
+        description: 'Use Trust Anchor Module (TAM) for password encryption.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
   - class_name: spanErspanOriginIp
     doc_path: Flow/span:ErspanOriginIp/
     rn: originip

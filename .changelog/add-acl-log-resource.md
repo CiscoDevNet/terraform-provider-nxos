@@ -1,0 +1,1 @@
+- Add `nxos_acl_log` resource and data source

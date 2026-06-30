@@ -232,6 +232,16 @@ resource "nxos_system" "example" {
       key_length = 2048
     }
   }
+  ssh_source_interfaces = {
+    "management" = {
+      source_interface = "mgmt0"
+    }
+  }
+  ftp_source_interfaces = {
+    "management" = {
+      source_interface = "mgmt0"
+    }
+  }
   erspan_origin_ip_is_global = true
   erspan_origin_ip_address   = "10.0.0.1"
   ttag_marker_interval       = 120

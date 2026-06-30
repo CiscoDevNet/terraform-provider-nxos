@@ -223,6 +223,8 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_message_authentication_codes", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_port", "22"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_keys.rsa.key_length", "2048"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ssh_source_interfaces.management.source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ftp_source_interfaces.management.source_interface", "mgmt0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "erspan_origin_ip_is_global", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "erspan_origin_ip_address", "10.0.0.1"))
 	if os.Getenv("TTAG") != "" {
@@ -541,6 +543,16 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config += `	ssh_keys = {` + "\n"
 	config += `		"rsa" = {` + "\n"
 	config += `			key_length = 2048` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ssh_source_interfaces = {` + "\n"
+	config += `		"management" = {` + "\n"
+	config += `			source_interface = "mgmt0"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ftp_source_interfaces = {` + "\n"
+	config += `		"management" = {` + "\n"
+	config += `			source_interface = "mgmt0"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	erspan_origin_ip_is_global = true` + "\n"

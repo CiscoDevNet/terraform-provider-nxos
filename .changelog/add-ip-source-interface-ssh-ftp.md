@@ -1,0 +1,2 @@
+- Add SSH source interface configuration (per VRF) to `nxos_system` resource and data source
+- Add FTP source interface configuration (per VRF) to `nxos_system` resource and data source

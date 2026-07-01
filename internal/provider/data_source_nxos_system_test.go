@@ -204,17 +204,6 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_message_authentication_codes", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_port", "22"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_keys.rsa.key_length", "2048"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_source_interfaces.management.source_interface", "mgmt0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ftp_source_interfaces.management.source_interface", "mgmt0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "password_encryption_admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "password_encryption_use_tam", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_detailed", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_entries", "8000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_include_mac", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_include_sgt", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_interval", "300"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_match_log_level", "3"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_threshold", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "erspan_origin_ip_is_global", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "erspan_origin_ip_address", "10.0.0.1"))
 	if os.Getenv("TTAG") != "" {
@@ -498,25 +487,6 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `			key_length = 2048` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	ssh_source_interfaces = {` + "\n"
-	config += `		"management" = {` + "\n"
-	config += `			source_interface = "mgmt0"` + "\n"
-	config += `		}` + "\n"
-	config += `	}` + "\n"
-	config += `	ftp_source_interfaces = {` + "\n"
-	config += `		"management" = {` + "\n"
-	config += `			source_interface = "mgmt0"` + "\n"
-	config += `		}` + "\n"
-	config += `	}` + "\n"
-	config += `	password_encryption_admin_state = "enabled"` + "\n"
-	config += `	password_encryption_use_tam = "disabled"` + "\n"
-	config += `	acl_log_detailed = true` + "\n"
-	config += `	acl_log_entries = 8000` + "\n"
-	config += `	acl_log_include_mac = true` + "\n"
-	config += `	acl_log_include_sgt = true` + "\n"
-	config += `	acl_log_interval = 300` + "\n"
-	config += `	acl_log_match_log_level = 3` + "\n"
-	config += `	acl_log_threshold = 100` + "\n"
 	config += `	erspan_origin_ip_is_global = true` + "\n"
 	config += `	erspan_origin_ip_address = "10.0.0.1"` + "\n"
 	if os.Getenv("TTAG") != "" {

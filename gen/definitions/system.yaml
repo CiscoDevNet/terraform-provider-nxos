@@ -2359,6 +2359,66 @@ child_classes:
           - enabled
           - disabled
         example: disabled
+  - class_name: acllogEntity
+    doc_path: Security and Policing/acllog:Entity/
+    rn: acllog
+    type: single
+    child_classes:
+      - class_name: acllogInst
+        doc_path: Security and Policing/acllog:Inst/
+        rn: inst
+        type: single
+        child_classes:
+          - class_name: acllogLogCache
+            doc_path: Security and Policing/acllog:LogCache/
+            rn: log
+            type: single
+            tf_name: acl_log
+            description: 'ACL logging configuration.'
+            attributes:
+              - nxos_name: detailed
+                tf_name: acl_log_detailed
+                type: Bool
+                description: 'Include detailed ACL information.'
+                example: true
+              - nxos_name: entries
+                tf_name: acl_log_entries
+                type: Int64
+                description: 'Maximum number of flows to be monitored by logging process.'
+                min_int: 0
+                max_int: 1048576
+                example: 8000
+              - nxos_name: includeMac
+                tf_name: acl_log_include_mac
+                type: Bool
+                description: 'Include Mac info in syslogs.'
+                example: true
+              - nxos_name: includeSgt
+                tf_name: acl_log_include_sgt
+                type: Bool
+                description: 'Include source group tag info in syslogs.'
+                example: true
+              - nxos_name: interval
+                tf_name: acl_log_interval
+                type: Int64
+                description: 'Log update interval in seconds.'
+                min_int: 5
+                max_int: 86400
+                example: 300
+              - nxos_name: matchLevel
+                tf_name: acl_log_match_log_level
+                type: Int64
+                description: 'Acllog logging level severity.'
+                min_int: 0
+                max_int: 7
+                example: 3
+              - nxos_name: threshold
+                tf_name: acl_log_threshold
+                type: Int64
+                description: 'Number of packets are logged before the expiry of the alert interval the system generates a Syslog message.'
+                min_int: 0
+                max_int: 1000000
+                example: 100
   - class_name: spanErspanOriginIp
     doc_path: Flow/span:ErspanOriginIp/
     rn: originip

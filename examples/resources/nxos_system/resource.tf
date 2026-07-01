@@ -244,6 +244,13 @@ resource "nxos_system" "example" {
   }
   password_encryption_admin_state = "enabled"
   password_encryption_use_tam     = "disabled"
+  acl_log_detailed                = true
+  acl_log_entries                 = 8000
+  acl_log_include_mac             = true
+  acl_log_include_sgt             = true
+  acl_log_interval                = 300
+  acl_log_match_log_level         = 3
+  acl_log_threshold               = 100
   erspan_origin_ip_is_global      = true
   erspan_origin_ip_address        = "10.0.0.1"
   ttag_marker_interval            = 120

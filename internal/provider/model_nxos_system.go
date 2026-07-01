@@ -206,6 +206,13 @@ type System struct {
 	FtpSourceInterfaces                           map[string]SystemFtpSourceInterfaces  `tfsdk:"ftp_source_interfaces"`
 	PasswordEncryptionAdminState                  types.String                          `tfsdk:"password_encryption_admin_state"`
 	PasswordEncryptionUseTam                      types.String                          `tfsdk:"password_encryption_use_tam"`
+	AclLogDetailed                                types.Bool                            `tfsdk:"acl_log_detailed"`
+	AclLogEntries                                 types.Int64                           `tfsdk:"acl_log_entries"`
+	AclLogIncludeMac                              types.Bool                            `tfsdk:"acl_log_include_mac"`
+	AclLogIncludeSgt                              types.Bool                            `tfsdk:"acl_log_include_sgt"`
+	AclLogInterval                                types.Int64                           `tfsdk:"acl_log_interval"`
+	AclLogMatchLogLevel                           types.Int64                           `tfsdk:"acl_log_match_log_level"`
+	AclLogThreshold                               types.Int64                           `tfsdk:"acl_log_threshold"`
 	ErspanOriginIpIsGlobal                        types.Bool                            `tfsdk:"erspan_origin_ip_is_global"`
 	ErspanOriginIpIsGlobalIpv6                    types.Bool                            `tfsdk:"erspan_origin_ip_is_global_ipv6"`
 	ErspanOriginIpAddress                         types.String                          `tfsdk:"erspan_origin_ip_address"`
@@ -1957,6 +1964,63 @@ func (data System) toBody(config System) nxos.Body {
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.smartcardPasswdEncrypt.attributes", attrs)
 	}
+	{
+		attrs = "{}"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "acllogEntity.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "acllogEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		{
+			attrs = "{}"
+			childBody := ""
+			childBody, _ = sjson.SetRaw(childBody, "acllogInst.attributes", attrs)
+			parentAttrs := attrs
+			parentPath := nestedChildrenPath
+			nestedChildrenPath := "acllogInst.children"
+			_ = nestedChildrenPath
+			prevBody := body
+			body = childBody
+			attrs = "{}"
+			if !data.AclLogDetailed.IsUnknown() && !data.AclLogDetailed.IsNull() && !config.AclLogDetailed.IsNull() {
+				attrs, _ = sjson.Set(attrs, "detailed", strconv.FormatBool(data.AclLogDetailed.ValueBool()))
+			}
+			if !data.AclLogEntries.IsUnknown() && !data.AclLogEntries.IsNull() && !config.AclLogEntries.IsNull() {
+				attrs, _ = sjson.Set(attrs, "entries", strconv.FormatInt(data.AclLogEntries.ValueInt64(), 10))
+			}
+			if !data.AclLogIncludeMac.IsUnknown() && !data.AclLogIncludeMac.IsNull() && !config.AclLogIncludeMac.IsNull() {
+				attrs, _ = sjson.Set(attrs, "includeMac", strconv.FormatBool(data.AclLogIncludeMac.ValueBool()))
+			}
+			if !data.AclLogIncludeSgt.IsUnknown() && !data.AclLogIncludeSgt.IsNull() && !config.AclLogIncludeSgt.IsNull() {
+				attrs, _ = sjson.Set(attrs, "includeSgt", strconv.FormatBool(data.AclLogIncludeSgt.ValueBool()))
+			}
+			if !data.AclLogInterval.IsUnknown() && !data.AclLogInterval.IsNull() && !config.AclLogInterval.IsNull() {
+				attrs, _ = sjson.Set(attrs, "interval", strconv.FormatInt(data.AclLogInterval.ValueInt64(), 10))
+			}
+			if !data.AclLogMatchLogLevel.IsUnknown() && !data.AclLogMatchLogLevel.IsNull() && !config.AclLogMatchLogLevel.IsNull() {
+				attrs, _ = sjson.Set(attrs, "matchLevel", strconv.FormatInt(data.AclLogMatchLogLevel.ValueInt64(), 10))
+			}
+			if !data.AclLogThreshold.IsUnknown() && !data.AclLogThreshold.IsNull() && !config.AclLogThreshold.IsNull() {
+				attrs, _ = sjson.Set(attrs, "threshold", strconv.FormatInt(data.AclLogThreshold.ValueInt64(), 10))
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.acllogLogCache.attributes", attrs)
+			}
+			childBody = body
+			body = prevBody
+			if parentAttrs != "{}" || gjson.Get(childBody, "acllogInst.children").Exists() {
+				body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "acllogEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
 	attrs = "{}"
 	if !data.ErspanOriginIpIsGlobal.IsUnknown() && !data.ErspanOriginIpIsGlobal.IsNull() && !config.ErspanOriginIpIsGlobal.IsNull() {
 		attrs, _ = sjson.Set(attrs, "isGlobal", strconv.FormatBool(data.ErspanOriginIpIsGlobal.ValueBool()))
@@ -3232,6 +3296,52 @@ func (data *System) fromBody(res gjson.Result) {
 		)
 		data.PasswordEncryptionAdminState = types.StringValue(rsmartcardPasswdEncrypt.Get("smartcardPasswdEncrypt.attributes.adminSt").String())
 		data.PasswordEncryptionUseTam = types.StringValue(rsmartcardPasswdEncrypt.Get("smartcardPasswdEncrypt.attributes.useTam").String())
+	}
+	{
+		var racllogEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("acllogEntity.attributes.rn").String()
+				if rnValue == "acllog" {
+					racllogEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var racllogInst gjson.Result
+			racllogEntity.Get("acllogEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("acllogInst.attributes.rn").String()
+					if rnValue == "inst" {
+						racllogInst = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var racllogLogCache gjson.Result
+				racllogInst.Get("acllogInst.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("acllogLogCache.attributes.rn").String()
+						if rnValue == "log" {
+							racllogLogCache = v
+							return false
+						}
+						return true
+					},
+				)
+				data.AclLogDetailed = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.detailed").String()))
+				data.AclLogEntries = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.entries").Int())
+				data.AclLogIncludeMac = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.includeMac").String()))
+				data.AclLogIncludeSgt = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.includeSgt").String()))
+				data.AclLogInterval = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.interval").Int())
+				data.AclLogMatchLogLevel = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.matchLevel").Int())
+				data.AclLogThreshold = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.threshold").Int())
+			}
+		}
 	}
 	{
 		var rspanErspanOriginIp gjson.Result
@@ -5350,6 +5460,78 @@ func (data *System) updateFromBody(res gjson.Result) {
 	} else {
 		data.PasswordEncryptionUseTam = types.StringNull()
 	}
+	var racllogEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("acllogEntity.attributes.rn").String()
+			if rnValue == "acllog" {
+				racllogEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var racllogInst gjson.Result
+		racllogEntity.Get("acllogEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("acllogInst.attributes.rn").String()
+				if rnValue == "inst" {
+					racllogInst = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var racllogLogCache gjson.Result
+			racllogInst.Get("acllogInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("acllogLogCache.attributes.rn").String()
+					if rnValue == "log" {
+						racllogLogCache = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.AclLogDetailed.IsNull() {
+				data.AclLogDetailed = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.detailed").String()))
+			} else {
+				data.AclLogDetailed = types.BoolNull()
+			}
+			if !data.AclLogEntries.IsNull() {
+				data.AclLogEntries = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.entries").Int())
+			} else {
+				data.AclLogEntries = types.Int64Null()
+			}
+			if !data.AclLogIncludeMac.IsNull() {
+				data.AclLogIncludeMac = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.includeMac").String()))
+			} else {
+				data.AclLogIncludeMac = types.BoolNull()
+			}
+			if !data.AclLogIncludeSgt.IsNull() {
+				data.AclLogIncludeSgt = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.includeSgt").String()))
+			} else {
+				data.AclLogIncludeSgt = types.BoolNull()
+			}
+			if !data.AclLogInterval.IsNull() {
+				data.AclLogInterval = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.interval").Int())
+			} else {
+				data.AclLogInterval = types.Int64Null()
+			}
+			if !data.AclLogMatchLogLevel.IsNull() {
+				data.AclLogMatchLogLevel = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.matchLevel").Int())
+			} else {
+				data.AclLogMatchLogLevel = types.Int64Null()
+			}
+			if !data.AclLogThreshold.IsNull() {
+				data.AclLogThreshold = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.threshold").Int())
+			} else {
+				data.AclLogThreshold = types.Int64Null()
+			}
+		}
+	}
 	var rspanErspanOriginIp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -6373,6 +6555,12 @@ func (data System) toDeleteBody() nxos.Body {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "smartcardPasswdEncrypt.attributes.rn", "passwdenc")
 		deleteBody, _ = sjson.Set(deleteBody, "smartcardPasswdEncrypt.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "acllogEntity.attributes.rn", "acllog")
+		deleteBody, _ = sjson.Set(deleteBody, "acllogEntity.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 	{
@@ -8165,6 +8353,54 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".smartcardPasswdEncrypt.attributes."+"useTam", "DME_UNSET_PROPERTY_MARKER")
 			}
 			break
+		}
+	}
+	{
+		singleChildPath := ""
+		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+			if sv.Get("acllogEntity").Exists() {
+				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".acllogEntity.children"
+				break
+			}
+		}
+		if singleChildPath != "" {
+			{
+				singleChildPath := ""
+				for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+					if sv.Get("acllogInst").Exists() {
+						singleChildPath = singleChildPath + "." + strconv.Itoa(si) + ".acllogInst.children"
+						break
+					}
+				}
+				if singleChildPath != "" {
+					for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+						if sv.Get("acllogLogCache").Exists() {
+							if !state.AclLogDetailed.IsNull() && config.AclLogDetailed.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"detailed", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogEntries.IsNull() && config.AclLogEntries.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"entries", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogIncludeMac.IsNull() && config.AclLogIncludeMac.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"includeMac", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogIncludeSgt.IsNull() && config.AclLogIncludeSgt.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"includeSgt", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogInterval.IsNull() && config.AclLogInterval.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogMatchLogLevel.IsNull() && config.AclLogMatchLogLevel.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"matchLevel", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogThreshold.IsNull() && config.AclLogThreshold.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"threshold", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+				}
+			}
 		}
 	}
 	for si, sv := range gjson.Get(body.Str, bodyPath).Array() {

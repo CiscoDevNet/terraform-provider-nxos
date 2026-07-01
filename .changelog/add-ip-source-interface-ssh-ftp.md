@@ -1,4 +1,0 @@
-- Add SSH source interface configuration (per VRF) to `nxos_system` resource and data source
-- Add FTP source interface configuration (per VRF) to `nxos_system` resource and data source
-- Add AES password encryption (`feature password encryption aes`) configuration to `nxos_system` resource and data source
-- Add ACL logging configuration (match log level, cache entries, interval, threshold, detailed, include-mac, include-sgt) to `nxos_system` resource and data source

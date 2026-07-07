@@ -202,6 +202,17 @@ type System struct {
 	SshMessageAuthenticationCodes                 types.String                          `tfsdk:"ssh_message_authentication_codes"`
 	SshPort                                       types.Int64                           `tfsdk:"ssh_port"`
 	SshKeys                                       map[string]SystemSshKeys              `tfsdk:"ssh_keys"`
+	SshSourceInterfaces                           map[string]SystemSshSourceInterfaces  `tfsdk:"ssh_source_interfaces"`
+	FtpSourceInterfaces                           map[string]SystemFtpSourceInterfaces  `tfsdk:"ftp_source_interfaces"`
+	PasswordEncryptionAdminState                  types.String                          `tfsdk:"password_encryption_admin_state"`
+	PasswordEncryptionUseTam                      types.String                          `tfsdk:"password_encryption_use_tam"`
+	AclLogDetailed                                types.Bool                            `tfsdk:"acl_log_detailed"`
+	AclLogEntries                                 types.Int64                           `tfsdk:"acl_log_entries"`
+	AclLogIncludeMac                              types.Bool                            `tfsdk:"acl_log_include_mac"`
+	AclLogIncludeSgt                              types.Bool                            `tfsdk:"acl_log_include_sgt"`
+	AclLogInterval                                types.Int64                           `tfsdk:"acl_log_interval"`
+	AclLogMatchLogLevel                           types.Int64                           `tfsdk:"acl_log_match_log_level"`
+	AclLogThreshold                               types.Int64                           `tfsdk:"acl_log_threshold"`
 	ErspanOriginIpIsGlobal                        types.Bool                            `tfsdk:"erspan_origin_ip_is_global"`
 	ErspanOriginIpIsGlobalIpv6                    types.Bool                            `tfsdk:"erspan_origin_ip_is_global_ipv6"`
 	ErspanOriginIpAddress                         types.String                          `tfsdk:"erspan_origin_ip_address"`
@@ -339,6 +350,14 @@ type SystemSshKeys struct {
 	KeyLength types.Int64 `tfsdk:"key_length"`
 }
 
+type SystemSshSourceInterfaces struct {
+	SourceInterface types.String `tfsdk:"source_interface"`
+}
+
+type SystemFtpSourceInterfaces struct {
+	SourceInterface types.String `tfsdk:"source_interface"`
+}
+
 type SystemTtagInterfaces struct {
 	Ttag       types.Bool `tfsdk:"ttag"`
 	TtagInner  types.Bool `tfsdk:"ttag_inner"`
@@ -436,6 +455,14 @@ func (data SystemServiceInstancesVrfs) getRn(key string) string {
 
 func (data SystemSshKeys) getRn(key string) string {
 	return fmt.Sprintf("key-[%s]", key)
+}
+
+func (data SystemSshSourceInterfaces) getRn(key string) string {
+	return fmt.Sprintf("ssh-[%s]", key)
+}
+
+func (data SystemFtpSourceInterfaces) getRn(key string) string {
+	return fmt.Sprintf("ftp-[%s]", key)
 }
 
 func (data SystemTtagInterfaces) getRn(key string) string {
@@ -1889,6 +1916,111 @@ func (data System) toBody(config System) nxos.Body {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
+	{
+		attrs = "{}"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "srcintfEntity.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "srcintfEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		for key, child := range data.SshSourceInterfaces {
+			configChild, configChildOk := config.SshSourceInterfaces[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "vrf", key)
+			if configChildOk && !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
+				attrs, _ = sjson.Set(attrs, "srcIf", child.SourceInterface.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.srcintfSsh.attributes", attrs)
+		}
+		for key, child := range data.FtpSourceInterfaces {
+			configChild, configChildOk := config.FtpSourceInterfaces[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "vrf", key)
+			if configChildOk && !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
+				attrs, _ = sjson.Set(attrs, "srcIf", child.SourceInterface.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.srcintfFtp.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "srcintfEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
+	attrs = "{}"
+	if !data.PasswordEncryptionAdminState.IsUnknown() && !data.PasswordEncryptionAdminState.IsNull() && !config.PasswordEncryptionAdminState.IsNull() {
+		attrs, _ = sjson.Set(attrs, "adminSt", data.PasswordEncryptionAdminState.ValueString())
+	}
+	if !data.PasswordEncryptionUseTam.IsUnknown() && !data.PasswordEncryptionUseTam.IsNull() && !config.PasswordEncryptionUseTam.IsNull() {
+		attrs, _ = sjson.Set(attrs, "useTam", data.PasswordEncryptionUseTam.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.smartcardPasswdEncrypt.attributes", attrs)
+	}
+	{
+		attrs = "{}"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "acllogEntity.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "acllogEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		{
+			attrs = "{}"
+			childBody := ""
+			childBody, _ = sjson.SetRaw(childBody, "acllogInst.attributes", attrs)
+			parentAttrs := attrs
+			parentPath := nestedChildrenPath
+			nestedChildrenPath := "acllogInst.children"
+			_ = nestedChildrenPath
+			prevBody := body
+			body = childBody
+			attrs = "{}"
+			if !data.AclLogDetailed.IsUnknown() && !data.AclLogDetailed.IsNull() && !config.AclLogDetailed.IsNull() {
+				attrs, _ = sjson.Set(attrs, "detailed", strconv.FormatBool(data.AclLogDetailed.ValueBool()))
+			}
+			if !data.AclLogEntries.IsUnknown() && !data.AclLogEntries.IsNull() && !config.AclLogEntries.IsNull() {
+				attrs, _ = sjson.Set(attrs, "entries", strconv.FormatInt(data.AclLogEntries.ValueInt64(), 10))
+			}
+			if !data.AclLogIncludeMac.IsUnknown() && !data.AclLogIncludeMac.IsNull() && !config.AclLogIncludeMac.IsNull() {
+				attrs, _ = sjson.Set(attrs, "includeMac", strconv.FormatBool(data.AclLogIncludeMac.ValueBool()))
+			}
+			if !data.AclLogIncludeSgt.IsUnknown() && !data.AclLogIncludeSgt.IsNull() && !config.AclLogIncludeSgt.IsNull() {
+				attrs, _ = sjson.Set(attrs, "includeSgt", strconv.FormatBool(data.AclLogIncludeSgt.ValueBool()))
+			}
+			if !data.AclLogInterval.IsUnknown() && !data.AclLogInterval.IsNull() && !config.AclLogInterval.IsNull() {
+				attrs, _ = sjson.Set(attrs, "interval", strconv.FormatInt(data.AclLogInterval.ValueInt64(), 10))
+			}
+			if !data.AclLogMatchLogLevel.IsUnknown() && !data.AclLogMatchLogLevel.IsNull() && !config.AclLogMatchLogLevel.IsNull() {
+				attrs, _ = sjson.Set(attrs, "matchLevel", strconv.FormatInt(data.AclLogMatchLogLevel.ValueInt64(), 10))
+			}
+			if !data.AclLogThreshold.IsUnknown() && !data.AclLogThreshold.IsNull() && !config.AclLogThreshold.IsNull() {
+				attrs, _ = sjson.Set(attrs, "threshold", strconv.FormatInt(data.AclLogThreshold.ValueInt64(), 10))
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.acllogLogCache.attributes", attrs)
+			}
+			childBody = body
+			body = prevBody
+			if parentAttrs != "{}" || gjson.Get(childBody, "acllogInst.children").Exists() {
+				body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "acllogEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
 	attrs = "{}"
 	if !data.ErspanOriginIpIsGlobal.IsUnknown() && !data.ErspanOriginIpIsGlobal.IsNull() && !config.ErspanOriginIpIsGlobal.IsNull() {
 		attrs, _ = sjson.Set(attrs, "isGlobal", strconv.FormatBool(data.ErspanOriginIpIsGlobal.ValueBool()))
@@ -3097,6 +3229,118 @@ func (data *System) fromBody(res gjson.Result) {
 					return true
 				},
 			)
+		}
+	}
+	{
+		var rsrcintfEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("srcintfEntity.attributes.rn").String()
+				if rnValue == "ipSrcIf" {
+					rsrcintfEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		rsrcintfEntity.Get("srcintfEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "srcintfSsh" {
+							var child SystemSshSourceInterfaces
+							child.SourceInterface = types.StringValue(value.Get("attributes.srcIf").String())
+							mapKey := value.Get("attributes.vrf").String()
+							if data.SshSourceInterfaces == nil {
+								data.SshSourceInterfaces = make(map[string]SystemSshSourceInterfaces)
+							}
+							data.SshSourceInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rsrcintfEntity.Get("srcintfEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "srcintfFtp" {
+							var child SystemFtpSourceInterfaces
+							child.SourceInterface = types.StringValue(value.Get("attributes.srcIf").String())
+							mapKey := value.Get("attributes.vrf").String()
+							if data.FtpSourceInterfaces == nil {
+								data.FtpSourceInterfaces = make(map[string]SystemFtpSourceInterfaces)
+							}
+							data.FtpSourceInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
+	{
+		var rsmartcardPasswdEncrypt gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("smartcardPasswdEncrypt.attributes.rn").String()
+				if rnValue == "passwdenc" {
+					rsmartcardPasswdEncrypt = v
+					return false
+				}
+				return true
+			},
+		)
+		data.PasswordEncryptionAdminState = types.StringValue(rsmartcardPasswdEncrypt.Get("smartcardPasswdEncrypt.attributes.adminSt").String())
+		data.PasswordEncryptionUseTam = types.StringValue(rsmartcardPasswdEncrypt.Get("smartcardPasswdEncrypt.attributes.useTam").String())
+	}
+	{
+		var racllogEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("acllogEntity.attributes.rn").String()
+				if rnValue == "acllog" {
+					racllogEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var racllogInst gjson.Result
+			racllogEntity.Get("acllogEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("acllogInst.attributes.rn").String()
+					if rnValue == "inst" {
+						racllogInst = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var racllogLogCache gjson.Result
+				racllogInst.Get("acllogInst.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("acllogLogCache.attributes.rn").String()
+						if rnValue == "log" {
+							racllogLogCache = v
+							return false
+						}
+						return true
+					},
+				)
+				data.AclLogDetailed = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.detailed").String()))
+				data.AclLogEntries = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.entries").Int())
+				data.AclLogIncludeMac = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.includeMac").String()))
+				data.AclLogIncludeSgt = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.includeSgt").String()))
+				data.AclLogInterval = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.interval").Int())
+				data.AclLogMatchLogLevel = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.matchLevel").Int())
+				data.AclLogThreshold = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.threshold").Int())
+			}
 		}
 	}
 	{
@@ -5140,6 +5384,154 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.SshKeys[key] = item
 		}
 	}
+	var rsrcintfEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("srcintfEntity.attributes.rn").String()
+			if rnValue == "ipSrcIf" {
+				rsrcintfEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	for key, item := range data.SshSourceInterfaces {
+		var rsrcintfSsh gjson.Result
+		rsrcintfEntity.Get("srcintfEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("srcintfSsh.attributes.vrf").String() == key {
+					rsrcintfSsh = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rsrcintfSsh.Exists() {
+			delete(data.SshSourceInterfaces, key)
+			continue
+		}
+		if !item.SourceInterface.IsNull() {
+			item.SourceInterface = types.StringValue(rsrcintfSsh.Get("srcintfSsh.attributes.srcIf").String())
+		} else {
+			item.SourceInterface = types.StringNull()
+		}
+		data.SshSourceInterfaces[key] = item
+	}
+	for key, item := range data.FtpSourceInterfaces {
+		var rsrcintfFtp gjson.Result
+		rsrcintfEntity.Get("srcintfEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("srcintfFtp.attributes.vrf").String() == key {
+					rsrcintfFtp = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rsrcintfFtp.Exists() {
+			delete(data.FtpSourceInterfaces, key)
+			continue
+		}
+		if !item.SourceInterface.IsNull() {
+			item.SourceInterface = types.StringValue(rsrcintfFtp.Get("srcintfFtp.attributes.srcIf").String())
+		} else {
+			item.SourceInterface = types.StringNull()
+		}
+		data.FtpSourceInterfaces[key] = item
+	}
+	var rsmartcardPasswdEncrypt gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("smartcardPasswdEncrypt.attributes.rn").String()
+			if rnValue == "passwdenc" {
+				rsmartcardPasswdEncrypt = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.PasswordEncryptionAdminState.IsNull() {
+		data.PasswordEncryptionAdminState = types.StringValue(rsmartcardPasswdEncrypt.Get("smartcardPasswdEncrypt.attributes.adminSt").String())
+	} else {
+		data.PasswordEncryptionAdminState = types.StringNull()
+	}
+	if !data.PasswordEncryptionUseTam.IsNull() {
+		data.PasswordEncryptionUseTam = types.StringValue(rsmartcardPasswdEncrypt.Get("smartcardPasswdEncrypt.attributes.useTam").String())
+	} else {
+		data.PasswordEncryptionUseTam = types.StringNull()
+	}
+	var racllogEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("acllogEntity.attributes.rn").String()
+			if rnValue == "acllog" {
+				racllogEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var racllogInst gjson.Result
+		racllogEntity.Get("acllogEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("acllogInst.attributes.rn").String()
+				if rnValue == "inst" {
+					racllogInst = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var racllogLogCache gjson.Result
+			racllogInst.Get("acllogInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("acllogLogCache.attributes.rn").String()
+					if rnValue == "log" {
+						racllogLogCache = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.AclLogDetailed.IsNull() {
+				data.AclLogDetailed = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.detailed").String()))
+			} else {
+				data.AclLogDetailed = types.BoolNull()
+			}
+			if !data.AclLogEntries.IsNull() {
+				data.AclLogEntries = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.entries").Int())
+			} else {
+				data.AclLogEntries = types.Int64Null()
+			}
+			if !data.AclLogIncludeMac.IsNull() {
+				data.AclLogIncludeMac = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.includeMac").String()))
+			} else {
+				data.AclLogIncludeMac = types.BoolNull()
+			}
+			if !data.AclLogIncludeSgt.IsNull() {
+				data.AclLogIncludeSgt = types.BoolValue(helpers.ParseNxosBoolean(racllogLogCache.Get("acllogLogCache.attributes.includeSgt").String()))
+			} else {
+				data.AclLogIncludeSgt = types.BoolNull()
+			}
+			if !data.AclLogInterval.IsNull() {
+				data.AclLogInterval = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.interval").Int())
+			} else {
+				data.AclLogInterval = types.Int64Null()
+			}
+			if !data.AclLogMatchLogLevel.IsNull() {
+				data.AclLogMatchLogLevel = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.matchLevel").Int())
+			} else {
+				data.AclLogMatchLogLevel = types.Int64Null()
+			}
+			if !data.AclLogThreshold.IsNull() {
+				data.AclLogThreshold = types.Int64Value(racllogLogCache.Get("acllogLogCache.attributes.threshold").Int())
+			} else {
+				data.AclLogThreshold = types.Int64Null()
+			}
+		}
+	}
 	var rspanErspanOriginIp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -6155,6 +6547,24 @@ func (data System) toDeleteBody() nxos.Body {
 	}
 	{
 		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "srcintfEntity.attributes.rn", "ipSrcIf")
+		deleteBody, _ = sjson.Set(deleteBody, "srcintfEntity.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "smartcardPasswdEncrypt.attributes.rn", "passwdenc")
+		deleteBody, _ = sjson.Set(deleteBody, "smartcardPasswdEncrypt.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "acllogEntity.attributes.rn", "acllog")
+		deleteBody, _ = sjson.Set(deleteBody, "acllogEntity.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.rn", "originip")
 		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
@@ -6435,6 +6845,24 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "commSshKey.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.commEntity.children"+".0.commSsh.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.SshSourceInterfaces {
+		if _, found := data.SshSourceInterfaces[stateKey]; !found {
+			stateChild := state.SshSourceInterfaces[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "srcintfSsh.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "srcintfSsh.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.srcintfEntity.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.FtpSourceInterfaces {
+		if _, found := data.FtpSourceInterfaces[stateKey]; !found {
+			stateChild := state.FtpSourceInterfaces[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "srcintfFtp.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "srcintfFtp.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.srcintfEntity.children"+".-1", deleteBody)
 		}
 	}
 	for stateKey := range state.TtagInterfaces {
@@ -7869,6 +8297,106 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 									break
 								}
 							}
+						}
+					}
+				}
+			}
+		}
+	}
+	{
+		singleChildPath := ""
+		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+			if sv.Get("srcintfEntity").Exists() {
+				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".srcintfEntity.children"
+				break
+			}
+		}
+		if singleChildPath != "" {
+			for key := range state.SshSourceInterfaces {
+				if configChild, ok := config.SshSourceInterfaces[key]; ok {
+					stateChild := state.SshSourceInterfaces[key]
+					_ = stateChild
+					_ = configChild
+					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+						if mv.Get("srcintfSsh.attributes.vrf").String() == key {
+							if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".srcintfSsh.attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+				}
+			}
+			for key := range state.FtpSourceInterfaces {
+				if configChild, ok := config.FtpSourceInterfaces[key]; ok {
+					stateChild := state.FtpSourceInterfaces[key]
+					_ = stateChild
+					_ = configChild
+					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+						if mv.Get("srcintfFtp.attributes.vrf").String() == key {
+							if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".srcintfFtp.attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+				}
+			}
+		}
+	}
+	for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+		if sv.Get("smartcardPasswdEncrypt").Exists() {
+			if !state.PasswordEncryptionAdminState.IsNull() && config.PasswordEncryptionAdminState.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".smartcardPasswdEncrypt.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.PasswordEncryptionUseTam.IsNull() && config.PasswordEncryptionUseTam.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".smartcardPasswdEncrypt.attributes."+"useTam", "DME_UNSET_PROPERTY_MARKER")
+			}
+			break
+		}
+	}
+	{
+		singleChildPath := ""
+		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+			if sv.Get("acllogEntity").Exists() {
+				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".acllogEntity.children"
+				break
+			}
+		}
+		if singleChildPath != "" {
+			{
+				singleChildPath := ""
+				for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+					if sv.Get("acllogInst").Exists() {
+						singleChildPath = singleChildPath + "." + strconv.Itoa(si) + ".acllogInst.children"
+						break
+					}
+				}
+				if singleChildPath != "" {
+					for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+						if sv.Get("acllogLogCache").Exists() {
+							if !state.AclLogDetailed.IsNull() && config.AclLogDetailed.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"detailed", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogEntries.IsNull() && config.AclLogEntries.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"entries", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogIncludeMac.IsNull() && config.AclLogIncludeMac.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"includeMac", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogIncludeSgt.IsNull() && config.AclLogIncludeSgt.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"includeSgt", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogInterval.IsNull() && config.AclLogInterval.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogMatchLogLevel.IsNull() && config.AclLogMatchLogLevel.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"matchLevel", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !state.AclLogThreshold.IsNull() && config.AclLogThreshold.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".acllogLogCache.attributes."+"threshold", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
 						}
 					}
 				}

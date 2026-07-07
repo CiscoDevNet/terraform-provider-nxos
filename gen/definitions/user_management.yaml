@@ -370,6 +370,7 @@ child_classes:
         description: "Default key encryption."
         example: "0"
         exclude_test: true
+        write_only: true
       - nxos_name: loggingLevel
         tf_name: tacacs_logging_level
         type: Int64
@@ -461,6 +462,7 @@ child_classes:
             description: "Default key encryption."
             example: "0"
             exclude_test: true
+            write_only: true
           - nxos_name: monitoringIdleTime
             tf_name: monitoring_idle_time
             type: Int64
@@ -485,6 +487,7 @@ child_classes:
             description: "Monitoring password type."
             example: "0"
             exclude_test: true
+            write_only: true
           - nxos_name: monitoringUser
             tf_name: monitoring_user
             type: String

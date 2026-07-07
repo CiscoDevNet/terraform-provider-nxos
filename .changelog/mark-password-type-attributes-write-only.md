@@ -1,0 +1,2 @@
+- Mark `password_type` attribute on `nxos_bgp` peers and interface_peers as write-only to prevent perpetual drift when the device round-trips the value differently than supplied
+- Mark `key_encryption` and `monitoring_password_type` attributes on `nxos_user_management` tacacs_providers as write-only for the same reason

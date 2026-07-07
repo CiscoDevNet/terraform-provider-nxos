@@ -54,6 +54,8 @@ import {
 
 ## Identity-Based Import
 
+Identity-based import requires **Terraform >= 1.12**, the version in which resource identity was introduced. On earlier Terraform versions, fall back to string-based import shown above.
+
 Resources also support identity-based imports using an `identity` block. For singleton resources, the identity block is empty:
 
 ```terraform

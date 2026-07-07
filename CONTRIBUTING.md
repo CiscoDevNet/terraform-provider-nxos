@@ -49,6 +49,8 @@ go install
 
 This provider heavily relies on code generation to create the necessary resources and data sources. The generator takes care of creating the necessary code, documentation and acceptance tests for a particular resource or data source. The generator is written in Go and can be found in the `gen` directory. There is a two step process to eventually generate the code for a new resource or data source. First, a "definition" is being created, which is a YAML file with all the necessary information to render the code artifacts. The second step is to run the generator with the "definition" file(s) as input. The generator will then render the code artifacts for the resources or data sources.
 
+> **Note:** Running code generation requires **Terraform >= 1.12** on `PATH`. `tfplugindocs` spawns the local `terraform` binary to introspect each resource's schema, including its identity schema, which was added in Terraform 1.12. On older versions, generation fails with errors such as `an identity import example was provided for a resource that does not support resource identity`.
+
 Definition files are being maintained in the `gen/definitions` directory. The model of the definition files is defined by a [Yamale](https://github.com/23andMe/Yamale) schema located [here](https://github.com/CiscoDevNet/terraform-provider-nxos/blob/main/gen/schema/schema.yaml). The schema also includes a description of the fields and their purpose.
 
 To generate the code for a new resource or data source, run the following command:

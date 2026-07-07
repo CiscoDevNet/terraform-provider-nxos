@@ -977,6 +977,7 @@ child_classes:
                   - '7'
                 example: LINE
                 exclude_test: true
+                write_only: true
               - nxos_name: password
                 tf_name: password
                 description: 'Configure a password for neighbor.'
@@ -1304,6 +1305,7 @@ child_classes:
                   - '7'
                 example: LINE
                 exclude_test: true
+                write_only: true
               - nxos_name: password
                 tf_name: password
                 description: 'Password.'
@@ -1947,6 +1949,7 @@ child_classes:
                   - '7'
                 example: LINE
                 exclude_test: true
+                write_only: true
               - nxos_name: password
                 tf_name: password
                 description: 'Configure a password for neighbor.'

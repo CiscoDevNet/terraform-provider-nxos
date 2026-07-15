@@ -16,4 +16,8 @@ resource "nxos_bridge_domain" "example" {
       cross_connect       = "disable"
     }
   }
+  vlan_configurations = {
+    "vlan-100" = {
+    }
+  }
 }

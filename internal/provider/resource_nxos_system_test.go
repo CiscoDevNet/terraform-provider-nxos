@@ -243,6 +243,18 @@ func TestAccNxosSystem(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ttag_interfaces.eth1/10.ttag_marker", "false"))
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ttag_interfaces.eth1/10.ttag_strip", "false"))
 	}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_fex_trunk", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlans.vlan-100.type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlans.vlan-100.association", "101-102"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.access_promiscuous_primary_vlan", "vlan-100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.access_promiscuous_secondary_vlans", "101-102"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.access_secondary_primary_vlan", "vlan-100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.access_secondary_secondary_vlan", "vlan-101"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_native_vlan", "vlan-10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_allowed_vlans", "1-4094"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_promiscuous_mappings.vlan-100.secondary_vlans", "101-102"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_secondary_associations.vlan-100.secondary_vlan", "vlan-101"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_svis.vlan100.secondary_vlans", "101-102"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
@@ -302,6 +314,65 @@ resource "nxos_dme" "PreReq1" {
   }
 }
 
+resource "nxos_dme" "PreReq2" {
+  dn = "sys/fm/pvlan"
+  class_name = "fmPvlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq3" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq4" {
+  dn = "sys/bd/bd-[vlan-100]"
+  class_name = "l2BD"
+  content = {
+      fabEncap = "vlan-100"
+  }
+}
+
+resource "nxos_dme" "PreReq5" {
+  dn = "sys/bd/bd-[vlan-101]"
+  class_name = "l2BD"
+  content = {
+      fabEncap = "vlan-101"
+  }
+}
+
+resource "nxos_dme" "PreReq6" {
+  dn = "sys/bd/bd-[vlan-102]"
+  class_name = "l2BD"
+  content = {
+      fabEncap = "vlan-102"
+  }
+}
+
+resource "nxos_dme" "PreReq7" {
+  dn = "sys/intf/svi-[vlan100]"
+  class_name = "sviIf"
+  content = {
+      id = "vlan100"
+  }
+  depends_on = [nxos_dme.PreReq3, nxos_dme.PreReq4, ]
+}
+
+resource "nxos_dme" "PreReq8" {
+  dn = "sys/intf/phys-[eth1/9]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer2"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -309,7 +380,7 @@ resource "nxos_dme" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSystemConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -586,7 +657,39 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 		config += `		}` + "\n"
 		config += `	}` + "\n"
 	}
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	pvlan_fex_trunk = "enabled"` + "\n"
+	config += `	pvlans = {` + "\n"
+	config += `		"vlan-100" = {` + "\n"
+	config += `			type = "primary"` + "\n"
+	config += `			association = "101-102"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	pvlan_interfaces = {` + "\n"
+	config += `		"eth1/9" = {` + "\n"
+	config += `			access_promiscuous_primary_vlan = "vlan-100"` + "\n"
+	config += `			access_promiscuous_secondary_vlans = "101-102"` + "\n"
+	config += `			access_secondary_primary_vlan = "vlan-100"` + "\n"
+	config += `			access_secondary_secondary_vlan = "vlan-101"` + "\n"
+	config += `			trunk_native_vlan = "vlan-10"` + "\n"
+	config += `			trunk_allowed_vlans = "1-4094"` + "\n"
+	config += `			trunk_promiscuous_mappings = {` + "\n"
+	config += `				"vlan-100" = {` + "\n"
+	config += `					secondary_vlans = "101-102"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			trunk_secondary_associations = {` + "\n"
+	config += `				"vlan-100" = {` + "\n"
+	config += `					secondary_vlan = "vlan-101"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	pvlan_svis = {` + "\n"
+	config += `		"vlan100" = {` + "\n"
+	config += `			secondary_vlans = "101-102"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

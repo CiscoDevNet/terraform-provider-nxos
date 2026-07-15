@@ -2299,6 +2299,7 @@ child_classes:
     doc_path: System/srcintf:Entity/
     rn: ipSrcIf
     type: single
+    no_delete: true
     child_classes:
       - class_name: srcintfSsh
         doc_path: System/srcintf:Ssh/
@@ -2363,11 +2364,13 @@ child_classes:
     doc_path: Security and Policing/acllog:Entity/
     rn: acllog
     type: single
+    no_delete: true
     child_classes:
       - class_name: acllogInst
         doc_path: Security and Policing/acllog:Inst/
         rn: inst
         type: single
+        no_delete: true
         child_classes:
           - class_name: acllogLogCache
             doc_path: Security and Policing/acllog:LogCache/
@@ -2498,6 +2501,192 @@ child_classes:
             type: Bool
             description: 'Strip ttag from egress packet on this interface.'
             example: false
+  - class_name: pvlanPrivateVlan
+    doc_path: Layer%202/pvlan:PrivateVlan/
+    rn: pvlan
+    type: single
+    no_delete: true
+    tf_name: pvlan
+    description: 'Private VLAN (PVLAN) configuration and management.'
+    attributes:
+      - nxos_name: fexTrunk
+        tf_name: pvlan_fex_trunk
+        type: String
+        enum_values:
+          - enabled
+          - disabled
+        description: 'Enable or disable PVLANs for FEX trunk.'
+        example: enabled
+    child_classes:
+      - class_name: pvlanVlan
+        doc_path: Layer%202/pvlan:Vlan/
+        rn: vlan-[%s]
+        type: list
+        tf_name: pvlans
+        description: 'VLAN configuration and operation for PVLAN.'
+        attributes:
+          - nxos_name: id
+            tf_name: vlan_id
+            type: String
+            id: true
+            description: 'VLAN ID in a PVLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+            example: vlan-100
+          - nxos_name: pvlanType
+            tf_name: type
+            type: String
+            enum_values:
+              - isolated
+              - community
+              - primary
+              - nonOperational
+            description: 'Type of VLAN in a PVLAN: Primary, Community or Isolated.'
+            example: primary
+          - nxos_name: association
+            tf_name: association
+            type: String
+            description: 'Association of Primary VLAN to Secondary VLANs in a PVLAN.'
+            example: '101-102'
+      - class_name: pvlanIf
+        doc_path: Layer%202/pvlan:If/
+        rn: if-[%s]
+        type: list
+        tf_name: pvlan_interfaces
+        description: 'PVLAN port configurations.'
+        attributes:
+          - nxos_name: if
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Interface id of port with PVLAN. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.'
+            example: eth1/9
+        child_classes:
+          - class_name: pvlanAccess
+            doc_path: Layer%202/pvlan:Access/
+            rn: access
+            type: single
+            tf_name: access
+            description: 'PVLAN access mode configurations on port.'
+            child_classes:
+              - class_name: pvlanAccessPromiscuous
+                doc_path: Layer%202/pvlan:AccessPromiscuous/
+                rn: promiscuous
+                type: single
+                tf_name: access_promiscuous
+                description: 'PVLAN promiscuous port configurations.'
+                attributes:
+                  - nxos_name: primaryVlan
+                    tf_name: access_promiscuous_primary_vlan
+                    type: String
+                    description: 'Primary VLAN of a PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+                    example: vlan-100
+                  - nxos_name: secondaryVlans
+                    tf_name: access_promiscuous_secondary_vlans
+                    type: String
+                    description: 'Secondary VLANS of the PVLAN domain.'
+                    example: '101-102'
+              - class_name: pvlanAccessSecondary
+                doc_path: Layer%202/pvlan:AccessSecondary/
+                rn: secondary
+                type: single
+                tf_name: access_secondary
+                description: 'Host VLAN access port configurations for isolated or community.'
+                attributes:
+                  - nxos_name: primaryVlan
+                    tf_name: access_secondary_primary_vlan
+                    type: String
+                    description: 'Primary VLAN of a PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+                    example: vlan-100
+                  - nxos_name: secondaryVlan
+                    tf_name: access_secondary_secondary_vlan
+                    type: String
+                    description: 'Secondary VLAN of the PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+                    example: vlan-101
+          - class_name: pvlanTrunk
+            doc_path: Layer%202/pvlan:Trunk/
+            rn: trunk
+            type: single
+            tf_name: trunk
+            description: 'PVLAN Trunk configuration tables.'
+            attributes:
+              - nxos_name: nativeVlan
+                tf_name: trunk_native_vlan
+                type: String
+                description: 'Native VLAN on PVLAN trunk. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+                example: vlan-10
+              - nxos_name: trunkAllowedVlans
+                tf_name: trunk_allowed_vlans
+                type: String
+                description: 'Trunk Allowed VLANs on PVLAN trunk.'
+                example: '1-4094'
+            child_classes:
+              - class_name: pvlanTrunkPromiscuousTable
+                doc_path: Layer%202/pvlan:TrunkPromiscuousTable/
+                rn: promiscuous
+                type: single
+                tf_name: trunk_promiscuous
+                description: 'PVLAN Promiscuous Trunk Table.'
+                child_classes:
+                  - class_name: pvlanTrunkPromiscuousEntry
+                    doc_path: Layer%202/pvlan:TrunkPromiscuousEntry/
+                    rn: primary-[%s]
+                    type: list
+                    tf_name: trunk_promiscuous_mappings
+                    description: 'PVLAN Promiscuous Trunk Entry.'
+                    attributes:
+                      - nxos_name: primaryVlan
+                        tf_name: primary_vlan
+                        type: String
+                        id: true
+                        description: 'Primary VLAN of a PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+                        example: vlan-100
+                      - nxos_name: secondaryVlans
+                        tf_name: secondary_vlans
+                        type: String
+                        description: 'Secondary VLANS of the PVLAN domain.'
+                        example: '101-102'
+              - class_name: pvlanTrunkSecondaryTable
+                doc_path: Layer%202/pvlan:TrunkSecondaryTable/
+                rn: secondary
+                type: single
+                tf_name: trunk_secondary
+                description: 'PVLAN Isolated Trunk Table.'
+                child_classes:
+                  - class_name: pvlanTrunkSecondaryEntry
+                    doc_path: Layer%202/pvlan:TrunkSecondaryEntry/
+                    rn: primary-[%s]
+                    type: list
+                    tf_name: trunk_secondary_associations
+                    description: 'PVLAN Isolated Trunk Entry.'
+                    attributes:
+                      - nxos_name: primaryVlan
+                        tf_name: primary_vlan
+                        type: String
+                        id: true
+                        description: 'Primary VLAN of a PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+                        example: vlan-100
+                      - nxos_name: secondaryVlan
+                        tf_name: secondary_vlan
+                        type: String
+                        description: 'Secondary VLAN of the PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+                        example: vlan-101
+      - class_name: pvlanSvi
+        doc_path: Layer%202/pvlan:Svi/
+        rn: svi-[%s]
+        type: list
+        tf_name: pvlan_svis
+        description: 'SVI configuration for propagating L3 capabilities to secondary VLANs.'
+        attributes:
+          - nxos_name: if
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Interface id of port with PVLAN. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.'
+            example: vlan100
+          - nxos_name: secondaryVlans
+            tf_name: secondary_vlans
+            type: String
+            description: 'Secondary VLANS of the PVLAN domain.'
+            example: '101-102'
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld
@@ -2509,3 +2698,41 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
+  - dn: sys/fm/pvlan
+    class_name: fmPvlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/bd/bd-[vlan-100]
+    class_name: l2BD
+    attributes:
+      - name: fabEncap
+        value: vlan-100
+  - dn: sys/bd/bd-[vlan-101]
+    class_name: l2BD
+    attributes:
+      - name: fabEncap
+        value: vlan-101
+  - dn: sys/bd/bd-[vlan-102]
+    class_name: l2BD
+    attributes:
+      - name: fabEncap
+        value: vlan-102
+  - dn: sys/intf/svi-[vlan100]
+    class_name: sviIf
+    dependencies: [3, 4]
+    attributes:
+      - name: id
+        value: vlan100
+  - dn: sys/intf/phys-[eth1/9]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer2

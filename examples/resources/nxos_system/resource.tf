@@ -262,4 +262,36 @@ resource "nxos_system" "example" {
       ttag_strip  = false
     }
   }
+  pvlan_fex_trunk = "enabled"
+  pvlans = {
+    "vlan-100" = {
+      type        = "primary"
+      association = "101-102"
+    }
+  }
+  pvlan_interfaces = {
+    "eth1/9" = {
+      access_promiscuous_primary_vlan    = "vlan-100"
+      access_promiscuous_secondary_vlans = "101-102"
+      access_secondary_primary_vlan      = "vlan-100"
+      access_secondary_secondary_vlan    = "vlan-101"
+      trunk_native_vlan                  = "vlan-10"
+      trunk_allowed_vlans                = "1-4094"
+      trunk_promiscuous_mappings = {
+        "vlan-100" = {
+          secondary_vlans = "101-102"
+        }
+      }
+      trunk_secondary_associations = {
+        "vlan-100" = {
+          secondary_vlan = "vlan-101"
+        }
+      }
+    }
+  }
+  pvlan_svis = {
+    "vlan100" = {
+      secondary_vlans = "101-102"
+    }
+  }
 }

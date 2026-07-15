@@ -1,0 +1,2 @@
+- Add Private VLAN (PVLAN) configuration (VLAN type/association, per-interface promiscuous/host/trunk mappings, and SVI secondary VLAN propagation) to `nxos_system` resource and data source
+- Add `vlan configuration` (per-VLAN MAC learning) support to `nxos_bridge_domain` resource and data source

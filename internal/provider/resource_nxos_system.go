@@ -63,7 +63,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Acceleration/sas:Sas/", "Service%20Acceleration/sas:Svc/", "Service%20Acceleration/sas:SvcInstance/", "Service%20Acceleration/sas:SController/", "Service%20Acceleration/sas:FwSvcPolicy/", "Service%20Acceleration/sas:IpVrf/", "Service%20Acceleration/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/", "System/srcintf:Entity/", "System/srcintf:Ssh/", "System/srcintf:Ftp/", "Security and Policing/smartcard:PasswdEncrypt/", "Security and Policing/acllog:Entity/", "Security and Policing/acllog:Inst/", "Security and Policing/acllog:LogCache/", "Flow/span:ErspanOriginIp/", "Interfaces/ttag:TtagEntity/", "Interfaces/ttag:TtagIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "System/mgmt%3AMgmtIf/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Acceleration/sas:Sas/", "Service%20Acceleration/sas:Svc/", "Service%20Acceleration/sas:SvcInstance/", "Service%20Acceleration/sas:SController/", "Service%20Acceleration/sas:FwSvcPolicy/", "Service%20Acceleration/sas:IpVrf/", "Service%20Acceleration/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/", "System/srcintf:Entity/", "System/srcintf:Ssh/", "System/srcintf:Ftp/", "Security and Policing/smartcard:PasswdEncrypt/", "Security and Policing/acllog:Entity/", "Security and Policing/acllog:Inst/", "Security and Policing/acllog:LogCache/", "Flow/span:ErspanOriginIp/", "Interfaces/ttag:TtagEntity/", "Interfaces/ttag:TtagIf/", "Layer%202/pvlan:PrivateVlan/", "Layer%202/pvlan:Vlan/", "Layer%202/pvlan:If/", "Layer%202/pvlan:Access/", "Layer%202/pvlan:AccessPromiscuous/", "Layer%202/pvlan:AccessSecondary/", "Layer%202/pvlan:Trunk/", "Layer%202/pvlan:TrunkPromiscuousTable/", "Layer%202/pvlan:TrunkPromiscuousEntry/", "Layer%202/pvlan:TrunkSecondaryTable/", "Layer%202/pvlan:TrunkSecondaryEntry/", "Layer%202/pvlan:Svi/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1723,6 +1723,100 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
+			"pvlan_fex_trunk": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable PVLANs for FEX trunk.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"pvlans": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("VLAN configuration and operation for PVLAN.\n  - Map key: `vlan_id` - VLAN ID in a PVLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of VLAN in a PVLAN: Primary, Community or Isolated.").AddStringEnumDescription("isolated", "community", "primary", "nonOperational").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("isolated", "community", "primary", "nonOperational"),
+							},
+						},
+						"association": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Association of Primary VLAN to Secondary VLANs in a PVLAN.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"pvlan_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PVLAN port configurations.\n  - Map key: `interface_id` - Interface id of port with PVLAN. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"access_promiscuous_primary_vlan": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Primary VLAN of a PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+							Optional:            true,
+						},
+						"access_promiscuous_secondary_vlans": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Secondary VLANS of the PVLAN domain.").String,
+							Optional:            true,
+						},
+						"access_secondary_primary_vlan": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Primary VLAN of a PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+							Optional:            true,
+						},
+						"access_secondary_secondary_vlan": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Secondary VLAN of the PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+							Optional:            true,
+						},
+						"trunk_native_vlan": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Native VLAN on PVLAN trunk. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+							Optional:            true,
+						},
+						"trunk_allowed_vlans": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Trunk Allowed VLANs on PVLAN trunk.").String,
+							Optional:            true,
+						},
+						"trunk_promiscuous_mappings": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("PVLAN Promiscuous Trunk Entry.\n  - Map key: `primary_vlan` - Primary VLAN of a PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"secondary_vlans": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Secondary VLANS of the PVLAN domain.").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+						"trunk_secondary_associations": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("PVLAN Isolated Trunk Entry.\n  - Map key: `primary_vlan` - Primary VLAN of a PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"secondary_vlan": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Secondary VLAN of the PVLAN domain. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"pvlan_svis": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SVI configuration for propagating L3 capabilities to secondary VLANs.\n  - Map key: `interface_id` - Interface id of port with PVLAN. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"secondary_vlans": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Secondary VLANS of the PVLAN domain.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -1832,7 +1926,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,ndVpc,ndVpcDom,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,cfsEntity,cfsInst,udldEntity,udldInst,udldPhysIf,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,cdpEntity,cdpInst,cdpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt,icamEntity,icamInst,icamScale,nxapiInst,imBreakout,imMod,imFpP,sasSas,sasSvc,sasSvcInstance,sasSController,sasFwSvcPolicy,sasIpVrf,sasDom,commEntity,commSsh,commSshKey,srcintfEntity,srcintfSsh,srcintfFtp,smartcardPasswdEncrypt,acllogEntity,acllogInst,acllogLogCache,spanErspanOriginIp,ttagTtagEntity,ttagTtagIf")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ethpmEntity,ethpmInst,arpEntity,arpInst,arpVpc,arpVpcDom,ndEntity,ndInst,ndDom,ndIf,ndVpc,ndVpcDom,datetimeClock,datetimeTimezone,datetimeSummerT,dnsEntity,dnsProf,dnsDom,nwVdc,resmgrLimRes,vshdCliAlias,licensemanagerLicenseManager,licensemanagerInst,licensemanagerSmartLicensing,licensemanagerTransportCsluUrl,bootBoot,bootImage,cfsEntity,cfsInst,udldEntity,udldInst,udldPhysIf,mgmtMgmtIf,lldpEntity,lldpInst,lldpIf,cdpEntity,cdpInst,cdpIf,coppEntity,coppProfile,terminalTerminal,terminalLine,terminalConsole,terminalExecTimeout,terminalVty,terminalExecTimeout,terminalSesLmt,icamEntity,icamInst,icamScale,nxapiInst,imBreakout,imMod,imFpP,sasSas,sasSvc,sasSvcInstance,sasSController,sasFwSvcPolicy,sasIpVrf,sasDom,commEntity,commSsh,commSshKey,srcintfEntity,srcintfSsh,srcintfFtp,smartcardPasswdEncrypt,acllogEntity,acllogInst,acllogLogCache,spanErspanOriginIp,ttagTtagEntity,ttagTtagIf,pvlanPrivateVlan,pvlanVlan,pvlanIf,pvlanAccess,pvlanAccessPromiscuous,pvlanAccessSecondary,pvlanTrunk,pvlanTrunkPromiscuousTable,pvlanTrunkPromiscuousEntry,pvlanTrunkSecondaryTable,pvlanTrunkSecondaryEntry,pvlanSvi")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

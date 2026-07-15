@@ -219,6 +219,10 @@ type System struct {
 	ErspanOriginIpv6Address                       types.String                          `tfsdk:"erspan_origin_ipv6_address"`
 	TtagMarkerInterval                            types.Int64                           `tfsdk:"ttag_marker_interval"`
 	TtagInterfaces                                map[string]SystemTtagInterfaces       `tfsdk:"ttag_interfaces"`
+	PvlanFexTrunk                                 types.String                          `tfsdk:"pvlan_fex_trunk"`
+	Pvlans                                        map[string]SystemPvlans               `tfsdk:"pvlans"`
+	PvlanInterfaces                               map[string]SystemPvlanInterfaces      `tfsdk:"pvlan_interfaces"`
+	PvlanSvis                                     map[string]SystemPvlanSvis            `tfsdk:"pvlan_svis"`
 }
 
 type SystemArpVpcDomains struct {
@@ -365,6 +369,34 @@ type SystemTtagInterfaces struct {
 	TtagStrip  types.Bool `tfsdk:"ttag_strip"`
 }
 
+type SystemPvlans struct {
+	Type        types.String `tfsdk:"type"`
+	Association types.String `tfsdk:"association"`
+}
+
+type SystemPvlanInterfaces struct {
+	AccessPromiscuousPrimaryVlan    types.String                                               `tfsdk:"access_promiscuous_primary_vlan"`
+	AccessPromiscuousSecondaryVlans types.String                                               `tfsdk:"access_promiscuous_secondary_vlans"`
+	AccessSecondaryPrimaryVlan      types.String                                               `tfsdk:"access_secondary_primary_vlan"`
+	AccessSecondarySecondaryVlan    types.String                                               `tfsdk:"access_secondary_secondary_vlan"`
+	TrunkNativeVlan                 types.String                                               `tfsdk:"trunk_native_vlan"`
+	TrunkAllowedVlans               types.String                                               `tfsdk:"trunk_allowed_vlans"`
+	TrunkPromiscuousMappings        map[string]SystemPvlanInterfacesTrunkPromiscuousMappings   `tfsdk:"trunk_promiscuous_mappings"`
+	TrunkSecondaryAssociations      map[string]SystemPvlanInterfacesTrunkSecondaryAssociations `tfsdk:"trunk_secondary_associations"`
+}
+
+type SystemPvlanInterfacesTrunkPromiscuousMappings struct {
+	SecondaryVlans types.String `tfsdk:"secondary_vlans"`
+}
+
+type SystemPvlanInterfacesTrunkSecondaryAssociations struct {
+	SecondaryVlan types.String `tfsdk:"secondary_vlan"`
+}
+
+type SystemPvlanSvis struct {
+	SecondaryVlans types.String `tfsdk:"secondary_vlans"`
+}
+
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -467,6 +499,26 @@ func (data SystemFtpSourceInterfaces) getRn(key string) string {
 
 func (data SystemTtagInterfaces) getRn(key string) string {
 	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data SystemPvlans) getRn(key string) string {
+	return fmt.Sprintf("vlan-[%s]", key)
+}
+
+func (data SystemPvlanInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data SystemPvlanInterfacesTrunkPromiscuousMappings) getRn(key string) string {
+	return fmt.Sprintf("primary-[%s]", key)
+}
+
+func (data SystemPvlanInterfacesTrunkSecondaryAssociations) getRn(key string) string {
+	return fmt.Sprintf("primary-[%s]", key)
+}
+
+func (data SystemPvlanSvis) getRn(key string) string {
+	return fmt.Sprintf("svi-[%s]", key)
 }
 
 func (data System) getClassName() string {
@@ -2076,6 +2128,175 @@ func (data System) toBody(config System) nxos.Body {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
+	{
+		attrs = "{}"
+		if !data.PvlanFexTrunk.IsUnknown() && !data.PvlanFexTrunk.IsNull() && !config.PvlanFexTrunk.IsNull() {
+			attrs, _ = sjson.Set(attrs, "fexTrunk", data.PvlanFexTrunk.ValueString())
+		}
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "pvlanPrivateVlan.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "pvlanPrivateVlan.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		for key, child := range data.Pvlans {
+			configChild, configChildOk := config.Pvlans[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			if configChildOk && !child.Type.IsUnknown() && !child.Type.IsNull() && !configChild.Type.IsNull() {
+				attrs, _ = sjson.Set(attrs, "pvlanType", child.Type.ValueString())
+			}
+			if configChildOk && !child.Association.IsUnknown() && !child.Association.IsNull() && !configChild.Association.IsNull() {
+				attrs, _ = sjson.Set(attrs, "association", child.Association.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pvlanVlan.attributes", attrs)
+		}
+		for key, child := range data.PvlanInterfaces {
+			configChild, configChildOk := config.PvlanInterfaces[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "if", key)
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pvlanIf.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".pvlanIf.children"
+				_ = nestedChildrenPath
+				{
+					attrs = "{}"
+					childBody := ""
+					childBody, _ = sjson.SetRaw(childBody, "pvlanAccess.attributes", attrs)
+					parentAttrs := attrs
+					parentPath := nestedChildrenPath
+					nestedChildrenPath := "pvlanAccess.children"
+					_ = nestedChildrenPath
+					prevBody := body
+					body = childBody
+					attrs = "{}"
+					if !child.AccessPromiscuousPrimaryVlan.IsUnknown() && !child.AccessPromiscuousPrimaryVlan.IsNull() && !configChild.AccessPromiscuousPrimaryVlan.IsNull() {
+						attrs, _ = sjson.Set(attrs, "primaryVlan", child.AccessPromiscuousPrimaryVlan.ValueString())
+					}
+					if !child.AccessPromiscuousSecondaryVlans.IsUnknown() && !child.AccessPromiscuousSecondaryVlans.IsNull() && !configChild.AccessPromiscuousSecondaryVlans.IsNull() {
+						attrs, _ = sjson.Set(attrs, "secondaryVlans", child.AccessPromiscuousSecondaryVlans.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pvlanAccessPromiscuous.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.AccessSecondaryPrimaryVlan.IsUnknown() && !child.AccessSecondaryPrimaryVlan.IsNull() && !configChild.AccessSecondaryPrimaryVlan.IsNull() {
+						attrs, _ = sjson.Set(attrs, "primaryVlan", child.AccessSecondaryPrimaryVlan.ValueString())
+					}
+					if !child.AccessSecondarySecondaryVlan.IsUnknown() && !child.AccessSecondarySecondaryVlan.IsNull() && !configChild.AccessSecondarySecondaryVlan.IsNull() {
+						attrs, _ = sjson.Set(attrs, "secondaryVlan", child.AccessSecondarySecondaryVlan.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pvlanAccessSecondary.attributes", attrs)
+					}
+					childBody = body
+					body = prevBody
+					if parentAttrs != "{}" || gjson.Get(childBody, "pvlanAccess.children").Exists() {
+						body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+					}
+				}
+				{
+					attrs = "{}"
+					if !child.TrunkNativeVlan.IsUnknown() && !child.TrunkNativeVlan.IsNull() && !configChild.TrunkNativeVlan.IsNull() {
+						attrs, _ = sjson.Set(attrs, "nativeVlan", child.TrunkNativeVlan.ValueString())
+					}
+					if !child.TrunkAllowedVlans.IsUnknown() && !child.TrunkAllowedVlans.IsNull() && !configChild.TrunkAllowedVlans.IsNull() {
+						attrs, _ = sjson.Set(attrs, "trunkAllowedVlans", child.TrunkAllowedVlans.ValueString())
+					}
+					childBody := ""
+					childBody, _ = sjson.SetRaw(childBody, "pvlanTrunk.attributes", attrs)
+					parentAttrs := attrs
+					parentPath := nestedChildrenPath
+					nestedChildrenPath := "pvlanTrunk.children"
+					_ = nestedChildrenPath
+					prevBody := body
+					body = childBody
+					{
+						attrs = "{}"
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "pvlanTrunkPromiscuousTable.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "pvlanTrunkPromiscuousTable.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
+						for key, child := range child.TrunkPromiscuousMappings {
+							configChild, configChildOk := configChild.TrunkPromiscuousMappings[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "primaryVlan", key)
+							if configChildOk && !child.SecondaryVlans.IsUnknown() && !child.SecondaryVlans.IsNull() && !configChild.SecondaryVlans.IsNull() {
+								attrs, _ = sjson.Set(attrs, "secondaryVlans", child.SecondaryVlans.ValueString())
+							}
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pvlanTrunkPromiscuousEntry.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "pvlanTrunkPromiscuousTable.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
+					}
+					{
+						attrs = "{}"
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "pvlanTrunkSecondaryTable.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "pvlanTrunkSecondaryTable.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
+						for key, child := range child.TrunkSecondaryAssociations {
+							configChild, configChildOk := configChild.TrunkSecondaryAssociations[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "primaryVlan", key)
+							if configChildOk && !child.SecondaryVlan.IsUnknown() && !child.SecondaryVlan.IsNull() && !configChild.SecondaryVlan.IsNull() {
+								attrs, _ = sjson.Set(attrs, "secondaryVlan", child.SecondaryVlan.ValueString())
+							}
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pvlanTrunkSecondaryEntry.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "pvlanTrunkSecondaryTable.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
+					}
+					childBody = body
+					body = prevBody
+					if parentAttrs != "{}" || gjson.Get(childBody, "pvlanTrunk.children").Exists() {
+						body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+					}
+				}
+			}
+		}
+		for key, child := range data.PvlanSvis {
+			configChild, configChildOk := config.PvlanSvis[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "if", key)
+			if configChildOk && !child.SecondaryVlans.IsUnknown() && !child.SecondaryVlans.IsNull() && !configChild.SecondaryVlans.IsNull() {
+				attrs, _ = sjson.Set(attrs, "secondaryVlans", child.SecondaryVlans.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pvlanSvi.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "pvlanPrivateVlan.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -3388,6 +3609,199 @@ func (data *System) fromBody(res gjson.Result) {
 								data.TtagInterfaces = make(map[string]SystemTtagInterfaces)
 							}
 							data.TtagInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
+	{
+		var rpvlanPrivateVlan gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("pvlanPrivateVlan.attributes.rn").String()
+				if rnValue == "pvlan" {
+					rpvlanPrivateVlan = v
+					return false
+				}
+				return true
+			},
+		)
+		data.PvlanFexTrunk = types.StringValue(rpvlanPrivateVlan.Get("pvlanPrivateVlan.attributes.fexTrunk").String())
+		rpvlanPrivateVlan.Get("pvlanPrivateVlan.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "pvlanVlan" {
+							var child SystemPvlans
+							child.Type = types.StringValue(value.Get("attributes.pvlanType").String())
+							child.Association = types.StringValue(value.Get("attributes.association").String())
+							mapKey := value.Get("attributes.id").String()
+							if data.Pvlans == nil {
+								data.Pvlans = make(map[string]SystemPvlans)
+							}
+							data.Pvlans[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rpvlanPrivateVlan.Get("pvlanPrivateVlan.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "pvlanIf" {
+							var child SystemPvlanInterfaces
+							mapKey := value.Get("attributes.if").String()
+							{
+								var rpvlanAccess gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("pvlanAccess.attributes.rn").String()
+										if rnValue == "access" {
+											rpvlanAccess = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								{
+									var rpvlanAccessPromiscuous gjson.Result
+									rpvlanAccess.Get("pvlanAccess").Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("pvlanAccessPromiscuous.attributes.rn").String()
+											if rnValue == "promiscuous" {
+												rpvlanAccessPromiscuous = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.AccessPromiscuousPrimaryVlan = types.StringValue(rpvlanAccessPromiscuous.Get("pvlanAccessPromiscuous.attributes.primaryVlan").String())
+									child.AccessPromiscuousSecondaryVlans = types.StringValue(rpvlanAccessPromiscuous.Get("pvlanAccessPromiscuous.attributes.secondaryVlans").String())
+								}
+								{
+									var rpvlanAccessSecondary gjson.Result
+									rpvlanAccess.Get("pvlanAccess").Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("pvlanAccessSecondary.attributes.rn").String()
+											if rnValue == "secondary" {
+												rpvlanAccessSecondary = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.AccessSecondaryPrimaryVlan = types.StringValue(rpvlanAccessSecondary.Get("pvlanAccessSecondary.attributes.primaryVlan").String())
+									child.AccessSecondarySecondaryVlan = types.StringValue(rpvlanAccessSecondary.Get("pvlanAccessSecondary.attributes.secondaryVlan").String())
+								}
+							}
+							{
+								var rpvlanTrunk gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("pvlanTrunk.attributes.rn").String()
+										if rnValue == "trunk" {
+											rpvlanTrunk = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.TrunkNativeVlan = types.StringValue(rpvlanTrunk.Get("pvlanTrunk.attributes.nativeVlan").String())
+								child.TrunkAllowedVlans = types.StringValue(rpvlanTrunk.Get("pvlanTrunk.attributes.trunkAllowedVlans").String())
+								{
+									var rpvlanTrunkPromiscuousTable gjson.Result
+									rpvlanTrunk.Get("pvlanTrunk").Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("pvlanTrunkPromiscuousTable.attributes.rn").String()
+											if rnValue == "promiscuous" {
+												rpvlanTrunkPromiscuousTable = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									rpvlanTrunkPromiscuousTable.Get("pvlanTrunkPromiscuousTable").Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											nestedV.ForEach(
+												func(nestedClassname, nestedValue gjson.Result) bool {
+													if nestedClassname.String() == "pvlanTrunkPromiscuousEntry" {
+														var nestedChildpvlanTrunkPromiscuousEntry SystemPvlanInterfacesTrunkPromiscuousMappings
+														nestedChildpvlanTrunkPromiscuousEntry.SecondaryVlans = types.StringValue(nestedValue.Get("attributes.secondaryVlans").String())
+														nestedMapKey := nestedValue.Get("attributes.primaryVlan").String()
+														if child.TrunkPromiscuousMappings == nil {
+															child.TrunkPromiscuousMappings = make(map[string]SystemPvlanInterfacesTrunkPromiscuousMappings)
+														}
+														child.TrunkPromiscuousMappings[nestedMapKey] = nestedChildpvlanTrunkPromiscuousEntry
+													}
+													return true
+												},
+											)
+											return true
+										},
+									)
+								}
+								{
+									var rpvlanTrunkSecondaryTable gjson.Result
+									rpvlanTrunk.Get("pvlanTrunk").Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("pvlanTrunkSecondaryTable.attributes.rn").String()
+											if rnValue == "secondary" {
+												rpvlanTrunkSecondaryTable = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									rpvlanTrunkSecondaryTable.Get("pvlanTrunkSecondaryTable").Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											nestedV.ForEach(
+												func(nestedClassname, nestedValue gjson.Result) bool {
+													if nestedClassname.String() == "pvlanTrunkSecondaryEntry" {
+														var nestedChildpvlanTrunkSecondaryEntry SystemPvlanInterfacesTrunkSecondaryAssociations
+														nestedChildpvlanTrunkSecondaryEntry.SecondaryVlan = types.StringValue(nestedValue.Get("attributes.secondaryVlan").String())
+														nestedMapKey := nestedValue.Get("attributes.primaryVlan").String()
+														if child.TrunkSecondaryAssociations == nil {
+															child.TrunkSecondaryAssociations = make(map[string]SystemPvlanInterfacesTrunkSecondaryAssociations)
+														}
+														child.TrunkSecondaryAssociations[nestedMapKey] = nestedChildpvlanTrunkSecondaryEntry
+													}
+													return true
+												},
+											)
+											return true
+										},
+									)
+								}
+							}
+							if data.PvlanInterfaces == nil {
+								data.PvlanInterfaces = make(map[string]SystemPvlanInterfaces)
+							}
+							data.PvlanInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rpvlanPrivateVlan.Get("pvlanPrivateVlan.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "pvlanSvi" {
+							var child SystemPvlanSvis
+							child.SecondaryVlans = types.StringValue(value.Get("attributes.secondaryVlans").String())
+							mapKey := value.Get("attributes.if").String()
+							if data.PvlanSvis == nil {
+								data.PvlanSvis = make(map[string]SystemPvlanSvis)
+							}
+							data.PvlanSvis[mapKey] = child
 						}
 						return true
 					},
@@ -5616,6 +6030,242 @@ func (data *System) updateFromBody(res gjson.Result) {
 		}
 		data.TtagInterfaces[key] = item
 	}
+	var rpvlanPrivateVlan gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("pvlanPrivateVlan.attributes.rn").String()
+			if rnValue == "pvlan" {
+				rpvlanPrivateVlan = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.PvlanFexTrunk.IsNull() {
+		data.PvlanFexTrunk = types.StringValue(rpvlanPrivateVlan.Get("pvlanPrivateVlan.attributes.fexTrunk").String())
+	} else {
+		data.PvlanFexTrunk = types.StringNull()
+	}
+	for key, item := range data.Pvlans {
+		var rpvlanVlan gjson.Result
+		rpvlanPrivateVlan.Get("pvlanPrivateVlan.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("pvlanVlan.attributes.id").String() == key {
+					rpvlanVlan = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rpvlanVlan.Exists() {
+			delete(data.Pvlans, key)
+			continue
+		}
+		if !item.Type.IsNull() {
+			item.Type = types.StringValue(rpvlanVlan.Get("pvlanVlan.attributes.pvlanType").String())
+		} else {
+			item.Type = types.StringNull()
+		}
+		if !item.Association.IsNull() {
+			item.Association = types.StringValue(rpvlanVlan.Get("pvlanVlan.attributes.association").String())
+		} else {
+			item.Association = types.StringNull()
+		}
+		data.Pvlans[key] = item
+	}
+	for key, item := range data.PvlanInterfaces {
+		var rpvlanIf gjson.Result
+		rpvlanPrivateVlan.Get("pvlanPrivateVlan.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("pvlanIf.attributes.if").String() == key {
+					rpvlanIf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rpvlanIf.Exists() {
+			delete(data.PvlanInterfaces, key)
+			continue
+		}
+		{
+			var rpvlanAccess gjson.Result
+			rpvlanIf.Get("pvlanIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("pvlanAccess.attributes.rn").String()
+					if rnValue == "access" {
+						rpvlanAccess = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rpvlanAccessPromiscuous gjson.Result
+				rpvlanAccess.Get("pvlanAccess.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("pvlanAccessPromiscuous.attributes.rn").String()
+						if rnValue == "promiscuous" {
+							rpvlanAccessPromiscuous = v
+							return false
+						}
+						return true
+					},
+				)
+				if !item.AccessPromiscuousPrimaryVlan.IsNull() {
+					item.AccessPromiscuousPrimaryVlan = types.StringValue(rpvlanAccessPromiscuous.Get("pvlanAccessPromiscuous.attributes.primaryVlan").String())
+				} else {
+					item.AccessPromiscuousPrimaryVlan = types.StringNull()
+				}
+				if !item.AccessPromiscuousSecondaryVlans.IsNull() {
+					item.AccessPromiscuousSecondaryVlans = types.StringValue(rpvlanAccessPromiscuous.Get("pvlanAccessPromiscuous.attributes.secondaryVlans").String())
+				} else {
+					item.AccessPromiscuousSecondaryVlans = types.StringNull()
+				}
+			}
+			{
+				var rpvlanAccessSecondary gjson.Result
+				rpvlanAccess.Get("pvlanAccess.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("pvlanAccessSecondary.attributes.rn").String()
+						if rnValue == "secondary" {
+							rpvlanAccessSecondary = v
+							return false
+						}
+						return true
+					},
+				)
+				if !item.AccessSecondaryPrimaryVlan.IsNull() {
+					item.AccessSecondaryPrimaryVlan = types.StringValue(rpvlanAccessSecondary.Get("pvlanAccessSecondary.attributes.primaryVlan").String())
+				} else {
+					item.AccessSecondaryPrimaryVlan = types.StringNull()
+				}
+				if !item.AccessSecondarySecondaryVlan.IsNull() {
+					item.AccessSecondarySecondaryVlan = types.StringValue(rpvlanAccessSecondary.Get("pvlanAccessSecondary.attributes.secondaryVlan").String())
+				} else {
+					item.AccessSecondarySecondaryVlan = types.StringNull()
+				}
+			}
+		}
+		{
+			var rpvlanTrunk gjson.Result
+			rpvlanIf.Get("pvlanIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("pvlanTrunk.attributes.rn").String()
+					if rnValue == "trunk" {
+						rpvlanTrunk = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.TrunkNativeVlan.IsNull() {
+				item.TrunkNativeVlan = types.StringValue(rpvlanTrunk.Get("pvlanTrunk.attributes.nativeVlan").String())
+			} else {
+				item.TrunkNativeVlan = types.StringNull()
+			}
+			if !item.TrunkAllowedVlans.IsNull() {
+				item.TrunkAllowedVlans = types.StringValue(rpvlanTrunk.Get("pvlanTrunk.attributes.trunkAllowedVlans").String())
+			} else {
+				item.TrunkAllowedVlans = types.StringNull()
+			}
+			{
+				var rpvlanTrunkPromiscuousTable gjson.Result
+				rpvlanTrunk.Get("pvlanTrunk.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("pvlanTrunkPromiscuousTable.attributes.rn").String()
+						if rnValue == "promiscuous" {
+							rpvlanTrunkPromiscuousTable = v
+							return false
+						}
+						return true
+					},
+				)
+				for nc := range item.TrunkPromiscuousMappings {
+					ncItem := item.TrunkPromiscuousMappings[nc]
+					var rpvlanTrunkPromiscuousEntry gjson.Result
+					rpvlanTrunkPromiscuousTable.Get("pvlanTrunkPromiscuousTable.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("pvlanTrunkPromiscuousEntry.attributes.primaryVlan").String() == nc {
+								rpvlanTrunkPromiscuousEntry = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rpvlanTrunkPromiscuousEntry.Exists() {
+						delete(item.TrunkPromiscuousMappings, nc)
+						continue
+					}
+					if !ncItem.SecondaryVlans.IsNull() {
+						ncItem.SecondaryVlans = types.StringValue(rpvlanTrunkPromiscuousEntry.Get("pvlanTrunkPromiscuousEntry.attributes.secondaryVlans").String())
+					} else {
+						ncItem.SecondaryVlans = types.StringNull()
+					}
+					item.TrunkPromiscuousMappings[nc] = ncItem
+				}
+			}
+			{
+				var rpvlanTrunkSecondaryTable gjson.Result
+				rpvlanTrunk.Get("pvlanTrunk.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("pvlanTrunkSecondaryTable.attributes.rn").String()
+						if rnValue == "secondary" {
+							rpvlanTrunkSecondaryTable = v
+							return false
+						}
+						return true
+					},
+				)
+				for nc := range item.TrunkSecondaryAssociations {
+					ncItem := item.TrunkSecondaryAssociations[nc]
+					var rpvlanTrunkSecondaryEntry gjson.Result
+					rpvlanTrunkSecondaryTable.Get("pvlanTrunkSecondaryTable.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("pvlanTrunkSecondaryEntry.attributes.primaryVlan").String() == nc {
+								rpvlanTrunkSecondaryEntry = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rpvlanTrunkSecondaryEntry.Exists() {
+						delete(item.TrunkSecondaryAssociations, nc)
+						continue
+					}
+					if !ncItem.SecondaryVlan.IsNull() {
+						ncItem.SecondaryVlan = types.StringValue(rpvlanTrunkSecondaryEntry.Get("pvlanTrunkSecondaryEntry.attributes.secondaryVlan").String())
+					} else {
+						ncItem.SecondaryVlan = types.StringNull()
+					}
+					item.TrunkSecondaryAssociations[nc] = ncItem
+				}
+			}
+		}
+		data.PvlanInterfaces[key] = item
+	}
+	for key, item := range data.PvlanSvis {
+		var rpvlanSvi gjson.Result
+		rpvlanPrivateVlan.Get("pvlanPrivateVlan.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("pvlanSvi.attributes.if").String() == key {
+					rpvlanSvi = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rpvlanSvi.Exists() {
+			delete(data.PvlanSvis, key)
+			continue
+		}
+		if !item.SecondaryVlans.IsNull() {
+			item.SecondaryVlans = types.StringValue(rpvlanSvi.Get("pvlanSvi.attributes.secondaryVlans").String())
+		} else {
+			item.SecondaryVlans = types.StringNull()
+		}
+		data.PvlanSvis[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -6546,10 +7196,36 @@ func (data System) toDeleteBody() nxos.Body {
 		}
 	}
 	{
-		deleteBody := ""
-		deleteBody, _ = sjson.Set(deleteBody, "srcintfEntity.attributes.rn", "ipSrcIf")
-		deleteBody, _ = sjson.Set(deleteBody, "srcintfEntity.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+		childBody := ""
+		hasNestedChildren := false
+		if len(data.SshSourceInterfaces) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.FtpSourceInterfaces) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".srcintfEntity"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.SshSourceInterfaces {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "srcintfSsh.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "srcintfSsh.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.FtpSourceInterfaces {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "srcintfFtp.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "srcintfFtp.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
 	}
 	{
 		deleteBody := ""
@@ -6558,10 +7234,40 @@ func (data System) toDeleteBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 	{
-		deleteBody := ""
-		deleteBody, _ = sjson.Set(deleteBody, "acllogEntity.attributes.rn", "acllog")
-		deleteBody, _ = sjson.Set(deleteBody, "acllogEntity.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+		childBody := ""
+		hasNestedChildren := false
+		hasNestedChildren = true
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".acllogEntity"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				childBody := ""
+				hasNestedChildren := false
+				hasNestedChildren = true
+				if childBody != "" || hasNestedChildren {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".acllogInst"
+					if childBody == "" {
+						childBody = "{}"
+					}
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					nestedChildrenPath := childBodyPath + ".children"
+					_ = nestedChildrenPath
+					{
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "acllogLogCache.attributes.rn", "log")
+						deleteBody, _ = sjson.Set(deleteBody, "acllogLogCache.attributes.status", "deleted")
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+					}
+				}
+			}
+		}
 	}
 	{
 		deleteBody := ""
@@ -6591,6 +7297,50 @@ func (data System) toDeleteBody() nxos.Body {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "ttagTtagIf.attributes.rn", child.getRn(key))
 				deleteBody, _ = sjson.Set(deleteBody, "ttagTtagIf.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
+	}
+	{
+		childBody := ""
+		if !data.PvlanFexTrunk.IsNull() {
+			childBody, _ = sjson.Set(childBody, "fexTrunk", "DME_UNSET_PROPERTY_MARKER")
+		}
+		hasNestedChildren := false
+		if len(data.Pvlans) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.PvlanInterfaces) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.PvlanSvis) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pvlanPrivateVlan"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.Pvlans {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pvlanVlan.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "pvlanVlan.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.PvlanInterfaces {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pvlanIf.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "pvlanIf.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.PvlanSvis {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pvlanSvi.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "pvlanSvi.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
 		}
@@ -6872,6 +7622,68 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			deleteBody, _ = sjson.Set(deleteBody, "ttagTtagIf.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "ttagTtagIf.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.ttagTtagEntity.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.Pvlans {
+		if _, found := data.Pvlans[stateKey]; !found {
+			stateChild := state.Pvlans[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "pvlanVlan.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "pvlanVlan.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.pvlanPrivateVlan.children"+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.PvlanInterfaces {
+		if _, found := data.PvlanInterfaces[stateKey]; !found {
+			stateChild := state.PvlanInterfaces[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "pvlanIf.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "pvlanIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.pvlanPrivateVlan.children"+".-1", deleteBody)
+		}
+	}
+	for di := range state.PvlanInterfaces {
+		if _, found := data.PvlanInterfaces[di]; !found {
+			continue
+		}
+		stateItemdi := state.PvlanInterfaces[di]
+		planItemdi := data.PvlanInterfaces[di]
+		matchBodyPathdi := ""
+		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.pvlanPrivateVlan.children").Array() {
+			if mv.Get("pvlanIf.attributes.if").String() == di {
+				matchBodyPathdi = bodyPath + ".0.pvlanPrivateVlan.children" + "." + strconv.Itoa(mi) + ".pvlanIf.children"
+				break
+			}
+		}
+		if matchBodyPathdi == "" {
+			continue
+		}
+		for stateKey := range stateItemdi.TrunkPromiscuousMappings {
+			if _, found := planItemdi.TrunkPromiscuousMappings[stateKey]; !found {
+				stateChild := stateItemdi.TrunkPromiscuousMappings[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pvlanTrunkPromiscuousEntry.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "pvlanTrunkPromiscuousEntry.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.pvlanTrunk.children"+".0.pvlanTrunkPromiscuousTable.children"+".-1", deleteBody)
+			}
+		}
+		for stateKey := range stateItemdi.TrunkSecondaryAssociations {
+			if _, found := planItemdi.TrunkSecondaryAssociations[stateKey]; !found {
+				stateChild := stateItemdi.TrunkSecondaryAssociations[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pvlanTrunkSecondaryEntry.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "pvlanTrunkSecondaryEntry.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.pvlanTrunk.children"+".0.pvlanTrunkSecondaryTable.children"+".-1", deleteBody)
+			}
+		}
+	}
+	for stateKey := range state.PvlanSvis {
+		if _, found := data.PvlanSvis[stateKey]; !found {
+			stateChild := state.PvlanSvis[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "pvlanSvi.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "pvlanSvi.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.pvlanPrivateVlan.children"+".-1", deleteBody)
 		}
 	}
 	if !state.Name.IsNull() && config.Name.IsNull() {
@@ -8455,6 +9267,183 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 							}
 							if !stateChild.TtagStrip.IsNull() && configChild.TtagStrip.IsNull() {
 								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".ttagTtagIf.attributes."+"ttagStrip", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+				}
+			}
+		}
+	}
+	for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+		if sv.Get("pvlanPrivateVlan").Exists() {
+			if !state.PvlanFexTrunk.IsNull() && config.PvlanFexTrunk.IsNull() {
+				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".pvlanPrivateVlan.attributes."+"fexTrunk", "DME_UNSET_PROPERTY_MARKER")
+			}
+			break
+		}
+	}
+	{
+		singleChildPath := ""
+		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+			if sv.Get("pvlanPrivateVlan").Exists() {
+				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".pvlanPrivateVlan.children"
+				break
+			}
+		}
+		if singleChildPath != "" {
+			for key := range state.Pvlans {
+				if configChild, ok := config.Pvlans[key]; ok {
+					stateChild := state.Pvlans[key]
+					_ = stateChild
+					_ = configChild
+					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+						if mv.Get("pvlanVlan.attributes.id").String() == key {
+							if !stateChild.Type.IsNull() && configChild.Type.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".pvlanVlan.attributes."+"pvlanType", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Association.IsNull() && configChild.Association.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".pvlanVlan.attributes."+"association", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
+						}
+					}
+				}
+			}
+			for key := range state.PvlanInterfaces {
+				if configChild, ok := config.PvlanInterfaces[key]; ok {
+					stateChild := state.PvlanInterfaces[key]
+					_ = stateChild
+					_ = configChild
+					{
+						listChildPath := ""
+						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+							if mv.Get("pvlanIf.attributes.if").String() == key {
+								listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".pvlanIf.children"
+								break
+							}
+						}
+						if listChildPath != "" {
+							{
+								singleChildPath := ""
+								for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+									if sv.Get("pvlanAccess").Exists() {
+										singleChildPath = listChildPath + "." + strconv.Itoa(si) + ".pvlanAccess.children"
+										break
+									}
+								}
+								if singleChildPath != "" {
+									for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+										if sv.Get("pvlanAccessPromiscuous").Exists() {
+											if !stateChild.AccessPromiscuousPrimaryVlan.IsNull() && configChild.AccessPromiscuousPrimaryVlan.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".pvlanAccessPromiscuous.attributes."+"primaryVlan", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AccessPromiscuousSecondaryVlans.IsNull() && configChild.AccessPromiscuousSecondaryVlans.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".pvlanAccessPromiscuous.attributes."+"secondaryVlans", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+									for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+										if sv.Get("pvlanAccessSecondary").Exists() {
+											if !stateChild.AccessSecondaryPrimaryVlan.IsNull() && configChild.AccessSecondaryPrimaryVlan.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".pvlanAccessSecondary.attributes."+"primaryVlan", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AccessSecondarySecondaryVlan.IsNull() && configChild.AccessSecondarySecondaryVlan.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".pvlanAccessSecondary.attributes."+"secondaryVlan", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
+										}
+									}
+								}
+							}
+							for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+								if sv.Get("pvlanTrunk").Exists() {
+									if !stateChild.TrunkNativeVlan.IsNull() && configChild.TrunkNativeVlan.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".pvlanTrunk.attributes."+"nativeVlan", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !stateChild.TrunkAllowedVlans.IsNull() && configChild.TrunkAllowedVlans.IsNull() {
+										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".pvlanTrunk.attributes."+"trunkAllowedVlans", "DME_UNSET_PROPERTY_MARKER")
+									}
+									break
+								}
+							}
+							{
+								singleChildPath := ""
+								for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+									if sv.Get("pvlanTrunk").Exists() {
+										singleChildPath = listChildPath + "." + strconv.Itoa(si) + ".pvlanTrunk.children"
+										break
+									}
+								}
+								if singleChildPath != "" {
+									{
+										singleChildPath := ""
+										for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+											if sv.Get("pvlanTrunkPromiscuousTable").Exists() {
+												singleChildPath = singleChildPath + "." + strconv.Itoa(si) + ".pvlanTrunkPromiscuousTable.children"
+												break
+											}
+										}
+										if singleChildPath != "" {
+											for key := range stateChild.TrunkPromiscuousMappings {
+												if configChild, ok := configChild.TrunkPromiscuousMappings[key]; ok {
+													stateChild := stateChild.TrunkPromiscuousMappings[key]
+													_ = stateChild
+													_ = configChild
+													for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+														if mv.Get("pvlanTrunkPromiscuousEntry.attributes.primaryVlan").String() == key {
+															if !stateChild.SecondaryVlans.IsNull() && configChild.SecondaryVlans.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".pvlanTrunkPromiscuousEntry.attributes."+"secondaryVlans", "DME_UNSET_PROPERTY_MARKER")
+															}
+															break
+														}
+													}
+												}
+											}
+										}
+									}
+									{
+										singleChildPath := ""
+										for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+											if sv.Get("pvlanTrunkSecondaryTable").Exists() {
+												singleChildPath = singleChildPath + "." + strconv.Itoa(si) + ".pvlanTrunkSecondaryTable.children"
+												break
+											}
+										}
+										if singleChildPath != "" {
+											for key := range stateChild.TrunkSecondaryAssociations {
+												if configChild, ok := configChild.TrunkSecondaryAssociations[key]; ok {
+													stateChild := stateChild.TrunkSecondaryAssociations[key]
+													_ = stateChild
+													_ = configChild
+													for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+														if mv.Get("pvlanTrunkSecondaryEntry.attributes.primaryVlan").String() == key {
+															if !stateChild.SecondaryVlan.IsNull() && configChild.SecondaryVlan.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".pvlanTrunkSecondaryEntry.attributes."+"secondaryVlan", "DME_UNSET_PROPERTY_MARKER")
+															}
+															break
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			for key := range state.PvlanSvis {
+				if configChild, ok := config.PvlanSvis[key]; ok {
+					stateChild := state.PvlanSvis[key]
+					_ = stateChild
+					_ = configChild
+					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+						if mv.Get("pvlanSvi.attributes.if").String() == key {
+							if !stateChild.SecondaryVlans.IsNull() && configChild.SecondaryVlans.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".pvlanSvi.attributes."+"secondaryVlans", "DME_UNSET_PROPERTY_MARKER")
 							}
 							break
 						}

@@ -38,10 +38,11 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type BridgeDomain struct {
-	Device        types.String                         `tfsdk:"device"`
-	Dn            types.String                         `tfsdk:"id"`
-	SviAutostate  types.String                         `tfsdk:"svi_autostate"`
-	BridgeDomains map[string]BridgeDomainBridgeDomains `tfsdk:"bridge_domains"`
+	Device             types.String                              `tfsdk:"device"`
+	Dn                 types.String                              `tfsdk:"id"`
+	SviAutostate       types.String                              `tfsdk:"svi_autostate"`
+	BridgeDomains      map[string]BridgeDomainBridgeDomains      `tfsdk:"bridge_domains"`
+	VlanConfigurations map[string]BridgeDomainVlanConfigurations `tfsdk:"vlan_configurations"`
 }
 
 type BridgeDomainBridgeDomains struct {
@@ -58,6 +59,10 @@ type BridgeDomainBridgeDomains struct {
 	Mode              types.String `tfsdk:"mode"`
 	VrfName           types.String `tfsdk:"vrf_name"`
 	CrossConnect      types.String `tfsdk:"cross_connect"`
+}
+
+type BridgeDomainVlanConfigurations struct {
+	MacLearning types.String `tfsdk:"mac_learning"`
 }
 
 type BridgeDomainIdentity struct {
@@ -90,6 +95,10 @@ func (data BridgeDomain) getDn() string {
 
 func (data BridgeDomainBridgeDomains) getRn(key string) string {
 	return fmt.Sprintf("bd-[%s]", key)
+}
+
+func (data BridgeDomainVlanConfigurations) getRn(key string) string {
+	return fmt.Sprintf("vlanconfig-[%s]", key)
 }
 
 func (data BridgeDomain) getClassName() string {
@@ -155,6 +164,17 @@ func (data BridgeDomain) toBody(config BridgeDomain) nxos.Body {
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.l2BD.attributes", attrs)
 	}
+	for key, child := range data.VlanConfigurations {
+		configChild, configChildOk := config.VlanConfigurations[key]
+		_ = configChild
+		_ = configChildOk
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "accEncap", key)
+		if configChildOk && !child.MacLearning.IsUnknown() && !child.MacLearning.IsNull() && !configChild.MacLearning.IsNull() {
+			attrs, _ = sjson.Set(attrs, "vlanMacLearn", child.MacLearning.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.l2VlanConfig.attributes", attrs)
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -189,6 +209,25 @@ func (data *BridgeDomain) fromBody(res gjson.Result) {
 							data.BridgeDomains = make(map[string]BridgeDomainBridgeDomains)
 						}
 						data.BridgeDomains[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "l2VlanConfig" {
+						var child BridgeDomainVlanConfigurations
+						child.MacLearning = types.StringValue(value.Get("attributes.vlanMacLearn").String())
+						mapKey := value.Get("attributes.accEncap").String()
+						if data.VlanConfigurations == nil {
+							data.VlanConfigurations = make(map[string]BridgeDomainVlanConfigurations)
+						}
+						data.VlanConfigurations[mapKey] = child
 					}
 					return true
 				},
@@ -290,6 +329,28 @@ func (data *BridgeDomain) updateFromBody(res gjson.Result) {
 		}
 		data.BridgeDomains[key] = item
 	}
+	for key, item := range data.VlanConfigurations {
+		var rl2VlanConfig gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("l2VlanConfig.attributes.accEncap").String() == key {
+					rl2VlanConfig = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rl2VlanConfig.Exists() {
+			delete(data.VlanConfigurations, key)
+			continue
+		}
+		if !item.MacLearning.IsNull() {
+			item.MacLearning = types.StringValue(rl2VlanConfig.Get("l2VlanConfig.attributes.vlanMacLearn").String())
+		} else {
+			item.MacLearning = types.StringNull()
+		}
+		data.VlanConfigurations[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -311,6 +372,12 @@ func (data BridgeDomain) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
+	for key, child := range data.VlanConfigurations {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "l2VlanConfig.attributes.rn", child.getRn(key))
+		deleteBody, _ = sjson.Set(deleteBody, "l2VlanConfig.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -325,6 +392,15 @@ func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDoma
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+		}
+	}
+	for stateKey := range state.VlanConfigurations {
+		if _, found := data.VlanConfigurations[stateKey]; !found {
+			stateChild := state.VlanConfigurations[stateKey]
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "l2VlanConfig.attributes.rn", stateChild.getRn(stateKey))
+			deleteBody, _ = sjson.Set(deleteBody, "l2VlanConfig.attributes.status", "deleted")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
@@ -376,6 +452,21 @@ func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDoma
 					}
 					if !stateChild.CrossConnect.IsNull() && configChild.CrossConnect.IsNull() {
 						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"xConnect", "DME_UNSET_PROPERTY_MARKER")
+					}
+					break
+				}
+			}
+		}
+	}
+	for key := range state.VlanConfigurations {
+		if configChild, ok := config.VlanConfigurations[key]; ok {
+			stateChild := state.VlanConfigurations[key]
+			_ = stateChild
+			_ = configChild
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("l2VlanConfig.attributes.accEncap").String() == key {
+					if !stateChild.MacLearning.IsNull() && configChild.MacLearning.IsNull() {
+						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2VlanConfig.attributes."+"vlanMacLearn", "DME_UNSET_PROPERTY_MARKER")
 					}
 					break
 				}

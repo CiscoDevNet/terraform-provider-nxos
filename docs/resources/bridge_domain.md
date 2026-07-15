@@ -5,7 +5,7 @@ subcategory: "Switching"
 description: |-
   This resource can manage the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
   API Documentation
-  bdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Bridge%20Domain/bd:Entity/l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/
+  bdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Bridge%20Domain/bd:Entity/l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/l2VlanConfig https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:VlanConfig/
 ---
 
 # nxos_bridge_domain (Resource)
@@ -16,6 +16,7 @@ This resource can manage the bridge domain configuration on NX-OS devices, inclu
 
 - [bdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Bridge%20Domain/bd:Entity/)
 - [l2BD](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/)
+- [l2VlanConfig](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:VlanConfig/)
 
 ## Example Usage
 
@@ -38,6 +39,10 @@ resource "nxos_bridge_domain" "example" {
       cross_connect       = "disable"
     }
   }
+  vlan_configurations = {
+    "vlan-100" = {
+    }
+  }
 }
 ```
 
@@ -51,6 +56,8 @@ resource "nxos_bridge_domain" "example" {
 - `device` (String) A device name from the provider configuration.
 - `svi_autostate` (String) Disable/enable autoState for SVI interface.
   - Choices: `disable`, `enable`
+- `vlan_configurations` (Attributes Map) List of `vlan configuration` stanzas.
+  - Map key: `access_encap` - The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`. (see [below for nested schema](#nestedatt--vlan_configurations))
 
 ### Read-Only
 
@@ -83,6 +90,15 @@ Optional:
   - Choices: `CE`, `FabricPath`
 - `name` (String) The name of the object.
 - `vrf_name` (String) Enable or disable vrf name of 32 characters for VLAN.
+
+
+<a id="nestedatt--vlan_configurations"></a>
+### Nested Schema for `vlan_configurations`
+
+Optional:
+
+- `mac_learning` (String) VlanMacLearn state.
+  - Choices: `disable`, `enable`
 
 ## Import
 

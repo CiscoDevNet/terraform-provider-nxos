@@ -127,3 +127,25 @@ child_classes:
           - disable
           - enable
         example: disable
+  - class_name: l2VlanConfig
+    doc_path: Layer%202/l2:VlanConfig/
+    rn: vlanconfig-[%s]
+    type: list
+    tf_name: vlan_configurations
+    description: 'List of `vlan configuration` stanzas.'
+    attributes:
+      - nxos_name: accEncap
+        tf_name: access_encap
+        type: String
+        id: true
+        description: 'The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+        example: vlan-100
+      - nxos_name: vlanMacLearn
+        tf_name: mac_learning
+        type: String
+        description: 'VlanMacLearn state.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true

@@ -57,7 +57,7 @@ func (d *BridgeDomainDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *BridgeDomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.").AddApiDocumentation("bdEntity", "Bridge%20Domain/bd:Entity/", []string{"l2BD"}, []string{"Layer%202/l2:BD/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.").AddApiDocumentation("bdEntity", "Bridge%20Domain/bd:Entity/", []string{"l2BD", "l2VlanConfig"}, []string{"Layer%202/l2:BD/", "Layer%202/l2:VlanConfig/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -132,6 +132,18 @@ func (d *BridgeDomainDataSource) Schema(ctx context.Context, req datasource.Sche
 					},
 				},
 			},
+			"vlan_configurations": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of `vlan configuration` stanzas.\n  - Map key: `access_encap` - The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"mac_learning": schema.StringAttribute{
+							MarkdownDescription: "VlanMacLearn state.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -164,7 +176,7 @@ func (d *BridgeDomainDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l2BD")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l2BD,l2VlanConfig")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

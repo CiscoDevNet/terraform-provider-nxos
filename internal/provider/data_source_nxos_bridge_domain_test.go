@@ -82,6 +82,10 @@ func testAccDataSourceNxosBridgeDomainConfig() string {
 	config += `			cross_connect = "disable"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	vlan_configurations = {` + "\n"
+	config += `		"vlan-100" = {` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `}` + "\n"
 
 	config += `

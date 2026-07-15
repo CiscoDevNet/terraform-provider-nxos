@@ -62,7 +62,7 @@ func (r *BridgeDomainResource) Metadata(ctx context.Context, req resource.Metada
 func (r *BridgeDomainResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.").AddApiDocumentation("bdEntity", "Bridge%20Domain/bd:Entity/", []string{"l2BD"}, []string{"Layer%202/l2:BD/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.").AddApiDocumentation("bdEntity", "Bridge%20Domain/bd:Entity/", []string{"l2BD", "l2VlanConfig"}, []string{"Layer%202/l2:BD/", "Layer%202/l2:VlanConfig/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -153,6 +153,21 @@ func (r *BridgeDomainResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						"cross_connect": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enable Cross Connect on VLAN.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"vlan_configurations": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of `vlan configuration` stanzas.\n  - Map key: `access_encap` - The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"mac_learning": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VlanMacLearn state.").AddStringEnumDescription("disable", "enable").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("disable", "enable"),
@@ -270,7 +285,7 @@ func (r *BridgeDomainResource) Read(ctx context.Context, req resource.ReadReques
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l2BD")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "l2BD,l2VlanConfig")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

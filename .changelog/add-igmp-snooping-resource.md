@@ -1,0 +1,1 @@
+- Add `nxos_igmp_snooping` resource and data source (global IGMP snooping configuration including VXLAN snooping, NVE static router port, querier, opt-flood, routing, and stateful-HA controls)

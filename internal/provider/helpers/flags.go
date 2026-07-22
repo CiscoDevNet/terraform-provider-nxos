@@ -25,8 +25,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 )
 
-func IsFlagImporting(ctx context.Context, req resource.ReadRequest) (bool, diag.Diagnostics) {
-	v, diags := req.Private.GetKey(ctx, "importing")
+// GetKeyer is something like ReadRequest.Private, UpdateRequest.Private or ModifyPlanRequest.Private.
+type GetKeyer interface {
+	GetKey(ctx context.Context, key string) ([]byte, diag.Diagnostics)
+}
+
+func IsFlagImporting(ctx context.Context, gk GetKeyer) (bool, diag.Diagnostics) {
+	v, diags := gk.GetKey(ctx, "importing")
 
 	return slices.Equal(v, []byte("1")), diags
 }
@@ -62,4 +67,13 @@ var (
 	// ensure interface match
 	_ SetKeyer = rr.Private
 	_ SetKeyer = ir.Private
+
+	rq  resource.ReadRequest
+	uq  resource.UpdateRequest
+	mpq resource.ModifyPlanRequest
+
+	// ensure interface match
+	_ GetKeyer = rq.Private
+	_ GetKeyer = uq.Private
+	_ GetKeyer = mpq.Private
 )

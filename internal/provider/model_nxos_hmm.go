@@ -302,71 +302,78 @@ func (data HMM) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM, config HMM) nxos.Body {
+func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM, config HMM, importing bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for stateKey := range state.Interfaces {
-		if _, found := data.Interfaces[stateKey]; !found {
-			stateChild := state.Interfaces[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "hmmFwdIf.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "hmmFwdIf.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.hmmFwdInst.children"+".-1", deleteBody)
+	if !importing {
+		for stateKey := range state.Interfaces {
+			if _, found := data.Interfaces[stateKey]; !found {
+				stateChild := state.Interfaces[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "hmmFwdIf.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "hmmFwdIf.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.hmmFwdInst.children"+".-1", deleteBody)
+			}
 		}
 	}
-	if !state.AdminState.IsNull() && config.AdminState.IsNull() {
-		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-	}
-	for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-		if sv.Get("hmmFwdInst").Exists() {
-			if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !state.AnycastMac.IsNull() && config.AnycastMac.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"amac", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !state.AdministrativeDistance.IsNull() && config.AdministrativeDistance.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"adminDist", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !state.Control.IsNull() && config.Control.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !state.LimitVlanMac.IsNull() && config.LimitVlanMac.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"limitVlanMac", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !state.SelectiveHostProbe.IsNull() && config.SelectiveHostProbe.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"selHostProbe", "DME_UNSET_PROPERTY_MARKER")
-			}
-			break
+
+	if !importing {
+		if !state.AdminState.IsNull() && config.AdminState.IsNull() {
+			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 	}
-	{
-		singleChildPath := ""
+	if !importing {
 		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
 			if sv.Get("hmmFwdInst").Exists() {
-				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".hmmFwdInst.children"
+				if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.AnycastMac.IsNull() && config.AnycastMac.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"amac", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.AdministrativeDistance.IsNull() && config.AdministrativeDistance.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"adminDist", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.Control.IsNull() && config.Control.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.LimitVlanMac.IsNull() && config.LimitVlanMac.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"limitVlanMac", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.SelectiveHostProbe.IsNull() && config.SelectiveHostProbe.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".hmmFwdInst.attributes."+"selHostProbe", "DME_UNSET_PROPERTY_MARKER")
+				}
 				break
 			}
 		}
-		if singleChildPath != "" {
-			for key := range state.Interfaces {
-				if configChild, ok := config.Interfaces[key]; ok {
-					stateChild := state.Interfaces[key]
-					_ = stateChild
-					_ = configChild
-					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-						if mv.Get("hmmFwdIf.attributes.id").String() == key {
-							if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		{
+			singleChildPath := ""
+			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+				if sv.Get("hmmFwdInst").Exists() {
+					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".hmmFwdInst.children"
+					break
+				}
+			}
+			if singleChildPath != "" {
+				for key := range state.Interfaces {
+					if configChild, ok := config.Interfaces[key]; ok {
+						stateChild := state.Interfaces[key]
+						_ = stateChild
+						_ = configChild
+						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+							if mv.Get("hmmFwdIf.attributes.id").String() == key {
+								if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !stateChild.Mode.IsNull() && configChild.Mode.IsNull() {
+									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+								}
+								break
 							}
-							if !stateChild.Mode.IsNull() && configChild.Mode.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
-							}
-							if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-							}
-							break
 						}
 					}
 				}

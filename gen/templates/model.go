@@ -1280,14 +1280,17 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- end}}
 {{- /* ==================== end toBodyUnsetChildAttrsTemplate ==================== */}}
 
-func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}) nxos.Body {
+func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool) nxos.Body {
 	body := data.toBody(config)
 	{{- if .ChildClasses}}
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
+	if !importing {
 	{{- template "toBodyDeletedChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPath" "bodyPath")}}
+	}
 	{{- end}}
 
+	if !importing {
 	{{- range .Attributes}}
 	{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
 	if !state.{{toGoName .TfName}}.IsNull() && config.{{toGoName .TfName}}.IsNull() {
@@ -1295,9 +1298,12 @@ func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{c
 	}
 	{{- end}}
 	{{- end}}
+	}
 
 	{{- if .ChildClasses}}
+	if !importing {
 	{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" "state" "ConfigVar" "config" "BodyPathExpr" "bodyPath")}}
+	}
 	{{- end}}
 
 	return body

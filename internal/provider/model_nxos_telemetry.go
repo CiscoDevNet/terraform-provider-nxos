@@ -740,193 +740,200 @@ func (data Telemetry) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, config Telemetry) nxos.Body {
+func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, config Telemetry, importing bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for stateKey := range state.DestinationGroups {
-		if _, found := data.DestinationGroups[stateKey]; !found {
-			stateChild := state.DestinationGroups[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "telemetryDestGroup.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "telemetryDestGroup.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
-		}
-	}
-	for di := range state.DestinationGroups {
-		if _, found := data.DestinationGroups[di]; !found {
-			continue
-		}
-		stateItemdi := state.DestinationGroups[di]
-		planItemdi := data.DestinationGroups[di]
-		matchBodyPathdi := ""
-		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("telemetryDestGroup.attributes.id").String() == di {
-				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".telemetryDestGroup.children"
-				break
-			}
-		}
-		if matchBodyPathdi == "" {
-			continue
-		}
-		for stateChildKey := range stateItemdi.Destinations {
-			if _, found := planItemdi.Destinations[stateChildKey]; !found {
-				stateChild := stateItemdi.Destinations[stateChildKey]
+	if !importing {
+		for stateKey := range state.DestinationGroups {
+			if _, found := data.DestinationGroups[stateKey]; !found {
+				stateChild := state.DestinationGroups[stateKey]
 				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "telemetryDest.attributes.rn", stateChild.getRn(stateChildKey))
-				deleteBody, _ = sjson.Set(deleteBody, "telemetryDest.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				deleteBody, _ = sjson.Set(deleteBody, "telemetryDestGroup.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "telemetryDestGroup.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 			}
 		}
-	}
-	for stateKey := range state.SensorGroups {
-		if _, found := data.SensorGroups[stateKey]; !found {
-			stateChild := state.SensorGroups[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "telemetrySensorGroup.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "telemetrySensorGroup.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
-		}
-	}
-	for di := range state.SensorGroups {
-		if _, found := data.SensorGroups[di]; !found {
-			continue
-		}
-		stateItemdi := state.SensorGroups[di]
-		planItemdi := data.SensorGroups[di]
-		matchBodyPathdi := ""
-		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("telemetrySensorGroup.attributes.id").String() == di {
-				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".telemetrySensorGroup.children"
-				break
+		for di := range state.DestinationGroups {
+			if _, found := data.DestinationGroups[di]; !found {
+				continue
+			}
+			stateItemdi := state.DestinationGroups[di]
+			planItemdi := data.DestinationGroups[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("telemetryDestGroup.attributes.id").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".telemetryDestGroup.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.Destinations {
+				if _, found := planItemdi.Destinations[stateChildKey]; !found {
+					stateChild := stateItemdi.Destinations[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "telemetryDest.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "telemetryDest.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
 			}
 		}
-		if matchBodyPathdi == "" {
-			continue
-		}
-		for stateChildKey := range stateItemdi.SensorPaths {
-			if _, found := planItemdi.SensorPaths[stateChildKey]; !found {
-				stateChild := stateItemdi.SensorPaths[stateChildKey]
+		for stateKey := range state.SensorGroups {
+			if _, found := data.SensorGroups[stateKey]; !found {
+				stateChild := state.SensorGroups[stateKey]
 				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "telemetrySensorPath.attributes.rn", stateChild.getRn(stateChildKey))
-				deleteBody, _ = sjson.Set(deleteBody, "telemetrySensorPath.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				deleteBody, _ = sjson.Set(deleteBody, "telemetrySensorGroup.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "telemetrySensorGroup.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 			}
 		}
-	}
-	for stateKey := range state.Subscriptions {
-		if _, found := data.Subscriptions[stateKey]; !found {
-			stateChild := state.Subscriptions[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "telemetrySubscription.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "telemetrySubscription.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
-		}
-	}
-	for di := range state.Subscriptions {
-		if _, found := data.Subscriptions[di]; !found {
-			continue
-		}
-		stateItemdi := state.Subscriptions[di]
-		planItemdi := data.Subscriptions[di]
-		matchBodyPathdi := ""
-		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("telemetrySubscription.attributes.id").String() == di {
-				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".telemetrySubscription.children"
-				break
+		for di := range state.SensorGroups {
+			if _, found := data.SensorGroups[di]; !found {
+				continue
+			}
+			stateItemdi := state.SensorGroups[di]
+			planItemdi := data.SensorGroups[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("telemetrySensorGroup.attributes.id").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".telemetrySensorGroup.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.SensorPaths {
+				if _, found := planItemdi.SensorPaths[stateChildKey]; !found {
+					stateChild := stateItemdi.SensorPaths[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "telemetrySensorPath.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "telemetrySensorPath.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
 			}
 		}
-		if matchBodyPathdi == "" {
-			continue
-		}
-		for stateChildKey := range stateItemdi.SensorGroupRelationships {
-			if _, found := planItemdi.SensorGroupRelationships[stateChildKey]; !found {
-				stateChild := stateItemdi.SensorGroupRelationships[stateChildKey]
+		for stateKey := range state.Subscriptions {
+			if _, found := data.Subscriptions[stateKey]; !found {
+				stateChild := state.Subscriptions[stateKey]
 				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "telemetryRsSensorGroupRel.attributes.rn", stateChild.getRn(stateChildKey))
-				deleteBody, _ = sjson.Set(deleteBody, "telemetryRsSensorGroupRel.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				deleteBody, _ = sjson.Set(deleteBody, "telemetrySubscription.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "telemetrySubscription.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 			}
 		}
-		for stateChildKey := range stateItemdi.DestinationGroupRelationships {
-			if _, found := planItemdi.DestinationGroupRelationships[stateChildKey]; !found {
-				stateChild := stateItemdi.DestinationGroupRelationships[stateChildKey]
-				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "telemetryRsDestGroupRel.attributes.rn", stateChild.getRn(stateChildKey))
-				deleteBody, _ = sjson.Set(deleteBody, "telemetryRsDestGroupRel.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+		for di := range state.Subscriptions {
+			if _, found := data.Subscriptions[di]; !found {
+				continue
+			}
+			stateItemdi := state.Subscriptions[di]
+			planItemdi := data.Subscriptions[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("telemetrySubscription.attributes.id").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".telemetrySubscription.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.SensorGroupRelationships {
+				if _, found := planItemdi.SensorGroupRelationships[stateChildKey]; !found {
+					stateChild := stateItemdi.SensorGroupRelationships[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "telemetryRsSensorGroupRel.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "telemetryRsSensorGroupRel.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.DestinationGroupRelationships {
+				if _, found := planItemdi.DestinationGroupRelationships[stateChildKey]; !found {
+					stateChild := stateItemdi.DestinationGroupRelationships[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "telemetryRsDestGroupRel.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "telemetryRsDestGroupRel.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
 			}
 		}
 	}
-	if !state.AdminState.IsNull() && config.AdminState.IsNull() {
-		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-	}
-	if !state.BatchDmeEvents.IsNull() && config.BatchDmeEvents.IsNull() {
-		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"batchDmeEvt", "DME_UNSET_PROPERTY_MARKER")
-	}
-	if !state.MergeSubscriptions.IsNull() && config.MergeSubscriptions.IsNull() {
-		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"mergeSubs", "DME_UNSET_PROPERTY_MARKER")
-	}
-	for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-		if sv.Get("telemetryDestProfile").Exists() {
-			if !state.DestinationProfileAdminState.IsNull() && config.DestinationProfileAdminState.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".telemetryDestProfile.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-			}
-			break
+
+	if !importing {
+		if !state.AdminState.IsNull() && config.AdminState.IsNull() {
+			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.BatchDmeEvents.IsNull() && config.BatchDmeEvents.IsNull() {
+			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"batchDmeEvt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.MergeSubscriptions.IsNull() && config.MergeSubscriptions.IsNull() {
+			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"mergeSubs", "DME_UNSET_PROPERTY_MARKER")
 		}
 	}
-	{
-		singleChildPath := ""
+	if !importing {
 		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
 			if sv.Get("telemetryDestProfile").Exists() {
-				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".telemetryDestProfile.children"
+				if !state.DestinationProfileAdminState.IsNull() && config.DestinationProfileAdminState.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".telemetryDestProfile.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
 				break
 			}
 		}
-		if singleChildPath != "" {
-			for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
-				if sv.Get("telemetryDestOptVrf").Exists() {
-					if !state.DestinationProfileVrf.IsNull() && config.DestinationProfileVrf.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".telemetryDestOptVrf.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-					}
+		{
+			singleChildPath := ""
+			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+				if sv.Get("telemetryDestProfile").Exists() {
+					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".telemetryDestProfile.children"
 					break
 				}
 			}
-		}
-	}
-	for key := range state.DestinationGroups {
-		if configChild, ok := config.DestinationGroups[key]; ok {
-			stateChild := state.DestinationGroups[key]
-			_ = stateChild
-			_ = configChild
-			{
-				listChildPath := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-					if mv.Get("telemetryDestGroup.attributes.id").String() == key {
-						listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".telemetryDestGroup.children"
+			if singleChildPath != "" {
+				for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+					if sv.Get("telemetryDestOptVrf").Exists() {
+						if !state.DestinationProfileVrf.IsNull() && config.DestinationProfileVrf.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".telemetryDestOptVrf.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						}
 						break
 					}
 				}
-				if listChildPath != "" {
-					for key := range stateChild.Destinations {
-						if configChild, ok := configChild.Destinations[key]; ok {
-							stateChild := stateChild.Destinations[key]
-							_ = stateChild
-							_ = configChild
-							keyParts := strings.SplitN(key, ";", 2)
-							for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
-								if mv.Get("telemetryDest.attributes.addr").String() == keyParts[0] &&
-									mv.Get("telemetryDest.attributes.port").String() == keyParts[1] {
-									if !stateChild.Encoding.IsNull() && configChild.Encoding.IsNull() {
-										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDest.attributes."+"enc", "DME_UNSET_PROPERTY_MARKER")
+			}
+		}
+		for key := range state.DestinationGroups {
+			if configChild, ok := config.DestinationGroups[key]; ok {
+				stateChild := state.DestinationGroups[key]
+				_ = stateChild
+				_ = configChild
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("telemetryDestGroup.attributes.id").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".telemetryDestGroup.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Destinations {
+							if configChild, ok := configChild.Destinations[key]; ok {
+								stateChild := stateChild.Destinations[key]
+								_ = stateChild
+								_ = configChild
+								keyParts := strings.SplitN(key, ";", 2)
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("telemetryDest.attributes.addr").String() == keyParts[0] &&
+										mv.Get("telemetryDest.attributes.port").String() == keyParts[1] {
+										if !stateChild.Encoding.IsNull() && configChild.Encoding.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDest.attributes."+"enc", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.NodeId.IsNull() && configChild.NodeId.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDest.attributes."+"nodeid", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Protocol.IsNull() && configChild.Protocol.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDest.attributes."+"proto", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
 									}
-									if !stateChild.NodeId.IsNull() && configChild.NodeId.IsNull() {
-										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDest.attributes."+"nodeid", "DME_UNSET_PROPERTY_MARKER")
-									}
-									if !stateChild.Protocol.IsNull() && configChild.Protocol.IsNull() {
-										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDest.attributes."+"proto", "DME_UNSET_PROPERTY_MARKER")
-									}
-									break
 								}
 							}
 						}
@@ -934,49 +941,49 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 				}
 			}
 		}
-	}
-	for key := range state.SensorGroups {
-		if configChild, ok := config.SensorGroups[key]; ok {
-			stateChild := state.SensorGroups[key]
-			_ = stateChild
-			_ = configChild
-			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-				if mv.Get("telemetrySensorGroup.attributes.id").String() == key {
-					if !stateChild.DataSource.IsNull() && configChild.DataSource.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".telemetrySensorGroup.attributes."+"dataSrc", "DME_UNSET_PROPERTY_MARKER")
-					}
-					break
-				}
-			}
-			{
-				listChildPath := ""
+		for key := range state.SensorGroups {
+			if configChild, ok := config.SensorGroups[key]; ok {
+				stateChild := state.SensorGroups[key]
+				_ = stateChild
+				_ = configChild
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("telemetrySensorGroup.attributes.id").String() == key {
-						listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".telemetrySensorGroup.children"
+						if !stateChild.DataSource.IsNull() && configChild.DataSource.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".telemetrySensorGroup.attributes."+"dataSrc", "DME_UNSET_PROPERTY_MARKER")
+						}
 						break
 					}
 				}
-				if listChildPath != "" {
-					for key := range stateChild.SensorPaths {
-						if configChild, ok := configChild.SensorPaths[key]; ok {
-							stateChild := stateChild.SensorPaths[key]
-							_ = stateChild
-							_ = configChild
-							for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
-								if mv.Get("telemetrySensorPath.attributes.path").String() == key {
-									if !stateChild.Alias.IsNull() && configChild.Alias.IsNull() {
-										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetrySensorPath.attributes."+"alias", "DME_UNSET_PROPERTY_MARKER")
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("telemetrySensorGroup.attributes.id").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".telemetrySensorGroup.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.SensorPaths {
+							if configChild, ok := configChild.SensorPaths[key]; ok {
+								stateChild := stateChild.SensorPaths[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("telemetrySensorPath.attributes.path").String() == key {
+										if !stateChild.Alias.IsNull() && configChild.Alias.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetrySensorPath.attributes."+"alias", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Depth.IsNull() && configChild.Depth.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetrySensorPath.attributes."+"depth", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.FilterCondition.IsNull() && configChild.FilterCondition.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetrySensorPath.attributes."+"filterCondition", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.QueryCondition.IsNull() && configChild.QueryCondition.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetrySensorPath.attributes."+"queryCondition", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
 									}
-									if !stateChild.Depth.IsNull() && configChild.Depth.IsNull() {
-										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetrySensorPath.attributes."+"depth", "DME_UNSET_PROPERTY_MARKER")
-									}
-									if !stateChild.FilterCondition.IsNull() && configChild.FilterCondition.IsNull() {
-										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetrySensorPath.attributes."+"filterCondition", "DME_UNSET_PROPERTY_MARKER")
-									}
-									if !stateChild.QueryCondition.IsNull() && configChild.QueryCondition.IsNull() {
-										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetrySensorPath.attributes."+"queryCondition", "DME_UNSET_PROPERTY_MARKER")
-									}
-									break
 								}
 							}
 						}
@@ -984,41 +991,41 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 				}
 			}
 		}
-	}
-	for key := range state.Subscriptions {
-		if configChild, ok := config.Subscriptions[key]; ok {
-			stateChild := state.Subscriptions[key]
-			_ = stateChild
-			_ = configChild
-			{
-				listChildPath := ""
-				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-					if mv.Get("telemetrySubscription.attributes.id").String() == key {
-						listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".telemetrySubscription.children"
-						break
+		for key := range state.Subscriptions {
+			if configChild, ok := config.Subscriptions[key]; ok {
+				stateChild := state.Subscriptions[key]
+				_ = stateChild
+				_ = configChild
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("telemetrySubscription.attributes.id").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".telemetrySubscription.children"
+							break
+						}
 					}
-				}
-				if listChildPath != "" {
-					for key := range stateChild.SensorGroupRelationships {
-						if configChild, ok := configChild.SensorGroupRelationships[key]; ok {
-							stateChild := stateChild.SensorGroupRelationships[key]
-							_ = stateChild
-							_ = configChild
-							for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
-								if mv.Get("telemetryRsSensorGroupRel.attributes.tDn").String() == key {
-									if !stateChild.SampleInterval.IsNull() && configChild.SampleInterval.IsNull() {
-										body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryRsSensorGroupRel.attributes."+"sampleIntvl", "DME_UNSET_PROPERTY_MARKER")
+					if listChildPath != "" {
+						for key := range stateChild.SensorGroupRelationships {
+							if configChild, ok := configChild.SensorGroupRelationships[key]; ok {
+								stateChild := stateChild.SensorGroupRelationships[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("telemetryRsSensorGroupRel.attributes.tDn").String() == key {
+										if !stateChild.SampleInterval.IsNull() && configChild.SampleInterval.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryRsSensorGroupRel.attributes."+"sampleIntvl", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
 									}
-									break
 								}
 							}
 						}
-					}
-					for key := range stateChild.DestinationGroupRelationships {
-						if configChild, ok := configChild.DestinationGroupRelationships[key]; ok {
-							stateChild := stateChild.DestinationGroupRelationships[key]
-							_ = stateChild
-							_ = configChild
+						for key := range stateChild.DestinationGroupRelationships {
+							if configChild, ok := configChild.DestinationGroupRelationships[key]; ok {
+								stateChild := stateChild.DestinationGroupRelationships[key]
+								_ = stateChild
+								_ = configChild
+							}
 						}
 					}
 				}

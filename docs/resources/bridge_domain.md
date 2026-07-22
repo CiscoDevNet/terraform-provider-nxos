@@ -124,10 +124,9 @@ import {
 In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
 
 ```terraform
-import {
-  to = nxos_bridge_domain.example
-  id = ""
-}
+# Terraform's `import` block requires a non-empty `id` value, so this format cannot be used to
+# import nxos_bridge_domain for the default device. Use the `terraform import` command
+# below, or identity-based import shown above, instead.
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:

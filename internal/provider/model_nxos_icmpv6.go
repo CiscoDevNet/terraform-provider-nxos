@@ -329,65 +329,72 @@ func (data ICMPv6) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data ICMPv6) toBodyWithDeletes(ctx context.Context, state ICMPv6, config ICMPv6) nxos.Body {
+func (data ICMPv6) toBodyWithDeletes(ctx context.Context, state ICMPv6, config ICMPv6, importing bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for stateKey := range state.Interfaces {
-		if _, found := data.Interfaces[stateKey]; !found {
-			stateChild := state.Interfaces[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "icmpv6If.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "icmpv6If.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.icmpv6Inst.children"+".-1", deleteBody)
+	if !importing {
+		for stateKey := range state.Interfaces {
+			if _, found := data.Interfaces[stateKey]; !found {
+				stateChild := state.Interfaces[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "icmpv6If.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "icmpv6If.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.icmpv6Inst.children"+".-1", deleteBody)
+			}
 		}
 	}
-	if !state.AdminState.IsNull() && config.AdminState.IsNull() {
-		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-	}
-	for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-		if sv.Get("icmpv6Inst").Exists() {
-			if !state.AdjacencyStaleTimer.IsNull() && config.AdjacencyStaleTimer.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"adjStaleTimer", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !state.AdjacencyStaleTimerIcmp.IsNull() && config.AdjacencyStaleTimerIcmp.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"adjStaleTimerIcmp", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !state.Control.IsNull() && config.Control.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !state.RedirectSyslog.IsNull() && config.RedirectSyslog.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"redirectSyslog", "DME_UNSET_PROPERTY_MARKER")
-			}
-			if !state.RedirectSyslogInterval.IsNull() && config.RedirectSyslogInterval.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"redirectSyslogInterval", "DME_UNSET_PROPERTY_MARKER")
-			}
-			break
+
+	if !importing {
+		if !state.AdminState.IsNull() && config.AdminState.IsNull() {
+			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 	}
-	{
-		singleChildPath := ""
+	if !importing {
 		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
 			if sv.Get("icmpv6Inst").Exists() {
-				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".icmpv6Inst.children"
+				if !state.AdjacencyStaleTimer.IsNull() && config.AdjacencyStaleTimer.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"adjStaleTimer", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.AdjacencyStaleTimerIcmp.IsNull() && config.AdjacencyStaleTimerIcmp.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"adjStaleTimerIcmp", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.Control.IsNull() && config.Control.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.RedirectSyslog.IsNull() && config.RedirectSyslog.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"redirectSyslog", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.RedirectSyslogInterval.IsNull() && config.RedirectSyslogInterval.IsNull() {
+					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv6Inst.attributes."+"redirectSyslogInterval", "DME_UNSET_PROPERTY_MARKER")
+				}
 				break
 			}
 		}
-		if singleChildPath != "" {
-			for key := range state.Interfaces {
-				if configChild, ok := config.Interfaces[key]; ok {
-					stateChild := state.Interfaces[key]
-					_ = stateChild
-					_ = configChild
-					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-						if mv.Get("icmpv6If.attributes.id").String() == key {
-							if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".icmpv6If.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+		{
+			singleChildPath := ""
+			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+				if sv.Get("icmpv6Inst").Exists() {
+					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".icmpv6Inst.children"
+					break
+				}
+			}
+			if singleChildPath != "" {
+				for key := range state.Interfaces {
+					if configChild, ok := config.Interfaces[key]; ok {
+						stateChild := state.Interfaces[key]
+						_ = stateChild
+						_ = configChild
+						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+							if mv.Get("icmpv6If.attributes.id").String() == key {
+								if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".icmpv6If.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+								}
+								break
 							}
-							break
 						}
 					}
 				}

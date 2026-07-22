@@ -292,82 +292,89 @@ func (data Keychain) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, config Keychain) nxos.Body {
+func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, config Keychain, importing bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for stateKey := range state.Keychains {
-		if _, found := data.Keychains[stateKey]; !found {
-			stateChild := state.Keychains[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "kcmgrClassicKeychain.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "kcmgrClassicKeychain.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.kcmgrKeychains.children"+".-1", deleteBody)
-		}
-	}
-	for di := range state.Keychains {
-		if _, found := data.Keychains[di]; !found {
-			continue
-		}
-		stateItemdi := state.Keychains[di]
-		planItemdi := data.Keychains[di]
-		matchBodyPathdi := ""
-		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.kcmgrKeychains.children").Array() {
-			if mv.Get("kcmgrClassicKeychain.attributes.keychainName").String() == di {
-				matchBodyPathdi = bodyPath + ".0.kcmgrKeychains.children" + "." + strconv.Itoa(mi) + ".kcmgrClassicKeychain.children"
-				break
-			}
-		}
-		if matchBodyPathdi == "" {
-			continue
-		}
-		for stateChildKey := range stateItemdi.Keys {
-			if _, found := planItemdi.Keys[stateChildKey]; !found {
-				stateChild := stateItemdi.Keys[stateChildKey]
+	if !importing {
+		for stateKey := range state.Keychains {
+			if _, found := data.Keychains[stateKey]; !found {
+				stateChild := state.Keychains[stateKey]
 				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "kcmgrKey.attributes.rn", stateChild.getRn(stateChildKey))
-				deleteBody, _ = sjson.Set(deleteBody, "kcmgrKey.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				deleteBody, _ = sjson.Set(deleteBody, "kcmgrClassicKeychain.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "kcmgrClassicKeychain.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.kcmgrKeychains.children"+".-1", deleteBody)
+			}
+		}
+		for di := range state.Keychains {
+			if _, found := data.Keychains[di]; !found {
+				continue
+			}
+			stateItemdi := state.Keychains[di]
+			planItemdi := data.Keychains[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath+".0.kcmgrKeychains.children").Array() {
+				if mv.Get("kcmgrClassicKeychain.attributes.keychainName").String() == di {
+					matchBodyPathdi = bodyPath + ".0.kcmgrKeychains.children" + "." + strconv.Itoa(mi) + ".kcmgrClassicKeychain.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.Keys {
+				if _, found := planItemdi.Keys[stateChildKey]; !found {
+					stateChild := stateItemdi.Keys[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "kcmgrKey.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "kcmgrKey.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
 			}
 		}
 	}
-	if !state.AdminState.IsNull() && config.AdminState.IsNull() {
-		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-	}
-	{
-		singleChildPath := ""
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("kcmgrKeychains").Exists() {
-				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".kcmgrKeychains.children"
-				break
-			}
+
+	if !importing {
+		if !state.AdminState.IsNull() && config.AdminState.IsNull() {
+			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
-		if singleChildPath != "" {
-			for key := range state.Keychains {
-				if configChild, ok := config.Keychains[key]; ok {
-					stateChild := state.Keychains[key]
-					_ = stateChild
-					_ = configChild
-					{
-						listChildPath := ""
-						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-							if mv.Get("kcmgrClassicKeychain.attributes.keychainName").String() == key {
-								listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".kcmgrClassicKeychain.children"
-								break
+	}
+	if !importing {
+		{
+			singleChildPath := ""
+			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+				if sv.Get("kcmgrKeychains").Exists() {
+					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".kcmgrKeychains.children"
+					break
+				}
+			}
+			if singleChildPath != "" {
+				for key := range state.Keychains {
+					if configChild, ok := config.Keychains[key]; ok {
+						stateChild := state.Keychains[key]
+						_ = stateChild
+						_ = configChild
+						{
+							listChildPath := ""
+							for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+								if mv.Get("kcmgrClassicKeychain.attributes.keychainName").String() == key {
+									listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".kcmgrClassicKeychain.children"
+									break
+								}
 							}
-						}
-						if listChildPath != "" {
-							for key := range stateChild.Keys {
-								if configChild, ok := configChild.Keys[key]; ok {
-									stateChild := stateChild.Keys[key]
-									_ = stateChild
-									_ = configChild
-									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
-										if mv.Get("kcmgrKey.attributes.keyId").String() == key {
-											if !stateChild.CryptographicAlgorithm.IsNull() && configChild.CryptographicAlgorithm.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".kcmgrKey.attributes."+"cryptoAlgo", "DME_UNSET_PROPERTY_MARKER")
+							if listChildPath != "" {
+								for key := range stateChild.Keys {
+									if configChild, ok := configChild.Keys[key]; ok {
+										stateChild := stateChild.Keys[key]
+										_ = stateChild
+										_ = configChild
+										for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+											if mv.Get("kcmgrKey.attributes.keyId").String() == key {
+												if !stateChild.CryptographicAlgorithm.IsNull() && configChild.CryptographicAlgorithm.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".kcmgrKey.attributes."+"cryptoAlgo", "DME_UNSET_PROPERTY_MARKER")
+												}
+												break
 											}
-											break
 										}
 									}
 								}

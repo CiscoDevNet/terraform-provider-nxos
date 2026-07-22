@@ -47,6 +47,7 @@ import (
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &PlatformResource{}
 var _ resource.ResourceWithIdentity = &PlatformResource{}
+var _ resource.ResourceWithModifyPlan = &PlatformResource{}
 
 func NewPlatformResource() resource.Resource {
 	return &PlatformResource{}
@@ -1534,6 +1535,25 @@ func (r *PlatformResource) Configure(ctx context.Context, req resource.Configure
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
+// ModifyPlan forces a recompute during the leniency window that follows an import, so that
+// Update always runs (and clears the `importing` flag) even when the plan would otherwise be
+// a no-op. Without this, a first post-import config that happens to declare every entry with
+// matching values would never invoke Update, leaving `importing` stuck and later, genuine
+// removals silently un-reconciled.
+func (r *PlatformResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.State.Raw.IsNull() || req.Plan.Raw.IsNull() {
+		return
+	}
+
+	imp, diags := helpers.IsFlagImporting(ctx, req.Private)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() || !imp {
+		return
+	}
+
+	resp.Diagnostics.Append(resp.Plan.SetAttribute(ctx, path.Root("id"), types.StringUnknown())...)
+}
+
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
@@ -1631,12 +1651,21 @@ func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, r
 			return
 		}
 
-		imp, diags := helpers.IsFlagImporting(ctx, req)
+		imp, diags := helpers.IsFlagImporting(ctx, req.Private)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
 		if imp {
 			state.fromBody(res)
+			// Warn here rather than in ModifyPlan: Terraform reuses this same refresh for both the
+			// preview plan and the plan it recomputes right before applying, so Read only runs once
+			// per operation - unlike ModifyPlan, which runs (and would warn) twice.
+			resp.Diagnostics.AddWarning(
+				"Import leniency in effect",
+				"This resource was recently imported. If the plan shows entries or attributes disappearing, "+
+					"that's expected: Terraform will stop tracking anything not declared in your configuration, "+
+					"but nothing will change on the device. This notice won't appear again after your next apply.",
+			)
 		} else {
 			state.updateFromBody(res)
 		}
@@ -1651,8 +1680,6 @@ func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, r
 	resp.Diagnostics.Append(diags...)
 	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
-
-	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end read
@@ -1693,8 +1720,14 @@ func (r *PlatformResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
+	imp, diags := helpers.IsFlagImporting(ctx, req.Private)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state, config)
+		body := plan.toBodyWithDeletes(ctx, state, config, imp)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
@@ -1712,6 +1745,8 @@ func (r *PlatformResource) Update(ctx context.Context, req resource.UpdateReques
 	resp.Diagnostics.Append(diags...)
 	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end update

@@ -292,86 +292,93 @@ func (data ManagementInterface) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state ManagementInterface, config ManagementInterface) nxos.Body {
+func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state ManagementInterface, config ManagementInterface, importing bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for stateKey := range state.ManagementInterfaces {
-		if _, found := data.ManagementInterfaces[stateKey]; !found {
-			stateChild := state.ManagementInterfaces[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
-			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.autoNeg", "DME_UNSET_PROPERTY_MARKER")
-			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
-			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.duplex", "DME_UNSET_PROPERTY_MARKER")
-			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
-			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
-			deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.speed", "DME_UNSET_PROPERTY_MARKER")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
-		}
-	}
-	for di := range state.ManagementInterfaces {
-		if _, found := data.ManagementInterfaces[di]; !found {
-			continue
-		}
-		matchBodyPathdi := ""
-		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("mgmtMgmtIf.attributes.id").String() == di {
-				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".mgmtMgmtIf.children"
-				break
+	if !importing {
+		for stateKey := range state.ManagementInterfaces {
+			if _, found := data.ManagementInterfaces[stateKey]; !found {
+				stateChild := state.ManagementInterfaces[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.autoNeg", "DME_UNSET_PROPERTY_MARKER")
+				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.duplex", "DME_UNSET_PROPERTY_MARKER")
+				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
+				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.speed", "DME_UNSET_PROPERTY_MARKER")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 			}
 		}
-		if matchBodyPathdi == "" {
-			continue
-		}
-	}
-	for key := range state.ManagementInterfaces {
-		if configChild, ok := config.ManagementInterfaces[key]; ok {
-			stateChild := state.ManagementInterfaces[key]
-			_ = stateChild
-			_ = configChild
+		for di := range state.ManagementInterfaces {
+			if _, found := data.ManagementInterfaces[di]; !found {
+				continue
+			}
+			matchBodyPathdi := ""
 			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-				if mv.Get("mgmtMgmtIf.attributes.id").String() == key {
-					if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.AutoNegotiation.IsNull() && configChild.AutoNegotiation.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"autoNeg", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.Duplex.IsNull() && configChild.Duplex.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"duplex", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.Mtu.IsNull() && configChild.Mtu.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"mtu", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.SnmpTrapState.IsNull() && configChild.SnmpTrapState.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.Speed.IsNull() && configChild.Speed.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"speed", "DME_UNSET_PROPERTY_MARKER")
-					}
+				if mv.Get("mgmtMgmtIf.attributes.id").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".mgmtMgmtIf.children"
 					break
 				}
 			}
-			{
-				listChildPath := ""
+			if matchBodyPathdi == "" {
+				continue
+			}
+		}
+	}
+
+	if !importing {
+	}
+	if !importing {
+		for key := range state.ManagementInterfaces {
+			if configChild, ok := config.ManagementInterfaces[key]; ok {
+				stateChild := state.ManagementInterfaces[key]
+				_ = stateChild
+				_ = configChild
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("mgmtMgmtIf.attributes.id").String() == key {
-						listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".mgmtMgmtIf.children"
+						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.AutoNegotiation.IsNull() && configChild.AutoNegotiation.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"autoNeg", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Duplex.IsNull() && configChild.Duplex.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"duplex", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Mtu.IsNull() && configChild.Mtu.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"mtu", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.SnmpTrapState.IsNull() && configChild.SnmpTrapState.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Speed.IsNull() && configChild.Speed.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"speed", "DME_UNSET_PROPERTY_MARKER")
+						}
 						break
 					}
 				}
-				if listChildPath != "" {
-					for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-						if sv.Get("nwRtVrfMbr").Exists() {
-							if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nwRtVrfMbr.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-							}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("mgmtMgmtIf.attributes.id").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".mgmtMgmtIf.children"
 							break
+						}
+					}
+					if listChildPath != "" {
+						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+							if sv.Get("nwRtVrfMbr").Exists() {
+								if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
+									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nwRtVrfMbr.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+								}
+								break
+							}
 						}
 					}
 				}

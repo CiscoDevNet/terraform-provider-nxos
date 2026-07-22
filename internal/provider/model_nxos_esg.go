@@ -964,204 +964,211 @@ func (data ESG) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG) nxos.Body {
+func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, importing bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for stateKey := range state.SecurityGroups {
-		if _, found := data.SecurityGroups[stateKey]; !found {
-			stateChild := state.SecurityGroups[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "esgGroupInst.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "esgGroupInst.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.esgGroupEntity.children"+".-1", deleteBody)
-		}
-	}
-	for di := range state.SecurityGroups {
-		if _, found := data.SecurityGroups[di]; !found {
-			continue
-		}
-		stateItemdi := state.SecurityGroups[di]
-		planItemdi := data.SecurityGroups[di]
-		matchBodyPathdi := ""
-		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.esgGroupEntity.children").Array() {
-			if mv.Get("esgGroupInst.attributes.id").String() == di {
-				matchBodyPathdi = bodyPath + ".0.esgGroupEntity.children" + "." + strconv.Itoa(mi) + ".esgGroupInst.children"
-				break
-			}
-		}
-		if matchBodyPathdi == "" {
-			continue
-		}
-		for stateKey := range stateItemdi.SelectorConnectedEndpointsIpv4 {
-			if _, found := planItemdi.SelectorConnectedEndpointsIpv4[stateKey]; !found {
-				stateChild := stateItemdi.SelectorConnectedEndpointsIpv4[stateKey]
+	if !importing {
+		for stateKey := range state.SecurityGroups {
+			if _, found := data.SecurityGroups[stateKey]; !found {
+				stateChild := state.SecurityGroups[stateKey]
 				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV4.attributes.rn", stateChild.getRn(stateKey))
-				deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV4.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.esgSelectorEntity.children"+".-1", deleteBody)
+				deleteBody, _ = sjson.Set(deleteBody, "esgGroupInst.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "esgGroupInst.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.esgGroupEntity.children"+".-1", deleteBody)
 			}
 		}
-		for stateKey := range stateItemdi.SelectorConnectedEndpointsIpv6 {
-			if _, found := planItemdi.SelectorConnectedEndpointsIpv6[stateKey]; !found {
-				stateChild := stateItemdi.SelectorConnectedEndpointsIpv6[stateKey]
+		for di := range state.SecurityGroups {
+			if _, found := data.SecurityGroups[di]; !found {
+				continue
+			}
+			stateItemdi := state.SecurityGroups[di]
+			planItemdi := data.SecurityGroups[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath+".0.esgGroupEntity.children").Array() {
+				if mv.Get("esgGroupInst.attributes.id").String() == di {
+					matchBodyPathdi = bodyPath + ".0.esgGroupEntity.children" + "." + strconv.Itoa(mi) + ".esgGroupInst.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateKey := range stateItemdi.SelectorConnectedEndpointsIpv4 {
+				if _, found := planItemdi.SelectorConnectedEndpointsIpv4[stateKey]; !found {
+					stateChild := stateItemdi.SelectorConnectedEndpointsIpv4[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV4.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV4.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.esgSelectorEntity.children"+".-1", deleteBody)
+				}
+			}
+			for stateKey := range stateItemdi.SelectorConnectedEndpointsIpv6 {
+				if _, found := planItemdi.SelectorConnectedEndpointsIpv6[stateKey]; !found {
+					stateChild := stateItemdi.SelectorConnectedEndpointsIpv6[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV6.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV6.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.esgSelectorEntity.children"+".-1", deleteBody)
+				}
+			}
+			for stateKey := range stateItemdi.SelectorMatchVlans {
+				if _, found := planItemdi.SelectorMatchVlans[stateKey]; !found {
+					stateChild := stateItemdi.SelectorMatchVlans[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchVlan.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchVlan.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.esgSelectorEntity.children"+".-1", deleteBody)
+				}
+			}
+		}
+		for stateKey := range state.ClassMaps {
+			if _, found := data.ClassMaps[stateKey]; !found {
+				stateChild := state.ClassMaps[stateKey]
 				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV6.attributes.rn", stateChild.getRn(stateKey))
-				deleteBody, _ = sjson.Set(deleteBody, "esgMatchConnectedEpV6.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.esgSelectorEntity.children"+".-1", deleteBody)
+				deleteBody, _ = sjson.Set(deleteBody, "esgClassMapInst.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "esgClassMapInst.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.esgClassMapEntity.children"+".-1", deleteBody)
 			}
 		}
-		for stateKey := range stateItemdi.SelectorMatchVlans {
-			if _, found := planItemdi.SelectorMatchVlans[stateKey]; !found {
-				stateChild := stateItemdi.SelectorMatchVlans[stateKey]
+		for di := range state.ClassMaps {
+			if _, found := data.ClassMaps[di]; !found {
+				continue
+			}
+			stateItemdi := state.ClassMaps[di]
+			planItemdi := data.ClassMaps[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath+".0.esgClassMapEntity.children").Array() {
+				if mv.Get("esgClassMapInst.attributes.name").String() == di {
+					matchBodyPathdi = bodyPath + ".0.esgClassMapEntity.children" + "." + strconv.Itoa(mi) + ".esgClassMapInst.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.FilterEntries {
+				if _, found := planItemdi.FilterEntries[stateChildKey]; !found {
+					stateChild := stateItemdi.FilterEntries[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgClassMapFilterEntry.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgClassMapFilterEntry.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+		}
+		for stateKey := range state.PolicyMaps {
+			if _, found := data.PolicyMaps[stateKey]; !found {
+				stateChild := state.PolicyMaps[stateKey]
 				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "esgMatchVlan.attributes.rn", stateChild.getRn(stateKey))
-				deleteBody, _ = sjson.Set(deleteBody, "esgMatchVlan.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.esgSelectorEntity.children"+".-1", deleteBody)
+				deleteBody, _ = sjson.Set(deleteBody, "esgPolicyMapInst.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "esgPolicyMapInst.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.esgPolicyMapEntity.children"+".-1", deleteBody)
 			}
 		}
-	}
-	for stateKey := range state.ClassMaps {
-		if _, found := data.ClassMaps[stateKey]; !found {
-			stateChild := state.ClassMaps[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "esgClassMapInst.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "esgClassMapInst.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.esgClassMapEntity.children"+".-1", deleteBody)
-		}
-	}
-	for di := range state.ClassMaps {
-		if _, found := data.ClassMaps[di]; !found {
-			continue
-		}
-		stateItemdi := state.ClassMaps[di]
-		planItemdi := data.ClassMaps[di]
-		matchBodyPathdi := ""
-		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.esgClassMapEntity.children").Array() {
-			if mv.Get("esgClassMapInst.attributes.name").String() == di {
-				matchBodyPathdi = bodyPath + ".0.esgClassMapEntity.children" + "." + strconv.Itoa(mi) + ".esgClassMapInst.children"
-				break
+		for di := range state.PolicyMaps {
+			if _, found := data.PolicyMaps[di]; !found {
+				continue
+			}
+			stateItemdi := state.PolicyMaps[di]
+			planItemdi := data.PolicyMaps[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath+".0.esgPolicyMapEntity.children").Array() {
+				if mv.Get("esgPolicyMapInst.attributes.name").String() == di {
+					matchBodyPathdi = bodyPath + ".0.esgPolicyMapEntity.children" + "." + strconv.Itoa(mi) + ".esgPolicyMapInst.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.MatchClassMaps {
+				if _, found := planItemdi.MatchClassMaps[stateChildKey]; !found {
+					stateChild := stateItemdi.MatchClassMaps[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchClassMap.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchClassMap.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
 			}
 		}
-		if matchBodyPathdi == "" {
-			continue
-		}
-		for stateChildKey := range stateItemdi.FilterEntries {
-			if _, found := planItemdi.FilterEntries[stateChildKey]; !found {
-				stateChild := stateItemdi.FilterEntries[stateChildKey]
+		for stateKey := range state.Domains {
+			if _, found := data.Domains[stateKey]; !found {
+				stateChild := state.Domains[stateKey]
 				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "esgClassMapFilterEntry.attributes.rn", stateChild.getRn(stateChildKey))
-				deleteBody, _ = sjson.Set(deleteBody, "esgClassMapFilterEntry.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				deleteBody, _ = sjson.Set(deleteBody, "esgDom.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "esgDom.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 			}
 		}
 	}
-	for stateKey := range state.PolicyMaps {
-		if _, found := data.PolicyMaps[stateKey]; !found {
-			stateChild := state.PolicyMaps[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "esgPolicyMapInst.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "esgPolicyMapInst.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.esgPolicyMapEntity.children"+".-1", deleteBody)
+
+	if !importing {
+		if !state.MacSegmentation.IsNull() && config.MacSegmentation.IsNull() {
+			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"macSegmentation", "DME_UNSET_PROPERTY_MARKER")
 		}
 	}
-	for di := range state.PolicyMaps {
-		if _, found := data.PolicyMaps[di]; !found {
-			continue
-		}
-		stateItemdi := state.PolicyMaps[di]
-		planItemdi := data.PolicyMaps[di]
-		matchBodyPathdi := ""
-		for mi, mv := range gjson.Get(body.Str, bodyPath+".0.esgPolicyMapEntity.children").Array() {
-			if mv.Get("esgPolicyMapInst.attributes.name").String() == di {
-				matchBodyPathdi = bodyPath + ".0.esgPolicyMapEntity.children" + "." + strconv.Itoa(mi) + ".esgPolicyMapInst.children"
-				break
+	if !importing {
+		{
+			singleChildPath := ""
+			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+				if sv.Get("esgGroupEntity").Exists() {
+					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".esgGroupEntity.children"
+					break
+				}
 			}
-		}
-		if matchBodyPathdi == "" {
-			continue
-		}
-		for stateChildKey := range stateItemdi.MatchClassMaps {
-			if _, found := planItemdi.MatchClassMaps[stateChildKey]; !found {
-				stateChild := stateItemdi.MatchClassMaps[stateChildKey]
-				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "esgMatchClassMap.attributes.rn", stateChild.getRn(stateChildKey))
-				deleteBody, _ = sjson.Set(deleteBody, "esgMatchClassMap.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
-			}
-		}
-	}
-	for stateKey := range state.Domains {
-		if _, found := data.Domains[stateKey]; !found {
-			stateChild := state.Domains[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "esgDom.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "esgDom.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
-		}
-	}
-	if !state.MacSegmentation.IsNull() && config.MacSegmentation.IsNull() {
-		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"macSegmentation", "DME_UNSET_PROPERTY_MARKER")
-	}
-	{
-		singleChildPath := ""
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("esgGroupEntity").Exists() {
-				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".esgGroupEntity.children"
-				break
-			}
-		}
-		if singleChildPath != "" {
-			for key := range state.SecurityGroups {
-				if configChild, ok := config.SecurityGroups[key]; ok {
-					stateChild := state.SecurityGroups[key]
-					_ = stateChild
-					_ = configChild
-					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-						if mv.Get("esgGroupInst.attributes.id").String() == key {
-							if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".esgGroupInst.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-							}
-							break
-						}
-					}
-					{
-						listChildPath := ""
+			if singleChildPath != "" {
+				for key := range state.SecurityGroups {
+					if configChild, ok := config.SecurityGroups[key]; ok {
+						stateChild := state.SecurityGroups[key]
+						_ = stateChild
+						_ = configChild
 						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
 							if mv.Get("esgGroupInst.attributes.id").String() == key {
-								listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".esgGroupInst.children"
+								if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".esgGroupInst.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+								}
 								break
 							}
 						}
-						if listChildPath != "" {
-							{
-								singleChildPath := ""
-								for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-									if sv.Get("esgSelectorEntity").Exists() {
-										singleChildPath = listChildPath + "." + strconv.Itoa(si) + ".esgSelectorEntity.children"
-										break
-									}
+						{
+							listChildPath := ""
+							for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+								if mv.Get("esgGroupInst.attributes.id").String() == key {
+									listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".esgGroupInst.children"
+									break
 								}
-								if singleChildPath != "" {
-									for key := range stateChild.SelectorConnectedEndpointsIpv4 {
-										if configChild, ok := configChild.SelectorConnectedEndpointsIpv4[key]; ok {
-											stateChild := stateChild.SelectorConnectedEndpointsIpv4[key]
-											_ = stateChild
-											_ = configChild
+							}
+							if listChildPath != "" {
+								{
+									singleChildPath := ""
+									for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+										if sv.Get("esgSelectorEntity").Exists() {
+											singleChildPath = listChildPath + "." + strconv.Itoa(si) + ".esgSelectorEntity.children"
+											break
 										}
 									}
-									for key := range stateChild.SelectorConnectedEndpointsIpv6 {
-										if configChild, ok := configChild.SelectorConnectedEndpointsIpv6[key]; ok {
-											stateChild := stateChild.SelectorConnectedEndpointsIpv6[key]
-											_ = stateChild
-											_ = configChild
+									if singleChildPath != "" {
+										for key := range stateChild.SelectorConnectedEndpointsIpv4 {
+											if configChild, ok := configChild.SelectorConnectedEndpointsIpv4[key]; ok {
+												stateChild := stateChild.SelectorConnectedEndpointsIpv4[key]
+												_ = stateChild
+												_ = configChild
+											}
 										}
-									}
-									for key := range stateChild.SelectorMatchVlans {
-										if configChild, ok := configChild.SelectorMatchVlans[key]; ok {
-											stateChild := stateChild.SelectorMatchVlans[key]
-											_ = stateChild
-											_ = configChild
+										for key := range stateChild.SelectorConnectedEndpointsIpv6 {
+											if configChild, ok := configChild.SelectorConnectedEndpointsIpv6[key]; ok {
+												stateChild := stateChild.SelectorConnectedEndpointsIpv6[key]
+												_ = stateChild
+												_ = configChild
+											}
+										}
+										for key := range stateChild.SelectorMatchVlans {
+											if configChild, ok := configChild.SelectorMatchVlans[key]; ok {
+												stateChild := stateChild.SelectorMatchVlans[key]
+												_ = stateChild
+												_ = configChild
+											}
 										}
 									}
 								}
@@ -1171,73 +1178,73 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG) nx
 				}
 			}
 		}
-	}
-	{
-		singleChildPath := ""
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("esgClassMapEntity").Exists() {
-				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".esgClassMapEntity.children"
-				break
+		{
+			singleChildPath := ""
+			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+				if sv.Get("esgClassMapEntity").Exists() {
+					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".esgClassMapEntity.children"
+					break
+				}
 			}
-		}
-		if singleChildPath != "" {
-			for key := range state.ClassMaps {
-				if configChild, ok := config.ClassMaps[key]; ok {
-					stateChild := state.ClassMaps[key]
-					_ = stateChild
-					_ = configChild
-					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-						if mv.Get("esgClassMapInst.attributes.name").String() == key {
-							if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".esgClassMapInst.attributes."+"desc", "DME_UNSET_PROPERTY_MARKER")
-							}
-							break
-						}
-					}
-					{
-						listChildPath := ""
+			if singleChildPath != "" {
+				for key := range state.ClassMaps {
+					if configChild, ok := config.ClassMaps[key]; ok {
+						stateChild := state.ClassMaps[key]
+						_ = stateChild
+						_ = configChild
 						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
 							if mv.Get("esgClassMapInst.attributes.name").String() == key {
-								listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".esgClassMapInst.children"
+								if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".esgClassMapInst.attributes."+"desc", "DME_UNSET_PROPERTY_MARKER")
+								}
 								break
 							}
 						}
-						if listChildPath != "" {
-							for key := range stateChild.FilterEntries {
-								if configChild, ok := configChild.FilterEntries[key]; ok {
-									stateChild := stateChild.FilterEntries[key]
-									_ = stateChild
-									_ = configChild
-									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
-										if mv.Get("esgClassMapFilterEntry.attributes.name").String() == key {
-											if !stateChild.ApplyToFragment.IsNull() && configChild.ApplyToFragment.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"applyToFrag", "DME_UNSET_PROPERTY_MARKER")
+						{
+							listChildPath := ""
+							for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+								if mv.Get("esgClassMapInst.attributes.name").String() == key {
+									listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".esgClassMapInst.children"
+									break
+								}
+							}
+							if listChildPath != "" {
+								for key := range stateChild.FilterEntries {
+									if configChild, ok := configChild.FilterEntries[key]; ok {
+										stateChild := stateChild.FilterEntries[key]
+										_ = stateChild
+										_ = configChild
+										for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+											if mv.Get("esgClassMapFilterEntry.attributes.name").String() == key {
+												if !stateChild.ApplyToFragment.IsNull() && configChild.ApplyToFragment.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"applyToFrag", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ArpOpcode.IsNull() && configChild.ArpOpcode.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"arpOpc", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.EtherType.IsNull() && configChild.EtherType.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"etherT", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.Icmpv4Type.IsNull() && configChild.Icmpv4Type.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"icmpv4T", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.Icmpv6Type.IsNull() && configChild.Icmpv6Type.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"icmpv6T", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.MatchDestinationPortZero.IsNull() && configChild.MatchDestinationPortZero.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"matchDPortZero", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.MatchDscp.IsNull() && configChild.MatchDscp.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"matchDscp", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.MatchSourcePortZero.IsNull() && configChild.MatchSourcePortZero.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"matchSPortZero", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.Stateful.IsNull() && configChild.Stateful.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"stateful", "DME_UNSET_PROPERTY_MARKER")
+												}
+												break
 											}
-											if !stateChild.ArpOpcode.IsNull() && configChild.ArpOpcode.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"arpOpc", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.EtherType.IsNull() && configChild.EtherType.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"etherT", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.Icmpv4Type.IsNull() && configChild.Icmpv4Type.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"icmpv4T", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.Icmpv6Type.IsNull() && configChild.Icmpv6Type.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"icmpv6T", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.MatchDestinationPortZero.IsNull() && configChild.MatchDestinationPortZero.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"matchDPortZero", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.MatchDscp.IsNull() && configChild.MatchDscp.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"matchDscp", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.MatchSourcePortZero.IsNull() && configChild.MatchSourcePortZero.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"matchSPortZero", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.Stateful.IsNull() && configChild.Stateful.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"stateful", "DME_UNSET_PROPERTY_MARKER")
-											}
-											break
 										}
 									}
 								}
@@ -1247,58 +1254,58 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG) nx
 				}
 			}
 		}
-	}
-	{
-		singleChildPath := ""
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("esgPolicyMapEntity").Exists() {
-				singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".esgPolicyMapEntity.children"
-				break
+		{
+			singleChildPath := ""
+			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
+				if sv.Get("esgPolicyMapEntity").Exists() {
+					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".esgPolicyMapEntity.children"
+					break
+				}
 			}
-		}
-		if singleChildPath != "" {
-			for key := range state.PolicyMaps {
-				if configChild, ok := config.PolicyMaps[key]; ok {
-					stateChild := state.PolicyMaps[key]
-					_ = stateChild
-					_ = configChild
-					for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-						if mv.Get("esgPolicyMapInst.attributes.name").String() == key {
-							if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".esgPolicyMapInst.attributes."+"desc", "DME_UNSET_PROPERTY_MARKER")
-							}
-							break
-						}
-					}
-					{
-						listChildPath := ""
+			if singleChildPath != "" {
+				for key := range state.PolicyMaps {
+					if configChild, ok := config.PolicyMaps[key]; ok {
+						stateChild := state.PolicyMaps[key]
+						_ = stateChild
+						_ = configChild
 						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
 							if mv.Get("esgPolicyMapInst.attributes.name").String() == key {
-								listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".esgPolicyMapInst.children"
+								if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".esgPolicyMapInst.attributes."+"desc", "DME_UNSET_PROPERTY_MARKER")
+								}
 								break
 							}
 						}
-						if listChildPath != "" {
-							for key := range stateChild.MatchClassMaps {
-								if configChild, ok := configChild.MatchClassMaps[key]; ok {
-									stateChild := stateChild.MatchClassMaps[key]
-									_ = stateChild
-									_ = configChild
-									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
-										if mv.Get("esgMatchClassMap.attributes.name").String() == key {
-											if !stateChild.CountAction.IsNull() && configChild.CountAction.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgMatchClassMap.attributes."+"countAction", "DME_UNSET_PROPERTY_MARKER")
+						{
+							listChildPath := ""
+							for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
+								if mv.Get("esgPolicyMapInst.attributes.name").String() == key {
+									listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".esgPolicyMapInst.children"
+									break
+								}
+							}
+							if listChildPath != "" {
+								for key := range stateChild.MatchClassMaps {
+									if configChild, ok := configChild.MatchClassMaps[key]; ok {
+										stateChild := stateChild.MatchClassMaps[key]
+										_ = stateChild
+										_ = configChild
+										for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+											if mv.Get("esgMatchClassMap.attributes.name").String() == key {
+												if !stateChild.CountAction.IsNull() && configChild.CountAction.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgMatchClassMap.attributes."+"countAction", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ForwardingAction.IsNull() && configChild.ForwardingAction.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgMatchClassMap.attributes."+"forwardingAction", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.LogAction.IsNull() && configChild.LogAction.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgMatchClassMap.attributes."+"logAction", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.RedirectChain.IsNull() && configChild.RedirectChain.IsNull() {
+													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgMatchClassMap.attributes."+"redirectChain", "DME_UNSET_PROPERTY_MARKER")
+												}
+												break
 											}
-											if !stateChild.ForwardingAction.IsNull() && configChild.ForwardingAction.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgMatchClassMap.attributes."+"forwardingAction", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.LogAction.IsNull() && configChild.LogAction.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgMatchClassMap.attributes."+"logAction", "DME_UNSET_PROPERTY_MARKER")
-											}
-											if !stateChild.RedirectChain.IsNull() && configChild.RedirectChain.IsNull() {
-												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgMatchClassMap.attributes."+"redirectChain", "DME_UNSET_PROPERTY_MARKER")
-											}
-											break
 										}
 									}
 								}
@@ -1308,24 +1315,24 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG) nx
 				}
 			}
 		}
-	}
-	for key := range state.Domains {
-		if configChild, ok := config.Domains[key]; ok {
-			stateChild := state.Domains[key]
-			_ = stateChild
-			_ = configChild
-			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-				if mv.Get("esgDom.attributes.name").String() == key {
-					if !stateChild.DefaultAction.IsNull() && configChild.DefaultAction.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".esgDom.attributes."+"defaultAction", "DME_UNSET_PROPERTY_MARKER")
+		for key := range state.Domains {
+			if configChild, ok := config.Domains[key]; ok {
+				stateChild := state.Domains[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("esgDom.attributes.name").String() == key {
+						if !stateChild.DefaultAction.IsNull() && configChild.DefaultAction.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".esgDom.attributes."+"defaultAction", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PolicyClassifierTag.IsNull() && configChild.PolicyClassifierTag.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".esgDom.attributes."+"pcTag", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.SecurityMode.IsNull() && configChild.SecurityMode.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".esgDom.attributes."+"securityMode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
 					}
-					if !stateChild.PolicyClassifierTag.IsNull() && configChild.PolicyClassifierTag.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".esgDom.attributes."+"pcTag", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.SecurityMode.IsNull() && configChild.SecurityMode.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".esgDom.attributes."+"securityMode", "DME_UNSET_PROPERTY_MARKER")
-					}
-					break
 				}
 			}
 		}

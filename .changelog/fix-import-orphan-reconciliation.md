@@ -1,0 +1,3 @@
+- Fix issue where importing a resource that manages multiple objects (e.g. `nxos_physical_interface`, `nxos_port_channel_interface`, `nxos_system`) could cause the next apply to reset objects, attributes, or entries that were never declared in configuration, which could fail outright for objects NX-OS doesn't allow configuring directly, such as physical interfaces that are port-channel members
+- Add a warning to the first plan/apply after importing a resource, noting that entries or attributes shown as removed are expected and will not change anything on the device
+- Fix the "Importing Resources" guide and every affected resource's generated string-based import example/docs, which showed an empty `id` value that Terraform's `import` block does not accept

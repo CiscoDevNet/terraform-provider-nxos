@@ -11,9 +11,15 @@ A resource can be imported by using the `terraform import` command or by using a
 
 Most resources in this provider are singleton resources that manage all objects of a given type on a device (e.g., all VRFs, all loopback interfaces). These resources use an empty import identifier. An optional device name can be appended when managing multiple devices.
 
+## Partial Configuration After Import
+
+Because a singleton resource manages every object of its type on a device, importing one populates state with every existing object — not just the ones you plan to declare in configuration. If your configuration only declares a subset of what was imported (or omits some attributes on an entry you do declare), the first `terraform plan` after import will show those entries and attributes as being removed.
+
+This is expected and safe: Terraform simply stops tracking anything you haven't declared, and nothing is changed on the device for it. Only the objects and attributes you explicitly configure are ever modified. A warning is included in the plan output as a reminder of this, and it will not appear again once you apply.
+
 ## String-Based Import
 
-An example for importing a resource using the `import` block with a string-based `id` is shown below. Assuming we have the following resource in our configuration:
+An example for importing a resource using the `terraform import` command with a string-based ID is shown below. Assuming we have the following resource in our configuration:
 
 ```terraform
 resource "nxos_vrf" "example" {
@@ -25,16 +31,15 @@ resource "nxos_vrf" "example" {
 }
 ```
 
-We could add an import block to import the resource as shown below:
+We could import the resource for the "default" device using the following command:
 
-```terraform
-import {
-  to = nxos_vrf.example
-  id = ""
-}
+```
+terraform import nxos_vrf.example ""
 ```
 
-This will populate the state for the `nxos_vrf` resource for the "default" device. When managing multiple devices, the device name can be used as the import identifier:
+-> **Note:** Terraform's `import` block requires a non-empty `id` value and will error with "Invalid import id argument" if it evaluates to an empty string. Since most resources in this provider use an empty string as their import identifier for the default device, use the `terraform import` command shown above, or identity-based import shown below, instead of an `import` block with `id = ""`.
+
+When managing multiple devices, the device name can be used as the import identifier. Since this identifier isn't empty, it also works with an `import` block:
 
 ```terraform
 resource "nxos_vrf" "example" {

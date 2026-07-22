@@ -382,93 +382,100 @@ func (data BridgeDomain) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDomain, config BridgeDomain) nxos.Body {
+func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDomain, config BridgeDomain, importing bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for stateKey := range state.BridgeDomains {
-		if _, found := data.BridgeDomains[stateKey]; !found {
-			stateChild := state.BridgeDomains[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+	if !importing {
+		for stateKey := range state.BridgeDomains {
+			if _, found := data.BridgeDomains[stateKey]; !found {
+				stateChild := state.BridgeDomains[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+			}
 		}
-	}
-	for stateKey := range state.VlanConfigurations {
-		if _, found := data.VlanConfigurations[stateKey]; !found {
-			stateChild := state.VlanConfigurations[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "l2VlanConfig.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "l2VlanConfig.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
-		}
-	}
-	if !state.SviAutostate.IsNull() && config.SviAutostate.IsNull() {
-		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"sysDefaultSVIAutostate", "DME_UNSET_PROPERTY_MARKER")
-	}
-	for key := range state.BridgeDomains {
-		if configChild, ok := config.BridgeDomains[key]; ok {
-			stateChild := state.BridgeDomains[key]
-			_ = stateChild
-			_ = configChild
-			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-				if mv.Get("l2BD.attributes.fabEncap").String() == key {
-					if !stateChild.AccessEncap.IsNull() && configChild.AccessEncap.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"accEncap", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.BridgeDomainState.IsNull() && configChild.BridgeDomainState.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"BdState", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.BridgeMode.IsNull() && configChild.BridgeMode.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"bridgeMode", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.ForwardingControl.IsNull() && configChild.ForwardingControl.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"fwdCtrl", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.ForwardingMode.IsNull() && configChild.ForwardingMode.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"fwdMode", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.LongName.IsNull() && configChild.LongName.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"longName", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.MacPacketClassify.IsNull() && configChild.MacPacketClassify.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"macPacketClassify", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.Mode.IsNull() && configChild.Mode.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.VrfName.IsNull() && configChild.VrfName.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"vrfName", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.CrossConnect.IsNull() && configChild.CrossConnect.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"xConnect", "DME_UNSET_PROPERTY_MARKER")
-					}
-					break
-				}
+		for stateKey := range state.VlanConfigurations {
+			if _, found := data.VlanConfigurations[stateKey]; !found {
+				stateChild := state.VlanConfigurations[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "l2VlanConfig.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "l2VlanConfig.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 			}
 		}
 	}
-	for key := range state.VlanConfigurations {
-		if configChild, ok := config.VlanConfigurations[key]; ok {
-			stateChild := state.VlanConfigurations[key]
-			_ = stateChild
-			_ = configChild
-			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-				if mv.Get("l2VlanConfig.attributes.accEncap").String() == key {
-					if !stateChild.MacLearning.IsNull() && configChild.MacLearning.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2VlanConfig.attributes."+"vlanMacLearn", "DME_UNSET_PROPERTY_MARKER")
+
+	if !importing {
+		if !state.SviAutostate.IsNull() && config.SviAutostate.IsNull() {
+			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"sysDefaultSVIAutostate", "DME_UNSET_PROPERTY_MARKER")
+		}
+	}
+	if !importing {
+		for key := range state.BridgeDomains {
+			if configChild, ok := config.BridgeDomains[key]; ok {
+				stateChild := state.BridgeDomains[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("l2BD.attributes.fabEncap").String() == key {
+						if !stateChild.AccessEncap.IsNull() && configChild.AccessEncap.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"accEncap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.BridgeDomainState.IsNull() && configChild.BridgeDomainState.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"BdState", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.BridgeMode.IsNull() && configChild.BridgeMode.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"bridgeMode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ForwardingControl.IsNull() && configChild.ForwardingControl.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"fwdCtrl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ForwardingMode.IsNull() && configChild.ForwardingMode.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"fwdMode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.LongName.IsNull() && configChild.LongName.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"longName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.MacPacketClassify.IsNull() && configChild.MacPacketClassify.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"macPacketClassify", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Mode.IsNull() && configChild.Mode.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.VrfName.IsNull() && configChild.VrfName.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"vrfName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.CrossConnect.IsNull() && configChild.CrossConnect.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"xConnect", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
 					}
-					break
+				}
+			}
+		}
+		for key := range state.VlanConfigurations {
+			if configChild, ok := config.VlanConfigurations[key]; ok {
+				stateChild := state.VlanConfigurations[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("l2VlanConfig.attributes.accEncap").String() == key {
+						if !stateChild.MacLearning.IsNull() && configChild.MacLearning.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2VlanConfig.attributes."+"vlanMacLearn", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
 				}
 			}
 		}

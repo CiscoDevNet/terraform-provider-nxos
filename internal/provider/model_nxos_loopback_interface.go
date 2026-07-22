@@ -246,68 +246,75 @@ func (data LoopbackInterface) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data LoopbackInterface) toBodyWithDeletes(ctx context.Context, state LoopbackInterface, config LoopbackInterface) nxos.Body {
+func (data LoopbackInterface) toBodyWithDeletes(ctx context.Context, state LoopbackInterface, config LoopbackInterface, importing bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
-	for stateKey := range state.LoopbackInterfaces {
-		if _, found := data.LoopbackInterfaces[stateKey]; !found {
-			stateChild := state.LoopbackInterfaces[stateKey]
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "l3LbRtdIf.attributes.rn", stateChild.getRn(stateKey))
-			deleteBody, _ = sjson.Set(deleteBody, "l3LbRtdIf.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
-		}
-	}
-	for di := range state.LoopbackInterfaces {
-		if _, found := data.LoopbackInterfaces[di]; !found {
-			continue
-		}
-		matchBodyPathdi := ""
-		for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-			if mv.Get("l3LbRtdIf.attributes.id").String() == di {
-				matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".l3LbRtdIf.children"
-				break
+	if !importing {
+		for stateKey := range state.LoopbackInterfaces {
+			if _, found := data.LoopbackInterfaces[stateKey]; !found {
+				stateChild := state.LoopbackInterfaces[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "l3LbRtdIf.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "l3LbRtdIf.attributes.status", "deleted")
+				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 			}
 		}
-		if matchBodyPathdi == "" {
-			continue
-		}
-	}
-	for key := range state.LoopbackInterfaces {
-		if configChild, ok := config.LoopbackInterfaces[key]; ok {
-			stateChild := state.LoopbackInterfaces[key]
-			_ = stateChild
-			_ = configChild
+		for di := range state.LoopbackInterfaces {
+			if _, found := data.LoopbackInterfaces[di]; !found {
+				continue
+			}
+			matchBodyPathdi := ""
 			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-				if mv.Get("l3LbRtdIf.attributes.id").String() == key {
-					if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l3LbRtdIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l3LbRtdIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if !stateChild.LinkLogging.IsNull() && configChild.LinkLogging.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l3LbRtdIf.attributes."+"linkLog", "DME_UNSET_PROPERTY_MARKER")
-					}
+				if mv.Get("l3LbRtdIf.attributes.id").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".l3LbRtdIf.children"
 					break
 				}
 			}
-			{
-				listChildPath := ""
+			if matchBodyPathdi == "" {
+				continue
+			}
+		}
+	}
+
+	if !importing {
+	}
+	if !importing {
+		for key := range state.LoopbackInterfaces {
+			if configChild, ok := config.LoopbackInterfaces[key]; ok {
+				stateChild := state.LoopbackInterfaces[key]
+				_ = stateChild
+				_ = configChild
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("l3LbRtdIf.attributes.id").String() == key {
-						listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".l3LbRtdIf.children"
+						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l3LbRtdIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l3LbRtdIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.LinkLogging.IsNull() && configChild.LinkLogging.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l3LbRtdIf.attributes."+"linkLog", "DME_UNSET_PROPERTY_MARKER")
+						}
 						break
 					}
 				}
-				if listChildPath != "" {
-					for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-						if sv.Get("nwRtVrfMbr").Exists() {
-							if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
-								body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nwRtVrfMbr.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-							}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("l3LbRtdIf.attributes.id").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".l3LbRtdIf.children"
 							break
+						}
+					}
+					if listChildPath != "" {
+						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
+							if sv.Get("nwRtVrfMbr").Exists() {
+								if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
+									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nwRtVrfMbr.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+								}
+								break
+							}
 						}
 					}
 				}

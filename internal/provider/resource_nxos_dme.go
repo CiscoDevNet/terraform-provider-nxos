@@ -231,7 +231,7 @@ func (r *DmeResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 			return
 		}
 
-		imp, diags := helpers.IsFlagImporting(ctx, req)
+		imp, diags := helpers.IsFlagImporting(ctx, req.Private)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}

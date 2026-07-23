@@ -2590,6 +2590,7 @@ child_classes:
                 type: single
                 tf_name: access_secondary
                 description: 'Host VLAN access port configurations for isolated or community.'
+                test_tags: [PVLAN]
                 attributes:
                   - nxos_name: primaryVlan
                     tf_name: access_secondary_primary_vlan
@@ -2607,6 +2608,7 @@ child_classes:
             type: single
             tf_name: trunk
             description: 'PVLAN Trunk configuration tables.'
+            test_tags: [PVLAN]
             attributes:
               - nxos_name: nativeVlan
                 tf_name: trunk_native_vlan

@@ -248,12 +248,16 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlans.vlan-100.association", "101-102"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.access_promiscuous_primary_vlan", "vlan-100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.access_promiscuous_secondary_vlans", "101-102"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.access_secondary_primary_vlan", "vlan-100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.access_secondary_secondary_vlan", "vlan-101"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_native_vlan", "vlan-10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_allowed_vlans", "1-4094"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_promiscuous_mappings.vlan-100.secondary_vlans", "101-102"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_secondary_associations.vlan-100.secondary_vlan", "vlan-101"))
+	if os.Getenv("PVLAN") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.access_secondary_primary_vlan", "vlan-100"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.access_secondary_secondary_vlan", "vlan-101"))
+	}
+	if os.Getenv("PVLAN") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_native_vlan", "vlan-10"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_allowed_vlans", "1-4094"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_promiscuous_mappings.vlan-100.secondary_vlans", "101-102"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_interfaces.eth1/9.trunk_secondary_associations.vlan-100.secondary_vlan", "vlan-101"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "pvlan_svis.vlan100.secondary_vlans", "101-102"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
@@ -668,20 +672,24 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config += `		"eth1/9" = {` + "\n"
 	config += `			access_promiscuous_primary_vlan = "vlan-100"` + "\n"
 	config += `			access_promiscuous_secondary_vlans = "101-102"` + "\n"
-	config += `			access_secondary_primary_vlan = "vlan-100"` + "\n"
-	config += `			access_secondary_secondary_vlan = "vlan-101"` + "\n"
-	config += `			trunk_native_vlan = "vlan-10"` + "\n"
-	config += `			trunk_allowed_vlans = "1-4094"` + "\n"
-	config += `			trunk_promiscuous_mappings = {` + "\n"
-	config += `				"vlan-100" = {` + "\n"
-	config += `					secondary_vlans = "101-102"` + "\n"
-	config += `				}` + "\n"
-	config += `			}` + "\n"
-	config += `			trunk_secondary_associations = {` + "\n"
-	config += `				"vlan-100" = {` + "\n"
-	config += `					secondary_vlan = "vlan-101"` + "\n"
-	config += `				}` + "\n"
-	config += `			}` + "\n"
+	if os.Getenv("PVLAN") != "" {
+		config += `			access_secondary_primary_vlan = "vlan-100"` + "\n"
+		config += `			access_secondary_secondary_vlan = "vlan-101"` + "\n"
+	}
+	if os.Getenv("PVLAN") != "" {
+		config += `			trunk_native_vlan = "vlan-10"` + "\n"
+		config += `			trunk_allowed_vlans = "1-4094"` + "\n"
+		config += `			trunk_promiscuous_mappings = {` + "\n"
+		config += `				"vlan-100" = {` + "\n"
+		config += `					secondary_vlans = "101-102"` + "\n"
+		config += `				}` + "\n"
+		config += `			}` + "\n"
+		config += `			trunk_secondary_associations = {` + "\n"
+		config += `				"vlan-100" = {` + "\n"
+		config += `					secondary_vlan = "vlan-101"` + "\n"
+		config += `				}` + "\n"
+		config += `			}` + "\n"
+	}
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	pvlan_svis = {` + "\n"

@@ -406,13 +406,14 @@ func HasNonIdAttrs(attrs []YamlConfigAttribute) bool {
 }
 
 // NeedsPlanItem returns true if any child in the list needs a planItem variable
-// for delete detection (list children always need it; single children need it only if they have child_classes).
+// for delete detection (list children always need it; single children need it only if a
+// list-type child exists somewhere in their descendant tree).
 func NeedsPlanItem(children []YamlConfigChildClass) bool {
 	for _, c := range children {
 		if c.Type == "list" {
 			return true
 		}
-		if c.Type == "single" && len(c.ChildClasses) > 0 {
+		if c.Type == "single" && NeedsPlanItem(c.ChildClasses) {
 			return true
 		}
 	}

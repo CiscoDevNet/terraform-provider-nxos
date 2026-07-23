@@ -71,8 +71,8 @@ func TestAccDataSourceNxosPIM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_range_none", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rp_policy_name", "RP"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rp_policy_description", "Static_RP_Policy"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rps.1.2.3.4.group_lists.224.0.0.0/4.bidir", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rps.1.2.3.4.group_lists.224.0.0.0/4.override", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rps.1.2.3.4.group_lists.225.0.0.0/24.bidir", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rps.1.2.3.4.group_lists.225.0.0.0/24.override", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_local_interface", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_source_interface", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_description", "Anycast_RP"))
@@ -167,7 +167,7 @@ func testAccDataSourceNxosPIMConfig() string {
 	config += `			static_rps = {` + "\n"
 	config += `				"1.2.3.4" = {` + "\n"
 	config += `					group_lists = {` + "\n"
-	config += `						"224.0.0.0/4" = {` + "\n"
+	config += `						"225.0.0.0/24" = {` + "\n"
 	config += `							bidir = true` + "\n"
 	config += `							override = true` + "\n"
 	config += `						}` + "\n"

@@ -375,7 +375,7 @@ child_classes:
                         type: String
                         id: true
                         description: 'Group List address information.'
-                        example: 224.0.0.0/4
+                        example: 225.0.0.0/24
                       - nxos_name: bidir
                         tf_name: bidir
                         type: Bool

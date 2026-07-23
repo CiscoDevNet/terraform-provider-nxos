@@ -79,7 +79,7 @@ resource "nxos_pim" "example" {
       static_rps = {
         "1.2.3.4" = {
           group_lists = {
-            "224.0.0.0/4" = {
+            "225.0.0.0/24" = {
               bidir    = true
               override = true
             }

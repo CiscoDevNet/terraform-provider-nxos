@@ -1,0 +1,1 @@
+- Add `nxos_object_group` resource and data source to manage IPv4 address, IPv6 address, and port object groups (and their members) referenced by ACLs

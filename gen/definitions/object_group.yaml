@@ -1,0 +1,275 @@
+---
+name: Object Group
+class_name: aclEntity
+dn: sys/acl
+no_delete: true
+ds_description: This data source can read IPv4 address, IPv6 address, and port object groups (and their members) used by ACLs on NX-OS devices.
+res_description: This resource can manage IPv4 address, IPv6 address, and port object groups (and their members) used by ACLs on NX-OS devices. Object groups are referenced from ACL entries via the `source_address_group`/`destination_address_group` and `source_port_group`/`destination_port_group` attributes of the `nxos_access_list` resource.
+doc_path: Security%20and%20Policing/acl:Entity/
+doc_category: Security
+child_classes:
+  - class_name: ipv4aclAF
+    doc_path: Security%20and%20Policing/ipv4acl:AF/
+    rn: ipv4
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ipv4aclAddrGroup
+        doc_path: Security%20and%20Policing/ipv4acl:AddrGroup/
+        rn: oName-[%s]
+        type: list
+        tf_name: ipv4_address_object_groups
+        description: 'List of IPv4 address object groups.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of the IPv4 address object group.'
+            example: AG1
+        child_classes:
+          - class_name: ipv4aclAddrMember
+            doc_path: Security%20and%20Policing/ipv4acl:AddrMember/
+            rn: seq-%v
+            type: list
+            tf_name: members
+            description: 'List of address members.'
+            status_replace: true
+            attributes:
+              - nxos_name: seqNum
+                tf_name: sequence_number
+                type: Int64
+                id: true
+                min_int: 0
+                max_int: 4294967295
+                description: "Sequence number."
+                example: 10
+              - nxos_name: prefix
+                tf_name: prefix
+                type: String
+                description: "IPv4 host address or network prefix."
+                example: 192.168.1.0
+              - nxos_name: prefixLength
+                tf_name: prefix_length
+                type: String
+                description: "IPv4 prefix length. Mutually exclusive with `prefix_mask`."
+                example: 24
+              - nxos_name: prefixMask
+                tf_name: prefix_mask
+                type: String
+                description: "IPv4 wildcard mask. Mutually exclusive with `prefix_length`."
+                exclude_test: true
+                example: 0.0.0.0
+  - class_name: ipv6aclAF
+    doc_path: Security%20and%20Policing/ipv6acl:AF/
+    rn: ipv6
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ipv6aclAddrGroup
+        doc_path: Security%20and%20Policing/ipv6acl:AddrGroup/
+        rn: oName-[%s]
+        type: list
+        tf_name: ipv6_address_object_groups
+        description: 'List of IPv6 address object groups.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of the IPv6 address object group.'
+            example: AG6
+        child_classes:
+          - class_name: ipv6aclAddrMember
+            doc_path: Security%20and%20Policing/ipv6acl:AddrMember/
+            rn: seq-%v
+            type: list
+            tf_name: members
+            description: 'List of address members.'
+            status_replace: true
+            attributes:
+              - nxos_name: seqNum
+                tf_name: sequence_number
+                type: Int64
+                id: true
+                min_int: 0
+                max_int: 4294967295
+                description: "Sequence number."
+                example: 10
+              - nxos_name: prefix
+                tf_name: prefix
+                type: String
+                description: "IPv6 host address or network prefix."
+                example: "2001:db8::"
+              - nxos_name: prefixLength
+                tf_name: prefix_length
+                type: String
+                description: "IPv6 prefix length. Mutually exclusive with `prefix_mask`."
+                example: 64
+              - nxos_name: prefixMask
+                tf_name: prefix_mask
+                type: String
+                description: "IPv6 prefix mask. Mutually exclusive with `prefix_length`."
+                exclude_test: true
+                example: "ffff:ffff:ffff:ffff::"
+  - class_name: aclPortGroup
+    doc_path: Security%20and%20Policing/acl:PortGroup/
+    rn: oName-[%s]
+    type: list
+    tf_name: port_object_groups
+    description: 'List of port object groups.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Name of the port object group.'
+        example: PG1
+    child_classes:
+      - class_name: aclPortMember
+        doc_path: Security%20and%20Policing/acl:PortMember/
+        rn: seq-%v
+        type: list
+        tf_name: members
+        description: 'List of port members.'
+        status_replace: true
+        attributes:
+          - nxos_name: seqNum
+            tf_name: sequence_number
+            type: Int64
+            id: true
+            min_int: 0
+            max_int: 4294967295
+            description: "Sequence number."
+            example: 10
+          - nxos_name: portOp
+            tf_name: port_operator
+            type: String
+            description: "Port operator."
+            enum_values:
+              - none
+              - lt
+              - gt
+              - eq
+              - neq
+              - range
+            example: eq
+          - nxos_name: port1
+            tf_name: port_1
+            type: String
+            enum_values:
+              - echo
+              - discard
+              - daytime
+              - chargen
+              - ftp-data
+              - ftp
+              - telnet
+              - smtp
+              - time
+              - nameserver
+              - whois
+              - tacacs
+              - domain
+              - bootps
+              - bootpc
+              - tftp
+              - gopher
+              - finger
+              - www
+              - hostname
+              - pop2
+              - pop3
+              - sunrpc
+              - ident
+              - nntp
+              - ntp
+              - netbios-ns
+              - netbios-dgm
+              - netbios-ss
+              - snmp
+              - snmptrap
+              - xdmcp
+              - bgp
+              - irc
+              - dnsix
+              - mobile-ip
+              - pim-auto-rp
+              - isakmp
+              - biff
+              - exec
+              - who
+              - login
+              - syslog
+              - cmd
+              - lpd
+              - talk
+              - rip
+              - uucp
+              - klogin
+              - kshell
+              - drip
+              - non500-isakmp
+            allow_non_enum_values: true
+            description: "First port number or name."
+            example: 443
+          - nxos_name: port2
+            tf_name: port_2
+            type: String
+            enum_values:
+              - echo
+              - discard
+              - daytime
+              - chargen
+              - ftp-data
+              - ftp
+              - telnet
+              - smtp
+              - time
+              - nameserver
+              - whois
+              - tacacs
+              - domain
+              - bootps
+              - bootpc
+              - tftp
+              - gopher
+              - finger
+              - www
+              - hostname
+              - pop2
+              - pop3
+              - sunrpc
+              - ident
+              - nntp
+              - ntp
+              - netbios-ns
+              - netbios-dgm
+              - netbios-ss
+              - snmp
+              - snmptrap
+              - xdmcp
+              - bgp
+              - irc
+              - dnsix
+              - mobile-ip
+              - pim-auto-rp
+              - isakmp
+              - biff
+              - exec
+              - who
+              - login
+              - syslog
+              - cmd
+              - lpd
+              - talk
+              - rip
+              - uucp
+              - klogin
+              - kshell
+              - drip
+              - non500-isakmp
+            allow_non_enum_values: true
+            description: "Second port number or name. Only used when `port_operator` is `range`."
+            exclude_test: true
+            example: 8080

@@ -38,6 +38,10 @@ func TestAccDataSourceNxosBFD(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "hardware_offload", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "slow_interval", "3000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "startup_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "detect_multiplier", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "echo_receive_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "min_receive_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "min_transmit_interval", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.echo_admin_state", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.start_timeout", "10"))
@@ -114,6 +118,10 @@ func testAccDataSourceNxosBFDConfig() string {
 	config += `	hardware_offload = "enable"` + "\n"
 	config += `	slow_interval = 3000` + "\n"
 	config += `	startup_interval = 10` + "\n"
+	config += `	detect_multiplier = 5` + "\n"
+	config += `	echo_receive_interval = 100` + "\n"
+	config += `	min_receive_interval = 100` + "\n"
+	config += `	min_transmit_interval = 100` + "\n"
 	config += `	interfaces = {` + "\n"
 	config += `		"vlan10" = {` + "\n"
 	config += `			admin_state = "enabled"` + "\n"

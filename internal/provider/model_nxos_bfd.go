@@ -37,16 +37,20 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type BFD struct {
-	Device             types.String             `tfsdk:"device"`
-	Dn                 types.String             `tfsdk:"id"`
-	AdminState         types.String             `tfsdk:"admin_state"`
-	InstanceAdminState types.String             `tfsdk:"instance_admin_state"`
-	InstanceControl    types.String             `tfsdk:"instance_control"`
-	EchoInterface      types.String             `tfsdk:"echo_interface"`
-	HardwareOffload    types.String             `tfsdk:"hardware_offload"`
-	SlowInterval       types.Int64              `tfsdk:"slow_interval"`
-	StartupInterval    types.Int64              `tfsdk:"startup_interval"`
-	Interfaces         map[string]BFDInterfaces `tfsdk:"interfaces"`
+	Device              types.String             `tfsdk:"device"`
+	Dn                  types.String             `tfsdk:"id"`
+	AdminState          types.String             `tfsdk:"admin_state"`
+	InstanceAdminState  types.String             `tfsdk:"instance_admin_state"`
+	InstanceControl     types.String             `tfsdk:"instance_control"`
+	EchoInterface       types.String             `tfsdk:"echo_interface"`
+	HardwareOffload     types.String             `tfsdk:"hardware_offload"`
+	SlowInterval        types.Int64              `tfsdk:"slow_interval"`
+	StartupInterval     types.Int64              `tfsdk:"startup_interval"`
+	DetectMultiplier    types.Int64              `tfsdk:"detect_multiplier"`
+	EchoReceiveInterval types.Int64              `tfsdk:"echo_receive_interval"`
+	MinReceiveInterval  types.Int64              `tfsdk:"min_receive_interval"`
+	MinTransmitInterval types.Int64              `tfsdk:"min_transmit_interval"`
+	Interfaces          map[string]BFDInterfaces `tfsdk:"interfaces"`
 }
 
 type BFDInterfaces struct {
@@ -150,6 +154,22 @@ func (data BFD) toBody(config BFD) nxos.Body {
 		_ = nestedChildrenPath
 		prevBody := body
 		body = childBody
+		attrs = "{}"
+		if !data.DetectMultiplier.IsUnknown() && !data.DetectMultiplier.IsNull() && !config.DetectMultiplier.IsNull() {
+			attrs, _ = sjson.Set(attrs, "detectMult", strconv.FormatInt(data.DetectMultiplier.ValueInt64(), 10))
+		}
+		if !data.EchoReceiveInterval.IsUnknown() && !data.EchoReceiveInterval.IsNull() && !config.EchoReceiveInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "echoRxIntvl", strconv.FormatInt(data.EchoReceiveInterval.ValueInt64(), 10))
+		}
+		if !data.MinReceiveInterval.IsUnknown() && !data.MinReceiveInterval.IsNull() && !config.MinReceiveInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "minRxIntvl", strconv.FormatInt(data.MinReceiveInterval.ValueInt64(), 10))
+		}
+		if !data.MinTransmitInterval.IsUnknown() && !data.MinTransmitInterval.IsNull() && !config.MinTransmitInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "minTxIntvl", strconv.FormatInt(data.MinTransmitInterval.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bfdKaP.attributes", attrs)
+		}
 		for key, child := range data.Interfaces {
 			configChild, configChildOk := config.Interfaces[key]
 			_ = configChild
@@ -263,6 +283,23 @@ func (data *BFD) fromBody(res gjson.Result) {
 		data.HardwareOffload = types.StringValue(rbfdInst.Get("bfdInst.attributes.hwOffload").String())
 		data.SlowInterval = types.Int64Value(rbfdInst.Get("bfdInst.attributes.slowIntvl").Int())
 		data.StartupInterval = types.Int64Value(rbfdInst.Get("bfdInst.attributes.startupIntvl").Int())
+		{
+			var rbfdKaP gjson.Result
+			rbfdInst.Get("bfdInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("bfdKaP.attributes.rn").String()
+					if rnValue == "ka" {
+						rbfdKaP = v
+						return false
+					}
+					return true
+				},
+			)
+			data.DetectMultiplier = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.detectMult").Int())
+			data.EchoReceiveInterval = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.echoRxIntvl").Int())
+			data.MinReceiveInterval = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.minRxIntvl").Int())
+			data.MinTransmitInterval = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.minTxIntvl").Int())
+		}
 		rbfdInst.Get("bfdInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -376,6 +413,39 @@ func (data *BFD) updateFromBody(res gjson.Result) {
 		data.StartupInterval = types.Int64Value(rbfdInst.Get("bfdInst.attributes.startupIntvl").Int())
 	} else {
 		data.StartupInterval = types.Int64Null()
+	}
+	{
+		var rbfdKaP gjson.Result
+		rbfdInst.Get("bfdInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("bfdKaP.attributes.rn").String()
+				if rnValue == "ka" {
+					rbfdKaP = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.DetectMultiplier.IsNull() {
+			data.DetectMultiplier = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.detectMult").Int())
+		} else {
+			data.DetectMultiplier = types.Int64Null()
+		}
+		if !data.EchoReceiveInterval.IsNull() {
+			data.EchoReceiveInterval = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.echoRxIntvl").Int())
+		} else {
+			data.EchoReceiveInterval = types.Int64Null()
+		}
+		if !data.MinReceiveInterval.IsNull() {
+			data.MinReceiveInterval = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.minRxIntvl").Int())
+		} else {
+			data.MinReceiveInterval = types.Int64Null()
+		}
+		if !data.MinTransmitInterval.IsNull() {
+			data.MinTransmitInterval = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.minTxIntvl").Int())
+		} else {
+			data.MinTransmitInterval = types.Int64Null()
+		}
 	}
 	for key, item := range data.Interfaces {
 		var rbfdIf gjson.Result
@@ -582,6 +652,23 @@ func (data BFD) toBodyWithDeletes(ctx context.Context, state BFD, config BFD, im
 				}
 			}
 			if singleChildPath != "" {
+				for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+					if sv.Get("bfdKaP").Exists() {
+						if !state.DetectMultiplier.IsNull() && config.DetectMultiplier.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".bfdKaP.attributes."+"detectMult", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !state.EchoReceiveInterval.IsNull() && config.EchoReceiveInterval.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".bfdKaP.attributes."+"echoRxIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !state.MinReceiveInterval.IsNull() && config.MinReceiveInterval.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".bfdKaP.attributes."+"minRxIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !state.MinTransmitInterval.IsNull() && config.MinTransmitInterval.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".bfdKaP.attributes."+"minTxIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
 				for key := range state.Interfaces {
 					if configChild, ok := config.Interfaces[key]; ok {
 						stateChild := state.Interfaces[key]

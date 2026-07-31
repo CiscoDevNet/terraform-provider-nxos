@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.
   API Documentation
-  bfdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:Entity/bfdInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:Inst/bfdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:If/bfdIfKaP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:IfKaP/bfdAuthP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:AuthP/
+  bfdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:Entity/bfdInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:Inst/bfdKaP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:KaP/bfdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:If/bfdIfKaP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:IfKaP/bfdAuthP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:AuthP/
 ---
 
 # nxos_bfd (Data Source)
@@ -16,6 +16,7 @@ This data source can read the BFD configuration on NX-OS devices, including BFD 
 
 - [bfdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:Entity/)
 - [bfdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:Inst/)
+- [bfdKaP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:KaP/)
 - [bfdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:If/)
 - [bfdIfKaP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:IfKaP/)
 - [bfdAuthP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:AuthP/)
@@ -37,13 +38,17 @@ data "nxos_bfd" "example" {
 ### Read-Only
 
 - `admin_state` (String) The administrative state of the object or policy.
+- `detect_multiplier` (Number) Detection Multiplier. This is the desired detection time multiplier for BFD packets on the local system.
 - `echo_interface` (String) Echo Interface to be used for BFD echo frames.
+- `echo_receive_interval` (Number) Echo Rx Interval. This is the minimum interval, in ms, between received BFD echo packets that this system is capable of supporting.
 - `hardware_offload` (String) Enable or Disable offloading of BFD sessions to hardware.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
 - `instance_control` (String) The control state.
 - `interfaces` (Attributes Map) List of BFD interfaces.
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--interfaces))
+- `min_receive_interval` (Number) Required Minimum RX Interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.
+- `min_transmit_interval` (Number) Desired Minimum TX Interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.
 - `slow_interval` (Number) Slow timer Interval.
 - `startup_interval` (Number) Startup timer Interval.
 

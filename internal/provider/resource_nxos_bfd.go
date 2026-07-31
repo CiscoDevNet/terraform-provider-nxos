@@ -64,7 +64,7 @@ func (r *BFDResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.").AddApiDocumentation("bfdEntity", "Routing%20and%20Forwarding/bfd:Entity/", []string{"bfdInst", "bfdIf", "bfdIfKaP", "bfdAuthP"}, []string{"Routing%20and%20Forwarding/bfd:Inst/", "Routing%20and%20Forwarding/bfd:If/", "Routing%20and%20Forwarding/bfd:IfKaP/", "Routing%20and%20Forwarding/bfd:AuthP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.").AddApiDocumentation("bfdEntity", "Routing%20and%20Forwarding/bfd:Entity/", []string{"bfdInst", "bfdKaP", "bfdIf", "bfdIfKaP", "bfdAuthP"}, []string{"Routing%20and%20Forwarding/bfd:Inst/", "Routing%20and%20Forwarding/bfd:KaP/", "Routing%20and%20Forwarding/bfd:If/", "Routing%20and%20Forwarding/bfd:IfKaP/", "Routing%20and%20Forwarding/bfd:AuthP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -119,6 +119,34 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 60),
+				},
+			},
+			"detect_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Detection Multiplier. This is the desired detection time multiplier for BFD packets on the local system.").AddIntegerRangeDescription(1, 50).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 50),
+				},
+			},
+			"echo_receive_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Echo Rx Interval. This is the minimum interval, in ms, between received BFD echo packets that this system is capable of supporting.").AddIntegerRangeDescription(0, 999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 999),
+				},
+			},
+			"min_receive_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Required Minimum RX Interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.").AddIntegerRangeDescription(10, 999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 999),
+				},
+			},
+			"min_transmit_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Desired Minimum TX Interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.").AddIntegerRangeDescription(10, 999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 999),
 				},
 			},
 			"interfaces": schema.MapNestedAttribute{
@@ -388,7 +416,7 @@ func (r *BFDResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "bfdInst,bfdIf,bfdIfKaP,bfdAuthP")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "bfdInst,bfdKaP,bfdIf,bfdIfKaP,bfdAuthP")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

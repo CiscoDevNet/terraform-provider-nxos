@@ -1,11 +1,15 @@
 resource "nxos_bfd" "example" {
-  admin_state          = "enabled"
-  instance_admin_state = "enabled"
-  instance_control     = "stateful-ha"
-  echo_interface       = "lo10"
-  hardware_offload     = "enable"
-  slow_interval        = 3000
-  startup_interval     = 10
+  admin_state           = "enabled"
+  instance_admin_state  = "enabled"
+  instance_control      = "stateful-ha"
+  echo_interface        = "lo10"
+  hardware_offload      = "enable"
+  slow_interval         = 3000
+  startup_interval      = 10
+  detect_multiplier     = 5
+  echo_receive_interval = 100
+  min_receive_interval  = 100
+  min_transmit_interval = 100
   interfaces = {
     "vlan10" = {
       admin_state            = "enabled"

@@ -57,7 +57,7 @@ func (d *BFDDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.").AddApiDocumentation("bfdEntity", "Routing%20and%20Forwarding/bfd:Entity/", []string{"bfdInst", "bfdIf", "bfdIfKaP", "bfdAuthP"}, []string{"Routing%20and%20Forwarding/bfd:Inst/", "Routing%20and%20Forwarding/bfd:If/", "Routing%20and%20Forwarding/bfd:IfKaP/", "Routing%20and%20Forwarding/bfd:AuthP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.").AddApiDocumentation("bfdEntity", "Routing%20and%20Forwarding/bfd:Entity/", []string{"bfdInst", "bfdKaP", "bfdIf", "bfdIfKaP", "bfdAuthP"}, []string{"Routing%20and%20Forwarding/bfd:Inst/", "Routing%20and%20Forwarding/bfd:KaP/", "Routing%20and%20Forwarding/bfd:If/", "Routing%20and%20Forwarding/bfd:IfKaP/", "Routing%20and%20Forwarding/bfd:AuthP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -94,6 +94,22 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"startup_interval": schema.Int64Attribute{
 				MarkdownDescription: "Startup timer Interval.",
+				Computed:            true,
+			},
+			"detect_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Detection Multiplier. This is the desired detection time multiplier for BFD packets on the local system.",
+				Computed:            true,
+			},
+			"echo_receive_interval": schema.Int64Attribute{
+				MarkdownDescription: "Echo Rx Interval. This is the minimum interval, in ms, between received BFD echo packets that this system is capable of supporting.",
+				Computed:            true,
+			},
+			"min_receive_interval": schema.Int64Attribute{
+				MarkdownDescription: "Required Minimum RX Interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.",
+				Computed:            true,
+			},
+			"min_transmit_interval": schema.Int64Attribute{
+				MarkdownDescription: "Desired Minimum TX Interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.",
 				Computed:            true,
 			},
 			"interfaces": schema.MapNestedAttribute{
@@ -226,7 +242,7 @@ func (d *BFDDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "bfdInst,bfdIf,bfdIfKaP,bfdAuthP")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "bfdInst,bfdKaP,bfdIf,bfdIfKaP,bfdAuthP")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

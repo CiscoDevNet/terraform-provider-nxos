@@ -7,6 +7,22 @@ description: |-
 
 # Changelog
 
+## 0.14.0
+
+- Add IPv4 address, IPv6 address, and port object group (and their members) configuration to `nxos_access_list` resource and data source
+- Add `nxos_igmp_snooping` resource and data source (global IGMP snooping configuration including VXLAN snooping, NVE static router port, querier, opt-flood, routing, and stateful-HA controls)
+- Add SSH source interface configuration (per VRF) to `nxos_system` resource and data source
+- Add FTP source interface configuration (per VRF) to `nxos_system` resource and data source
+- Add AES password encryption (`feature password encryption aes`) configuration to `nxos_system` resource and data source
+- Add ACL logging configuration (match log level, cache entries, interval, threshold, detailed, include-mac, include-sgt) to `nxos_system` resource and data source
+- Add Private VLAN (PVLAN) configuration (VLAN type/association, per-interface promiscuous/host/trunk mappings, and SVI secondary VLAN propagation) to `nxos_system` resource and data source
+- Add `vlan configuration` (per-VLAN MAC learning) support to `nxos_bridge_domain` resource and data source
+- Fix issue where importing a resource that manages multiple objects (e.g. `nxos_physical_interface`, `nxos_port_channel_interface`, `nxos_system`) could cause the next apply to reset objects, attributes, or entries that were never declared in configuration, which could fail outright for objects NX-OS doesn't allow configuring directly, such as physical interfaces that are port-channel members
+- Add a warning to the first plan/apply after importing a resource, noting that entries or attributes shown as removed are expected and will not change anything on the device
+- Fix the "Importing Resources" guide and every affected resource's generated string-based import example/docs, which showed an empty `id` value that Terraform's `import` block does not accept
+- Mark `password_type` attribute on `nxos_bgp` peers and interface_peers as write-only to prevent perpetual drift when the device round-trips the value differently than supplied
+- Mark `key_encryption` and `monitoring_password_type` attributes on `nxos_user_management` tacacs_providers as write-only for the same reason
+
 ## 0.13.1
 
 - Fix issue where removing an optional attribute from the configuration would not reset the value on the device during updates

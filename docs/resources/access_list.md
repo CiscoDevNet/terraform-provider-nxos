@@ -3,14 +3,14 @@
 page_title: "nxos_access_list Resource - terraform-provider-nxos"
 subcategory: "Security"
 description: |-
-  This resource can manage IPv4 and IPv6 access control lists (ACLs) on NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports applying ACLs to interfaces in ingress or egress direction.
+  This resource can manage IPv4 and IPv6 access control lists (ACLs) on NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports applying ACLs to interfaces in ingress or egress direction, as well as managing IPv4 address, IPv6 address, and port object groups (and their members) referenced from ACL entries via the source_address_group/destination_address_group and source_port_group/destination_port_group attributes.
   API Documentation
-  aclEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Entity/ipv4aclAF https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AF/ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACL/ipv4aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACE/aclPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/aclIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/ipv6aclAF https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:AF/ipv6aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:ACL/ipv6aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:ACE/aclPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/aclIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/
+  aclEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Entity/ipv4aclAF https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AF/ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACL/ipv4aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACE/ipv4aclAddrGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AddrGroup/ipv4aclAddrMember https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AddrMember/aclPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/aclIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/ipv6aclAF https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:AF/ipv6aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:ACL/ipv6aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:ACE/ipv6aclAddrGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:AddrGroup/ipv6aclAddrMember https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:AddrMember/aclPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/aclIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclVty https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclPortGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:PortGroup/aclPortMember https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:PortMember/
 ---
 
 # nxos_access_list (Resource)
 
-This resource can manage IPv4 and IPv6 access control lists (ACLs) on NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports applying ACLs to interfaces in ingress or egress direction.
+This resource can manage IPv4 and IPv6 access control lists (ACLs) on NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports applying ACLs to interfaces in ingress or egress direction, as well as managing IPv4 address, IPv6 address, and port object groups (and their members) referenced from ACL entries via the `source_address_group`/`destination_address_group` and `source_port_group`/`destination_port_group` attributes.
 
 ### API Documentation
 
@@ -18,6 +18,8 @@ This resource can manage IPv4 and IPv6 access control lists (ACLs) on NX-OS devi
 - [ipv4aclAF](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AF/)
 - [ipv4aclACL](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACL/)
 - [ipv4aclACE](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACE/)
+- [ipv4aclAddrGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AddrGroup/)
+- [ipv4aclAddrMember](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AddrMember/)
 - [aclPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/)
 - [aclIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/)
 - [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/)
@@ -32,6 +34,8 @@ This resource can manage IPv4 and IPv6 access control lists (ACLs) on NX-OS devi
 - [ipv6aclAF](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:AF/)
 - [ipv6aclACL](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:ACL/)
 - [ipv6aclACE](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:ACE/)
+- [ipv6aclAddrGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:AddrGroup/)
+- [ipv6aclAddrMember](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv6acl:AddrMember/)
 - [aclPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/)
 - [aclIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/)
 - [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/)
@@ -43,6 +47,8 @@ This resource can manage IPv4 and IPv6 access control lists (ACLs) on NX-OS devi
 - [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/)
 - [aclVty](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Vty/)
 - [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/)
+- [aclPortGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:PortGroup/)
+- [aclPortMember](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:PortMember/)
 
 ## Example Usage
 
@@ -92,6 +98,16 @@ resource "nxos_access_list" "example" {
           telemetry_path            = false
           telemetry_queue           = false
           type_of_service           = 0
+        }
+      }
+    }
+  }
+  ipv4_address_object_groups = {
+    "AG1" = {
+      members = {
+        "10" = {
+          prefix        = "192.168.1.0"
+          prefix_length = "24"
         }
       }
     }
@@ -153,6 +169,16 @@ resource "nxos_access_list" "example" {
       }
     }
   }
+  ipv6_address_object_groups = {
+    "AG6" = {
+      members = {
+        "10" = {
+          prefix        = "2001:db8::"
+          prefix_length = "64"
+        }
+      }
+    }
+  }
   ipv6_ingress_interfaces = {
     "eth1/10" = {
       access_list_name = "ACL2"
@@ -165,6 +191,16 @@ resource "nxos_access_list" "example" {
     }
   }
   ipv6_egress_vty_access_list_name = "ACL2"
+  port_object_groups = {
+    "PG1" = {
+      members = {
+        "10" = {
+          port_operator = "eq"
+          port_1        = "443"
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -182,14 +218,20 @@ resource "nxos_access_list" "example" {
 - `ingress_interfaces` (Attributes Map) List of interfaces with IPv4 ingress access list policy.
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--ingress_interfaces))
 - `ingress_vty_access_list_name` (String) Access Control List name.
+- `ipv4_address_object_groups` (Attributes Map) List of IPv4 address object groups.
+  - Map key: `name` - Name of the IPv4 address object group. (see [below for nested schema](#nestedatt--ipv4_address_object_groups))
 - `ipv6_access_lists` (Attributes Map) List of IPv6 Access Lists.
   - Map key: `name` - Name of Access lists. (see [below for nested schema](#nestedatt--ipv6_access_lists))
+- `ipv6_address_object_groups` (Attributes Map) List of IPv6 address object groups.
+  - Map key: `name` - Name of the IPv6 address object group. (see [below for nested schema](#nestedatt--ipv6_address_object_groups))
 - `ipv6_egress_interfaces` (Attributes Map) List of interfaces with IPv6 egress access list policy.
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--ipv6_egress_interfaces))
 - `ipv6_egress_vty_access_list_name` (String) Access Control List name.
 - `ipv6_ingress_interfaces` (Attributes Map) List of interfaces with IPv6 ingress access list policy.
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--ipv6_ingress_interfaces))
 - `ipv6_ingress_vty_access_list_name` (String) Access Control List name.
+- `port_object_groups` (Attributes Map) List of port object groups.
+  - Map key: `name` - Name of the port object group. (see [below for nested schema](#nestedatt--port_object_groups))
 
 ### Read-Only
 
@@ -316,6 +358,26 @@ Optional:
 - `access_list_name` (String) Access Control List name.
 
 
+<a id="nestedatt--ipv4_address_object_groups"></a>
+### Nested Schema for `ipv4_address_object_groups`
+
+Optional:
+
+- `members` (Attributes Map) List of address members.
+  - Map key: `sequence_number` - Sequence number.
+  - Key range: `0`-`4294967295` (see [below for nested schema](#nestedatt--ipv4_address_object_groups--members))
+
+<a id="nestedatt--ipv4_address_object_groups--members"></a>
+### Nested Schema for `ipv4_address_object_groups.members`
+
+Optional:
+
+- `prefix` (String) IPv4 host address or network prefix.
+- `prefix_length` (String) IPv4 prefix length. Mutually exclusive with `prefix_mask`.
+- `prefix_mask` (String) IPv4 wildcard mask. Mutually exclusive with `prefix_length`.
+
+
+
 <a id="nestedatt--ipv6_access_lists"></a>
 ### Nested Schema for `ipv6_access_lists`
 
@@ -417,6 +479,26 @@ Optional:
 
 
 
+<a id="nestedatt--ipv6_address_object_groups"></a>
+### Nested Schema for `ipv6_address_object_groups`
+
+Optional:
+
+- `members` (Attributes Map) List of address members.
+  - Map key: `sequence_number` - Sequence number.
+  - Key range: `0`-`4294967295` (see [below for nested schema](#nestedatt--ipv6_address_object_groups--members))
+
+<a id="nestedatt--ipv6_address_object_groups--members"></a>
+### Nested Schema for `ipv6_address_object_groups.members`
+
+Optional:
+
+- `prefix` (String) IPv6 host address or network prefix.
+- `prefix_length` (String) IPv6 prefix length. Mutually exclusive with `prefix_mask`.
+- `prefix_mask` (String) IPv6 prefix mask. Mutually exclusive with `prefix_length`.
+
+
+
 <a id="nestedatt--ipv6_egress_interfaces"></a>
 ### Nested Schema for `ipv6_egress_interfaces`
 
@@ -431,6 +513,28 @@ Optional:
 Optional:
 
 - `access_list_name` (String) Access Control List name.
+
+
+<a id="nestedatt--port_object_groups"></a>
+### Nested Schema for `port_object_groups`
+
+Optional:
+
+- `members` (Attributes Map) List of port members.
+  - Map key: `sequence_number` - Sequence number.
+  - Key range: `0`-`4294967295` (see [below for nested schema](#nestedatt--port_object_groups--members))
+
+<a id="nestedatt--port_object_groups--members"></a>
+### Nested Schema for `port_object_groups.members`
+
+Optional:
+
+- `port_1` (String) First port number or name.
+  - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
+- `port_2` (String) Second port number or name. Only used when `port_operator` is `range`.
+  - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
+- `port_operator` (String) Port operator.
+  - Choices: `none`, `lt`, `gt`, `eq`, `neq`, `range`
 
 ## Import
 

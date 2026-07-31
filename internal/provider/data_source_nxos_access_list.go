@@ -57,7 +57,7 @@ func (d *AccessListDataSource) Metadata(_ context.Context, req datasource.Metada
 func (d *AccessListDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read IPv4 and IPv6 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.").AddApiDocumentation("aclEntity", "Security%20and%20Policing/acl:Entity/", []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "ipv6aclAF", "ipv6aclACL", "ipv6aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/ipv6acl:AF/", "Security%20and%20Policing/ipv6acl:ACL/", "Security%20and%20Policing/ipv6acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read IPv4 and IPv6 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction, as well as IPv4 address, IPv6 address, and port object groups (and their members) referenced by ACL entries.").AddApiDocumentation("aclEntity", "Security%20and%20Policing/acl:Entity/", []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "ipv4aclAddrGroup", "ipv4aclAddrMember", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "ipv6aclAF", "ipv6aclACL", "ipv6aclACE", "ipv6aclAddrGroup", "ipv6aclAddrMember", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "aclPortGroup", "aclPortMember"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/ipv4acl:AddrGroup/", "Security%20and%20Policing/ipv4acl:AddrMember/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/ipv6acl:AF/", "Security%20and%20Policing/ipv6acl:ACL/", "Security%20and%20Policing/ipv6acl:ACE/", "Security%20and%20Policing/ipv6acl:AddrGroup/", "Security%20and%20Policing/ipv6acl:AddrMember/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:PortGroup/", "Security%20and%20Policing/acl:PortMember/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -320,6 +320,34 @@ func (d *AccessListDataSource) Schema(ctx context.Context, req datasource.Schema
 									},
 									"type_of_service": schema.Int64Attribute{
 										MarkdownDescription: "Type of service.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ipv4_address_object_groups": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 address object groups.\n  - Map key: `name` - Name of the IPv4 address object group.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"members": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of address members.\n  - Map key: `sequence_number` - Sequence number.\n  - Key range: `0`-`4294967295`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"prefix": schema.StringAttribute{
+										MarkdownDescription: "IPv4 host address or network prefix.",
+										Computed:            true,
+									},
+									"prefix_length": schema.StringAttribute{
+										MarkdownDescription: "IPv4 prefix length. Mutually exclusive with `prefix_mask`.",
+										Computed:            true,
+									},
+									"prefix_mask": schema.StringAttribute{
+										MarkdownDescription: "IPv4 wildcard mask. Mutually exclusive with `prefix_length`.",
 										Computed:            true,
 									},
 								},
@@ -608,6 +636,34 @@ func (d *AccessListDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
+			"ipv6_address_object_groups": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 address object groups.\n  - Map key: `name` - Name of the IPv6 address object group.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"members": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of address members.\n  - Map key: `sequence_number` - Sequence number.\n  - Key range: `0`-`4294967295`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"prefix": schema.StringAttribute{
+										MarkdownDescription: "IPv6 host address or network prefix.",
+										Computed:            true,
+									},
+									"prefix_length": schema.StringAttribute{
+										MarkdownDescription: "IPv6 prefix length. Mutually exclusive with `prefix_mask`.",
+										Computed:            true,
+									},
+									"prefix_mask": schema.StringAttribute{
+										MarkdownDescription: "IPv6 prefix mask. Mutually exclusive with `prefix_length`.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"ipv6_ingress_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv6 ingress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Computed:            true,
@@ -639,6 +695,34 @@ func (d *AccessListDataSource) Schema(ctx context.Context, req datasource.Schema
 			"ipv6_egress_vty_access_list_name": schema.StringAttribute{
 				MarkdownDescription: "Access Control List name.",
 				Computed:            true,
+			},
+			"port_object_groups": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of port object groups.\n  - Map key: `name` - Name of the port object group.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"members": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of port members.\n  - Map key: `sequence_number` - Sequence number.\n  - Key range: `0`-`4294967295`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"port_operator": schema.StringAttribute{
+										MarkdownDescription: "Port operator.",
+										Computed:            true,
+									},
+									"port_1": schema.StringAttribute{
+										MarkdownDescription: "First port number or name.",
+										Computed:            true,
+									},
+									"port_2": schema.StringAttribute{
+										MarkdownDescription: "Second port number or name. Only used when `port_operator` is `range`.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -672,7 +756,7 @@ func (d *AccessListDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ipv4aclAF,ipv4aclACL,ipv4aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst,ipv6aclAF,ipv6aclACL,ipv6aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ipv4aclAF,ipv4aclACL,ipv4aclACE,ipv4aclAddrGroup,ipv4aclAddrMember,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst,ipv6aclAF,ipv6aclACL,ipv6aclACE,ipv6aclAddrGroup,ipv6aclAddrMember,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst,aclPortGroup,aclPortMember")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -71,6 +71,8 @@ func TestAccDataSourceNxosAccessList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.telemetry_path", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.telemetry_queue", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.type_of_service", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv4_address_object_groups.AG1.members.10.prefix", "192.168.1.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv4_address_object_groups.AG1.members.10.prefix_length", "24"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ingress_interfaces.eth1/10.access_list_name", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ingress_vty_access_list_name", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "egress_interfaces.eth1/10.access_list_name", "ACL1"))
@@ -112,10 +114,14 @@ func TestAccDataSourceNxosAccessList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.tcp_flags_mask", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.telemetry_path", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.telemetry_queue", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_address_object_groups.AG6.members.10.prefix", "2001:db8::"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_address_object_groups.AG6.members.10.prefix_length", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_ingress_interfaces.eth1/10.access_list_name", "ACL2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_ingress_vty_access_list_name", "ACL2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_egress_interfaces.eth1/10.access_list_name", "ACL2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_egress_vty_access_list_name", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "port_object_groups.PG1.members.10.port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "port_object_groups.PG1.members.10.port_1", "443"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -195,6 +201,16 @@ func testAccDataSourceNxosAccessListConfig() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	ipv4_address_object_groups = {` + "\n"
+	config += `		"AG1" = {` + "\n"
+	config += `			members = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					prefix = "192.168.1.0"` + "\n"
+	config += `					prefix_length = "24"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	ingress_interfaces = {` + "\n"
 	config += `		"eth1/10" = {` + "\n"
 	config += `			access_list_name = "ACL1"` + "\n"
@@ -252,6 +268,16 @@ func testAccDataSourceNxosAccessListConfig() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	ipv6_address_object_groups = {` + "\n"
+	config += `		"AG6" = {` + "\n"
+	config += `			members = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					prefix = "2001:db8::"` + "\n"
+	config += `					prefix_length = "64"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	ipv6_ingress_interfaces = {` + "\n"
 	config += `		"eth1/10" = {` + "\n"
 	config += `			access_list_name = "ACL2"` + "\n"
@@ -264,6 +290,16 @@ func testAccDataSourceNxosAccessListConfig() string {
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	ipv6_egress_vty_access_list_name = "ACL2"` + "\n"
+	config += `	port_object_groups = {` + "\n"
+	config += `		"PG1" = {` + "\n"
+	config += `			members = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					port_operator = "eq"` + "\n"
+	config += `					port_1 = "443"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

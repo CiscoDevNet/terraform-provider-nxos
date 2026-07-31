@@ -64,7 +64,7 @@ func (r *AccessListResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *AccessListResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage IPv4 and IPv6 access control lists (ACLs) on NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports applying ACLs to interfaces in ingress or egress direction.").AddApiDocumentation("aclEntity", "Security%20and%20Policing/acl:Entity/", []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "ipv6aclAF", "ipv6aclACL", "ipv6aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/ipv6acl:AF/", "Security%20and%20Policing/ipv6acl:ACL/", "Security%20and%20Policing/ipv6acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage IPv4 and IPv6 access control lists (ACLs) on NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports applying ACLs to interfaces in ingress or egress direction, as well as managing IPv4 address, IPv6 address, and port object groups (and their members) referenced from ACL entries via the `source_address_group`/`destination_address_group` and `source_port_group`/`destination_port_group` attributes.").AddApiDocumentation("aclEntity", "Security%20and%20Policing/acl:Entity/", []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "ipv4aclAddrGroup", "ipv4aclAddrMember", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "ipv6aclAF", "ipv6aclACL", "ipv6aclACE", "ipv6aclAddrGroup", "ipv6aclAddrMember", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "aclPortGroup", "aclPortMember"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/ipv4acl:AddrGroup/", "Security%20and%20Policing/ipv4acl:AddrMember/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/ipv6acl:AF/", "Security%20and%20Policing/ipv6acl:ACL/", "Security%20and%20Policing/ipv6acl:ACE/", "Security%20and%20Policing/ipv6acl:AddrGroup/", "Security%20and%20Policing/ipv6acl:AddrMember/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Vty/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:PortGroup/", "Security%20and%20Policing/acl:PortMember/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -385,6 +385,34 @@ func (r *AccessListResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Validators: []validator.Int64{
 											int64validator.Between(0, 15),
 										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ipv4_address_object_groups": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 address object groups.\n  - Map key: `name` - Name of the IPv4 address object group.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"members": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of address members.\n  - Map key: `sequence_number` - Sequence number.\n  - Key range: `0`-`4294967295`").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"prefix": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv4 host address or network prefix.").String,
+										Optional:            true,
+									},
+									"prefix_length": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv4 prefix length. Mutually exclusive with `prefix_mask`.").String,
+										Optional:            true,
+									},
+									"prefix_mask": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv4 wildcard mask. Mutually exclusive with `prefix_length`.").String,
+										Optional:            true,
 									},
 								},
 							},
@@ -723,6 +751,34 @@ func (r *AccessListResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 			},
+			"ipv6_address_object_groups": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 address object groups.\n  - Map key: `name` - Name of the IPv6 address object group.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"members": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of address members.\n  - Map key: `sequence_number` - Sequence number.\n  - Key range: `0`-`4294967295`").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"prefix": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 host address or network prefix.").String,
+										Optional:            true,
+									},
+									"prefix_length": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 prefix length. Mutually exclusive with `prefix_mask`.").String,
+										Optional:            true,
+									},
+									"prefix_mask": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 prefix mask. Mutually exclusive with `prefix_length`.").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"ipv6_ingress_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with IPv6 ingress access list policy.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
@@ -754,6 +810,37 @@ func (r *AccessListResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"ipv6_egress_vty_access_list_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Access Control List name.").String,
 				Optional:            true,
+			},
+			"port_object_groups": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of port object groups.\n  - Map key: `name` - Name of the port object group.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"members": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of port members.\n  - Map key: `sequence_number` - Sequence number.\n  - Key range: `0`-`4294967295`").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"port_operator": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Port operator.").AddStringEnumDescription("none", "lt", "gt", "eq", "neq", "range").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "lt", "gt", "eq", "neq", "range"),
+										},
+									},
+									"port_1": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("First port number or name.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
+										Optional:            true,
+									},
+									"port_2": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Second port number or name. Only used when `port_operator` is `range`.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -883,7 +970,7 @@ func (r *AccessListResource) Read(ctx context.Context, req resource.ReadRequest,
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ipv4aclAF,ipv4aclACL,ipv4aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst,ipv6aclAF,ipv6aclACL,ipv6aclACE,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ipv4aclAF,ipv4aclACL,ipv4aclACE,ipv4aclAddrGroup,ipv4aclAddrMember,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst,ipv6aclAF,ipv6aclACL,ipv6aclACE,ipv6aclAddrGroup,ipv6aclAddrMember,aclPolicy,aclIngress,aclIf,aclInst,aclVty,aclInst,aclEgress,aclIf,aclInst,aclVty,aclInst,aclPortGroup,aclPortMember")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

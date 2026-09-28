@@ -4,6 +4,7 @@ resource "nxos_feature" "example" {
   bfd                  = "enabled"
   bgp                  = "enabled"
   dhcp                 = "enabled"
+  eigrp                = "enabled"
   evpn                 = "enabled"
   grpc                 = "enabled"
   hmm                  = "enabled"

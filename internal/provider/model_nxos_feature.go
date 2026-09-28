@@ -44,6 +44,7 @@ type Feature struct {
 	Bfd                 types.String                  `tfsdk:"bfd"`
 	Bgp                 types.String                  `tfsdk:"bgp"`
 	Dhcp                types.String                  `tfsdk:"dhcp"`
+	Eigrp               types.String                  `tfsdk:"eigrp"`
 	Evpn                types.String                  `tfsdk:"evpn"`
 	Grpc                types.String                  `tfsdk:"grpc"`
 	Hmm                 types.String                  `tfsdk:"hmm"`
@@ -171,6 +172,13 @@ func (data Feature) toBody(config Feature) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmDhcp.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.Eigrp.IsUnknown() && !data.Eigrp.IsNull() && !config.Eigrp.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.Eigrp.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmEigrp.attributes", attrs)
 		}
 		attrs = "{}"
 		if !data.Evpn.IsUnknown() && !data.Evpn.IsNull() && !config.Evpn.IsNull() {
@@ -496,6 +504,20 @@ func (data *Feature) fromBody(res gjson.Result) {
 				},
 			)
 			data.Dhcp = types.StringValue(rfmDhcp.Get("fmDhcp.attributes.adminSt").String())
+		}
+		{
+			var rfmEigrp gjson.Result
+			rfmEntity.Get("fmEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("fmEigrp.attributes.rn").String()
+					if rnValue == "eigrp" {
+						rfmEigrp = v
+						return false
+					}
+					return true
+				},
+			)
+			data.Eigrp = types.StringValue(rfmEigrp.Get("fmEigrp.attributes.adminSt").String())
 		}
 		{
 			var rfmEvpn gjson.Result
@@ -1057,6 +1079,24 @@ func (data *Feature) updateFromBody(res gjson.Result) {
 			data.Dhcp = types.StringValue(rfmDhcp.Get("fmDhcp.attributes.adminSt").String())
 		} else {
 			data.Dhcp = types.StringNull()
+		}
+	}
+	{
+		var rfmEigrp gjson.Result
+		rfmEntity.Get("fmEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmEigrp.attributes.rn").String()
+				if rnValue == "eigrp" {
+					rfmEigrp = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Eigrp.IsNull() {
+			data.Eigrp = types.StringValue(rfmEigrp.Get("fmEigrp.attributes.adminSt").String())
+		} else {
+			data.Eigrp = types.StringNull()
 		}
 	}
 	{
@@ -1720,6 +1760,17 @@ func (data Feature) toDeleteBody() nxos.Body {
 			}
 			{
 				childBody := ""
+				if !data.Eigrp.IsNull() {
+					childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmEigrp"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childBody := ""
 				if !data.Evpn.IsNull() {
 					childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 				}
@@ -2135,6 +2186,14 @@ func (data Feature) toBodyWithDeletes(ctx context.Context, state Feature, config
 					if sv.Get("fmDhcp").Exists() {
 						if !state.Dhcp.IsNull() && config.Dhcp.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".fmDhcp.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+				for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
+					if sv.Get("fmEigrp").Exists() {
+						if !state.Eigrp.IsNull() && config.Eigrp.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".fmEigrp.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 						}
 						break
 					}

@@ -1,6 +1,4 @@
-
 ---
-layout: ""
 page_title: "Provider: NXOS"
 description: |-
   The NXOS provider provides resources to interact with one or more Cisco NX-OS devices.

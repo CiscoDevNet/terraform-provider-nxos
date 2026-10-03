@@ -134,7 +134,7 @@ func TestAccNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.aigp", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.allowed_self_as_count", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.as_override", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.default_originate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.default_originate", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.default_originate_route_map", "DEF_ORIG_MAP"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.dmz_link_bandwidth", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.link_bandwidth_cumulative", "disabled"))
@@ -176,7 +176,7 @@ func TestAccNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.aigp", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.allowed_self_as_count", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.as_override", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.default_originate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.default_originate", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.default_originate_route_map", "DEF_ORIG_MAP"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.dmz_link_bandwidth", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.link_bandwidth_cumulative", "disabled"))
@@ -413,7 +413,7 @@ func testAccNxosBGPConfig_all(includeWriteOnly bool) string {
 	config += `							aigp = "disabled"` + "\n"
 	config += `							allowed_self_as_count = 0` + "\n"
 	config += `							as_override = "disabled"` + "\n"
-	config += `							default_originate = "disabled"` + "\n"
+	config += `							default_originate = "enabled"` + "\n"
 	config += `							default_originate_route_map = "DEF_ORIG_MAP"` + "\n"
 	config += `							dmz_link_bandwidth = "disabled"` + "\n"
 	config += `							link_bandwidth_cumulative = "disabled"` + "\n"
@@ -469,7 +469,7 @@ func testAccNxosBGPConfig_all(includeWriteOnly bool) string {
 	config += `							aigp = "disabled"` + "\n"
 	config += `							allowed_self_as_count = 0` + "\n"
 	config += `							as_override = "disabled"` + "\n"
-	config += `							default_originate = "disabled"` + "\n"
+	config += `							default_originate = "enabled"` + "\n"
 	config += `							default_originate_route_map = "DEF_ORIG_MAP"` + "\n"
 	config += `							dmz_link_bandwidth = "disabled"` + "\n"
 	config += `							link_bandwidth_cumulative = "disabled"` + "\n"

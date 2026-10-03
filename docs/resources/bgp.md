@@ -160,7 +160,7 @@ resource "nxos_bgp" "example" {
               aigp                        = "disabled"
               allowed_self_as_count       = 0
               as_override                 = "disabled"
-              default_originate           = "disabled"
+              default_originate           = "enabled"
               default_originate_route_map = "DEF_ORIG_MAP"
               dmz_link_bandwidth          = "disabled"
               link_bandwidth_cumulative   = "disabled"
@@ -210,7 +210,7 @@ resource "nxos_bgp" "example" {
               aigp                        = "disabled"
               allowed_self_as_count       = 0
               as_override                 = "disabled"
-              default_originate           = "disabled"
+              default_originate           = "enabled"
               default_originate_route_map = "DEF_ORIG_MAP"
               dmz_link_bandwidth          = "disabled"
               link_bandwidth_cumulative   = "disabled"

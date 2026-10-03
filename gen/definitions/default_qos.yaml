@@ -198,7 +198,7 @@ child_classes:
                       - set-dscp-transmit
                       - set-prec-transmit
                       - set-qos-transmit
-                    example: transmit
+                    example: set-dscp-transmit
                   - nxos_name: conformSetCosTransmit
                     tf_name: police_conform_set_cos
                     type: Int64
@@ -244,7 +244,7 @@ child_classes:
                       - set-dscp-transmit
                       - set-prec-transmit
                       - set-qos-transmit
-                    example: transmit
+                    example: set-dscp-transmit
                   - nxos_name: exceedSetCosTransmit
                     tf_name: police_exceed_set_cos
                     type: Int64
@@ -310,7 +310,7 @@ child_classes:
                       - set-dscp-transmit
                       - set-prec-transmit
                       - set-qos-transmit
-                    example: drop
+                    example: set-dscp-transmit
                   - nxos_name: violateSetCosTransmit
                     tf_name: police_violate_set_cos
                     type: Int64

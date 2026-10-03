@@ -369,3 +369,17 @@ test_prerequisites:
     attributes:
       - name: layer
         value: Layer3
+  - dn: sys/track/object-10
+    class_name: trackObject
+    dependencies: [1]
+    attributes:
+      - name: id
+        value: 10
+    children:
+      - rn: if
+        class_name: trackIf
+        attributes:
+          - name: id
+            value: eth1/10
+          - name: protocolType
+            value: line-protocol

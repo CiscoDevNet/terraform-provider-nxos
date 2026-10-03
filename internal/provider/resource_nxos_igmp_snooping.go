@@ -78,7 +78,7 @@ func (r *IGMPSnoopingResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of IGMP snooping.").AddStringEnumDescription("enabled", "disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of IGMP snooping. Some NX-OS versions (e.g. 10.6.4) reject modifying this attribute, in which case it should not be configured.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),

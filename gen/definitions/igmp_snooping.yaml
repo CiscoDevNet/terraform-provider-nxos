@@ -11,10 +11,11 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'The administrative state of IGMP snooping.'
+    description: 'The administrative state of IGMP snooping. Some NX-OS versions (e.g. 10.6.4) reject modifying this attribute, in which case it should not be configured.'
     enum_values:
       - enabled
       - disabled
+    exclude_test: true
     example: enabled
 child_classes:
   - class_name: igmpsnoopInst

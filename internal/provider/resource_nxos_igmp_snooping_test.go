@@ -35,7 +35,6 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIGMPSnooping(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp_snooping.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp_snooping.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp_snooping.test", "instance_control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp_snooping.test", "domain_control", "opt-flood"))
@@ -99,7 +98,6 @@ func testAccNxosIGMPSnoopingConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIGMPSnoopingConfig_all() string {
 	config := `resource "nxos_igmp_snooping" "test" {` + "\n"
-	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
 	config += `	instance_control = "stateful-ha"` + "\n"
 	config += `	domain_control = "opt-flood"` + "\n"

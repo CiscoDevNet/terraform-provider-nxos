@@ -160,7 +160,14 @@ type YamlTest struct {
 	ClassName    string              `yaml:"class_name"`
 	NoDelete     bool                `yaml:"no_delete"`
 	Attributes   []YamlTestAttribute `yaml:"attributes"`
+	Children     []YamlTestChild     `yaml:"children"`
 	Dependencies []string            `yaml:"dependencies"`
+}
+
+type YamlTestChild struct {
+	Rn         string              `yaml:"rn"`
+	ClassName  string              `yaml:"class_name"`
+	Attributes []YamlTestAttribute `yaml:"attributes"`
 }
 
 type YamlTestAttribute struct {

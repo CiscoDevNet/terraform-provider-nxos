@@ -36,7 +36,7 @@ data "nxos_igmp_snooping" "example" {
 
 ### Read-Only
 
-- `admin_state` (String) The administrative state of IGMP snooping.
+- `admin_state` (String) The administrative state of IGMP snooping. Some NX-OS versions (e.g. 10.6.4) reject modifying this attribute, in which case it should not be configured.
 - `domain_control` (String) IGMP snooping domain controls (querier, opt-flood, routing).
 - `domain_name` (String) IGMP snooping domain object name.
 - `global_vlan_disable_nve_static_router_port` (Boolean) Disable NVE static router port for IGMP snooping.

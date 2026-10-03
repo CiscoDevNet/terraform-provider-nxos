@@ -84,6 +84,25 @@ resource "nxos_dme" "PreReq0" {
   }
 }
 
+resource "nxos_dme" "PreReq1" {
+  dn = "sys/track/object-10"
+  class_name = "trackObject"
+  content = {
+      id = "10"
+  }
+  children = [
+    {
+      rn         = "if"
+      class_name = "trackIf"
+      content = {
+          id = "eth1/10"
+          protocolType = "line-protocol"
+      }
+    },
+  ]
+  depends_on = [nxos_dme.PreReq0, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -140,7 +159,7 @@ func testAccDataSourceNxosIPv6Config() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

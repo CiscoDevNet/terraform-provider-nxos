@@ -69,7 +69,7 @@ func (d *IGMPSnoopingDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "The administrative state of IGMP snooping.",
+				MarkdownDescription: "The administrative state of IGMP snooping. Some NX-OS versions (e.g. 10.6.4) reject modifying this attribute, in which case it should not be configured.",
 				Computed:            true,
 			},
 			"instance_admin_state": schema.StringAttribute{

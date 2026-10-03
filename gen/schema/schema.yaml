@@ -50,7 +50,13 @@ test_prerequisite:
   class_name: str() # NX-API class name of the prerequisite
   no_delete: bool(required=False) # Set to true if the prerequisite should not be deleted after the test
   attributes: list(include('test_attribute'), required=False) # List of prerequisite attributes
+  children: list(include('test_child'), required=False) # List of prerequisite child objects, created together with the prerequisite object
   dependencies: list(int(), required=False) # List of dependencies to other test prerequisites, referencing the index in the test_prerequisites list
+
+test_child:
+  rn: str() # Relative name of the child object
+  class_name: str() # NX-API class name of the child object
+  attributes: list(include('test_attribute'), required=False) # List of child object attributes
 
 test_attribute:
   name: str() # NX-API attribute name

@@ -24,7 +24,6 @@ This resource can manage the global IGMP snooping configuration on NX-OS devices
 
 ```terraform
 resource "nxos_igmp_snooping" "example" {
-  admin_state                                = "enabled"
   instance_admin_state                       = "enabled"
   instance_control                           = "stateful-ha"
   domain_control                             = "opt-flood"
@@ -40,7 +39,7 @@ resource "nxos_igmp_snooping" "example" {
 
 ### Optional
 
-- `admin_state` (String) The administrative state of IGMP snooping.
+- `admin_state` (String) The administrative state of IGMP snooping. Some NX-OS versions (e.g. 10.6.4) reject modifying this attribute, in which case it should not be configured.
   - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
 - `domain_control` (String) IGMP snooping domain controls (querier, opt-flood, routing).

@@ -6,17 +6,36 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-# Run acceptance tests
+# Run acceptance tests across all devices and versions
 # Usage: make test [NAME="Definition Name"] [DEBUG=1]
-# NAME must be a definition name (e.g., "BGP", "Loopback Interface") matching the name: field in gen/definitions/*.yaml
 .PHONY: test
-test:
+test: test-10-5-6 test-10-6-4
+	@echo ""
+	@echo "All multi-device tests completed!"
+
+# Test against NX-OS 10.5.6
+# Usage: make test-10-5-6 [NAME="Definition Name"] [DEBUG=1]
+.PHONY: test-10-5-6
+test-10-5-6:
+	@$(MAKE) --no-print-directory run-acc-tests VERSION=10.5.6 URL_VAR=NXOS_10_5_6_URL NXOS_URL="$(NXOS_10_5_6_URL)" LOG=test-output-10-5-6.log
+
+# Test against NX-OS 10.6.4
+# Usage: make test-10-6-4 [NAME="Definition Name"] [DEBUG=1]
+.PHONY: test-10-6-4
+test-10-6-4:
+	@$(MAKE) --no-print-directory run-acc-tests VERSION=10.6.4 URL_VAR=NXOS_10_6_4_URL NXOS_URL="$(NXOS_10_6_4_URL)" LOG=test-output-10-6-4.log
+
+# Internal: run acceptance tests against a single device
+# Requires VERSION, URL_VAR, NXOS_URL and LOG to be passed by the caller.
+# NAME must be a definition name (e.g., "BGP", "Loopback Interface") matching the name: field in gen/definitions/*.yaml
+.PHONY: run-acc-tests
+run-acc-tests:
 	@echo "========================================="
-	@echo "Running acceptance tests..."
+	@echo "Testing against NX-OS $(VERSION)..."
 	@echo "========================================="
 	@if [ -z "$(NXOS_URL)" ]; then \
-		echo "SKIPPED: NXOS_URL is not configured"; \
-		echo "To enable tests, configure NXOS_URL, NXOS_USERNAME, and NXOS_PASSWORD in your .env file"; \
+		echo "SKIPPED: $(URL_VAR) is not configured"; \
+		echo "To enable this test, configure $(URL_VAR) in your .env file"; \
 	else \
 		TEST_NAME=""; \
 		if [ -n "$(NAME)" ]; then \
@@ -30,11 +49,11 @@ test:
 				exit 1; \
 			fi; \
 		fi; \
-		$(if $(DEBUG),echo "Debug mode enabled - logs will be written to test-output.log";) \
+		$(if $(DEBUG),echo "Debug mode enabled - logs will be written to $(LOG)";) \
 		if [ -n "$${TEST_NAME}" ]; then echo "Running tests matching: $${TEST_NAME}"; fi; \
 		TF_ACC=1 \
 		$(if $(DEBUG),TF_LOG=Trace) \
-		go test -v $${TEST_NAME:+-run "$${TEST_NAME}"} $(TESTARGS) -count 1 -timeout 120m ./internal/provider $(if $(DEBUG),2>&1 | tee test-output.log); \
+		go test -v $${TEST_NAME:+-run "$${TEST_NAME}"} $(TESTARGS) -count 1 -timeout 120m ./internal/provider $(if $(DEBUG),2>&1 | tee $(LOG)); \
 	fi
 
 # Update all files from a single definition

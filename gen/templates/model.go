@@ -946,14 +946,42 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	}
 {{- end}}
 {{- end}}
+	{{- /* If a child is itself NoDelete with children, whether anything gets emitted below it
+	       depends on that child's own state, so emit this entry and drop it again if it ends up
+	       empty. An empty stub of a feature-gated class (e.g. lldpEntity) is rejected by NX-OS
+	       when the feature is not enabled. */}}
+	{{- $pruneEmpty := false}}
+	{{- range .ChildClasses}}
+	{{- if and .NoDelete (eq .Type "single") .ChildClasses}}
+	{{- $pruneEmpty = true}}
+	{{- end}}
+	{{- end}}
+	{{- if $pruneEmpty}}
+	hasAttributes := childBody != ""
+	siblingsPath := {{$childrenPathVar}}
+	childIndex := len(gjson.Get(body, siblingsPath).Array())
+	entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+	childBodyPath := entryPath + ".{{$childClassName}}"
+	if childBody == "" {
+		childBody = "{}"
+	}
+	body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+	nestedChildrenPath := childBodyPath + ".children"
+	_ = nestedChildrenPath
+	{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "ChildrenPathVar" "nestedChildrenPath")}}
+	if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+		body, _ = sjson.Delete(body, entryPath)
+		if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, siblingsPath)
+		}
+	}
+	{{- else}}
 	hasNestedChildren := false
 	{{- range .ChildClasses}}
 	{{- if eq .Type "list"}}
 	if len(data.{{toGoName .TfName}}) > 0 {
 		hasNestedChildren = true
 	}
-	{{- else if and .NoDelete (eq .Type "single") .ChildClasses}}
-	hasNestedChildren = true
 	{{- else if and (not .NoDelete) (eq .Type "single")}}
 	hasNestedChildren = true
 	{{- end}}
@@ -969,6 +997,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		_ = nestedChildrenPath
 		{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "ChildrenPathVar" "nestedChildrenPath")}}
 	}
+	{{- end}}
 	}
 {{- else}}
 	{

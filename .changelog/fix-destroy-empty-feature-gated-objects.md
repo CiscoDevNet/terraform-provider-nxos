@@ -1,0 +1,1 @@
+- Fix `terraform destroy` failing for objects belonging to a feature that is not enabled on the device, even though they were never configured

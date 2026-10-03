@@ -988,39 +988,44 @@ func (data DefaultQoS) toDeleteBody() nxos.Body {
 	}
 	{
 		childBody := ""
-		hasNestedChildren := false
-		hasNestedChildren = true
-		if childBody != "" || hasNestedChildren {
-			childIndex := len(gjson.Get(body, childrenPath).Array())
-			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"
-			if childBody == "" {
-				childBody = "{}"
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".ipqosServPol"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			hasNestedChildren := false
+			if len(data.PolicyInterfaceIn) > 0 {
+				hasNestedChildren = true
 			}
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-			nestedChildrenPath := childBodyPath + ".children"
-			_ = nestedChildrenPath
-			{
-				childBody := ""
-				hasNestedChildren := false
-				if len(data.PolicyInterfaceIn) > 0 {
-					hasNestedChildren = true
+			if childBody != "" || hasNestedChildren {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosIngress"
+				if childBody == "" {
+					childBody = "{}"
 				}
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosIngress"
-					if childBody == "" {
-						childBody = "{}"
-					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					for key, child := range data.PolicyInterfaceIn {
-						deleteBody := ""
-						deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.rn", child.getRn(key))
-						deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.status", "deleted")
-						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-					}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				for key, child := range data.PolicyInterfaceIn {
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.rn", child.getRn(key))
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.status", "deleted")
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 				}
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
 			}
 		}
 	}

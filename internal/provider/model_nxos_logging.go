@@ -774,45 +774,50 @@ func (data Logging) toDeleteBody() nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	{
 		childBody := ""
-		hasNestedChildren := false
-		hasNestedChildren = true
-		if childBody != "" || hasNestedChildren {
-			childIndex := len(gjson.Get(body, childrenPath).Array())
-			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogging"
-			if childBody == "" {
-				childBody = "{}"
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".loggingLogging"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.All.IsNull() {
+				childBody, _ = sjson.Set(childBody, "all", "DME_UNSET_PROPERTY_MARKER")
 			}
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-			nestedChildrenPath := childBodyPath + ".children"
-			_ = nestedChildrenPath
-			{
-				childBody := ""
-				if !data.All.IsNull() {
-					childBody, _ = sjson.Set(childBody, "all", "DME_UNSET_PROPERTY_MARKER")
+			if !data.Level.IsNull() {
+				childBody, _ = sjson.Set(childBody, "severityLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			hasNestedChildren := false
+			if len(data.Facilities) > 0 {
+				hasNestedChildren = true
+			}
+			if childBody != "" || hasNestedChildren {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
+				if childBody == "" {
+					childBody = "{}"
 				}
-				if !data.Level.IsNull() {
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				for key, child := range data.Facilities {
+					childBody := ""
+					childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
 					childBody, _ = sjson.Set(childBody, "severityLevel", "DME_UNSET_PROPERTY_MARKER")
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", childBody)
 				}
-				hasNestedChildren := false
-				if len(data.Facilities) > 0 {
-					hasNestedChildren = true
-				}
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
-					if childBody == "" {
-						childBody = "{}"
-					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					for key, child := range data.Facilities {
-						childBody := ""
-						childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
-						childBody, _ = sjson.Set(childBody, "severityLevel", "DME_UNSET_PROPERTY_MARKER")
-						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", childBody)
-					}
-				}
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
 			}
 		}
 	}

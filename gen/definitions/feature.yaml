@@ -91,6 +91,21 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmEigrp
+        rn: eigrp
+        type: single
+        no_delete: true
+        description: 'EIGRP feature configuration.'
+        doc_path: Feature%20Management/fm:Eigrp/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: eigrp
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmEvpn
         rn: evpn
         type: single

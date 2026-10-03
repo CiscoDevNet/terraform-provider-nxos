@@ -105,25 +105,25 @@ func TestAccNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_protocol", "chap"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_description", "Default authentication"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_error_enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_fallback", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_fallback", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_invalid_user_log", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_local", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_local", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_none", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_owner_key", "owner1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_provider_group", "TACACS_GROUP1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_realm", "tacacs"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authentication_realm", "local"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_protocol", "chap"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_description", "Console authentication"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_error_enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_fallback", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_fallback", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_invalid_user_log", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_local", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_local", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_none", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_owner_key", "owner1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_provider_group", "TACACS_GROUP1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_realm", "tacacs"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "console_authentication_realm", "local"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authorizations.config.authorization_method_none", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authorizations.config.description", "Default authorization"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_authorizations.config.local_rbac", "true"))
@@ -296,25 +296,25 @@ func testAccNxosUserManagementConfig_all(includeWriteOnly bool) string {
 	config += `	default_authentication_protocol = "chap"` + "\n"
 	config += `	default_authentication_description = "Default authentication"` + "\n"
 	config += `	default_authentication_error_enable = true` + "\n"
-	config += `	default_authentication_fallback = "no"` + "\n"
+	config += `	default_authentication_fallback = "yes"` + "\n"
 	config += `	default_authentication_invalid_user_log = true` + "\n"
-	config += `	default_authentication_local = "no"` + "\n"
+	config += `	default_authentication_local = "yes"` + "\n"
 	config += `	default_authentication_none = "no"` + "\n"
 	config += `	default_authentication_owner_key = "owner1"` + "\n"
 	config += `	default_authentication_owner_tag = "tag1"` + "\n"
 	config += `	default_authentication_provider_group = "TACACS_GROUP1"` + "\n"
-	config += `	default_authentication_realm = "tacacs"` + "\n"
+	config += `	default_authentication_realm = "local"` + "\n"
 	config += `	console_authentication_protocol = "chap"` + "\n"
 	config += `	console_authentication_description = "Console authentication"` + "\n"
 	config += `	console_authentication_error_enable = true` + "\n"
-	config += `	console_authentication_fallback = "no"` + "\n"
+	config += `	console_authentication_fallback = "yes"` + "\n"
 	config += `	console_authentication_invalid_user_log = true` + "\n"
-	config += `	console_authentication_local = "no"` + "\n"
+	config += `	console_authentication_local = "yes"` + "\n"
 	config += `	console_authentication_none = "no"` + "\n"
 	config += `	console_authentication_owner_key = "owner1"` + "\n"
 	config += `	console_authentication_owner_tag = "tag1"` + "\n"
 	config += `	console_authentication_provider_group = "TACACS_GROUP1"` + "\n"
-	config += `	console_authentication_realm = "tacacs"` + "\n"
+	config += `	console_authentication_realm = "local"` + "\n"
 	config += `	default_authorizations = {` + "\n"
 	config += `		"config" = {` + "\n"
 	config += `			authorization_method_none = false` + "\n"

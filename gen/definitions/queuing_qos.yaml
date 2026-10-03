@@ -76,7 +76,7 @@ child_classes:
                     description: 'Optional priority level.'
                     min_int: 1
                     max_int: 8
-                    example: 1
+                    example: 3
               - class_name: ipqosSetRemBW
                 doc_path: Qos/ipqos:SetRemBW/
                 rn: setRemBW
@@ -145,7 +145,7 @@ test_prerequisites:
     no_delete: true
     attributes:
       - name: level
-        value: 1
+        value: 3
     dependencies: [1]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]
     class_name: ipqosMatchCMap

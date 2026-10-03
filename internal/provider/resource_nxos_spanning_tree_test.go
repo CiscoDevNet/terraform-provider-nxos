@@ -40,7 +40,7 @@ func TestAccNxosSpanningTree(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "bridge_assurance", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "control", "normal,stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "fcoe", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "l2_gateway_stp_domain_id", "2048"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "l2_gateway_stp_domain_id", "512"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "linecard_issu", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "loopguard", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mode", "pvrst"))
@@ -135,7 +135,7 @@ func testAccNxosSpanningTreeConfig_all() string {
 	config += `	bridge_assurance = "disabled"` + "\n"
 	config += `	control = "normal,stateful-ha"` + "\n"
 	config += `	fcoe = "enabled"` + "\n"
-	config += `	l2_gateway_stp_domain_id = 2048` + "\n"
+	config += `	l2_gateway_stp_domain_id = 512` + "\n"
 	config += `	linecard_issu = "auto"` + "\n"
 	config += `	loopguard = "enabled"` + "\n"
 	config += `	mode = "pvrst"` + "\n"

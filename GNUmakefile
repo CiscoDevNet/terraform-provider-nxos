@@ -39,9 +39,10 @@ run-acc-tests:
 	else \
 		TEST_NAME=""; \
 		if [ -n "$(NAME)" ]; then \
-			MATCH=$$(grep -rl '^name: $(NAME)$$' gen/definitions/*.yaml | head -1); \
+			MATCH=$$(grep -il '^name: $(NAME)$$' gen/definitions/*.yaml | head -1); \
 			if [ -n "$${MATCH}" ]; then \
-				CAMEL=$$(echo "$(NAME)" | tr -d ' '); \
+				DEFNAME=$$(grep -i -m1 -h '^name: $(NAME)$$' "$${MATCH}" | sed 's/^name: //'); \
+				CAMEL=$$(echo "$${DEFNAME}" | awk '{for(i=1;i<=NF;i++) $$i=toupper(substr($$i,1,1)) substr($$i,2)} 1' | tr -d ' '); \
 				TEST_NAME="TestAcc.*Nxos$${CAMEL}"; \
 				echo "Resolved definition '$(NAME)' to test pattern: $${TEST_NAME}"; \
 			else \

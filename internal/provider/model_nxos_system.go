@@ -6651,10 +6651,49 @@ func (data System) toDeleteBody() nxos.Body {
 		}
 	}
 	{
-		deleteBody := ""
-		deleteBody, _ = sjson.Set(deleteBody, "bootBoot.attributes.rn", "boot")
-		deleteBody, _ = sjson.Set(deleteBody, "bootBoot.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+		childBody := ""
+		if !data.BootAci.IsNull() {
+			childBody, _ = sjson.Set(childBody, "aci", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.BootAutoCopy.IsNull() {
+			childBody, _ = sjson.Set(childBody, "autoCopy", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.BootDhcp.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dhcp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.BootExcludeConfiguration.IsNull() {
+			childBody, _ = sjson.Set(childBody, "excludeCfg", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.BootFex.IsNull() {
+			childBody, _ = sjson.Set(childBody, "fex", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.BootMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.BootOrder.IsNull() {
+			childBody, _ = sjson.Set(childBody, "order", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.BootPoap.IsNull() {
+			childBody, _ = sjson.Set(childBody, "poap", "DME_UNSET_PROPERTY_MARKER")
+		}
+		hasNestedChildren := false
+		hasNestedChildren = true
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".bootBoot"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "bootImage.attributes.rn", "image")
+				deleteBody, _ = sjson.Set(deleteBody, "bootImage.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
 	}
 	{
 		childBody := ""

@@ -448,3 +448,44 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
+# Sequential steps that change the group lists of a static RP. NX-OS removes a static RP once its
+# last group list is deleted, so replacing all group lists at once must create the new ones first.
+additional_tests:
+  # baseline with a single group list
+  - |-
+    resource "nxos_pim" "test" {
+      vrfs = {
+        "default" = {
+          static_rps = {
+            "1.2.3.4" = {
+              group_lists = {
+                "225.0.0.0/24" = {
+                  bidir    = true
+                  override = true
+                }
+              }
+            }
+          }
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }
+  # replace the only group list
+  - |-
+    resource "nxos_pim" "test" {
+      vrfs = {
+        "default" = {
+          static_rps = {
+            "1.2.3.4" = {
+              group_lists = {
+                "226.0.0.0/24" = {
+                  bidir    = true
+                  override = true
+                }
+              }
+            }
+          }
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }

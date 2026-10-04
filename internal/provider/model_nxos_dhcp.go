@@ -763,7 +763,8 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayIf.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayIf.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.dhcpInst.children"+".-1", deleteBody)
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.RelayInterfaces {
@@ -773,9 +774,9 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 			stateItemdi := state.RelayInterfaces[di]
 			planItemdi := data.RelayInterfaces[di]
 			matchBodyPathdi := ""
-			for mi, mv := range gjson.Get(body.Str, bodyPath+".0.dhcpInst.children").Array() {
+			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children").Array() {
 				if mv.Get("dhcpRelayIf.attributes.id").String() == di {
-					matchBodyPathdi = bodyPath + ".0.dhcpInst.children" + "." + strconv.Itoa(mi) + ".dhcpRelayIf.children"
+					matchBodyPathdi = helpers.FindChildPath(body.Str, bodyPath, "dhcpInst") + ".children" + "." + strconv.Itoa(mi) + ".dhcpRelayIf.children"
 					break
 				}
 			}
@@ -800,159 +801,172 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 		}
 	}
 	if !importing {
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("dhcpInst").Exists() {
-				if !state.Ipv6RelayInformationOptionVpn.IsNull() && config.Ipv6RelayInformationOptionVpn.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"Ipv6RelayInformationOptionVpnEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.Ipv6RelayOptionTypeCisco.IsNull() && config.Ipv6RelayOptionTypeCisco.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"Ipv6RelayOptionTypeCiscoEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelayInformationOption.IsNull() && config.RelayInformationOption.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"RelayInformationOptionEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelayInformationOptionTrust.IsNull() && config.RelayInformationOptionTrust.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"RelayInformationOptionTrustEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelayInformationOptionVpn.IsNull() && config.RelayInformationOptionVpn.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"RelayInformationOptionVpnEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelayInformationTrustAll.IsNull() && config.RelayInformationTrustAll.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"RelayInformationTrustAllEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelaySubOptionCircuitIdCustomized.IsNull() && config.RelaySubOptionCircuitIdCustomized.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"RelaySubOptionCircuitIdCustomizedEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelaySubOptionCircuitIdFormatString.IsNull() && config.RelaySubOptionCircuitIdFormatString.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"RelaySubOptionCircuitIdFormatString", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelaySubOptionTypeCisco.IsNull() && config.RelaySubOptionTypeCisco.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"RelaySubOptionTypeCiscoEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.SmartRelayGlobal.IsNull() && config.SmartRelayGlobal.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.Snooping.IsNull() && config.Snooping.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"SnoopingEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.SnoopingInformationOption.IsNull() && config.SnoopingInformationOption.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"SnoopingInformationOptionEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.SnoopingVerifyMacAddress.IsNull() && config.SnoopingVerifyMacAddress.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"SnoopingVerifyMacAddressEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.DaiLogBufferEntries.IsNull() && config.DaiLogBufferEntries.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"daiLogBufEntries", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.DaiValidateDestination.IsNull() && config.DaiValidateDestination.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"daiValidateDst", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.DaiValidateIp.IsNull() && config.DaiValidateIp.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"daiValidateIp", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.DaiValidateSource.IsNull() && config.DaiValidateSource.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"daiValidateSrc", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.Ipv6RelayOption79.IsNull() && config.Ipv6RelayOption79.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"ipv6RelayOption79Enabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.PacketStrictValidation.IsNull() && config.PacketStrictValidation.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"pktStrictVal", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelayDai.IsNull() && config.RelayDai.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"relayDAIEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelayInformationOptionServerIdOverride.IsNull() && config.RelayInformationOptionServerIdOverride.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"relayInformationOptionServerIdOverrideDisableEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelaySubOptionFormatNonTlv.IsNull() && config.RelaySubOptionFormatNonTlv.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"relaySubOptionFormatNonTLVEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelayV4OverV6.IsNull() && config.RelayV4OverV6.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"relayV4overV6Enabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.RelayV6IapdRouteAdd.IsNull() && config.RelayV6IapdRouteAdd.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"relayV6IAPDRouteAddEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.SnoopSubOptionCircuitIdFormatString.IsNull() && config.SnoopSubOptionCircuitIdFormatString.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"snoopSubOptionCircuitIdFormatString", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.SnoopingSubOptionFormatNonTlv.IsNull() && config.SnoopingSubOptionFormatNonTlv.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"snoopingSubOptionFormatNonTLVEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.V4Relay.IsNull() && config.V4Relay.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"v4RelayEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.V6Relay.IsNull() && config.V6Relay.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"v6RelayEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.V6SmartRelayGlobal.IsNull() && config.V6SmartRelayGlobal.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".dhcpInst.attributes."+"v6SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
-				}
-				break
-			}
+		if !state.Ipv6RelayInformationOptionVpn.IsNull() && config.Ipv6RelayInformationOptionVpn.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"Ipv6RelayInformationOptionVpnEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
-		{
-			singleChildPath := ""
-			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-				if sv.Get("dhcpInst").Exists() {
-					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".dhcpInst.children"
-					break
-				}
-			}
-			if singleChildPath != "" {
-				for key := range state.RelayInterfaces {
-					if configChild, ok := config.RelayInterfaces[key]; ok {
-						stateChild := state.RelayInterfaces[key]
-						_ = stateChild
-						_ = configChild
-						for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-							if mv.Get("dhcpRelayIf.attributes.id").String() == key {
-								if !stateChild.InformationTrusted.IsNull() && configChild.InformationTrusted.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"InformationTrustedEnabled", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.SmartRelay.IsNull() && configChild.SmartRelay.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"SmartRelayEnabled", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.SubnetBroadcast.IsNull() && configChild.SubnetBroadcast.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"SubnetBroadcastEnabled", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.Options.IsNull() && configChild.Options.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"options", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.SubnetSelection.IsNull() && configChild.SubnetSelection.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"subnetSelection", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.V6SmartRelay.IsNull() && configChild.V6SmartRelay.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"v6SmartRelayEnabled", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+		if !state.Ipv6RelayOptionTypeCisco.IsNull() && config.Ipv6RelayOptionTypeCisco.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"Ipv6RelayOptionTypeCiscoEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelayInformationOption.IsNull() && config.RelayInformationOption.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"RelayInformationOptionEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelayInformationOptionTrust.IsNull() && config.RelayInformationOptionTrust.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"RelayInformationOptionTrustEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelayInformationOptionVpn.IsNull() && config.RelayInformationOptionVpn.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"RelayInformationOptionVpnEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelayInformationTrustAll.IsNull() && config.RelayInformationTrustAll.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"RelayInformationTrustAllEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelaySubOptionCircuitIdCustomized.IsNull() && config.RelaySubOptionCircuitIdCustomized.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"RelaySubOptionCircuitIdCustomizedEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelaySubOptionCircuitIdFormatString.IsNull() && config.RelaySubOptionCircuitIdFormatString.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"RelaySubOptionCircuitIdFormatString", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelaySubOptionTypeCisco.IsNull() && config.RelaySubOptionTypeCisco.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"RelaySubOptionTypeCiscoEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SmartRelayGlobal.IsNull() && config.SmartRelayGlobal.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.Snooping.IsNull() && config.Snooping.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"SnoopingEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SnoopingInformationOption.IsNull() && config.SnoopingInformationOption.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"SnoopingInformationOptionEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SnoopingVerifyMacAddress.IsNull() && config.SnoopingVerifyMacAddress.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"SnoopingVerifyMacAddressEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DaiLogBufferEntries.IsNull() && config.DaiLogBufferEntries.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"daiLogBufEntries", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DaiValidateDestination.IsNull() && config.DaiValidateDestination.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"daiValidateDst", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DaiValidateIp.IsNull() && config.DaiValidateIp.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"daiValidateIp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DaiValidateSource.IsNull() && config.DaiValidateSource.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"daiValidateSrc", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.Ipv6RelayOption79.IsNull() && config.Ipv6RelayOption79.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ipv6RelayOption79Enabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PacketStrictValidation.IsNull() && config.PacketStrictValidation.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pktStrictVal", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelayDai.IsNull() && config.RelayDai.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"relayDAIEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelayInformationOptionServerIdOverride.IsNull() && config.RelayInformationOptionServerIdOverride.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"relayInformationOptionServerIdOverrideDisableEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelaySubOptionFormatNonTlv.IsNull() && config.RelaySubOptionFormatNonTlv.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"relaySubOptionFormatNonTLVEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelayV4OverV6.IsNull() && config.RelayV4OverV6.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"relayV4overV6Enabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RelayV6IapdRouteAdd.IsNull() && config.RelayV6IapdRouteAdd.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"relayV6IAPDRouteAddEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SnoopSubOptionCircuitIdFormatString.IsNull() && config.SnoopSubOptionCircuitIdFormatString.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"snoopSubOptionCircuitIdFormatString", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SnoopingSubOptionFormatNonTlv.IsNull() && config.SnoopingSubOptionFormatNonTlv.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"snoopingSubOptionFormatNonTLVEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.V4Relay.IsNull() && config.V4Relay.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v4RelayEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.V6Relay.IsNull() && config.V6Relay.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v6RelayEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.V6SmartRelayGlobal.IsNull() && config.V6SmartRelayGlobal.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v6SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.RelayInterfaces {
+			if configChild, ok := config.RelayInterfaces[key]; ok {
+				stateChild := state.RelayInterfaces[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children").Array() {
+					if mv.Get("dhcpRelayIf.attributes.id").String() == key {
+						if !stateChild.InformationTrusted.IsNull() && configChild.InformationTrusted.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"InformationTrustedEnabled", "DME_UNSET_PROPERTY_MARKER")
 						}
-						{
-							listChildPath := ""
-							for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-								if mv.Get("dhcpRelayIf.attributes.id").String() == key {
-									listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".dhcpRelayIf.children"
-									break
-								}
-							}
-							if listChildPath != "" {
-								for key := range stateChild.Addresses {
-									if configChild, ok := configChild.Addresses[key]; ok {
-										stateChild := stateChild.Addresses[key]
-										_ = stateChild
-										_ = configChild
-										keyParts := strings.SplitN(key, ";", 2)
-										for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
-											if mv.Get("dhcpRelayAddr.attributes.vrf").String() == keyParts[0] &&
-												mv.Get("dhcpRelayAddr.attributes.address").String() == keyParts[1] {
-												if !stateChild.Counter.IsNull() && configChild.Counter.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".dhcpRelayAddr.attributes."+"counter", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+						if !stateChild.SmartRelay.IsNull() && configChild.SmartRelay.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"SmartRelayEnabled", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.SubnetBroadcast.IsNull() && configChild.SubnetBroadcast.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"SubnetBroadcastEnabled", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Options.IsNull() && configChild.Options.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"options", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.SubnetSelection.IsNull() && configChild.SubnetSelection.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"subnetSelection", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.V6SmartRelay.IsNull() && configChild.V6SmartRelay.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpRelayIf.attributes."+"v6SmartRelayEnabled", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children").Array() {
+						if mv.Get("dhcpRelayIf.attributes.id").String() == key {
+							listChildPath = helpers.FindChildPath(body.Str, bodyPath, "dhcpInst") + ".children" + "." + strconv.Itoa(mi) + ".dhcpRelayIf.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Addresses {
+							if configChild, ok := configChild.Addresses[key]; ok {
+								stateChild := stateChild.Addresses[key]
+								_ = stateChild
+								_ = configChild
+								keyParts := strings.SplitN(key, ";", 2)
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("dhcpRelayAddr.attributes.vrf").String() == keyParts[0] &&
+										mv.Get("dhcpRelayAddr.attributes.address").String() == keyParts[1] {
+										if !stateChild.Counter.IsNull() && configChild.Counter.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".dhcpRelayAddr.attributes."+"counter", "DME_UNSET_PROPERTY_MARKER")
 										}
+										break
 									}
 								}
 							}

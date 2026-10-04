@@ -850,7 +850,8 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "flowExporter.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "flowExporter.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for stateKey := range state.Records {
@@ -859,7 +860,8 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "flowRecord.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "flowRecord.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for stateKey := range state.Monitors {
@@ -868,7 +870,8 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "flowMonitor.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "flowMonitor.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.Monitors {
@@ -918,7 +921,8 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "flowHwProfile.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "flowHwProfile.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for stateKey := range state.ClassMaps {
@@ -927,7 +931,8 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "flowClassMap.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "flowClassMap.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.ClassMaps {
@@ -1037,13 +1042,9 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 						}
 					}
 					if listChildPath != "" {
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("flowRsRecord").Exists() {
-								if !stateChild.RecordTargetDn.IsNull() && configChild.RecordTargetDn.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".flowRsRecord.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.RecordTargetDn.IsNull() && configChild.RecordTargetDn.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "flowRsRecord")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 						}
 						for key := range stateChild.ExporterBuckets {
 							if configChild, ok := configChild.ExporterBuckets[key]; ok {
@@ -1065,29 +1066,21 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 									}
 								}
 								{
-									listChildPath := ""
+									listChildPath_ := ""
 									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 										if mv.Get("flowExporterBucket.attributes.id").String() == key {
-											listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".flowExporterBucket.children"
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".flowExporterBucket.children"
 											break
 										}
 									}
-									if listChildPath != "" {
-										for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-											if sv.Get("flowRsExporter1").Exists() {
-												if !stateChild.Exporter1TargetDn.IsNull() && configChild.Exporter1TargetDn.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".flowRsExporter1.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+									if listChildPath_ != "" {
+										if !stateChild.Exporter1TargetDn.IsNull() && configChild.Exporter1TargetDn.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "flowRsExporter1")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 										}
-										for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-											if sv.Get("flowRsExporter2").Exists() {
-												if !stateChild.Exporter2TargetDn.IsNull() && configChild.Exporter2TargetDn.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".flowRsExporter2.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+										if !stateChild.Exporter2TargetDn.IsNull() && configChild.Exporter2TargetDn.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "flowRsExporter2")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 										}
 									}
 								}

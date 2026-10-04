@@ -117,6 +117,7 @@ type YamlConfig struct {
 	ChildClasses      []YamlConfigChildClass `yaml:"child_classes"`
 	TfChildClasses    []YamlConfigChildClass `yaml:"-"`
 	TestPrerequisites []YamlTest             `yaml:"test_prerequisites"`
+	AdditionalTests   []string               `yaml:"additional_tests"`
 }
 
 type YamlConfigAttribute struct {

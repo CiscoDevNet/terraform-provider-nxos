@@ -11,6 +11,7 @@ doc_category: str() # Documentation category for the resource
 attributes: list(include('attribute'), required=False) # List of attributes
 child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
 test_prerequisites: list(include('test_prerequisite'), required=False) # List of test prerequisites
+additional_tests: list(str(), required=False) # List of additional acceptance test HCL configurations, executed as consecutive test steps after the standard steps. Prerequisites are prepended automatically.
 ---
 attribute:
   nxos_name: str() # NX-API attribute name

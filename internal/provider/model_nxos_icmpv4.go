@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -310,7 +311,8 @@ func (data ICMPv4) toBodyWithDeletes(ctx context.Context, state ICMPv4, config I
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "icmpv4Dom.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "icmpv4Dom.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.icmpv4Inst.children"+".-1", deleteBody)
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "icmpv4Inst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.Vrfs {
@@ -320,9 +322,9 @@ func (data ICMPv4) toBodyWithDeletes(ctx context.Context, state ICMPv4, config I
 			stateItemdi := state.Vrfs[di]
 			planItemdi := data.Vrfs[di]
 			matchBodyPathdi := ""
-			for mi, mv := range gjson.Get(body.Str, bodyPath+".0.icmpv4Inst.children").Array() {
+			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "icmpv4Inst")+".children").Array() {
 				if mv.Get("icmpv4Dom.attributes.name").String() == di {
-					matchBodyPathdi = bodyPath + ".0.icmpv4Inst.children" + "." + strconv.Itoa(mi) + ".icmpv4Dom.children"
+					matchBodyPathdi = helpers.FindChildPath(body.Str, bodyPath, "icmpv4Inst") + ".children" + "." + strconv.Itoa(mi) + ".icmpv4Dom.children"
 					break
 				}
 			}
@@ -347,53 +349,39 @@ func (data ICMPv4) toBodyWithDeletes(ctx context.Context, state ICMPv4, config I
 		}
 	}
 	if !importing {
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("icmpv4Inst").Exists() {
-				if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv4Inst.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.Control.IsNull() && config.Control.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".icmpv4Inst.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-				}
-				break
-			}
+		if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "icmpv4Inst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
-		{
-			singleChildPath := ""
-			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-				if sv.Get("icmpv4Inst").Exists() {
-					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".icmpv4Inst.children"
-					break
-				}
-			}
-			if singleChildPath != "" {
-				for key := range state.Vrfs {
-					if configChild, ok := config.Vrfs[key]; ok {
-						stateChild := state.Vrfs[key]
-						_ = stateChild
-						_ = configChild
-						{
-							listChildPath := ""
-							for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-								if mv.Get("icmpv4Dom.attributes.name").String() == key {
-									listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".icmpv4Dom.children"
-									break
-								}
-							}
-							if listChildPath != "" {
-								for key := range stateChild.Interfaces {
-									if configChild, ok := configChild.Interfaces[key]; ok {
-										stateChild := stateChild.Interfaces[key]
-										_ = stateChild
-										_ = configChild
-										for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
-											if mv.Get("icmpv4If.attributes.id").String() == key {
-												if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".icmpv4If.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+		if !state.Control.IsNull() && config.Control.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "icmpv4Inst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.Vrfs {
+			if configChild, ok := config.Vrfs[key]; ok {
+				stateChild := state.Vrfs[key]
+				_ = stateChild
+				_ = configChild
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "icmpv4Inst")+".children").Array() {
+						if mv.Get("icmpv4Dom.attributes.name").String() == key {
+							listChildPath = helpers.FindChildPath(body.Str, bodyPath, "icmpv4Inst") + ".children" + "." + strconv.Itoa(mi) + ".icmpv4Dom.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Interfaces {
+							if configChild, ok := configChild.Interfaces[key]; ok {
+								stateChild := stateChild.Interfaces[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("icmpv4If.attributes.id").String() == key {
+										if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".icmpv4If.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
 										}
+										break
 									}
 								}
 							}

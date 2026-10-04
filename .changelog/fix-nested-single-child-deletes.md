@@ -1,0 +1,2 @@
+- Fix `nxos_access_list` update failing with HTTP 400 or `child (Rn) of class aclPolicy is already attached` when removing interface bindings (`ingress_interfaces`, `egress_interfaces`, and IPv6 variants)
+- Fix removed attributes of nested child objects (for example `ingress_vty_access_list_name` in `nxos_access_list`) not being unset on the device

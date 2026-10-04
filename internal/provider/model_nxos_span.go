@@ -585,7 +585,8 @@ func (data SPAN) toBodyWithDeletes(ctx context.Context, state SPAN, config SPAN,
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "spanMonitor.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "spanMonitor.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.Sessions {

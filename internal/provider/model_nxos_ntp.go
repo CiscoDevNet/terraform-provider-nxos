@@ -501,7 +501,8 @@ func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP, config NTP, im
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 	}
@@ -569,33 +570,29 @@ func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP, config NTP, im
 				}
 			}
 		}
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("datetimeNtpSrcIf").Exists() {
-				if !state.SourceInterface.IsNull() && config.SourceInterface.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".datetimeNtpSrcIf.attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
-				}
-				break
-			}
+		if !state.SourceInterface.IsNull() && config.SourceInterface.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeNtpSrcIf")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
 		}
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("datetimeAccessGroup").Exists() {
-				if !state.AccessGroupMatchAll.IsNull() && config.AccessGroupMatchAll.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".datetimeAccessGroup.attributes."+"matchAll", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.AccessGroupPeer.IsNull() && config.AccessGroupPeer.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".datetimeAccessGroup.attributes."+"peer", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.AccessGroupQueryOnly.IsNull() && config.AccessGroupQueryOnly.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".datetimeAccessGroup.attributes."+"queryOnly", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.AccessGroupServe.IsNull() && config.AccessGroupServe.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".datetimeAccessGroup.attributes."+"serve", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.AccessGroupServeOnly.IsNull() && config.AccessGroupServeOnly.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".datetimeAccessGroup.attributes."+"serveOnly", "DME_UNSET_PROPERTY_MARKER")
-				}
-				break
-			}
+		if !state.AccessGroupMatchAll.IsNull() && config.AccessGroupMatchAll.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"matchAll", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.AccessGroupPeer.IsNull() && config.AccessGroupPeer.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peer", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.AccessGroupQueryOnly.IsNull() && config.AccessGroupQueryOnly.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queryOnly", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.AccessGroupServe.IsNull() && config.AccessGroupServe.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"serve", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.AccessGroupServeOnly.IsNull() && config.AccessGroupServeOnly.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"serveOnly", "DME_UNSET_PROPERTY_MARKER")
 		}
 	}
 

@@ -146,6 +146,14 @@ resource "nxos_dme" "PreReq0" {
   }
 }
 
+resource "nxos_dme" "PreReq1" {
+  dn = "sys/intf/phys-[eth1/11]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -300,7 +308,7 @@ func testAccDataSourceNxosAccessListConfig() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

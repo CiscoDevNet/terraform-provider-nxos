@@ -737,7 +737,8 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "nvoEp.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "nvoEp.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.NveInterfaces {
@@ -762,7 +763,8 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "nvoNw.attributes.rn", stateChild.getRn(stateKey))
 					deleteBody, _ = sjson.Set(deleteBody, "nvoNw.attributes.status", "deleted")
-					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.nvoNws.children"+".-1", deleteBody)
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "nvoNws") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 				}
 			}
 			for di__ := range stateItemdi.Vnis {
@@ -770,9 +772,9 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 					continue
 				}
 				matchBodyPathdi__ := ""
-				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi+".0.nvoNws.children").Array() {
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, matchBodyPathdi, "nvoNws")+".children").Array() {
 					if mv.Get("nvoNw.attributes.vni").String() == di__ {
-						matchBodyPathdi__ = matchBodyPathdi + ".0.nvoNws.children" + "." + strconv.Itoa(mi) + ".nvoNw.children"
+						matchBodyPathdi__ = helpers.FindChildPath(body.Str, matchBodyPathdi, "nvoNws") + ".children" + "." + strconv.Itoa(mi) + ".nvoNw.children"
 						break
 					}
 				}
@@ -792,31 +794,33 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 		}
 	}
 	if !importing {
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("nvoEvpnMultisiteBordergw").Exists() {
-				if !state.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() && config.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".nvoEvpnMultisiteBordergw.attributes."+"dciAdvertisePip", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() && config.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".nvoEvpnMultisiteBordergw.attributes."+"delayRestoreTime", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() && config.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".nvoEvpnMultisiteBordergw.attributes."+"dfElectionTime", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() && config.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".nvoEvpnMultisiteBordergw.attributes."+"fabricAdvertisePip", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.EvpnMultisiteBorderGatewaySiteId.IsNull() && config.EvpnMultisiteBorderGatewaySiteId.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".nvoEvpnMultisiteBordergw.attributes."+"siteId", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() && config.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".nvoEvpnMultisiteBordergw.attributes."+"splitHorizonPerSite", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.EvpnMultisiteBorderGatewayState.IsNull() && config.EvpnMultisiteBorderGatewayState.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".nvoEvpnMultisiteBordergw.attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
-				}
-				break
-			}
+		if !state.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() && config.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dciAdvertisePip", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() && config.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreTime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() && config.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dfElectionTime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() && config.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fabricAdvertisePip", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultisiteBorderGatewaySiteId.IsNull() && config.EvpnMultisiteBorderGatewaySiteId.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"siteId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() && config.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"splitHorizonPerSite", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultisiteBorderGatewayState.IsNull() && config.EvpnMultisiteBorderGatewayState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.NveInterfaces {
 			if configChild, ok := config.NveInterfaces[key]; ok {
@@ -900,64 +904,49 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 						}
 					}
 					if listChildPath != "" {
-						{
-							singleChildPath := ""
-							for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-								if sv.Get("nvoNws").Exists() {
-									singleChildPath = listChildPath + "." + strconv.Itoa(si) + ".nvoNws.children"
-									break
-								}
-							}
-							if singleChildPath != "" {
-								for key := range stateChild.Vnis {
-									if configChild, ok := configChild.Vnis[key]; ok {
-										stateChild := stateChild.Vnis[key]
-										_ = stateChild
-										_ = configChild
-										for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-											if mv.Get("nvoNw.attributes.vni").String() == key {
-												if !stateChild.AssociateVrf.IsNull() && configChild.AssociateVrf.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"associateVrfFlag", "DME_UNSET_PROPERTY_MARKER")
-												}
-												if !stateChild.MulticastGroup.IsNull() && configChild.MulticastGroup.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"mcastGroup", "DME_UNSET_PROPERTY_MARKER")
-												}
-												if !stateChild.MultisiteIngressReplication.IsNull() && configChild.MultisiteIngressReplication.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"multisiteIngRepl", "DME_UNSET_PROPERTY_MARKER")
-												}
-												if !stateChild.SuppressArp.IsNull() && configChild.SuppressArp.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"suppressARP", "DME_UNSET_PROPERTY_MARKER")
-												}
-												if !stateChild.LegacyMode.IsNull() && configChild.LegacyMode.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"isLegacyMode", "DME_UNSET_PROPERTY_MARKER")
-												}
-												if !stateChild.MultisiteMulticastGroup.IsNull() && configChild.MultisiteMulticastGroup.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"multisiteMcastGroup", "DME_UNSET_PROPERTY_MARKER")
-												}
-												if !stateChild.SpineAnycastGateway.IsNull() && configChild.SpineAnycastGateway.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"spineAnyCastGw", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+						for key := range stateChild.Vnis {
+							if configChild, ok := configChild.Vnis[key]; ok {
+								stateChild := stateChild.Vnis[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, listChildPath, "nvoNws")+".children").Array() {
+									if mv.Get("nvoNw.attributes.vni").String() == key {
+										if !stateChild.AssociateVrf.IsNull() && configChild.AssociateVrf.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "nvoNws")+".children"+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"associateVrfFlag", "DME_UNSET_PROPERTY_MARKER")
 										}
-										{
-											listChildPath := ""
-											for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-												if mv.Get("nvoNw.attributes.vni").String() == key {
-													listChildPath = singleChildPath + "." + strconv.Itoa(mi) + ".nvoNw.children"
-													break
-												}
-											}
-											if listChildPath != "" {
-												for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-													if sv.Get("nvoIngRepl").Exists() {
-														if !stateChild.IngressReplicationProtocol.IsNull() && configChild.IngressReplicationProtocol.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nvoIngRepl.attributes."+"proto", "DME_UNSET_PROPERTY_MARKER")
-														}
-														break
-													}
-												}
-											}
+										if !stateChild.MulticastGroup.IsNull() && configChild.MulticastGroup.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "nvoNws")+".children"+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"mcastGroup", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.MultisiteIngressReplication.IsNull() && configChild.MultisiteIngressReplication.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "nvoNws")+".children"+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"multisiteIngRepl", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SuppressArp.IsNull() && configChild.SuppressArp.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "nvoNws")+".children"+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"suppressARP", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.LegacyMode.IsNull() && configChild.LegacyMode.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "nvoNws")+".children"+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"isLegacyMode", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.MultisiteMulticastGroup.IsNull() && configChild.MultisiteMulticastGroup.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "nvoNws")+".children"+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"multisiteMcastGroup", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SpineAnycastGateway.IsNull() && configChild.SpineAnycastGateway.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "nvoNws")+".children"+"."+strconv.Itoa(mi)+".nvoNw.attributes."+"spineAnyCastGw", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+								{
+									listChildPath_ := ""
+									for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, listChildPath, "nvoNws")+".children").Array() {
+										if mv.Get("nvoNw.attributes.vni").String() == key {
+											listChildPath_ = helpers.FindChildPath(body.Str, listChildPath, "nvoNws") + ".children" + "." + strconv.Itoa(mi) + ".nvoNw.children"
+											break
+										}
+									}
+									if listChildPath_ != "" {
+										if !stateChild.IngressReplicationProtocol.IsNull() && configChild.IngressReplicationProtocol.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "nvoIngRepl")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"proto", "DME_UNSET_PROPERTY_MARKER")
 										}
 									}
 								}

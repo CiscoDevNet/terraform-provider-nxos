@@ -89,6 +89,12 @@ resource "nxos_route_policy" "example" {
           match_regular_community_lists = {
             "sys/rpm/rtregcom-[COMMUNITY_LIST1]" = {}
           }
+          match_as_path_lists = {
+            "sys/rpm/accesslist-[AS_PATH_LIST1]" = {}
+          }
+          match_as_number_as_path_lists = {
+            "sys/rpm/accesslist-[AS_PATH_LIST1]" = {}
+          }
         }
       }
     }
@@ -103,6 +109,16 @@ resource "nxos_route_policy" "example" {
             "regular:as2-nn2:65001:123" = {
             }
           }
+        }
+      }
+    }
+  }
+  as_path_access_lists = {
+    "AS_PATH_LIST1" = {
+      entries = {
+        "10" = {
+          action = "deny"
+          regex  = "_65110_"
         }
       }
     }

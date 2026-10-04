@@ -83,6 +83,8 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.match_regular_community_criteria", "exact"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.mode", "standard"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.entries.10.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.action", "deny"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.regex", "_65110_"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -199,6 +201,14 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `						"sys/rpm/rtregcom-[COMMUNITY_LIST1]" = {` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
+	config += `					match_as_path_lists = {` + "\n"
+	config += `						"sys/rpm/accesslist-[AS_PATH_LIST1]" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					match_as_number_as_path_lists = {` + "\n"
+	config += `						"sys/rpm/accesslist-[AS_PATH_LIST1]" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"
@@ -213,6 +223,16 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `						"regular:as2-nn2:65001:123" = {` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	as_path_access_lists = {` + "\n"
+	config += `		"AS_PATH_LIST1" = {` + "\n"
+	config += `			entries = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					action = "deny"` + "\n"
+	config += `					regex = "_65110_"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

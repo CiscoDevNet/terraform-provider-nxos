@@ -1,2 +1,0 @@
-- Add AS-Path access list (and their entries) configuration to `nxos_route_policy` resource and data source
-- Add match AS-Path access list and match AS number AS-Path access list configuration to `nxos_route_policy` route map entries

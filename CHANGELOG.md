@@ -1,3 +1,13 @@
+## 0.15.0
+
+- Add global BFD timers (keepalive policy: detect multiplier, echo receive interval, minimum receive interval, minimum transmit interval) configuration to `nxos_bfd` resource and data source
+- Add AS-Path access list (and their entries) configuration to `nxos_route_policy` resource and data source
+- Add match AS-Path access list and match AS number AS-Path access list configuration to `nxos_route_policy` route map entries
+- Fix `terraform destroy` failing for objects belonging to a feature that is not enabled on the device, even though they were never configured
+- Fix `nxos_access_list` update failing with HTTP 400 or `child (Rn) of class aclPolicy is already attached` when removing interface bindings (`ingress_interfaces`, `egress_interfaces`, and IPv6 variants)
+- Fix removed attributes of nested child objects (for example `ingress_vty_access_list_name` in `nxos_access_list`) not being unset on the device
+- Fix `nxos_pim` update failing with `child (Rn) cannot be added to deleted object` when all group lists of a static RP are replaced at once
+
 ## 0.14.0
 
 - Add IPv4 address, IPv6 address, and port object group (and their members) configuration to `nxos_access_list` resource and data source

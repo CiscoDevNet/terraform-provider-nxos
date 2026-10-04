@@ -1,0 +1,1 @@
+- Fix `nxos_pim` update failing with `child (Rn) cannot be added to deleted object` when all group lists of a static RP are replaced at once

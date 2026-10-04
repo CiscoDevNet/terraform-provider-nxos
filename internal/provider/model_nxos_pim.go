@@ -1166,8 +1166,11 @@ func (data PIM) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM, importing bool) nxos.Body {
-	body := data.toBody(config)
+// toBodyWithDeletes returns the update body. With deferEmptied set, deletes of children that would
+// leave an auto_delete_on_empty parent without children are left out and deferred is true, so the
+// caller can send them in a second request after the new children have been created.
+func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM, importing bool, deferEmptied bool) (body nxos.Body, deferred bool) {
+	body = data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	if !importing {
@@ -1230,8 +1233,24 @@ func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM, im
 				if matchBodyPathdi__ == "" {
 					continue
 				}
+				// NX-OS removes the parent once its last child is deleted, so a request that
+				// deletes all existing children and adds new ones fails. Defer those deletes.
+				deferChildDeletesdi__ := false
+				if deferEmptied && len(planItemdi__.GroupLists) > 0 {
+					deferChildDeletesdi__ = true
+					for stateChildKey := range stateItemdi__.GroupLists {
+						if _, found := planItemdi__.GroupLists[stateChildKey]; found {
+							deferChildDeletesdi__ = false
+							break
+						}
+					}
+				}
 				for stateChildKey := range stateItemdi__.GroupLists {
 					if _, found := planItemdi__.GroupLists[stateChildKey]; !found {
+						if deferChildDeletesdi__ {
+							deferred = true
+							continue
+						}
 						stateChild := stateItemdi__.GroupLists[stateChildKey]
 						deleteBody := ""
 						deleteBody, _ = sjson.Set(deleteBody, "pimRPGrpList.attributes.rn", stateChild.getRn(stateChildKey))
@@ -1557,7 +1576,7 @@ func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM, im
 		}
 	}
 
-	return body
+	return body, deferred
 }
 
 // End of section. //template:end toDeleteBody

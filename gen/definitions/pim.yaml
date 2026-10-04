@@ -355,6 +355,7 @@ child_classes:
                 type: list
                 tf_name: static_rps
                 description: 'List of PIM Static RP configurations.'
+                auto_delete_on_empty: true
                 attributes:
                   - nxos_name: addr
                     tf_name: address

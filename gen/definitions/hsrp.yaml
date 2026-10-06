@@ -331,6 +331,29 @@ child_classes:
                 max_int: 255
                 description: 'Group Priority.'
                 example: 110
+            child_classes:
+              - class_name: hsrpObjectTrack
+                doc_path: System/hsrp:ObjectTrack/
+                rn: track-%v
+                type: list
+                tf_name: tracked_objects
+                description: 'List of objects tracked by the HSRP group.'
+                attributes:
+                  - nxos_name: id
+                    tf_name: id
+                    type: Int64
+                    id: true
+                    min_int: 1
+                    max_int: 512
+                    description: 'Object Id to be tracked.'
+                    example: 10
+                  - nxos_name: decrPrio
+                    tf_name: decrement_priority
+                    type: Int64
+                    min_int: 1
+                    max_int: 255
+                    description: 'Priority to be decremented when tracked object is down. Default value is 10.'
+                    example: 20
 test_prerequisites:
   - dn: sys/fm/hsrp
     class_name: fmHsrp
@@ -357,3 +380,17 @@ test_prerequisites:
     attributes:
       - name: id
         value: vlan10
+  - dn: sys/track/object-10
+    class_name: trackObject
+    attributes:
+      - name: id
+        value: 10
+    children:
+      - rn: if
+        class_name: trackIf
+        attributes:
+          - name: id
+            value: vlan10
+          - name: protocolType
+            value: line-protocol
+    dependencies: [3]

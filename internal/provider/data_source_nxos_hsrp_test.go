@@ -60,6 +60,7 @@ func TestAccDataSourceNxosHSRP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_reload", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_sync", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.priority", "110"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.tracked_objects.10.decrement_priority", "20"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -113,6 +114,25 @@ resource "nxos_dme" "PreReq3" {
   depends_on = [nxos_dme.PreReq2, ]
 }
 
+resource "nxos_dme" "PreReq4" {
+  dn = "sys/track/object-10"
+  class_name = "trackObject"
+  content = {
+      id = "10"
+  }
+  children = [
+    {
+      rn         = "if"
+      class_name = "trackIf"
+      content = {
+          id = "vlan10"
+          protocolType = "line-protocol"
+      }
+    },
+  ]
+  depends_on = [nxos_dme.PreReq3, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -153,11 +173,16 @@ func testAccDataSourceNxosHSRPConfig() string {
 	config += `					preempt_delay_reload = 10` + "\n"
 	config += `					preempt_delay_sync = 10` + "\n"
 	config += `					priority = 110` + "\n"
+	config += `					tracked_objects = {` + "\n"
+	config += `						"10" = {` + "\n"
+	config += `							decrement_priority = 20` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

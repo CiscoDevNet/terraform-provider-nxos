@@ -57,7 +57,7 @@ func (d *HSRPDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *HSRPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.").AddApiDocumentation("hsrpEntity", "System/hsrp:Entity/", []string{"hsrpInst", "hsrpIf", "hsrpGroup"}, []string{"System/hsrp:Inst/", "System/hsrp:If/", "System/hsrp:Group/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.").AddApiDocumentation("hsrpEntity", "System/hsrp:Entity/", []string{"hsrpInst", "hsrpIf", "hsrpGroup", "hsrpObjectTrack"}, []string{"System/hsrp:Inst/", "System/hsrp:If/", "System/hsrp:Group/", "System/hsrp:ObjectTrack/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -239,6 +239,18 @@ func (d *HSRPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "Group Priority.",
 										Computed:            true,
 									},
+									"tracked_objects": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of objects tracked by the HSRP group.\n  - Map key: `id` - Object Id to be tracked.\n  - Key range: `1`-`512`").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"decrement_priority": schema.Int64Attribute{
+													MarkdownDescription: "Priority to be decremented when tracked object is down. Default value is 10.",
+													Computed:            true,
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -277,7 +289,7 @@ func (d *HSRPDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "hsrpInst,hsrpIf,hsrpGroup")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "hsrpInst,hsrpIf,hsrpGroup,hsrpObjectTrack")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

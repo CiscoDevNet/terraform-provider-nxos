@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.
   API Documentation
-  hsrpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Entity/hsrpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Inst/hsrpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:If/hsrpGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Group/
+  hsrpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Entity/hsrpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Inst/hsrpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:If/hsrpGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Group/hsrpObjectTrack https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:ObjectTrack/
 ---
 
 # nxos_hsrp (Resource)
@@ -18,6 +18,7 @@ This resource can manage the HSRP configuration on NX-OS devices, including HSRP
 - [hsrpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Inst/)
 - [hsrpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:If/)
 - [hsrpGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Group/)
+- [hsrpObjectTrack](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:ObjectTrack/)
 
 ## Example Usage
 
@@ -56,6 +57,11 @@ resource "nxos_hsrp" "example" {
           preempt_delay_reload       = 10
           preempt_delay_sync         = 10
           priority                   = 110
+          tracked_objects = {
+            "10" = {
+              decrement_priority = 20
+            }
+          }
         }
       }
     }
@@ -160,6 +166,17 @@ Optional:
   - Range: `0`-`3600`
 - `priority` (Number) Group Priority.
   - Range: `0`-`255`
+- `tracked_objects` (Attributes Map) List of objects tracked by the HSRP group.
+  - Map key: `id` - Object Id to be tracked.
+  - Key range: `1`-`512` (see [below for nested schema](#nestedatt--interfaces--groups--tracked_objects))
+
+<a id="nestedatt--interfaces--groups--tracked_objects"></a>
+### Nested Schema for `interfaces.groups.tracked_objects`
+
+Optional:
+
+- `decrement_priority` (Number) Priority to be decremented when tracked object is down. Default value is 10.
+  - Range: `1`-`255`
 
 ## Import
 

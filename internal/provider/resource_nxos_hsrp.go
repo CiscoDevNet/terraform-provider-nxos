@@ -64,7 +64,7 @@ func (r *HSRPResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *HSRPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.").AddApiDocumentation("hsrpEntity", "System/hsrp:Entity/", []string{"hsrpInst", "hsrpIf", "hsrpGroup"}, []string{"System/hsrp:Inst/", "System/hsrp:If/", "System/hsrp:Group/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.").AddApiDocumentation("hsrpEntity", "System/hsrp:Entity/", []string{"hsrpInst", "hsrpIf", "hsrpGroup", "hsrpObjectTrack"}, []string{"System/hsrp:Inst/", "System/hsrp:If/", "System/hsrp:Group/", "System/hsrp:ObjectTrack/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -328,6 +328,21 @@ func (r *HSRPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											int64validator.Between(0, 255),
 										},
 									},
+									"tracked_objects": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of objects tracked by the HSRP group.\n  - Map key: `id` - Object Id to be tracked.\n  - Key range: `1`-`512`").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"decrement_priority": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Priority to be decremented when tracked object is down. Default value is 10.").AddIntegerRangeDescription(1, 255).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 255),
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -462,7 +477,7 @@ func (r *HSRPResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "hsrpInst,hsrpIf,hsrpGroup")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "hsrpInst,hsrpIf,hsrpGroup,hsrpObjectTrack")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

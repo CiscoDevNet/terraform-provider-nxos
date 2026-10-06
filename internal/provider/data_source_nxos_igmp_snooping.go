@@ -57,7 +57,7 @@ func (d *IGMPSnoopingDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *IGMPSnoopingDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global IGMP snooping configuration on NX-OS devices, including admin state, instance controls, domain controls (querier, optimized multicast flood, routing), VXLAN snooping, and NVE static router port settings.").AddApiDocumentation("igmpsnoopEntity", "Layer 3/igmpsnoop:Entity/", []string{"igmpsnoopInst", "igmpsnoopDom", "igmpsnoopGl", "igmpsnoopGVlan"}, []string{"Layer 3/igmpsnoop:Inst/", "Layer 3/igmpsnoop:Dom/", "Layer 3/igmpsnoop:Gl/", "Layer 3/igmpsnoop:GVlan/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global IGMP snooping configuration on NX-OS devices, including admin state, instance controls, domain controls (querier, optimized multicast flood, routing), VXLAN snooping, and NVE static router port settings.").AddApiDocumentation("igmpsnoopEntity", "Layer%203/igmpsnoop:Entity/", []string{"igmpsnoopInst", "igmpsnoopDom", "igmpsnoopGl", "igmpsnoopGVlan"}, []string{"Layer%203/igmpsnoop:Inst/", "Layer%203/igmpsnoop:Dom/", "Layer%203/igmpsnoop:Gl/", "Layer%203/igmpsnoop:GVlan/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

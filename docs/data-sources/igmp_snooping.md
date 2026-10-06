@@ -5,7 +5,7 @@ subcategory: "Multicast"
 description: |-
   This data source can read the global IGMP snooping configuration on NX-OS devices, including admin state, instance controls, domain controls (querier, optimized multicast flood, routing), VXLAN snooping, and NVE static router port settings.
   API Documentation
-  [igmpsnoopEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer 3/igmpsnoop:Entity/)[igmpsnoopInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer 3/igmpsnoop:Inst/)[igmpsnoopDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer 3/igmpsnoop:Dom/)[igmpsnoopGl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer 3/igmpsnoop:Gl/)[igmpsnoopGVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer 3/igmpsnoop:GVlan/)
+  igmpsnoopEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/igmpsnoop:Entity/igmpsnoopInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/igmpsnoop:Inst/igmpsnoopDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/igmpsnoop:Dom/igmpsnoopGl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/igmpsnoop:Gl/igmpsnoopGVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/igmpsnoop:GVlan/
 ---
 
 # nxos_igmp_snooping (Data Source)
@@ -14,11 +14,11 @@ This data source can read the global IGMP snooping configuration on NX-OS device
 
 ### API Documentation
 
-- [igmpsnoopEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer 3/igmpsnoop:Entity/)
-- [igmpsnoopInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer 3/igmpsnoop:Inst/)
-- [igmpsnoopDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer 3/igmpsnoop:Dom/)
-- [igmpsnoopGl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer 3/igmpsnoop:Gl/)
-- [igmpsnoopGVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer 3/igmpsnoop:GVlan/)
+- [igmpsnoopEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/igmpsnoop:Entity/)
+- [igmpsnoopInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/igmpsnoop:Inst/)
+- [igmpsnoopDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/igmpsnoop:Dom/)
+- [igmpsnoopGl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/igmpsnoop:Gl/)
+- [igmpsnoopGVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/igmpsnoop:GVlan/)
 
 ## Example Usage
 

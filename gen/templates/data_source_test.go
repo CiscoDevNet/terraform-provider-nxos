@@ -148,6 +148,23 @@ resource "nxos_dme" "PreReq{{$index}}" {
     {{- end}}
   }
   {{- end}}
+  {{- if .Children}}
+  children = [
+    {{- range .Children}}
+    {
+      rn         = "{{.Rn}}"
+      class_name = "{{.ClassName}}"
+      {{- if .Attributes}}
+      content = {
+        {{- range .Attributes}}
+          {{.Name}} = "{{.Value}}"
+        {{- end}}
+      }
+      {{- end}}
+    },
+    {{- end}}
+  ]
+  {{- end}}
   {{- if .Dependencies}}
   depends_on = [{{range .Dependencies}}nxos_dme.PreReq{{.}}, {{end}}]
   {{- end}}

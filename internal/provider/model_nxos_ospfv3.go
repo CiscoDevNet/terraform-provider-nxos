@@ -771,7 +771,8 @@ func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config O
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "ospfv3Inst.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "ospfv3Inst.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.Instances {
@@ -841,7 +842,8 @@ func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config O
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "ospfv3If.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "ospfv3If.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 	}
@@ -921,35 +923,35 @@ func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config O
 									}
 								}
 								{
-									listChildPath := ""
+									listChildPath_ := ""
 									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 										if mv.Get("ospfv3Dom.attributes.name").String() == key {
-											listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".ospfv3Dom.children"
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".ospfv3Dom.children"
 											break
 										}
 									}
-									if listChildPath != "" {
+									if listChildPath_ != "" {
 										for key := range stateChild.Areas {
 											if configChild, ok := configChild.Areas[key]; ok {
 												stateChild := stateChild.Areas[key]
 												_ = stateChild
 												_ = configChild
-												for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
 													if mv.Get("ospfv3Area.attributes.id").String() == key {
 														if !stateChild.Redistribute.IsNull() && configChild.Redistribute.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ospfv3Area.attributes."+"redistribute", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".ospfv3Area.attributes."+"redistribute", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.NssaTranslatorRole.IsNull() && configChild.NssaTranslatorRole.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ospfv3Area.attributes."+"nssaTransRole", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".ospfv3Area.attributes."+"nssaTransRole", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.Summary.IsNull() && configChild.Summary.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ospfv3Area.attributes."+"summary", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".ospfv3Area.attributes."+"summary", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.SuppressForwardAddress.IsNull() && configChild.SuppressForwardAddress.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ospfv3Area.attributes."+"supressFa", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".ospfv3Area.attributes."+"supressFa", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.Type.IsNull() && configChild.Type.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ospfv3Area.attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".ospfv3Area.attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
 														}
 														break
 													}
@@ -961,19 +963,19 @@ func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config O
 												stateChild := stateChild.AddressFamilies[key]
 												_ = stateChild
 												_ = configChild
-												for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
 													if mv.Get("ospfv3DomAf.attributes.type").String() == key {
 														if !stateChild.AdministrativeDistance.IsNull() && configChild.AdministrativeDistance.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ospfv3DomAf.attributes."+"adminDistance", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".ospfv3DomAf.attributes."+"adminDistance", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.DefaultMetric.IsNull() && configChild.DefaultMetric.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ospfv3DomAf.attributes."+"defaultMetric", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".ospfv3DomAf.attributes."+"defaultMetric", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.DefaultRouteNssaPbitClear.IsNull() && configChild.DefaultRouteNssaPbitClear.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ospfv3DomAf.attributes."+"defRtNssaPbitClear", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".ospfv3DomAf.attributes."+"defRtNssaPbitClear", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.MaxEcmpCost.IsNull() && configChild.MaxEcmpCost.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".ospfv3DomAf.attributes."+"maxEcmp", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".ospfv3DomAf.attributes."+"maxEcmp", "DME_UNSET_PROPERTY_MARKER")
 														}
 														break
 													}

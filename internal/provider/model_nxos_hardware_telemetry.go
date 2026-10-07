@@ -404,11 +404,54 @@ func (data HardwareTelemetry) toDeleteBody() nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	{
 		childBody := ""
-		hasNestedChildren := false
-		hasNestedChildren = true
-		if childBody != "" || hasNestedChildren {
-			childIndex := len(gjson.Get(body, childrenPath).Array())
-			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".sflowSflow"
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".sflowSflow"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.SflowAdminState.IsNull() {
+				childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SflowAgentAddress.IsNull() {
+				childBody, _ = sjson.Set(childBody, "agentAddress", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SflowCounterPollInterval.IsNull() {
+				childBody, _ = sjson.Set(childBody, "counterPollInterval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SflowControl.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SflowExtendedBgp.IsNull() {
+				childBody, _ = sjson.Set(childBody, "isExtendedBgp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SflowExtendedSwitch.IsNull() {
+				childBody, _ = sjson.Set(childBody, "isExtendedSwitch", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SflowMaxHeaderSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "maxHeaderSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SflowPacketSamplingRate.IsNull() {
+				childBody, _ = sjson.Set(childBody, "pktSamplingRate", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SflowReceiverMaxDatagramSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "rcvrMaxDatagramSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SflowReceiverPort.IsNull() {
+				childBody, _ = sjson.Set(childBody, "rcvrPort", "DME_UNSET_PROPERTY_MARKER")
+			}
+			hasAttributes := childBody != ""
+			siblingsPath := nestedChildrenPath
+			childIndex := len(gjson.Get(body, siblingsPath).Array())
+			entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+			childBodyPath := entryPath + ".sflowInst"
 			if childBody == "" {
 				childBody = "{}"
 			}
@@ -417,71 +460,38 @@ func (data HardwareTelemetry) toDeleteBody() nxos.Body {
 			_ = nestedChildrenPath
 			{
 				childBody := ""
-				if !data.SflowAdminState.IsNull() {
-					childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.SflowAgentAddress.IsNull() {
-					childBody, _ = sjson.Set(childBody, "agentAddress", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.SflowCounterPollInterval.IsNull() {
-					childBody, _ = sjson.Set(childBody, "counterPollInterval", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.SflowControl.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ctrl", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.SflowExtendedBgp.IsNull() {
-					childBody, _ = sjson.Set(childBody, "isExtendedBgp", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.SflowExtendedSwitch.IsNull() {
-					childBody, _ = sjson.Set(childBody, "isExtendedSwitch", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.SflowMaxHeaderSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "maxHeaderSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.SflowPacketSamplingRate.IsNull() {
-					childBody, _ = sjson.Set(childBody, "pktSamplingRate", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.SflowReceiverMaxDatagramSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "rcvrMaxDatagramSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.SflowReceiverPort.IsNull() {
-					childBody, _ = sjson.Set(childBody, "rcvrPort", "DME_UNSET_PROPERTY_MARKER")
-				}
 				hasNestedChildren := false
-				hasNestedChildren = true
+				if len(data.Receivers) > 0 {
+					hasNestedChildren = true
+				}
 				if childBody != "" || hasNestedChildren {
 					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sflowInst"
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sflowTransport"
 					if childBody == "" {
 						childBody = "{}"
 					}
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					nestedChildrenPath := childBodyPath + ".children"
 					_ = nestedChildrenPath
-					{
-						childBody := ""
-						hasNestedChildren := false
-						if len(data.Receivers) > 0 {
-							hasNestedChildren = true
-						}
-						if childBody != "" || hasNestedChildren {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".sflowTransport"
-							if childBody == "" {
-								childBody = "{}"
-							}
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-							nestedChildrenPath := childBodyPath + ".children"
-							_ = nestedChildrenPath
-							for key, child := range data.Receivers {
-								deleteBody := ""
-								deleteBody, _ = sjson.Set(deleteBody, "sflowReceiver.attributes.rn", child.getRn(key))
-								deleteBody, _ = sjson.Set(deleteBody, "sflowReceiver.attributes.status", "deleted")
-								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-							}
-						}
+					for key, child := range data.Receivers {
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "sflowReceiver.attributes.rn", child.getRn(key))
+						deleteBody, _ = sjson.Set(deleteBody, "sflowReceiver.attributes.status", "deleted")
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 					}
 				}
+			}
+			if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, entryPath)
+				if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, siblingsPath)
+				}
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
 			}
 		}
 	}
@@ -500,7 +510,8 @@ func (data HardwareTelemetry) toBodyWithDeletes(ctx context.Context, state Hardw
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "sflowReceiver.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "sflowReceiver.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.sflowSflow.children"+".0.sflowInst.children"+".0.sflowTransport.children"+".-1", deleteBody)
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")+".children", "sflowTransport") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 	}
@@ -508,87 +519,59 @@ func (data HardwareTelemetry) toBodyWithDeletes(ctx context.Context, state Hardw
 	if !importing {
 	}
 	if !importing {
-		{
-			singleChildPath := ""
-			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-				if sv.Get("sflowSflow").Exists() {
-					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".sflowSflow.children"
-					break
-				}
-			}
-			if singleChildPath != "" {
-				for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
-					if sv.Get("sflowInst").Exists() {
-						if !state.SflowAdminState.IsNull() && config.SflowAdminState.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".sflowInst.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !state.SflowAgentAddress.IsNull() && config.SflowAgentAddress.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".sflowInst.attributes."+"agentAddress", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !state.SflowCounterPollInterval.IsNull() && config.SflowCounterPollInterval.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".sflowInst.attributes."+"counterPollInterval", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !state.SflowControl.IsNull() && config.SflowControl.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".sflowInst.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !state.SflowExtendedBgp.IsNull() && config.SflowExtendedBgp.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".sflowInst.attributes."+"isExtendedBgp", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !state.SflowExtendedSwitch.IsNull() && config.SflowExtendedSwitch.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".sflowInst.attributes."+"isExtendedSwitch", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !state.SflowMaxHeaderSize.IsNull() && config.SflowMaxHeaderSize.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".sflowInst.attributes."+"maxHeaderSize", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !state.SflowPacketSamplingRate.IsNull() && config.SflowPacketSamplingRate.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".sflowInst.attributes."+"pktSamplingRate", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !state.SflowReceiverMaxDatagramSize.IsNull() && config.SflowReceiverMaxDatagramSize.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".sflowInst.attributes."+"rcvrMaxDatagramSize", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !state.SflowReceiverPort.IsNull() && config.SflowReceiverPort.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".sflowInst.attributes."+"rcvrPort", "DME_UNSET_PROPERTY_MARKER")
+		if !state.SflowAdminState.IsNull() && config.SflowAdminState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SflowAgentAddress.IsNull() && config.SflowAgentAddress.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"agentAddress", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SflowCounterPollInterval.IsNull() && config.SflowCounterPollInterval.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"counterPollInterval", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SflowControl.IsNull() && config.SflowControl.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SflowExtendedBgp.IsNull() && config.SflowExtendedBgp.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"isExtendedBgp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SflowExtendedSwitch.IsNull() && config.SflowExtendedSwitch.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"isExtendedSwitch", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SflowMaxHeaderSize.IsNull() && config.SflowMaxHeaderSize.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxHeaderSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SflowPacketSamplingRate.IsNull() && config.SflowPacketSamplingRate.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pktSamplingRate", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SflowReceiverMaxDatagramSize.IsNull() && config.SflowReceiverMaxDatagramSize.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rcvrMaxDatagramSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SflowReceiverPort.IsNull() && config.SflowReceiverPort.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rcvrPort", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.Receivers {
+			if configChild, ok := config.Receivers[key]; ok {
+				stateChild := state.Receivers[key]
+				_ = stateChild
+				_ = configChild
+				keyParts := strings.SplitN(key, ";", 2)
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")+".children", "sflowTransport")+".children").Array() {
+					if mv.Get("sflowReceiver.attributes.rcvrVrfName").String() == keyParts[0] &&
+						mv.Get("sflowReceiver.attributes.rcvrAddress").String() == keyParts[1] {
+						if !stateChild.SourceAddress.IsNull() && configChild.SourceAddress.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")+".children", "sflowTransport")+".children"+"."+strconv.Itoa(mi)+".sflowReceiver.attributes."+"rcvrSrcAddress", "DME_UNSET_PROPERTY_MARKER")
 						}
 						break
-					}
-				}
-				{
-					singleChildPath := ""
-					for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
-						if sv.Get("sflowInst").Exists() {
-							singleChildPath = singleChildPath + "." + strconv.Itoa(si) + ".sflowInst.children"
-							break
-						}
-					}
-					if singleChildPath != "" {
-						{
-							singleChildPath := ""
-							for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
-								if sv.Get("sflowTransport").Exists() {
-									singleChildPath = singleChildPath + "." + strconv.Itoa(si) + ".sflowTransport.children"
-									break
-								}
-							}
-							if singleChildPath != "" {
-								for key := range state.Receivers {
-									if configChild, ok := config.Receivers[key]; ok {
-										stateChild := state.Receivers[key]
-										_ = stateChild
-										_ = configChild
-										keyParts := strings.SplitN(key, ";", 2)
-										for mi, mv := range gjson.Get(body.Str, singleChildPath).Array() {
-											if mv.Get("sflowReceiver.attributes.rcvrVrfName").String() == keyParts[0] &&
-												mv.Get("sflowReceiver.attributes.rcvrAddress").String() == keyParts[1] {
-												if !stateChild.SourceAddress.IsNull() && configChild.SourceAddress.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(mi)+".sflowReceiver.attributes."+"rcvrSrcAddress", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
-										}
-									}
-								}
-							}
-						}
 					}
 				}
 			}

@@ -669,6 +669,46 @@ child_classes:
                     description: 'DN of Community List. For example: `sys/rpm/rtregcom-[COMMUNITY_LIST1]`.'
                     example: sys/rpm/rtregcom-[COMMUNITY_LIST1]
                     id: true
+          - class_name: rtmapMatchAsPathAccessList
+            doc_path: Routing%20and%20Forwarding/rtmap:MatchAsPathAccessList/
+            rn: mrtacclist
+            type: single
+            tf_name: match_as_path
+            description: 'Match on AS-Path Access List configuration.'
+            child_classes:
+              - class_name: rtmapRsRtAsPathAccAtt
+                doc_path: Routing%20and%20Forwarding/rtmap:RsRtAsPathAccAtt/
+                rn: rtrtAsPathAccAtt-[%s]
+                type: list
+                tf_name: match_as_path_lists
+                description: 'List of Match AS-Path Access Lists.'
+                attributes:
+                  - nxos_name: tDn
+                    tf_name: as_path_access_list_dn
+                    type: String
+                    description: 'DN of AS-Path Access List. For example: `sys/rpm/accesslist-[AS_PATH_LIST1]`.'
+                    example: sys/rpm/accesslist-[AS_PATH_LIST1]
+                    id: true
+          - class_name: rtmapMatchAsnAsPathAccessList
+            doc_path: Routing%20and%20Forwarding/rtmap:MatchAsnAsPathAccessList/
+            rn: mrtasnacclist
+            type: single
+            tf_name: match_as_number_as_path
+            description: 'Match on ASN AS-Path Access List configuration.'
+            child_classes:
+              - class_name: rtmapRsRtAsnAsPathAccAtt
+                doc_path: Routing%20and%20Forwarding/rtmap:RsRtAsnAsPathAccAtt/
+                rn: rtrtAsnAsPathAccAtt-[%s]
+                type: list
+                tf_name: match_as_number_as_path_lists
+                description: 'List of Match ASN AS-Path Access Lists.'
+                attributes:
+                  - nxos_name: tDn
+                    tf_name: as_path_access_list_dn
+                    type: String
+                    description: 'DN of AS-Path Access List. For example: `sys/rpm/accesslist-[AS_PATH_LIST1]`.'
+                    example: sys/rpm/accesslist-[AS_PATH_LIST1]
+                    id: true
   - class_name: rtregcomRule
     doc_path: Routing%20and%20Forwarding/rtregcom:Rule/
     rn: rtregcom-[%s]
@@ -774,4 +814,64 @@ child_classes:
                 description: 'Object name.'
                 example: 'COMMUNITY1'
                 exclude_test: true
+  - class_name: rtlistRule
+    doc_path: Routing%20and%20Forwarding/rtlist:Rule/
+    rn: accesslist-[%s]
+    type: list
+    tf_name: as_path_access_lists
+    description: 'List of AS-Path Access Lists.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Object name.'
+        example: 'AS_PATH_LIST1'
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: 'Description of the specified attribute.'
+        example: 'My AS-Path access list'
+        exclude_test: true
+    child_classes:
+      - class_name: rtlistEntry
+        doc_path: Routing%20and%20Forwarding/rtlist:Entry/
+        rn: ent-%v
+        type: list
+        tf_name: entries
+        description: 'List of AS-Path Access List entries.'
+        attributes:
+          - nxos_name: order
+            tf_name: order
+            type: Int64
+            id: true
+            description: 'Order.'
+            min_int: 1
+            max_int: 4294967294
+            example: 10
+          - nxos_name: action
+            tf_name: action
+            type: String
+            description: 'Action.'
+            enum_values:
+              - deny
+              - permit
+            example: deny
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My entry'
+            exclude_test: true
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: 'Object name.'
+            example: 'ENTRY1'
+            exclude_test: true
+          - nxos_name: regex
+            tf_name: regex
+            type: String
+            description: 'Regular Expression.'
+            example: '_65110_'
 test_prerequisites:

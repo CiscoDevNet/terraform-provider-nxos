@@ -117,6 +117,7 @@ type YamlConfig struct {
 	ChildClasses      []YamlConfigChildClass `yaml:"child_classes"`
 	TfChildClasses    []YamlConfigChildClass `yaml:"-"`
 	TestPrerequisites []YamlTest             `yaml:"test_prerequisites"`
+	AdditionalTests   []string               `yaml:"additional_tests"`
 }
 
 type YamlConfigAttribute struct {
@@ -140,19 +141,20 @@ type YamlConfigAttribute struct {
 }
 
 type YamlConfigChildClass struct {
-	ClassName      string                 `yaml:"class_name"`
-	Rn             string                 `yaml:"rn"`
-	Type           string                 `yaml:"type"`
-	TfName         string                 `yaml:"tf_name"`
-	Description    string                 `yaml:"description"`
-	DocPath        string                 `yaml:"doc_path"`
-	Mandatory      bool                   `yaml:"mandatory"`
-	NoDelete       bool                   `yaml:"no_delete"`
-	StatusReplace  bool                   `yaml:"status_replace"`
-	TestTags       []string               `yaml:"test_tags"`
-	Attributes     []YamlConfigAttribute  `yaml:"attributes"`
-	ChildClasses   []YamlConfigChildClass `yaml:"child_classes"`
-	TfChildClasses []YamlConfigChildClass `yaml:"-"`
+	ClassName         string                 `yaml:"class_name"`
+	Rn                string                 `yaml:"rn"`
+	Type              string                 `yaml:"type"`
+	TfName            string                 `yaml:"tf_name"`
+	Description       string                 `yaml:"description"`
+	DocPath           string                 `yaml:"doc_path"`
+	Mandatory         bool                   `yaml:"mandatory"`
+	NoDelete          bool                   `yaml:"no_delete"`
+	StatusReplace     bool                   `yaml:"status_replace"`
+	AutoDeleteOnEmpty bool                   `yaml:"auto_delete_on_empty"`
+	TestTags          []string               `yaml:"test_tags"`
+	Attributes        []YamlConfigAttribute  `yaml:"attributes"`
+	ChildClasses      []YamlConfigChildClass `yaml:"child_classes"`
+	TfChildClasses    []YamlConfigChildClass `yaml:"-"`
 }
 
 type YamlTest struct {
@@ -160,12 +162,19 @@ type YamlTest struct {
 	ClassName    string              `yaml:"class_name"`
 	NoDelete     bool                `yaml:"no_delete"`
 	Attributes   []YamlTestAttribute `yaml:"attributes"`
+	Children     []YamlTestChild     `yaml:"children"`
 	Dependencies []string            `yaml:"dependencies"`
 }
 
+type YamlTestChild struct {
+	Rn         string              `yaml:"rn"`
+	ClassName  string              `yaml:"class_name"`
+	Attributes []YamlTestAttribute `yaml:"attributes"`
+}
+
 type YamlTestAttribute struct {
-	Name      string `yaml:"name"`
-	Value     string `yaml:"value"`
+	Name  string `yaml:"name"`
+	Value string `yaml:"value"`
 }
 
 // Templating helper function to convert TF name to GO name
@@ -374,6 +383,7 @@ var functions = template.FuncMap{
 	"join":                      strings.Join,
 	"hasNonIdAttrs":             HasNonIdAttrs,
 	"needsPlanItem":             NeedsPlanItem,
+	"hasAutoDeleteOnEmpty":      HasAutoDeleteOnEmpty,
 	"idCount":                   IdCount,
 	"mapKeyExpr":                MapKeyExpr,
 	"mapKeyExample":             MapKeyExample,
@@ -414,6 +424,16 @@ func NeedsPlanItem(children []YamlConfigChildClass) bool {
 			return true
 		}
 		if c.Type == "single" && NeedsPlanItem(c.ChildClasses) {
+			return true
+		}
+	}
+	return false
+}
+
+// HasAutoDeleteOnEmpty returns true if any child class (recursively) has auto_delete_on_empty set.
+func HasAutoDeleteOnEmpty(children []YamlConfigChildClass) bool {
+	for _, c := range children {
+		if c.AutoDeleteOnEmpty || HasAutoDeleteOnEmpty(c.ChildClasses) {
 			return true
 		}
 	}

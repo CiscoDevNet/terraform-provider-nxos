@@ -702,7 +702,7 @@ child_classes:
               - "no"
               - "yes"
             description: "Fallback in case all AAA servers configured for remote authentication are unreachable."
-            example: "no"
+            example: "yes"
           - nxos_name: invalidUserLog
             tf_name: default_authentication_invalid_user_log
             type: Bool
@@ -715,7 +715,7 @@ child_classes:
               - "no"
               - "yes"
             description: "Use local username authentication."
-            example: "no"
+            example: "yes"
           - nxos_name: none
             tf_name: default_authentication_none
             type: String
@@ -790,7 +790,7 @@ child_classes:
               - tacacs
               - ldap
             description: "Realm."
-            example: "tacacs"
+            example: "local"
       - class_name: aaaConsoleAuth
         doc_path: Security%20and%20Policing/aaa:ConsoleAuth/
         rn: consoleauth
@@ -825,7 +825,7 @@ child_classes:
               - "no"
               - "yes"
             description: "Fallback in case all AAA servers configured for remote authentication are unreachable."
-            example: "no"
+            example: "yes"
           - nxos_name: invalidUserLog
             tf_name: console_authentication_invalid_user_log
             type: Bool
@@ -838,7 +838,7 @@ child_classes:
               - "no"
               - "yes"
             description: "Use local username authentication."
-            example: "no"
+            example: "yes"
           - nxos_name: none
             tf_name: console_authentication_none
             type: String
@@ -913,7 +913,7 @@ child_classes:
               - tacacs
               - ldap
             description: "Realm."
-            example: "tacacs"
+            example: "local"
       - class_name: aaaDefaultAuthor
         doc_path: Security%20and%20Policing/aaa:DefaultAuthor/
         rn: defaultauthor-[%s]

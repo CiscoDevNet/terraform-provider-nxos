@@ -393,7 +393,8 @@ func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDoma
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for stateKey := range state.VlanConfigurations {
@@ -402,7 +403,8 @@ func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDoma
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "l2VlanConfig.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "l2VlanConfig.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 	}

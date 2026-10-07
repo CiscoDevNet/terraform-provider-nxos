@@ -150,6 +150,33 @@ func TestAccNxosAccessList(t *testing.T) {
 				ExpectNonEmptyPlan: true,
 				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
+			{
+				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional0,
+			},
+			{
+				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional1,
+			},
+			{
+				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional2,
+			},
+			{
+				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional3,
+			},
+			{
+				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional4,
+			},
+			{
+				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional5,
+			},
+			{
+				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional6,
+			},
+			{
+				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional7,
+			},
+			{
+				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional8,
+			},
 		},
 	})
 }
@@ -176,6 +203,14 @@ resource "nxos_dme" "PreReq0" {
   }
 }
 
+resource "nxos_dme" "PreReq1" {
+  dn = "sys/intf/phys-[eth1/11]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -183,7 +218,7 @@ resource "nxos_dme" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosAccessListConfig_minimum() string {
 	config := `resource "nxos_access_list" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -340,9 +375,265 @@ func testAccNxosAccessListConfig_all() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
+
+const testAccNxosAccessListConfigAdditional0 = `
+resource "nxos_access_list" "test" {
+  access_lists = {
+    "ACL1" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ip"
+          source_prefix             = "0.0.0.0"
+          source_prefix_length      = "0"
+          destination_prefix        = "1.1.1.1"
+          destination_prefix_length = "32"
+        }
+      }
+    }
+  }
+  ingress_interfaces = {
+    "eth1/10" = {
+      access_list_name = "ACL1"
+    }
+    "eth1/11" = {
+      access_list_name = "ACL1"
+    }
+  }
+  ingress_vty_access_list_name = "ACL1"
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+`
+
+const testAccNxosAccessListConfigAdditional1 = `
+resource "nxos_access_list" "test" {
+  access_lists = {
+    "ACL1" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ip"
+          source_prefix             = "0.0.0.0"
+          source_prefix_length      = "0"
+          destination_prefix        = "1.1.1.1"
+          destination_prefix_length = "32"
+        }
+      }
+    }
+  }
+  ingress_interfaces = {
+    "eth1/10" = {
+      access_list_name = "ACL1"
+    }
+  }
+  ingress_vty_access_list_name = "ACL1"
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+`
+
+const testAccNxosAccessListConfigAdditional2 = `
+resource "nxos_access_list" "test" {
+  access_lists = {
+    "ACL1" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ip"
+          source_prefix             = "0.0.0.0"
+          source_prefix_length      = "0"
+          destination_prefix        = "1.1.1.1"
+          destination_prefix_length = "32"
+        }
+      }
+    }
+  }
+  ingress_interfaces = {
+    "eth1/10" = {
+      access_list_name = "ACL1"
+    }
+  }
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+
+data "nxos_access_list" "verify" {
+  depends_on = [nxos_access_list.test]
+
+  lifecycle {
+    postcondition {
+      condition     = self.ingress_vty_access_list_name == null || self.ingress_vty_access_list_name == ""
+      error_message = "ingress_vty_access_list_name was not removed from the device"
+    }
+  }
+}
+`
+
+const testAccNxosAccessListConfigAdditional3 = `
+resource "nxos_access_list" "test" {
+  access_lists = {
+    "ACL1" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ip"
+          source_prefix             = "0.0.0.0"
+          source_prefix_length      = "0"
+          destination_prefix        = "1.1.1.1"
+          destination_prefix_length = "32"
+        }
+      }
+    }
+  }
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+`
+
+const testAccNxosAccessListConfigAdditional4 = `
+resource "nxos_access_list" "test" {
+  access_lists = {
+    "ACL1" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ip"
+          source_prefix             = "0.0.0.0"
+          source_prefix_length      = "0"
+          destination_prefix        = "1.1.1.1"
+          destination_prefix_length = "32"
+        }
+      }
+    }
+  }
+  ingress_vty_access_list_name = "ACL1"
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+`
+
+const testAccNxosAccessListConfigAdditional5 = `
+resource "nxos_access_list" "test" {
+  access_lists = {
+    "ACL1" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ip"
+          source_prefix             = "0.0.0.0"
+          source_prefix_length      = "0"
+          destination_prefix        = "1.1.1.1"
+          destination_prefix_length = "32"
+        }
+      }
+    }
+  }
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+
+data "nxos_access_list" "verify" {
+  depends_on = [nxos_access_list.test]
+
+  lifecycle {
+    postcondition {
+      condition     = self.ingress_vty_access_list_name == null || self.ingress_vty_access_list_name == ""
+      error_message = "ingress_vty_access_list_name was not removed from the device"
+    }
+  }
+}
+`
+
+const testAccNxosAccessListConfigAdditional6 = `
+resource "nxos_access_list" "test" {
+  access_lists = {
+    "ACL1" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ip"
+          source_prefix             = "0.0.0.0"
+          source_prefix_length      = "0"
+          destination_prefix        = "1.1.1.1"
+          destination_prefix_length = "32"
+        }
+      }
+    }
+  }
+  ipv6_access_lists = {
+    "ACL2" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ipv6"
+          source_prefix             = "2001:db8:2::"
+          source_prefix_length      = "48"
+          destination_prefix        = "2001:db8:1::"
+          destination_prefix_length = "64"
+        }
+      }
+    }
+  }
+  ipv6_egress_interfaces = {
+    "eth1/10" = {
+      access_list_name = "ACL2"
+    }
+  }
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+`
+
+const testAccNxosAccessListConfigAdditional7 = `
+resource "nxos_access_list" "test" {
+  access_lists = {
+    "ACL1" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ip"
+          source_prefix             = "0.0.0.0"
+          source_prefix_length      = "0"
+          destination_prefix        = "1.1.1.1"
+          destination_prefix_length = "32"
+        }
+      }
+    }
+  }
+  ipv6_access_lists = {
+    "ACL2" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ipv6"
+          source_prefix             = "2001:db8:2::"
+          source_prefix_length      = "48"
+          destination_prefix        = "2001:db8:1::"
+          destination_prefix_length = "64"
+        }
+      }
+    }
+  }
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+`
+
+const testAccNxosAccessListConfigAdditional8 = `
+resource "nxos_access_list" "test" {
+  ipv6_access_lists = {
+    "ACL2" = {
+      entries = {
+        "10" = {
+          action                    = "permit"
+          protocol                  = "ipv6"
+          source_prefix             = "2001:db8:2::"
+          source_prefix_length      = "48"
+          destination_prefix        = "2001:db8:1::"
+          destination_prefix_length = "64"
+        }
+      }
+    }
+  }
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+`
 
 // End of section. //template:end testAccConfigAll

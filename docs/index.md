@@ -1,6 +1,4 @@
-
 ---
-layout: ""
 page_title: "Provider: NXOS"
 description: |-
   The NXOS provider provides resources to interact with one or more Cisco NX-OS devices.
@@ -21,6 +19,7 @@ All resources and data sources have been tested with the following releases.
 | Platform  | Version |
 | --------- | ------- |
 | Nexus 9Kv | 10.5(6) |
+| Nexus 9Kv | 10.6(4) |
 
 ## Guides
 

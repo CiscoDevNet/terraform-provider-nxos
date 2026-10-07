@@ -123,6 +123,25 @@ resource "nxos_dme" "PreReq1" {
   }
 }
 
+resource "nxos_dme" "PreReq2" {
+  dn = "sys/track/object-10"
+  class_name = "trackObject"
+  content = {
+      id = "10"
+  }
+  children = [
+    {
+      rn         = "if"
+      class_name = "trackIf"
+      content = {
+          id = "eth1/10"
+          protocolType = "line-protocol"
+      }
+    },
+  ]
+  depends_on = [nxos_dme.PreReq1, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -130,7 +149,7 @@ resource "nxos_dme" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv4Config_minimum() string {
 	config := `resource "nxos_ipv4" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -192,7 +211,7 @@ func testAccNxosIPv4Config_all() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

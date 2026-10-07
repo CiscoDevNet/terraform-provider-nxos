@@ -1061,6 +1061,7 @@ child_classes:
     doc_path: System/boot:Boot/
     rn: boot
     type: single
+    no_delete: true
     tf_name: boot
     description: 'Configure boot images.'
     attributes:
@@ -2338,7 +2339,7 @@ child_classes:
             description: 'Source Interface. Must match first field in the output of `show intf brief`.'
             example: mgmt0
   - class_name: smartcardPasswdEncrypt
-    doc_path: Security and Policing/smartcard:PasswdEncrypt/
+    doc_path: Security%20and%20Policing/smartcard:PasswdEncrypt/
     rn: passwdenc
     type: single
     tf_name: password_encryption
@@ -2361,19 +2362,19 @@ child_classes:
           - disabled
         example: disabled
   - class_name: acllogEntity
-    doc_path: Security and Policing/acllog:Entity/
+    doc_path: Security%20and%20Policing/acllog:Entity/
     rn: acllog
     type: single
     no_delete: true
     child_classes:
       - class_name: acllogInst
-        doc_path: Security and Policing/acllog:Inst/
+        doc_path: Security%20and%20Policing/acllog:Inst/
         rn: inst
         type: single
         no_delete: true
         child_classes:
           - class_name: acllogLogCache
-            doc_path: Security and Policing/acllog:LogCache/
+            doc_path: Security%20and%20Policing/acllog:LogCache/
             rn: log
             type: single
             tf_name: acl_log

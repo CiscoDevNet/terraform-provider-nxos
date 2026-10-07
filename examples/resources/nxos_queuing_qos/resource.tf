@@ -4,7 +4,7 @@ resource "nxos_queuing_qos" "example" {
       match_type = "match-any"
       match_class_maps = {
         "c-out-q1" = {
-          priority = 1
+          priority = 3
         }
       }
     }

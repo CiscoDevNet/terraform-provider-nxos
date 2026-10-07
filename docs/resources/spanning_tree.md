@@ -28,7 +28,7 @@ resource "nxos_spanning_tree" "example" {
   bridge_assurance         = "disabled"
   control                  = "normal,stateful-ha"
   fcoe                     = "enabled"
-  l2_gateway_stp_domain_id = 2048
+  l2_gateway_stp_domain_id = 512
   linecard_issu            = "auto"
   loopguard                = "enabled"
   mode                     = "pvrst"

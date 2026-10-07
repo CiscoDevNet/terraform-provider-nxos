@@ -1229,7 +1229,8 @@ func (data ISIS) toBodyWithDeletes(ctx context.Context, state ISIS, config ISIS,
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "isisInst.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "isisInst.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.Instances {
@@ -1290,7 +1291,8 @@ func (data ISIS) toBodyWithDeletes(ctx context.Context, state ISIS, config ISIS,
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "isisInternalIf.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "isisInternalIf.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 	}
@@ -1388,87 +1390,87 @@ func (data ISIS) toBodyWithDeletes(ctx context.Context, state ISIS, config ISIS,
 									}
 								}
 								{
-									listChildPath := ""
+									listChildPath_ := ""
 									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 										if mv.Get("isisDom.attributes.name").String() == key {
-											listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".isisDom.children"
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".isisDom.children"
 											break
 										}
 									}
-									if listChildPath != "" {
+									if listChildPath_ != "" {
 										for key := range stateChild.AddressFamilies {
 											if configChild, ok := configChild.AddressFamilies[key]; ok {
 												stateChild := stateChild.AddressFamilies[key]
 												_ = stateChild
 												_ = configChild
-												for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
 													if mv.Get("isisDomAf.attributes.type").String() == key {
 														if !stateChild.SegmentRoutingMpls.IsNull() && configChild.SegmentRoutingMpls.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"srMpls", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"srMpls", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.EnableBfd.IsNull() && configChild.EnableBfd.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"enableBfd", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"enableBfd", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.PrefixAdvertisePassiveL1.IsNull() && configChild.PrefixAdvertisePassiveL1.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"advPassiveLvl1", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"advPassiveLvl1", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.PrefixAdvertisePassiveL2.IsNull() && configChild.PrefixAdvertisePassiveL2.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"advPassiveLvl2", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"advPassiveLvl2", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.DefaultInformationOriginate.IsNull() && configChild.DefaultInformationOriginate.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"defInfOrig", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"defInfOrig", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.DefaultInformationOriginateRouteMap.IsNull() && configChild.DefaultInformationOriginateRouteMap.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"defInfOrigRtMap", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"defInfOrigRtMap", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.Distance.IsNull() && configChild.Distance.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"dist", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"dist", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.MaxEcmp.IsNull() && configChild.MaxEcmp.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"maxEcmp", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"maxEcmp", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.MultiTopology.IsNull() && configChild.MultiTopology.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"mtType", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"mtType", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.RouterIdInterface.IsNull() && configChild.RouterIdInterface.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"rtrIdIf", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"rtrIdIf", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.RouterIdIpAddress.IsNull() && configChild.RouterIdIpAddress.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"rtrIdIpAddr", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"rtrIdIpAddr", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.TableMap.IsNull() && configChild.TableMap.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"tblMap", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"tblMap", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.TableMapFilter.IsNull() && configChild.TableMapFilter.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"tblMapFltr", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomAf.attributes."+"tblMapFltr", "DME_UNSET_PROPERTY_MARKER")
 														}
 														break
 													}
 												}
 											}
 										}
-										for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-											if sv.Get("isisOverload").Exists() {
-												if !stateChild.OverloadStartupTime.IsNull() && configChild.OverloadStartupTime.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".isisOverload.attributes."+"startupTime", "DME_UNSET_PROPERTY_MARKER")
-												}
-												if !stateChild.OverloadAdminState.IsNull() && configChild.OverloadAdminState.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".isisOverload.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-												}
-												if !stateChild.OverloadBgpAsNumber.IsNull() && configChild.OverloadBgpAsNumber.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".isisOverload.attributes."+"bgpAsNum", "DME_UNSET_PROPERTY_MARKER")
-												}
-												if !stateChild.OverloadBgpAsNumberString.IsNull() && configChild.OverloadBgpAsNumberString.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".isisOverload.attributes."+"bgpAsNumStr", "DME_UNSET_PROPERTY_MARKER")
-												}
-												if !stateChild.OverloadSuppress.IsNull() && configChild.OverloadSuppress.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".isisOverload.attributes."+"suppress", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+										if !stateChild.OverloadStartupTime.IsNull() && configChild.OverloadStartupTime.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "isisOverload")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startupTime", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.OverloadAdminState.IsNull() && configChild.OverloadAdminState.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "isisOverload")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.OverloadBgpAsNumber.IsNull() && configChild.OverloadBgpAsNumber.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "isisOverload")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bgpAsNum", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.OverloadBgpAsNumberString.IsNull() && configChild.OverloadBgpAsNumberString.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "isisOverload")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bgpAsNumStr", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.OverloadSuppress.IsNull() && configChild.OverloadSuppress.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "isisOverload")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"suppress", "DME_UNSET_PROPERTY_MARKER")
 										}
 									}
 								}

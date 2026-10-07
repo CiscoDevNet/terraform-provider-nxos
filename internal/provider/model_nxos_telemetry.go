@@ -751,7 +751,8 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "telemetryDestGroup.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "telemetryDestGroup.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.DestinationGroups {
@@ -786,7 +787,8 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "telemetrySensorGroup.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "telemetrySensorGroup.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.SensorGroups {
@@ -821,7 +823,8 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "telemetrySubscription.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "telemetrySubscription.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.Subscriptions {
@@ -873,32 +876,13 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 		}
 	}
 	if !importing {
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("telemetryDestProfile").Exists() {
-				if !state.DestinationProfileAdminState.IsNull() && config.DestinationProfileAdminState.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".telemetryDestProfile.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-				}
-				break
-			}
+		if !state.DestinationProfileAdminState.IsNull() && config.DestinationProfileAdminState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
-		{
-			singleChildPath := ""
-			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-				if sv.Get("telemetryDestProfile").Exists() {
-					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".telemetryDestProfile.children"
-					break
-				}
-			}
-			if singleChildPath != "" {
-				for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
-					if sv.Get("telemetryDestOptVrf").Exists() {
-						if !state.DestinationProfileVrf.IsNull() && config.DestinationProfileVrf.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".telemetryDestOptVrf.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-						}
-						break
-					}
-				}
-			}
+		if !state.DestinationProfileVrf.IsNull() && config.DestinationProfileVrf.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptVrf")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.DestinationGroups {
 			if configChild, ok := config.DestinationGroups[key]; ok {

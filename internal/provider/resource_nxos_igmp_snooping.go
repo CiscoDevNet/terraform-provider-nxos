@@ -63,7 +63,7 @@ func (r *IGMPSnoopingResource) Metadata(ctx context.Context, req resource.Metada
 func (r *IGMPSnoopingResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global IGMP snooping configuration on NX-OS devices, including admin state, instance controls, domain controls (querier, optimized multicast flood, routing), VXLAN snooping, and NVE static router port settings.").AddApiDocumentation("igmpsnoopEntity", "Layer 3/igmpsnoop:Entity/", []string{"igmpsnoopInst", "igmpsnoopDom", "igmpsnoopGl", "igmpsnoopGVlan"}, []string{"Layer 3/igmpsnoop:Inst/", "Layer 3/igmpsnoop:Dom/", "Layer 3/igmpsnoop:Gl/", "Layer 3/igmpsnoop:GVlan/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global IGMP snooping configuration on NX-OS devices, including admin state, instance controls, domain controls (querier, optimized multicast flood, routing), VXLAN snooping, and NVE static router port settings.").AddApiDocumentation("igmpsnoopEntity", "Layer%203/igmpsnoop:Entity/", []string{"igmpsnoopInst", "igmpsnoopDom", "igmpsnoopGl", "igmpsnoopGVlan"}, []string{"Layer%203/igmpsnoop:Inst/", "Layer%203/igmpsnoop:Dom/", "Layer%203/igmpsnoop:Gl/", "Layer%203/igmpsnoop:GVlan/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -78,7 +78,7 @@ func (r *IGMPSnoopingResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of IGMP snooping.").AddStringEnumDescription("enabled", "disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of IGMP snooping. Some NX-OS versions (e.g. 10.6.4) reject modifying this attribute, in which case it should not be configured.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),

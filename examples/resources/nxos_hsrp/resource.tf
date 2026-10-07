@@ -32,6 +32,11 @@ resource "nxos_hsrp" "example" {
           preempt_delay_reload       = 10
           preempt_delay_sync         = 10
           priority                   = 110
+          tracked_objects = {
+            "10" = {
+              decrement_priority = 20
+            }
+          }
         }
       }
     }

@@ -328,7 +328,8 @@ func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN,
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "rtctrlBDEvi.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "rtctrlBDEvi.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.Vnis {
@@ -425,14 +426,14 @@ func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN,
 								_ = stateChild
 								_ = configChild
 								{
-									listChildPath := ""
+									listChildPath_ := ""
 									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 										if mv.Get("rtctrlRttP.attributes.type").String() == key {
-											listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".rtctrlRttP.children"
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".rtctrlRttP.children"
 											break
 										}
 									}
-									if listChildPath != "" {
+									if listChildPath_ != "" {
 										for key := range stateChild.RouteTargets {
 											if configChild, ok := configChild.RouteTargets[key]; ok {
 												stateChild := stateChild.RouteTargets[key]

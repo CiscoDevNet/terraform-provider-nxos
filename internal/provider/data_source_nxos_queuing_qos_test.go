@@ -32,7 +32,7 @@ import (
 func TestAccDataSourceNxosQueuingQoS(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_type", "match-any"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.priority", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.priority", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "system_out_policy_map_name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_map_statistics", "false"))
 	resource.Test(t, resource.TestCase{
@@ -73,7 +73,7 @@ resource "nxos_dme" "PreReq2" {
   class_name = "ipqosPriority"
   delete = false
   content = {
-      level = "1"
+      level = "3"
   }
   depends_on = [nxos_dme.PreReq1, ]
 }
@@ -147,7 +147,7 @@ func testAccDataSourceNxosQueuingQoSConfig() string {
 	config += `			match_type = "match-any"` + "\n"
 	config += `			match_class_maps = {` + "\n"
 	config += `				"c-out-q1" = {` + "\n"
-	config += `					priority = 1` + "\n"
+	config += `					priority = 3` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

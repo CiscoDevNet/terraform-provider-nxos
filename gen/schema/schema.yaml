@@ -11,6 +11,7 @@ doc_category: str() # Documentation category for the resource
 attributes: list(include('attribute'), required=False) # List of attributes
 child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
 test_prerequisites: list(include('test_prerequisite'), required=False) # List of test prerequisites
+additional_tests: list(str(), required=False) # List of additional acceptance test HCL configurations, executed as consecutive test steps after the standard steps. Prerequisites are prepended automatically.
 ---
 attribute:
   nxos_name: str() # NX-API attribute name
@@ -41,6 +42,7 @@ child_classes:
   mandatory: bool(required=False) # Set to true if the child class(es) are mandatory
   no_delete: bool(required=False) # Set to true if the child class should not be deleted
   status_replace: bool(required=False) # Set to true to emit DME `status: "replaced"` for each list child on update, ensuring duplicates on key collisions are overwritten rather than rejected. Use with caution: `replaced` resets unmodeled properties to defaults and deletes unmodeled children.
+  auto_delete_on_empty: bool(required=False) # Set to true if the device removes objects of this class once their last list child is deleted. Deleting all existing children while adding new ones then fails, so on update these deletes are sent in a second request after the new children have been created.
   test_tags: list(str(), required=False) # List of test tags, child class only included in test if env var is set
   attributes: list(include('attribute'), required=False) # List of child class attributes
   child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
@@ -50,7 +52,13 @@ test_prerequisite:
   class_name: str() # NX-API class name of the prerequisite
   no_delete: bool(required=False) # Set to true if the prerequisite should not be deleted after the test
   attributes: list(include('test_attribute'), required=False) # List of prerequisite attributes
+  children: list(include('test_child'), required=False) # List of prerequisite child objects, created together with the prerequisite object
   dependencies: list(int(), required=False) # List of dependencies to other test prerequisites, referencing the index in the test_prerequisites list
+
+test_child:
+  rn: str() # Relative name of the child object
+  class_name: str() # NX-API class name of the child object
+  attributes: list(include('test_attribute'), required=False) # List of child object attributes
 
 test_attribute:
   name: str() # NX-API attribute name

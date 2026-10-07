@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -309,7 +310,8 @@ func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state Man
 				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
 				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
 				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.speed", "DME_UNSET_PROPERTY_MARKER")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.ManagementInterfaces {
@@ -372,13 +374,9 @@ func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state Man
 						}
 					}
 					if listChildPath != "" {
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("nwRtVrfMbr").Exists() {
-								if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nwRtVrfMbr.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 						}
 					}
 				}

@@ -1514,7 +1514,8 @@ func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state Physi
 				deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.voicePortTrust", "DME_UNSET_PROPERTY_MARKER")
 				deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.voiceVlanId", "DME_UNSET_PROPERTY_MARKER")
 				deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.attributes.voiceVlanType", "DME_UNSET_PROPERTY_MARKER")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.PhysicalInterfaces {
@@ -1718,185 +1719,205 @@ func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state Physi
 						}
 					}
 					if listChildPath != "" {
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("nwRtVrfMbr").Exists() {
-								if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nwRtVrfMbr.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 						}
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("l1StormCtrlP").Exists() {
-								if !stateChild.StormControlBurstPacketsPerSecond.IsNull() && configChild.StormControlBurstPacketsPerSecond.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1StormCtrlP.attributes."+"burstPps", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlBurstRate.IsNull() && configChild.StormControlBurstRate.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1StormCtrlP.attributes."+"burstRate", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlRate.IsNull() && configChild.StormControlRate.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1StormCtrlP.attributes."+"rate", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlRatePacketsPerSecond.IsNull() && configChild.StormControlRatePacketsPerSecond.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1StormCtrlP.attributes."+"ratePps", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlPacketType.IsNull() && configChild.StormControlPacketType.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1StormCtrlP.attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.StormControlBurstPacketsPerSecond.IsNull() && configChild.StormControlBurstPacketsPerSecond.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstPps", "DME_UNSET_PROPERTY_MARKER")
 						}
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("nvoMultisiteIfTracking").Exists() {
-								if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nvoMultisiteIfTracking.attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.StormControlBurstRate.IsNull() && configChild.StormControlBurstRate.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstRate", "DME_UNSET_PROPERTY_MARKER")
 						}
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("ipqosPriorFlowCtrl").Exists() {
-								if !stateChild.PriorityFlowControlMode.IsNull() && configChild.PriorityFlowControlMode.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".ipqosPriorFlowCtrl.attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.PriorityFlowControlSendTlv.IsNull() && configChild.PriorityFlowControlSendTlv.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".ipqosPriorFlowCtrl.attributes."+"send_tlv", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.StormControlRate.IsNull() && configChild.StormControlRate.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rate", "DME_UNSET_PROPERTY_MARKER")
 						}
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("ipqosPriorFlowCtrlWd").Exists() {
-								if !stateChild.PriorityFlowControlWatchdogDisableAction.IsNull() && configChild.PriorityFlowControlWatchdogDisableAction.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".ipqosPriorFlowCtrlWd.attributes."+"disableAction", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() && configChild.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".ipqosPriorFlowCtrlWd.attributes."+"interfaceMutiplier", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.PriorityFlowControlWatchdogInterval.IsNull() && configChild.PriorityFlowControlWatchdogInterval.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".ipqosPriorFlowCtrlWd.attributes."+"watchDogInterval", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.StormControlRatePacketsPerSecond.IsNull() && configChild.StormControlRatePacketsPerSecond.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ratePps", "DME_UNSET_PROPERTY_MARKER")
 						}
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("l1PhysIfExtended").Exists() {
-								if !stateChild.AllowMultiTag.IsNull() && configChild.AllowMultiTag.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"allowMultiTag", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.AutoExcludeVlans.IsNull() && configChild.AutoExcludeVlans.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"autoExcludeVlans", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.BufferBoost.IsNull() && configChild.BufferBoost.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"bufferBoost", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.ChassisModuleSerial.IsNull() && configChild.ChassisModuleSerial.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"chassisModuleSerial", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.ChassisModuleSide.IsNull() && configChild.ChassisModuleSide.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"chassisModuleSide", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.ChassisNumber.IsNull() && configChild.ChassisNumber.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"chassisNumber", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.ChassisProfileName.IsNull() && configChild.ChassisProfileName.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"chassisProfileName", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.ChassisSerial.IsNull() && configChild.ChassisSerial.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"chassisSerial", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.ExtendedDescription.IsNull() && configChild.ExtendedDescription.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.FlowControlReceive.IsNull() && configChild.FlowControlReceive.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"flowCtrlReceive", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.FlowControlSend.IsNull() && configChild.FlowControlSend.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"flowCtrlSend", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.FlowRedirect.IsNull() && configChild.FlowRedirect.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"flowRedirect", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.GtpHashMode.IsNull() && configChild.GtpHashMode.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"gtpHashMode", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.Layer3MulticastReceiverVlan.IsNull() && configChild.Layer3MulticastReceiverVlan.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"l3McastReceiverVlan", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.PortTypeExternal.IsNull() && configChild.PortTypeExternal.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"portTypeExternal", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.PortTypeFabric.IsNull() && configChild.PortTypeFabric.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"portTypeFabric", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.RouterMacIpv6Extract.IsNull() && configChild.RouterMacIpv6Extract.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"routerMacIpv6Extract", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.ShutDownLan.IsNull() && configChild.ShutDownLan.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"shutDownLan", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlAction.IsNull() && configChild.StormControlAction.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlAct", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlAction1.IsNull() && configChild.StormControlAction1.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlAct1", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlAction2.IsNull() && configChild.StormControlAction2.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlAct2", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlBroadcastLevel.IsNull() && configChild.StormControlBroadcastLevel.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlBCastLevel", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlBroadcastLevel1.IsNull() && configChild.StormControlBroadcastLevel1.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlBCastLevel1", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlBroadcastLevel2.IsNull() && configChild.StormControlBroadcastLevel2.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlBCastLevel2", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlBroadcastPacketsPerSecond.IsNull() && configChild.StormControlBroadcastPacketsPerSecond.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlBCastPPS", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlMulticastLevel.IsNull() && configChild.StormControlMulticastLevel.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlMCastLevel", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlMulticastLevel1.IsNull() && configChild.StormControlMulticastLevel1.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlMCastLevel1", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlMulticastLevel2.IsNull() && configChild.StormControlMulticastLevel2.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlMCastLevel2", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlMulticastPacketsPerSecond.IsNull() && configChild.StormControlMulticastPacketsPerSecond.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlMCastPPS", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlUnicastLevel.IsNull() && configChild.StormControlUnicastLevel.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlUCastLevel", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlUnicastLevel1.IsNull() && configChild.StormControlUnicastLevel1.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlUCastLevel1", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlUnicastLevel2.IsNull() && configChild.StormControlUnicastLevel2.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlUCastLevel2", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.StormControlUnicastPacketsPerSecond.IsNull() && configChild.StormControlUnicastPacketsPerSecond.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"stormCtrlUCastPPS", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.SwitchportBlock.IsNull() && configChild.SwitchportBlock.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"switchportBlock", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.SwitchportIsolated.IsNull() && configChild.SwitchportIsolated.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"switchportIsolated", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.SwitchportMacLearn.IsNull() && configChild.SwitchportMacLearn.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"switchportMacLearn", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.SwitchportMacPermit.IsNull() && configChild.SwitchportMacPermit.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"switchportMacPermit", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.SwitchportVirtualEthernetBridge.IsNull() && configChild.SwitchportVirtualEthernetBridge.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".l1PhysIfExtended.attributes."+"switchportVirtualEthernetBridge", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.StormControlPacketType.IsNull() && configChild.StormControlPacketType.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PriorityFlowControlMode.IsNull() && configChild.PriorityFlowControlMode.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PriorityFlowControlSendTlv.IsNull() && configChild.PriorityFlowControlSendTlv.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"send_tlv", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PriorityFlowControlWatchdogDisableAction.IsNull() && configChild.PriorityFlowControlWatchdogDisableAction.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrlWd")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"disableAction", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() && configChild.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrlWd")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interfaceMutiplier", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PriorityFlowControlWatchdogInterval.IsNull() && configChild.PriorityFlowControlWatchdogInterval.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrlWd")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"watchDogInterval", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.AllowMultiTag.IsNull() && configChild.AllowMultiTag.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"allowMultiTag", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.AutoExcludeVlans.IsNull() && configChild.AutoExcludeVlans.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"autoExcludeVlans", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.BufferBoost.IsNull() && configChild.BufferBoost.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bufferBoost", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ChassisModuleSerial.IsNull() && configChild.ChassisModuleSerial.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"chassisModuleSerial", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ChassisModuleSide.IsNull() && configChild.ChassisModuleSide.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"chassisModuleSide", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ChassisNumber.IsNull() && configChild.ChassisNumber.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"chassisNumber", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ChassisProfileName.IsNull() && configChild.ChassisProfileName.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"chassisProfileName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ChassisSerial.IsNull() && configChild.ChassisSerial.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"chassisSerial", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ExtendedDescription.IsNull() && configChild.ExtendedDescription.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.FlowControlReceive.IsNull() && configChild.FlowControlReceive.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"flowCtrlReceive", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.FlowControlSend.IsNull() && configChild.FlowControlSend.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"flowCtrlSend", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.FlowRedirect.IsNull() && configChild.FlowRedirect.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"flowRedirect", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.GtpHashMode.IsNull() && configChild.GtpHashMode.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"gtpHashMode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Layer3MulticastReceiverVlan.IsNull() && configChild.Layer3MulticastReceiverVlan.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"l3McastReceiverVlan", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PortTypeExternal.IsNull() && configChild.PortTypeExternal.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"portTypeExternal", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PortTypeFabric.IsNull() && configChild.PortTypeFabric.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"portTypeFabric", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.RouterMacIpv6Extract.IsNull() && configChild.RouterMacIpv6Extract.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"routerMacIpv6Extract", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ShutDownLan.IsNull() && configChild.ShutDownLan.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"shutDownLan", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlAction.IsNull() && configChild.StormControlAction.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlAct", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlAction1.IsNull() && configChild.StormControlAction1.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlAct1", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlAction2.IsNull() && configChild.StormControlAction2.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlAct2", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlBroadcastLevel.IsNull() && configChild.StormControlBroadcastLevel.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlBCastLevel", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlBroadcastLevel1.IsNull() && configChild.StormControlBroadcastLevel1.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlBCastLevel1", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlBroadcastLevel2.IsNull() && configChild.StormControlBroadcastLevel2.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlBCastLevel2", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlBroadcastPacketsPerSecond.IsNull() && configChild.StormControlBroadcastPacketsPerSecond.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlBCastPPS", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlMulticastLevel.IsNull() && configChild.StormControlMulticastLevel.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlMCastLevel", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlMulticastLevel1.IsNull() && configChild.StormControlMulticastLevel1.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlMCastLevel1", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlMulticastLevel2.IsNull() && configChild.StormControlMulticastLevel2.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlMCastLevel2", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlMulticastPacketsPerSecond.IsNull() && configChild.StormControlMulticastPacketsPerSecond.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlMCastPPS", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlUnicastLevel.IsNull() && configChild.StormControlUnicastLevel.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlUCastLevel", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlUnicastLevel1.IsNull() && configChild.StormControlUnicastLevel1.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlUCastLevel1", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlUnicastLevel2.IsNull() && configChild.StormControlUnicastLevel2.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlUCastLevel2", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StormControlUnicastPacketsPerSecond.IsNull() && configChild.StormControlUnicastPacketsPerSecond.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stormCtrlUCastPPS", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.SwitchportBlock.IsNull() && configChild.SwitchportBlock.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"switchportBlock", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.SwitchportIsolated.IsNull() && configChild.SwitchportIsolated.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"switchportIsolated", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.SwitchportMacLearn.IsNull() && configChild.SwitchportMacLearn.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"switchportMacLearn", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.SwitchportMacPermit.IsNull() && configChild.SwitchportMacPermit.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"switchportMacPermit", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.SwitchportVirtualEthernetBridge.IsNull() && configChild.SwitchportVirtualEthernetBridge.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1PhysIfExtended")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"switchportVirtualEthernetBridge", "DME_UNSET_PROPERTY_MARKER")
 						}
 					}
 				}

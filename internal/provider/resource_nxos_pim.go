@@ -596,11 +596,19 @@ func (r *PIMResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	}
 
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state, config, imp)
+		body, deferred := plan.toBodyWithDeletes(ctx, state, config, imp, true)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+		if deferred {
+			body, _ = plan.toBodyWithDeletes(ctx, state, config, imp, false)
+			_, err = device.Client.Post(plan.getDn(), body.Str)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+				return
+			}
 		}
 	}
 

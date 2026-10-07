@@ -431,12 +431,29 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 	}
 
 	if device.Managed {
+		{{- if hasAutoDeleteOnEmpty .ChildClasses}}
+		body, deferred := plan.toBodyWithDeletes(ctx, state, config, imp, true)
+		_, err := device.Client.Post(plan.getDn(), body.Str)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+			return
+		}
+		if deferred {
+			body, _ = plan.toBodyWithDeletes(ctx, state, config, imp, false)
+			_, err = device.Client.Post(plan.getDn(), body.Str)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+				return
+			}
+		}
+		{{- else}}
 		body := plan.toBodyWithDeletes(ctx, state, config, imp)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
 		}
+		{{- end}}
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())

@@ -1,1 +1,0 @@
-- Add global BFD timers (keepalive policy: detect multiplier, echo receive interval, minimum receive interval, minimum transmit interval) configuration to `nxos_bfd` resource and data source

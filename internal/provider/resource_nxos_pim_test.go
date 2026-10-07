@@ -105,6 +105,12 @@ func TestAccNxosPIM(t *testing.T) {
 				ExpectNonEmptyPlan: true,
 				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
+			{
+				Config: testAccNxosPIMPrerequisitesConfig + testAccNxosPIMConfigAdditional0,
+			},
+			{
+				Config: testAccNxosPIMPrerequisitesConfig + testAccNxosPIMConfigAdditional1,
+			},
 		},
 	})
 }
@@ -228,5 +234,45 @@ func testAccNxosPIMConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+const testAccNxosPIMConfigAdditional0 = `
+resource "nxos_pim" "test" {
+  vrfs = {
+    "default" = {
+      static_rps = {
+        "1.2.3.4" = {
+          group_lists = {
+            "225.0.0.0/24" = {
+              bidir    = true
+              override = true
+            }
+          }
+        }
+      }
+    }
+  }
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+`
+
+const testAccNxosPIMConfigAdditional1 = `
+resource "nxos_pim" "test" {
+  vrfs = {
+    "default" = {
+      static_rps = {
+        "1.2.3.4" = {
+          group_lists = {
+            "226.0.0.0/24" = {
+              bidir    = true
+              override = true
+            }
+          }
+        }
+      }
+    }
+  }
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+}
+`
 
 // End of section. //template:end testAccConfigAll

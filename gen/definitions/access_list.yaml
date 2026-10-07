@@ -2087,3 +2087,258 @@ test_prerequisites:
     attributes:
       - name: layer
         value: Layer3
+  - dn: sys/intf/phys-[eth1/11]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3
+# Sequential steps that remove interface bindings, VTY access lists and access lists again,
+# after the standard test has created them. Each step is applied on top of the previous one.
+additional_tests:
+  # add a second interface binding
+  - |-
+    resource "nxos_access_list" "test" {
+      access_lists = {
+        "ACL1" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ip"
+              source_prefix             = "0.0.0.0"
+              source_prefix_length      = "0"
+              destination_prefix        = "1.1.1.1"
+              destination_prefix_length = "32"
+            }
+          }
+        }
+      }
+      ingress_interfaces = {
+        "eth1/10" = {
+          access_list_name = "ACL1"
+        }
+        "eth1/11" = {
+          access_list_name = "ACL1"
+        }
+      }
+      ingress_vty_access_list_name = "ACL1"
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }
+  # remove one of two interface bindings
+  - |-
+    resource "nxos_access_list" "test" {
+      access_lists = {
+        "ACL1" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ip"
+              source_prefix             = "0.0.0.0"
+              source_prefix_length      = "0"
+              destination_prefix        = "1.1.1.1"
+              destination_prefix_length = "32"
+            }
+          }
+        }
+      }
+      ingress_interfaces = {
+        "eth1/10" = {
+          access_list_name = "ACL1"
+        }
+      }
+      ingress_vty_access_list_name = "ACL1"
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }
+  # remove the VTY access list while an interface binding remains
+  - |-
+    resource "nxos_access_list" "test" {
+      access_lists = {
+        "ACL1" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ip"
+              source_prefix             = "0.0.0.0"
+              source_prefix_length      = "0"
+              destination_prefix        = "1.1.1.1"
+              destination_prefix_length = "32"
+            }
+          }
+        }
+      }
+      ingress_interfaces = {
+        "eth1/10" = {
+          access_list_name = "ACL1"
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }
+
+    data "nxos_access_list" "verify" {
+      depends_on = [nxos_access_list.test]
+
+      lifecycle {
+        postcondition {
+          condition     = self.ingress_vty_access_list_name == null || self.ingress_vty_access_list_name == ""
+          error_message = "ingress_vty_access_list_name was not removed from the device"
+        }
+      }
+    }
+  # remove the last interface binding, nothing else is left below the policy
+  - |-
+    resource "nxos_access_list" "test" {
+      access_lists = {
+        "ACL1" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ip"
+              source_prefix             = "0.0.0.0"
+              source_prefix_length      = "0"
+              destination_prefix        = "1.1.1.1"
+              destination_prefix_length = "32"
+            }
+          }
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }
+  # set the VTY access list without any interface binding
+  - |-
+    resource "nxos_access_list" "test" {
+      access_lists = {
+        "ACL1" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ip"
+              source_prefix             = "0.0.0.0"
+              source_prefix_length      = "0"
+              destination_prefix        = "1.1.1.1"
+              destination_prefix_length = "32"
+            }
+          }
+        }
+      }
+      ingress_vty_access_list_name = "ACL1"
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }
+  # remove the VTY access list without any interface binding
+  - |-
+    resource "nxos_access_list" "test" {
+      access_lists = {
+        "ACL1" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ip"
+              source_prefix             = "0.0.0.0"
+              source_prefix_length      = "0"
+              destination_prefix        = "1.1.1.1"
+              destination_prefix_length = "32"
+            }
+          }
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }
+
+    data "nxos_access_list" "verify" {
+      depends_on = [nxos_access_list.test]
+
+      lifecycle {
+        postcondition {
+          condition     = self.ingress_vty_access_list_name == null || self.ingress_vty_access_list_name == ""
+          error_message = "ingress_vty_access_list_name was not removed from the device"
+        }
+      }
+    }
+  # add an IPv6 egress interface binding
+  - |-
+    resource "nxos_access_list" "test" {
+      access_lists = {
+        "ACL1" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ip"
+              source_prefix             = "0.0.0.0"
+              source_prefix_length      = "0"
+              destination_prefix        = "1.1.1.1"
+              destination_prefix_length = "32"
+            }
+          }
+        }
+      }
+      ipv6_access_lists = {
+        "ACL2" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ipv6"
+              source_prefix             = "2001:db8:2::"
+              source_prefix_length      = "48"
+              destination_prefix        = "2001:db8:1::"
+              destination_prefix_length = "64"
+            }
+          }
+        }
+      }
+      ipv6_egress_interfaces = {
+        "eth1/10" = {
+          access_list_name = "ACL2"
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }
+  # remove the last IPv6 egress interface binding
+  - |-
+    resource "nxos_access_list" "test" {
+      access_lists = {
+        "ACL1" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ip"
+              source_prefix             = "0.0.0.0"
+              source_prefix_length      = "0"
+              destination_prefix        = "1.1.1.1"
+              destination_prefix_length = "32"
+            }
+          }
+        }
+      }
+      ipv6_access_lists = {
+        "ACL2" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ipv6"
+              source_prefix             = "2001:db8:2::"
+              source_prefix_length      = "48"
+              destination_prefix        = "2001:db8:1::"
+              destination_prefix_length = "64"
+            }
+          }
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }
+  # remove the IPv4 access list while an IPv6 access list remains
+  - |-
+    resource "nxos_access_list" "test" {
+      ipv6_access_lists = {
+        "ACL2" = {
+          entries = {
+            "10" = {
+              action                    = "permit"
+              protocol                  = "ipv6"
+              source_prefix             = "2001:db8:2::"
+              source_prefix_length      = "48"
+              destination_prefix        = "2001:db8:1::"
+              destination_prefix_length = "64"
+            }
+          }
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }

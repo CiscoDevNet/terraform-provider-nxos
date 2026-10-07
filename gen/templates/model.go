@@ -946,14 +946,42 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	}
 {{- end}}
 {{- end}}
+	{{- /* If a child is itself NoDelete with children, whether anything gets emitted below it
+	       depends on that child's own state, so emit this entry and drop it again if it ends up
+	       empty. An empty stub of a feature-gated class (e.g. lldpEntity) is rejected by NX-OS
+	       when the feature is not enabled. */}}
+	{{- $pruneEmpty := false}}
+	{{- range .ChildClasses}}
+	{{- if and .NoDelete (eq .Type "single") .ChildClasses}}
+	{{- $pruneEmpty = true}}
+	{{- end}}
+	{{- end}}
+	{{- if $pruneEmpty}}
+	hasAttributes := childBody != ""
+	siblingsPath := {{$childrenPathVar}}
+	childIndex := len(gjson.Get(body, siblingsPath).Array())
+	entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+	childBodyPath := entryPath + ".{{$childClassName}}"
+	if childBody == "" {
+		childBody = "{}"
+	}
+	body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+	nestedChildrenPath := childBodyPath + ".children"
+	_ = nestedChildrenPath
+	{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "ChildrenPathVar" "nestedChildrenPath")}}
+	if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+		body, _ = sjson.Delete(body, entryPath)
+		if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, siblingsPath)
+		}
+	}
+	{{- else}}
 	hasNestedChildren := false
 	{{- range .ChildClasses}}
 	{{- if eq .Type "list"}}
 	if len(data.{{toGoName .TfName}}) > 0 {
 		hasNestedChildren = true
 	}
-	{{- else if and .NoDelete (eq .Type "single") .ChildClasses}}
-	hasNestedChildren = true
 	{{- else if and (not .NoDelete) (eq .Type "single")}}
 	hasNestedChildren = true
 	{{- end}}
@@ -969,6 +997,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		_ = nestedChildrenPath
 		{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "ChildrenPathVar" "nestedChildrenPath")}}
 	}
+	{{- end}}
 	}
 {{- else}}
 	{
@@ -1052,13 +1081,16 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
          "Children" ([]YamlConfigChildClass)
          "StateItemExpr" (string) - Go expression for a single state item
          "PlanItemExpr" (string) - Go expression for a single plan item
-         "ParentBodyPath" (string) - Go expression for the parent body path
+         "ParentBodyPath" (string) - Go expression for the parent body path (read only)
+         "ParentWritePath" (string) - Go expression for the same path, creating missing single
+                                      parents so delete entries can be appended
          "IndexVar" (string) - Loop index variable name
        ========================================================= */}}
 {{- define "toBodyDeletedSingleInListTemplate"}}
 {{- $stateItemExpr := .StateItemExpr}}
 {{- $planItemExpr := .PlanItemExpr}}
 {{- $parentBodyPath := .ParentBodyPath}}
+{{- $parentWritePath := .ParentWritePath}}
 {{- $indexVar := .IndexVar}}
 {{- range .Children}}
 {{- if eq .Type "list"}}
@@ -1068,15 +1100,16 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.rn", stateChild.getRn(stateKey))
 					deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.status", "deleted")
-					body.Str, _ = sjson.SetRaw(body.Str, {{$parentBodyPath}}+".-1", deleteBody)
+					deletePath := {{$parentWritePath}}
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 				}
 			}
 {{- if .ChildClasses}}
-{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "%s.%s" $stateItemExpr (toGoName .TfName)) "PlanListExpr" (printf "%s.%s" $planItemExpr (toGoName .TfName)) "ParentBodyPath" $parentBodyPath "IdAttributes" .Attributes "ClassName" .ClassName "IndexVar" (printf "%s_" $indexVar))}}
+{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "%s.%s" $stateItemExpr (toGoName .TfName)) "PlanListExpr" (printf "%s.%s" $planItemExpr (toGoName .TfName)) "ParentBodyPath" $parentBodyPath "IdAttributes" .Attributes "ClassName" .ClassName "DeferEmptied" .AutoDeleteOnEmpty "IndexVar" (printf "%s_" $indexVar))}}
 {{- end}}
 {{- else if eq .Type "single"}}
 {{- if .ChildClasses}}
-{{- template "toBodyDeletedSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" $stateItemExpr "PlanItemExpr" $planItemExpr "ParentBodyPath" (printf "%s+\".0.%s.children\"" $parentBodyPath .ClassName) "IndexVar" $indexVar)}}
+{{- template "toBodyDeletedSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" $stateItemExpr "PlanItemExpr" $planItemExpr "ParentBodyPath" (printf "helpers.FindChildPath(body.Str, %s, \"%s\")+\".children\"" $parentBodyPath .ClassName) "ParentWritePath" (printf "helpers.EnsureChildPath(&body.Str, %s, \"%s\")+\".children\"" $parentWritePath .ClassName) "IndexVar" $indexVar)}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -1093,6 +1126,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
          "ParentBodyPath" (string) - Go expression for the parent body path
          "IdAttributes" ([]Attribute) - Attributes used to match items by ID
          "ClassName" (string) - Class name of the parent list item
+         "DeferEmptied" (bool) - Parent class has auto_delete_on_empty set
          "IndexVar" (string) - Loop index variable name
        ========================================================= */}}
 {{- define "toBodyDeletedListChildTemplate"}}
@@ -1101,6 +1135,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- $parentBodyPath := .ParentBodyPath}}
 {{- $idAttributes := .IdAttributes}}
 {{- $parentClassName := .ClassName}}
+{{- $deferEmptied := .DeferEmptied}}
 {{- $indexVar := .IndexVar}}
 	for {{$indexVar}} := range {{$stateListExpr}} {
 		if _, found := {{$planListExpr}}[{{$indexVar}}]; !found {
@@ -1125,8 +1160,28 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 		}
 		{{- range .Children}}
 		{{- if eq .Type "list"}}
+		{{- if $deferEmptied}}
+		// NX-OS removes the parent once its last child is deleted, so a request that
+		// deletes all existing children and adds new ones fails. Defer those deletes.
+		deferChildDeletes{{$indexVar}} := false
+		if deferEmptied && len(planItem{{$indexVar}}.{{toGoName .TfName}}) > 0 {
+			deferChildDeletes{{$indexVar}} = true
+			for stateChildKey := range stateItem{{$indexVar}}.{{toGoName .TfName}} {
+				if _, found := planItem{{$indexVar}}.{{toGoName .TfName}}[stateChildKey]; found {
+					deferChildDeletes{{$indexVar}} = false
+					break
+				}
+			}
+		}
+		{{- end}}
 		for stateChildKey := range stateItem{{$indexVar}}.{{toGoName .TfName}} {
 			if _, found := planItem{{$indexVar}}.{{toGoName .TfName}}[stateChildKey]; !found {
+				{{- if $deferEmptied}}
+				if deferChildDeletes{{$indexVar}} {
+					deferred = true
+					continue
+				}
+				{{- end}}
 				stateChild := stateItem{{$indexVar}}.{{toGoName .TfName}}[stateChildKey]
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.rn", stateChild.getRn(stateChildKey))
@@ -1135,11 +1190,11 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 			}
 		}
 		{{- if .ChildClasses}}
-		{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "stateItem%s.%s" $indexVar (toGoName .TfName)) "PlanListExpr" (printf "planItem%s.%s" $indexVar (toGoName .TfName)) "ParentBodyPath" (printf "matchBodyPath%s" $indexVar) "IdAttributes" .Attributes "ClassName" .ClassName "IndexVar" (printf "%s_" $indexVar))}}
+		{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "stateItem%s.%s" $indexVar (toGoName .TfName)) "PlanListExpr" (printf "planItem%s.%s" $indexVar (toGoName .TfName)) "ParentBodyPath" (printf "matchBodyPath%s" $indexVar) "IdAttributes" .Attributes "ClassName" .ClassName "DeferEmptied" .AutoDeleteOnEmpty "IndexVar" (printf "%s_" $indexVar))}}
 		{{- end}}
 		{{- else if eq .Type "single"}}
 		{{- if .ChildClasses}}
-		{{- template "toBodyDeletedSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" (printf "stateItem%s" $indexVar) "PlanItemExpr" (printf "planItem%s" $indexVar) "ParentBodyPath" (printf "matchBodyPath%s+\".0.%s.children\"" $indexVar .ClassName) "IndexVar" (printf "%s_" $indexVar))}}
+		{{- template "toBodyDeletedSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" (printf "stateItem%s" $indexVar) "PlanItemExpr" (printf "planItem%s" $indexVar) "ParentBodyPath" (printf "helpers.FindChildPath(body.Str, matchBodyPath%s, \"%s\")+\".children\"" $indexVar .ClassName) "ParentWritePath" (printf "helpers.EnsureChildPath(&body.Str, matchBodyPath%s, \"%s\")+\".children\"" $indexVar .ClassName) "IndexVar" (printf "%s_" $indexVar))}}
 		{{- end}}
 		{{- end}}
 		{{- end}}
@@ -1151,10 +1206,14 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
        Recursively generates deleted-item body entries for list children.
        Context: map with:
          "Children" ([]YamlConfigChildClass)
-         "BodyPath" (string) - Go expression for the body path to the children array
+         "BodyPath" (string) - Go expression for the body path to the children array (read only,
+                               resolves to nothing if a single parent is not part of the body)
+         "WritePath" (string) - Go expression for the same path, but creating missing single
+                                parents so delete entries can be appended
        ========================================================= */}}
 {{- define "toBodyDeletedChildrenTemplate"}}
 {{- $bodyPath := .BodyPath}}
+{{- $writePath := .WritePath}}
 {{- range .Children}}
 {{- if eq .Type "list"}}
 	for stateKey := range state.{{toGoName .TfName}} {
@@ -1173,15 +1232,16 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.status", "deleted")
 {{- end}}
-			body.Str, _ = sjson.SetRaw(body.Str, {{$bodyPath}}+".-1", deleteBody)
+			deletePath := {{$writePath}}
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 		}
 	}
 	{{- if .ChildClasses}}
-	{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "state.%s" (toGoName .TfName)) "PlanListExpr" (printf "data.%s" (toGoName .TfName)) "ParentBodyPath" $bodyPath "IdAttributes" .Attributes "ClassName" .ClassName "IndexVar" "di")}}
+	{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "state.%s" (toGoName .TfName)) "PlanListExpr" (printf "data.%s" (toGoName .TfName)) "ParentBodyPath" $bodyPath "IdAttributes" .Attributes "ClassName" .ClassName "DeferEmptied" .AutoDeleteOnEmpty "IndexVar" "di")}}
 	{{- end}}
 {{- else if eq .Type "single"}}
 {{- if .ChildClasses}}
-{{- template "toBodyDeletedChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPath" (printf "%s+\".0.%s.children\"" $bodyPath .ClassName))}}
+{{- template "toBodyDeletedChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPath" (printf "helpers.FindChildPath(body.Str, %s, \"%s\")+\".children\"" $bodyPath .ClassName) "WritePath" (printf "helpers.EnsureChildPath(&body.Str, %s, \"%s\")+\".children\"" $writePath .ClassName))}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -1191,48 +1251,35 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- /* ==================== toBodyUnsetChildAttrsTemplate ====================
        Emits DME_UNSET_PROPERTY_MARKER for child-class attributes that were
        non-null in state but are now null in config.
+       Single children that are not part of the body (because none of their
+       attributes is set in config) are created on demand.
        Context: map with:
          "Children" ([]YamlConfigChildClass)
          "StateVar" (string) - Go variable for state
          "ConfigVar" (string) - Go variable for config
-         "BodyPathExpr" (string) - Go expression for the body path to children array
+         "BodyPathExpr" (string) - Go expression for the body path to children array (read only)
+         "EnsurePathExpr" (string) - Go expression for the same path, creating missing single parents
+         "Level" (string) - Suffix that keeps local variable names unique across nesting levels
        ========================================================= */}}
 {{- define "toBodyUnsetChildAttrsTemplate"}}
 {{- $stateVar := .StateVar}}
 {{- $configVar := .ConfigVar}}
 {{- $bodyPathExpr := .BodyPathExpr}}
+{{- $ensurePathExpr := .EnsurePathExpr}}
+{{- $level := .Level}}
 {{- range .Children}}
 {{- $childClassName := .ClassName}}
 {{- if eq .Type "single"}}
-{{- $hasUnsetAttrs := false}}
-{{- range .Attributes}}{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}{{$hasUnsetAttrs = true}}{{end}}{{end}}
-{{- if $hasUnsetAttrs}}
-	for si, sv := range gjson.Get(body.Str, {{$bodyPathExpr}}).Array() {
-		if sv.Get("{{$childClassName}}").Exists() {
-			{{- range .Attributes}}
-			{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
-			if !{{$stateVar}}.{{toGoName .TfName}}.IsNull() && {{$configVar}}.{{toGoName .TfName}}.IsNull() {
-				body.Str, _ = sjson.Set(body.Str, {{$bodyPathExpr}}+"."+strconv.Itoa(si)+".{{$childClassName}}.attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
-			}
-			{{- end}}
-			{{- end}}
-			break
-		}
+{{- range .Attributes}}
+{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
+	if !{{$stateVar}}.{{toGoName .TfName}}.IsNull() && {{$configVar}}.{{toGoName .TfName}}.IsNull() {
+		unsetPath := helpers.EnsureChildPath(&body.Str, {{$ensurePathExpr}}, "{{$childClassName}}")
+		body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
 	}
 {{- end}}
+{{- end}}
 {{- if .ChildClasses}}
-	{
-	singleChildPath := ""
-	for si, sv := range gjson.Get(body.Str, {{$bodyPathExpr}}).Array() {
-		if sv.Get("{{$childClassName}}").Exists() {
-			singleChildPath = {{$bodyPathExpr}} + "." + strconv.Itoa(si) + ".{{$childClassName}}.children"
-			break
-		}
-	}
-	if singleChildPath != "" {
-		{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" $stateVar "ConfigVar" $configVar "BodyPathExpr" "singleChildPath")}}
-	}
-	}
+{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" $stateVar "ConfigVar" $configVar "BodyPathExpr" (printf "helpers.FindChildPath(body.Str, %s, \"%s\")+\".children\"" $bodyPathExpr $childClassName) "EnsurePathExpr" (printf "helpers.EnsureChildPath(&body.Str, %s, \"%s\")+\".children\"" $ensurePathExpr $childClassName) "Level" $level)}}
 {{- end}}
 {{- else if eq .Type "list"}}
 	for key := range {{$stateVar}}.{{toGoName .TfName}} {
@@ -1261,15 +1308,15 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 			{{- end}}
 			{{- if .ChildClasses}}
 			{
-			listChildPath := ""
+			listChildPath{{$level}} := ""
 			for mi, mv := range gjson.Get(body.Str, {{$bodyPathExpr}}).Array() {
 				if {{mapKeyMatchExprVar "mv" "key" $childClassName .Attributes}} {
-					listChildPath = {{$bodyPathExpr}} + "." + strconv.Itoa(mi) + ".{{$childClassName}}.children"
+					listChildPath{{$level}} = {{$bodyPathExpr}} + "." + strconv.Itoa(mi) + ".{{$childClassName}}.children"
 					break
 				}
 			}
-			if listChildPath != "" {
-				{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" "stateChild" "ConfigVar" "configChild" "BodyPathExpr" "listChildPath")}}
+			if listChildPath{{$level}} != "" {
+				{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" "stateChild" "ConfigVar" "configChild" "BodyPathExpr" (printf "listChildPath%s" $level) "EnsurePathExpr" (printf "listChildPath%s" $level) "Level" (printf "%s_" $level))}}
 			}
 			}
 			{{- end}}
@@ -1280,13 +1327,21 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- end}}
 {{- /* ==================== end toBodyUnsetChildAttrsTemplate ==================== */}}
 
+{{if hasAutoDeleteOnEmpty .ChildClasses -}}
+// toBodyWithDeletes returns the update body. With deferEmptied set, deletes of children that would
+// leave an auto_delete_on_empty parent without children are left out and deferred is true, so the
+// caller can send them in a second request after the new children have been created.
+func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool, deferEmptied bool) (body nxos.Body, deferred bool) {
+	body = data.toBody(config)
+{{- else -}}
 func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool) nxos.Body {
 	body := data.toBody(config)
+{{- end}}
 	{{- if .ChildClasses}}
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	if !importing {
-	{{- template "toBodyDeletedChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPath" "bodyPath")}}
+	{{- template "toBodyDeletedChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPath" "bodyPath" "WritePath" "bodyPath")}}
 	}
 	{{- end}}
 
@@ -1302,11 +1357,15 @@ func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{c
 
 	{{- if .ChildClasses}}
 	if !importing {
-	{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" "state" "ConfigVar" "config" "BodyPathExpr" "bodyPath")}}
+	{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" "state" "ConfigVar" "config" "BodyPathExpr" "bodyPath" "EnsurePathExpr" "bodyPath" "Level" "")}}
 	}
 	{{- end}}
 
+	{{if hasAutoDeleteOnEmpty .ChildClasses -}}
+	return body, deferred
+	{{- else -}}
 	return body
+	{{- end}}
 }
 
 // End of section. //template:end toDeleteBody

@@ -391,74 +391,33 @@ func (data IGMPSnooping) toBodyWithDeletes(ctx context.Context, state IGMPSnoopi
 		}
 	}
 	if !importing {
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("igmpsnoopInst").Exists() {
-				if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".igmpsnoopInst.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.InstanceControl.IsNull() && config.InstanceControl.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".igmpsnoopInst.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-				}
-				break
-			}
+		if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "igmpsnoopInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
-		{
-			singleChildPath := ""
-			for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-				if sv.Get("igmpsnoopInst").Exists() {
-					singleChildPath = bodyPath + "." + strconv.Itoa(si) + ".igmpsnoopInst.children"
-					break
-				}
-			}
-			if singleChildPath != "" {
-				for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
-					if sv.Get("igmpsnoopDom").Exists() {
-						if !state.DomainControl.IsNull() && config.DomainControl.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".igmpsnoopDom.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !state.DomainName.IsNull() && config.DomainName.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".igmpsnoopDom.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-						}
-						break
-					}
-				}
-				{
-					singleChildPath := ""
-					for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
-						if sv.Get("igmpsnoopDom").Exists() {
-							singleChildPath = singleChildPath + "." + strconv.Itoa(si) + ".igmpsnoopDom.children"
-							break
-						}
-					}
-					if singleChildPath != "" {
-						{
-							singleChildPath := ""
-							for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
-								if sv.Get("igmpsnoopGl").Exists() {
-									singleChildPath = singleChildPath + "." + strconv.Itoa(si) + ".igmpsnoopGl.children"
-									break
-								}
-							}
-							if singleChildPath != "" {
-								for si, sv := range gjson.Get(body.Str, singleChildPath).Array() {
-									if sv.Get("igmpsnoopGVlan").Exists() {
-										if !state.GlobalVlanVxlan.IsNull() && config.GlobalVlanVxlan.IsNull() {
-											body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".igmpsnoopGVlan.attributes."+"vxlan", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !state.GlobalVlanDisableNveStaticRouterPort.IsNull() && config.GlobalVlanDisableNveStaticRouterPort.IsNull() {
-											body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".igmpsnoopGVlan.attributes."+"disableNveStRtrPort", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !state.GlobalVlanVxlanUmcDropVlan.IsNull() && config.GlobalVlanVxlanUmcDropVlan.IsNull() {
-											body.Str, _ = sjson.Set(body.Str, singleChildPath+"."+strconv.Itoa(si)+".igmpsnoopGVlan.attributes."+"vxlanUmcDropVlan", "DME_UNSET_PROPERTY_MARKER")
-										}
-										break
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+		if !state.InstanceControl.IsNull() && config.InstanceControl.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "igmpsnoopInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DomainControl.IsNull() && config.DomainControl.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DomainName.IsNull() && config.DomainName.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GlobalVlanVxlan.IsNull() && config.GlobalVlanVxlan.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom")+".children", "igmpsnoopGl")+".children", "igmpsnoopGVlan")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"vxlan", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GlobalVlanDisableNveStaticRouterPort.IsNull() && config.GlobalVlanDisableNveStaticRouterPort.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom")+".children", "igmpsnoopGl")+".children", "igmpsnoopGVlan")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"disableNveStRtrPort", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GlobalVlanVxlanUmcDropVlan.IsNull() && config.GlobalVlanVxlanUmcDropVlan.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom")+".children", "igmpsnoopGl")+".children", "igmpsnoopGVlan")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"vxlanUmcDropVlan", "DME_UNSET_PROPERTY_MARKER")
 		}
 	}
 

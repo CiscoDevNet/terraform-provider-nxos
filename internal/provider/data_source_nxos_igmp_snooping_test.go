@@ -31,7 +31,6 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIGMPSnooping(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "instance_control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "domain_control", "opt-flood"))
@@ -60,7 +59,6 @@ func TestAccDataSourceNxosIGMPSnooping(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosIGMPSnoopingConfig() string {
 	config := `resource "nxos_igmp_snooping" "test" {` + "\n"
-	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
 	config += `	instance_control = "stateful-ha"` + "\n"
 	config += `	domain_control = "opt-flood"` + "\n"

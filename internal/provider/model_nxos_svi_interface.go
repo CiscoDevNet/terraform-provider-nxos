@@ -428,7 +428,8 @@ func (data SVIInterface) toBodyWithDeletes(ctx context.Context, state SVIInterfa
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "sviIf.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "sviIf.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.SviInterfaces {
@@ -518,21 +519,13 @@ func (data SVIInterface) toBodyWithDeletes(ctx context.Context, state SVIInterfa
 						}
 					}
 					if listChildPath != "" {
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("nwRtVrfMbr").Exists() {
-								if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nwRtVrfMbr.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 						}
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("nvoMultisiteIfTracking").Exists() {
-								if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".nvoMultisiteIfTracking.attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
 						}
 					}
 				}

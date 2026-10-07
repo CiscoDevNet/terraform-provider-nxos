@@ -141,6 +141,11 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 			{{- end}}
+			{{- range $i, $e := .AdditionalTests}}
+			{
+				Config: {{if $.TestPrerequisites}}testAccNxos{{camelCase $.Name}}PrerequisitesConfig+{{end}}testAccNxos{{camelCase $.Name}}ConfigAdditional{{$i}},
+			},
+			{{- end}}
 		},
 	})
 }
@@ -180,6 +185,23 @@ resource "nxos_dme" "PreReq{{$index}}" {
       {{.Name}} = "{{.Value}}"
     {{- end}}
   }
+  {{- end}}
+  {{- if .Children}}
+  children = [
+    {{- range .Children}}
+    {
+      rn         = "{{.Rn}}"
+      class_name = "{{.ClassName}}"
+      {{- if .Attributes}}
+      content = {
+        {{- range .Attributes}}
+          {{.Name}} = "{{.Value}}"
+        {{- end}}
+      }
+      {{- end}}
+    },
+    {{- end}}
+  ]
   {{- end}}
   {{- if .Dependencies}}
   depends_on = [{{range .Dependencies}}nxos_dme.PreReq{{.}}, {{end}}]
@@ -345,4 +367,8 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 	return config
 }
 
-// End of section. //template:end testAccConfigAll
+{{range $i, $e := .AdditionalTests}}const testAccNxos{{camelCase $.Name}}ConfigAdditional{{$i}} = `
+{{$e}}
+`
+
+{{end}}// End of section. //template:end testAccConfigAll

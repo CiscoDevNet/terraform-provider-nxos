@@ -1628,7 +1628,8 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "analyticsInst.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "analyticsInst.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.Instances {
@@ -1959,29 +1960,29 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 									}
 								}
 								{
-									listChildPath := ""
+									listChildPath_ := ""
 									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 										if mv.Get("analyticsPolicy.attributes.name").String() == key {
-											listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".analyticsPolicy.children"
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".analyticsPolicy.children"
 											break
 										}
 									}
-									if listChildPath != "" {
+									if listChildPath_ != "" {
 										for key := range stateChild.MatchAcls {
 											if configChild, ok := configChild.MatchAcls[key]; ok {
 												stateChild := stateChild.MatchAcls[key]
 												_ = stateChild
 												_ = configChild
-												for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
 													if mv.Get("analyticsMatchAcl.attributes.name").String() == key {
 														if !stateChild.AclName.IsNull() && configChild.AclName.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsMatchAcl.attributes."+"aclName", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".analyticsMatchAcl.attributes."+"aclName", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.FilterType.IsNull() && configChild.FilterType.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsMatchAcl.attributes."+"fltType", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".analyticsMatchAcl.attributes."+"fltType", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsMatchAcl.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".analyticsMatchAcl.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
 														}
 														break
 													}
@@ -2072,50 +2073,46 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 									}
 								}
 								{
-									listChildPath := ""
+									listChildPath_ := ""
 									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 										if mv.Get("analyticsMonitor.attributes.name").String() == key {
-											listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".analyticsMonitor.children"
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".analyticsMonitor.children"
 											break
 										}
 									}
-									if listChildPath != "" {
-										for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-											if sv.Get("analyticsRsRecordPAtt").Exists() {
-												if !stateChild.RecordTargetDn.IsNull() && configChild.RecordTargetDn.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsRsRecordPAtt.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+									if listChildPath_ != "" {
+										if !stateChild.RecordTargetDn.IsNull() && configChild.RecordTargetDn.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsRecordPAtt")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 										}
 										for key := range stateChild.CollectorBuckets {
 											if configChild, ok := configChild.CollectorBuckets[key]; ok {
 												stateChild := stateChild.CollectorBuckets[key]
 												_ = stateChild
 												_ = configChild
-												for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
 													if mv.Get("analyticsCollectorBucket.attributes.id").String() == key {
 														if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollectorBucket.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".analyticsCollectorBucket.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.HashHigh.IsNull() && configChild.HashHigh.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollectorBucket.attributes."+"hashHi", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".analyticsCollectorBucket.attributes."+"hashHi", "DME_UNSET_PROPERTY_MARKER")
 														}
 														if !stateChild.HashLow.IsNull() && configChild.HashLow.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".analyticsCollectorBucket.attributes."+"hashLo", "DME_UNSET_PROPERTY_MARKER")
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".analyticsCollectorBucket.attributes."+"hashLo", "DME_UNSET_PROPERTY_MARKER")
 														}
 														break
 													}
 												}
 												{
-													listChildPath := ""
-													for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+													listChildPath__ := ""
+													for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
 														if mv.Get("analyticsCollectorBucket.attributes.id").String() == key {
-															listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".analyticsCollectorBucket.children"
+															listChildPath__ = listChildPath_ + "." + strconv.Itoa(mi) + ".analyticsCollectorBucket.children"
 															break
 														}
 													}
-													if listChildPath != "" {
+													if listChildPath__ != "" {
 														for key := range stateChild.Collectors {
 															if configChild, ok := configChild.Collectors[key]; ok {
 																stateChild := stateChild.Collectors[key]
@@ -2131,28 +2128,29 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 								}
 							}
 						}
-						for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-							if sv.Get("analyticsTrafficAnalytics").Exists() {
-								if !stateChild.TrafficAnalyticsDescription.IsNull() && configChild.TrafficAnalyticsDescription.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.TrafficAnalyticsInterfaceMode.IsNull() && configChild.TrafficAnalyticsInterfaceMode.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"interfaceMode", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.TrafficAnalyticsName.IsNull() && configChild.TrafficAnalyticsName.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.TrafficAnalyticsServiceDatabaseSize.IsNull() && configChild.TrafficAnalyticsServiceDatabaseSize.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"serviceDbSize", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() && configChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"troubleshootExportInterval", "DME_UNSET_PROPERTY_MARKER")
-								}
-								if !stateChild.TrafficAnalyticsUdpPortList.IsNull() && configChild.TrafficAnalyticsUdpPortList.IsNull() {
-									body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsTrafficAnalytics.attributes."+"udpPortList", "DME_UNSET_PROPERTY_MARKER")
-								}
-								break
-							}
+						if !stateChild.TrafficAnalyticsDescription.IsNull() && configChild.TrafficAnalyticsDescription.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.TrafficAnalyticsInterfaceMode.IsNull() && configChild.TrafficAnalyticsInterfaceMode.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interfaceMode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.TrafficAnalyticsName.IsNull() && configChild.TrafficAnalyticsName.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.TrafficAnalyticsServiceDatabaseSize.IsNull() && configChild.TrafficAnalyticsServiceDatabaseSize.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"serviceDbSize", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() && configChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"troubleshootExportInterval", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.TrafficAnalyticsUdpPortList.IsNull() && configChild.TrafficAnalyticsUdpPortList.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udpPortList", "DME_UNSET_PROPERTY_MARKER")
 						}
 						for key := range stateChild.ForwardInstanceTargets {
 							if configChild, ok := configChild.ForwardInstanceTargets[key]; ok {
@@ -2189,45 +2187,29 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 									}
 								}
 								{
-									listChildPath := ""
+									listChildPath_ := ""
 									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 										if mv.Get("analyticsFwdInstTarget.attributes.id").String() == key {
-											listChildPath = listChildPath + "." + strconv.Itoa(mi) + ".analyticsFwdInstTarget.children"
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".analyticsFwdInstTarget.children"
 											break
 										}
 									}
-									if listChildPath != "" {
-										for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-											if sv.Get("analyticsRsMonitorAtt").Exists() {
-												if !stateChild.MonitorAttachmentTargetDn.IsNull() && configChild.MonitorAttachmentTargetDn.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsRsMonitorAtt.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+									if listChildPath_ != "" {
+										if !stateChild.MonitorAttachmentTargetDn.IsNull() && configChild.MonitorAttachmentTargetDn.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsMonitorAtt")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 										}
-										for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-											if sv.Get("analyticsRsProfAtt").Exists() {
-												if !stateChild.ProfileAttachmentTargetDn.IsNull() && configChild.ProfileAttachmentTargetDn.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsRsProfAtt.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+										if !stateChild.ProfileAttachmentTargetDn.IsNull() && configChild.ProfileAttachmentTargetDn.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsProfAtt")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 										}
-										for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-											if sv.Get("analyticsRsEventsAtt").Exists() {
-												if !stateChild.EventsAttachmentTargetDn.IsNull() && configChild.EventsAttachmentTargetDn.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsRsEventsAtt.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+										if !stateChild.EventsAttachmentTargetDn.IsNull() && configChild.EventsAttachmentTargetDn.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsEventsAtt")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 										}
-										for si, sv := range gjson.Get(body.Str, listChildPath).Array() {
-											if sv.Get("analyticsRsPolicyAtt").Exists() {
-												if !stateChild.PolicyAttachmentTargetDn.IsNull() && configChild.PolicyAttachmentTargetDn.IsNull() {
-													body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(si)+".analyticsRsPolicyAtt.attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
-												}
-												break
-											}
+										if !stateChild.PolicyAttachmentTargetDn.IsNull() && configChild.PolicyAttachmentTargetDn.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsPolicyAtt")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 										}
 									}
 								}

@@ -1,0 +1,220 @@
+---
+name: Track
+class_name: trackEntity
+dn: sys/track
+no_delete: true
+ds_description: This data source can read the object tracking configuration on NX-OS devices, including track objects of type interface, IP route, IP SLA and track list.
+res_description: This resource can manage the object tracking configuration on NX-OS devices, including track objects of type interface, IP route, IP SLA and track list.
+doc_path: System/track:Entity/
+doc_category: System
+child_classes:
+  - class_name: trackObject
+    doc_path: System/track:Object/
+    rn: object-%v
+    type: list
+    tf_name: objects
+    description: 'List of track objects.'
+    attributes:
+      - nxos_name: id
+        tf_name: id
+        type: Int64
+        id: true
+        min_int: 1
+        max_int: 512
+        description: 'Track object ID.'
+        example: 10
+      - nxos_name: delayDown
+        tf_name: delay_down
+        type: Int64
+        min_int: 0
+        max_int: 180
+        description: 'Delay down in seconds.'
+        example: 10
+      - nxos_name: delayDownMs
+        tf_name: delay_down_milliseconds
+        type: Int64
+        min_int: 0
+        max_int: 60000
+        description: 'Delay down in milliseconds. Allowed values - {0, 100-60000}.'
+        example: 1000
+        exclude_test: true
+      - nxos_name: delayUp
+        tf_name: delay_up
+        type: Int64
+        min_int: 0
+        max_int: 180
+        description: 'Delay up in seconds.'
+        example: 20
+      - nxos_name: delayUpMs
+        tf_name: delay_up_milliseconds
+        type: Int64
+        min_int: 0
+        max_int: 60000
+        description: 'Delay up in milliseconds. Allowed values - {0, 100-60000}.'
+        example: 2000
+        exclude_test: true
+    child_classes:
+      - class_name: trackIf
+        doc_path: System/track:If/
+        rn: if
+        type: single
+        tf_name: interface
+        description: 'Interface tracking.'
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            description: 'Interface to track. Must match first field in the output of show intf brief. Example: Eth1/1 or Vlan100.'
+            example: eth1/10
+          - nxos_name: protocolType
+            tf_name: interface_protocol_type
+            type: String
+            description: 'Protocol type for interface object.'
+            enum_values:
+              - none
+              - ipv4-routing
+              - ipv6-routing
+              - line-protocol
+            example: line-protocol
+      - class_name: trackIpRoute
+        doc_path: System/track:IpRoute/
+        rn: iprt
+        type: single
+        test_tags: [TRACK_IP_ROUTE]
+        tf_name: ip_route
+        description: 'IP route tracking. Tracks whether an IPv4/IPv6 route exists and is reachable from the local switch.'
+        attributes:
+          - nxos_name: af
+            tf_name: ip_route_address_family
+            type: String
+            description: 'Address family.'
+            enum_values:
+              - none
+              - ipv4
+              - ipv6
+            example: ipv4
+          - nxos_name: prefix
+            tf_name: ip_route_prefix
+            type: String
+            description: 'IP route prefix.'
+            example: 10.1.1.0/24
+          - nxos_name: routeOwner
+            tf_name: ip_route_owner
+            type: String
+            description: 'Owner of the route.'
+            enum_values:
+              - none
+              - hmm
+            example: none
+          - nxos_name: routeState
+            tf_name: ip_route_state
+            type: String
+            description: 'Route State.'
+            enum_values:
+              - reachability
+            example: reachability
+          - nxos_name: vrf
+            tf_name: ip_route_vrf_name
+            type: String
+            description: 'Vrf for track.'
+            example: default
+      - class_name: trackIpSla
+        doc_path: System/track:IpSla/
+        rn: ipsla
+        type: single
+        test_tags: [TRACK_IP_SLA]
+        tf_name: ip_sla
+        description: 'IP SLA tracking. Tracks the output of IP SLA operations.'
+        attributes:
+          - nxos_name: probeId
+            tf_name: ip_sla_probe_id
+            type: Int64
+            min_int: 1
+            max_int: 2147483647
+            description: 'SLA probe ID.'
+            example: 1
+          - nxos_name: probeState
+            tf_name: ip_sla_probe_state
+            type: String
+            description: 'SLA reachability/state type.'
+            enum_values:
+              - reachability
+              - state
+            example: reachability
+      - class_name: trackList
+        doc_path: System/track:List/
+        rn: list
+        type: single
+        test_tags: [TRACK_LIST]
+        tf_name: list
+        description: 'Track list. Tracks the combined states of multiple objects.'
+        attributes:
+          - nxos_name: type
+            tf_name: list_type
+            type: String
+            description: 'Type of list object.'
+            enum_values:
+              - and
+              - or
+              - percentage
+              - weight
+            example: weight
+          - nxos_name: percentageDown
+            tf_name: list_percentage_down
+            type: Int64
+            min_int: 0
+            max_int: 100
+            description: 'Percentage Down.'
+            example: 10
+            exclude_test: true
+          - nxos_name: percentageUp
+            tf_name: list_percentage_up
+            type: Int64
+            min_int: 0
+            max_int: 100
+            description: 'Percentage Up.'
+            example: 80
+            exclude_test: true
+          - nxos_name: weightDown
+            tf_name: list_weight_down
+            type: Int64
+            min_int: 0
+            max_int: 255
+            description: 'Weight down value.'
+            example: 10
+          - nxos_name: weightUp
+            tf_name: list_weight_up
+            type: Int64
+            min_int: 0
+            max_int: 255
+            description: 'Weight up value.'
+            example: 20
+        child_classes:
+          - class_name: trackMember
+            doc_path: System/track:Member/
+            rn: obj-%v
+            type: list
+            tf_name: list_members
+            description: 'List of track list members.'
+            attributes:
+              - nxos_name: id
+                tf_name: object_id
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 512
+                description: 'Track ID of object to be tracked.'
+                example: 11
+              - nxos_name: not
+                tf_name: negate
+                type: Bool
+                description: 'Negate state of object.'
+                example: true
+                exclude_test: true
+              - nxos_name: weight
+                tf_name: weight
+                type: Int64
+                min_int: 1
+                max_int: 255
+                description: 'Assign weight to a particular object.'
+                example: 20

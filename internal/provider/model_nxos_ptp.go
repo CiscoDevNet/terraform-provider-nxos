@@ -1249,7 +1249,8 @@ func (data PTP) toBodyWithDeletes(ctx context.Context, state PTP, config PTP, im
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "ptpPtpDomain.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "ptpPtpDomain.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for stateKey := range state.Interfaces {
@@ -1258,7 +1259,8 @@ func (data PTP) toBodyWithDeletes(ctx context.Context, state PTP, config PTP, im
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "ptpPtpIf.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "ptpPtpIf.attributes.status", "deleted")
-				body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for di := range state.Interfaces {
@@ -1427,36 +1429,33 @@ func (data PTP) toBodyWithDeletes(ctx context.Context, state PTP, config PTP, im
 				}
 			}
 		}
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("ptpPtpNotifyHighCorr").Exists() {
-				if !state.NotifyHighCorrectionInterval.IsNull() && config.NotifyHighCorrectionInterval.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ptpPtpNotifyHighCorr.attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.NotifyHighCorrection.IsNull() && config.NotifyHighCorrection.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ptpPtpNotifyHighCorr.attributes."+"notify", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.NotifyHighCorrectionPeriodic.IsNull() && config.NotifyHighCorrectionPeriodic.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ptpPtpNotifyHighCorr.attributes."+"periodic", "DME_UNSET_PROPERTY_MARKER")
-				}
-				break
-			}
+		if !state.NotifyHighCorrectionInterval.IsNull() && config.NotifyHighCorrectionInterval.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyHighCorr")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
 		}
-		for si, sv := range gjson.Get(body.Str, bodyPath).Array() {
-			if sv.Get("ptpPtpNotifyPortStateChg").Exists() {
-				if !state.NotifyPortStateChangeCategory.IsNull() && config.NotifyPortStateChangeCategory.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ptpPtpNotifyPortStateChg.attributes."+"category", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.NotifyPortStateChangeInterval.IsNull() && config.NotifyPortStateChangeInterval.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ptpPtpNotifyPortStateChg.attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.NotifyPortStateChange.IsNull() && config.NotifyPortStateChange.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ptpPtpNotifyPortStateChg.attributes."+"notify", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !state.NotifyPortStateChangePeriodic.IsNull() && config.NotifyPortStateChangePeriodic.IsNull() {
-					body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(si)+".ptpPtpNotifyPortStateChg.attributes."+"periodic", "DME_UNSET_PROPERTY_MARKER")
-				}
-				break
-			}
+		if !state.NotifyHighCorrection.IsNull() && config.NotifyHighCorrection.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyHighCorr")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"notify", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NotifyHighCorrectionPeriodic.IsNull() && config.NotifyHighCorrectionPeriodic.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyHighCorr")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"periodic", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NotifyPortStateChangeCategory.IsNull() && config.NotifyPortStateChangeCategory.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"category", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NotifyPortStateChangeInterval.IsNull() && config.NotifyPortStateChangeInterval.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NotifyPortStateChange.IsNull() && config.NotifyPortStateChange.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"notify", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NotifyPortStateChangePeriodic.IsNull() && config.NotifyPortStateChangePeriodic.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"periodic", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.Interfaces {
 			if configChild, ok := config.Interfaces[key]; ok {

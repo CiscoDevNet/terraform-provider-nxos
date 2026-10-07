@@ -67,7 +67,7 @@ child_classes:
         min_int: 0
         max_int: 200000000
         description: "Spanning tree L2 Gateway Domain Id."
-        example: 2048
+        example: 512
       - nxos_name: lcIssu
         tf_name: linecard_issu
         type: String

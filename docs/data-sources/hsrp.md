@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This data source can read the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.
   API Documentation
-  hsrpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Entity/hsrpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Inst/hsrpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:If/hsrpGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Group/
+  hsrpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Entity/hsrpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Inst/hsrpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:If/hsrpGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Group/hsrpObjectTrack https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:ObjectTrack/
 ---
 
 # nxos_hsrp (Data Source)
@@ -18,6 +18,7 @@ This data source can read the HSRP configuration on NX-OS devices, including HSR
 - [hsrpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Inst/)
 - [hsrpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:If/)
 - [hsrpGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:Group/)
+- [hsrpObjectTrack](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/hsrp:ObjectTrack/)
 
 ## Example Usage
 
@@ -94,3 +95,13 @@ Read-Only:
 - `preempt_delay_reload` (Number) Preempt delay after a switch reload.
 - `preempt_delay_sync` (Number) Wait for IP redundancy clients.
 - `priority` (Number) Group Priority.
+- `tracked_objects` (Attributes Map) List of objects tracked by the HSRP group.
+  - Map key: `id` - Object Id to be tracked.
+  - Key range: `1`-`512` (see [below for nested schema](#nestedatt--interfaces--groups--tracked_objects))
+
+<a id="nestedatt--interfaces--groups--tracked_objects"></a>
+### Nested Schema for `interfaces.groups.tracked_objects`
+
+Read-Only:
+
+- `decrement_priority` (Number) Priority to be decremented when tracked object is down. Default value is 10.

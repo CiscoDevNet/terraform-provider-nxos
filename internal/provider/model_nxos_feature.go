@@ -2163,6 +2163,10 @@ func (data Feature) toBodyWithDeletes(ctx context.Context, state Feature, config
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmDhcp")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
+		if !state.Eigrp.IsNull() && config.Eigrp.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmEigrp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
 		if !state.Evpn.IsNull() && config.Evpn.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmEvpn")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")

@@ -1,0 +1,720 @@
+---
+name: EIGRP
+class_name: eigrpEntity
+dn: sys/eigrp
+ds_description: This data source can read the EIGRP configuration on NX-OS devices, including EIGRP instances, VRFs, address families, route redistribution, and interface settings such as timers, metrics, and authentication.
+res_description: This resource can manage the EIGRP configuration on NX-OS devices, including EIGRP instances, VRFs, address families, route redistribution, and interface settings such as timers, metrics, and authentication.
+doc_category: Routing
+child_classes:
+  - class_name: eigrpInst
+    rn: inst-%s
+    type: list
+    tf_name: instances
+    description: 'List of EIGRP instances.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'EIGRP instance name.'
+        example: EIGRP1
+      - nxos_name: flushRoutes
+        tf_name: flush_routes
+        type: Bool
+        description: 'Flush routes on non-graceful controlled restart.'
+        example: true
+      - nxos_name: isolate
+        tf_name: isolate
+        type: Bool
+        description: 'Isolate this router from EIGRP perspective.'
+        example: true
+    child_classes:
+      - class_name: eigrpDom
+        rn: dom-[%s]
+        type: list
+        tf_name: vrfs
+        description: 'List of EIGRP VRFs.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'VRF name.'
+            example: default
+        child_classes:
+          - class_name: eigrpDomAf
+            rn: af-%s
+            type: list
+            tf_name: address_families
+            description: 'List of EIGRP VRF address families.'
+            attributes:
+              - nxos_name: type
+                tf_name: address_family
+                type: String
+                id: true
+                description: 'Address family type.'
+                enum_values:
+                  - ipv4-ucast
+                  - ipv6-ucast
+                example: ipv4-ucast
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'Enable/Disable EIGRP instance within address family.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: asn
+                tf_name: asn
+                type: Int64
+                min_int: 1
+                max_int: 65535
+                description: 'Autonomous system number for address family.'
+                example: 100
+              - nxos_name: rtrId
+                tf_name: router_id
+                type: String
+                description: 'Router identifier for address family domain.'
+                example: 10.1.1.1
+              - nxos_name: intDist
+                tf_name: internal_distance
+                type: Int64
+                min_int: 1
+                max_int: 255
+                description: 'Administrative distance for internal routes.'
+                example: 91
+              - nxos_name: extDist
+                tf_name: external_distance
+                type: Int64
+                min_int: 1
+                max_int: 255
+                description: 'Administrative distance for external routes.'
+                example: 171
+              - nxos_name: maxPaths
+                tf_name: maximum_paths
+                type: Int64
+                min_int: 1
+                max_int: 32
+                description: 'Maximum number of ECMP paths.'
+                example: 4
+              - nxos_name: actIntvlSt
+                tf_name: active_interval_state
+                type: String
+                description: 'Enable/Disable EIGRP time limit for active state.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: actIntvl
+                tf_name: active_interval
+                type: Int64
+                min_int: 1
+                max_int: 65535
+                description: 'EIGRP time limit (in minutes) for active state.'
+                example: 5
+              - nxos_name: metricStyle
+                tf_name: metric_style
+                type: String
+                description: 'EIGRP metric version (`narrow` = 32-bit, `wide` = 64-bit).'
+                enum_values:
+                  - narrow
+                  - wide
+                example: wide
+              - nxos_name: ribScale
+                tf_name: rib_scale
+                type: Int64
+                min_int: 1
+                max_int: 255
+                description: 'EIGRP RIB scale value.'
+                example: 100
+              - nxos_name: maxHops
+                tf_name: maximum_hops
+                type: Int64
+                min_int: 1
+                max_int: 255
+                description: 'EIGRP maximum hop count.'
+                example: 50
+              - nxos_name: logAdjChanges
+                tf_name: log_adjacency_changes
+                type: Bool
+                description: 'Log neighbor/adjacency changes.'
+                example: false
+              - nxos_name: logNbrWarnIntvl
+                tf_name: log_neighbor_warnings_interval
+                type: Int64
+                min_int: 1
+                max_int: 65535
+                description: 'Log neighbor warning interval (in seconds).'
+                example: 20
+              - nxos_name: logNbrWarnState
+                tf_name: log_neighbor_warnings_state
+                type: String
+                description: 'Enable/Disable log neighbor warnings.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: passiveIntfDefault
+                tf_name: passive_interface_default
+                type: Bool
+                description: 'Suppress routing updates on all interfaces by default.'
+                example: true
+              - nxos_name: suppressFibPending
+                tf_name: suppress_fib_pending
+                type: Bool
+                description: 'Advertise only routes that are programmed in hardware to peers.'
+                example: true
+              - nxos_name: bfd
+                tf_name: bfd
+                type: Bool
+                description: 'Enable BFD on all EIGRP interfaces.'
+                example: true
+            child_classes:
+              - class_name: eigrpAuthP
+                rn: auth
+                type: single
+                tf_name: authentication
+                description: 'EIGRP address family authentication policy.'
+                attributes:
+                  - nxos_name: mode
+                    tf_name: authentication_mode
+                    type: String
+                    description: 'Authentication mode.'
+                    enum_values:
+                      - none
+                      - md5
+                    example: md5
+                  - nxos_name: keyChain
+                    tf_name: authentication_key_chain
+                    type: String
+                    description: 'Authentication key chain name.'
+                    example: KEYCHAIN1
+              - class_name: eigrpDefMetric
+                rn: defmetric
+                type: single
+                tf_name: default_metric_policy
+                description: 'Default metric of redistributed routes.'
+                attributes:
+                  - nxos_name: defBw
+                    tf_name: default_metric_bandwidth
+                    type: Int64
+                    min_int: 1
+                    max_int: 16777215
+                    description: 'Default bandwidth metric value in Kbits per second.'
+                    example: 10000
+                  - nxos_name: defDelay
+                    tf_name: default_metric_delay
+                    type: Int64
+                    min_int: 0
+                    max_int: 16777215
+                    description: 'Default delay metric value (in tens of microseconds).'
+                    example: 200
+                  - nxos_name: defRel
+                    tf_name: default_metric_reliability
+                    type: Int64
+                    min_int: 0
+                    max_int: 255
+                    description: 'Default reliability metric where 255 is 100% reliable.'
+                    example: 200
+                  - nxos_name: defLoad
+                    tf_name: default_metric_load
+                    type: Int64
+                    min_int: 1
+                    max_int: 255
+                    description: 'Default effective bandwidth metric (loading) where 255 is 100% loaded.'
+                    example: 2
+                  - nxos_name: defMtu
+                    tf_name: default_metric_mtu
+                    type: Int64
+                    min_int: 128
+                    max_int: 9216
+                    description: 'Default Maximum Transmission Unit metric of the path.'
+                    example: 1500
+              - class_name: eigrpGr
+                rn: gr
+                type: single
+                tf_name: graceful_restart_policy
+                description: 'EIGRP graceful restart configuration.'
+                attributes:
+                  - nxos_name: enable
+                    tf_name: graceful_restart
+                    type: Bool
+                    description: 'Enable EIGRP graceful restart.'
+                    example: false
+                  - nxos_name: rtHoldIntvl
+                    tf_name: graceful_restart_route_hold_interval
+                    type: Int64
+                    min_int: 20
+                    max_int: 300
+                    description: 'EIGRP NSF (graceful restart) route hold interval (in seconds).'
+                    example: 200
+                  - nxos_name: convIntvl
+                    tf_name: graceful_restart_convergence_interval
+                    type: Int64
+                    min_int: 60
+                    max_int: 180
+                    description: 'EIGRP NSF (graceful restart) convergence interval (in seconds).'
+                    example: 100
+                  - nxos_name: signalIntvl
+                    tf_name: graceful_restart_signal_interval
+                    type: Int64
+                    min_int: 10
+                    max_int: 360
+                    description: 'EIGRP NSF (graceful restart) signal interval (in seconds).'
+                    example: 30
+                  - nxos_name: awaitRedistProtoConv
+                    tf_name: graceful_restart_await_redistribution_protocol_convergence
+                    type: Bool
+                    description: 'EIGRP await redistributed protocol convergence.'
+                    example: true
+              - class_name: eigrpMetricWt
+                rn: metricwt
+                type: single
+                tf_name: metric_weights
+                description: 'EIGRP routing metric coefficients.'
+                attributes:
+                  - nxos_name: typeofService
+                    tf_name: metric_weights_type_of_service
+                    type: Int64
+                    min_int: 0
+                    max_int: 8
+                    description: 'Type of Service (only TOS 0 supported).'
+                    example: 0
+                  - nxos_name: k1
+                    tf_name: metric_weights_k1
+                    type: Int64
+                    min_int: 0
+                    max_int: 255
+                    description: 'Metric weight coefficient K1.'
+                    example: 2
+                  - nxos_name: k2
+                    tf_name: metric_weights_k2
+                    type: Int64
+                    min_int: 0
+                    max_int: 255
+                    description: 'Metric weight coefficient K2.'
+                    example: 1
+                  - nxos_name: k3
+                    tf_name: metric_weights_k3
+                    type: Int64
+                    min_int: 1
+                    max_int: 255
+                    description: 'Metric weight coefficient K3.'
+                    example: 2
+                  - nxos_name: k4
+                    tf_name: metric_weights_k4
+                    type: Int64
+                    min_int: 0
+                    max_int: 255
+                    description: 'Metric weight coefficient K4.'
+                    example: 0
+                  - nxos_name: k5
+                    tf_name: metric_weights_k5
+                    type: Int64
+                    min_int: 0
+                    max_int: 255
+                    description: 'Metric weight coefficient K5.'
+                    example: 0
+                  - nxos_name: k6
+                    tf_name: metric_weights_k6
+                    type: Int64
+                    min_int: 0
+                    max_int: 255
+                    description: 'Metric weight coefficient K6 (wide metrics only).'
+                    example: 0
+              - class_name: eigrpDefRtLeakP
+                rn: defrtleak
+                type: single
+                tf_name: default_information
+                description: 'EIGRP default route leak (default-information originate) policy.'
+                attributes:
+                  - nxos_name: always
+                    tf_name: default_information_originate_always
+                    type: Bool
+                    description: 'Always advertise default route.'
+                    example: true
+                  - nxos_name: rtMap
+                    tf_name: default_information_originate_route_map
+                    type: String
+                    description: 'Route map to control distribution of the default route.'
+                    example: RM_DEFAULT
+              - class_name: eigrpInterLeakP
+                rn: interleak-%s-[%s]-%s
+                type: list
+                tf_name: redistributions
+                description: 'List of EIGRP route redistributions.'
+                attributes:
+                  - nxos_name: proto
+                    tf_name: protocol
+                    type: String
+                    id: true
+                    description: 'The protocol from which routes are redistributed.'
+                    enum_values:
+                      - unspecified
+                      - static
+                      - direct
+                      - bgp
+                      - isis
+                      - ospf
+                      - ospfv3
+                      - eigrp
+                      - host
+                      - rip
+                      - amt
+                      - lisp
+                      - hmm
+                      - am
+                      - srv6
+                      - dhcpv6
+                      - icmpv6
+                    example: bgp
+                  - nxos_name: inst
+                    tf_name: protocol_instance
+                    type: String
+                    id: true
+                    description: 'The routing protocol instance from which routes are redistributed. Use `none` when not applicable.'
+                    example: none
+                  - nxos_name: asn
+                    tf_name: asn
+                    type: String
+                    id: true
+                    description: 'The BGP autonomous system number from which routes are redistributed. Use `none` when not applicable.'
+                    example: '65001'
+                  - nxos_name: rtMap
+                    tf_name: route_map
+                    type: String
+                    description: 'Route map to control redistribution.'
+                    example: RM_REDIST
+              - class_name: eigrpLeakCtrlP
+                rn: leakctrl
+                type: single
+                tf_name: redistribute_maximum_prefix_policy
+                description: 'Maximum number of prefixes redistributed into EIGRP.'
+                attributes:
+                  - nxos_name: ctrl
+                    tf_name: redistribute_maximum_prefix_control
+                    type: String
+                    description: 'Action when the number of redistributed routes crosses the maximum limit.'
+                    enum_values:
+                      - unspecified
+                      - warning
+                      - withdraw
+                    example: withdraw
+                  - nxos_name: max
+                    tf_name: redistribute_maximum_prefix
+                    type: Int64
+                    min_int: 1
+                    max_int: 65535
+                    description: 'Maximum limit on redistributed routes.'
+                    example: 1000
+                  - nxos_name: thresh
+                    tf_name: redistribute_maximum_prefix_threshold
+                    type: Int64
+                    min_int: 1
+                    max_int: 100
+                    description: 'Threshold percentage at which a warning is issued.'
+                    example: 80
+                  - nxos_name: retries
+                    tf_name: redistribute_maximum_prefix_retries
+                    type: Int64
+                    min_int: 1
+                    max_int: 12
+                    description: 'Maximum number of retries to retrieve the redistributed routes after withdrawal.'
+                    example: 2
+                  - nxos_name: duration
+                    tf_name: redistribute_maximum_prefix_duration
+                    type: Int64
+                    min_int: 60
+                    max_int: 600
+                    description: 'Duration (in seconds) between retries.'
+                    example: 400
+              - class_name: eigrpRibLeakP
+                rn: ribleak
+                type: single
+                tf_name: table_map
+                description: 'EIGRP to RIB route distribution (table-map) policy.'
+                attributes:
+                  - nxos_name: rtMap
+                    tf_name: table_map_route_map
+                    type: String
+                    description: 'Route map used in distribution of routes to the RIB.'
+                    example: RM_TABLE
+                  - nxos_name: always
+                    tf_name: table_map_always
+                    type: Bool
+                    description: 'If `false`, only routes permitted by the route map are downloaded to the RIB (`table-map <rm> filter`).'
+                    example: false
+              - class_name: eigrpStubP
+                rn: stub
+                type: single
+                tf_name: stub
+                description: 'EIGRP stub configuration.'
+                attributes:
+                  - nxos_name: direct
+                    tf_name: stub_direct
+                    type: Bool
+                    description: 'Advertise direct routes.'
+                    example: true
+                  - nxos_name: static
+                    tf_name: stub_static
+                    type: Bool
+                    description: 'Advertise static routes.'
+                    example: true
+                  - nxos_name: summary
+                    tf_name: stub_summary
+                    type: Bool
+                    description: 'Advertise summary routes.'
+                    example: false
+                  - nxos_name: external
+                    tf_name: stub_external
+                    type: Bool
+                    description: 'Advertise external redistributed routes.'
+                    example: false
+                  - nxos_name: receiveOnly
+                    tf_name: stub_receive_only
+                    type: Bool
+                    description: 'Configure EIGRP as receive-only stub.'
+                    example: false
+                  - nxos_name: rtMap
+                    tf_name: stub_leak_map
+                    type: String
+                    description: 'Route map used to allow dynamic prefixes (leak-map).'
+                    example: RM_STUB
+          - class_name: eigrpIf
+            rn: if-[%s]
+            type: list
+            tf_name: interfaces
+            description: 'List of EIGRP interfaces.'
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                example: eth1/10
+            child_classes:
+              - class_name: eigrpIfAf
+                rn: af-%s
+                type: list
+                tf_name: address_families
+                description: 'List of EIGRP interface address families.'
+                attributes:
+                  - nxos_name: type
+                    tf_name: address_family
+                    type: String
+                    id: true
+                    description: 'Address family type.'
+                    enum_values:
+                      - ipv4-ucast
+                      - ipv6-ucast
+                    example: ipv4-ucast
+                  - nxos_name: adminSt
+                    tf_name: admin_state
+                    type: String
+                    description: 'Admin state of EIGRP on the interface address family (`disabled` = `ip eigrp <name> shutdown`).'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: helloIntvl
+                    tf_name: hello_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 65535
+                    description: 'EIGRP hello interval (in seconds).'
+                    example: 10
+                  - nxos_name: holdIntvl
+                    tf_name: hold_time
+                    type: Int64
+                    min_int: 1
+                    max_int: 65535
+                    description: 'EIGRP hold time (in seconds).'
+                    example: 30
+                  - nxos_name: bw
+                    tf_name: bandwidth
+                    type: Int64
+                    min_int: 0
+                    max_int: 2560000000
+                    description: 'Bandwidth (in Kbps) for the interface used in EIGRP metric calculation.'
+                    example: 100000
+                  - nxos_name: bwPercent
+                    tf_name: bandwidth_percent
+                    type: Int64
+                    min_int: 1
+                    max_int: 100
+                    description: 'Percent of interface bandwidth that EIGRP may use.'
+                    example: 40
+                  - nxos_name: delay
+                    tf_name: delay
+                    type: Int64
+                    min_int: 0
+                    max_int: 16777215
+                    description: 'Delay for the interface used in EIGRP metric calculation.'
+                    example: 200
+                  - nxos_name: delayUnit
+                    tf_name: delay_unit
+                    type: String
+                    description: 'Delay unit for EIGRP interface delay; wide metrics can use picoseconds.'
+                    enum_values:
+                      - tens-of-micro
+                      - pico
+                    example: tens-of-micro
+                  - nxos_name: mtu
+                    tf_name: mtu
+                    type: Int64
+                    min_int: 209
+                    max_int: 16384
+                    description: 'Maximum packet size to be used by EIGRP.'
+                    example: 1400
+                  - nxos_name: bfd
+                    tf_name: bfd
+                    type: String
+                    description: 'BFD state on the EIGRP interface.'
+                    enum_values:
+                      - inherit
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: nhSelf
+                    tf_name: next_hop_self
+                    type: Bool
+                    description: 'Configure EIGRP next-hop-self on the interface.'
+                    example: false
+                  - nxos_name: splitHorizon
+                    tf_name: split_horizon
+                    type: Bool
+                    description: 'Configure EIGRP split-horizon on the interface.'
+                    example: false
+                  - nxos_name: passive
+                    tf_name: passive
+                    type: String
+                    description: 'Configure EIGRP passive interface.'
+                    enum_values:
+                      - inherit
+                      - enabled
+                      - disabled
+                    example: enabled
+                child_classes:
+                  - class_name: eigrpAuthP
+                    rn: auth
+                    type: single
+                    tf_name: authentication
+                    description: 'EIGRP interface authentication policy.'
+                    attributes:
+                      - nxos_name: mode
+                        tf_name: authentication_mode
+                        type: String
+                        description: 'Authentication mode.'
+                        enum_values:
+                          - none
+                          - md5
+                        example: md5
+                      - nxos_name: keyChain
+                        tf_name: authentication_key_chain
+                        type: String
+                        description: 'Authentication key chain name.'
+                        example: KEYCHAIN1
+                  - class_name: eigrpRtCtrlP
+                    rn: rtctrl-%s
+                    type: list
+                    tf_name: distribute_lists
+                    description: 'List of EIGRP interface route control (distribute-list) policies.'
+                    attributes:
+                      - nxos_name: direction
+                        tf_name: direction
+                        type: String
+                        id: true
+                        description: 'Direction.'
+                        enum_values:
+                          - in
+                          - out
+                        example: in
+                      - nxos_name: rtMap
+                        tf_name: route_map
+                        type: String
+                        description: 'Route map used to filter routes.'
+                        example: RM_DIST
+                      - nxos_name: pfxList
+                        tf_name: prefix_list
+                        type: String
+                        description: 'Prefix list used to filter routes.'
+                        example: PL_DIST
+                        exclude_test: true
+                  - class_name: eigrpRtMetricAlterP
+                    rn: rtmetricalter-%s
+                    type: list
+                    tf_name: offset_lists
+                    description: 'List of EIGRP interface route metric alteration (offset-list) policies.'
+                    attributes:
+                      - nxos_name: direction
+                        tf_name: direction
+                        type: String
+                        id: true
+                        description: 'Direction.'
+                        enum_values:
+                          - in
+                          - out
+                        example: in
+                      - nxos_name: rtMap
+                        tf_name: route_map
+                        type: String
+                        description: 'Route map used to match routes.'
+                        example: RM_OFFSET
+                      - nxos_name: pfxList
+                        tf_name: prefix_list
+                        type: String
+                        description: 'Prefix list used to match routes.'
+                        example: PL_OFFSET
+                        exclude_test: true
+                      - nxos_name: offset
+                        tf_name: offset
+                        type: Int64
+                        min_int: 0
+                        max_int: 2147483647
+                        description: 'Offset value to be added to the metric.'
+                        example: 10
+                  - class_name: eigrpRtSum
+                    rn: rtsum-[%s]
+                    type: list
+                    tf_name: summary_addresses
+                    description: 'List of EIGRP interface summary addresses.'
+                    attributes:
+                      - nxos_name: addr
+                        tf_name: address
+                        type: String
+                        id: true
+                        description: 'Summary address prefix.'
+                        example: 10.10.0.0/16
+                      - nxos_name: rtMap
+                        tf_name: route_map
+                        type: String
+                        description: 'Route map to allow dynamic prefixes (leak-map).'
+                        example: RM_SUMMARY
+                      - nxos_name: distance
+                        tf_name: distance
+                        type: Int64
+                        min_int: 1
+                        max_int: 255
+                        description: 'Administrative distance for the summary address.'
+                        example: 10
+test_prerequisites:
+  - dn: sys/fm/eigrp
+    class_name: fmEigrp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/bfd
+    class_name: fmBfd
+    dependencies: [0]
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3
+    dependencies: [1]

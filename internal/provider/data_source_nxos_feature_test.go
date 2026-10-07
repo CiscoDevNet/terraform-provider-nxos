@@ -40,6 +40,7 @@ func TestAccDataSourceNxosFeature(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "bfd", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "bgp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "dhcp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "eigrp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "evpn", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "grpc", "enabled"))
 	if os.Getenv("FEATURE_HMM") != "" {
@@ -105,6 +106,7 @@ func testAccDataSourceNxosFeatureConfig() string {
 	config += `	bfd = "enabled"` + "\n"
 	config += `	bgp = "enabled"` + "\n"
 	config += `	dhcp = "enabled"` + "\n"
+	config += `	eigrp = "enabled"` + "\n"
 	config += `	evpn = "enabled"` + "\n"
 	config += `	grpc = "enabled"` + "\n"
 	if os.Getenv("FEATURE_HMM") != "" {

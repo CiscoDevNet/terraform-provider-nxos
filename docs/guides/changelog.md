@@ -7,6 +7,13 @@ description: |-
 
 # Changelog
 
+## 0.16.0
+
+- Add `nxos_eigrp` resource and data source (EIGRP instances, VRFs, address families, authentication, default metric, graceful restart, metric weights, default-information originate, redistribution, redistribute maximum-prefix, table-map, stub, and per-interface address family settings including timers, metrics, passive, split-horizon, next-hop-self, authentication, distribute-lists, offset-lists, and summary addresses)
+- Add EIGRP feature (`feature eigrp`) configuration to `nxos_feature` resource and data source
+- Add `nxos_track` resource and data source
+- Add tracked objects configuration to `nxos_hsrp` groups
+
 ## 0.15.0
 
 - Add global BFD timers (keepalive policy: detect multiplier, echo receive interval, minimum receive interval, minimum transmit interval) configuration to `nxos_bfd` resource and data source

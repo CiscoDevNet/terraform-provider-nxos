@@ -1,2 +1,0 @@
-- Add `nxos_track` resource and data source
-- Add tracked objects configuration to `nxos_hsrp` groups

@@ -1,2 +1,0 @@
-- Add `nxos_eigrp` resource and data source (EIGRP instances, VRFs, address families, authentication, default metric, graceful restart, metric weights, default-information originate, redistribution, redistribute maximum-prefix, table-map, stub, and per-interface address family settings including timers, metrics, passive, split-horizon, next-hop-self, authentication, distribute-lists, offset-lists, and summary addresses)
-- Add EIGRP feature (`feature eigrp`) configuration to `nxos_feature` resource and data source

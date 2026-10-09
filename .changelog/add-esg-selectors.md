@@ -1,0 +1,6 @@
+- Add external subnet selectors (`match external-subnets vrf <vrf> ipv4|ipv6 <prefix> [route-inject]`) configuration to `nxos_esg` security groups
+- Add external subnet with next-hop selectors (`match external-subnets vrf <vrf> ipv4|ipv6 <prefix> nexthop ipv4|ipv6 <address> [encap-type mpls-vpn]`) configuration to `nxos_esg` security groups
+- Add interface selectors (`match interface <interface>`) configuration to `nxos_esg` security groups
+- Add VLAN and MAC selectors (`match vlan <vlan> mac <mac>`) configuration to `nxos_esg` security groups
+- Add VLAN and interface selectors (`match vlan <vlan> interface <interface>`) configuration to `nxos_esg` security groups (requires NX-OS 10.6(1) or later)
+- Add layer4-7 type (`type layer4-7`) configuration to `nxos_esg` security groups

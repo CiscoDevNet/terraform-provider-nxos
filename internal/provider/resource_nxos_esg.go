@@ -64,7 +64,7 @@ func (r *ESGResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *ESGResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.").AddApiDocumentation("esgEntity", "Security%20and%20Policing/esg:Entity/", []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom", "esgContractEntity", "esgContract"}, []string{"Security%20and%20Policing/esg:GroupEntity/", "Security%20and%20Policing/esg:GroupInst/", "Security%20and%20Policing/esg:SelectorEntity/", "Security%20and%20Policing/esg:MatchConnectedEpV4/", "Security%20and%20Policing/esg:MatchConnectedEpV6/", "Security%20and%20Policing/esg:MatchVlan/", "Security%20and%20Policing/esg:ClassMapEntity/", "Security%20and%20Policing/esg:ClassMapInst/", "Security%20and%20Policing/esg:ClassMapFilterEntry/", "Security%20and%20Policing/esg:PolicyMapEntity/", "Security%20and%20Policing/esg:PolicyMapInst/", "Security%20and%20Policing/esg:MatchClassMap/", "Security%20and%20Policing/esg:Dom/", "Security%20and%20Policing/esg:ContractEntity/", "Security%20and%20Policing/esg:Contract/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.").AddApiDocumentation("esgEntity", "Security%20and%20Policing/esg:Entity/", []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgMatchExternalSubnetV4", "esgMatchExternalSubnetV6", "esgMatchExternalSubnetV4WithNh", "esgMatchExternalSubnetV6WithNh", "esgMatchExternalSubnetV4WithNhEncap", "esgMatchExternalSubnetV6WithNhEncap", "esgMatchInterface", "esgMatchVlanMac", "esgMatchVlanInterface", "esgAttributeEntity", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom", "esgContractEntity", "esgContract"}, []string{"Security%20and%20Policing/esg:GroupEntity/", "Security%20and%20Policing/esg:GroupInst/", "Security%20and%20Policing/esg:SelectorEntity/", "Security%20and%20Policing/esg:MatchConnectedEpV4/", "Security%20and%20Policing/esg:MatchConnectedEpV6/", "Security%20and%20Policing/esg:MatchVlan/", "Security%20and%20Policing/esg:MatchExternalSubnetV4/", "Security%20and%20Policing/esg:MatchExternalSubnetV6/", "Security%20and%20Policing/esg:MatchExternalSubnetV4WithNh/", "Security%20and%20Policing/esg:MatchExternalSubnetV6WithNh/", "Security%20and%20Policing/esg:MatchExternalSubnetV4WithNhEncap/", "Security%20and%20Policing/esg:MatchExternalSubnetV6WithNhEncap/", "Security%20and%20Policing/esg:MatchInterface/", "Security%20and%20Policing/esg:MatchVlanMac/", "Security%20and%20Policing/esg:MatchVlanInterface/", "Security%20and%20Policing/esg:AttributeEntity/", "Security%20and%20Policing/esg:ClassMapEntity/", "Security%20and%20Policing/esg:ClassMapInst/", "Security%20and%20Policing/esg:ClassMapFilterEntry/", "Security%20and%20Policing/esg:PolicyMapEntity/", "Security%20and%20Policing/esg:PolicyMapInst/", "Security%20and%20Policing/esg:MatchClassMap/", "Security%20and%20Policing/esg:Dom/", "Security%20and%20Policing/esg:ContractEntity/", "Security%20and%20Policing/esg:Contract/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -113,6 +113,92 @@ func (r *ESGResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"selector_external_subnets_ipv4": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of external subnets selectors based on VRF and IPv4 address/prefix.\n  - Map key format: `<vrf>;<address>`\n  - Key component `vrf`: Name of VRF that the prefix belongs to.\n  - Key component `address`: IPv4 prefix that needs to be classified in this security-group.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"route_inject": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable/disable route-injection for this selector.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+								},
+							},
+						},
+						"selector_external_subnets_ipv6": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of external subnets selectors based on VRF and IPv6 address/prefix.\n  - Map key format: `<vrf>;<address>`\n  - Key component `vrf`: Name of VRF that the prefix belongs to.\n  - Key component `address`: IPv6 prefix that needs to be classified in this security-group.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"route_inject": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable/disable route-injection for this selector.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+								},
+							},
+						},
+						"selector_external_subnets_nexthop_ipv4": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of external subnets selectors based on VRF and IPv4 address/prefix with nexthop.\n  - Map key format: `<vrf>;<prefix>;<nexthop_address>`\n  - Key component `vrf`: Name of VRF that the selector prefix belongs to.\n  - Key component `prefix`: IPv4 selector prefix that needs to be classified in this security-group.\n  - Key component `nexthop_address`: Nexthop IP address for the selector prefix.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"selector_external_subnets_nexthop_ipv6": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of external subnets selectors based on VRF and IPv6 address/prefix with nexthop.\n  - Map key format: `<vrf>;<prefix>;<nexthop_address>`\n  - Key component `vrf`: Name of VRF that the selector prefix belongs to.\n  - Key component `prefix`: IPv6 selector prefix that needs to be classified in this security-group.\n  - Key component `nexthop_address`: Nexthop IP address for the selector prefix.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"selector_external_subnets_nexthop_encap_ipv4": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of external subnets selectors based on VRF and IPv4 address/prefix with nexthop having encap type.\n  - Map key format: `<vrf>;<prefix>;<nexthop_address>;<encap_type>`\n  - Key component `vrf`: Name of VRF that the selector prefix belongs to.\n  - Key component `prefix`: IPv4 selector prefix that needs to be classified in this security-group.\n  - Key component `nexthop_address`: Nexthop IP address for the selector prefix.\n  - Key component `encap_type`: Encap type of the Nexthop IP address. Choices: `mpls-vpn`.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"selector_external_subnets_nexthop_encap_ipv6": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of external subnets selectors based on VRF and IPv6 address/prefix with nexthop having encap type.\n  - Map key format: `<vrf>;<prefix>;<nexthop_address>;<encap_type>`\n  - Key component `vrf`: Name of VRF that the selector prefix belongs to.\n  - Key component `prefix`: IPv6 selector prefix that needs to be classified in this security-group.\n  - Key component `nexthop_address`: Nexthop IP address for the selector prefix.\n  - Key component `encap_type`: Encap type of the Nexthop IP address. Choices: `mpls-vpn`.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"selector_match_interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of selectors based on interface.\n  - Map key: `interface_id` - Interface that needs to be classified in this security-group. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"selector_match_vlan_macs": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of selectors based on VLAN and MAC address.\n  - Map key format: `<vlan_id>;<mac_address>`\n  - Key component `vlan_id`: VLAN ID that needs to be classified in this security-group.\n  - Key component `mac_address`: MAC Address that needs to be classified in this security-group.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"selector_match_vlan_interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of selectors based on VLAN and interface.\n  - Map key format: `<vlan_id>;<interface_id>`\n  - Key component `vlan_id`: VLAN ID that needs to be classified in this security-group.\n  - Key component `interface_id`: Interface that needs to be classified in this security-group. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `po1`.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"type_layer4_7": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the security-group as an layer4-7 type.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
 							},
 						},
 					},
@@ -424,7 +510,7 @@ func (r *ESGResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "esgGroupEntity,esgGroupInst,esgSelectorEntity,esgMatchConnectedEpV4,esgMatchConnectedEpV6,esgMatchVlan,esgClassMapEntity,esgClassMapInst,esgClassMapFilterEntry,esgPolicyMapEntity,esgPolicyMapInst,esgMatchClassMap,esgDom,esgContractEntity,esgContract")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "esgGroupEntity,esgGroupInst,esgSelectorEntity,esgMatchConnectedEpV4,esgMatchConnectedEpV6,esgMatchVlan,esgMatchExternalSubnetV4,esgMatchExternalSubnetV6,esgMatchExternalSubnetV4WithNh,esgMatchExternalSubnetV6WithNh,esgMatchExternalSubnetV4WithNhEncap,esgMatchExternalSubnetV6WithNhEncap,esgMatchInterface,esgMatchVlanMac,esgMatchVlanInterface,esgAttributeEntity,esgClassMapEntity,esgClassMapInst,esgClassMapFilterEntry,esgPolicyMapEntity,esgPolicyMapInst,esgMatchClassMap,esgDom,esgContractEntity,esgContract")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

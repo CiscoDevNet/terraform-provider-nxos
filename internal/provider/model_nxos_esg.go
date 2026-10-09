@@ -49,10 +49,20 @@ type ESG struct {
 }
 
 type ESGSecurityGroups struct {
-	Name                           types.String                                               `tfsdk:"name"`
-	SelectorConnectedEndpointsIpv4 map[string]ESGSecurityGroupsSelectorConnectedEndpointsIpv4 `tfsdk:"selector_connected_endpoints_ipv4"`
-	SelectorConnectedEndpointsIpv6 map[string]ESGSecurityGroupsSelectorConnectedEndpointsIpv6 `tfsdk:"selector_connected_endpoints_ipv6"`
-	SelectorMatchVlans             map[string]ESGSecurityGroupsSelectorMatchVlans             `tfsdk:"selector_match_vlans"`
+	Name                                    types.String                                                        `tfsdk:"name"`
+	SelectorConnectedEndpointsIpv4          map[string]ESGSecurityGroupsSelectorConnectedEndpointsIpv4          `tfsdk:"selector_connected_endpoints_ipv4"`
+	SelectorConnectedEndpointsIpv6          map[string]ESGSecurityGroupsSelectorConnectedEndpointsIpv6          `tfsdk:"selector_connected_endpoints_ipv6"`
+	SelectorMatchVlans                      map[string]ESGSecurityGroupsSelectorMatchVlans                      `tfsdk:"selector_match_vlans"`
+	SelectorExternalSubnetsIpv4             map[string]ESGSecurityGroupsSelectorExternalSubnetsIpv4             `tfsdk:"selector_external_subnets_ipv4"`
+	SelectorExternalSubnetsIpv6             map[string]ESGSecurityGroupsSelectorExternalSubnetsIpv6             `tfsdk:"selector_external_subnets_ipv6"`
+	SelectorExternalSubnetsNexthopIpv4      map[string]ESGSecurityGroupsSelectorExternalSubnetsNexthopIpv4      `tfsdk:"selector_external_subnets_nexthop_ipv4"`
+	SelectorExternalSubnetsNexthopIpv6      map[string]ESGSecurityGroupsSelectorExternalSubnetsNexthopIpv6      `tfsdk:"selector_external_subnets_nexthop_ipv6"`
+	SelectorExternalSubnetsNexthopEncapIpv4 map[string]ESGSecurityGroupsSelectorExternalSubnetsNexthopEncapIpv4 `tfsdk:"selector_external_subnets_nexthop_encap_ipv4"`
+	SelectorExternalSubnetsNexthopEncapIpv6 map[string]ESGSecurityGroupsSelectorExternalSubnetsNexthopEncapIpv6 `tfsdk:"selector_external_subnets_nexthop_encap_ipv6"`
+	SelectorMatchInterfaces                 map[string]ESGSecurityGroupsSelectorMatchInterfaces                 `tfsdk:"selector_match_interfaces"`
+	SelectorMatchVlanMacs                   map[string]ESGSecurityGroupsSelectorMatchVlanMacs                   `tfsdk:"selector_match_vlan_macs"`
+	SelectorMatchVlanInterfaces             map[string]ESGSecurityGroupsSelectorMatchVlanInterfaces             `tfsdk:"selector_match_vlan_interfaces"`
+	TypeLayer47                             types.String                                                        `tfsdk:"type_layer4_7"`
 }
 
 type ESGSecurityGroupsSelectorConnectedEndpointsIpv4 struct {
@@ -62,6 +72,35 @@ type ESGSecurityGroupsSelectorConnectedEndpointsIpv6 struct {
 }
 
 type ESGSecurityGroupsSelectorMatchVlans struct {
+}
+
+type ESGSecurityGroupsSelectorExternalSubnetsIpv4 struct {
+	RouteInject types.String `tfsdk:"route_inject"`
+}
+
+type ESGSecurityGroupsSelectorExternalSubnetsIpv6 struct {
+	RouteInject types.String `tfsdk:"route_inject"`
+}
+
+type ESGSecurityGroupsSelectorExternalSubnetsNexthopIpv4 struct {
+}
+
+type ESGSecurityGroupsSelectorExternalSubnetsNexthopIpv6 struct {
+}
+
+type ESGSecurityGroupsSelectorExternalSubnetsNexthopEncapIpv4 struct {
+}
+
+type ESGSecurityGroupsSelectorExternalSubnetsNexthopEncapIpv6 struct {
+}
+
+type ESGSecurityGroupsSelectorMatchInterfaces struct {
+}
+
+type ESGSecurityGroupsSelectorMatchVlanMacs struct {
+}
+
+type ESGSecurityGroupsSelectorMatchVlanInterfaces struct {
 }
 
 type ESGClassMaps struct {
@@ -154,6 +193,50 @@ func (data ESGSecurityGroupsSelectorConnectedEndpointsIpv6) getRn(key string) st
 
 func (data ESGSecurityGroupsSelectorMatchVlans) getRn(key string) string {
 	return fmt.Sprintf("vlan-[%s]", key)
+}
+
+func (data ESGSecurityGroupsSelectorExternalSubnetsIpv4) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("extsubnetv4-[%s]-[%s]", keyParts[0], keyParts[1])
+}
+
+func (data ESGSecurityGroupsSelectorExternalSubnetsIpv6) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("extsubnetv6-[%s]-[%s]", keyParts[0], keyParts[1])
+}
+
+func (data ESGSecurityGroupsSelectorExternalSubnetsNexthopIpv4) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 3)
+	return fmt.Sprintf("extsubnetv4nh-[%s]-[%s]-[%s]", keyParts[0], keyParts[1], keyParts[2])
+}
+
+func (data ESGSecurityGroupsSelectorExternalSubnetsNexthopIpv6) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 3)
+	return fmt.Sprintf("extsubnetv6nh-[%s]-[%s]-[%s]", keyParts[0], keyParts[1], keyParts[2])
+}
+
+func (data ESGSecurityGroupsSelectorExternalSubnetsNexthopEncapIpv4) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 4)
+	return fmt.Sprintf("extsubnetv4nhencap-[%s]-[%s]-[%s]-[%s]", keyParts[0], keyParts[1], keyParts[2], keyParts[3])
+}
+
+func (data ESGSecurityGroupsSelectorExternalSubnetsNexthopEncapIpv6) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 4)
+	return fmt.Sprintf("extsubnetv6nhencap-[%s]-[%s]-[%s]-[%s]", keyParts[0], keyParts[1], keyParts[2], keyParts[3])
+}
+
+func (data ESGSecurityGroupsSelectorMatchInterfaces) getRn(key string) string {
+	return fmt.Sprintf("interface-[%s]", key)
+}
+
+func (data ESGSecurityGroupsSelectorMatchVlanMacs) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("vlanmac-[%s]-[%s]", keyParts[0], keyParts[1])
+}
+
+func (data ESGSecurityGroupsSelectorMatchVlanInterfaces) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("vlaninterface-[%s]-[%s]", keyParts[0], keyParts[1])
 }
 
 func (data ESGClassMaps) getRn(key string) string {
@@ -259,11 +342,118 @@ func (data ESG) toBody(config ESG) nxos.Body {
 						attrs, _ = sjson.Set(attrs, "vlanId", key)
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchVlan.attributes", attrs)
 					}
+					for key, child := range child.SelectorExternalSubnetsIpv4 {
+						configChild, configChildOk := configChild.SelectorExternalSubnetsIpv4[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 2)
+						attrs, _ = sjson.Set(attrs, "vrf", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "addr", keyParts[1])
+						if configChildOk && !child.RouteInject.IsUnknown() && !child.RouteInject.IsNull() && !configChild.RouteInject.IsNull() {
+							attrs, _ = sjson.Set(attrs, "rtInject", child.RouteInject.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchExternalSubnetV4.attributes", attrs)
+					}
+					for key, child := range child.SelectorExternalSubnetsIpv6 {
+						configChild, configChildOk := configChild.SelectorExternalSubnetsIpv6[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 2)
+						attrs, _ = sjson.Set(attrs, "vrf", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "addr", keyParts[1])
+						if configChildOk && !child.RouteInject.IsUnknown() && !child.RouteInject.IsNull() && !configChild.RouteInject.IsNull() {
+							attrs, _ = sjson.Set(attrs, "rtInject", child.RouteInject.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchExternalSubnetV6.attributes", attrs)
+					}
+					for key := range child.SelectorExternalSubnetsNexthopIpv4 {
+						configChild, configChildOk := configChild.SelectorExternalSubnetsNexthopIpv4[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 3)
+						attrs, _ = sjson.Set(attrs, "selectorVrf", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "selectorPrefix", keyParts[1])
+						attrs, _ = sjson.Set(attrs, "nexthopAddr", keyParts[2])
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchExternalSubnetV4WithNh.attributes", attrs)
+					}
+					for key := range child.SelectorExternalSubnetsNexthopIpv6 {
+						configChild, configChildOk := configChild.SelectorExternalSubnetsNexthopIpv6[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 3)
+						attrs, _ = sjson.Set(attrs, "selectorVrf", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "selectorPrefix", keyParts[1])
+						attrs, _ = sjson.Set(attrs, "nexthopAddr", keyParts[2])
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchExternalSubnetV6WithNh.attributes", attrs)
+					}
+					for key := range child.SelectorExternalSubnetsNexthopEncapIpv4 {
+						configChild, configChildOk := configChild.SelectorExternalSubnetsNexthopEncapIpv4[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 4)
+						attrs, _ = sjson.Set(attrs, "selectorVrf", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "selectorPrefix", keyParts[1])
+						attrs, _ = sjson.Set(attrs, "nexthopAddr", keyParts[2])
+						attrs, _ = sjson.Set(attrs, "encapType", keyParts[3])
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchExternalSubnetV4WithNhEncap.attributes", attrs)
+					}
+					for key := range child.SelectorExternalSubnetsNexthopEncapIpv6 {
+						configChild, configChildOk := configChild.SelectorExternalSubnetsNexthopEncapIpv6[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 4)
+						attrs, _ = sjson.Set(attrs, "selectorVrf", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "selectorPrefix", keyParts[1])
+						attrs, _ = sjson.Set(attrs, "nexthopAddr", keyParts[2])
+						attrs, _ = sjson.Set(attrs, "encapType", keyParts[3])
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchExternalSubnetV6WithNhEncap.attributes", attrs)
+					}
+					for key := range child.SelectorMatchInterfaces {
+						configChild, configChildOk := configChild.SelectorMatchInterfaces[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "id", key)
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchInterface.attributes", attrs)
+					}
+					for key := range child.SelectorMatchVlanMacs {
+						configChild, configChildOk := configChild.SelectorMatchVlanMacs[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 2)
+						attrs, _ = sjson.Set(attrs, "vlanId", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "macAddr", keyParts[1])
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchVlanMac.attributes", attrs)
+					}
+					for key := range child.SelectorMatchVlanInterfaces {
+						configChild, configChildOk := configChild.SelectorMatchVlanInterfaces[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 2)
+						attrs, _ = sjson.Set(attrs, "vlanId", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "interfaceId", keyParts[1])
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgMatchVlanInterface.attributes", attrs)
+					}
 					childBody = body
 					body = prevBody
 					if parentAttrs != "{}" || gjson.Get(childBody, "esgSelectorEntity.children").Exists() {
 						body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 					}
+				}
+				attrs = "{}"
+				if !child.TypeLayer47.IsUnknown() && !child.TypeLayer47.IsNull() && !configChild.TypeLayer47.IsNull() {
+					attrs, _ = sjson.Set(attrs, "typeLayer4To7", child.TypeLayer47.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgAttributeEntity.attributes", attrs)
 				}
 			}
 		}
@@ -558,6 +748,184 @@ func (data *ESG) fromBody(res gjson.Result) {
 										return true
 									},
 								)
+								resgSelectorEntity.Get("esgSelectorEntity").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "esgMatchExternalSubnetV4" {
+													var nestedChildesgMatchExternalSubnetV4 ESGSecurityGroupsSelectorExternalSubnetsIpv4
+													nestedChildesgMatchExternalSubnetV4.RouteInject = types.StringValue(nestedValue.Get("attributes.rtInject").String())
+													nestedMapKey := nestedValue.Get("attributes.vrf").String() + ";" + nestedValue.Get("attributes.addr").String()
+													if child.SelectorExternalSubnetsIpv4 == nil {
+														child.SelectorExternalSubnetsIpv4 = make(map[string]ESGSecurityGroupsSelectorExternalSubnetsIpv4)
+													}
+													child.SelectorExternalSubnetsIpv4[nestedMapKey] = nestedChildesgMatchExternalSubnetV4
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								resgSelectorEntity.Get("esgSelectorEntity").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "esgMatchExternalSubnetV6" {
+													var nestedChildesgMatchExternalSubnetV6 ESGSecurityGroupsSelectorExternalSubnetsIpv6
+													nestedChildesgMatchExternalSubnetV6.RouteInject = types.StringValue(nestedValue.Get("attributes.rtInject").String())
+													nestedMapKey := nestedValue.Get("attributes.vrf").String() + ";" + nestedValue.Get("attributes.addr").String()
+													if child.SelectorExternalSubnetsIpv6 == nil {
+														child.SelectorExternalSubnetsIpv6 = make(map[string]ESGSecurityGroupsSelectorExternalSubnetsIpv6)
+													}
+													child.SelectorExternalSubnetsIpv6[nestedMapKey] = nestedChildesgMatchExternalSubnetV6
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								resgSelectorEntity.Get("esgSelectorEntity").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "esgMatchExternalSubnetV4WithNh" {
+													var nestedChildesgMatchExternalSubnetV4WithNh ESGSecurityGroupsSelectorExternalSubnetsNexthopIpv4
+													nestedMapKey := nestedValue.Get("attributes.selectorVrf").String() + ";" + nestedValue.Get("attributes.selectorPrefix").String() + ";" + nestedValue.Get("attributes.nexthopAddr").String()
+													if child.SelectorExternalSubnetsNexthopIpv4 == nil {
+														child.SelectorExternalSubnetsNexthopIpv4 = make(map[string]ESGSecurityGroupsSelectorExternalSubnetsNexthopIpv4)
+													}
+													child.SelectorExternalSubnetsNexthopIpv4[nestedMapKey] = nestedChildesgMatchExternalSubnetV4WithNh
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								resgSelectorEntity.Get("esgSelectorEntity").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "esgMatchExternalSubnetV6WithNh" {
+													var nestedChildesgMatchExternalSubnetV6WithNh ESGSecurityGroupsSelectorExternalSubnetsNexthopIpv6
+													nestedMapKey := nestedValue.Get("attributes.selectorVrf").String() + ";" + nestedValue.Get("attributes.selectorPrefix").String() + ";" + nestedValue.Get("attributes.nexthopAddr").String()
+													if child.SelectorExternalSubnetsNexthopIpv6 == nil {
+														child.SelectorExternalSubnetsNexthopIpv6 = make(map[string]ESGSecurityGroupsSelectorExternalSubnetsNexthopIpv6)
+													}
+													child.SelectorExternalSubnetsNexthopIpv6[nestedMapKey] = nestedChildesgMatchExternalSubnetV6WithNh
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								resgSelectorEntity.Get("esgSelectorEntity").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "esgMatchExternalSubnetV4WithNhEncap" {
+													var nestedChildesgMatchExternalSubnetV4WithNhEncap ESGSecurityGroupsSelectorExternalSubnetsNexthopEncapIpv4
+													nestedMapKey := nestedValue.Get("attributes.selectorVrf").String() + ";" + nestedValue.Get("attributes.selectorPrefix").String() + ";" + nestedValue.Get("attributes.nexthopAddr").String() + ";" + nestedValue.Get("attributes.encapType").String()
+													if child.SelectorExternalSubnetsNexthopEncapIpv4 == nil {
+														child.SelectorExternalSubnetsNexthopEncapIpv4 = make(map[string]ESGSecurityGroupsSelectorExternalSubnetsNexthopEncapIpv4)
+													}
+													child.SelectorExternalSubnetsNexthopEncapIpv4[nestedMapKey] = nestedChildesgMatchExternalSubnetV4WithNhEncap
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								resgSelectorEntity.Get("esgSelectorEntity").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "esgMatchExternalSubnetV6WithNhEncap" {
+													var nestedChildesgMatchExternalSubnetV6WithNhEncap ESGSecurityGroupsSelectorExternalSubnetsNexthopEncapIpv6
+													nestedMapKey := nestedValue.Get("attributes.selectorVrf").String() + ";" + nestedValue.Get("attributes.selectorPrefix").String() + ";" + nestedValue.Get("attributes.nexthopAddr").String() + ";" + nestedValue.Get("attributes.encapType").String()
+													if child.SelectorExternalSubnetsNexthopEncapIpv6 == nil {
+														child.SelectorExternalSubnetsNexthopEncapIpv6 = make(map[string]ESGSecurityGroupsSelectorExternalSubnetsNexthopEncapIpv6)
+													}
+													child.SelectorExternalSubnetsNexthopEncapIpv6[nestedMapKey] = nestedChildesgMatchExternalSubnetV6WithNhEncap
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								resgSelectorEntity.Get("esgSelectorEntity").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "esgMatchInterface" {
+													var nestedChildesgMatchInterface ESGSecurityGroupsSelectorMatchInterfaces
+													nestedMapKey := nestedValue.Get("attributes.id").String()
+													if child.SelectorMatchInterfaces == nil {
+														child.SelectorMatchInterfaces = make(map[string]ESGSecurityGroupsSelectorMatchInterfaces)
+													}
+													child.SelectorMatchInterfaces[nestedMapKey] = nestedChildesgMatchInterface
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								resgSelectorEntity.Get("esgSelectorEntity").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "esgMatchVlanMac" {
+													var nestedChildesgMatchVlanMac ESGSecurityGroupsSelectorMatchVlanMacs
+													nestedMapKey := nestedValue.Get("attributes.vlanId").String() + ";" + nestedValue.Get("attributes.macAddr").String()
+													if child.SelectorMatchVlanMacs == nil {
+														child.SelectorMatchVlanMacs = make(map[string]ESGSecurityGroupsSelectorMatchVlanMacs)
+													}
+													child.SelectorMatchVlanMacs[nestedMapKey] = nestedChildesgMatchVlanMac
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								resgSelectorEntity.Get("esgSelectorEntity").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "esgMatchVlanInterface" {
+													var nestedChildesgMatchVlanInterface ESGSecurityGroupsSelectorMatchVlanInterfaces
+													nestedMapKey := nestedValue.Get("attributes.vlanId").String() + ";" + nestedValue.Get("attributes.interfaceId").String()
+													if child.SelectorMatchVlanInterfaces == nil {
+														child.SelectorMatchVlanInterfaces = make(map[string]ESGSecurityGroupsSelectorMatchVlanInterfaces)
+													}
+													child.SelectorMatchVlanInterfaces[nestedMapKey] = nestedChildesgMatchVlanInterface
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+							}
+							{
+								var resgAttributeEntity gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("esgAttributeEntity.attributes.rn").String()
+										if rnValue == "attribute" {
+											resgAttributeEntity = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.TypeLayer47 = types.StringValue(resgAttributeEntity.Get("esgAttributeEntity.attributes.typeLayer4To7").String())
 							}
 							if data.SecurityGroups == nil {
 								data.SecurityGroups = make(map[string]ESGSecurityGroups)
@@ -855,6 +1223,218 @@ func (data *ESG) updateFromBody(res gjson.Result) {
 					continue
 				}
 				item.SelectorMatchVlans[nc] = ncItem
+			}
+			for nc := range item.SelectorExternalSubnetsIpv4 {
+				ncItem := item.SelectorExternalSubnetsIpv4[nc]
+				keyParts := strings.SplitN(nc, ";", 2)
+				var resgMatchExternalSubnetV4 gjson.Result
+				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("esgMatchExternalSubnetV4.attributes.vrf").String() == keyParts[0] &&
+							v.Get("esgMatchExternalSubnetV4.attributes.addr").String() == keyParts[1] {
+							resgMatchExternalSubnetV4 = v
+							return false
+						}
+						return true
+					},
+				)
+				if !resgMatchExternalSubnetV4.Exists() {
+					delete(item.SelectorExternalSubnetsIpv4, nc)
+					continue
+				}
+				if !ncItem.RouteInject.IsNull() {
+					ncItem.RouteInject = types.StringValue(resgMatchExternalSubnetV4.Get("esgMatchExternalSubnetV4.attributes.rtInject").String())
+				} else {
+					ncItem.RouteInject = types.StringNull()
+				}
+				item.SelectorExternalSubnetsIpv4[nc] = ncItem
+			}
+			for nc := range item.SelectorExternalSubnetsIpv6 {
+				ncItem := item.SelectorExternalSubnetsIpv6[nc]
+				keyParts := strings.SplitN(nc, ";", 2)
+				var resgMatchExternalSubnetV6 gjson.Result
+				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("esgMatchExternalSubnetV6.attributes.vrf").String() == keyParts[0] &&
+							v.Get("esgMatchExternalSubnetV6.attributes.addr").String() == keyParts[1] {
+							resgMatchExternalSubnetV6 = v
+							return false
+						}
+						return true
+					},
+				)
+				if !resgMatchExternalSubnetV6.Exists() {
+					delete(item.SelectorExternalSubnetsIpv6, nc)
+					continue
+				}
+				if !ncItem.RouteInject.IsNull() {
+					ncItem.RouteInject = types.StringValue(resgMatchExternalSubnetV6.Get("esgMatchExternalSubnetV6.attributes.rtInject").String())
+				} else {
+					ncItem.RouteInject = types.StringNull()
+				}
+				item.SelectorExternalSubnetsIpv6[nc] = ncItem
+			}
+			for nc := range item.SelectorExternalSubnetsNexthopIpv4 {
+				ncItem := item.SelectorExternalSubnetsNexthopIpv4[nc]
+				keyParts := strings.SplitN(nc, ";", 3)
+				var resgMatchExternalSubnetV4WithNh gjson.Result
+				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("esgMatchExternalSubnetV4WithNh.attributes.selectorVrf").String() == keyParts[0] &&
+							v.Get("esgMatchExternalSubnetV4WithNh.attributes.selectorPrefix").String() == keyParts[1] &&
+							v.Get("esgMatchExternalSubnetV4WithNh.attributes.nexthopAddr").String() == keyParts[2] {
+							resgMatchExternalSubnetV4WithNh = v
+							return false
+						}
+						return true
+					},
+				)
+				if !resgMatchExternalSubnetV4WithNh.Exists() {
+					delete(item.SelectorExternalSubnetsNexthopIpv4, nc)
+					continue
+				}
+				item.SelectorExternalSubnetsNexthopIpv4[nc] = ncItem
+			}
+			for nc := range item.SelectorExternalSubnetsNexthopIpv6 {
+				ncItem := item.SelectorExternalSubnetsNexthopIpv6[nc]
+				keyParts := strings.SplitN(nc, ";", 3)
+				var resgMatchExternalSubnetV6WithNh gjson.Result
+				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("esgMatchExternalSubnetV6WithNh.attributes.selectorVrf").String() == keyParts[0] &&
+							v.Get("esgMatchExternalSubnetV6WithNh.attributes.selectorPrefix").String() == keyParts[1] &&
+							v.Get("esgMatchExternalSubnetV6WithNh.attributes.nexthopAddr").String() == keyParts[2] {
+							resgMatchExternalSubnetV6WithNh = v
+							return false
+						}
+						return true
+					},
+				)
+				if !resgMatchExternalSubnetV6WithNh.Exists() {
+					delete(item.SelectorExternalSubnetsNexthopIpv6, nc)
+					continue
+				}
+				item.SelectorExternalSubnetsNexthopIpv6[nc] = ncItem
+			}
+			for nc := range item.SelectorExternalSubnetsNexthopEncapIpv4 {
+				ncItem := item.SelectorExternalSubnetsNexthopEncapIpv4[nc]
+				keyParts := strings.SplitN(nc, ";", 4)
+				var resgMatchExternalSubnetV4WithNhEncap gjson.Result
+				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("esgMatchExternalSubnetV4WithNhEncap.attributes.selectorVrf").String() == keyParts[0] &&
+							v.Get("esgMatchExternalSubnetV4WithNhEncap.attributes.selectorPrefix").String() == keyParts[1] &&
+							v.Get("esgMatchExternalSubnetV4WithNhEncap.attributes.nexthopAddr").String() == keyParts[2] &&
+							v.Get("esgMatchExternalSubnetV4WithNhEncap.attributes.encapType").String() == keyParts[3] {
+							resgMatchExternalSubnetV4WithNhEncap = v
+							return false
+						}
+						return true
+					},
+				)
+				if !resgMatchExternalSubnetV4WithNhEncap.Exists() {
+					delete(item.SelectorExternalSubnetsNexthopEncapIpv4, nc)
+					continue
+				}
+				item.SelectorExternalSubnetsNexthopEncapIpv4[nc] = ncItem
+			}
+			for nc := range item.SelectorExternalSubnetsNexthopEncapIpv6 {
+				ncItem := item.SelectorExternalSubnetsNexthopEncapIpv6[nc]
+				keyParts := strings.SplitN(nc, ";", 4)
+				var resgMatchExternalSubnetV6WithNhEncap gjson.Result
+				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("esgMatchExternalSubnetV6WithNhEncap.attributes.selectorVrf").String() == keyParts[0] &&
+							v.Get("esgMatchExternalSubnetV6WithNhEncap.attributes.selectorPrefix").String() == keyParts[1] &&
+							v.Get("esgMatchExternalSubnetV6WithNhEncap.attributes.nexthopAddr").String() == keyParts[2] &&
+							v.Get("esgMatchExternalSubnetV6WithNhEncap.attributes.encapType").String() == keyParts[3] {
+							resgMatchExternalSubnetV6WithNhEncap = v
+							return false
+						}
+						return true
+					},
+				)
+				if !resgMatchExternalSubnetV6WithNhEncap.Exists() {
+					delete(item.SelectorExternalSubnetsNexthopEncapIpv6, nc)
+					continue
+				}
+				item.SelectorExternalSubnetsNexthopEncapIpv6[nc] = ncItem
+			}
+			for nc := range item.SelectorMatchInterfaces {
+				ncItem := item.SelectorMatchInterfaces[nc]
+				var resgMatchInterface gjson.Result
+				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("esgMatchInterface.attributes.id").String() == nc {
+							resgMatchInterface = v
+							return false
+						}
+						return true
+					},
+				)
+				if !resgMatchInterface.Exists() {
+					delete(item.SelectorMatchInterfaces, nc)
+					continue
+				}
+				item.SelectorMatchInterfaces[nc] = ncItem
+			}
+			for nc := range item.SelectorMatchVlanMacs {
+				ncItem := item.SelectorMatchVlanMacs[nc]
+				keyParts := strings.SplitN(nc, ";", 2)
+				var resgMatchVlanMac gjson.Result
+				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("esgMatchVlanMac.attributes.vlanId").String() == keyParts[0] &&
+							v.Get("esgMatchVlanMac.attributes.macAddr").String() == keyParts[1] {
+							resgMatchVlanMac = v
+							return false
+						}
+						return true
+					},
+				)
+				if !resgMatchVlanMac.Exists() {
+					delete(item.SelectorMatchVlanMacs, nc)
+					continue
+				}
+				item.SelectorMatchVlanMacs[nc] = ncItem
+			}
+			for nc := range item.SelectorMatchVlanInterfaces {
+				ncItem := item.SelectorMatchVlanInterfaces[nc]
+				keyParts := strings.SplitN(nc, ";", 2)
+				var resgMatchVlanInterface gjson.Result
+				resgSelectorEntity.Get("esgSelectorEntity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("esgMatchVlanInterface.attributes.vlanId").String() == keyParts[0] &&
+							v.Get("esgMatchVlanInterface.attributes.interfaceId").String() == keyParts[1] {
+							resgMatchVlanInterface = v
+							return false
+						}
+						return true
+					},
+				)
+				if !resgMatchVlanInterface.Exists() {
+					delete(item.SelectorMatchVlanInterfaces, nc)
+					continue
+				}
+				item.SelectorMatchVlanInterfaces[nc] = ncItem
+			}
+		}
+		{
+			var resgAttributeEntity gjson.Result
+			resgGroupInst.Get("esgGroupInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("esgAttributeEntity.attributes.rn").String()
+					if rnValue == "attribute" {
+						resgAttributeEntity = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.TypeLayer47.IsNull() {
+				item.TypeLayer47 = types.StringValue(resgAttributeEntity.Get("esgAttributeEntity.attributes.typeLayer4To7").String())
+			} else {
+				item.TypeLayer47 = types.StringNull()
 			}
 		}
 		data.SecurityGroups[key] = item
@@ -1201,6 +1781,96 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 				}
 			}
+			for stateKey := range stateItemdi.SelectorExternalSubnetsIpv4 {
+				if _, found := planItemdi.SelectorExternalSubnetsIpv4[stateKey]; !found {
+					stateChild := stateItemdi.SelectorExternalSubnetsIpv4[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV4.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV4.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "esgSelectorEntity") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
+			for stateKey := range stateItemdi.SelectorExternalSubnetsIpv6 {
+				if _, found := planItemdi.SelectorExternalSubnetsIpv6[stateKey]; !found {
+					stateChild := stateItemdi.SelectorExternalSubnetsIpv6[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV6.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV6.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "esgSelectorEntity") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
+			for stateKey := range stateItemdi.SelectorExternalSubnetsNexthopIpv4 {
+				if _, found := planItemdi.SelectorExternalSubnetsNexthopIpv4[stateKey]; !found {
+					stateChild := stateItemdi.SelectorExternalSubnetsNexthopIpv4[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV4WithNh.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV4WithNh.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "esgSelectorEntity") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
+			for stateKey := range stateItemdi.SelectorExternalSubnetsNexthopIpv6 {
+				if _, found := planItemdi.SelectorExternalSubnetsNexthopIpv6[stateKey]; !found {
+					stateChild := stateItemdi.SelectorExternalSubnetsNexthopIpv6[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV6WithNh.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV6WithNh.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "esgSelectorEntity") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
+			for stateKey := range stateItemdi.SelectorExternalSubnetsNexthopEncapIpv4 {
+				if _, found := planItemdi.SelectorExternalSubnetsNexthopEncapIpv4[stateKey]; !found {
+					stateChild := stateItemdi.SelectorExternalSubnetsNexthopEncapIpv4[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV4WithNhEncap.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV4WithNhEncap.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "esgSelectorEntity") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
+			for stateKey := range stateItemdi.SelectorExternalSubnetsNexthopEncapIpv6 {
+				if _, found := planItemdi.SelectorExternalSubnetsNexthopEncapIpv6[stateKey]; !found {
+					stateChild := stateItemdi.SelectorExternalSubnetsNexthopEncapIpv6[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV6WithNhEncap.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchExternalSubnetV6WithNhEncap.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "esgSelectorEntity") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
+			for stateKey := range stateItemdi.SelectorMatchInterfaces {
+				if _, found := planItemdi.SelectorMatchInterfaces[stateKey]; !found {
+					stateChild := stateItemdi.SelectorMatchInterfaces[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchInterface.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchInterface.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "esgSelectorEntity") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
+			for stateKey := range stateItemdi.SelectorMatchVlanMacs {
+				if _, found := planItemdi.SelectorMatchVlanMacs[stateKey]; !found {
+					stateChild := stateItemdi.SelectorMatchVlanMacs[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchVlanMac.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchVlanMac.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "esgSelectorEntity") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
+			for stateKey := range stateItemdi.SelectorMatchVlanInterfaces {
+				if _, found := planItemdi.SelectorMatchVlanInterfaces[stateKey]; !found {
+					stateChild := stateItemdi.SelectorMatchVlanInterfaces[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchVlanInterface.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgMatchVlanInterface.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "esgSelectorEntity") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
 		}
 		for stateKey := range state.ClassMaps {
 			if _, found := data.ClassMaps[stateKey]; !found {
@@ -1361,6 +2031,93 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 								_ = stateChild
 								_ = configChild
 							}
+						}
+						for key := range stateChild.SelectorExternalSubnetsIpv4 {
+							if configChild, ok := configChild.SelectorExternalSubnetsIpv4[key]; ok {
+								stateChild := stateChild.SelectorExternalSubnetsIpv4[key]
+								_ = stateChild
+								_ = configChild
+								keyParts := strings.SplitN(key, ";", 2)
+								for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, listChildPath, "esgSelectorEntity")+".children").Array() {
+									if mv.Get("esgMatchExternalSubnetV4.attributes.vrf").String() == keyParts[0] &&
+										mv.Get("esgMatchExternalSubnetV4.attributes.addr").String() == keyParts[1] {
+										if !stateChild.RouteInject.IsNull() && configChild.RouteInject.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "esgSelectorEntity")+".children"+"."+strconv.Itoa(mi)+".esgMatchExternalSubnetV4.attributes."+"rtInject", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
+						for key := range stateChild.SelectorExternalSubnetsIpv6 {
+							if configChild, ok := configChild.SelectorExternalSubnetsIpv6[key]; ok {
+								stateChild := stateChild.SelectorExternalSubnetsIpv6[key]
+								_ = stateChild
+								_ = configChild
+								keyParts := strings.SplitN(key, ";", 2)
+								for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, listChildPath, "esgSelectorEntity")+".children").Array() {
+									if mv.Get("esgMatchExternalSubnetV6.attributes.vrf").String() == keyParts[0] &&
+										mv.Get("esgMatchExternalSubnetV6.attributes.addr").String() == keyParts[1] {
+										if !stateChild.RouteInject.IsNull() && configChild.RouteInject.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "esgSelectorEntity")+".children"+"."+strconv.Itoa(mi)+".esgMatchExternalSubnetV6.attributes."+"rtInject", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
+						for key := range stateChild.SelectorExternalSubnetsNexthopIpv4 {
+							if configChild, ok := configChild.SelectorExternalSubnetsNexthopIpv4[key]; ok {
+								stateChild := stateChild.SelectorExternalSubnetsNexthopIpv4[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.SelectorExternalSubnetsNexthopIpv6 {
+							if configChild, ok := configChild.SelectorExternalSubnetsNexthopIpv6[key]; ok {
+								stateChild := stateChild.SelectorExternalSubnetsNexthopIpv6[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.SelectorExternalSubnetsNexthopEncapIpv4 {
+							if configChild, ok := configChild.SelectorExternalSubnetsNexthopEncapIpv4[key]; ok {
+								stateChild := stateChild.SelectorExternalSubnetsNexthopEncapIpv4[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.SelectorExternalSubnetsNexthopEncapIpv6 {
+							if configChild, ok := configChild.SelectorExternalSubnetsNexthopEncapIpv6[key]; ok {
+								stateChild := stateChild.SelectorExternalSubnetsNexthopEncapIpv6[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.SelectorMatchInterfaces {
+							if configChild, ok := configChild.SelectorMatchInterfaces[key]; ok {
+								stateChild := stateChild.SelectorMatchInterfaces[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.SelectorMatchVlanMacs {
+							if configChild, ok := configChild.SelectorMatchVlanMacs[key]; ok {
+								stateChild := stateChild.SelectorMatchVlanMacs[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.SelectorMatchVlanInterfaces {
+							if configChild, ok := configChild.SelectorMatchVlanInterfaces[key]; ok {
+								stateChild := stateChild.SelectorMatchVlanInterfaces[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						if !stateChild.TypeLayer47.IsNull() && configChild.TypeLayer47.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "esgAttributeEntity")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"typeLayer4To7", "DME_UNSET_PROPERTY_MARKER")
 						}
 					}
 				}

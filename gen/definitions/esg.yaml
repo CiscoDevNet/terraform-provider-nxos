@@ -102,6 +102,242 @@ child_classes:
                     id: true
                     description: 'VLAN ID that needs to be classified in this security-group.'
                     example: vlan-100
+              - class_name: esgMatchExternalSubnetV4
+                doc_path: Security%20and%20Policing/esg:MatchExternalSubnetV4/
+                rn: extsubnetv4-[%s]-[%s]
+                type: list
+                tf_name: selector_external_subnets_ipv4
+                description: 'List of external subnets selectors based on VRF and IPv4 address/prefix.'
+                attributes:
+                  - nxos_name: vrf
+                    tf_name: vrf
+                    type: String
+                    id: true
+                    description: 'Name of VRF that the prefix belongs to.'
+                    example: default
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'IPv4 prefix that needs to be classified in this security-group.'
+                    example: '20.0.0.0/8'
+                  - nxos_name: rtInject
+                    tf_name: route_inject
+                    type: String
+                    description: 'Enable/disable route-injection for this selector.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+              - class_name: esgMatchExternalSubnetV6
+                doc_path: Security%20and%20Policing/esg:MatchExternalSubnetV6/
+                rn: extsubnetv6-[%s]-[%s]
+                type: list
+                tf_name: selector_external_subnets_ipv6
+                description: 'List of external subnets selectors based on VRF and IPv6 address/prefix.'
+                attributes:
+                  - nxos_name: vrf
+                    tf_name: vrf
+                    type: String
+                    id: true
+                    description: 'Name of VRF that the prefix belongs to.'
+                    example: default
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'IPv6 prefix that needs to be classified in this security-group.'
+                    example: '2001:db9::/32'
+                  - nxos_name: rtInject
+                    tf_name: route_inject
+                    type: String
+                    description: 'Enable/disable route-injection for this selector.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+              - class_name: esgMatchExternalSubnetV4WithNh
+                doc_path: Security%20and%20Policing/esg:MatchExternalSubnetV4WithNh/
+                rn: extsubnetv4nh-[%s]-[%s]-[%s]
+                type: list
+                tf_name: selector_external_subnets_nexthop_ipv4
+                description: 'List of external subnets selectors based on VRF and IPv4 address/prefix with nexthop.'
+                attributes:
+                  - nxos_name: selectorVrf
+                    tf_name: vrf
+                    type: String
+                    id: true
+                    description: 'Name of VRF that the selector prefix belongs to.'
+                    example: default
+                  - nxos_name: selectorPrefix
+                    tf_name: prefix
+                    type: String
+                    id: true
+                    description: 'IPv4 selector prefix that needs to be classified in this security-group.'
+                    example: '21.0.0.0/8'
+                  - nxos_name: nexthopAddr
+                    tf_name: nexthop_address
+                    type: String
+                    id: true
+                    description: 'Nexthop IP address for the selector prefix.'
+                    example: '100.0.1.1'
+              - class_name: esgMatchExternalSubnetV6WithNh
+                doc_path: Security%20and%20Policing/esg:MatchExternalSubnetV6WithNh/
+                rn: extsubnetv6nh-[%s]-[%s]-[%s]
+                type: list
+                tf_name: selector_external_subnets_nexthop_ipv6
+                description: 'List of external subnets selectors based on VRF and IPv6 address/prefix with nexthop.'
+                attributes:
+                  - nxos_name: selectorVrf
+                    tf_name: vrf
+                    type: String
+                    id: true
+                    description: 'Name of VRF that the selector prefix belongs to.'
+                    example: default
+                  - nxos_name: selectorPrefix
+                    tf_name: prefix
+                    type: String
+                    id: true
+                    description: 'IPv6 selector prefix that needs to be classified in this security-group.'
+                    example: '2001:dba::/32'
+                  - nxos_name: nexthopAddr
+                    tf_name: nexthop_address
+                    type: String
+                    id: true
+                    description: 'Nexthop IP address for the selector prefix.'
+                    example: '2001::1'
+              - class_name: esgMatchExternalSubnetV4WithNhEncap
+                doc_path: Security%20and%20Policing/esg:MatchExternalSubnetV4WithNhEncap/
+                rn: extsubnetv4nhencap-[%s]-[%s]-[%s]-[%s]
+                type: list
+                tf_name: selector_external_subnets_nexthop_encap_ipv4
+                description: 'List of external subnets selectors based on VRF and IPv4 address/prefix with nexthop having encap type.'
+                attributes:
+                  - nxos_name: selectorVrf
+                    tf_name: vrf
+                    type: String
+                    id: true
+                    description: 'Name of VRF that the selector prefix belongs to.'
+                    example: default
+                  - nxos_name: selectorPrefix
+                    tf_name: prefix
+                    type: String
+                    id: true
+                    description: 'IPv4 selector prefix that needs to be classified in this security-group.'
+                    example: '22.0.0.0/8'
+                  - nxos_name: nexthopAddr
+                    tf_name: nexthop_address
+                    type: String
+                    id: true
+                    description: 'Nexthop IP address for the selector prefix.'
+                    example: '100.0.1.1'
+                  - nxos_name: encapType
+                    tf_name: encap_type
+                    type: String
+                    id: true
+                    description: 'Encap type of the Nexthop IP address.'
+                    enum_values:
+                      - mpls-vpn
+                    example: mpls-vpn
+              - class_name: esgMatchExternalSubnetV6WithNhEncap
+                doc_path: Security%20and%20Policing/esg:MatchExternalSubnetV6WithNhEncap/
+                rn: extsubnetv6nhencap-[%s]-[%s]-[%s]-[%s]
+                type: list
+                tf_name: selector_external_subnets_nexthop_encap_ipv6
+                description: 'List of external subnets selectors based on VRF and IPv6 address/prefix with nexthop having encap type.'
+                attributes:
+                  - nxos_name: selectorVrf
+                    tf_name: vrf
+                    type: String
+                    id: true
+                    description: 'Name of VRF that the selector prefix belongs to.'
+                    example: default
+                  - nxos_name: selectorPrefix
+                    tf_name: prefix
+                    type: String
+                    id: true
+                    description: 'IPv6 selector prefix that needs to be classified in this security-group.'
+                    example: '2001:dbb::/32'
+                  - nxos_name: nexthopAddr
+                    tf_name: nexthop_address
+                    type: String
+                    id: true
+                    description: 'Nexthop IP address for the selector prefix.'
+                    example: '100.0.1.1'
+                  - nxos_name: encapType
+                    tf_name: encap_type
+                    type: String
+                    id: true
+                    description: 'Encap type of the Nexthop IP address.'
+                    enum_values:
+                      - mpls-vpn
+                    example: mpls-vpn
+              - class_name: esgMatchInterface
+                doc_path: Security%20and%20Policing/esg:MatchInterface/
+                rn: interface-[%s]
+                type: list
+                tf_name: selector_match_interfaces
+                description: 'List of selectors based on interface.'
+                attributes:
+                  - nxos_name: id
+                    tf_name: interface_id
+                    type: String
+                    id: true
+                    description: 'Interface that needs to be classified in this security-group. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.'
+                    example: vlan100
+              - class_name: esgMatchVlanMac
+                doc_path: Security%20and%20Policing/esg:MatchVlanMac/
+                rn: vlanmac-[%s]-[%s]
+                type: list
+                tf_name: selector_match_vlan_macs
+                description: 'List of selectors based on VLAN and MAC address.'
+                attributes:
+                  - nxos_name: vlanId
+                    tf_name: vlan_id
+                    type: String
+                    id: true
+                    description: 'VLAN ID that needs to be classified in this security-group.'
+                    example: vlan-101
+                  - nxos_name: macAddr
+                    tf_name: mac_address
+                    type: String
+                    id: true
+                    description: 'MAC Address that needs to be classified in this security-group.'
+                    example: '00:1B:63:84:45:E6'
+              - class_name: esgMatchVlanInterface
+                doc_path: Security%20and%20Policing/esg:MatchVlanInterface/
+                rn: vlaninterface-[%s]-[%s]
+                type: list
+                tf_name: selector_match_vlan_interfaces
+                description: 'List of selectors based on VLAN and interface.'
+                attributes:
+                  - nxos_name: vlanId
+                    tf_name: vlan_id
+                    type: String
+                    id: true
+                    description: 'VLAN ID that needs to be classified in this security-group.'
+                    example: vlan-102
+                  - nxos_name: interfaceId
+                    tf_name: interface_id
+                    type: String
+                    id: true
+                    description: 'Interface that needs to be classified in this security-group. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `po1`.'
+                    example: eth1/1
+          - class_name: esgAttributeEntity
+            doc_path: Security%20and%20Policing/esg:AttributeEntity/
+            rn: attribute
+            type: single
+            tf_name: attribute
+            description: 'ESG Attribute list for this GroupInst.'
+            attributes:
+              - nxos_name: typeLayer4To7
+                tf_name: type_layer4_7
+                type: String
+                description: 'Set the security-group as an layer4-7 type.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
   - class_name: esgClassMapEntity
     doc_path: Security%20and%20Policing/esg:ClassMapEntity/
     rn: classmap

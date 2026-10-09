@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This data source can read the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.
   API Documentation
-  esgEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Entity/esgGroupEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupEntity/esgGroupInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupInst/esgSelectorEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:SelectorEntity/esgMatchConnectedEpV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV4/esgMatchConnectedEpV6 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV6/esgMatchVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlan/esgClassMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapEntity/esgClassMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapInst/esgClassMapFilterEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapFilterEntry/esgPolicyMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapEntity/esgPolicyMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapInst/esgMatchClassMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchClassMap/esgDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Dom/esgContractEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ContractEntity/esgContract https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Contract/
+  esgEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Entity/esgGroupEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupEntity/esgGroupInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupInst/esgSelectorEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:SelectorEntity/esgMatchConnectedEpV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV4/esgMatchConnectedEpV6 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV6/esgMatchVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlan/esgMatchExternalSubnetV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV4/esgMatchExternalSubnetV6 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV6/esgMatchExternalSubnetV4WithNh https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV4WithNh/esgMatchExternalSubnetV6WithNh https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV6WithNh/esgMatchExternalSubnetV4WithNhEncap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV4WithNhEncap/esgMatchExternalSubnetV6WithNhEncap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV6WithNhEncap/esgMatchInterface https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchInterface/esgMatchVlanMac https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlanMac/esgMatchVlanInterface https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlanInterface/esgAttributeEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:AttributeEntity/esgClassMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapEntity/esgClassMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapInst/esgClassMapFilterEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapFilterEntry/esgPolicyMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapEntity/esgPolicyMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapInst/esgMatchClassMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchClassMap/esgDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Dom/esgContractEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ContractEntity/esgContract https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Contract/
 ---
 
 # nxos_esg (Data Source)
@@ -21,6 +21,16 @@ This data source can read the ESG (Endpoint Security Group) configuration on NX-
 - [esgMatchConnectedEpV4](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV4/)
 - [esgMatchConnectedEpV6](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV6/)
 - [esgMatchVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlan/)
+- [esgMatchExternalSubnetV4](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV4/)
+- [esgMatchExternalSubnetV6](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV6/)
+- [esgMatchExternalSubnetV4WithNh](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV4WithNh/)
+- [esgMatchExternalSubnetV6WithNh](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV6WithNh/)
+- [esgMatchExternalSubnetV4WithNhEncap](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV4WithNhEncap/)
+- [esgMatchExternalSubnetV6WithNhEncap](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchExternalSubnetV6WithNhEncap/)
+- [esgMatchInterface](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchInterface/)
+- [esgMatchVlanMac](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlanMac/)
+- [esgMatchVlanInterface](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlanInterface/)
+- [esgAttributeEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:AttributeEntity/)
 - [esgClassMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapEntity/)
 - [esgClassMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapInst/)
 - [esgClassMapFilterEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapFilterEntry/)
@@ -151,8 +161,49 @@ Read-Only:
   - Map key format: `<vrf>;<address>`
   - Key component `vrf`: Name of VRF that the prefix belongs to.
   - Key component `address`: IPv6 prefix that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--selector_connected_endpoints_ipv6))
+- `selector_external_subnets_ipv4` (Attributes Map) List of external subnets selectors based on VRF and IPv4 address/prefix.
+  - Map key format: `<vrf>;<address>`
+  - Key component `vrf`: Name of VRF that the prefix belongs to.
+  - Key component `address`: IPv4 prefix that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--selector_external_subnets_ipv4))
+- `selector_external_subnets_ipv6` (Attributes Map) List of external subnets selectors based on VRF and IPv6 address/prefix.
+  - Map key format: `<vrf>;<address>`
+  - Key component `vrf`: Name of VRF that the prefix belongs to.
+  - Key component `address`: IPv6 prefix that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--selector_external_subnets_ipv6))
+- `selector_external_subnets_nexthop_encap_ipv4` (Attributes Map) List of external subnets selectors based on VRF and IPv4 address/prefix with nexthop having encap type.
+  - Map key format: `<vrf>;<prefix>;<nexthop_address>;<encap_type>`
+  - Key component `vrf`: Name of VRF that the selector prefix belongs to.
+  - Key component `prefix`: IPv4 selector prefix that needs to be classified in this security-group.
+  - Key component `nexthop_address`: Nexthop IP address for the selector prefix.
+  - Key component `encap_type`: Encap type of the Nexthop IP address. Choices: `mpls-vpn`. (see [below for nested schema](#nestedatt--security_groups--selector_external_subnets_nexthop_encap_ipv4))
+- `selector_external_subnets_nexthop_encap_ipv6` (Attributes Map) List of external subnets selectors based on VRF and IPv6 address/prefix with nexthop having encap type.
+  - Map key format: `<vrf>;<prefix>;<nexthop_address>;<encap_type>`
+  - Key component `vrf`: Name of VRF that the selector prefix belongs to.
+  - Key component `prefix`: IPv6 selector prefix that needs to be classified in this security-group.
+  - Key component `nexthop_address`: Nexthop IP address for the selector prefix.
+  - Key component `encap_type`: Encap type of the Nexthop IP address. Choices: `mpls-vpn`. (see [below for nested schema](#nestedatt--security_groups--selector_external_subnets_nexthop_encap_ipv6))
+- `selector_external_subnets_nexthop_ipv4` (Attributes Map) List of external subnets selectors based on VRF and IPv4 address/prefix with nexthop.
+  - Map key format: `<vrf>;<prefix>;<nexthop_address>`
+  - Key component `vrf`: Name of VRF that the selector prefix belongs to.
+  - Key component `prefix`: IPv4 selector prefix that needs to be classified in this security-group.
+  - Key component `nexthop_address`: Nexthop IP address for the selector prefix. (see [below for nested schema](#nestedatt--security_groups--selector_external_subnets_nexthop_ipv4))
+- `selector_external_subnets_nexthop_ipv6` (Attributes Map) List of external subnets selectors based on VRF and IPv6 address/prefix with nexthop.
+  - Map key format: `<vrf>;<prefix>;<nexthop_address>`
+  - Key component `vrf`: Name of VRF that the selector prefix belongs to.
+  - Key component `prefix`: IPv6 selector prefix that needs to be classified in this security-group.
+  - Key component `nexthop_address`: Nexthop IP address for the selector prefix. (see [below for nested schema](#nestedatt--security_groups--selector_external_subnets_nexthop_ipv6))
+- `selector_match_interfaces` (Attributes Map) List of selectors based on interface.
+  - Map key: `interface_id` - Interface that needs to be classified in this security-group. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`. (see [below for nested schema](#nestedatt--security_groups--selector_match_interfaces))
+- `selector_match_vlan_interfaces` (Attributes Map) List of selectors based on VLAN and interface.
+  - Map key format: `<vlan_id>;<interface_id>`
+  - Key component `vlan_id`: VLAN ID that needs to be classified in this security-group.
+  - Key component `interface_id`: Interface that needs to be classified in this security-group. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `po1`. (see [below for nested schema](#nestedatt--security_groups--selector_match_vlan_interfaces))
+- `selector_match_vlan_macs` (Attributes Map) List of selectors based on VLAN and MAC address.
+  - Map key format: `<vlan_id>;<mac_address>`
+  - Key component `vlan_id`: VLAN ID that needs to be classified in this security-group.
+  - Key component `mac_address`: MAC Address that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--selector_match_vlan_macs))
 - `selector_match_vlans` (Attributes Map) List of selectors based on VLAN.
   - Map key: `vlan_id` - VLAN ID that needs to be classified in this security-group. (see [below for nested schema](#nestedatt--security_groups--selector_match_vlans))
+- `type_layer4_7` (String) Set the security-group as an layer4-7 type.
 
 <a id="nestedatt--security_groups--selector_connected_endpoints_ipv4"></a>
 ### Nested Schema for `security_groups.selector_connected_endpoints_ipv4`
@@ -160,6 +211,50 @@ Read-Only:
 
 <a id="nestedatt--security_groups--selector_connected_endpoints_ipv6"></a>
 ### Nested Schema for `security_groups.selector_connected_endpoints_ipv6`
+
+
+<a id="nestedatt--security_groups--selector_external_subnets_ipv4"></a>
+### Nested Schema for `security_groups.selector_external_subnets_ipv4`
+
+Read-Only:
+
+- `route_inject` (String) Enable/disable route-injection for this selector.
+
+
+<a id="nestedatt--security_groups--selector_external_subnets_ipv6"></a>
+### Nested Schema for `security_groups.selector_external_subnets_ipv6`
+
+Read-Only:
+
+- `route_inject` (String) Enable/disable route-injection for this selector.
+
+
+<a id="nestedatt--security_groups--selector_external_subnets_nexthop_encap_ipv4"></a>
+### Nested Schema for `security_groups.selector_external_subnets_nexthop_encap_ipv4`
+
+
+<a id="nestedatt--security_groups--selector_external_subnets_nexthop_encap_ipv6"></a>
+### Nested Schema for `security_groups.selector_external_subnets_nexthop_encap_ipv6`
+
+
+<a id="nestedatt--security_groups--selector_external_subnets_nexthop_ipv4"></a>
+### Nested Schema for `security_groups.selector_external_subnets_nexthop_ipv4`
+
+
+<a id="nestedatt--security_groups--selector_external_subnets_nexthop_ipv6"></a>
+### Nested Schema for `security_groups.selector_external_subnets_nexthop_ipv6`
+
+
+<a id="nestedatt--security_groups--selector_match_interfaces"></a>
+### Nested Schema for `security_groups.selector_match_interfaces`
+
+
+<a id="nestedatt--security_groups--selector_match_vlan_interfaces"></a>
+### Nested Schema for `security_groups.selector_match_vlan_interfaces`
+
+
+<a id="nestedatt--security_groups--selector_match_vlan_macs"></a>
+### Nested Schema for `security_groups.selector_match_vlan_macs`
 
 
 <a id="nestedatt--security_groups--selector_match_vlans"></a>

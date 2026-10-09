@@ -37,6 +37,9 @@ func TestAccNxosESG(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "mac_segmentation", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "security_groups.100.name", "group1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "security_groups.100.selector_external_subnets_ipv4.default;20.0.0.0/8.route_inject", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "security_groups.100.selector_external_subnets_ipv6.default;2001:db9::/32.route_inject", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "security_groups.100.type_layer4_7", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "class_maps.cmap1.description", "My class map"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.apply_to_fragment", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.arp_opcode", "req"))
@@ -152,6 +155,45 @@ func testAccNxosESGConfig_all() string {
 	config += `				"vlan-100" = {` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
+	config += `			selector_external_subnets_ipv4 = {` + "\n"
+	config += `				"default;20.0.0.0/8" = {` + "\n"
+	config += `					route_inject = "enabled"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			selector_external_subnets_ipv6 = {` + "\n"
+	config += `				"default;2001:db9::/32" = {` + "\n"
+	config += `					route_inject = "enabled"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			selector_external_subnets_nexthop_ipv4 = {` + "\n"
+	config += `				"default;21.0.0.0/8;100.0.1.1" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			selector_external_subnets_nexthop_ipv6 = {` + "\n"
+	config += `				"default;2001:dba::/32;2001::1" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			selector_external_subnets_nexthop_encap_ipv4 = {` + "\n"
+	config += `				"default;22.0.0.0/8;100.0.1.1;mpls-vpn" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			selector_external_subnets_nexthop_encap_ipv6 = {` + "\n"
+	config += `				"default;2001:dbb::/32;100.0.1.1;mpls-vpn" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			selector_match_interfaces = {` + "\n"
+	config += `				"vlan100" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			selector_match_vlan_macs = {` + "\n"
+	config += `				"vlan-101;00:1B:63:84:45:E6" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			selector_match_vlan_interfaces = {` + "\n"
+	config += `				"vlan-102;eth1/1" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			type_layer4_7 = "enabled"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	class_maps = {` + "\n"

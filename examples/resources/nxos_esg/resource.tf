@@ -12,6 +12,38 @@ resource "nxos_esg" "example" {
       selector_match_vlans = {
         "vlan-100" = {}
       }
+      selector_external_subnets_ipv4 = {
+        "default;20.0.0.0/8" = {
+          route_inject = "enabled"
+        }
+      }
+      selector_external_subnets_ipv6 = {
+        "default;2001:db9::/32" = {
+          route_inject = "enabled"
+        }
+      }
+      selector_external_subnets_nexthop_ipv4 = {
+        "default;21.0.0.0/8;100.0.1.1" = {}
+      }
+      selector_external_subnets_nexthop_ipv6 = {
+        "default;2001:dba::/32;2001::1" = {}
+      }
+      selector_external_subnets_nexthop_encap_ipv4 = {
+        "default;22.0.0.0/8;100.0.1.1;mpls-vpn" = {}
+      }
+      selector_external_subnets_nexthop_encap_ipv6 = {
+        "default;2001:dbb::/32;100.0.1.1;mpls-vpn" = {}
+      }
+      selector_match_interfaces = {
+        "vlan100" = {}
+      }
+      selector_match_vlan_macs = {
+        "vlan-101;00:1B:63:84:45:E6" = {}
+      }
+      selector_match_vlan_interfaces = {
+        "vlan-102;eth1/1" = {}
+      }
+      type_layer4_7 = "enabled"
     }
   }
   class_maps = {

@@ -47,6 +47,11 @@ func TestAccDataSourceNxosNTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.min_poll", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.max_poll", "6"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.preferred", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.authentication_type", "md5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.encryption_type", "type7"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.encrypted", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.name", "KEY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.trusted", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "source_interface", "lo0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "access_group_match_all", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "access_group_peer", "PeerAcl"))
@@ -92,6 +97,16 @@ func testAccDataSourceNxosNTPConfig() string {
 	config += `			min_poll = 4` + "\n"
 	config += `			max_poll = 6` + "\n"
 	config += `			preferred = true` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	authentication_keys = {` + "\n"
+	config += `		"10" = {` + "\n"
+	config += `			authentication_type = "md5"` + "\n"
+	config += `			encryption_type = "type7"` + "\n"
+	config += `			encrypted = true` + "\n"
+	config += `			key = "secret_key"` + "\n"
+	config += `			name = "KEY1"` + "\n"
+	config += `			trusted = true` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	source_interface = "lo0"` + "\n"

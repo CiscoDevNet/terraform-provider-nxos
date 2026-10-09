@@ -3,8 +3,8 @@ name: NTP
 class_name: datetimeClkPol
 dn: sys/time
 no_delete: true
-ds_description: This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
-res_description: This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
+ds_description: This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings, as well as NTP authentication keys.
+res_description: This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings, as well as NTP authentication keys.
 doc_path: System/datetime:ClkPol/
 doc_category: System
 attributes:
@@ -145,6 +145,61 @@ child_classes:
         tf_name: preferred
         type: Bool
         description: 'A property that indicates if the NTP server is preferred. Only one preferred server is allowed.'
+        example: true
+  - class_name: datetimeNtpAuth
+    rn: auth-[%v]
+    type: list
+    tf_name: authentication_keys
+    description: 'List of NTP authentication keys.'
+    doc_path: System/datetime:NtpAuth/
+    attributes:
+      - nxos_name: id
+        tf_name: id
+        type: Int64
+        id: true
+        description: 'The NTP key ID.'
+        min_int: 1
+        max_int: 65535
+        example: 10
+      - nxos_name: authType
+        tf_name: authentication_type
+        type: String
+        description: 'The NTP authentication type.'
+        enum_values:
+          - unspecified
+          - aes128cmac
+          - md5
+        example: md5
+      - nxos_name: encryptType
+        tf_name: encryption_type
+        type: String
+        description: 'The NTP authentication key encryption type.'
+        enum_values:
+          - type0
+          - type6
+          - type7
+        example: type7
+      - nxos_name: isEncrypt
+        tf_name: encrypted
+        type: Bool
+        description: 'Is Encrypted Flag.'
+        example: true
+      - nxos_name: key
+        tf_name: key
+        type: String
+        write_only: true
+        sensitive: true
+        description: 'The NTP authentication key.'
+        example: 'secret_key'
+      - nxos_name: name
+        tf_name: name
+        type: String
+        description: 'Object name.'
+        example: KEY1
+      - nxos_name: trusted
+        tf_name: trusted
+        type: Bool
+        description: 'A property that indicates if the NTP authentication is trusted.'
         example: true
   - class_name: datetimeNtpSrcIf
     rn: srcIf

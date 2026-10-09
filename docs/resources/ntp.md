@@ -3,19 +3,20 @@
 page_title: "nxos_ntp Resource - terraform-provider-nxos"
 subcategory: "System"
 description: |-
-  This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
+  This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings, as well as NTP authentication keys.
   API Documentation
-  datetimeClkPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/datetimeNtpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpSrcIf/datetimeAccessGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:AccessGroup/
+  datetimeClkPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/datetimeNtpAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpAuth/datetimeNtpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpSrcIf/datetimeAccessGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:AccessGroup/
 ---
 
 # nxos_ntp (Resource)
 
-This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
+This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings, as well as NTP authentication keys.
 
 ### API Documentation
 
 - [datetimeClkPol](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/)
 - [datetimeNtpProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/)
+- [datetimeNtpAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpAuth/)
 - [datetimeNtpSrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpSrcIf/)
 - [datetimeAccessGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:AccessGroup/)
 
@@ -41,6 +42,16 @@ resource "nxos_ntp" "example" {
       min_poll  = 4
       max_poll  = 6
       preferred = true
+    }
+  }
+  authentication_keys = {
+    "10" = {
+      authentication_type = "md5"
+      encryption_type     = "type7"
+      encrypted           = true
+      key                 = "secret_key"
+      name                = "KEY1"
+      trusted             = true
     }
   }
   source_interface        = "lo0"
@@ -69,6 +80,9 @@ resource "nxos_ntp" "example" {
   - Choices: `enabled`, `disabled`
 - `allow_private` (String) Allow Private Mode NTP Packets.
   - Choices: `enabled`, `disabled`
+- `authentication_keys` (Attributes Map) List of NTP authentication keys.
+  - Map key: `id` - The NTP key ID.
+  - Key range: `1`-`65535` (see [below for nested schema](#nestedatt--authentication_keys))
 - `authentication_state` (String) A property that indicates if the Datetime policy authentication is enabled or disabled.
   - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
@@ -91,6 +105,23 @@ resource "nxos_ntp" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--authentication_keys"></a>
+### Nested Schema for `authentication_keys`
+
+Optional:
+
+- `authentication_type` (String) The NTP authentication type.
+  - Choices: `unspecified`, `aes128cmac`, `md5`
+- `encrypted` (Boolean) Is Encrypted Flag.
+- `encryption_type` (String) The NTP authentication key encryption type.
+  - Choices: `type0`, `type6`, `type7`
+- `key` (String, Sensitive) The NTP authentication key.
+- `key_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `key_wo_version` (Number) The write-only version of the attribute.
+- `name` (String) Object name.
+- `trusted` (Boolean) A property that indicates if the NTP authentication is trusted.
+
 
 <a id="nestedatt--servers"></a>
 ### Nested Schema for `servers`

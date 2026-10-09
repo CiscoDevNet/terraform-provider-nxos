@@ -3,19 +3,20 @@
 page_title: "nxos_ntp Data Source - terraform-provider-nxos"
 subcategory: "System"
 description: |-
-  This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
+  This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings, as well as NTP authentication keys.
   API Documentation
-  datetimeClkPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/datetimeNtpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpSrcIf/datetimeAccessGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:AccessGroup/
+  datetimeClkPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/datetimeNtpAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpAuth/datetimeNtpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpSrcIf/datetimeAccessGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:AccessGroup/
 ---
 
 # nxos_ntp (Data Source)
 
-This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
+This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings, as well as NTP authentication keys.
 
 ### API Documentation
 
 - [datetimeClkPol](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/)
 - [datetimeNtpProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/)
+- [datetimeNtpAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpAuth/)
 - [datetimeNtpSrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpSrcIf/)
 - [datetimeAccessGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:AccessGroup/)
 
@@ -43,6 +44,9 @@ data "nxos_ntp" "example" {
 - `admin_state` (String) A property that indicates if the NTP protocol is enabled or disabled.
 - `allow_control` (String) Allow Control Mode NTP Packets.
 - `allow_private` (String) Allow Private Mode NTP Packets.
+- `authentication_keys` (Attributes Map) List of NTP authentication keys.
+  - Map key: `id` - The NTP key ID.
+  - Key range: `1`-`65535` (see [below for nested schema](#nestedatt--authentication_keys))
 - `authentication_state` (String) A property that indicates if the Datetime policy authentication is enabled or disabled.
 - `id` (String) The distinguished name of the object.
 - `logging` (String) NTP Logging Status.
@@ -54,6 +58,21 @@ data "nxos_ntp" "example" {
 - `servers` (Attributes Map) List of NTP servers or peers.
   - Map key: `name` - NTP server or peer address. (see [below for nested schema](#nestedatt--servers))
 - `source_interface` (String) Source Interface.
+
+<a id="nestedatt--authentication_keys"></a>
+### Nested Schema for `authentication_keys`
+
+Read-Only:
+
+- `authentication_type` (String) The NTP authentication type.
+- `encrypted` (Boolean) Is Encrypted Flag.
+- `encryption_type` (String) The NTP authentication key encryption type.
+- `key` (String, Sensitive) The NTP authentication key.
+- `key_wo` (String) The write-only value of the attribute.
+- `key_wo_version` (Number) The write-only version of the attribute.
+- `name` (String) Object name.
+- `trusted` (Boolean) A property that indicates if the NTP authentication is trusted.
+
 
 <a id="nestedatt--servers"></a>
 ### Nested Schema for `servers`

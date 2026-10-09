@@ -51,6 +51,12 @@ func TestAccNxosNTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.min_poll", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.max_poll", "6"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.1.2.3.4.preferred", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "authentication_keys.10.authentication_type", "md5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "authentication_keys.10.encryption_type", "type7"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "authentication_keys.10.encrypted", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "authentication_keys.10.key", "secret_key"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "authentication_keys.10.name", "KEY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "authentication_keys.10.trusted", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "source_interface", "lo0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_match_all", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_peer", "PeerAcl"))
@@ -58,6 +64,7 @@ func TestAccNxosNTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_serve", "ServeAcl"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_serve_only", "ServeOnlyAcl"))
 	var tfVersion *goversion.Version
+	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -66,7 +73,7 @@ func TestAccNxosNTP(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosNTPConfig_all(),
+				Config: testAccNxosNTPConfig_all(includeWriteOnly),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -111,7 +118,7 @@ func testAccNxosNTPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosNTPConfig_all() string {
+func testAccNxosNTPConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_ntp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	allow_control = "enabled"` + "\n"
@@ -131,6 +138,22 @@ func testAccNxosNTPConfig_all() string {
 	config += `			min_poll = 4` + "\n"
 	config += `			max_poll = 6` + "\n"
 	config += `			preferred = true` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	authentication_keys = {` + "\n"
+	config += `		"10" = {` + "\n"
+	config += `			authentication_type = "md5"` + "\n"
+	config += `			encryption_type = "type7"` + "\n"
+	config += `			encrypted = true` + "\n"
+	if includeWriteOnly {
+		config += `			key = "secret_key"` + "\n"
+		config += `			key_wo = "secret_key"` + "\n"
+		config += `			key_wo_version = 1` + "\n"
+	} else {
+		config += `			key = "secret_key"` + "\n"
+	}
+	config += `			name = "KEY1"` + "\n"
+	config += `			trusted = true` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	source_interface = "lo0"` + "\n"

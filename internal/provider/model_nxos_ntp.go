@@ -38,25 +38,26 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type NTP struct {
-	Device               types.String          `tfsdk:"device"`
-	Dn                   types.String          `tfsdk:"id"`
-	AdminState           types.String          `tfsdk:"admin_state"`
-	AllowControl         types.String          `tfsdk:"allow_control"`
-	AllowPrivate         types.String          `tfsdk:"allow_private"`
-	AuthenticationState  types.String          `tfsdk:"authentication_state"`
-	Logging              types.String          `tfsdk:"logging"`
-	LoggingLevel         types.String          `tfsdk:"logging_level"`
-	Master               types.String          `tfsdk:"master"`
-	MasterStratum        types.Int64           `tfsdk:"master_stratum"`
-	Passive              types.String          `tfsdk:"passive"`
-	RateLimit            types.Int64           `tfsdk:"rate_limit"`
-	Servers              map[string]NTPServers `tfsdk:"servers"`
-	SourceInterface      types.String          `tfsdk:"source_interface"`
-	AccessGroupMatchAll  types.String          `tfsdk:"access_group_match_all"`
-	AccessGroupPeer      types.String          `tfsdk:"access_group_peer"`
-	AccessGroupQueryOnly types.String          `tfsdk:"access_group_query_only"`
-	AccessGroupServe     types.String          `tfsdk:"access_group_serve"`
-	AccessGroupServeOnly types.String          `tfsdk:"access_group_serve_only"`
+	Device               types.String                     `tfsdk:"device"`
+	Dn                   types.String                     `tfsdk:"id"`
+	AdminState           types.String                     `tfsdk:"admin_state"`
+	AllowControl         types.String                     `tfsdk:"allow_control"`
+	AllowPrivate         types.String                     `tfsdk:"allow_private"`
+	AuthenticationState  types.String                     `tfsdk:"authentication_state"`
+	Logging              types.String                     `tfsdk:"logging"`
+	LoggingLevel         types.String                     `tfsdk:"logging_level"`
+	Master               types.String                     `tfsdk:"master"`
+	MasterStratum        types.Int64                      `tfsdk:"master_stratum"`
+	Passive              types.String                     `tfsdk:"passive"`
+	RateLimit            types.Int64                      `tfsdk:"rate_limit"`
+	Servers              map[string]NTPServers            `tfsdk:"servers"`
+	AuthenticationKeys   map[string]NTPAuthenticationKeys `tfsdk:"authentication_keys"`
+	SourceInterface      types.String                     `tfsdk:"source_interface"`
+	AccessGroupMatchAll  types.String                     `tfsdk:"access_group_match_all"`
+	AccessGroupPeer      types.String                     `tfsdk:"access_group_peer"`
+	AccessGroupQueryOnly types.String                     `tfsdk:"access_group_query_only"`
+	AccessGroupServe     types.String                     `tfsdk:"access_group_serve"`
+	AccessGroupServeOnly types.String                     `tfsdk:"access_group_serve_only"`
 }
 
 type NTPServers struct {
@@ -66,6 +67,17 @@ type NTPServers struct {
 	MinPoll   types.Int64  `tfsdk:"min_poll"`
 	MaxPoll   types.Int64  `tfsdk:"max_poll"`
 	Preferred types.Bool   `tfsdk:"preferred"`
+}
+
+type NTPAuthenticationKeys struct {
+	AuthenticationType types.String `tfsdk:"authentication_type"`
+	EncryptionType     types.String `tfsdk:"encryption_type"`
+	Encrypted          types.Bool   `tfsdk:"encrypted"`
+	Key                types.String `tfsdk:"key"`
+	KeyWo              types.String `tfsdk:"key_wo"`
+	KeyWoVersion       types.Int64  `tfsdk:"key_wo_version"`
+	Name               types.String `tfsdk:"name"`
+	Trusted            types.Bool   `tfsdk:"trusted"`
 }
 
 type NTPIdentity struct {
@@ -98,6 +110,10 @@ func (data NTP) getDn() string {
 
 func (data NTPServers) getRn(key string) string {
 	return fmt.Sprintf("prov-[%s]", key)
+}
+
+func (data NTPAuthenticationKeys) getRn(key string) string {
+	return fmt.Sprintf("auth-[%v]", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
 func (data NTP) getClassName() string {
@@ -169,6 +185,34 @@ func (data NTP) toBody(config NTP) nxos.Body {
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.datetimeNtpProvider.attributes", attrs)
 	}
+	for key, child := range data.AuthenticationKeys {
+		configChild, configChildOk := config.AuthenticationKeys[key]
+		_ = configChild
+		_ = configChildOk
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "id", key)
+		if configChildOk && !child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull() && !configChild.AuthenticationType.IsNull() {
+			attrs, _ = sjson.Set(attrs, "authType", child.AuthenticationType.ValueString())
+		}
+		if configChildOk && !child.EncryptionType.IsUnknown() && !child.EncryptionType.IsNull() && !configChild.EncryptionType.IsNull() {
+			attrs, _ = sjson.Set(attrs, "encryptType", child.EncryptionType.ValueString())
+		}
+		if configChildOk && !child.Encrypted.IsUnknown() && !child.Encrypted.IsNull() && !configChild.Encrypted.IsNull() {
+			attrs, _ = sjson.Set(attrs, "isEncrypt", strconv.FormatBool(child.Encrypted.ValueBool()))
+		}
+		if configChildOk && !configChild.KeyWo.IsNull() {
+			attrs, _ = sjson.Set(attrs, "key", configChild.KeyWo.ValueString())
+		} else if !child.Key.IsUnknown() && !child.Key.IsNull() {
+			attrs, _ = sjson.Set(attrs, "key", child.Key.ValueString())
+		}
+		if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+		}
+		if configChildOk && !child.Trusted.IsUnknown() && !child.Trusted.IsNull() && !configChild.Trusted.IsNull() {
+			attrs, _ = sjson.Set(attrs, "trusted", strconv.FormatBool(child.Trusted.ValueBool()))
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.datetimeNtpAuth.attributes", attrs)
+	}
 	attrs = "{}"
 	if !data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull() && !config.SourceInterface.IsNull() {
 		attrs, _ = sjson.Set(attrs, "srcIf", data.SourceInterface.ValueString())
@@ -231,6 +275,29 @@ func (data *NTP) fromBody(res gjson.Result) {
 							data.Servers = make(map[string]NTPServers)
 						}
 						data.Servers[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "datetimeNtpAuth" {
+						var child NTPAuthenticationKeys
+						child.AuthenticationType = types.StringValue(value.Get("attributes.authType").String())
+						child.EncryptionType = types.StringValue(value.Get("attributes.encryptType").String())
+						child.Encrypted = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.isEncrypt").String()))
+						child.Name = types.StringValue(value.Get("attributes.name").String())
+						child.Trusted = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.trusted").String()))
+						mapKey := value.Get("attributes.id").String()
+						if data.AuthenticationKeys == nil {
+							data.AuthenticationKeys = make(map[string]NTPAuthenticationKeys)
+						}
+						data.AuthenticationKeys[mapKey] = child
 					}
 					return true
 				},
@@ -374,6 +441,48 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 		}
 		data.Servers[key] = item
 	}
+	for key, item := range data.AuthenticationKeys {
+		var rdatetimeNtpAuth gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("datetimeNtpAuth.attributes.id").String() == key {
+					rdatetimeNtpAuth = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rdatetimeNtpAuth.Exists() {
+			delete(data.AuthenticationKeys, key)
+			continue
+		}
+		if !item.AuthenticationType.IsNull() {
+			item.AuthenticationType = types.StringValue(rdatetimeNtpAuth.Get("datetimeNtpAuth.attributes.authType").String())
+		} else {
+			item.AuthenticationType = types.StringNull()
+		}
+		if !item.EncryptionType.IsNull() {
+			item.EncryptionType = types.StringValue(rdatetimeNtpAuth.Get("datetimeNtpAuth.attributes.encryptType").String())
+		} else {
+			item.EncryptionType = types.StringNull()
+		}
+		if !item.Encrypted.IsNull() {
+			item.Encrypted = types.BoolValue(helpers.ParseNxosBoolean(rdatetimeNtpAuth.Get("datetimeNtpAuth.attributes.isEncrypt").String()))
+		} else {
+			item.Encrypted = types.BoolNull()
+		}
+		if !item.Name.IsNull() {
+			item.Name = types.StringValue(rdatetimeNtpAuth.Get("datetimeNtpAuth.attributes.name").String())
+		} else {
+			item.Name = types.StringNull()
+		}
+		if !item.Trusted.IsNull() {
+			item.Trusted = types.BoolValue(helpers.ParseNxosBoolean(rdatetimeNtpAuth.Get("datetimeNtpAuth.attributes.trusted").String()))
+		} else {
+			item.Trusted = types.BoolNull()
+		}
+		data.AuthenticationKeys[key] = item
+	}
 	var rdatetimeNtpSrcIf gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -474,6 +583,12 @@ func (data NTP) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
+	for key, child := range data.AuthenticationKeys {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpAuth.attributes.rn", child.getRn(key))
+		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpAuth.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 	{
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpSrcIf.attributes.rn", "srcIf")
@@ -501,6 +616,16 @@ func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP, config NTP, im
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.status", "deleted")
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.AuthenticationKeys {
+			if _, found := data.AuthenticationKeys[stateKey]; !found {
+				stateChild := state.AuthenticationKeys[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpAuth.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpAuth.attributes.status", "deleted")
 				deletePath := bodyPath
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
@@ -564,6 +689,33 @@ func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP, config NTP, im
 						}
 						if !stateChild.Preferred.IsNull() && configChild.Preferred.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".datetimeNtpProvider.attributes."+"preferred", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		for key := range state.AuthenticationKeys {
+			if configChild, ok := config.AuthenticationKeys[key]; ok {
+				stateChild := state.AuthenticationKeys[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("datetimeNtpAuth.attributes.id").String() == key {
+						if !stateChild.AuthenticationType.IsNull() && configChild.AuthenticationType.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".datetimeNtpAuth.attributes."+"authType", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EncryptionType.IsNull() && configChild.EncryptionType.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".datetimeNtpAuth.attributes."+"encryptType", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Encrypted.IsNull() && configChild.Encrypted.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".datetimeNtpAuth.attributes."+"isEncrypt", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".datetimeNtpAuth.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Trusted.IsNull() && configChild.Trusted.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".datetimeNtpAuth.attributes."+"trusted", "DME_UNSET_PROPERTY_MARKER")
 						}
 						break
 					}

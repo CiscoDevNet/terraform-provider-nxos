@@ -19,6 +19,16 @@ resource "nxos_ntp" "example" {
       preferred = true
     }
   }
+  authentication_keys = {
+    "10" = {
+      authentication_type = "md5"
+      encryption_type     = "type7"
+      encrypted           = true
+      key                 = "secret_key"
+      name                = "KEY1"
+      trusted             = true
+    }
+  }
   source_interface        = "lo0"
   access_group_match_all  = "enabled"
   access_group_peer       = "PeerAcl"

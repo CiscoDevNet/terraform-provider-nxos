@@ -64,7 +64,7 @@ func (r *NTPResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.").AddApiDocumentation("datetimeClkPol", "System/datetime:ClkPol/", []string{"datetimeNtpProvider", "datetimeNtpSrcIf", "datetimeAccessGroup"}, []string{"System/datetime:NtpProvider/", "System/datetime:NtpSrcIf/", "System/datetime:AccessGroup/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings, as well as NTP authentication keys.").AddApiDocumentation("datetimeClkPol", "System/datetime:ClkPol/", []string{"datetimeNtpProvider", "datetimeNtpAuth", "datetimeNtpSrcIf", "datetimeAccessGroup"}, []string{"System/datetime:NtpProvider/", "System/datetime:NtpAuth/", "System/datetime:NtpSrcIf/", "System/datetime:AccessGroup/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -187,6 +187,54 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 						"preferred": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("A property that indicates if the NTP server is preferred. Only one preferred server is allowed.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"authentication_keys": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of NTP authentication keys.\n  - Map key: `id` - The NTP key ID.\n  - Key range: `1`-`65535`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"authentication_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The NTP authentication type.").AddStringEnumDescription("unspecified", "aes128cmac", "md5").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("unspecified", "aes128cmac", "md5"),
+							},
+						},
+						"encryption_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The NTP authentication key encryption type.").AddStringEnumDescription("type0", "type6", "type7").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("type0", "type6", "type7"),
+							},
+						},
+						"encrypted": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Is Encrypted Flag.").String,
+							Optional:            true,
+						},
+						"key": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The NTP authentication key.").String,
+							Optional:            true,
+							Sensitive:           true,
+						},
+						"key_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							WriteOnly:           true,
+							Optional:            true,
+						},
+						"key_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
+							Optional:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"trusted": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("A property that indicates if the NTP authentication is trusted.").String,
 							Optional:            true,
 						},
 					},
@@ -347,7 +395,7 @@ func (r *NTPResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "datetimeNtpProvider,datetimeNtpSrcIf,datetimeAccessGroup")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "datetimeNtpProvider,datetimeNtpAuth,datetimeNtpSrcIf,datetimeAccessGroup")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

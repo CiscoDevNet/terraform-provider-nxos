@@ -57,7 +57,7 @@ func (d *NTPDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.").AddApiDocumentation("datetimeClkPol", "System/datetime:ClkPol/", []string{"datetimeNtpProvider", "datetimeNtpSrcIf", "datetimeAccessGroup"}, []string{"System/datetime:NtpProvider/", "System/datetime:NtpSrcIf/", "System/datetime:AccessGroup/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings, as well as NTP authentication keys.").AddApiDocumentation("datetimeClkPol", "System/datetime:ClkPol/", []string{"datetimeNtpProvider", "datetimeNtpAuth", "datetimeNtpSrcIf", "datetimeAccessGroup"}, []string{"System/datetime:NtpProvider/", "System/datetime:NtpAuth/", "System/datetime:NtpSrcIf/", "System/datetime:AccessGroup/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -140,6 +140,47 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
+			"authentication_keys": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of NTP authentication keys.\n  - Map key: `id` - The NTP key ID.\n  - Key range: `1`-`65535`").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"authentication_type": schema.StringAttribute{
+							MarkdownDescription: "The NTP authentication type.",
+							Computed:            true,
+						},
+						"encryption_type": schema.StringAttribute{
+							MarkdownDescription: "The NTP authentication key encryption type.",
+							Computed:            true,
+						},
+						"encrypted": schema.BoolAttribute{
+							MarkdownDescription: "Is Encrypted Flag.",
+							Computed:            true,
+						},
+						"key": schema.StringAttribute{
+							MarkdownDescription: "The NTP authentication key.",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"key_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							Computed:            true,
+						},
+						"key_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
+							Computed:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"trusted": schema.BoolAttribute{
+							MarkdownDescription: "A property that indicates if the NTP authentication is trusted.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"source_interface": schema.StringAttribute{
 				MarkdownDescription: "Source Interface.",
 				Computed:            true,
@@ -196,7 +237,7 @@ func (d *NTPDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "datetimeNtpProvider,datetimeNtpSrcIf,datetimeAccessGroup")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "datetimeNtpProvider,datetimeNtpAuth,datetimeNtpSrcIf,datetimeAccessGroup")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

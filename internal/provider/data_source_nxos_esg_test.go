@@ -36,21 +36,28 @@ func TestAccDataSourceNxosESG(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.description", "My class map"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.apply_to_fragment", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.arp_opcode", "req"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.destination_port_from", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.destination_port_to", "400"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.ether_type", "ipv4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.icmpv4_type", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.icmpv6_type", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_destination_port_zero", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_dscp", "AF11"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_source_port_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.protocol", "tcp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.source_port_from", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.source_port_to", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.stateful", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.tcp_rules", "ack,syn"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.description", "My policy map"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.count_action", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.forwarding_action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.log_action", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.redirect_chain", "chain1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.default.default_action", "deny"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.default.policy_classifier_tag", "200"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.default.security_mode", "enforced"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.VRF1.default_action", "deny"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.VRF1.policy_classifier_tag", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.VRF1.security_mode", "enforced"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.VRF1.contracts.100;any;pmap1.direction", "uni-dir"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -68,6 +75,12 @@ func TestAccDataSourceNxosESG(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosESGPrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
+  dn = "sys/inst-VRF1"
+  class_name = "l3Inst"
+  delete = false
+}
+
+resource "nxos_dme" "PreReq1" {
   dn = "sys/fm/securitygroup"
   class_name = "fmSecurityGroup"
   delete = false
@@ -108,13 +121,19 @@ func testAccDataSourceNxosESGConfig() string {
 	config += `				"entry1" = {` + "\n"
 	config += `					apply_to_fragment = true` + "\n"
 	config += `					arp_opcode = "req"` + "\n"
+	config += `					destination_port_from = "300"` + "\n"
+	config += `					destination_port_to = "400"` + "\n"
 	config += `					ether_type = "ipv4"` + "\n"
 	config += `					icmpv4_type = 0` + "\n"
 	config += `					icmpv6_type = 0` + "\n"
 	config += `					match_destination_port_zero = true` + "\n"
-	config += `					match_dscp = 0` + "\n"
+	config += `					match_dscp = "AF11"` + "\n"
 	config += `					match_source_port_zero = true` + "\n"
+	config += `					protocol = "tcp"` + "\n"
+	config += `					source_port_from = "100"` + "\n"
+	config += `					source_port_to = "200"` + "\n"
 	config += `					stateful = true` + "\n"
+	config += `					tcp_rules = "ack,syn"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"
@@ -133,13 +152,18 @@ func testAccDataSourceNxosESGConfig() string {
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	domains = {` + "\n"
-	config += `		"default" = {` + "\n"
+	config += `		"VRF1" = {` + "\n"
 	config += `			default_action = "deny"` + "\n"
 	config += `			policy_classifier_tag = 200` + "\n"
 	config += `			security_mode = "enforced"` + "\n"
+	config += `			contracts = {` + "\n"
+	config += `				"100;any;pmap1" = {` + "\n"
+	config += `					direction = "uni-dir"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

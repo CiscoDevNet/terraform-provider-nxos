@@ -64,7 +64,7 @@ func (r *ESGResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *ESGResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.").AddApiDocumentation("esgEntity", "Security%20and%20Policing/esg:Entity/", []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom"}, []string{"Security%20and%20Policing/esg:GroupEntity/", "Security%20and%20Policing/esg:GroupInst/", "Security%20and%20Policing/esg:SelectorEntity/", "Security%20and%20Policing/esg:MatchConnectedEpV4/", "Security%20and%20Policing/esg:MatchConnectedEpV6/", "Security%20and%20Policing/esg:MatchVlan/", "Security%20and%20Policing/esg:ClassMapEntity/", "Security%20and%20Policing/esg:ClassMapInst/", "Security%20and%20Policing/esg:ClassMapFilterEntry/", "Security%20and%20Policing/esg:PolicyMapEntity/", "Security%20and%20Policing/esg:PolicyMapInst/", "Security%20and%20Policing/esg:MatchClassMap/", "Security%20and%20Policing/esg:Dom/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.").AddApiDocumentation("esgEntity", "Security%20and%20Policing/esg:Entity/", []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom", "esgContractEntity", "esgContract"}, []string{"Security%20and%20Policing/esg:GroupEntity/", "Security%20and%20Policing/esg:GroupInst/", "Security%20and%20Policing/esg:SelectorEntity/", "Security%20and%20Policing/esg:MatchConnectedEpV4/", "Security%20and%20Policing/esg:MatchConnectedEpV6/", "Security%20and%20Policing/esg:MatchVlan/", "Security%20and%20Policing/esg:ClassMapEntity/", "Security%20and%20Policing/esg:ClassMapInst/", "Security%20and%20Policing/esg:ClassMapFilterEntry/", "Security%20and%20Policing/esg:PolicyMapEntity/", "Security%20and%20Policing/esg:PolicyMapInst/", "Security%20and%20Policing/esg:MatchClassMap/", "Security%20and%20Policing/esg:Dom/", "Security%20and%20Policing/esg:ContractEntity/", "Security%20and%20Policing/esg:Contract/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -143,6 +143,14 @@ func (r *ESGResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 											stringvalidator.OneOf("unspecified", "req", "reply"),
 										},
 									},
+									"destination_port_from": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination From Port.").AddStringEnumDescription("unspecified", "ftpData", "smtp", "dns", "http", "pop3", "https", "rtsp").String,
+										Optional:            true,
+									},
+									"destination_port_to": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination To Port.").AddStringEnumDescription("unspecified", "ftpData", "smtp", "dns", "http", "pop3", "https", "rtsp").String,
+										Optional:            true,
+									},
 									"ether_type": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Ether type.").AddStringEnumDescription("unspecified", "ipv4", "arp", "trill", "ipv6", "mpls_ucast", "mac_security", "fcoe", "ip").String,
 										Optional:            true,
@@ -168,19 +176,35 @@ func (r *ESGResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										MarkdownDescription: helpers.NewAttributeDescription("L4 Dport match being zero for contract filter entry.").String,
 										Optional:            true,
 									},
-									"match_dscp": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IP DSCP match for contract filter entry.").AddIntegerRangeDescription(0, 64).String,
+									"match_dscp": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP DSCP match for contract filter entry.").AddStringEnumDescription("0", "1", "2", "3", "4", "5", "6", "7", "CS1", "9", "AF11", "11", "AF12", "13", "AF13", "15", "CS2", "17", "AF21", "19", "AF22", "21", "AF23", "23", "CS3", "25", "AF31", "27", "AF32", "29", "AF33", "31", "CS4", "33", "AF41", "35", "AF42", "37", "AF43", "39", "CS5", "41", "42", "43", "VA", "45", "EF", "47", "CS6", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "unspecified").String,
 										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 64),
+										Validators: []validator.String{
+											stringvalidator.OneOf("0", "1", "2", "3", "4", "5", "6", "7", "CS1", "9", "AF11", "11", "AF12", "13", "AF13", "15", "CS2", "17", "AF21", "19", "AF22", "21", "AF23", "23", "CS3", "25", "AF31", "27", "AF32", "29", "AF33", "31", "CS4", "33", "AF41", "35", "AF42", "37", "AF43", "39", "CS5", "41", "42", "43", "VA", "45", "EF", "47", "CS6", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "unspecified"),
 										},
 									},
 									"match_source_port_zero": schema.BoolAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("L4 Sport match being zero for contract filter entry.").String,
 										Optional:            true,
 									},
+									"protocol": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("L3 Ip Protocol.").AddStringEnumDescription("unspecified", "icmp", "igmp", "tcp", "egp", "igp", "udp", "icmpv6", "eigrp", "ospfigp", "pim", "l2tp").String,
+										Optional:            true,
+									},
+									"source_port_from": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source From Port.").AddStringEnumDescription("unspecified", "ftpData", "smtp", "dns", "http", "pop3", "https", "rtsp").String,
+										Optional:            true,
+									},
+									"source_port_to": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source To Port.").AddStringEnumDescription("unspecified", "ftpData", "smtp", "dns", "http", "pop3", "https", "rtsp").String,
+										Optional:            true,
+									},
 									"stateful": schema.BoolAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Stateful match for contract filter entry.").String,
+										Optional:            true,
+									},
+									"tcp_rules": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP Session Rules. Choices: `unspecified`, `syn`, `ack`, `fin`, `rst`, `est`. Can be an empty string. Allowed formats:\n  - Single value. Example: `est`\n  - Multiple values (comma-separated). Example: `ack,syn`. In this case values must be in alphabetical order.").AddStringEnumDescription("unspecified", "syn", "ack", "fin", "rst", "est").String,
 										Optional:            true,
 									},
 								},
@@ -252,6 +276,21 @@ func (r *ESGResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("enforced", "unenforced"),
+							},
+						},
+						"contracts": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of security contracts (SGACLs) between security groups.\n  - Map key format: `<source_policy_classifier_tag>;<destination_policy_classifier_tag>;<policy_map>`\n  - Key component `source_policy_classifier_tag`: Source Policy Tag aka sclass. Possible values are `any` or a number between `0` and `65535`.\n  - Key component `destination_policy_classifier_tag`: Destination Policy Tag aka dclass. Possible values are `any` or a number between `0` and `65535`.\n  - Key component `policy_map`: Match using class-map.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"direction": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Direction of the Actrl Rule.").AddStringEnumDescription("uni-dir", "bi-dir", "uni-dir-ignore").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("uni-dir", "bi-dir", "uni-dir-ignore"),
+										},
+									},
+								},
 							},
 						},
 					},
@@ -385,7 +424,7 @@ func (r *ESGResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "esgGroupEntity,esgGroupInst,esgSelectorEntity,esgMatchConnectedEpV4,esgMatchConnectedEpV6,esgMatchVlan,esgClassMapEntity,esgClassMapInst,esgClassMapFilterEntry,esgPolicyMapEntity,esgPolicyMapInst,esgMatchClassMap,esgDom")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "esgGroupEntity,esgGroupInst,esgSelectorEntity,esgMatchConnectedEpV4,esgMatchConnectedEpV6,esgMatchVlan,esgClassMapEntity,esgClassMapInst,esgClassMapFilterEntry,esgPolicyMapEntity,esgPolicyMapInst,esgMatchClassMap,esgDom,esgContractEntity,esgContract")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

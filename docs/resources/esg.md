@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This resource can manage the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.
   API Documentation
-  esgEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Entity/esgGroupEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupEntity/esgGroupInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupInst/esgSelectorEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:SelectorEntity/esgMatchConnectedEpV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV4/esgMatchConnectedEpV6 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV6/esgMatchVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlan/esgClassMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapEntity/esgClassMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapInst/esgClassMapFilterEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapFilterEntry/esgPolicyMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapEntity/esgPolicyMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapInst/esgMatchClassMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchClassMap/esgDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Dom/
+  esgEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Entity/esgGroupEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupEntity/esgGroupInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupInst/esgSelectorEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:SelectorEntity/esgMatchConnectedEpV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV4/esgMatchConnectedEpV6 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV6/esgMatchVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlan/esgClassMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapEntity/esgClassMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapInst/esgClassMapFilterEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapFilterEntry/esgPolicyMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapEntity/esgPolicyMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapInst/esgMatchClassMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchClassMap/esgDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Dom/esgContractEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ContractEntity/esgContract https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Contract/
 ---
 
 # nxos_esg (Resource)
@@ -28,6 +28,8 @@ This resource can manage the ESG (Endpoint Security Group) configuration on NX-O
 - [esgPolicyMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapInst/)
 - [esgMatchClassMap](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchClassMap/)
 - [esgDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Dom/)
+- [esgContractEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ContractEntity/)
+- [esgContract](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Contract/)
 
 ## Example Usage
 
@@ -55,13 +57,19 @@ resource "nxos_esg" "example" {
         "entry1" = {
           apply_to_fragment           = true
           arp_opcode                  = "req"
+          destination_port_from       = "300"
+          destination_port_to         = "400"
           ether_type                  = "ipv4"
           icmpv4_type                 = 0
           icmpv6_type                 = 0
           match_destination_port_zero = true
-          match_dscp                  = 0
+          match_dscp                  = "AF11"
           match_source_port_zero      = true
+          protocol                    = "tcp"
+          source_port_from            = "100"
+          source_port_to              = "200"
           stateful                    = true
+          tcp_rules                   = "ack,syn"
         }
       }
     }
@@ -80,10 +88,15 @@ resource "nxos_esg" "example" {
     }
   }
   domains = {
-    "default" = {
+    "VRF1" = {
       default_action        = "deny"
       policy_classifier_tag = 200
       security_mode         = "enforced"
+      contracts = {
+        "100;any;pmap1" = {
+          direction = "uni-dir"
+        }
+      }
     }
   }
 }
@@ -128,6 +141,10 @@ Optional:
 - `apply_to_fragment` (Boolean) Apply Rule for all Fragments.
 - `arp_opcode` (String) ARP opcodes.
   - Choices: `unspecified`, `req`, `reply`
+- `destination_port_from` (String) Destination From Port.
+  - Choices: `unspecified`, `ftpData`, `smtp`, `dns`, `http`, `pop3`, `https`, `rtsp`
+- `destination_port_to` (String) Destination To Port.
+  - Choices: `unspecified`, `ftpData`, `smtp`, `dns`, `http`, `pop3`, `https`, `rtsp`
 - `ether_type` (String) Ether type.
   - Choices: `unspecified`, `ipv4`, `arp`, `trill`, `ipv6`, `mpls_ucast`, `mac_security`, `fcoe`, `ip`
 - `icmpv4_type` (Number) ICMPv4 Type.
@@ -135,10 +152,20 @@ Optional:
 - `icmpv6_type` (Number) ICMPv6 Type.
   - Range: `0`-`255`
 - `match_destination_port_zero` (Boolean) L4 Dport match being zero for contract filter entry.
-- `match_dscp` (Number) IP DSCP match for contract filter entry.
-  - Range: `0`-`64`
+- `match_dscp` (String) IP DSCP match for contract filter entry.
+  - Choices: `0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `CS1`, `9`, `AF11`, `11`, `AF12`, `13`, `AF13`, `15`, `CS2`, `17`, `AF21`, `19`, `AF22`, `21`, `AF23`, `23`, `CS3`, `25`, `AF31`, `27`, `AF32`, `29`, `AF33`, `31`, `CS4`, `33`, `AF41`, `35`, `AF42`, `37`, `AF43`, `39`, `CS5`, `41`, `42`, `43`, `VA`, `45`, `EF`, `47`, `CS6`, `49`, `50`, `51`, `52`, `53`, `54`, `55`, `56`, `57`, `58`, `59`, `60`, `61`, `62`, `63`, `unspecified`
 - `match_source_port_zero` (Boolean) L4 Sport match being zero for contract filter entry.
+- `protocol` (String) L3 Ip Protocol.
+  - Choices: `unspecified`, `icmp`, `igmp`, `tcp`, `egp`, `igp`, `udp`, `icmpv6`, `eigrp`, `ospfigp`, `pim`, `l2tp`
+- `source_port_from` (String) Source From Port.
+  - Choices: `unspecified`, `ftpData`, `smtp`, `dns`, `http`, `pop3`, `https`, `rtsp`
+- `source_port_to` (String) Source To Port.
+  - Choices: `unspecified`, `ftpData`, `smtp`, `dns`, `http`, `pop3`, `https`, `rtsp`
 - `stateful` (Boolean) Stateful match for contract filter entry.
+- `tcp_rules` (String) TCP Session Rules. Choices: `unspecified`, `syn`, `ack`, `fin`, `rst`, `est`. Can be an empty string. Allowed formats:
+  - Single value. Example: `est`
+  - Multiple values (comma-separated). Example: `ack,syn`. In this case values must be in alphabetical order.
+  - Choices: `unspecified`, `syn`, `ack`, `fin`, `rst`, `est`
 
 
 
@@ -147,12 +174,26 @@ Optional:
 
 Optional:
 
+- `contracts` (Attributes Map) List of security contracts (SGACLs) between security groups.
+  - Map key format: `<source_policy_classifier_tag>;<destination_policy_classifier_tag>;<policy_map>`
+  - Key component `source_policy_classifier_tag`: Source Policy Tag aka sclass. Possible values are `any` or a number between `0` and `65535`.
+  - Key component `destination_policy_classifier_tag`: Destination Policy Tag aka dclass. Possible values are `any` or a number between `0` and `65535`.
+  - Key component `policy_map`: Match using class-map. (see [below for nested schema](#nestedatt--domains--contracts))
 - `default_action` (String) Default VRF's Action when there is no contract match.
   - Choices: `deny`, `permit`
 - `policy_classifier_tag` (Number) VRF's Default Class Id aka Policy Classifier Tag.
   - Range: `0`-`65535`
 - `security_mode` (String) Policy Control Enforcement Mode.
   - Choices: `enforced`, `unenforced`
+
+<a id="nestedatt--domains--contracts"></a>
+### Nested Schema for `domains.contracts`
+
+Optional:
+
+- `direction` (String) Direction of the Actrl Rule.
+  - Choices: `uni-dir`, `bi-dir`, `uni-dir-ignore`
+
 
 
 <a id="nestedatt--policy_maps"></a>

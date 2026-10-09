@@ -1,0 +1,3 @@
+- Add security contracts (`security contract source <sg> destination <sg> policy <policy-map>`) configuration to `nxos_esg` domains
+- Add protocol, source/destination port range (`match ipv4 tcp sport <from> to <to> dport <from> to <to>`), and TCP session rules (`match ipv4 tcp session-rule <flags>`) configuration to `nxos_esg` class map filter entries
+- BREAKING CHANGE: Change `match_dscp` attribute of `nxos_esg` class map filter entries from a number to a string, using the DSCP names returned by the device (e.g., `AF11`, `EF`, `CS1`) and plain numbers for values without a name (e.g., `'0'`, `'56'`), to fix permanent diffs when a named DSCP value is configured

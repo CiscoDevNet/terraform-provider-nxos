@@ -57,7 +57,7 @@ func (d *ESGDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *ESGDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.").AddApiDocumentation("esgEntity", "Security%20and%20Policing/esg:Entity/", []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom"}, []string{"Security%20and%20Policing/esg:GroupEntity/", "Security%20and%20Policing/esg:GroupInst/", "Security%20and%20Policing/esg:SelectorEntity/", "Security%20and%20Policing/esg:MatchConnectedEpV4/", "Security%20and%20Policing/esg:MatchConnectedEpV6/", "Security%20and%20Policing/esg:MatchVlan/", "Security%20and%20Policing/esg:ClassMapEntity/", "Security%20and%20Policing/esg:ClassMapInst/", "Security%20and%20Policing/esg:ClassMapFilterEntry/", "Security%20and%20Policing/esg:PolicyMapEntity/", "Security%20and%20Policing/esg:PolicyMapInst/", "Security%20and%20Policing/esg:MatchClassMap/", "Security%20and%20Policing/esg:Dom/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.").AddApiDocumentation("esgEntity", "Security%20and%20Policing/esg:Entity/", []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom", "esgContractEntity", "esgContract"}, []string{"Security%20and%20Policing/esg:GroupEntity/", "Security%20and%20Policing/esg:GroupInst/", "Security%20and%20Policing/esg:SelectorEntity/", "Security%20and%20Policing/esg:MatchConnectedEpV4/", "Security%20and%20Policing/esg:MatchConnectedEpV6/", "Security%20and%20Policing/esg:MatchVlan/", "Security%20and%20Policing/esg:ClassMapEntity/", "Security%20and%20Policing/esg:ClassMapInst/", "Security%20and%20Policing/esg:ClassMapFilterEntry/", "Security%20and%20Policing/esg:PolicyMapEntity/", "Security%20and%20Policing/esg:PolicyMapInst/", "Security%20and%20Policing/esg:MatchClassMap/", "Security%20and%20Policing/esg:Dom/", "Security%20and%20Policing/esg:ContractEntity/", "Security%20and%20Policing/esg:Contract/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -127,6 +127,14 @@ func (d *ESGDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "ARP opcodes.",
 										Computed:            true,
 									},
+									"destination_port_from": schema.StringAttribute{
+										MarkdownDescription: "Destination From Port.",
+										Computed:            true,
+									},
+									"destination_port_to": schema.StringAttribute{
+										MarkdownDescription: "Destination To Port.",
+										Computed:            true,
+									},
 									"ether_type": schema.StringAttribute{
 										MarkdownDescription: "Ether type.",
 										Computed:            true,
@@ -143,7 +151,7 @@ func (d *ESGDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "L4 Dport match being zero for contract filter entry.",
 										Computed:            true,
 									},
-									"match_dscp": schema.Int64Attribute{
+									"match_dscp": schema.StringAttribute{
 										MarkdownDescription: "IP DSCP match for contract filter entry.",
 										Computed:            true,
 									},
@@ -151,8 +159,24 @@ func (d *ESGDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "L4 Sport match being zero for contract filter entry.",
 										Computed:            true,
 									},
+									"protocol": schema.StringAttribute{
+										MarkdownDescription: "L3 Ip Protocol.",
+										Computed:            true,
+									},
+									"source_port_from": schema.StringAttribute{
+										MarkdownDescription: "Source From Port.",
+										Computed:            true,
+									},
+									"source_port_to": schema.StringAttribute{
+										MarkdownDescription: "Source To Port.",
+										Computed:            true,
+									},
 									"stateful": schema.BoolAttribute{
 										MarkdownDescription: "Stateful match for contract filter entry.",
+										Computed:            true,
+									},
+									"tcp_rules": schema.StringAttribute{
+										MarkdownDescription: "TCP Session Rules. Choices: `unspecified`, `syn`, `ack`, `fin`, `rst`, `est`. Can be an empty string. Allowed formats:\n  - Single value. Example: `est`\n  - Multiple values (comma-separated). Example: `ack,syn`. In this case values must be in alphabetical order.",
 										Computed:            true,
 									},
 								},
@@ -214,6 +238,18 @@ func (d *ESGDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							MarkdownDescription: "Policy Control Enforcement Mode.",
 							Computed:            true,
 						},
+						"contracts": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of security contracts (SGACLs) between security groups.\n  - Map key format: `<source_policy_classifier_tag>;<destination_policy_classifier_tag>;<policy_map>`\n  - Key component `source_policy_classifier_tag`: Source Policy Tag aka sclass. Possible values are `any` or a number between `0` and `65535`.\n  - Key component `destination_policy_classifier_tag`: Destination Policy Tag aka dclass. Possible values are `any` or a number between `0` and `65535`.\n  - Key component `policy_map`: Match using class-map.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"direction": schema.StringAttribute{
+										MarkdownDescription: "Direction of the Actrl Rule.",
+										Computed:            true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -249,7 +285,7 @@ func (d *ESGDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "esgGroupEntity,esgGroupInst,esgSelectorEntity,esgMatchConnectedEpV4,esgMatchConnectedEpV6,esgMatchVlan,esgClassMapEntity,esgClassMapInst,esgClassMapFilterEntry,esgPolicyMapEntity,esgPolicyMapInst,esgMatchClassMap,esgDom")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "esgGroupEntity,esgGroupInst,esgSelectorEntity,esgMatchConnectedEpV4,esgMatchConnectedEpV6,esgMatchVlan,esgClassMapEntity,esgClassMapInst,esgClassMapFilterEntry,esgPolicyMapEntity,esgPolicyMapInst,esgMatchClassMap,esgDom,esgContractEntity,esgContract")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

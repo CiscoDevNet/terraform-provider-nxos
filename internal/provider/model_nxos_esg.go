@@ -72,13 +72,19 @@ type ESGClassMaps struct {
 type ESGClassMapsFilterEntries struct {
 	ApplyToFragment          types.Bool   `tfsdk:"apply_to_fragment"`
 	ArpOpcode                types.String `tfsdk:"arp_opcode"`
+	DestinationPortFrom      types.String `tfsdk:"destination_port_from"`
+	DestinationPortTo        types.String `tfsdk:"destination_port_to"`
 	EtherType                types.String `tfsdk:"ether_type"`
 	Icmpv4Type               types.Int64  `tfsdk:"icmpv4_type"`
 	Icmpv6Type               types.Int64  `tfsdk:"icmpv6_type"`
 	MatchDestinationPortZero types.Bool   `tfsdk:"match_destination_port_zero"`
-	MatchDscp                types.Int64  `tfsdk:"match_dscp"`
+	MatchDscp                types.String `tfsdk:"match_dscp"`
 	MatchSourcePortZero      types.Bool   `tfsdk:"match_source_port_zero"`
+	Protocol                 types.String `tfsdk:"protocol"`
+	SourcePortFrom           types.String `tfsdk:"source_port_from"`
+	SourcePortTo             types.String `tfsdk:"source_port_to"`
 	Stateful                 types.Bool   `tfsdk:"stateful"`
+	TcpRules                 types.String `tfsdk:"tcp_rules"`
 }
 
 type ESGPolicyMaps struct {
@@ -94,9 +100,14 @@ type ESGPolicyMapsMatchClassMaps struct {
 }
 
 type ESGDomains struct {
-	DefaultAction       types.String `tfsdk:"default_action"`
-	PolicyClassifierTag types.Int64  `tfsdk:"policy_classifier_tag"`
-	SecurityMode        types.String `tfsdk:"security_mode"`
+	DefaultAction       types.String                   `tfsdk:"default_action"`
+	PolicyClassifierTag types.Int64                    `tfsdk:"policy_classifier_tag"`
+	SecurityMode        types.String                   `tfsdk:"security_mode"`
+	Contracts           map[string]ESGDomainsContracts `tfsdk:"contracts"`
+}
+
+type ESGDomainsContracts struct {
+	Direction types.String `tfsdk:"direction"`
 }
 
 type ESGIdentity struct {
@@ -163,6 +174,11 @@ func (data ESGPolicyMapsMatchClassMaps) getRn(key string) string {
 
 func (data ESGDomains) getRn(key string) string {
 	return fmt.Sprintf("dom-%s", key)
+}
+
+func (data ESGDomainsContracts) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 3)
+	return fmt.Sprintf("sgt-%s-dgt-%s-policy-%s", keyParts[0], keyParts[1], keyParts[2])
 }
 
 func (data ESG) getClassName() string {
@@ -293,6 +309,12 @@ func (data ESG) toBody(config ESG) nxos.Body {
 					if configChildOk && !child.ArpOpcode.IsUnknown() && !child.ArpOpcode.IsNull() && !configChild.ArpOpcode.IsNull() {
 						attrs, _ = sjson.Set(attrs, "arpOpc", child.ArpOpcode.ValueString())
 					}
+					if configChildOk && !child.DestinationPortFrom.IsUnknown() && !child.DestinationPortFrom.IsNull() && !configChild.DestinationPortFrom.IsNull() {
+						attrs, _ = sjson.Set(attrs, "dFromPort", child.DestinationPortFrom.ValueString())
+					}
+					if configChildOk && !child.DestinationPortTo.IsUnknown() && !child.DestinationPortTo.IsNull() && !configChild.DestinationPortTo.IsNull() {
+						attrs, _ = sjson.Set(attrs, "dToPort", child.DestinationPortTo.ValueString())
+					}
 					if configChildOk && !child.EtherType.IsUnknown() && !child.EtherType.IsNull() && !configChild.EtherType.IsNull() {
 						attrs, _ = sjson.Set(attrs, "etherT", child.EtherType.ValueString())
 					}
@@ -306,13 +328,25 @@ func (data ESG) toBody(config ESG) nxos.Body {
 						attrs, _ = sjson.Set(attrs, "matchDPortZero", strconv.FormatBool(child.MatchDestinationPortZero.ValueBool()))
 					}
 					if configChildOk && !child.MatchDscp.IsUnknown() && !child.MatchDscp.IsNull() && !configChild.MatchDscp.IsNull() {
-						attrs, _ = sjson.Set(attrs, "matchDscp", strconv.FormatInt(child.MatchDscp.ValueInt64(), 10))
+						attrs, _ = sjson.Set(attrs, "matchDscp", child.MatchDscp.ValueString())
 					}
 					if configChildOk && !child.MatchSourcePortZero.IsUnknown() && !child.MatchSourcePortZero.IsNull() && !configChild.MatchSourcePortZero.IsNull() {
 						attrs, _ = sjson.Set(attrs, "matchSPortZero", strconv.FormatBool(child.MatchSourcePortZero.ValueBool()))
 					}
+					if configChildOk && !child.Protocol.IsUnknown() && !child.Protocol.IsNull() && !configChild.Protocol.IsNull() {
+						attrs, _ = sjson.Set(attrs, "prot", child.Protocol.ValueString())
+					}
+					if configChildOk && !child.SourcePortFrom.IsUnknown() && !child.SourcePortFrom.IsNull() && !configChild.SourcePortFrom.IsNull() {
+						attrs, _ = sjson.Set(attrs, "sFromPort", child.SourcePortFrom.ValueString())
+					}
+					if configChildOk && !child.SourcePortTo.IsUnknown() && !child.SourcePortTo.IsNull() && !configChild.SourcePortTo.IsNull() {
+						attrs, _ = sjson.Set(attrs, "sToPort", child.SourcePortTo.ValueString())
+					}
 					if configChildOk && !child.Stateful.IsUnknown() && !child.Stateful.IsNull() && !configChild.Stateful.IsNull() {
 						attrs, _ = sjson.Set(attrs, "stateful", strconv.FormatBool(child.Stateful.ValueBool()))
+					}
+					if configChildOk && !child.TcpRules.IsUnknown() && !child.TcpRules.IsNull() && !configChild.TcpRules.IsNull() {
+						attrs, _ = sjson.Set(attrs, "tcpRules", child.TcpRules.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgClassMapFilterEntry.attributes", attrs)
 				}
@@ -392,6 +426,41 @@ func (data ESG) toBody(config ESG) nxos.Body {
 			attrs, _ = sjson.Set(attrs, "securityMode", child.SecurityMode.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.esgDom.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".esgDom.children"
+			_ = nestedChildrenPath
+			{
+				attrs = "{}"
+				childBody := ""
+				childBody, _ = sjson.SetRaw(childBody, "esgContractEntity.attributes", attrs)
+				parentAttrs := attrs
+				parentPath := nestedChildrenPath
+				nestedChildrenPath := "esgContractEntity.children"
+				_ = nestedChildrenPath
+				prevBody := body
+				body = childBody
+				for key, child := range child.Contracts {
+					configChild, configChildOk := configChild.Contracts[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					keyParts := strings.SplitN(key, ";", 3)
+					attrs, _ = sjson.Set(attrs, "sPcTag", keyParts[0])
+					attrs, _ = sjson.Set(attrs, "dPcTag", keyParts[1])
+					attrs, _ = sjson.Set(attrs, "policyMap", keyParts[2])
+					if configChildOk && !child.Direction.IsUnknown() && !child.Direction.IsNull() && !configChild.Direction.IsNull() {
+						attrs, _ = sjson.Set(attrs, "direction", child.Direction.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgContract.attributes", attrs)
+				}
+				childBody = body
+				body = prevBody
+				if parentAttrs != "{}" || gjson.Get(childBody, "esgContractEntity.children").Exists() {
+					body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+				}
+			}
+		}
 	}
 
 	return nxos.Body{Str: body}
@@ -530,13 +599,19 @@ func (data *ESG) fromBody(res gjson.Result) {
 												var nestedChildesgClassMapFilterEntry ESGClassMapsFilterEntries
 												nestedChildesgClassMapFilterEntry.ApplyToFragment = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.applyToFrag").String()))
 												nestedChildesgClassMapFilterEntry.ArpOpcode = types.StringValue(nestedValue.Get("attributes.arpOpc").String())
+												nestedChildesgClassMapFilterEntry.DestinationPortFrom = types.StringValue(nestedValue.Get("attributes.dFromPort").String())
+												nestedChildesgClassMapFilterEntry.DestinationPortTo = types.StringValue(nestedValue.Get("attributes.dToPort").String())
 												nestedChildesgClassMapFilterEntry.EtherType = types.StringValue(nestedValue.Get("attributes.etherT").String())
 												nestedChildesgClassMapFilterEntry.Icmpv4Type = types.Int64Value(nestedValue.Get("attributes.icmpv4T").Int())
 												nestedChildesgClassMapFilterEntry.Icmpv6Type = types.Int64Value(nestedValue.Get("attributes.icmpv6T").Int())
 												nestedChildesgClassMapFilterEntry.MatchDestinationPortZero = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.matchDPortZero").String()))
-												nestedChildesgClassMapFilterEntry.MatchDscp = types.Int64Value(nestedValue.Get("attributes.matchDscp").Int())
+												nestedChildesgClassMapFilterEntry.MatchDscp = types.StringValue(nestedValue.Get("attributes.matchDscp").String())
 												nestedChildesgClassMapFilterEntry.MatchSourcePortZero = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.matchSPortZero").String()))
+												nestedChildesgClassMapFilterEntry.Protocol = types.StringValue(nestedValue.Get("attributes.prot").String())
+												nestedChildesgClassMapFilterEntry.SourcePortFrom = types.StringValue(nestedValue.Get("attributes.sFromPort").String())
+												nestedChildesgClassMapFilterEntry.SourcePortTo = types.StringValue(nestedValue.Get("attributes.sToPort").String())
 												nestedChildesgClassMapFilterEntry.Stateful = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.stateful").String()))
+												nestedChildesgClassMapFilterEntry.TcpRules = types.StringValue(nestedValue.Get("attributes.tcpRules").String())
 												nestedMapKey := nestedValue.Get("attributes.name").String()
 												if child.FilterEntries == nil {
 													child.FilterEntries = make(map[string]ESGClassMapsFilterEntries)
@@ -625,6 +700,38 @@ func (data *ESG) fromBody(res gjson.Result) {
 						child.PolicyClassifierTag = types.Int64Value(value.Get("attributes.pcTag").Int())
 						child.SecurityMode = types.StringValue(value.Get("attributes.securityMode").String())
 						mapKey := value.Get("attributes.name").String()
+						{
+							var resgContractEntity gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("esgContractEntity.attributes.rn").String()
+									if rnValue == "contract" {
+										resgContractEntity = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							resgContractEntity.Get("esgContractEntity").Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "esgContract" {
+												var nestedChildesgContract ESGDomainsContracts
+												nestedChildesgContract.Direction = types.StringValue(nestedValue.Get("attributes.direction").String())
+												nestedMapKey := nestedValue.Get("attributes.sPcTag").String() + ";" + nestedValue.Get("attributes.dPcTag").String() + ";" + nestedValue.Get("attributes.policyMap").String()
+												if child.Contracts == nil {
+													child.Contracts = make(map[string]ESGDomainsContracts)
+												}
+												child.Contracts[nestedMapKey] = nestedChildesgContract
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+						}
 						if data.Domains == nil {
 							data.Domains = make(map[string]ESGDomains)
 						}
@@ -809,6 +916,16 @@ func (data *ESG) updateFromBody(res gjson.Result) {
 			} else {
 				ncItem.ArpOpcode = types.StringNull()
 			}
+			if !ncItem.DestinationPortFrom.IsNull() {
+				ncItem.DestinationPortFrom = types.StringValue(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.dFromPort").String())
+			} else {
+				ncItem.DestinationPortFrom = types.StringNull()
+			}
+			if !ncItem.DestinationPortTo.IsNull() {
+				ncItem.DestinationPortTo = types.StringValue(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.dToPort").String())
+			} else {
+				ncItem.DestinationPortTo = types.StringNull()
+			}
 			if !ncItem.EtherType.IsNull() {
 				ncItem.EtherType = types.StringValue(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.etherT").String())
 			} else {
@@ -830,19 +947,39 @@ func (data *ESG) updateFromBody(res gjson.Result) {
 				ncItem.MatchDestinationPortZero = types.BoolNull()
 			}
 			if !ncItem.MatchDscp.IsNull() {
-				ncItem.MatchDscp = types.Int64Value(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.matchDscp").Int())
+				ncItem.MatchDscp = types.StringValue(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.matchDscp").String())
 			} else {
-				ncItem.MatchDscp = types.Int64Null()
+				ncItem.MatchDscp = types.StringNull()
 			}
 			if !ncItem.MatchSourcePortZero.IsNull() {
 				ncItem.MatchSourcePortZero = types.BoolValue(helpers.ParseNxosBoolean(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.matchSPortZero").String()))
 			} else {
 				ncItem.MatchSourcePortZero = types.BoolNull()
 			}
+			if !ncItem.Protocol.IsNull() {
+				ncItem.Protocol = types.StringValue(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.prot").String())
+			} else {
+				ncItem.Protocol = types.StringNull()
+			}
+			if !ncItem.SourcePortFrom.IsNull() {
+				ncItem.SourcePortFrom = types.StringValue(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.sFromPort").String())
+			} else {
+				ncItem.SourcePortFrom = types.StringNull()
+			}
+			if !ncItem.SourcePortTo.IsNull() {
+				ncItem.SourcePortTo = types.StringValue(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.sToPort").String())
+			} else {
+				ncItem.SourcePortTo = types.StringNull()
+			}
 			if !ncItem.Stateful.IsNull() {
 				ncItem.Stateful = types.BoolValue(helpers.ParseNxosBoolean(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.stateful").String()))
 			} else {
 				ncItem.Stateful = types.BoolNull()
+			}
+			if !ncItem.TcpRules.IsNull() {
+				ncItem.TcpRules = types.StringValue(resgClassMapFilterEntry.Get("esgClassMapFilterEntry.attributes.tcpRules").String())
+			} else {
+				ncItem.TcpRules = types.StringNull()
 			}
 			item.FilterEntries[nc] = ncItem
 		}
@@ -948,6 +1085,45 @@ func (data *ESG) updateFromBody(res gjson.Result) {
 			item.SecurityMode = types.StringValue(resgDom.Get("esgDom.attributes.securityMode").String())
 		} else {
 			item.SecurityMode = types.StringNull()
+		}
+		{
+			var resgContractEntity gjson.Result
+			resgDom.Get("esgDom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("esgContractEntity.attributes.rn").String()
+					if rnValue == "contract" {
+						resgContractEntity = v
+						return false
+					}
+					return true
+				},
+			)
+			for nc := range item.Contracts {
+				ncItem := item.Contracts[nc]
+				keyParts := strings.SplitN(nc, ";", 3)
+				var resgContract gjson.Result
+				resgContractEntity.Get("esgContractEntity.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("esgContract.attributes.sPcTag").String() == keyParts[0] &&
+							v.Get("esgContract.attributes.dPcTag").String() == keyParts[1] &&
+							v.Get("esgContract.attributes.policyMap").String() == keyParts[2] {
+							resgContract = v
+							return false
+						}
+						return true
+					},
+				)
+				if !resgContract.Exists() {
+					delete(item.Contracts, nc)
+					continue
+				}
+				if !ncItem.Direction.IsNull() {
+					ncItem.Direction = types.StringValue(resgContract.Get("esgContract.attributes.direction").String())
+				} else {
+					ncItem.Direction = types.StringNull()
+				}
+				item.Contracts[nc] = ncItem
+			}
 		}
 		data.Domains[key] = item
 	}
@@ -1108,6 +1284,33 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
+		for di := range state.Domains {
+			if _, found := data.Domains[di]; !found {
+				continue
+			}
+			stateItemdi := state.Domains[di]
+			planItemdi := data.Domains[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("esgDom.attributes.name").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".esgDom.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateKey := range stateItemdi.Contracts {
+				if _, found := planItemdi.Contracts[stateKey]; !found {
+					stateChild := stateItemdi.Contracts[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "esgContract.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "esgContract.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "esgContractEntity") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
+		}
 	}
 
 	if !importing {
@@ -1198,6 +1401,12 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 										if !stateChild.ArpOpcode.IsNull() && configChild.ArpOpcode.IsNull() {
 											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"arpOpc", "DME_UNSET_PROPERTY_MARKER")
 										}
+										if !stateChild.DestinationPortFrom.IsNull() && configChild.DestinationPortFrom.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"dFromPort", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.DestinationPortTo.IsNull() && configChild.DestinationPortTo.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"dToPort", "DME_UNSET_PROPERTY_MARKER")
+										}
 										if !stateChild.EtherType.IsNull() && configChild.EtherType.IsNull() {
 											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"etherT", "DME_UNSET_PROPERTY_MARKER")
 										}
@@ -1216,8 +1425,20 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 										if !stateChild.MatchSourcePortZero.IsNull() && configChild.MatchSourcePortZero.IsNull() {
 											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"matchSPortZero", "DME_UNSET_PROPERTY_MARKER")
 										}
+										if !stateChild.Protocol.IsNull() && configChild.Protocol.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"prot", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SourcePortFrom.IsNull() && configChild.SourcePortFrom.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"sFromPort", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SourcePortTo.IsNull() && configChild.SourcePortTo.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"sToPort", "DME_UNSET_PROPERTY_MARKER")
+										}
 										if !stateChild.Stateful.IsNull() && configChild.Stateful.IsNull() {
 											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"stateful", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.TcpRules.IsNull() && configChild.TcpRules.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".esgClassMapFilterEntry.attributes."+"tcpRules", "DME_UNSET_PROPERTY_MARKER")
 										}
 										break
 									}
@@ -1295,6 +1516,35 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".esgDom.attributes."+"securityMode", "DME_UNSET_PROPERTY_MARKER")
 						}
 						break
+					}
+				}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("esgDom.attributes.name").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".esgDom.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Contracts {
+							if configChild, ok := configChild.Contracts[key]; ok {
+								stateChild := stateChild.Contracts[key]
+								_ = stateChild
+								_ = configChild
+								keyParts := strings.SplitN(key, ";", 3)
+								for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, listChildPath, "esgContractEntity")+".children").Array() {
+									if mv.Get("esgContract.attributes.sPcTag").String() == keyParts[0] &&
+										mv.Get("esgContract.attributes.dPcTag").String() == keyParts[1] &&
+										mv.Get("esgContract.attributes.policyMap").String() == keyParts[2] {
+										if !stateChild.Direction.IsNull() && configChild.Direction.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "esgContractEntity")+".children"+"."+strconv.Itoa(mi)+".esgContract.attributes."+"direction", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
 					}
 				}
 			}

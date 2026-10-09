@@ -155,6 +155,36 @@ child_classes:
                   - req
                   - reply
                 example: req
+              - nxos_name: dFromPort
+                tf_name: destination_port_from
+                type: String
+                description: 'Destination From Port.'
+                enum_values:
+                  - unspecified
+                  - ftpData
+                  - smtp
+                  - dns
+                  - http
+                  - pop3
+                  - https
+                  - rtsp
+                allow_non_enum_values: true
+                example: '300'
+              - nxos_name: dToPort
+                tf_name: destination_port_to
+                type: String
+                description: 'Destination To Port.'
+                enum_values:
+                  - unspecified
+                  - ftpData
+                  - smtp
+                  - dns
+                  - http
+                  - pop3
+                  - https
+                  - rtsp
+                allow_non_enum_values: true
+                example: '400'
               - nxos_name: etherT
                 tf_name: ether_type
                 type: String
@@ -191,21 +221,147 @@ child_classes:
                 example: true
               - nxos_name: matchDscp
                 tf_name: match_dscp
-                type: Int64
+                type: String
                 description: 'IP DSCP match for contract filter entry.'
-                min_int: 0
-                max_int: 64
-                example: 0
+                enum_values:
+                  - '0'
+                  - '1'
+                  - '2'
+                  - '3'
+                  - '4'
+                  - '5'
+                  - '6'
+                  - '7'
+                  - CS1
+                  - '9'
+                  - AF11
+                  - '11'
+                  - AF12
+                  - '13'
+                  - AF13
+                  - '15'
+                  - CS2
+                  - '17'
+                  - AF21
+                  - '19'
+                  - AF22
+                  - '21'
+                  - AF23
+                  - '23'
+                  - CS3
+                  - '25'
+                  - AF31
+                  - '27'
+                  - AF32
+                  - '29'
+                  - AF33
+                  - '31'
+                  - CS4
+                  - '33'
+                  - AF41
+                  - '35'
+                  - AF42
+                  - '37'
+                  - AF43
+                  - '39'
+                  - CS5
+                  - '41'
+                  - '42'
+                  - '43'
+                  - VA
+                  - '45'
+                  - EF
+                  - '47'
+                  - CS6
+                  - '49'
+                  - '50'
+                  - '51'
+                  - '52'
+                  - '53'
+                  - '54'
+                  - '55'
+                  - '56'
+                  - '57'
+                  - '58'
+                  - '59'
+                  - '60'
+                  - '61'
+                  - '62'
+                  - '63'
+                  - unspecified
+                example: AF11
               - nxos_name: matchSPortZero
                 tf_name: match_source_port_zero
                 type: Bool
                 description: 'L4 Sport match being zero for contract filter entry.'
                 example: true
+              - nxos_name: prot
+                tf_name: protocol
+                type: String
+                description: 'L3 Ip Protocol.'
+                enum_values:
+                  - unspecified
+                  - icmp
+                  - igmp
+                  - tcp
+                  - egp
+                  - igp
+                  - udp
+                  - icmpv6
+                  - eigrp
+                  - ospfigp
+                  - pim
+                  - l2tp
+                allow_non_enum_values: true
+                example: tcp
+              - nxos_name: sFromPort
+                tf_name: source_port_from
+                type: String
+                description: 'Source From Port.'
+                enum_values:
+                  - unspecified
+                  - ftpData
+                  - smtp
+                  - dns
+                  - http
+                  - pop3
+                  - https
+                  - rtsp
+                allow_non_enum_values: true
+                example: '100'
+              - nxos_name: sToPort
+                tf_name: source_port_to
+                type: String
+                description: 'Source To Port.'
+                enum_values:
+                  - unspecified
+                  - ftpData
+                  - smtp
+                  - dns
+                  - http
+                  - pop3
+                  - https
+                  - rtsp
+                allow_non_enum_values: true
+                example: '200'
               - nxos_name: stateful
                 tf_name: stateful
                 type: Bool
                 description: 'Stateful match for contract filter entry.'
                 example: true
+              - nxos_name: tcpRules
+                tf_name: tcp_rules
+                type: String
+                description: 'TCP Session Rules. Choices: `unspecified`, `syn`, `ack`, `fin`, `rst`, `est`. Can be an empty string. Allowed formats:\n  - Single value. Example: `est`\n  - Multiple values (comma-separated). Example: `ack,syn`. In this case values must be in alphabetical order.'
+                enum_values:
+                  - unspecified
+                  - syn
+                  - ack
+                  - fin
+                  - rst
+                  - est
+                allow_non_enum_values: true
+                example: ack,syn
   - class_name: esgPolicyMapEntity
     doc_path: Security%20and%20Policing/esg:PolicyMapEntity/
     rn: policymap
@@ -280,7 +436,7 @@ child_classes:
         type: String
         id: true
         description: 'The name of the object.'
-        example: default
+        example: VRF1
       - nxos_name: defaultAction
         tf_name: default_action
         type: String
@@ -304,7 +460,52 @@ child_classes:
           - enforced
           - unenforced
         example: enforced
+    child_classes:
+      - class_name: esgContractEntity
+        doc_path: Security%20and%20Policing/esg:ContractEntity/
+        rn: contract
+        type: single
+        tf_name: contract
+        description: 'Contract entity.'
+        child_classes:
+          - class_name: esgContract
+            doc_path: Security%20and%20Policing/esg:Contract/
+            rn: sgt-%s-dgt-%s-policy-%s
+            type: list
+            tf_name: contracts
+            description: 'List of security contracts (SGACLs) between security groups.'
+            attributes:
+              - nxos_name: sPcTag
+                tf_name: source_policy_classifier_tag
+                type: String
+                id: true
+                description: 'Source Policy Tag aka sclass. Possible values are `any` or a number between `0` and `65535`.'
+                example: '100'
+              - nxos_name: dPcTag
+                tf_name: destination_policy_classifier_tag
+                type: String
+                id: true
+                description: 'Destination Policy Tag aka dclass. Possible values are `any` or a number between `0` and `65535`.'
+                example: any
+              - nxos_name: policyMap
+                tf_name: policy_map
+                type: String
+                id: true
+                description: 'Match using class-map.'
+                example: pmap1
+              - nxos_name: direction
+                tf_name: direction
+                type: String
+                description: 'Direction of the Actrl Rule.'
+                enum_values:
+                  - uni-dir
+                  - bi-dir
+                  - uni-dir-ignore
+                example: uni-dir
 test_prerequisites:
+  - dn: sys/inst-VRF1
+    class_name: l3Inst
+    no_delete: true
   - dn: sys/fm/securitygroup
     class_name: fmSecurityGroup
     no_delete: true

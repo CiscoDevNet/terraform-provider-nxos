@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This data source can read the ESG (Endpoint Security Group) configuration on NX-OS devices, including security groups, selectors, class maps, policy maps, and VRF domains.
   API Documentation
-  esgEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Entity/esgGroupEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupEntity/esgGroupInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupInst/esgSelectorEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:SelectorEntity/esgMatchConnectedEpV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV4/esgMatchConnectedEpV6 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV6/esgMatchVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlan/esgClassMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapEntity/esgClassMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapInst/esgClassMapFilterEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapFilterEntry/esgPolicyMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapEntity/esgPolicyMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapInst/esgMatchClassMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchClassMap/esgDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Dom/
+  esgEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Entity/esgGroupEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupEntity/esgGroupInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:GroupInst/esgSelectorEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:SelectorEntity/esgMatchConnectedEpV4 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV4/esgMatchConnectedEpV6 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchConnectedEpV6/esgMatchVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchVlan/esgClassMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapEntity/esgClassMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapInst/esgClassMapFilterEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ClassMapFilterEntry/esgPolicyMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapEntity/esgPolicyMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapInst/esgMatchClassMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchClassMap/esgDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Dom/esgContractEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ContractEntity/esgContract https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Contract/
 ---
 
 # nxos_esg (Data Source)
@@ -28,6 +28,8 @@ This data source can read the ESG (Endpoint Security Group) configuration on NX-
 - [esgPolicyMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:PolicyMapInst/)
 - [esgMatchClassMap](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:MatchClassMap/)
 - [esgDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Dom/)
+- [esgContractEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:ContractEntity/)
+- [esgContract](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/esg:Contract/)
 
 ## Example Usage
 
@@ -73,13 +75,21 @@ Read-Only:
 
 - `apply_to_fragment` (Boolean) Apply Rule for all Fragments.
 - `arp_opcode` (String) ARP opcodes.
+- `destination_port_from` (String) Destination From Port.
+- `destination_port_to` (String) Destination To Port.
 - `ether_type` (String) Ether type.
 - `icmpv4_type` (Number) ICMPv4 Type.
 - `icmpv6_type` (Number) ICMPv6 Type.
 - `match_destination_port_zero` (Boolean) L4 Dport match being zero for contract filter entry.
-- `match_dscp` (Number) IP DSCP match for contract filter entry.
+- `match_dscp` (String) IP DSCP match for contract filter entry.
 - `match_source_port_zero` (Boolean) L4 Sport match being zero for contract filter entry.
+- `protocol` (String) L3 Ip Protocol.
+- `source_port_from` (String) Source From Port.
+- `source_port_to` (String) Source To Port.
 - `stateful` (Boolean) Stateful match for contract filter entry.
+- `tcp_rules` (String) TCP Session Rules. Choices: `unspecified`, `syn`, `ack`, `fin`, `rst`, `est`. Can be an empty string. Allowed formats:
+  - Single value. Example: `est`
+  - Multiple values (comma-separated). Example: `ack,syn`. In this case values must be in alphabetical order.
 
 
 
@@ -88,9 +98,22 @@ Read-Only:
 
 Read-Only:
 
+- `contracts` (Attributes Map) List of security contracts (SGACLs) between security groups.
+  - Map key format: `<source_policy_classifier_tag>;<destination_policy_classifier_tag>;<policy_map>`
+  - Key component `source_policy_classifier_tag`: Source Policy Tag aka sclass. Possible values are `any` or a number between `0` and `65535`.
+  - Key component `destination_policy_classifier_tag`: Destination Policy Tag aka dclass. Possible values are `any` or a number between `0` and `65535`.
+  - Key component `policy_map`: Match using class-map. (see [below for nested schema](#nestedatt--domains--contracts))
 - `default_action` (String) Default VRF's Action when there is no contract match.
 - `policy_classifier_tag` (Number) VRF's Default Class Id aka Policy Classifier Tag.
 - `security_mode` (String) Policy Control Enforcement Mode.
+
+<a id="nestedatt--domains--contracts"></a>
+### Nested Schema for `domains.contracts`
+
+Read-Only:
+
+- `direction` (String) Direction of the Actrl Rule.
+
 
 
 <a id="nestedatt--policy_maps"></a>

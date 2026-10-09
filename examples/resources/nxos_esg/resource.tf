@@ -21,13 +21,19 @@ resource "nxos_esg" "example" {
         "entry1" = {
           apply_to_fragment           = true
           arp_opcode                  = "req"
+          destination_port_from       = "300"
+          destination_port_to         = "400"
           ether_type                  = "ipv4"
           icmpv4_type                 = 0
           icmpv6_type                 = 0
           match_destination_port_zero = true
-          match_dscp                  = 0
+          match_dscp                  = "AF11"
           match_source_port_zero      = true
+          protocol                    = "tcp"
+          source_port_from            = "100"
+          source_port_to              = "200"
           stateful                    = true
+          tcp_rules                   = "ack,syn"
         }
       }
     }
@@ -46,10 +52,15 @@ resource "nxos_esg" "example" {
     }
   }
   domains = {
-    "default" = {
+    "VRF1" = {
       default_action        = "deny"
       policy_classifier_tag = 200
       security_mode         = "enforced"
+      contracts = {
+        "100;any;pmap1" = {
+          direction = "uni-dir"
+        }
+      }
     }
   }
 }

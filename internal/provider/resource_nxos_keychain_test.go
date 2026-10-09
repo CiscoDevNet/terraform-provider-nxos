@@ -38,6 +38,18 @@ func TestAccNxosKeychain(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.cryptographic_algorithm", "AES"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.key_string", "secret_password"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.cryptographic_algorithm", "AES_256_CMAC"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.key_hex_string", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_day", "31"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_month", "Dec"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_time", "23:59:59"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_year", "2035"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.local", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_day", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_month", "Jan"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_time", "00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_year", "2025"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_psk_no_show", "enabled"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
@@ -48,7 +60,7 @@ func TestAccNxosKeychain(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosKeychainConfig_all(includeWriteOnly),
+				Config: testAccNxosKeychainPrerequisitesConfig + testAccNxosKeychainConfig_all(includeWriteOnly),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -80,12 +92,24 @@ func nxosKeychainImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosKeychainPrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/macsec"
+  class_name = "fmMacsec"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosKeychainConfig_minimum() string {
 	config := `resource "nxos_keychain" "test" {` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -112,6 +136,33 @@ func testAccNxosKeychainConfig_all(includeWriteOnly bool) string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	macsec_keychains = {` + "\n"
+	config += `		"MACSEC_KEYCHAIN1" = {` + "\n"
+	config += `			keys = {` + "\n"
+	config += `				"1000" = {` + "\n"
+	config += `					cryptographic_algorithm = "AES_256_CMAC"` + "\n"
+	if includeWriteOnly {
+		config += `					key_hex_string = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"` + "\n"
+		config += `					key_hex_string_wo = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"` + "\n"
+		config += `					key_hex_string_wo_version = 1` + "\n"
+	} else {
+		config += `					key_hex_string = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"` + "\n"
+	}
+	config += `					end_day = 31` + "\n"
+	config += `					end_month = "Dec"` + "\n"
+	config += `					end_time = "23:59:59"` + "\n"
+	config += `					end_year = 2035` + "\n"
+	config += `					local = "local"` + "\n"
+	config += `					start_day = 1` + "\n"
+	config += `					start_month = "Jan"` + "\n"
+	config += `					start_time = "00:00:00"` + "\n"
+	config += `					start_year = 2025` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	macsec_psk_no_show = "enabled"` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

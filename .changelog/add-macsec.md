@@ -1,0 +1,2 @@
+- Add `nxos_macsec` resource and data source (MACsec instance shutdown, MACsec policies, and per-interface MACsec keychain, fallback keychain, and policy settings)
+- Add MACsec keychains (`key chain <name> macsec`), including keys, key octet strings, cryptographic algorithms, and send lifetimes, and MACsec PSK no-show (`key chain macsec-psk no-show`) configuration to `nxos_keychain` resource and data source

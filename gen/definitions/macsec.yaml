@@ -1,0 +1,213 @@
+---
+name: MACsec
+class_name: macsecEntity
+dn: sys/macsec
+ds_description: This data source can read the MACsec configuration on NX-OS devices, including MACsec policies and per-interface MACsec keychain and policy settings.
+res_description: This resource can manage the MACsec configuration on NX-OS devices, including MACsec policies and per-interface MACsec keychain and policy settings.
+doc_path: Security%20and%20Policing/macsec:Entity/
+doc_category: Security
+no_delete: true
+child_classes:
+  - class_name: macsecInst
+    doc_path: Security%20and%20Policing/macsec:Inst/
+    rn: inst
+    type: single
+    no_delete: true
+    tf_name: instance
+    description: 'MACsec instance configuration.'
+    attributes:
+      - nxos_name: macsecShutdown
+        tf_name: shutdown
+        type: Bool
+        description: 'Enable or disable Macsec Shutdown.'
+        example: false
+    child_classes:
+      - class_name: macsecPolicy
+        doc_path: Security%20and%20Policing/macsec:Policy/
+        rn: policy-[%s]
+        type: list
+        tf_name: policies
+        description: 'List of MACsec policies.'
+        attributes:
+          - nxos_name: policyName
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of Macsec Policy.'
+            example: POLICY1
+          - nxos_name: allowedPeerCipherSuite1
+            tf_name: allowed_peer_cipher_suite_1
+            type: String
+            description: 'Cipher Suite for Macsec Policy.'
+            enum_values:
+              - None
+              - GCM-AES-128
+              - GCM-AES-256
+              - GCM-AES-XPN-128
+              - GCM-AES-XPN-256
+            example: GCM-AES-128
+          - nxos_name: allowedPeerCipherSuite2
+            tf_name: allowed_peer_cipher_suite_2
+            type: String
+            description: 'Cipher Suite for Macsec Policy.'
+            enum_values:
+              - None
+              - GCM-AES-128
+              - GCM-AES-256
+              - GCM-AES-XPN-128
+              - GCM-AES-XPN-256
+            example: GCM-AES-256
+          - nxos_name: allowedPeerCipherSuite3
+            tf_name: allowed_peer_cipher_suite_3
+            type: String
+            description: 'Cipher Suite for Macsec Policy.'
+            enum_values:
+              - None
+              - GCM-AES-128
+              - GCM-AES-256
+              - GCM-AES-XPN-128
+              - GCM-AES-XPN-256
+            example: GCM-AES-XPN-128
+          - nxos_name: allowedPeerCipherSuite4
+            tf_name: allowed_peer_cipher_suite_4
+            type: String
+            description: 'Cipher Suite for Macsec Policy.'
+            enum_values:
+              - None
+              - GCM-AES-128
+              - GCM-AES-256
+              - GCM-AES-XPN-128
+              - GCM-AES-XPN-256
+            example: GCM-AES-XPN-256
+          - nxos_name: cipherSuite
+            tf_name: cipher_suite
+            type: String
+            description: 'Cipher Suite for Macsec Policy.'
+            enum_values:
+              - NoneOrEnforce-peer
+              - GCM-AES-128
+              - GCM-AES-256
+              - GCM-AES-XPN-128
+              - GCM-AES-XPN-256
+            example: NoneOrEnforce-peer
+          - nxos_name: confOffset
+            tf_name: confidentiality_offset
+            type: String
+            description: 'Confidentiality Offset for Macsec Policy.'
+            enum_values:
+              - CONF-OFFSET-0
+              - CONF-OFFSET-30
+              - CONF-OFFSET-50
+            example: CONF-OFFSET-30
+          - nxos_name: cryptoPolicyName
+            tf_name: crypto_policy_name
+            type: String
+            description: 'Name of Crypto Profile Policy.'
+            example: CRYPTO1
+            exclude_test: true
+          - nxos_name: includeIcvParam
+            tf_name: include_icv_indicator
+            type: Bool
+            description: 'Include ICV Indicator paramset in MKPDU for Macsec Policy.'
+            example: true
+          - nxos_name: includeSci
+            tf_name: include_sci
+            type: Bool
+            description: 'Include SCI in sectag for Macsec Policy.'
+            example: false
+          - nxos_name: keySvrPrio
+            tf_name: key_server_priority
+            type: Int64
+            description: 'Key Server Priority for Macsec Policy.'
+            min_int: 0
+            max_int: 255
+            example: 32
+          - nxos_name: lldpBypass
+            tf_name: lldp_bypass
+            type: Bool
+            description: 'bypass lldp protocol packet.'
+            example: false
+          - nxos_name: replayWindow
+            tf_name: replay_window
+            type: Int64
+            description: 'Replay Window for Macsec Policy.'
+            min_int: 0
+            max_int: 596000000
+            example: 1000
+          - nxos_name: sakExpiryTime
+            tf_name: sak_expiry_time
+            type: String
+            description: 'Security Association Key Expiry Time for Macsec Policy.'
+            enum_values:
+              - pn-rollover
+            allow_non_enum_values: true
+            example: '3600'
+          - nxos_name: secPolicy
+            tf_name: security_policy
+            type: String
+            description: 'Security Policy for Macsec Policy.'
+            enum_values:
+              - must-secure
+              - should-secure
+            example: must-secure
+      - class_name: macsecIf
+        doc_path: Security%20and%20Policing/macsec:If/
+        rn: if-[%s]
+        type: list
+        tf_name: interfaces
+        description: 'List of MACsec interfaces.'
+        test_tags: [MACSEC_INTERFACE]
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+            example: eth1/30
+          - nxos_name: fallbackKeychainName
+            tf_name: fallback_keychain_name
+            type: String
+            description: 'Name of Macsec Fallback Key Chain.'
+            example: MACSEC_FALLBACK_KEYCHAIN1
+          - nxos_name: keychainName
+            tf_name: keychain_name
+            type: String
+            description: 'Name of Macsec Key Chain.'
+            example: MACSEC_KEYCHAIN1
+          - nxos_name: keychainPkiEnabled
+            tf_name: keychain_pki
+            type: Bool
+            description: 'Name of Macsec Keychain-Pki-Mode.'
+            example: false
+          - nxos_name: policyName
+            tf_name: policy_name
+            type: String
+            description: 'Name of Macsec Policy.'
+            example: POLICY1
+test_prerequisites:
+  - dn: sys/fm/macsec
+    class_name: fmMacsec
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/kcmgr
+    class_name: kcmgrEntity
+    no_delete: true
+    dependencies: [0]
+  - dn: sys/kcmgr/keychains
+    class_name: kcmgrKeychains
+    no_delete: true
+    dependencies: [1]
+  - dn: sys/kcmgr/keychains/macseckeychain-[MACSEC_KEYCHAIN1]
+    class_name: kcmgrMacsecKeychain
+    dependencies: [2]
+    attributes:
+      - name: keychainName
+        value: MACSEC_KEYCHAIN1
+  - dn: sys/kcmgr/keychains/macseckeychain-[MACSEC_FALLBACK_KEYCHAIN1]
+    class_name: kcmgrMacsecKeychain
+    dependencies: [2]
+    attributes:
+      - name: keychainName
+        value: MACSEC_FALLBACK_KEYCHAIN1

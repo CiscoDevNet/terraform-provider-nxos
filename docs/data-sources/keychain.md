@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This data source can read the keychain configuration on NX-OS devices, including keychains and their associated key entries.
   API Documentation
-  kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Entity/kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Key/
+  kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Entity/kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Key/kcmgrMacsecKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/kcmgrMacsecKeyId https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/kcmgrMacsecSendlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/kcmgrMacsecpsk https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Macsecpsk/
 ---
 
 # nxos_keychain (Data Source)
@@ -18,6 +18,10 @@ This data source can read the keychain configuration on NX-OS devices, including
 - [kcmgrKeychains](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/)
 - [kcmgrClassicKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/)
 - [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Key/)
+- [kcmgrMacsecKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/)
+- [kcmgrMacsecKeyId](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/)
+- [kcmgrMacsecSendlifetime](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/)
+- [kcmgrMacsecpsk](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Macsecpsk/)
 
 ## Example Usage
 
@@ -39,6 +43,9 @@ data "nxos_keychain" "example" {
 - `id` (String) The distinguished name of the object.
 - `keychains` (Attributes Map) List of keychains.
   - Map key: `name` - Keychain name. (see [below for nested schema](#nestedatt--keychains))
+- `macsec_keychains` (Attributes Map) List of MACsec keychains.
+  - Map key: `name` - Keychain name of macseckeychain. (see [below for nested schema](#nestedatt--macsec_keychains))
+- `macsec_psk_no_show` (String) macsec-psk hide them in show.
 
 <a id="nestedatt--keychains"></a>
 ### Nested Schema for `keychains`
@@ -59,3 +66,35 @@ Read-Only:
 - `key_string` (String, Sensitive) keyString provided by user for the keychain.
 - `key_string_wo` (String) The write-only value of the attribute.
 - `key_string_wo_version` (Number) The write-only version of the attribute.
+
+
+
+<a id="nestedatt--macsec_keychains"></a>
+### Nested Schema for `macsec_keychains`
+
+Read-Only:
+
+- `keys` (Attributes Map) List of MACsec keys.
+  - Map key: `key_id` - keyId of macseckeychain. (see [below for nested schema](#nestedatt--macsec_keychains--keys))
+
+<a id="nestedatt--macsec_keychains--keys"></a>
+### Nested Schema for `macsec_keychains.keys`
+
+Read-Only:
+
+- `cryptographic_algorithm` (String) cryptographicAlgo of macseckeychain.
+- `duration` (Number) duration period of lifetime.
+- `encryption_type` (String) Encryption type of macseckeychain.
+- `end_day` (Number) Ending date of lifetime for the keychain.
+- `end_month` (String) Ending month of lifetime for the keychain.
+- `end_time` (String) HH:MM:SS End Time of lifetime.
+- `end_year` (Number) Ending Year of lifetime for the keychain.
+- `infinite` (String) Lifetime has no endtime.
+- `key_hex_string` (String, Sensitive) keystring of macseckeychain.
+- `key_hex_string_wo` (String) The write-only value of the attribute.
+- `key_hex_string_wo_version` (Number) The write-only version of the attribute.
+- `local` (String) local timezone notification.
+- `start_day` (Number) starting Day of Lifetime for the keychain.
+- `start_month` (String) starting month of Lifetime for the keychain.
+- `start_time` (String) HH:MM:SS Start Time of lifetime.
+- `start_year` (Number) starting Year of Lifetime for the keychain.

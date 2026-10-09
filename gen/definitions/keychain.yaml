@@ -82,3 +82,187 @@ child_classes:
                 example: secret_password
                 write_only: true
                 sensitive: true
+      - class_name: kcmgrMacsecKeychain
+        doc_path: Security%20and%20Policing/kcmgr:MacsecKeychain/
+        rn: macseckeychain-[%s]
+        type: list
+        tf_name: macsec_keychains
+        description: 'List of MACsec keychains.'
+        attributes:
+          - nxos_name: keychainName
+            tf_name: name
+            type: String
+            id: true
+            description: 'Keychain name of macseckeychain.'
+            example: MACSEC_KEYCHAIN1
+        child_classes:
+          - class_name: kcmgrMacsecKeyId
+            doc_path: Security%20and%20Policing/kcmgr:MacsecKeyId/
+            rn: macseckeyid-[%s]
+            type: list
+            tf_name: keys
+            description: 'List of MACsec keys.'
+            attributes:
+              - nxos_name: keyId
+                tf_name: key_id
+                type: String
+                id: true
+                description: 'keyId of macseckeychain.'
+                example: '1000'
+              - nxos_name: cryptographicAlgo
+                tf_name: cryptographic_algorithm
+                type: String
+                description: 'cryptographicAlgo of macseckeychain.'
+                enum_values:
+                  - AES_128_CMAC
+                  - AES_256_CMAC
+                example: AES_256_CMAC
+              - nxos_name: encryptType
+                tf_name: encryption_type
+                type: String
+                description: 'Encryption type of macseckeychain.'
+                enum_values:
+                  - unencrypted
+                  - type7
+                  - type6
+                example: type7
+                exclude_test: true
+                write_only: true
+              - nxos_name: keyHexString
+                tf_name: key_hex_string
+                type: String
+                description: 'keystring of macseckeychain.'
+                example: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+                write_only: true
+                sensitive: true
+            child_classes:
+              - class_name: kcmgrMacsecSendlifetime
+                doc_path: Security%20and%20Policing/kcmgr:MacsecSendlifetime/
+                rn: macsecsendlifetime
+                type: single
+                tf_name: send_lifetime
+                description: 'MACsec key send lifetime.'
+                attributes:
+                  - nxos_name: duration
+                    tf_name: duration
+                    type: Int64
+                    description: 'duration period of lifetime.'
+                    min_int: 0
+                    max_int: 2147483646
+                    example: 86400
+                    exclude_test: true
+                  - nxos_name: endDay
+                    tf_name: end_day
+                    type: Int64
+                    description: 'Ending date of lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 31
+                    example: 31
+                  - nxos_name: endMonth
+                    tf_name: end_month
+                    type: String
+                    description: 'Ending month of lifetime for the keychain.'
+                    enum_values:
+                      - Unspecified
+                      - Jan
+                      - Feb
+                      - Mar
+                      - Apr
+                      - May
+                      - Jun
+                      - Jul
+                      - Aug
+                      - Sep
+                      - Oct
+                      - Nov
+                      - Dec
+                    example: Dec
+                  - nxos_name: endTime
+                    tf_name: end_time
+                    type: String
+                    description: 'HH:MM:SS End Time of lifetime.'
+                    example: '23:59:59'
+                  - nxos_name: endYear
+                    tf_name: end_year
+                    type: Int64
+                    description: 'Ending Year of lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 2035
+                    example: 2035
+                  - nxos_name: infinite
+                    tf_name: infinite
+                    type: String
+                    description: 'Lifetime has no endtime.'
+                    enum_values:
+                      - disabled
+                      - enabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: local
+                    tf_name: local
+                    type: String
+                    description: 'local timezone notification.'
+                    enum_values:
+                      - unspecified
+                      - local
+                    example: local
+                  - nxos_name: startDay
+                    tf_name: start_day
+                    type: Int64
+                    description: 'starting Day of Lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 31
+                    example: 1
+                  - nxos_name: startMonth
+                    tf_name: start_month
+                    type: String
+                    description: 'starting month of Lifetime for the keychain.'
+                    enum_values:
+                      - Unspecified
+                      - Jan
+                      - Feb
+                      - Mar
+                      - Apr
+                      - May
+                      - Jun
+                      - Jul
+                      - Aug
+                      - Sep
+                      - Oct
+                      - Nov
+                      - Dec
+                    example: Jan
+                  - nxos_name: startTime
+                    tf_name: start_time
+                    type: String
+                    description: 'HH:MM:SS Start Time of lifetime.'
+                    example: '00:00:00'
+                  - nxos_name: startYear
+                    tf_name: start_year
+                    type: Int64
+                    description: 'starting Year of Lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 2035
+                    example: 2025
+      - class_name: kcmgrMacsecpsk
+        doc_path: Security%20and%20Policing/kcmgr:Macsecpsk/
+        rn: macsecpsk
+        type: single
+        tf_name: macsec_psk
+        description: 'MACsec pre-shared key settings.'
+        attributes:
+          - nxos_name: pskNoshow
+            tf_name: macsec_psk_no_show
+            type: String
+            description: 'macsec-psk hide them in show.'
+            enum_values:
+              - disabled
+              - enabled
+            example: enabled
+test_prerequisites:
+  - dn: sys/fm/macsec
+    class_name: fmMacsec
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

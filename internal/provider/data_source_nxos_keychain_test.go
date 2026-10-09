@@ -33,12 +33,23 @@ func TestAccDataSourceNxosKeychain(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.cryptographic_algorithm", "AES"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.cryptographic_algorithm", "AES_256_CMAC"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_day", "31"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_month", "Dec"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_time", "23:59:59"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_year", "2035"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.local", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_day", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_month", "Jan"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_time", "00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_year", "2025"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_psk_no_show", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosKeychainConfig(),
+				Config: testAccDataSourceNxosKeychainPrerequisitesConfig + testAccDataSourceNxosKeychainConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -48,6 +59,17 @@ func TestAccDataSourceNxosKeychain(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosKeychainPrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/macsec"
+  class_name = "fmMacsec"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -65,6 +87,27 @@ func testAccDataSourceNxosKeychainConfig() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	macsec_keychains = {` + "\n"
+	config += `		"MACSEC_KEYCHAIN1" = {` + "\n"
+	config += `			keys = {` + "\n"
+	config += `				"1000" = {` + "\n"
+	config += `					cryptographic_algorithm = "AES_256_CMAC"` + "\n"
+	config += `					key_hex_string = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"` + "\n"
+	config += `					end_day = 31` + "\n"
+	config += `					end_month = "Dec"` + "\n"
+	config += `					end_time = "23:59:59"` + "\n"
+	config += `					end_year = 2035` + "\n"
+	config += `					local = "local"` + "\n"
+	config += `					start_day = 1` + "\n"
+	config += `					start_month = "Jan"` + "\n"
+	config += `					start_time = "00:00:00"` + "\n"
+	config += `					start_year = 2025` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	macsec_psk_no_show = "enabled"` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

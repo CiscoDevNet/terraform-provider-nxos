@@ -45,26 +45,26 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &KeychainResource{}
-var _ resource.ResourceWithIdentity = &KeychainResource{}
-var _ resource.ResourceWithModifyPlan = &KeychainResource{}
+var _ resource.Resource = &MACsecResource{}
+var _ resource.ResourceWithIdentity = &MACsecResource{}
+var _ resource.ResourceWithModifyPlan = &MACsecResource{}
 
-func NewKeychainResource() resource.Resource {
-	return &KeychainResource{}
+func NewMACsecResource() resource.Resource {
+	return &MACsecResource{}
 }
 
-type KeychainResource struct {
+type MACsecResource struct {
 	data *NxosProviderData
 }
 
-func (r *KeychainResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_keychain"
+func (r *MACsecResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_macsec"
 }
 
-func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *MACsecResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the keychain configuration on NX-OS devices, including keychains and their associated key entries.").AddApiDocumentation("kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/", []string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey", "kcmgrMacsecKeychain", "kcmgrMacsecKeyId", "kcmgrMacsecSendlifetime", "kcmgrMacsecpsk"}, []string{"Security%20and%20Policing/kcmgr:Keychains/", "Security%20and%20Policing/kcmgr:ClassicKeychain/", "Security%20and%20Policing/kcmgr:Key/", "Security%20and%20Policing/kcmgr:MacsecKeychain/", "Security%20and%20Policing/kcmgr:MacsecKeyId/", "Security%20and%20Policing/kcmgr:MacsecSendlifetime/", "Security%20and%20Policing/kcmgr:Macsecpsk/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the MACsec configuration on NX-OS devices, including MACsec policies and per-interface MACsec keychain and policy settings.").AddApiDocumentation("macsecEntity", "Security%20and%20Policing/macsec:Entity/", []string{"macsecInst", "macsecPolicy", "macsecIf"}, []string{"Security%20and%20Policing/macsec:Inst/", "Security%20and%20Policing/macsec:Policy/", "Security%20and%20Policing/macsec:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -78,184 +78,130 @@ func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+			"shutdown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Macsec Shutdown.").String,
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
-				},
 			},
-			"keychains": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("List of keychains.\n  - Map key: `name` - Keychain name.").String,
+			"policies": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of MACsec policies.\n  - Map key: `name` - Name of Macsec Policy.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"keys": schema.MapNestedAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("List of keys.\n  - Map key: `key_id` - keyId of classic key chain.\n  - Key range: `0`-`65535`").String,
+						"allowed_peer_cipher_suite_1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cipher Suite for Macsec Policy.").AddStringEnumDescription("None", "GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256").String,
 							Optional:            true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"cryptographic_algorithm": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Cryptographic Algorithm used in key.").AddStringEnumDescription("NONE", "MD5", "HMAC-SHA-1", "HMAC-SHA-256", "HMAC-SHA-384", "HMAC-SHA-512", "3DES", "AES").String,
-										Optional:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("NONE", "MD5", "HMAC-SHA-1", "HMAC-SHA-256", "HMAC-SHA-384", "HMAC-SHA-512", "3DES", "AES"),
-										},
-									},
-									"encryption_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Encryption type value based on user input.").AddStringEnumDescription("unencrypted", "type7", "type6").String,
-										Optional:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("unencrypted", "type7", "type6"),
-										},
-									},
-									"key_string": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("keyString provided by user for the keychain.").String,
-										Optional:            true,
-										Sensitive:           true,
-									},
-									"key_string_wo": schema.StringAttribute{
-										MarkdownDescription: "The write-only value of the attribute.",
-										WriteOnly:           true,
-										Optional:            true,
-									},
-									"key_string_wo_version": schema.Int64Attribute{
-										MarkdownDescription: "The write-only version of the attribute.",
-										Optional:            true,
-									},
-								},
+							Validators: []validator.String{
+								stringvalidator.OneOf("None", "GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256"),
+							},
+						},
+						"allowed_peer_cipher_suite_2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cipher Suite for Macsec Policy.").AddStringEnumDescription("None", "GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("None", "GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256"),
+							},
+						},
+						"allowed_peer_cipher_suite_3": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cipher Suite for Macsec Policy.").AddStringEnumDescription("None", "GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("None", "GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256"),
+							},
+						},
+						"allowed_peer_cipher_suite_4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cipher Suite for Macsec Policy.").AddStringEnumDescription("None", "GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("None", "GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256"),
+							},
+						},
+						"cipher_suite": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cipher Suite for Macsec Policy.").AddStringEnumDescription("NoneOrEnforce-peer", "GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("NoneOrEnforce-peer", "GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256"),
+							},
+						},
+						"confidentiality_offset": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Confidentiality Offset for Macsec Policy.").AddStringEnumDescription("CONF-OFFSET-0", "CONF-OFFSET-30", "CONF-OFFSET-50").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("CONF-OFFSET-0", "CONF-OFFSET-30", "CONF-OFFSET-50"),
+							},
+						},
+						"crypto_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of Crypto Profile Policy.").String,
+							Optional:            true,
+						},
+						"include_icv_indicator": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include ICV Indicator paramset in MKPDU for Macsec Policy.").String,
+							Optional:            true,
+						},
+						"include_sci": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include SCI in sectag for Macsec Policy.").String,
+							Optional:            true,
+						},
+						"key_server_priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Key Server Priority for Macsec Policy.").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"lldp_bypass": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("bypass lldp protocol packet.").String,
+							Optional:            true,
+						},
+						"replay_window": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Replay Window for Macsec Policy.").AddIntegerRangeDescription(0, 596000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 596000000),
+							},
+						},
+						"sak_expiry_time": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Security Association Key Expiry Time for Macsec Policy.").AddStringEnumDescription("pn-rollover").String,
+							Optional:            true,
+						},
+						"security_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Security Policy for Macsec Policy.").AddStringEnumDescription("must-secure", "should-secure").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("must-secure", "should-secure"),
 							},
 						},
 					},
 				},
 			},
-			"macsec_keychains": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("List of MACsec keychains.\n  - Map key: `name` - Keychain name of macseckeychain.").String,
+			"interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of MACsec interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"keys": schema.MapNestedAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("List of MACsec keys.\n  - Map key: `key_id` - keyId of macseckeychain.").String,
+						"fallback_keychain_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of Macsec Fallback Key Chain.").String,
 							Optional:            true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"cryptographic_algorithm": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("cryptographicAlgo of macseckeychain.").AddStringEnumDescription("AES_128_CMAC", "AES_256_CMAC").String,
-										Optional:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("AES_128_CMAC", "AES_256_CMAC"),
-										},
-									},
-									"encryption_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Encryption type of macseckeychain.").AddStringEnumDescription("unencrypted", "type7", "type6").String,
-										Optional:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("unencrypted", "type7", "type6"),
-										},
-									},
-									"key_hex_string": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("keystring of macseckeychain.").String,
-										Optional:            true,
-										Sensitive:           true,
-									},
-									"key_hex_string_wo": schema.StringAttribute{
-										MarkdownDescription: "The write-only value of the attribute.",
-										WriteOnly:           true,
-										Optional:            true,
-									},
-									"key_hex_string_wo_version": schema.Int64Attribute{
-										MarkdownDescription: "The write-only version of the attribute.",
-										Optional:            true,
-									},
-									"duration": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("duration period of lifetime.").AddIntegerRangeDescription(0, 2147483646).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 2147483646),
-										},
-									},
-									"end_day": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Ending date of lifetime for the keychain.").AddIntegerRangeDescription(0, 31).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 31),
-										},
-									},
-									"end_month": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Ending month of lifetime for the keychain.").AddStringEnumDescription("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec").String,
-										Optional:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
-										},
-									},
-									"end_time": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("HH:MM:SS End Time of lifetime.").String,
-										Optional:            true,
-									},
-									"end_year": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Ending Year of lifetime for the keychain.").AddIntegerRangeDescription(0, 2035).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 2035),
-										},
-									},
-									"infinite": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Lifetime has no endtime.").AddStringEnumDescription("disabled", "enabled").String,
-										Optional:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("disabled", "enabled"),
-										},
-									},
-									"local": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("local timezone notification.").AddStringEnumDescription("unspecified", "local").String,
-										Optional:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("unspecified", "local"),
-										},
-									},
-									"start_day": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("starting Day of Lifetime for the keychain.").AddIntegerRangeDescription(0, 31).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 31),
-										},
-									},
-									"start_month": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("starting month of Lifetime for the keychain.").AddStringEnumDescription("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec").String,
-										Optional:            true,
-										Validators: []validator.String{
-											stringvalidator.OneOf("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
-										},
-									},
-									"start_time": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("HH:MM:SS Start Time of lifetime.").String,
-										Optional:            true,
-									},
-									"start_year": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("starting Year of Lifetime for the keychain.").AddIntegerRangeDescription(0, 2035).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 2035),
-										},
-									},
-								},
-							},
+						},
+						"keychain_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of Macsec Key Chain.").String,
+							Optional:            true,
+						},
+						"keychain_pki": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of Macsec Keychain-Pki-Mode.").String,
+							Optional:            true,
+						},
+						"policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of Macsec Policy.").String,
+							Optional:            true,
 						},
 					},
-				},
-			},
-			"macsec_psk_no_show": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("macsec-psk hide them in show.").AddStringEnumDescription("disabled", "enabled").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disabled", "enabled"),
 				},
 			},
 		},
 	}
 }
 
-func (r *KeychainResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *MACsecResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
@@ -266,7 +212,7 @@ func (r *KeychainResource) IdentitySchema(ctx context.Context, req resource.Iden
 	}
 }
 
-func (r *KeychainResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *MACsecResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -280,7 +226,7 @@ func (r *KeychainResource) Configure(ctx context.Context, req resource.Configure
 // a no-op. Without this, a first post-import config that happens to declare every entry with
 // matching values would never invoke Update, leaving `importing` stuck and later, genuine
 // removals silently un-reconciled.
-func (r *KeychainResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+func (r *MACsecResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
 	if req.State.Raw.IsNull() || req.Plan.Raw.IsNull() {
 		return
 	}
@@ -297,8 +243,8 @@ func (r *KeychainResource) ModifyPlan(ctx context.Context, req resource.ModifyPl
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *KeychainResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan Keychain
+func (r *MACsecResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan MACsec
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -308,7 +254,7 @@ func (r *KeychainResource) Create(ctx context.Context, req resource.CreateReques
 	}
 
 	// Read config
-	var config Keychain
+	var config MACsec
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -334,7 +280,7 @@ func (r *KeychainResource) Create(ctx context.Context, req resource.CreateReques
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity KeychainIdentity
+	var identity MACsecIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -350,8 +296,8 @@ func (r *KeychainResource) Create(ctx context.Context, req resource.CreateReques
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *KeychainResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state Keychain
+func (r *MACsecResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state MACsec
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -362,7 +308,7 @@ func (r *KeychainResource) Read(ctx context.Context, req resource.ReadRequest, r
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity KeychainIdentity
+		var identity MACsecIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -379,7 +325,7 @@ func (r *KeychainResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "kcmgrKeychains,kcmgrClassicKeychain,kcmgrKey,kcmgrMacsecKeychain,kcmgrMacsecKeyId,kcmgrMacsecSendlifetime,kcmgrMacsecpsk")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "macsecInst,macsecPolicy,macsecIf")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -411,7 +357,7 @@ func (r *KeychainResource) Read(ctx context.Context, req resource.ReadRequest, r
 		}
 	}
 
-	var identity KeychainIdentity
+	var identity MACsecIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -425,8 +371,8 @@ func (r *KeychainResource) Read(ctx context.Context, req resource.ReadRequest, r
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *KeychainResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan Keychain
+func (r *MACsecResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan MACsec
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -436,14 +382,14 @@ func (r *KeychainResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 
 	// Read config
-	var config Keychain
+	var config MACsec
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	var state Keychain
+	var state MACsec
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -476,7 +422,7 @@ func (r *KeychainResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity KeychainIdentity
+	var identity MACsecIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -492,8 +438,8 @@ func (r *KeychainResource) Update(ctx context.Context, req resource.UpdateReques
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *KeychainResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state Keychain
+func (r *MACsecResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state MACsec
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -529,7 +475,7 @@ func (r *KeychainResource) Delete(ctx context.Context, req resource.DeleteReques
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *KeychainResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *MACsecResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
@@ -548,7 +494,7 @@ func (r *KeychainResource) ImportState(ctx context.Context, req resource.ImportS
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity KeychainIdentity
+		var identity MACsecIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -558,7 +504,7 @@ func (r *KeychainResource) ImportState(ctx context.Context, req resource.ImportS
 		}
 	}
 
-	var state Keychain
+	var state MACsec
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

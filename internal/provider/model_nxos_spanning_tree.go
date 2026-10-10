@@ -101,6 +101,12 @@ func (data *SpanningTree) fromIdentity(ctx context.Context, identity *SpanningTr
 	}
 }
 
+// SpanningTreeSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var SpanningTreeSubtreeClassMinVersions = map[string]string{}
+
+// SpanningTreeMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var SpanningTreeMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

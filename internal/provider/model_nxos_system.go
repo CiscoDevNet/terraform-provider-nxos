@@ -417,6 +417,12 @@ func (data *System) fromIdentity(ctx context.Context, identity *SystemIdentity) 
 	}
 }
 
+// SystemSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var SystemSubtreeClassMinVersions = map[string]string{}
+
+// SystemMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var SystemMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

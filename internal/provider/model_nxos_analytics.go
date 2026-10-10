@@ -178,6 +178,12 @@ func (data *Analytics) fromIdentity(ctx context.Context, identity *AnalyticsIden
 	}
 }
 
+// AnalyticsSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var AnalyticsSubtreeClassMinVersions = map[string]string{}
+
+// AnalyticsMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var AnalyticsMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

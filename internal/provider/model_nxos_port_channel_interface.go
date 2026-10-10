@@ -163,6 +163,12 @@ func (data *PortChannelInterface) fromIdentity(ctx context.Context, identity *Po
 	}
 }
 
+// PortChannelInterfaceSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var PortChannelInterfaceSubtreeClassMinVersions = map[string]string{}
+
+// PortChannelInterfaceMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var PortChannelInterfaceMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

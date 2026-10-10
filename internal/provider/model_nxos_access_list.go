@@ -254,6 +254,12 @@ func (data *AccessList) fromIdentity(ctx context.Context, identity *AccessListId
 	}
 }
 
+// AccessListSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var AccessListSubtreeClassMinVersions = map[string]string{}
+
+// AccessListMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var AccessListMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

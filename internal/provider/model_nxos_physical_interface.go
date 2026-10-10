@@ -170,6 +170,12 @@ func (data *PhysicalInterface) fromIdentity(ctx context.Context, identity *Physi
 	}
 }
 
+// PhysicalInterfaceSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var PhysicalInterfaceSubtreeClassMinVersions = map[string]string{}
+
+// PhysicalInterfaceMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var PhysicalInterfaceMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

@@ -175,6 +175,12 @@ func (data *ISIS) fromIdentity(ctx context.Context, identity *ISISIdentity) {
 	}
 }
 
+// ISISSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var ISISSubtreeClassMinVersions = map[string]string{}
+
+// ISISMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var ISISMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

@@ -101,6 +101,12 @@ func (data *NetworkQoS) fromIdentity(ctx context.Context, identity *NetworkQoSId
 	}
 }
 
+// NetworkQoSSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var NetworkQoSSubtreeClassMinVersions = map[string]string{}
+
+// NetworkQoSMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var NetworkQoSMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

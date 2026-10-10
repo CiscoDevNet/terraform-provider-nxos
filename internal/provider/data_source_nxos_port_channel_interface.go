@@ -488,7 +488,7 @@ func (d *PortChannelInterfaceDataSource) Read(ctx context.Context, req datasourc
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "pcAggrIf,nwRtVrfMbr,l1StormCtrlP,nvoMultisiteIfTracking,ipqosPriorFlowCtrl,ipqosPriorFlowCtrlWd,pcAggrIfExtended,pcRsMbrIfs")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcAggrIfExtended", "pcRsMbrIfs"}, PortChannelInterfaceSubtreeClassMinVersions))}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

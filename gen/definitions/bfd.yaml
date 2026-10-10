@@ -283,6 +283,7 @@ test_prerequisites:
         value: lo10
   - dn: sys/fm/ifvlan
     class_name: fmInterfaceVlan
+    no_delete: true
     dependencies: [1]
     attributes:
       - name: adminSt

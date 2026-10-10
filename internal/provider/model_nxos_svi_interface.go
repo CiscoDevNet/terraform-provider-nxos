@@ -84,6 +84,12 @@ func (data *SVIInterface) fromIdentity(ctx context.Context, identity *SVIInterfa
 	}
 }
 
+// SVIInterfaceSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var SVIInterfaceSubtreeClassMinVersions = map[string]string{}
+
+// SVIInterfaceMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var SVIInterfaceMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

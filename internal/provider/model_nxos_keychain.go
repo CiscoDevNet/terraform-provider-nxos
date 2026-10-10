@@ -101,6 +101,12 @@ func (data *Keychain) fromIdentity(ctx context.Context, identity *KeychainIdenti
 	}
 }
 
+// KeychainSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var KeychainSubtreeClassMinVersions = map[string]string{}
+
+// KeychainMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var KeychainMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

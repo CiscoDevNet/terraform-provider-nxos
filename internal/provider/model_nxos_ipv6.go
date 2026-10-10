@@ -114,6 +114,12 @@ func (data *IPv6) fromIdentity(ctx context.Context, identity *IPv6Identity) {
 	}
 }
 
+// IPv6SubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var IPv6SubtreeClassMinVersions = map[string]string{}
+
+// IPv6MinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var IPv6MinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

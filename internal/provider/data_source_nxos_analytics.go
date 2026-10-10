@@ -475,7 +475,7 @@ func (d *AnalyticsDataSource) Read(ctx context.Context, req datasource.ReadReque
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "analyticsInst,analyticsProfile,analyticsEvents,analyticsPolicy,analyticsMatchAcl,analyticsRecordP,analyticsCollector,analyticsMonitor,analyticsRsRecordPAtt,analyticsCollectorBucket,analyticsRsCollectorAtt,analyticsTrafficAnalytics,analyticsFwdInstTarget,analyticsRsMonitorAtt,analyticsRsProfAtt,analyticsRsEventsAtt,analyticsRsPolicyAtt")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsMatchAcl", "analyticsRecordP", "analyticsCollector", "analyticsMonitor", "analyticsRsRecordPAtt", "analyticsCollectorBucket", "analyticsRsCollectorAtt", "analyticsTrafficAnalytics", "analyticsFwdInstTarget", "analyticsRsMonitorAtt", "analyticsRsProfAtt", "analyticsRsEventsAtt", "analyticsRsPolicyAtt"}, AnalyticsSubtreeClassMinVersions))}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

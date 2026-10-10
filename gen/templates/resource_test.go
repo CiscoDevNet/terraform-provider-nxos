@@ -45,14 +45,14 @@ import (
 {{- $prefix := .Prefix}}
 {{- range .Children}}
 {{- $list := .TfName}}
-{{- if len .TestTags}}
-	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
 {{- end}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}
-{{- if len .TestTags}}
-	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$prefix}}{{.TfName}}", "{{.Example}}"))
 	}
 {{- else}}
@@ -67,8 +67,8 @@ import (
 {{- $mapKey := mapKeyExample .Attributes}}
 {{- range .Attributes}}
 {{- if and (not .ExcludeTest) (not .Id)}}
-{{- if len .TestTags}}
-	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$prefix}}{{$list}}.{{$mapKey}}.{{.TfName}}", "{{.Example}}"))
 	}
 {{- else}}
@@ -80,7 +80,7 @@ import (
 {{- template "resourceTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "Prefix" (printf "%s%s.%s." $prefix $list $mapKey))}}
 {{- end}}
 {{- end}}
-{{- if len .TestTags}}
+{{- if testCond .TestTags .MinVersion}}
 	}
 {{- end}}
 {{- end}}
@@ -98,8 +98,8 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 	{{- $name := .Name }}
 	{{- range  .Attributes}}
 	{{- if not .ExcludeTest}}
-	{{- if len .TestTags}}
-	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
 	}
 	{{- else}}
@@ -218,8 +218,8 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	config := `resource "nxos_{{snakeCase $name}}" "test" {` + "\n"
 	{{- range  .Attributes}}
 	{{- if or .Id .Mandatory}}
-	{{- if len .TestTags}}
-	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
 		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	}
 	{{- else}}
@@ -245,14 +245,14 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- define "testConfigChildrenTemplate"}}
 {{- $indent := .Indent}}
 {{- range .Children}}
-{{- if len .TestTags}}
-	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
 {{- end}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}
-{{- if len .TestTags}}
-	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
 		config += `{{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 		{{- if .Sensitive}}
 		if includeWriteOnly {
@@ -286,8 +286,8 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	config += `{{$indent}}	"{{$mapKey}}" = {` + "\n"
 {{- range .Attributes}}
 {{- if and (not .ExcludeTest) (not .Id)}}
-{{- if len .TestTags}}
-	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
 		config += `{{$indent}}		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 		{{- if .Sensitive}}
 		if includeWriteOnly {
@@ -318,7 +318,7 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	config += `{{$indent}}}` + "\n"
 {{- end}}
 {{- end}}
-{{- if len .TestTags}}
+{{- if testCond .TestTags .MinVersion}}
 	}
 {{- end}}
 {{- end}}
@@ -334,8 +334,8 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 	config := `resource "nxos_{{snakeCase $name}}" "test" {` + "\n"
 	{{- range  .Attributes}}
 	{{- if not .ExcludeTest}}
-	{{- if len .TestTags}}
-	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
 		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 		{{- if .Sensitive}}
 		if includeWriteOnly {

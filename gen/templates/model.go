@@ -149,6 +149,21 @@ func (data *{{camelCase .Name}}) fromIdentity(ctx context.Context, identity *{{c
 {{- end}}
 }
 
+
+// {{camelCase .Name}}SubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var {{camelCase .Name}}SubtreeClassMinVersions = map[string]string{
+{{- range $class, $version := classMinVersions .ChildClasses}}
+	"{{$class}}": "{{$version}}",
+{{- end}}
+}
+
+// {{camelCase .Name}}MinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var {{camelCase .Name}}MinVersions = map[string]helpers.MinVersion{
+{{- range minVersionChecks .}}
+	"{{.Key}}": {Version: "{{.Version}}", Path: "{{.Path}}"},
+{{- end}}
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

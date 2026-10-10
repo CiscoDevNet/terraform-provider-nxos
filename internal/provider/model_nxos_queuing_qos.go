@@ -77,6 +77,12 @@ func (data *QueuingQoS) fromIdentity(ctx context.Context, identity *QueuingQoSId
 	}
 }
 
+// QueuingQoSSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var QueuingQoSSubtreeClassMinVersions = map[string]string{}
+
+// QueuingQoSMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var QueuingQoSMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

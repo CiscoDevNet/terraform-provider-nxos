@@ -120,6 +120,12 @@ func (data *OSPFv3) fromIdentity(ctx context.Context, identity *OSPFv3Identity) 
 	}
 }
 
+// OSPFv3SubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var OSPFv3SubtreeClassMinVersions = map[string]string{}
+
+// OSPFv3MinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var OSPFv3MinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

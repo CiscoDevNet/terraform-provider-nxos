@@ -151,6 +151,12 @@ func (data *PTP) fromIdentity(ctx context.Context, identity *PTPIdentity) {
 	}
 }
 
+// PTPSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var PTPSubtreeClassMinVersions = map[string]string{}
+
+// PTPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var PTPMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

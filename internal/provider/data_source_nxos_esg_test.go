@@ -35,6 +35,8 @@ func TestAccDataSourceNxosESG(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "security_groups.100.name", "group1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "security_groups.100.selector_external_subnets_ipv4.default;20.0.0.0/8.route_inject", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "security_groups.100.selector_external_subnets_ipv6.default;2001:db9::/32.route_inject", "enabled"))
+	if testAccDeviceVersionAtLeast("10.6(1)") {
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "security_groups.100.type_layer4_7", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.description", "My class map"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.apply_to_fragment", "true"))
@@ -92,6 +94,15 @@ resource "nxos_dme" "PreReq1" {
   }
 }
 
+resource "nxos_dme" "PreReq2" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -141,18 +152,16 @@ func testAccDataSourceNxosESGConfig() string {
 	config += `				"default;2001:dbb::/32;100.0.1.1;mpls-vpn" = {` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
-	config += `			selector_match_interfaces = {` + "\n"
-	config += `				"vlan100" = {` + "\n"
-	config += `				}` + "\n"
-	config += `			}` + "\n"
 	config += `			selector_match_vlan_macs = {` + "\n"
 	config += `				"vlan-101;00:1B:63:84:45:E6" = {` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
-	config += `			selector_match_vlan_interfaces = {` + "\n"
-	config += `				"vlan-102;eth1/1" = {` + "\n"
-	config += `				}` + "\n"
-	config += `			}` + "\n"
+	if testAccDeviceVersionAtLeast("10.6(1)") {
+		config += `			selector_match_vlan_interfaces = {` + "\n"
+		config += `				"vlan-102;eth1/1" = {` + "\n"
+		config += `				}` + "\n"
+		config += `			}` + "\n"
+	}
 	config += `			type_layer4_7 = "enabled"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
@@ -205,7 +214,7 @@ func testAccDataSourceNxosESGConfig() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

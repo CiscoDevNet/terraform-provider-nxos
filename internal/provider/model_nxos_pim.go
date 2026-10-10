@@ -136,6 +136,12 @@ func (data *PIM) fromIdentity(ctx context.Context, identity *PIMIdentity) {
 	}
 }
 
+// PIMSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var PIMSubtreeClassMinVersions = map[string]string{}
+
+// PIMMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var PIMMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

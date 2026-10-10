@@ -97,6 +97,12 @@ func (data *Logging) fromIdentity(ctx context.Context, identity *LoggingIdentity
 	}
 }
 
+// LoggingSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var LoggingSubtreeClassMinVersions = map[string]string{}
+
+// LoggingMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var LoggingMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

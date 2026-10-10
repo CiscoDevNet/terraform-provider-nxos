@@ -174,6 +174,12 @@ func (data *EIGRP) fromIdentity(ctx context.Context, identity *EIGRPIdentity) {
 	}
 }
 
+// EIGRPSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var EIGRPSubtreeClassMinVersions = map[string]string{}
+
+// EIGRPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var EIGRPMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

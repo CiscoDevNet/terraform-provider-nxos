@@ -208,6 +208,12 @@ func (data *RoutePolicy) fromIdentity(ctx context.Context, identity *RoutePolicy
 	}
 }
 
+// RoutePolicySubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var RoutePolicySubtreeClassMinVersions = map[string]string{}
+
+// RoutePolicyMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var RoutePolicyMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

@@ -70,6 +70,12 @@ func (data *LoopbackInterface) fromIdentity(ctx context.Context, identity *Loopb
 	}
 }
 
+// LoopbackInterfaceSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var LoopbackInterfaceSubtreeClassMinVersions = map[string]string{}
+
+// LoopbackInterfaceMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var LoopbackInterfaceMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

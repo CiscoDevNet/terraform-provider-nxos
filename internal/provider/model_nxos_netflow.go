@@ -113,6 +113,12 @@ func (data *Netflow) fromIdentity(ctx context.Context, identity *NetflowIdentity
 	}
 }
 
+// NetflowSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var NetflowSubtreeClassMinVersions = map[string]string{}
+
+// NetflowMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var NetflowMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

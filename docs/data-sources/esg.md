@@ -196,7 +196,8 @@ Read-Only:
 - `selector_match_vlan_interfaces` (Attributes Map) List of selectors based on VLAN and interface.
   - Map key format: `<vlan_id>;<interface_id>`
   - Key component `vlan_id`: VLAN ID that needs to be classified in this security-group.
-  - Key component `interface_id`: Interface that needs to be classified in this security-group. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `po1`. (see [below for nested schema](#nestedatt--security_groups--selector_match_vlan_interfaces))
+  - Key component `interface_id`: Interface that needs to be classified in this security-group. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `po1`.
+  - Minimum NX-OS version: `10.6(1)` (see [below for nested schema](#nestedatt--security_groups--selector_match_vlan_interfaces))
 - `selector_match_vlan_macs` (Attributes Map) List of selectors based on VLAN and MAC address.
   - Map key format: `<vlan_id>;<mac_address>`
   - Key component `vlan_id`: VLAN ID that needs to be classified in this security-group.

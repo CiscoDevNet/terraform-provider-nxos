@@ -116,6 +116,12 @@ func (data *HSRP) fromIdentity(ctx context.Context, identity *HSRPIdentity) {
 	}
 }
 
+// HSRPSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var HSRPSubtreeClassMinVersions = map[string]string{}
+
+// HSRPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var HSRPMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

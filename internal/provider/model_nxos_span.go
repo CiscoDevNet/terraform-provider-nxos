@@ -103,6 +103,12 @@ func (data *SPAN) fromIdentity(ctx context.Context, identity *SPANIdentity) {
 	}
 }
 
+// SPANSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var SPANSubtreeClassMinVersions = map[string]string{}
+
+// SPANMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var SPANMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

@@ -85,6 +85,12 @@ func (data *BridgeDomain) fromIdentity(ctx context.Context, identity *BridgeDoma
 	}
 }
 
+// BridgeDomainSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var BridgeDomainSubtreeClassMinVersions = map[string]string{}
+
+// BridgeDomainMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var BridgeDomainMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

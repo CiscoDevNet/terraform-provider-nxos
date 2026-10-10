@@ -108,6 +108,12 @@ func (data *NVO) fromIdentity(ctx context.Context, identity *NVOIdentity) {
 	}
 }
 
+// NVOSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var NVOSubtreeClassMinVersions = map[string]string{}
+
+// NVOMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var NVOMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

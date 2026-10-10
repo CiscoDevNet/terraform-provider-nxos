@@ -94,6 +94,12 @@ func (data *VRF) fromIdentity(ctx context.Context, identity *VRFIdentity) {
 	}
 }
 
+// VRFSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var VRFSubtreeClassMinVersions = map[string]string{}
+
+// VRFMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var VRFMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

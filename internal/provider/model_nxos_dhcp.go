@@ -108,6 +108,12 @@ func (data *DHCP) fromIdentity(ctx context.Context, identity *DHCPIdentity) {
 	}
 }
 
+// DHCPSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var DHCPSubtreeClassMinVersions = map[string]string{}
+
+// DHCPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var DHCPMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

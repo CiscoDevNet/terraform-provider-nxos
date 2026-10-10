@@ -94,6 +94,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
 					.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
 					{{- end -}}
+					{{- if .DocMinVersion -}}
+					.AddMinimumVersionDescription("{{.DocMinVersion}}")
+					{{- end -}}
 					.String,
 				{{- if or .Id .Mandatory}}
 				Required:            true,
@@ -138,6 +141,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					{{- end -}}
 					{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
 					.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+					{{- end -}}
+					{{- if .DocMinVersion -}}
+					.AddMinimumVersionDescription("{{.DocMinVersion}}")
 					{{- end -}}
 					.String,
 				{{- if or .Id .Mandatory}}
@@ -184,7 +190,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			{{- template "resChildrenSchema" .TfChildClasses}}
 			{{- else if eq .Type "list"}}
 			"{{.TfName}}": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}{{mapKeyDescription .Attributes}}").String,
+				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}{{mapKeyDescription .Attributes}}"){{if .DocMinVersion}}.AddMinimumVersionDescription("{{.DocMinVersion}}"){{end}}.String,
 				{{- if .Mandatory}}
 				Required:            true,
 				{{- else}}
@@ -235,13 +241,32 @@ func (r *{{camelCase .Name}}Resource) Configure(ctx context.Context, req resourc
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-// ModifyPlan forces a recompute during the leniency window that follows an import, so that
-// Update always runs (and clears the `importing` flag) even when the plan would otherwise be
-// a no-op. Without this, a first post-import config that happens to declare every entry with
-// matching values would never invoke Update, leaving `importing` stuck and later, genuine
-// removals silently un-reconciled.
+// ModifyPlan rejects configurations using objects not supported by the NX-OS version of the device,
+// so that the error surfaces during plan rather than apply. It also forces a recompute during the
+// leniency window that follows an import, so that Update always runs (and clears the `importing`
+// flag) even when the plan would otherwise be a no-op. Without this, a first post-import config that
+// happens to declare every entry with matching values would never invoke Update, leaving `importing`
+// stuck and later, genuine removals silently un-reconciled.
 func (r *{{camelCase .Name}}Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
-	if req.State.Raw.IsNull() || req.Plan.Raw.IsNull() {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	// The check is skipped if the plan cannot be fully evaluated yet (e.g. unknown map keys or device);
+	// Create and Update repeat it before sending the request.
+	if len({{camelCase .Name}}MinVersions) > 0 && r.data != nil {
+		var plan, config {{camelCase .Name}}
+		if !req.Plan.Get(ctx, &plan).HasError() && !req.Config.Get(ctx, &config).HasError() && !plan.Device.IsUnknown() {
+			if device, ok := r.data.Devices[plan.Device.ValueString()]; ok && device.Managed {
+				resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), plan.toBody(config).Str, {{camelCase .Name}}MinVersions)...)
+				if resp.Diagnostics.HasError() {
+					return
+				}
+			}
+		}
+	}
+
+	if req.State.Raw.IsNull() {
 		return
 	}
 
@@ -286,6 +311,10 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 	// Post object
 	if device.Managed {
 		body := plan.toBody(config)
+		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, {{camelCase .Name}}MinVersions)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -340,7 +369,7 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 
 	if device.Managed {
 		{{- if .ChildClasses}}
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "{{join (allChildClassNames .ChildClasses) ","}}")}
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{ {{- range $i, $c := allChildClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} }, {{camelCase .Name}}SubtreeClassMinVersions))}
 		{{- else}}
 		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "no")}
 		{{- end}}
@@ -433,6 +462,10 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 	if device.Managed {
 		{{- if hasAutoDeleteOnEmpty .ChildClasses}}
 		body, deferred := plan.toBodyWithDeletes(ctx, state, config, imp, true)
+		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, {{camelCase .Name}}MinVersions)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
@@ -448,6 +481,10 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		}
 		{{- else}}
 		body := plan.toBodyWithDeletes(ctx, state, config, imp)
+		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, {{camelCase .Name}}MinVersions)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

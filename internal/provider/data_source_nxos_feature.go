@@ -260,7 +260,7 @@ func (d *FeatureDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "fmEntity,fmAnalytics,fmBashShell,fmBfd,fmBgp,fmDhcp,fmEigrp,fmEvpn,fmGrpc,fmHmm,fmHsrp,fmInterfaceVlan,fmIsis,fmLacp,fmLldp,fmMacsec,fmNetflow,fmNgmvpn,fmNgoam,fmNvo,fmNxapi,fmOspf,fmOspfv3,fmPim,fmPtp,fmPvlan,fmSflow,fmScpServer,fmSecurityGroup,fmServiceAcceleration,fmSftpServer,fmSsh,fmTacacsplus,fmTelemetry,fmTelnet,fmUdld,fmVnSegment,fmVpc,fsetFeatureSet")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{"fmEntity", "fmAnalytics", "fmBashShell", "fmBfd", "fmBgp", "fmDhcp", "fmEigrp", "fmEvpn", "fmGrpc", "fmHmm", "fmHsrp", "fmInterfaceVlan", "fmIsis", "fmLacp", "fmLldp", "fmMacsec", "fmNetflow", "fmNgmvpn", "fmNgoam", "fmNvo", "fmNxapi", "fmOspf", "fmOspfv3", "fmPim", "fmPtp", "fmPvlan", "fmSflow", "fmScpServer", "fmSecurityGroup", "fmServiceAcceleration", "fmSftpServer", "fmSsh", "fmTacacsplus", "fmTelemetry", "fmTelnet", "fmUdld", "fmVnSegment", "fmVpc", "fsetFeatureSet"}, FeatureSubtreeClassMinVersions))}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

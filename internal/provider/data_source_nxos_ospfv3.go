@@ -292,7 +292,7 @@ func (d *OSPFv3DataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "ospfv3Inst,ospfv3Dom,ospfv3Area,ospfv3DomAf,ospfv3If")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3DomAf", "ospfv3If"}, OSPFv3SubtreeClassMinVersions))}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

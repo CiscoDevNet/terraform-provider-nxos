@@ -44,6 +44,11 @@ func (d *AttributeDescription) AddIntegerRangeDescription(min, max int64) *Attri
 	return d
 }
 
+func (d *AttributeDescription) AddMinimumVersionDescription(version string) *AttributeDescription {
+	d.String = fmt.Sprintf("%s\n  - Minimum NX-OS version: `%s`", d.String, version)
+	return d
+}
+
 type ResourceDescription struct {
 	String string
 }

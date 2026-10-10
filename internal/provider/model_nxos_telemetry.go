@@ -105,6 +105,12 @@ func (data *Telemetry) fromIdentity(ctx context.Context, identity *TelemetryIden
 	}
 }
 
+// TelemetrySubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var TelemetrySubtreeClassMinVersions = map[string]string{}
+
+// TelemetryMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var TelemetryMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

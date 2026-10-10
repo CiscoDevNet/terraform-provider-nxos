@@ -74,6 +74,12 @@ func (data *ICMPv4) fromIdentity(ctx context.Context, identity *ICMPv4Identity) 
 	}
 }
 
+// ICMPv4SubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var ICMPv4SubtreeClassMinVersions = map[string]string{}
+
+// ICMPv4MinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var ICMPv4MinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

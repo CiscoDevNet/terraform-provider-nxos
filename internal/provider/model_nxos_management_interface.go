@@ -74,6 +74,12 @@ func (data *ManagementInterface) fromIdentity(ctx context.Context, identity *Man
 	}
 }
 
+// ManagementInterfaceSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var ManagementInterfaceSubtreeClassMinVersions = map[string]string{}
+
+// ManagementInterfaceMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var ManagementInterfaceMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

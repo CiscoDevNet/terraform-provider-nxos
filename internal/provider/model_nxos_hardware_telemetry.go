@@ -78,6 +78,12 @@ func (data *HardwareTelemetry) fromIdentity(ctx context.Context, identity *Hardw
 	}
 }
 
+// HardwareTelemetrySubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var HardwareTelemetrySubtreeClassMinVersions = map[string]string{}
+
+// HardwareTelemetryMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var HardwareTelemetryMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

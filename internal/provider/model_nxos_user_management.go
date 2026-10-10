@@ -240,6 +240,12 @@ func (data *UserManagement) fromIdentity(ctx context.Context, identity *UserMana
 	}
 }
 
+// UserManagementSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var UserManagementSubtreeClassMinVersions = map[string]string{}
+
+// UserManagementMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var UserManagementMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

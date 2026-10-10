@@ -76,6 +76,12 @@ func (data *HMM) fromIdentity(ctx context.Context, identity *HMMIdentity) {
 	}
 }
 
+// HMMSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var HMMSubtreeClassMinVersions = map[string]string{}
+
+// HMMMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var HMMMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

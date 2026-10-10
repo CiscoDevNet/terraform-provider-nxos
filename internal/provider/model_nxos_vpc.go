@@ -111,6 +111,12 @@ func (data *VPC) fromIdentity(ctx context.Context, identity *VPCIdentity) {
 	}
 }
 
+// VPCSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var VPCSubtreeClassMinVersions = map[string]string{}
+
+// VPCMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var VPCMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

@@ -281,6 +281,12 @@ func (data *Platform) fromIdentity(ctx context.Context, identity *PlatformIdenti
 	}
 }
 
+// PlatformSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var PlatformSubtreeClassMinVersions = map[string]string{}
+
+// PlatformMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var PlatformMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

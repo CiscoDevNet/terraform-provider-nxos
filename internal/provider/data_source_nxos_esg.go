@@ -169,7 +169,7 @@ func (d *ESGDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							},
 						},
 						"selector_match_vlan_interfaces": schema.MapNestedAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("List of selectors based on VLAN and interface.\n  - Map key format: `<vlan_id>;<interface_id>`\n  - Key component `vlan_id`: VLAN ID that needs to be classified in this security-group.\n  - Key component `interface_id`: Interface that needs to be classified in this security-group. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `po1`.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("List of selectors based on VLAN and interface.\n  - Map key format: `<vlan_id>;<interface_id>`\n  - Key component `vlan_id`: VLAN ID that needs to be classified in this security-group.\n  - Key component `interface_id`: Interface that needs to be classified in this security-group. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `po1`.").AddMinimumVersionDescription("10.6(1)").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{},
@@ -362,7 +362,7 @@ func (d *ESGDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "esgGroupEntity,esgGroupInst,esgSelectorEntity,esgMatchConnectedEpV4,esgMatchConnectedEpV6,esgMatchVlan,esgMatchExternalSubnetV4,esgMatchExternalSubnetV6,esgMatchExternalSubnetV4WithNh,esgMatchExternalSubnetV6WithNh,esgMatchExternalSubnetV4WithNhEncap,esgMatchExternalSubnetV6WithNhEncap,esgMatchInterface,esgMatchVlanMac,esgMatchVlanInterface,esgAttributeEntity,esgClassMapEntity,esgClassMapInst,esgClassMapFilterEntry,esgPolicyMapEntity,esgPolicyMapInst,esgMatchClassMap,esgDom,esgContractEntity,esgContract")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgMatchExternalSubnetV4", "esgMatchExternalSubnetV6", "esgMatchExternalSubnetV4WithNh", "esgMatchExternalSubnetV6WithNh", "esgMatchExternalSubnetV4WithNhEncap", "esgMatchExternalSubnetV6WithNhEncap", "esgMatchInterface", "esgMatchVlanMac", "esgMatchVlanInterface", "esgAttributeEntity", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom", "esgContractEntity", "esgContract"}, ESGSubtreeClassMinVersions))}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

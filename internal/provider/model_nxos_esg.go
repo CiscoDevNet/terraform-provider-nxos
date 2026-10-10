@@ -169,6 +169,16 @@ func (data *ESG) fromIdentity(ctx context.Context, identity *ESGIdentity) {
 	}
 }
 
+// ESGSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var ESGSubtreeClassMinVersions = map[string]string{
+	"esgMatchVlanInterface": "10.6(1)",
+}
+
+// ESGMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var ESGMinVersions = map[string]helpers.MinVersion{
+	"esgMatchVlanInterface": {Version: "10.6(1)", Path: "security_groups.selector_match_vlan_interfaces"},
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

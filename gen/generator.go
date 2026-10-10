@@ -31,6 +31,7 @@ import (
 	"strings"
 	"text/template"
 
+	nxos "github.com/netascode/go-nxos"
 	"gopkg.in/yaml.v3"
 )
 
@@ -138,6 +139,8 @@ type YamlConfigAttribute struct {
 	ExcludeTest        bool     `yaml:"exclude_test"`
 	RequiresReplace    bool     `yaml:"requires_replace"`
 	TestTags           []string `yaml:"test_tags"`
+	MinVersion         string   `yaml:"min_version"`
+	DocMinVersion      string   `yaml:"-"`
 }
 
 type YamlConfigChildClass struct {
@@ -152,6 +155,8 @@ type YamlConfigChildClass struct {
 	StatusReplace     bool                   `yaml:"status_replace"`
 	AutoDeleteOnEmpty bool                   `yaml:"auto_delete_on_empty"`
 	TestTags          []string               `yaml:"test_tags"`
+	MinVersion        string                 `yaml:"min_version"`
+	DocMinVersion     string                 `yaml:"-"`
 	Attributes        []YamlConfigAttribute  `yaml:"attributes"`
 	ChildClasses      []YamlConfigChildClass `yaml:"child_classes"`
 	TfChildClasses    []YamlConfigChildClass `yaml:"-"`
@@ -393,6 +398,9 @@ var functions = template.FuncMap{
 	"mapKeyMatchExprVar":        MapKeyMatchExprVar,
 	"mapKeyRnFormatArgs":        MapKeyRnFormatArgs,
 	"mapKeyDescription":         MapKeyDescription,
+	"classMinVersions":          ClassMinVersions,
+	"minVersionChecks":          MinVersionChecks,
+	"testCond":                  TestCond,
 }
 
 // AllChildClassNames recursively collects all child class names.
@@ -783,6 +791,7 @@ func main() {
 	}
 
 	for i := range configs {
+		processMinVersions(&configs[i])
 		configs[i].TfChildClasses = buildTfChildClasses(configs[i].ChildClasses)
 		buildChildTfChildClasses(configs[i].ChildClasses)
 	}
@@ -805,4 +814,194 @@ func main() {
 		log.Fatalf("Error reading changelog: %v", err)
 	}
 	renderTemplate(changelogTemplate, changelogLocation, string(changelog))
+}
+
+// maxVersion returns the higher of two NX-OS version strings, where "" means no minimum version.
+func maxVersion(a, b string) string {
+	if a == "" {
+		return b
+	}
+	if b == "" {
+		return a
+	}
+	if nxos.MustParseVersion(a).AtLeast(nxos.MustParseVersion(b)) {
+		return a
+	}
+	return b
+}
+
+// versionAbove returns true if version v is set and higher than scope.
+func versionAbove(v, scope string) bool {
+	return v != "" && (scope == "" || nxos.MustParseVersion(v).Compare(nxos.MustParseVersion(scope)) > 0)
+}
+
+// processMinVersions validates all min_version values of a definition and sets DocMinVersion on
+// attributes and list child classes. DocMinVersion is only set where the effective minimum version
+// (including inherited ones) is higher than the one already documented on the enclosing schema level,
+// so that the requirement is documented exactly once.
+func processMinVersions(config *YamlConfig) {
+	for i := range config.Attributes {
+		validateAttributeMinVersion(config.Name, config.Attributes[i].TfName, config.Attributes[i])
+		config.Attributes[i].DocMinVersion = config.Attributes[i].MinVersion
+	}
+	processChildMinVersions(config.Name, config.ChildClasses, "", "")
+}
+
+// validateAttributeMinVersion validates the min_version of an attribute. Attributes with a static value
+// are sent with every request, so a minimum version would reject every write to older devices.
+func validateAttributeMinVersion(name, element string, a YamlConfigAttribute) {
+	validateMinVersion(name, element, a.MinVersion)
+	if a.MinVersion != "" && a.Value != "" {
+		log.Fatalf("%s: min_version is not supported on attribute %s with a static value", name, element)
+	}
+}
+
+func validateMinVersion(name, element, v string) {
+	if v == "" {
+		return
+	}
+	if _, err := nxos.ParseVersion(v); err != nil {
+		log.Fatalf("%s: invalid min_version of %s: %v", name, element, err)
+	}
+}
+
+// processChildMinVersions walks child classes. scope is the effective minimum version documented on the
+// enclosing schema level (root or list), inherited is the effective minimum version of the parent class.
+func processChildMinVersions(name string, children []YamlConfigChildClass, scope, inherited string) {
+	for i := range children {
+		c := &children[i]
+		validateMinVersion(name, c.ClassName, c.MinVersion)
+		// Single classes whose attributes all have static values are hidden and sent with every request,
+		// so a minimum version would reject every write to older devices.
+		if c.MinVersion != "" && c.Type == "single" && len(c.Attributes) > 0 && allAttributesHaveValue(c.Attributes) {
+			log.Fatalf("%s: min_version is not supported on class %s, as all its attributes have static values", name, c.ClassName)
+		}
+		eff := maxVersion(inherited, c.MinVersion)
+		if c.Type == "list" {
+			if versionAbove(eff, scope) {
+				c.DocMinVersion = eff
+			}
+			for j := range c.Attributes {
+				a := &c.Attributes[j]
+				validateAttributeMinVersion(name, c.ClassName+"."+a.NxosName, *a)
+				if v := maxVersion(eff, a.MinVersion); versionAbove(v, eff) {
+					a.DocMinVersion = v
+				}
+			}
+			processChildMinVersions(name, c.ChildClasses, eff, eff)
+		} else {
+			for j := range c.Attributes {
+				a := &c.Attributes[j]
+				validateAttributeMinVersion(name, c.ClassName+"."+a.NxosName, *a)
+				if v := maxVersion(eff, a.MinVersion); versionAbove(v, scope) {
+					a.DocMinVersion = v
+				}
+			}
+			processChildMinVersions(name, c.ChildClasses, scope, eff)
+		}
+	}
+}
+
+// ClassMinVersions returns a map of child class names to their effective minimum NX-OS version
+// (including versions inherited from parent classes). Classes without a minimum version are omitted.
+func ClassMinVersions(children []YamlConfigChildClass) map[string]string {
+	result := map[string]string{}
+	var walk func([]YamlConfigChildClass, string)
+	walk = func(children []YamlConfigChildClass, inherited string) {
+		for _, c := range children {
+			eff := maxVersion(inherited, c.MinVersion)
+			if eff != "" {
+				result[c.ClassName] = maxVersion(result[c.ClassName], eff)
+			}
+			walk(c.ChildClasses, eff)
+		}
+	}
+	walk(children, "")
+	return result
+}
+
+// MinVersionCheck describes a class or attribute with a minimum NX-OS version, used for write-time checks.
+type MinVersionCheck struct {
+	// Key is the class name, or "<class name>.<attribute nxos_name>" for attributes.
+	Key string
+	// Version is the minimum NX-OS version.
+	Version string
+	// Path is the Terraform attribute path used in error messages.
+	Path string
+}
+
+// MinVersionChecks returns all classes and attributes of a definition that have their own minimum NX-OS version.
+func MinVersionChecks(config YamlConfig) []MinVersionCheck {
+	var result []MinVersionCheck
+	for _, a := range config.Attributes {
+		if a.MinVersion != "" {
+			result = append(result, MinVersionCheck{config.ClassName + "." + a.NxosName, a.MinVersion, a.TfName})
+		}
+	}
+	var walk func([]YamlConfigChildClass, string)
+	walk = func(children []YamlConfigChildClass, prefix string) {
+		for _, c := range children {
+			scope := prefix
+			if c.Type == "list" {
+				scope = prefix + c.TfName + "."
+			}
+			if c.MinVersion != "" {
+				path := strings.TrimSuffix(scope, ".")
+				if c.Type != "list" {
+					var names []string
+					for _, a := range c.Attributes {
+						if a.Value == "" {
+							names = append(names, a.TfName)
+						}
+					}
+					path = prefix + strings.Join(names, "/")
+					if len(names) == 0 {
+						path = prefix + c.TfName
+					}
+				}
+				result = append(result, MinVersionCheck{c.ClassName, c.MinVersion, path})
+			}
+			for _, a := range c.Attributes {
+				if a.MinVersion != "" {
+					result = append(result, MinVersionCheck{c.ClassName + "." + a.NxosName, a.MinVersion, scope + a.TfName})
+				}
+			}
+			walk(c.ChildClasses, scope)
+		}
+	}
+	walk(config.ChildClasses, "")
+	// Merge duplicate keys (e.g. the same class at multiple paths), keeping the highest version
+	var merged []MinVersionCheck
+	index := map[string]int{}
+	for _, c := range result {
+		if i, ok := index[c.Key]; ok {
+			merged[i].Version = maxVersion(merged[i].Version, c.Version)
+			merged[i].Path += ", " + c.Path
+			continue
+		}
+		index[c.Key] = len(merged)
+		merged = append(merged, c)
+	}
+	return merged
+}
+
+// TestCond returns the Go condition under which a test attribute or child class is included in acceptance tests,
+// combining test tags (any of the environment variables set) and minimum NX-OS version. Returns "" if unconditional.
+func TestCond(tags []string, minVersion string) string {
+	var conds []string
+	if len(tags) > 0 {
+		var t []string
+		for _, tag := range tags {
+			t = append(t, fmt.Sprintf("os.Getenv(\"%s\") != \"\"", tag))
+		}
+		cond := strings.Join(t, " || ")
+		if len(tags) > 1 && minVersion != "" {
+			cond = "(" + cond + ")"
+		}
+		conds = append(conds, cond)
+	}
+	if minVersion != "" {
+		conds = append(conds, fmt.Sprintf("testAccDeviceVersionAtLeast(\"%s\")", minVersion))
+	}
+	return strings.Join(conds, " && ")
 }

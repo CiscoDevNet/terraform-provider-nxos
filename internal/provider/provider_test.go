@@ -19,15 +19,20 @@ package provider
 
 import (
 	"context"
+	"io"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 	"testing"
 
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
+	"github.com/hashicorp/terraform-plugin-testing/helper/logging"
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
+	"github.com/netascode/go-nxos"
 )
 
 // testAccProtoV6ProviderFactories are used to instantiate a provider during
@@ -104,4 +109,36 @@ func terraformVersionMinimum(min *version.Version) bool {
 		return false
 	}
 	return v.GreaterThanOrEqual(min)
+}
+
+// Requests made directly by the tests (e.g. testAccDeviceVersionAtLeast) happen before resource.Test applies
+// the TF_LOG based log filter, so go-nxos debug logs would otherwise be printed unconditionally.
+func init() {
+	if logging.LogLevel() == "" && os.Getenv(logging.EnvAccLogFile) == "" {
+		log.SetOutput(io.Discard)
+	}
+}
+
+var (
+	testAccDeviceVersion     *nxos.Version
+	testAccDeviceVersionOnce sync.Once
+)
+
+// testAccDeviceVersionAtLeast returns true if the NX-OS version of the test device (NXOS_URL) is at least
+// the given minimum version. The device version is retrieved once and cached. If it cannot be determined,
+// true is returned so that the corresponding configuration is tested and failures surface.
+func testAccDeviceVersionAtLeast(min string) bool {
+	testAccDeviceVersionOnce.Do(func() {
+		client, err := nxos.NewClient(os.Getenv("NXOS_URL"), os.Getenv("NXOS_USERNAME"), os.Getenv("NXOS_PASSWORD"), true)
+		if err != nil {
+			return
+		}
+		if v, err := client.Version(); err == nil {
+			testAccDeviceVersion = &v
+		}
+	})
+	if testAccDeviceVersion == nil {
+		return true
+	}
+	return testAccDeviceVersion.AtLeast(nxos.MustParseVersion(min))
 }

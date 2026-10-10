@@ -89,6 +89,12 @@ func (data *MACsec) fromIdentity(ctx context.Context, identity *MACsecIdentity) 
 	}
 }
 
+// MACsecSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
+var MACsecSubtreeClassMinVersions = map[string]string{}
+
+// MACsecMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
+var MACsecMinVersions = map[string]helpers.MinVersion{}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

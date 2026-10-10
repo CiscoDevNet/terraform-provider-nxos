@@ -89,6 +89,7 @@ resource "nxos_dme" "PreReq1" {
 resource "nxos_dme" "PreReq2" {
   dn = "sys/fm/ifvlan"
   class_name = "fmInterfaceVlan"
+  delete = false
   content = {
       adminSt = "enabled"
   }

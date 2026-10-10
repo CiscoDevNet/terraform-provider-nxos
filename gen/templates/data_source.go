@@ -71,7 +71,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			},
 			{{- range .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
-				MarkdownDescription: "{{.Description}}",
+				MarkdownDescription: {{if .DocMinVersion}}helpers.NewAttributeDescription("{{.Description}}").AddMinimumVersionDescription("{{.DocMinVersion}}").String{{else}}"{{.Description}}"{{end}},
 				{{- if .Id}}
 				Required:            true,
 				{{- else}}
@@ -94,7 +94,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			{{- end}}
 			{{- define "dsAttrSchema" -}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
-				MarkdownDescription: "{{.Description}}",
+				MarkdownDescription: {{if .DocMinVersion}}helpers.NewAttributeDescription("{{.Description}}").AddMinimumVersionDescription("{{.DocMinVersion}}").String{{else}}"{{.Description}}"{{end}},
 				Computed:            true,
 				{{- if .Sensitive}}
 				Sensitive:           true,
@@ -120,7 +120,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			{{- template "dsChildrenSchema" .TfChildClasses}}
 			{{- else if eq .Type "list"}}
 			"{{.TfName}}": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}{{mapKeyDescription .Attributes}}").String,
+				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}{{mapKeyDescription .Attributes}}"){{if .DocMinVersion}}.AddMinimumVersionDescription("{{.DocMinVersion}}"){{end}}.String,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -171,7 +171,7 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 	}
 
 	{{- if .ChildClasses}}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "{{join (allChildClassNames .ChildClasses) ","}}")}
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{ {{- range $i, $c := allChildClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} }, {{camelCase .Name}}SubtreeClassMinVersions))}
 	{{- else}}
 	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "no")}
 	{{- end}}

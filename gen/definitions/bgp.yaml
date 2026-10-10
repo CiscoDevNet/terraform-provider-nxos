@@ -336,6 +336,101 @@ child_classes:
                 min_int: 1
                 max_int: 3600
                 example: 1800
+          - class_name: bgpPathCtrl
+            doc_path: Routing%20and%20Forwarding/bgp:PathCtrl/
+            rn: pathctrl
+            type: single
+            tf_name: path_control
+            description: 'BGP bestpath control configuration.'
+            attributes:
+              - nxos_name: aigpIgnore
+                tf_name: path_control_aigp_ignore
+                type: String
+                description: 'Ignore AIGP attribute during next-hop during bestpath calculation when one of the paths does not have an AIGP attribute.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: alwaysCompMed
+                tf_name: path_control_always_compare_med
+                type: String
+                description: 'Compare MED on paths from different AS.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: asPathIgnore
+                tf_name: path_control_as_path_ignore
+                type: String
+                description: 'Ignore AS-Path during bestpath selection.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: asPathMultipathRelax
+                tf_name: path_control_as_path_multipath_relax
+                type: String
+                description: 'Relax AS-Path restriction when choosing multipaths.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: compNbrId
+                tf_name: path_control_compare_neighbor_id
+                type: String
+                description: 'Compare Neighbor Id.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: compRtrId
+                tf_name: path_control_compare_router_id
+                type: String
+                description: 'Compare Router Id.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: costCommunityIgnore
+                tf_name: path_control_cost_community_ignore
+                type: String
+                description: 'Ignore Cost Communities.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: igpMetricIgnore
+                tf_name: path_control_igp_metric_ignore
+                type: String
+                description: 'Ignore IGP metric for next-hop during bestpath calculation.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: medConfed
+                tf_name: path_control_med_confed
+                type: String
+                description: 'Compare MED only from paths originated from within a confederation.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: medMissingAsWorst
+                tf_name: path_control_med_missing_as_worst
+                type: String
+                description: 'Med Missing As Worst.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: medNonDeter
+                tf_name: path_control_med_non_deterministic
+                type: String
+                description: 'Med Non-Deterministic.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
           - class_name: bgpDomAf
             doc_path: Routing%20and%20Forwarding/bgp:DomAf/
             rn: af-[%s]

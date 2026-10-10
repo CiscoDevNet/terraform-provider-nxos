@@ -63,7 +63,7 @@ func (r *BGPResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.").AddApiDocumentation("bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/", []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpAddlPath", "bgpAggAddr", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPeerIf"}, []string{"Routing%20and%20Forwarding/bgp:Inst/", "Routing%20and%20Forwarding/bgp:Dom/", "Routing%20and%20Forwarding/bgp:RtCtrl/", "Routing%20and%20Forwarding/bgp:Gr/", "Routing%20and%20Forwarding/bgp:DomAf/", "Routing%20and%20Forwarding/bgp:AdvPrefix/", "Routing%20and%20Forwarding/bgp:InterLeakP/", "Routing%20and%20Forwarding/bgp:AddlPath/", "Routing%20and%20Forwarding/bgp:AggAddr/", "Routing%20and%20Forwarding/bgp:PeerCont/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:Peer/", "Routing%20and%20Forwarding/bgp:LocalAsn/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:RtCtrlP/", "Routing%20and%20Forwarding/bgp:PfxCtrlP/", "Routing%20and%20Forwarding/bgp:PeerIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.").AddApiDocumentation("bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/", []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpPathCtrl", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpAddlPath", "bgpAggAddr", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPeerIf"}, []string{"Routing%20and%20Forwarding/bgp:Inst/", "Routing%20and%20Forwarding/bgp:Dom/", "Routing%20and%20Forwarding/bgp:RtCtrl/", "Routing%20and%20Forwarding/bgp:Gr/", "Routing%20and%20Forwarding/bgp:PathCtrl/", "Routing%20and%20Forwarding/bgp:DomAf/", "Routing%20and%20Forwarding/bgp:AdvPrefix/", "Routing%20and%20Forwarding/bgp:InterLeakP/", "Routing%20and%20Forwarding/bgp:AddlPath/", "Routing%20and%20Forwarding/bgp:AggAddr/", "Routing%20and%20Forwarding/bgp:PeerCont/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:Peer/", "Routing%20and%20Forwarding/bgp:LocalAsn/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:RtCtrlP/", "Routing%20and%20Forwarding/bgp:PfxCtrlP/", "Routing%20and%20Forwarding/bgp:PeerIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -330,6 +330,83 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 3600),
+							},
+						},
+						"path_control_aigp_ignore": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ignore AIGP attribute during next-hop during bestpath calculation when one of the paths does not have an AIGP attribute.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"path_control_always_compare_med": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Compare MED on paths from different AS.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"path_control_as_path_ignore": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ignore AS-Path during bestpath selection.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"path_control_as_path_multipath_relax": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Relax AS-Path restriction when choosing multipaths.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"path_control_compare_neighbor_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Compare Neighbor Id.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"path_control_compare_router_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Compare Router Id.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"path_control_cost_community_ignore": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ignore Cost Communities.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"path_control_igp_metric_ignore": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ignore IGP metric for next-hop during bestpath calculation.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"path_control_med_confed": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Compare MED only from paths originated from within a confederation.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"path_control_med_missing_as_worst": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Med Missing As Worst.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"path_control_med_non_deterministic": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Med Non-Deterministic.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
 							},
 						},
 						"address_families": schema.MapNestedAttribute{
@@ -1721,7 +1798,7 @@ func (r *BGPResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpAddlPath", "bgpAggAddr", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPeerIf"}, BGPSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpPathCtrl", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpAddlPath", "bgpAggAddr", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPeerIf"}, BGPSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

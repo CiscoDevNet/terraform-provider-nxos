@@ -62,33 +62,44 @@ type BGP struct {
 }
 
 type BGPVrfs struct {
-	RouterId                       types.String                      `tfsdk:"router_id"`
-	AllocIndex                     types.Int64                       `tfsdk:"alloc_index"`
-	BestpathFirstAlways            types.String                      `tfsdk:"bestpath_first_always"`
-	BestpathInterval               types.Int64                       `tfsdk:"bestpath_interval"`
-	BandwidthReference             types.Int64                       `tfsdk:"bandwidth_reference"`
-	BandwidthReferenceUnit         types.String                      `tfsdk:"bandwidth_reference_unit"`
-	ClusterId                      types.String                      `tfsdk:"cluster_id"`
-	HoldTime                       types.Int64                       `tfsdk:"hold_time"`
-	KeepaliveInterval              types.Int64                       `tfsdk:"keepalive_interval"`
-	LocalAsn                       types.String                      `tfsdk:"local_asn"`
-	MaxAsLimit                     types.Int64                       `tfsdk:"max_as_limit"`
-	Mode                           types.String                      `tfsdk:"mode"`
-	PrefixPeerTimeout              types.Int64                       `tfsdk:"prefix_peer_timeout"`
-	PrefixPeerWaitTime             types.Int64                       `tfsdk:"prefix_peer_wait_time"`
-	ReconnectInterval              types.Int64                       `tfsdk:"reconnect_interval"`
-	RouterIdAuto                   types.String                      `tfsdk:"router_id_auto"`
-	RouteControlEnforceFirstAs     types.String                      `tfsdk:"route_control_enforce_first_as"`
-	RouteControlFibAccelerate      types.String                      `tfsdk:"route_control_fib_accelerate"`
-	RouteControlLogNeighborChanges types.String                      `tfsdk:"route_control_log_neighbor_changes"`
-	RouteControlSuppressRoutes     types.String                      `tfsdk:"route_control_suppress_routes"`
-	GracefulRestartControl         types.String                      `tfsdk:"graceful_restart_control"`
-	GracefulRestartInterval        types.Int64                       `tfsdk:"graceful_restart_interval"`
-	GracefulRestartStaleInterval   types.Int64                       `tfsdk:"graceful_restart_stale_interval"`
-	AddressFamilies                map[string]BGPVrfsAddressFamilies `tfsdk:"address_families"`
-	PeerTemplates                  map[string]BGPVrfsPeerTemplates   `tfsdk:"peer_templates"`
-	Peers                          map[string]BGPVrfsPeers           `tfsdk:"peers"`
-	InterfacePeers                 map[string]BGPVrfsInterfacePeers  `tfsdk:"interface_peers"`
+	RouterId                        types.String                      `tfsdk:"router_id"`
+	AllocIndex                      types.Int64                       `tfsdk:"alloc_index"`
+	BestpathFirstAlways             types.String                      `tfsdk:"bestpath_first_always"`
+	BestpathInterval                types.Int64                       `tfsdk:"bestpath_interval"`
+	BandwidthReference              types.Int64                       `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit          types.String                      `tfsdk:"bandwidth_reference_unit"`
+	ClusterId                       types.String                      `tfsdk:"cluster_id"`
+	HoldTime                        types.Int64                       `tfsdk:"hold_time"`
+	KeepaliveInterval               types.Int64                       `tfsdk:"keepalive_interval"`
+	LocalAsn                        types.String                      `tfsdk:"local_asn"`
+	MaxAsLimit                      types.Int64                       `tfsdk:"max_as_limit"`
+	Mode                            types.String                      `tfsdk:"mode"`
+	PrefixPeerTimeout               types.Int64                       `tfsdk:"prefix_peer_timeout"`
+	PrefixPeerWaitTime              types.Int64                       `tfsdk:"prefix_peer_wait_time"`
+	ReconnectInterval               types.Int64                       `tfsdk:"reconnect_interval"`
+	RouterIdAuto                    types.String                      `tfsdk:"router_id_auto"`
+	RouteControlEnforceFirstAs      types.String                      `tfsdk:"route_control_enforce_first_as"`
+	RouteControlFibAccelerate       types.String                      `tfsdk:"route_control_fib_accelerate"`
+	RouteControlLogNeighborChanges  types.String                      `tfsdk:"route_control_log_neighbor_changes"`
+	RouteControlSuppressRoutes      types.String                      `tfsdk:"route_control_suppress_routes"`
+	GracefulRestartControl          types.String                      `tfsdk:"graceful_restart_control"`
+	GracefulRestartInterval         types.Int64                       `tfsdk:"graceful_restart_interval"`
+	GracefulRestartStaleInterval    types.Int64                       `tfsdk:"graceful_restart_stale_interval"`
+	PathControlAigpIgnore           types.String                      `tfsdk:"path_control_aigp_ignore"`
+	PathControlAlwaysCompareMed     types.String                      `tfsdk:"path_control_always_compare_med"`
+	PathControlAsPathIgnore         types.String                      `tfsdk:"path_control_as_path_ignore"`
+	PathControlAsPathMultipathRelax types.String                      `tfsdk:"path_control_as_path_multipath_relax"`
+	PathControlCompareNeighborId    types.String                      `tfsdk:"path_control_compare_neighbor_id"`
+	PathControlCompareRouterId      types.String                      `tfsdk:"path_control_compare_router_id"`
+	PathControlCostCommunityIgnore  types.String                      `tfsdk:"path_control_cost_community_ignore"`
+	PathControlIgpMetricIgnore      types.String                      `tfsdk:"path_control_igp_metric_ignore"`
+	PathControlMedConfed            types.String                      `tfsdk:"path_control_med_confed"`
+	PathControlMedMissingAsWorst    types.String                      `tfsdk:"path_control_med_missing_as_worst"`
+	PathControlMedNonDeterministic  types.String                      `tfsdk:"path_control_med_non_deterministic"`
+	AddressFamilies                 map[string]BGPVrfsAddressFamilies `tfsdk:"address_families"`
+	PeerTemplates                   map[string]BGPVrfsPeerTemplates   `tfsdk:"peer_templates"`
+	Peers                           map[string]BGPVrfsPeers           `tfsdk:"peers"`
+	InterfacePeers                  map[string]BGPVrfsInterfacePeers  `tfsdk:"interface_peers"`
 }
 
 type BGPVrfsAddressFamilies struct {
@@ -565,6 +576,43 @@ func (data BGP) toBody(config BGP) nxos.Body {
 				}
 				if attrs != "{}" {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpGr.attributes", attrs)
+				}
+				attrs = "{}"
+				if !child.PathControlAigpIgnore.IsUnknown() && !child.PathControlAigpIgnore.IsNull() && !configChild.PathControlAigpIgnore.IsNull() {
+					attrs, _ = sjson.Set(attrs, "aigpIgnore", child.PathControlAigpIgnore.ValueString())
+				}
+				if !child.PathControlAlwaysCompareMed.IsUnknown() && !child.PathControlAlwaysCompareMed.IsNull() && !configChild.PathControlAlwaysCompareMed.IsNull() {
+					attrs, _ = sjson.Set(attrs, "alwaysCompMed", child.PathControlAlwaysCompareMed.ValueString())
+				}
+				if !child.PathControlAsPathIgnore.IsUnknown() && !child.PathControlAsPathIgnore.IsNull() && !configChild.PathControlAsPathIgnore.IsNull() {
+					attrs, _ = sjson.Set(attrs, "asPathIgnore", child.PathControlAsPathIgnore.ValueString())
+				}
+				if !child.PathControlAsPathMultipathRelax.IsUnknown() && !child.PathControlAsPathMultipathRelax.IsNull() && !configChild.PathControlAsPathMultipathRelax.IsNull() {
+					attrs, _ = sjson.Set(attrs, "asPathMultipathRelax", child.PathControlAsPathMultipathRelax.ValueString())
+				}
+				if !child.PathControlCompareNeighborId.IsUnknown() && !child.PathControlCompareNeighborId.IsNull() && !configChild.PathControlCompareNeighborId.IsNull() {
+					attrs, _ = sjson.Set(attrs, "compNbrId", child.PathControlCompareNeighborId.ValueString())
+				}
+				if !child.PathControlCompareRouterId.IsUnknown() && !child.PathControlCompareRouterId.IsNull() && !configChild.PathControlCompareRouterId.IsNull() {
+					attrs, _ = sjson.Set(attrs, "compRtrId", child.PathControlCompareRouterId.ValueString())
+				}
+				if !child.PathControlCostCommunityIgnore.IsUnknown() && !child.PathControlCostCommunityIgnore.IsNull() && !configChild.PathControlCostCommunityIgnore.IsNull() {
+					attrs, _ = sjson.Set(attrs, "costCommunityIgnore", child.PathControlCostCommunityIgnore.ValueString())
+				}
+				if !child.PathControlIgpMetricIgnore.IsUnknown() && !child.PathControlIgpMetricIgnore.IsNull() && !configChild.PathControlIgpMetricIgnore.IsNull() {
+					attrs, _ = sjson.Set(attrs, "igpMetricIgnore", child.PathControlIgpMetricIgnore.ValueString())
+				}
+				if !child.PathControlMedConfed.IsUnknown() && !child.PathControlMedConfed.IsNull() && !configChild.PathControlMedConfed.IsNull() {
+					attrs, _ = sjson.Set(attrs, "medConfed", child.PathControlMedConfed.ValueString())
+				}
+				if !child.PathControlMedMissingAsWorst.IsUnknown() && !child.PathControlMedMissingAsWorst.IsNull() && !configChild.PathControlMedMissingAsWorst.IsNull() {
+					attrs, _ = sjson.Set(attrs, "medMissingAsWorst", child.PathControlMedMissingAsWorst.ValueString())
+				}
+				if !child.PathControlMedNonDeterministic.IsUnknown() && !child.PathControlMedNonDeterministic.IsNull() && !configChild.PathControlMedNonDeterministic.IsNull() {
+					attrs, _ = sjson.Set(attrs, "medNonDeter", child.PathControlMedNonDeterministic.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpPathCtrl.attributes", attrs)
 				}
 				for key, child := range child.AddressFamilies {
 					configChild, configChildOk := configChild.AddressFamilies[key]
@@ -1357,6 +1405,30 @@ func (data *BGP) fromBody(res gjson.Result) {
 								child.GracefulRestartInterval = types.Int64Value(rbgpGr.Get("bgpGr.attributes.restartIntvl").Int())
 								child.GracefulRestartStaleInterval = types.Int64Value(rbgpGr.Get("bgpGr.attributes.staleIntvl").Int())
 							}
+							{
+								var rbgpPathCtrl gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("bgpPathCtrl.attributes.rn").String()
+										if rnValue == "pathctrl" {
+											rbgpPathCtrl = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.PathControlAigpIgnore = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.aigpIgnore").String())
+								child.PathControlAlwaysCompareMed = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.alwaysCompMed").String())
+								child.PathControlAsPathIgnore = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.asPathIgnore").String())
+								child.PathControlAsPathMultipathRelax = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.asPathMultipathRelax").String())
+								child.PathControlCompareNeighborId = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.compNbrId").String())
+								child.PathControlCompareRouterId = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.compRtrId").String())
+								child.PathControlCostCommunityIgnore = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.costCommunityIgnore").String())
+								child.PathControlIgpMetricIgnore = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.igpMetricIgnore").String())
+								child.PathControlMedConfed = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.medConfed").String())
+								child.PathControlMedMissingAsWorst = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.medMissingAsWorst").String())
+								child.PathControlMedNonDeterministic = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.medNonDeter").String())
+							}
 							value.Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
 									nestedV.ForEach(
@@ -2054,6 +2126,74 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				item.GracefulRestartStaleInterval = types.Int64Value(rbgpGr.Get("bgpGr.attributes.staleIntvl").Int())
 			} else {
 				item.GracefulRestartStaleInterval = types.Int64Null()
+			}
+		}
+		{
+			var rbgpPathCtrl gjson.Result
+			rbgpDom.Get("bgpDom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("bgpPathCtrl.attributes.rn").String()
+					if rnValue == "pathctrl" {
+						rbgpPathCtrl = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.PathControlAigpIgnore.IsNull() {
+				item.PathControlAigpIgnore = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.aigpIgnore").String())
+			} else {
+				item.PathControlAigpIgnore = types.StringNull()
+			}
+			if !item.PathControlAlwaysCompareMed.IsNull() {
+				item.PathControlAlwaysCompareMed = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.alwaysCompMed").String())
+			} else {
+				item.PathControlAlwaysCompareMed = types.StringNull()
+			}
+			if !item.PathControlAsPathIgnore.IsNull() {
+				item.PathControlAsPathIgnore = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.asPathIgnore").String())
+			} else {
+				item.PathControlAsPathIgnore = types.StringNull()
+			}
+			if !item.PathControlAsPathMultipathRelax.IsNull() {
+				item.PathControlAsPathMultipathRelax = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.asPathMultipathRelax").String())
+			} else {
+				item.PathControlAsPathMultipathRelax = types.StringNull()
+			}
+			if !item.PathControlCompareNeighborId.IsNull() {
+				item.PathControlCompareNeighborId = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.compNbrId").String())
+			} else {
+				item.PathControlCompareNeighborId = types.StringNull()
+			}
+			if !item.PathControlCompareRouterId.IsNull() {
+				item.PathControlCompareRouterId = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.compRtrId").String())
+			} else {
+				item.PathControlCompareRouterId = types.StringNull()
+			}
+			if !item.PathControlCostCommunityIgnore.IsNull() {
+				item.PathControlCostCommunityIgnore = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.costCommunityIgnore").String())
+			} else {
+				item.PathControlCostCommunityIgnore = types.StringNull()
+			}
+			if !item.PathControlIgpMetricIgnore.IsNull() {
+				item.PathControlIgpMetricIgnore = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.igpMetricIgnore").String())
+			} else {
+				item.PathControlIgpMetricIgnore = types.StringNull()
+			}
+			if !item.PathControlMedConfed.IsNull() {
+				item.PathControlMedConfed = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.medConfed").String())
+			} else {
+				item.PathControlMedConfed = types.StringNull()
+			}
+			if !item.PathControlMedMissingAsWorst.IsNull() {
+				item.PathControlMedMissingAsWorst = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.medMissingAsWorst").String())
+			} else {
+				item.PathControlMedMissingAsWorst = types.StringNull()
+			}
+			if !item.PathControlMedNonDeterministic.IsNull() {
+				item.PathControlMedNonDeterministic = types.StringValue(rbgpPathCtrl.Get("bgpPathCtrl.attributes.medNonDeter").String())
+			} else {
+				item.PathControlMedNonDeterministic = types.StringNull()
 			}
 		}
 		for nc := range item.AddressFamilies {
@@ -3593,6 +3733,50 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP, im
 						if !stateChild.GracefulRestartStaleInterval.IsNull() && configChild.GracefulRestartStaleInterval.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpGr")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"staleIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlAigpIgnore.IsNull() && configChild.PathControlAigpIgnore.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"aigpIgnore", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlAlwaysCompareMed.IsNull() && configChild.PathControlAlwaysCompareMed.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"alwaysCompMed", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlAsPathIgnore.IsNull() && configChild.PathControlAsPathIgnore.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"asPathIgnore", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlAsPathMultipathRelax.IsNull() && configChild.PathControlAsPathMultipathRelax.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"asPathMultipathRelax", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlCompareNeighborId.IsNull() && configChild.PathControlCompareNeighborId.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"compNbrId", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlCompareRouterId.IsNull() && configChild.PathControlCompareRouterId.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"compRtrId", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlCostCommunityIgnore.IsNull() && configChild.PathControlCostCommunityIgnore.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"costCommunityIgnore", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlIgpMetricIgnore.IsNull() && configChild.PathControlIgpMetricIgnore.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"igpMetricIgnore", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlMedConfed.IsNull() && configChild.PathControlMedConfed.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"medConfed", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlMedMissingAsWorst.IsNull() && configChild.PathControlMedMissingAsWorst.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"medMissingAsWorst", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PathControlMedNonDeterministic.IsNull() && configChild.PathControlMedNonDeterministic.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "bgpPathCtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"medNonDeter", "DME_UNSET_PROPERTY_MARKER")
 						}
 						for key := range stateChild.AddressFamilies {
 							if configChild, ok := configChild.AddressFamilies[key]; ok {

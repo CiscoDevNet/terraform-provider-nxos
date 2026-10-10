@@ -64,6 +64,17 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.graceful_restart_control", "complete"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.graceful_restart_interval", "240"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.graceful_restart_stale_interval", "1800"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_aigp_ignore", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_always_compare_med", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_as_path_ignore", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_as_path_multipath_relax", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_compare_neighbor_id", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_compare_router_id", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_cost_community_ignore", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_igp_metric_ignore", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_med_confed", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_med_missing_as_worst", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_med_non_deterministic", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.critical_nexthop_timeout", "2500"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.non_critical_nexthop_timeout", "8000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertise_l2vpn_evpn", "disabled"))
@@ -284,6 +295,17 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `			graceful_restart_control = "complete"` + "\n"
 	config += `			graceful_restart_interval = 240` + "\n"
 	config += `			graceful_restart_stale_interval = 1800` + "\n"
+	config += `			path_control_aigp_ignore = "enabled"` + "\n"
+	config += `			path_control_always_compare_med = "enabled"` + "\n"
+	config += `			path_control_as_path_ignore = "enabled"` + "\n"
+	config += `			path_control_as_path_multipath_relax = "enabled"` + "\n"
+	config += `			path_control_compare_neighbor_id = "enabled"` + "\n"
+	config += `			path_control_compare_router_id = "enabled"` + "\n"
+	config += `			path_control_cost_community_ignore = "enabled"` + "\n"
+	config += `			path_control_igp_metric_ignore = "enabled"` + "\n"
+	config += `			path_control_med_confed = "enabled"` + "\n"
+	config += `			path_control_med_missing_as_worst = "enabled"` + "\n"
+	config += `			path_control_med_non_deterministic = "enabled"` + "\n"
 	config += `			address_families = {` + "\n"
 	config += `				"ipv4-ucast" = {` + "\n"
 	config += `					critical_nexthop_timeout = "2500"` + "\n"

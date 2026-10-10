@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This data source can read the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.
   API Documentation
-  bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpAddlPath https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AddlPath/bgpAggAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AggAddr/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpPeerIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/
+  bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpPathCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PathCtrl/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpAddlPath https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AddlPath/bgpAggAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AggAddr/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpPeerIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/
 ---
 
 # nxos_bgp (Data Source)
@@ -19,6 +19,7 @@ This data source can read the BGP configuration on NX-OS devices, including the 
 - [bgpDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/)
 - [bgpRtCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/)
 - [bgpGr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/)
+- [bgpPathCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PathCtrl/)
 - [bgpDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/)
 - [bgpAdvPrefix](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/)
 - [bgpInterLeakP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/)
@@ -96,6 +97,17 @@ Read-Only:
 - `local_asn` (String) Local Asn for the EBGP neighbor.
 - `max_as_limit` (Number) Max AS-Path limit from EBGP neighbor.
 - `mode` (String) The BGP Domain mode.
+- `path_control_aigp_ignore` (String) Ignore AIGP attribute during next-hop during bestpath calculation when one of the paths does not have an AIGP attribute.
+- `path_control_always_compare_med` (String) Compare MED on paths from different AS.
+- `path_control_as_path_ignore` (String) Ignore AS-Path during bestpath selection.
+- `path_control_as_path_multipath_relax` (String) Relax AS-Path restriction when choosing multipaths.
+- `path_control_compare_neighbor_id` (String) Compare Neighbor Id.
+- `path_control_compare_router_id` (String) Compare Router Id.
+- `path_control_cost_community_ignore` (String) Ignore Cost Communities.
+- `path_control_igp_metric_ignore` (String) Ignore IGP metric for next-hop during bestpath calculation.
+- `path_control_med_confed` (String) Compare MED only from paths originated from within a confederation.
+- `path_control_med_missing_as_worst` (String) Med Missing As Worst.
+- `path_control_med_non_deterministic` (String) Med Non-Deterministic.
 - `peer_templates` (Attributes Map) List of BGP peer templates.
   - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
 - `peers` (Attributes Map) List of BGP peers.

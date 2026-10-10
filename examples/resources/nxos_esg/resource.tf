@@ -43,7 +43,8 @@ resource "nxos_esg" "example" {
       selector_match_vlan_interfaces = {
         "vlan-102;eth1/1" = {}
       }
-      type_layer4_7 = "enabled"
+      type_layer4_7         = "enabled"
+      intra_group_isolation = "enabled"
     }
   }
   class_maps = {

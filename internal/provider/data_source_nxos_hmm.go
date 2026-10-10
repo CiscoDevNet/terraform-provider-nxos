@@ -108,6 +108,10 @@ func (d *HMMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							MarkdownDescription: "HMM Fabric Forwarding mode information for the interface.",
 							Computed:            true,
 						},
+						"proxy": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Anycast Gateway with proxy.").AddMinimumVersionDescription("10.6(3)").String,
+							Computed:            true,
+						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: "Description.",
 							Computed:            true,

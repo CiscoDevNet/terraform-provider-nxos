@@ -63,7 +63,7 @@ func (r *PortChannelInterfaceResource) Metadata(ctx context.Context, req resourc
 func (r *PortChannelInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "Interfaces/pc:VlanMapping/", "Interfaces/pc:VlanTranslateTable/", "Interfaces/pc:VlanTranslateEntry/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -415,6 +415,42 @@ func (r *PortChannelInterfaceResource) Schema(ctx context.Context, req resource.
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("on", "off"),
+							},
+						},
+						"vlan_mapping_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable VLAN mapping.").String,
+							Optional:            true,
+						},
+						"selective_qinq_all": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Selective QinQ for all VLANs.").String,
+							Optional:            true,
+						},
+						"selective_qinq_vlans": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of VLANs for selective QinQ. Example: `20-25,30`.").String,
+							Optional:            true,
+						},
+						"selective_qinq_outer_vlan_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Outer VLAN ID for selective QinQ. Possible values are `vlan-XX`.").String,
+							Optional:            true,
+						},
+						"vlan_mappings": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of VLAN mappings.\n  - Map key: `vlan_id` - VLAN ID to be translated. Possible values are `vlan-XX`.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"translated_vlan_id": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Translated VLAN ID. Possible values are `vlan-XX`.").String,
+										Optional:            true,
+									},
+									"inner_vlan_id": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Inner VLAN ID. Possible values are `vlan-XX`.").String,
+										Optional:            true,
+									},
+									"rx_only": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Translate ingress traffic only (`true`) or traffic in both directions (`false`).").AddMinimumVersionDescription("10.6(3)").String,
+										Optional:            true,
+									},
+								},
 							},
 						},
 						"allow_multi_tag": schema.StringAttribute{
@@ -793,7 +829,7 @@ func (r *PortChannelInterfaceResource) Read(ctx context.Context, req resource.Re
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcAggrIfExtended", "pcRsMbrIfs"}, PortChannelInterfaceSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, PortChannelInterfaceSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

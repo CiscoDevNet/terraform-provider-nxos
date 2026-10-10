@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1VlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanMapping/l1VlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanTranslateTable/l1VlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanTranslateEntry/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
 ---
 
 # nxos_physical_interface (Resource)
@@ -20,6 +20,9 @@ This resource can manage physical interfaces on NX-OS devices, including setting
 - [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
 - [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/)
 - [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
+- [l1VlanMapping](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanMapping/)
+- [l1VlanTranslateTable](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanTranslateTable/)
+- [l1VlanTranslateEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanTranslateEntry/)
 - [l1PhysIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/)
 
 ## Example Usage
@@ -88,7 +91,17 @@ resource "nxos_physical_interface" "example" {
       storm_control_packet_type              = "bcast"
       priority_flow_control_mode             = "on"
       priority_flow_control_send_tlv         = true
-      extended_description                   = "Extended interface config"
+      vlan_mapping_enable                    = true
+      selective_qinq_all                     = false
+      selective_qinq_vlans                   = "20-25"
+      selective_qinq_outer_vlan_id           = "vlan-200"
+      vlan_mappings = {
+        "vlan-11" = {
+          translated_vlan_id = "vlan-10"
+          rx_only            = true
+        }
+      }
+      extended_description = "Extended interface config"
     }
   }
 }
@@ -222,6 +235,9 @@ Optional:
 - `router_mac` (String) The administrative router MAC address.
 - `router_mac_ipv6_extract` (String) Disable/enable switchport ipv6 extract.
   - Choices: `disable`, `enable`
+- `selective_qinq_all` (Boolean) Selective QinQ for all VLANs.
+- `selective_qinq_outer_vlan_id` (String) Outer VLAN ID for selective QinQ. Possible values are `vlan-XX`.
+- `selective_qinq_vlans` (String) List of VLANs for selective QinQ. Example: `20-25,30`.
 - `shut_down_lan` (String) Shut/Unshut all LAN VLANs on interface.
   - Choices: `disable`, `enable`
 - `snmp_trap_state` (String) Administrative port snmp trap state.
@@ -284,6 +300,9 @@ Optional:
   - Choices: `discovery`, `epg`, `fabric`, `infra`, `controller`, `blacklist`
 - `user_configured_flags` (String) Port User Config Flags.
   - Choices: `none`, `admin_state`, `admin_layer`, `admin_router_mac`, `admin_dce_mode`, `admin_mtu`
+- `vlan_mapping_enable` (Boolean) Enable VLAN mapping.
+- `vlan_mappings` (Attributes Map) List of VLAN mappings.
+  - Map key: `vlan_id` - VLAN ID to be translated. Possible values are `vlan-XX`. (see [below for nested schema](#nestedatt--physical_interfaces--vlan_mappings))
 - `voice_port_cos` (Number) Voice Port Cos.
   - Range: `-1`-`7`
 - `voice_port_trust` (String) Voice Port Trust.
@@ -293,6 +312,16 @@ Optional:
 - `voice_vlan_type` (String) Voice vlan type.
   - Choices: `none`, `tagged`, `dot1p`, `untagged`
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
+
+<a id="nestedatt--physical_interfaces--vlan_mappings"></a>
+### Nested Schema for `physical_interfaces.vlan_mappings`
+
+Optional:
+
+- `inner_vlan_id` (String) Inner VLAN ID. Possible values are `vlan-XX`.
+- `rx_only` (Boolean) Translate ingress traffic only (`true`) or traffic in both directions (`false`).
+  - Minimum NX-OS version: `10.6(3)`
+- `translated_vlan_id` (String) Translated VLAN ID. Possible values are `vlan-XX`.
 
 ## Import
 

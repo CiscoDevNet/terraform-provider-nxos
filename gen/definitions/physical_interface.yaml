@@ -604,6 +604,72 @@ child_classes:
               - 'off'
             example: 'off'
             exclude_test: true
+      - class_name: l1VlanMapping
+        rn: vlanmapping
+        type: single
+        tf_name: vlan_mapping
+        description: 'VLAN mapping configuration.'
+        test_tags: [PHYSICAL_INTERFACE_VLAN_MAPPING]
+        doc_path: System/l1:VlanMapping/
+        attributes:
+          - nxos_name: Enabled
+            tf_name: vlan_mapping_enable
+            type: Bool
+            description: 'Enable VLAN mapping.'
+            example: true
+          - nxos_name: selectiveQinqAll
+            tf_name: selective_qinq_all
+            type: Bool
+            description: 'Selective QinQ for all VLANs.'
+            example: false
+          - nxos_name: selectiveQinqVlans
+            tf_name: selective_qinq_vlans
+            type: String
+            description: 'List of VLANs for selective QinQ. Example: `20-25,30`.'
+            example: '20-25'
+          - nxos_name: selectiveQinqTranslateVlan
+            tf_name: selective_qinq_outer_vlan_id
+            type: String
+            description: 'Outer VLAN ID for selective QinQ. Possible values are `vlan-XX`.'
+            example: vlan-200
+        child_classes:
+          - class_name: l1VlanTranslateTable
+            rn: vlantranslatetable
+            type: single
+            tf_name: vlan_translate_table
+            description: 'VLAN translate table.'
+            doc_path: System/l1:VlanTranslateTable/
+            child_classes:
+              - class_name: l1VlanTranslateEntry
+                rn: vlan-[%s]
+                type: list
+                tf_name: vlan_mappings
+                description: 'List of VLAN mappings.'
+                doc_path: System/l1:VlanTranslateEntry/
+                attributes:
+                  - nxos_name: vlanid
+                    tf_name: vlan_id
+                    type: String
+                    id: true
+                    description: 'VLAN ID to be translated. Possible values are `vlan-XX`.'
+                    example: vlan-11
+                  - nxos_name: translatevlanid
+                    tf_name: translated_vlan_id
+                    type: String
+                    description: 'Translated VLAN ID. Possible values are `vlan-XX`.'
+                    example: vlan-10
+                  - nxos_name: innervlanid
+                    tf_name: inner_vlan_id
+                    type: String
+                    description: 'Inner VLAN ID. Possible values are `vlan-XX`.'
+                    example: vlan-1
+                    exclude_test: true
+                  - nxos_name: direction
+                    tf_name: rx_only
+                    type: Bool
+                    description: 'Translate ingress traffic only (`true`) or traffic in both directions (`false`).'
+                    min_version: '10.6(3)'
+                    example: true
       - class_name: l1PhysIfExtended
         rn: physExtd
         type: single

@@ -340,6 +340,22 @@ child_classes:
                   - enabled
                   - disabled
                 example: enabled
+          - class_name: esgIsolationEntity
+            doc_path: Security%20and%20Policing/esg:IsolationEntity/
+            rn: isolation
+            type: single
+            tf_name: isolation
+            description: 'ESG Attribute list for GroupInst isolation.'
+            min_version: '10.6(3)'
+            attributes:
+              - nxos_name: intraGroupIsolation
+                tf_name: intra_group_isolation
+                type: String
+                description: 'Set intra group isolation of traffic.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
   - class_name: esgClassMapEntity
     doc_path: Security%20and%20Policing/esg:ClassMapEntity/
     rn: classmap

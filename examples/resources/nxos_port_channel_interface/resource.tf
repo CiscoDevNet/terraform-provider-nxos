@@ -14,9 +14,9 @@ resource "nxos_port_channel_interface" "example" {
       layer                                  = "Layer2"
       link_logging                           = "enable"
       medium                                 = "broadcast"
-      mode                                   = "access"
+      mode                                   = "trunk"
       mtu                                    = 1500
-      native_vlan                            = "unknown"
+      native_vlan                            = "vlan-1"
       speed                                  = "auto"
       trunk_vlans                            = "1-4094"
       equalization_delay                     = 5
@@ -41,6 +41,16 @@ resource "nxos_port_channel_interface" "example" {
       storm_control_packet_type              = "bcast"
       priority_flow_control_mode             = "on"
       priority_flow_control_send_tlv         = true
+      vlan_mapping_enable                    = true
+      selective_qinq_all                     = false
+      selective_qinq_vlans                   = "20-25"
+      selective_qinq_outer_vlan_id           = "vlan-200"
+      vlan_mappings = {
+        "vlan-11" = {
+          translated_vlan_id = "vlan-10"
+          rx_only            = true
+        }
+      }
       members = {
         "sys/intf/phys-[eth1/11]" = {
           force = true

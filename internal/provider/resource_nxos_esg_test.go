@@ -42,6 +42,9 @@ func TestAccNxosESG(t *testing.T) {
 	if testAccDeviceVersionAtLeast("10.6(1)") {
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "security_groups.100.type_layer4_7", "enabled"))
+	if testAccDeviceVersionAtLeast("10.6(3)") {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "security_groups.100.intra_group_isolation", "enabled"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "class_maps.cmap1.description", "My class map"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.apply_to_fragment", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.arp_opcode", "req"))
@@ -203,6 +206,9 @@ func testAccNxosESGConfig_all() string {
 		config += `			}` + "\n"
 	}
 	config += `			type_layer4_7 = "enabled"` + "\n"
+	if testAccDeviceVersionAtLeast("10.6(3)") {
+		config += `			intra_group_isolation = "enabled"` + "\n"
+	}
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	class_maps = {` + "\n"

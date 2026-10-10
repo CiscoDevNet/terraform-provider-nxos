@@ -53,6 +53,7 @@ type HMM struct {
 type HMMInterfaces struct {
 	AdminState  types.String `tfsdk:"admin_state"`
 	Mode        types.String `tfsdk:"mode"`
+	Proxy       types.Bool   `tfsdk:"proxy"`
 	Description types.String `tfsdk:"description"`
 }
 
@@ -80,7 +81,9 @@ func (data *HMM) fromIdentity(ctx context.Context, identity *HMMIdentity) {
 var HMMSubtreeClassMinVersions = map[string]string{}
 
 // HMMMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
-var HMMMinVersions = map[string]helpers.MinVersion{}
+var HMMMinVersions = map[string]helpers.MinVersion{
+	"hmmFwdIf.proxy": {Version: "10.6(3)", Path: "interfaces.proxy"},
+}
 
 // End of section. //template:end types
 
@@ -150,6 +153,9 @@ func (data HMM) toBody(config HMM) nxos.Body {
 			if configChildOk && !child.Mode.IsUnknown() && !child.Mode.IsNull() && !configChild.Mode.IsNull() {
 				attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
 			}
+			if configChildOk && !child.Proxy.IsUnknown() && !child.Proxy.IsNull() && !configChild.Proxy.IsNull() {
+				attrs, _ = sjson.Set(attrs, "proxy", strconv.FormatBool(child.Proxy.ValueBool()))
+			}
 			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
@@ -197,6 +203,7 @@ func (data *HMM) fromBody(res gjson.Result) {
 							var child HMMInterfaces
 							child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
 							child.Mode = types.StringValue(value.Get("attributes.mode").String())
+							child.Proxy = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.proxy").String()))
 							child.Description = types.StringValue(value.Get("attributes.descr").String())
 							mapKey := value.Get("attributes.id").String()
 							if data.Interfaces == nil {
@@ -289,6 +296,11 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 		} else {
 			item.Mode = types.StringNull()
 		}
+		if !item.Proxy.IsNull() {
+			item.Proxy = types.BoolValue(helpers.ParseNxosBoolean(rhmmFwdIf.Get("hmmFwdIf.attributes.proxy").String()))
+		} else {
+			item.Proxy = types.BoolNull()
+		}
 		if !item.Description.IsNull() {
 			item.Description = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.descr").String())
 		} else {
@@ -368,6 +380,9 @@ func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM, config HMM, im
 						}
 						if !stateChild.Mode.IsNull() && configChild.Mode.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Proxy.IsNull() && configChild.Proxy.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"proxy", "DME_UNSET_PROPERTY_MARKER")
 						}
 						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")

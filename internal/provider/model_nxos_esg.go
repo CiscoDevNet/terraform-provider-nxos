@@ -63,6 +63,7 @@ type ESGSecurityGroups struct {
 	SelectorMatchVlanMacs                   map[string]ESGSecurityGroupsSelectorMatchVlanMacs                   `tfsdk:"selector_match_vlan_macs"`
 	SelectorMatchVlanInterfaces             map[string]ESGSecurityGroupsSelectorMatchVlanInterfaces             `tfsdk:"selector_match_vlan_interfaces"`
 	TypeLayer47                             types.String                                                        `tfsdk:"type_layer4_7"`
+	IntraGroupIsolation                     types.String                                                        `tfsdk:"intra_group_isolation"`
 }
 
 type ESGSecurityGroupsSelectorConnectedEndpointsIpv4 struct {
@@ -171,12 +172,14 @@ func (data *ESG) fromIdentity(ctx context.Context, identity *ESGIdentity) {
 
 // ESGSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
 var ESGSubtreeClassMinVersions = map[string]string{
+	"esgIsolationEntity":    "10.6(3)",
 	"esgMatchVlanInterface": "10.6(1)",
 }
 
 // ESGMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var ESGMinVersions = map[string]helpers.MinVersion{
 	"esgMatchVlanInterface": {Version: "10.6(1)", Path: "security_groups.selector_match_vlan_interfaces"},
+	"esgIsolationEntity":    {Version: "10.6(3)", Path: "security_groups.intra_group_isolation"},
 }
 
 // End of section. //template:end types
@@ -464,6 +467,13 @@ func (data ESG) toBody(config ESG) nxos.Body {
 				}
 				if attrs != "{}" {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgAttributeEntity.attributes", attrs)
+				}
+				attrs = "{}"
+				if !child.IntraGroupIsolation.IsUnknown() && !child.IntraGroupIsolation.IsNull() && !configChild.IntraGroupIsolation.IsNull() {
+					attrs, _ = sjson.Set(attrs, "intraGroupIsolation", child.IntraGroupIsolation.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.esgIsolationEntity.attributes", attrs)
 				}
 			}
 		}
@@ -936,6 +946,20 @@ func (data *ESG) fromBody(res gjson.Result) {
 									},
 								)
 								child.TypeLayer47 = types.StringValue(resgAttributeEntity.Get("esgAttributeEntity.attributes.typeLayer4To7").String())
+							}
+							{
+								var resgIsolationEntity gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("esgIsolationEntity.attributes.rn").String()
+										if rnValue == "isolation" {
+											resgIsolationEntity = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.IntraGroupIsolation = types.StringValue(resgIsolationEntity.Get("esgIsolationEntity.attributes.intraGroupIsolation").String())
 							}
 							if data.SecurityGroups == nil {
 								data.SecurityGroups = make(map[string]ESGSecurityGroups)
@@ -1445,6 +1469,24 @@ func (data *ESG) updateFromBody(res gjson.Result) {
 				item.TypeLayer47 = types.StringValue(resgAttributeEntity.Get("esgAttributeEntity.attributes.typeLayer4To7").String())
 			} else {
 				item.TypeLayer47 = types.StringNull()
+			}
+		}
+		{
+			var resgIsolationEntity gjson.Result
+			resgGroupInst.Get("esgGroupInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("esgIsolationEntity.attributes.rn").String()
+					if rnValue == "isolation" {
+						resgIsolationEntity = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.IntraGroupIsolation.IsNull() {
+				item.IntraGroupIsolation = types.StringValue(resgIsolationEntity.Get("esgIsolationEntity.attributes.intraGroupIsolation").String())
+			} else {
+				item.IntraGroupIsolation = types.StringNull()
 			}
 		}
 		data.SecurityGroups[key] = item
@@ -2128,6 +2170,10 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 						if !stateChild.TypeLayer47.IsNull() && configChild.TypeLayer47.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "esgAttributeEntity")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"typeLayer4To7", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.IntraGroupIsolation.IsNull() && configChild.IntraGroupIsolation.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "esgIsolationEntity")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"intraGroupIsolation", "DME_UNSET_PROPERTY_MARKER")
 						}
 					}
 				}

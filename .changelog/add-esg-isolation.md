@@ -1,0 +1,5 @@
+- Add intra-group isolation (`intra-group isolation`) configuration to `nxos_esg` security groups (requires NX-OS 10.6(3) or later)
+- Add layer 2 isolation (`isolate`) configuration to `nxos_bridge_domain` (requires NX-OS 10.6(3) or later)
+- Add anycast gateway proxy (`fabric forwarding mode anycast-gateway proxy`) configuration to `nxos_hmm` interfaces (requires NX-OS 10.6(3) or later)
+- Add VLAN mapping (`switchport vlan mapping enable`, `switchport vlan mapping <vlan> [inner <vlan>] <translated-vlan> [rx]`) configuration to `nxos_physical_interface` and `nxos_port_channel_interface`, receive-only mapping (`rx`) requires NX-OS 10.6(3) or later
+- Add selective QinQ (`switchport vlan mapping <vlan-range>|all dot1q-tunnel <outer-vlan>`) configuration to `nxos_physical_interface` and `nxos_port_channel_interface`

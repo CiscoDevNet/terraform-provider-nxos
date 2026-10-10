@@ -96,6 +96,13 @@ child_classes:
               - anycastGW
               - proxyGW
             example: anycastGW
+          - nxos_name: proxy
+            tf_name: proxy
+            type: Bool
+            description: "Enable Anycast Gateway with proxy."
+            min_version: '10.6(3)'
+            example: true
+            exclude_test: true
           - nxos_name: descr
             tf_name: description
             type: String

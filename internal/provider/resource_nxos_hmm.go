@@ -139,6 +139,10 @@ func (r *HMMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 								stringvalidator.OneOf("standard", "anycastGW", "proxyGW"),
 							},
 						},
+						"proxy": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Anycast Gateway with proxy.").AddMinimumVersionDescription("10.6(3)").String,
+							Optional:            true,
+						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
 							Optional:            true,

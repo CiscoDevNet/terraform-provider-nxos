@@ -61,7 +61,17 @@ resource "nxos_physical_interface" "example" {
       storm_control_packet_type              = "bcast"
       priority_flow_control_mode             = "on"
       priority_flow_control_send_tlv         = true
-      extended_description                   = "Extended interface config"
+      vlan_mapping_enable                    = true
+      selective_qinq_all                     = false
+      selective_qinq_vlans                   = "20-25"
+      selective_qinq_outer_vlan_id           = "vlan-200"
+      vlan_mappings = {
+        "vlan-11" = {
+          translated_vlan_id = "vlan-10"
+          rx_only            = true
+        }
+      }
+      extended_description = "Extended interface config"
     }
   }
 }

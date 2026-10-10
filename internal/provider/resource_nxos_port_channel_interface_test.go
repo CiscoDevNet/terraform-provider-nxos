@@ -52,9 +52,9 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.layer", "Layer2"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.link_logging", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.medium", "broadcast"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.mode", "access"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.mode", "trunk"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.mtu", "1500"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.native_vlan", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.native_vlan", "vlan-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.speed", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.trunk_vlans", "1-4094"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.equalization_delay", "5"))
@@ -79,6 +79,14 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_packet_type", "bcast"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.priority_flow_control_mode", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.priority_flow_control_send_tlv", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mapping_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.selective_qinq_all", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.selective_qinq_vlans", "20-25"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.selective_qinq_outer_vlan_id", "vlan-200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mappings.vlan-11.translated_vlan_id", "vlan-10"))
+	if testAccDeviceVersionAtLeast("10.6(3)") {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mappings.vlan-11.rx_only", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.members.sys/intf/phys-[eth1/11].force", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -163,9 +171,9 @@ func testAccNxosPortChannelInterfaceConfig_all() string {
 	config += `			layer = "Layer2"` + "\n"
 	config += `			link_logging = "enable"` + "\n"
 	config += `			medium = "broadcast"` + "\n"
-	config += `			mode = "access"` + "\n"
+	config += `			mode = "trunk"` + "\n"
 	config += `			mtu = 1500` + "\n"
-	config += `			native_vlan = "unknown"` + "\n"
+	config += `			native_vlan = "vlan-1"` + "\n"
 	config += `			speed = "auto"` + "\n"
 	config += `			trunk_vlans = "1-4094"` + "\n"
 	config += `			equalization_delay = 5` + "\n"
@@ -190,6 +198,18 @@ func testAccNxosPortChannelInterfaceConfig_all() string {
 	config += `			storm_control_packet_type = "bcast"` + "\n"
 	config += `			priority_flow_control_mode = "on"` + "\n"
 	config += `			priority_flow_control_send_tlv = true` + "\n"
+	config += `			vlan_mapping_enable = true` + "\n"
+	config += `			selective_qinq_all = false` + "\n"
+	config += `			selective_qinq_vlans = "20-25"` + "\n"
+	config += `			selective_qinq_outer_vlan_id = "vlan-200"` + "\n"
+	config += `			vlan_mappings = {` + "\n"
+	config += `				"vlan-11" = {` + "\n"
+	config += `					translated_vlan_id = "vlan-10"` + "\n"
+	if testAccDeviceVersionAtLeast("10.6(3)") {
+		config += `					rx_only = true` + "\n"
+	}
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `			members = {` + "\n"
 	config += `				"sys/intf/phys-[eth1/11]" = {` + "\n"
 	config += `					force = true` + "\n"

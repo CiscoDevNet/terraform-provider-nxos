@@ -92,6 +92,13 @@ child_classes:
           - route
           - bridge
         example: bridge
+      - nxos_name: isolate
+        tf_name: isolate
+        type: Bool
+        description: 'Enable Layer 2 isolation on this VLAN.'
+        min_version: '10.6(3)'
+        example: true
+        exclude_test: true
       - nxos_name: longName
         tf_name: long_name
         type: Bool

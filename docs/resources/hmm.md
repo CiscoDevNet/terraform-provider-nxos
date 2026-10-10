@@ -74,6 +74,8 @@ Optional:
 - `description` (String) Description.
 - `mode` (String) HMM Fabric Forwarding mode information for the interface.
   - Choices: `standard`, `anycastGW`, `proxyGW`
+- `proxy` (Boolean) Enable Anycast Gateway with proxy.
+  - Minimum NX-OS version: `10.6(3)`
 
 ## Import
 

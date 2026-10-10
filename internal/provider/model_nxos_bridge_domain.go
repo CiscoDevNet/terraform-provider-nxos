@@ -54,6 +54,7 @@ type BridgeDomainBridgeDomains struct {
 	Control           types.String `tfsdk:"control"`
 	ForwardingControl types.String `tfsdk:"forwarding_control"`
 	ForwardingMode    types.String `tfsdk:"forwarding_mode"`
+	Isolate           types.Bool   `tfsdk:"isolate"`
 	LongName          types.Bool   `tfsdk:"long_name"`
 	MacPacketClassify types.String `tfsdk:"mac_packet_classify"`
 	Mode              types.String `tfsdk:"mode"`
@@ -89,7 +90,9 @@ func (data *BridgeDomain) fromIdentity(ctx context.Context, identity *BridgeDoma
 var BridgeDomainSubtreeClassMinVersions = map[string]string{}
 
 // BridgeDomainMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
-var BridgeDomainMinVersions = map[string]helpers.MinVersion{}
+var BridgeDomainMinVersions = map[string]helpers.MinVersion{
+	"l2BD.isolate": {Version: "10.6(3)", Path: "bridge_domains.isolate"},
+}
 
 // End of section. //template:end types
 
@@ -153,6 +156,9 @@ func (data BridgeDomain) toBody(config BridgeDomain) nxos.Body {
 		if configChildOk && !child.ForwardingMode.IsUnknown() && !child.ForwardingMode.IsNull() && !configChild.ForwardingMode.IsNull() {
 			attrs, _ = sjson.Set(attrs, "fwdMode", child.ForwardingMode.ValueString())
 		}
+		if configChildOk && !child.Isolate.IsUnknown() && !child.Isolate.IsNull() && !configChild.Isolate.IsNull() {
+			attrs, _ = sjson.Set(attrs, "isolate", strconv.FormatBool(child.Isolate.ValueBool()))
+		}
 		if configChildOk && !child.LongName.IsUnknown() && !child.LongName.IsNull() && !configChild.LongName.IsNull() {
 			attrs, _ = sjson.Set(attrs, "longName", strconv.FormatBool(child.LongName.ValueBool()))
 		}
@@ -205,6 +211,7 @@ func (data *BridgeDomain) fromBody(res gjson.Result) {
 						child.Control = types.StringValue(value.Get("attributes.ctrl").String())
 						child.ForwardingControl = types.StringValue(value.Get("attributes.fwdCtrl").String())
 						child.ForwardingMode = types.StringValue(value.Get("attributes.fwdMode").String())
+						child.Isolate = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.isolate").String()))
 						child.LongName = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.longName").String()))
 						child.MacPacketClassify = types.StringValue(value.Get("attributes.macPacketClassify").String())
 						child.Mode = types.StringValue(value.Get("attributes.mode").String())
@@ -307,6 +314,11 @@ func (data *BridgeDomain) updateFromBody(res gjson.Result) {
 			item.ForwardingMode = types.StringValue(rl2BD.Get("l2BD.attributes.fwdMode").String())
 		} else {
 			item.ForwardingMode = types.StringNull()
+		}
+		if !item.Isolate.IsNull() {
+			item.Isolate = types.BoolValue(helpers.ParseNxosBoolean(rl2BD.Get("l2BD.attributes.isolate").String()))
+		} else {
+			item.Isolate = types.BoolNull()
 		}
 		if !item.LongName.IsNull() {
 			item.LongName = types.BoolValue(helpers.ParseNxosBoolean(rl2BD.Get("l2BD.attributes.longName").String()))
@@ -451,6 +463,9 @@ func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDoma
 						}
 						if !stateChild.ForwardingMode.IsNull() && configChild.ForwardingMode.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"fwdMode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Isolate.IsNull() && configChild.Isolate.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"isolate", "DME_UNSET_PROPERTY_MARKER")
 						}
 						if !stateChild.LongName.IsNull() && configChild.LongName.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".l2BD.attributes."+"longName", "DME_UNSET_PROPERTY_MARKER")

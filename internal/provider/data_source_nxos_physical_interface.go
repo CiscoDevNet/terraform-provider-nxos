@@ -56,7 +56,7 @@ func (d *PhysicalInterfaceDataSource) Metadata(_ context.Context, req datasource
 func (d *PhysicalInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:PhysIfExtended/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:VlanMapping/", "System/l1:VlanTranslateTable/", "System/l1:VlanTranslateEntry/", "System/l1:PhysIfExtended/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -336,6 +336,42 @@ func (d *PhysicalInterfaceDataSource) Schema(ctx context.Context, req datasource
 							MarkdownDescription: "Watch dog internal on/off.",
 							Computed:            true,
 						},
+						"vlan_mapping_enable": schema.BoolAttribute{
+							MarkdownDescription: "Enable VLAN mapping.",
+							Computed:            true,
+						},
+						"selective_qinq_all": schema.BoolAttribute{
+							MarkdownDescription: "Selective QinQ for all VLANs.",
+							Computed:            true,
+						},
+						"selective_qinq_vlans": schema.StringAttribute{
+							MarkdownDescription: "List of VLANs for selective QinQ. Example: `20-25,30`.",
+							Computed:            true,
+						},
+						"selective_qinq_outer_vlan_id": schema.StringAttribute{
+							MarkdownDescription: "Outer VLAN ID for selective QinQ. Possible values are `vlan-XX`.",
+							Computed:            true,
+						},
+						"vlan_mappings": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of VLAN mappings.\n  - Map key: `vlan_id` - VLAN ID to be translated. Possible values are `vlan-XX`.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"translated_vlan_id": schema.StringAttribute{
+										MarkdownDescription: "Translated VLAN ID. Possible values are `vlan-XX`.",
+										Computed:            true,
+									},
+									"inner_vlan_id": schema.StringAttribute{
+										MarkdownDescription: "Inner VLAN ID. Possible values are `vlan-XX`.",
+										Computed:            true,
+									},
+									"rx_only": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Translate ingress traffic only (`true`) or traffic in both directions (`false`).").AddMinimumVersionDescription("10.6(3)").String,
+										Computed:            true,
+									},
+								},
+							},
+						},
 						"allow_multi_tag": schema.StringAttribute{
 							MarkdownDescription: "Allow Multitag.",
 							Computed:            true,
@@ -523,7 +559,7 @@ func (d *PhysicalInterfaceDataSource) Read(ctx context.Context, req datasource.R
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

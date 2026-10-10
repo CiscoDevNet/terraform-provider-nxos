@@ -108,6 +108,10 @@ func (d *BridgeDomainDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.",
 							Computed:            true,
 						},
+						"isolate": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Layer 2 isolation on this VLAN.").AddMinimumVersionDescription("10.6(3)").String,
+							Computed:            true,
+						},
 						"long_name": schema.BoolAttribute{
 							MarkdownDescription: "Enable or disable long name of 128 characters for VLAN.",
 							Computed:            true,

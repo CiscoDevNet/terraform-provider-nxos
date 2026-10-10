@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -91,6 +92,16 @@ func TestAccDataSourceNxosPhysicalInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_packet_type", "bcast"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.priority_flow_control_mode", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.priority_flow_control_send_tlv", "true"))
+	if os.Getenv("PHYSICAL_INTERFACE_VLAN_MAPPING") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.vlan_mapping_enable", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.selective_qinq_all", "false"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.selective_qinq_vlans", "20-25"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.selective_qinq_outer_vlan_id", "vlan-200"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.vlan_mappings.vlan-11.translated_vlan_id", "vlan-10"))
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.vlan_mappings.vlan-11.rx_only", "true"))
+		}
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "physical_interfaces.eth1/10.extended_description", "Extended interface config"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -175,6 +186,20 @@ func testAccDataSourceNxosPhysicalInterfaceConfig() string {
 	config += `			storm_control_packet_type = "bcast"` + "\n"
 	config += `			priority_flow_control_mode = "on"` + "\n"
 	config += `			priority_flow_control_send_tlv = true` + "\n"
+	if os.Getenv("PHYSICAL_INTERFACE_VLAN_MAPPING") != "" {
+		config += `			vlan_mapping_enable = true` + "\n"
+		config += `			selective_qinq_all = false` + "\n"
+		config += `			selective_qinq_vlans = "20-25"` + "\n"
+		config += `			selective_qinq_outer_vlan_id = "vlan-200"` + "\n"
+		config += `			vlan_mappings = {` + "\n"
+		config += `				"vlan-11" = {` + "\n"
+		config += `					translated_vlan_id = "vlan-10"` + "\n"
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			config += `					rx_only = true` + "\n"
+		}
+		config += `				}` + "\n"
+		config += `			}` + "\n"
+	}
 	config += `			extended_description = "Extended interface config"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"

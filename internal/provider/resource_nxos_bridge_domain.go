@@ -129,6 +129,10 @@ func (r *BridgeDomainResource) Schema(ctx context.Context, req resource.SchemaRe
 							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.").AddStringEnumDescription("route", "bridge").String,
 							Optional:            true,
 						},
+						"isolate": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Layer 2 isolation on this VLAN.").AddMinimumVersionDescription("10.6(3)").String,
+							Optional:            true,
+						},
 						"long_name": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable long name of 128 characters for VLAN.").String,
 							Optional:            true,

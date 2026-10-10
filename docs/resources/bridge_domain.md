@@ -83,6 +83,8 @@ Optional:
   - Choices: `mdst-flood`, `arp-flood`
 - `forwarding_mode` (String) The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.
   - Choices: `route`, `bridge`
+- `isolate` (Boolean) Enable Layer 2 isolation on this VLAN.
+  - Minimum NX-OS version: `10.6(3)`
 - `long_name` (Boolean) Enable or disable long name of 128 characters for VLAN.
 - `mac_packet_classify` (String) Vlan mac packet classify.
   - Choices: `disable`, `enable`

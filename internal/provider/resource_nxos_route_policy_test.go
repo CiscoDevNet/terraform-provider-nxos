@@ -86,6 +86,17 @@ func TestAccNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_local_preference", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_path_selection_advertise", "ps-all"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.match_regular_community_criteria", "exact"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_as_path_prepend", "65001 65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_as_path_prepend_last_as", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_tag", "12345"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_weight", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_origin_asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_origin", "egp"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_route_target_additive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_route_target_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_community_list_delete", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_community_list_name", "COMMUNITY_LIST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_community_list_criteria", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.mode", "standard"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.entries.10.action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.action", "deny"))
@@ -247,6 +258,29 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config += `					}` + "\n"
 	config += `					match_as_number_as_path_lists = {` + "\n"
 	config += `						"sys/rpm/accesslist-[AS_PATH_LIST1]" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					set_as_path_prepend = "65001 65001"` + "\n"
+	config += `					set_as_path_prepend_last_as = 2` + "\n"
+	config += `					set_tag = 12345` + "\n"
+	config += `					set_weight = 200` + "\n"
+	config += `					set_origin_asn = 65001` + "\n"
+	config += `					set_origin = "egp"` + "\n"
+	config += `					set_extended_community_route_target_additive = "enabled"` + "\n"
+	config += `					set_extended_community_route_target_criteria = "none"` + "\n"
+	config += `					set_extended_community_route_target_items = {` + "\n"
+	config += `						"transitive;route-target:as2-nn2:65001:100" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					set_community_list_delete = "enabled"` + "\n"
+	config += `					set_community_list_name = "COMMUNITY_LIST1"` + "\n"
+	config += `					set_community_list_criteria = "none"` + "\n"
+	config += `					match_interfaces = {` + "\n"
+	config += `						"eth1/1" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					match_route_types = {` + "\n"
+	config += `						"internal" = {` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
 	config += `				}` + "\n"

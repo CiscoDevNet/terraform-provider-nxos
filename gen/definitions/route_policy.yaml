@@ -709,6 +709,209 @@ child_classes:
                     description: 'DN of AS-Path Access List. For example: `sys/rpm/accesslist-[AS_PATH_LIST1]`.'
                     example: sys/rpm/accesslist-[AS_PATH_LIST1]
                     id: true
+          - class_name: rtmapSetPrepend
+            doc_path: Routing%20and%20Forwarding/rtmap:SetPrepend/
+            rn: setaspathprepend
+            type: single
+            tf_name: set_as_path_prepend
+            description: 'Set AS-Path Prepend configuration.'
+            attributes:
+              - nxos_name: as
+                tf_name: set_as_path_prepend
+                type: String
+                description: 'As Path Prepend.'
+                example: '65001 65001'
+          - class_name: rtmapSetPrependLastAs
+            doc_path: Routing%20and%20Forwarding/rtmap:SetPrependLastAs/
+            rn: setaspathlastas
+            type: single
+            tf_name: set_as_path_prepend_last_as
+            description: 'Set AS-Path Prepend Last AS configuration.'
+            attributes:
+              - nxos_name: lastas
+                tf_name: set_as_path_prepend_last_as
+                type: Int64
+                description: 'LastAs.'
+                min_int: 1
+                max_int: 10
+                example: 2
+          - class_name: rtmapSetRtTag
+            doc_path: Routing%20and%20Forwarding/rtmap:SetRtTag/
+            rn: srttag
+            type: single
+            tf_name: set_tag
+            description: 'Set Route Tag configuration.'
+            attributes:
+              - nxos_name: tag
+                tf_name: set_tag
+                type: Int64
+                description: 'The color of a policy label.'
+                min_int: 0
+                max_int: 4294967295
+                example: 12345
+          - class_name: rtmapSetWeight
+            doc_path: Routing%20and%20Forwarding/rtmap:SetWeight/
+            rn: sweight
+            type: single
+            tf_name: set_weight
+            description: 'Set Weight configuration.'
+            attributes:
+              - nxos_name: weight
+                tf_name: set_weight
+                type: Int64
+                description: 'The weight of the fault in calculating the health score of an object. A higher weight causes a higher degradation of the health score of the affected object.'
+                min_int: 0
+                max_int: 65535
+                example: 200
+          - class_name: rtmapSetOrigin
+            doc_path: Routing%20and%20Forwarding/rtmap:SetOrigin/
+            rn: origin
+            type: single
+            tf_name: set_origin
+            description: 'Set Origin configuration.'
+            attributes:
+              - nxos_name: asn
+                tf_name: set_origin_asn
+                type: Int64
+                description: 'Autonomous System Number.'
+                min_int: 1
+                max_int: 4294967295
+                example: 65001
+              - nxos_name: originT
+                tf_name: set_origin
+                type: String
+                description: 'Origin Type.'
+                enum_values:
+                  - egp
+                  - igp
+                  - incomplete
+                example: egp
+          - class_name: rtmapSetRttComm
+            doc_path: Routing%20and%20Forwarding/rtmap:SetRttComm/
+            rn: srtt
+            type: single
+            tf_name: set_extended_community_route_target
+            description: 'Set Extended Community Route Target configuration.'
+            attributes:
+              - nxos_name: additive
+                tf_name: set_extended_community_route_target_additive
+                type: String
+                description: 'Add To Existing Community.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: setCriteria
+                tf_name: set_extended_community_route_target_criteria
+                type: String
+                description: 'Criteria.'
+                enum_values:
+                  - none
+                  - append
+                  - replace
+                  - igp
+                  - pre-bestpath
+                example: none
+            child_classes:
+              - class_name: rtextcomItem
+                doc_path: Routing%20and%20Forwarding/rtextcom:Item/
+                rn: item-%s-%s
+                type: list
+                tf_name: set_extended_community_route_target_items
+                description: 'List of Set Extended Community Route Target Items.'
+                attributes:
+                  - nxos_name: scope
+                    tf_name: scope
+                    type: String
+                    id: true
+                    description: 'The domain applicable to the capability.'
+                    enum_values:
+                      - transitive
+                      - non-transitive
+                    example: transitive
+                  - nxos_name: community
+                    tf_name: community
+                    type: String
+                    id: true
+                    description: 'Community.'
+                    example: route-target:as2-nn2:65001:100
+          - class_name: rtmapSetCommList
+            doc_path: Routing%20and%20Forwarding/rtmap:SetCommList/
+            rn: scommlist
+            type: single
+            tf_name: set_community_list
+            description: 'Set Community List configuration.'
+            attributes:
+              - nxos_name: delete
+                tf_name: set_community_list_delete
+                type: String
+                description: 'Delete Matching Communities.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: name
+                tf_name: set_community_list_name
+                type: String
+                description: 'Community list Name to configure.'
+                example: COMMUNITY_LIST1
+              - nxos_name: setCriteria
+                tf_name: set_community_list_criteria
+                type: String
+                description: 'Criteria.'
+                enum_values:
+                  - none
+                  - append
+                  - replace
+                  - igp
+                  - pre-bestpath
+                example: none
+          - class_name: rtmapMatchRtIf
+            doc_path: Routing%20and%20Forwarding/rtmap:MatchRtIf/
+            rn: mrtif-[%s]
+            type: list
+            tf_name: match_interfaces
+            description: 'List of Match Interfaces.'
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'Route If. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.'
+                example: eth1/1
+          - class_name: rtmapMatchRtType
+            doc_path: Routing%20and%20Forwarding/rtmap:MatchRtType/
+            rn: mrttype-[%s]
+            type: list
+            tf_name: match_route_types
+            description: 'List of Match Route Types.'
+            attributes:
+              - nxos_name: routeT
+                tf_name: route_type
+                type: String
+                id: true
+                description: 'Route Type.'
+                enum_values:
+                  - external
+                  - internal
+                  - ospf-inter-area
+                  - ospf-intra-area
+                  - isis-l1
+                  - isis-l2
+                  - local
+                  - ospf-nssa-external
+                  - ospf-type1
+                  - ospf-type2
+                  - R1
+                  - mac-only
+                  - mac-ip
+                  - R2_ALL
+                  - R3
+                  - R4
+                  - R5
+                  - R6
+                  - redistributed-direct
+                example: internal
   - class_name: rtregcomRule
     doc_path: Routing%20and%20Forwarding/rtregcom:Rule/
     rn: rtregcom-[%s]

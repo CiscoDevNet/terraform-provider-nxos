@@ -95,6 +95,26 @@ resource "nxos_route_policy" "example" {
           match_as_number_as_path_lists = {
             "sys/rpm/accesslist-[AS_PATH_LIST1]" = {}
           }
+          set_as_path_prepend                          = "65001 65001"
+          set_as_path_prepend_last_as                  = 2
+          set_tag                                      = 12345
+          set_weight                                   = 200
+          set_origin_asn                               = 65001
+          set_origin                                   = "egp"
+          set_extended_community_route_target_additive = "enabled"
+          set_extended_community_route_target_criteria = "none"
+          set_extended_community_route_target_items = {
+            "transitive;route-target:as2-nn2:65001:100" = {}
+          }
+          set_community_list_delete   = "enabled"
+          set_community_list_name     = "COMMUNITY_LIST1"
+          set_community_list_criteria = "none"
+          match_interfaces = {
+            "eth1/1" = {}
+          }
+          match_route_types = {
+            "internal" = {}
+          }
         }
       }
     }

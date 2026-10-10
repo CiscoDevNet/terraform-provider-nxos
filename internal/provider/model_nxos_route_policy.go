@@ -25,6 +25,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -84,50 +85,64 @@ type RoutePolicyRouteMaps struct {
 }
 
 type RoutePolicyRouteMapsEntries struct {
-	Action                         types.String                                                     `tfsdk:"action"`
-	Description                    types.String                                                     `tfsdk:"description"`
-	DropOnFailV4                   types.String                                                     `tfsdk:"drop_on_fail_v4"`
-	DropOnFailV6                   types.String                                                     `tfsdk:"drop_on_fail_v6"`
-	ForceOrderV4                   types.String                                                     `tfsdk:"force_order_v4"`
-	ForceOrderV6                   types.String                                                     `tfsdk:"force_order_v6"`
-	LoadShareV4                    types.String                                                     `tfsdk:"load_share_v4"`
-	LoadShareV6                    types.String                                                     `tfsdk:"load_share_v6"`
-	SetDefaultNextHopV4            types.String                                                     `tfsdk:"set_default_next_hop_v4"`
-	SetDefaultNextHopV6            types.String                                                     `tfsdk:"set_default_next_hop_v6"`
-	SetVrfV4                       types.String                                                     `tfsdk:"set_vrf_v4"`
-	SetVrfV6                       types.String                                                     `tfsdk:"set_vrf_v6"`
-	VerifyAvailabilityV4           types.String                                                     `tfsdk:"verify_availability_v4"`
-	VerifyAvailabilityV6           types.String                                                     `tfsdk:"verify_availability_v6"`
-	SetPolicyTag                   types.Int64                                                      `tfsdk:"set_policy_tag"`
-	MatchRoutePrefixLists          map[string]RoutePolicyRouteMapsEntriesMatchRoutePrefixLists      `tfsdk:"match_route_prefix_lists"`
-	MatchRouteAccessLists          map[string]RoutePolicyRouteMapsEntriesMatchRouteAccessLists      `tfsdk:"match_route_access_lists"`
-	SetRegularCommunityAdditive    types.String                                                     `tfsdk:"set_regular_community_additive"`
-	SetRegularCommunityNoCommunity types.String                                                     `tfsdk:"set_regular_community_no_community"`
-	SetRegularCommunityCriteria    types.String                                                     `tfsdk:"set_regular_community_criteria"`
-	SetRegularCommunityItems       map[string]RoutePolicyRouteMapsEntriesSetRegularCommunityItems   `tfsdk:"set_regular_community_items"`
-	MatchTags                      map[string]RoutePolicyRouteMapsEntriesMatchTags                  `tfsdk:"match_tags"`
-	SetMetricIsBgp                 types.Bool                                                       `tfsdk:"set_metric_is_bgp"`
-	SetMetric                      types.String                                                     `tfsdk:"set_metric"`
-	SetMetricDelay                 types.Int64                                                      `tfsdk:"set_metric_delay"`
-	SetMetricLoad                  types.Int64                                                      `tfsdk:"set_metric_load"`
-	SetMetricMtu                   types.Int64                                                      `tfsdk:"set_metric_mtu"`
-	SetMetricReliability           types.Int64                                                      `tfsdk:"set_metric_reliability"`
-	SetMetricType                  types.String                                                     `tfsdk:"set_metric_type"`
-	SetNextHopV4PeerAddress        types.String                                                     `tfsdk:"set_next_hop_v4_peer_address"`
-	SetNextHopV4RedistUnchanged    types.String                                                     `tfsdk:"set_next_hop_v4_redist_unchanged"`
-	SetNextHopV4Unchanged          types.String                                                     `tfsdk:"set_next_hop_v4_unchanged"`
-	SetNextHopV6PeerAddress        types.String                                                     `tfsdk:"set_next_hop_v6_peer_address"`
-	SetNextHopV6RedistUnchanged    types.String                                                     `tfsdk:"set_next_hop_v6_redist_unchanged"`
-	SetNextHopV6Unchanged          types.String                                                     `tfsdk:"set_next_hop_v6_unchanged"`
-	SetLocalPreference             types.Int64                                                      `tfsdk:"set_local_preference"`
-	SetPathSelectionAdvertise      types.String                                                     `tfsdk:"set_path_selection_advertise"`
-	SetEvpnGatewayType             types.String                                                     `tfsdk:"set_evpn_gateway_type"`
-	SetEvpnGatewayIp               types.String                                                     `tfsdk:"set_evpn_gateway_ip"`
-	MatchNextHopPrefixLists        map[string]RoutePolicyRouteMapsEntriesMatchNextHopPrefixLists    `tfsdk:"match_next_hop_prefix_lists"`
-	MatchRegularCommunityCriteria  types.String                                                     `tfsdk:"match_regular_community_criteria"`
-	MatchRegularCommunityLists     map[string]RoutePolicyRouteMapsEntriesMatchRegularCommunityLists `tfsdk:"match_regular_community_lists"`
-	MatchAsPathLists               map[string]RoutePolicyRouteMapsEntriesMatchAsPathLists           `tfsdk:"match_as_path_lists"`
-	MatchAsNumberAsPathLists       map[string]RoutePolicyRouteMapsEntriesMatchAsNumberAsPathLists   `tfsdk:"match_as_number_as_path_lists"`
+	Action                                  types.String                                                               `tfsdk:"action"`
+	Description                             types.String                                                               `tfsdk:"description"`
+	DropOnFailV4                            types.String                                                               `tfsdk:"drop_on_fail_v4"`
+	DropOnFailV6                            types.String                                                               `tfsdk:"drop_on_fail_v6"`
+	ForceOrderV4                            types.String                                                               `tfsdk:"force_order_v4"`
+	ForceOrderV6                            types.String                                                               `tfsdk:"force_order_v6"`
+	LoadShareV4                             types.String                                                               `tfsdk:"load_share_v4"`
+	LoadShareV6                             types.String                                                               `tfsdk:"load_share_v6"`
+	SetDefaultNextHopV4                     types.String                                                               `tfsdk:"set_default_next_hop_v4"`
+	SetDefaultNextHopV6                     types.String                                                               `tfsdk:"set_default_next_hop_v6"`
+	SetVrfV4                                types.String                                                               `tfsdk:"set_vrf_v4"`
+	SetVrfV6                                types.String                                                               `tfsdk:"set_vrf_v6"`
+	VerifyAvailabilityV4                    types.String                                                               `tfsdk:"verify_availability_v4"`
+	VerifyAvailabilityV6                    types.String                                                               `tfsdk:"verify_availability_v6"`
+	SetPolicyTag                            types.Int64                                                                `tfsdk:"set_policy_tag"`
+	MatchRoutePrefixLists                   map[string]RoutePolicyRouteMapsEntriesMatchRoutePrefixLists                `tfsdk:"match_route_prefix_lists"`
+	MatchRouteAccessLists                   map[string]RoutePolicyRouteMapsEntriesMatchRouteAccessLists                `tfsdk:"match_route_access_lists"`
+	SetRegularCommunityAdditive             types.String                                                               `tfsdk:"set_regular_community_additive"`
+	SetRegularCommunityNoCommunity          types.String                                                               `tfsdk:"set_regular_community_no_community"`
+	SetRegularCommunityCriteria             types.String                                                               `tfsdk:"set_regular_community_criteria"`
+	SetRegularCommunityItems                map[string]RoutePolicyRouteMapsEntriesSetRegularCommunityItems             `tfsdk:"set_regular_community_items"`
+	MatchTags                               map[string]RoutePolicyRouteMapsEntriesMatchTags                            `tfsdk:"match_tags"`
+	SetMetricIsBgp                          types.Bool                                                                 `tfsdk:"set_metric_is_bgp"`
+	SetMetric                               types.String                                                               `tfsdk:"set_metric"`
+	SetMetricDelay                          types.Int64                                                                `tfsdk:"set_metric_delay"`
+	SetMetricLoad                           types.Int64                                                                `tfsdk:"set_metric_load"`
+	SetMetricMtu                            types.Int64                                                                `tfsdk:"set_metric_mtu"`
+	SetMetricReliability                    types.Int64                                                                `tfsdk:"set_metric_reliability"`
+	SetMetricType                           types.String                                                               `tfsdk:"set_metric_type"`
+	SetNextHopV4PeerAddress                 types.String                                                               `tfsdk:"set_next_hop_v4_peer_address"`
+	SetNextHopV4RedistUnchanged             types.String                                                               `tfsdk:"set_next_hop_v4_redist_unchanged"`
+	SetNextHopV4Unchanged                   types.String                                                               `tfsdk:"set_next_hop_v4_unchanged"`
+	SetNextHopV6PeerAddress                 types.String                                                               `tfsdk:"set_next_hop_v6_peer_address"`
+	SetNextHopV6RedistUnchanged             types.String                                                               `tfsdk:"set_next_hop_v6_redist_unchanged"`
+	SetNextHopV6Unchanged                   types.String                                                               `tfsdk:"set_next_hop_v6_unchanged"`
+	SetLocalPreference                      types.Int64                                                                `tfsdk:"set_local_preference"`
+	SetPathSelectionAdvertise               types.String                                                               `tfsdk:"set_path_selection_advertise"`
+	SetEvpnGatewayType                      types.String                                                               `tfsdk:"set_evpn_gateway_type"`
+	SetEvpnGatewayIp                        types.String                                                               `tfsdk:"set_evpn_gateway_ip"`
+	MatchNextHopPrefixLists                 map[string]RoutePolicyRouteMapsEntriesMatchNextHopPrefixLists              `tfsdk:"match_next_hop_prefix_lists"`
+	MatchRegularCommunityCriteria           types.String                                                               `tfsdk:"match_regular_community_criteria"`
+	MatchRegularCommunityLists              map[string]RoutePolicyRouteMapsEntriesMatchRegularCommunityLists           `tfsdk:"match_regular_community_lists"`
+	MatchAsPathLists                        map[string]RoutePolicyRouteMapsEntriesMatchAsPathLists                     `tfsdk:"match_as_path_lists"`
+	MatchAsNumberAsPathLists                map[string]RoutePolicyRouteMapsEntriesMatchAsNumberAsPathLists             `tfsdk:"match_as_number_as_path_lists"`
+	SetAsPathPrepend                        types.String                                                               `tfsdk:"set_as_path_prepend"`
+	SetAsPathPrependLastAs                  types.Int64                                                                `tfsdk:"set_as_path_prepend_last_as"`
+	SetTag                                  types.Int64                                                                `tfsdk:"set_tag"`
+	SetWeight                               types.Int64                                                                `tfsdk:"set_weight"`
+	SetOriginAsn                            types.Int64                                                                `tfsdk:"set_origin_asn"`
+	SetOrigin                               types.String                                                               `tfsdk:"set_origin"`
+	SetExtendedCommunityRouteTargetAdditive types.String                                                               `tfsdk:"set_extended_community_route_target_additive"`
+	SetExtendedCommunityRouteTargetCriteria types.String                                                               `tfsdk:"set_extended_community_route_target_criteria"`
+	SetExtendedCommunityRouteTargetItems    map[string]RoutePolicyRouteMapsEntriesSetExtendedCommunityRouteTargetItems `tfsdk:"set_extended_community_route_target_items"`
+	SetCommunityListDelete                  types.String                                                               `tfsdk:"set_community_list_delete"`
+	SetCommunityListName                    types.String                                                               `tfsdk:"set_community_list_name"`
+	SetCommunityListCriteria                types.String                                                               `tfsdk:"set_community_list_criteria"`
+	MatchInterfaces                         map[string]RoutePolicyRouteMapsEntriesMatchInterfaces                      `tfsdk:"match_interfaces"`
+	MatchRouteTypes                         map[string]RoutePolicyRouteMapsEntriesMatchRouteTypes                      `tfsdk:"match_route_types"`
 }
 
 type RoutePolicyRouteMapsEntriesMatchRoutePrefixLists struct {
@@ -154,6 +169,15 @@ type RoutePolicyRouteMapsEntriesMatchAsPathLists struct {
 }
 
 type RoutePolicyRouteMapsEntriesMatchAsNumberAsPathLists struct {
+}
+
+type RoutePolicyRouteMapsEntriesSetExtendedCommunityRouteTargetItems struct {
+}
+
+type RoutePolicyRouteMapsEntriesMatchInterfaces struct {
+}
+
+type RoutePolicyRouteMapsEntriesMatchRouteTypes struct {
 }
 
 type RoutePolicyCommunityLists struct {
@@ -276,6 +300,19 @@ func (data RoutePolicyRouteMapsEntriesMatchAsPathLists) getRn(key string) string
 
 func (data RoutePolicyRouteMapsEntriesMatchAsNumberAsPathLists) getRn(key string) string {
 	return fmt.Sprintf("rtrtAsnAsPathAccAtt-[%s]", key)
+}
+
+func (data RoutePolicyRouteMapsEntriesSetExtendedCommunityRouteTargetItems) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("item-%s-%s", keyParts[0], keyParts[1])
+}
+
+func (data RoutePolicyRouteMapsEntriesMatchInterfaces) getRn(key string) string {
+	return fmt.Sprintf("mrtif-[%s]", key)
+}
+
+func (data RoutePolicyRouteMapsEntriesMatchRouteTypes) getRn(key string) string {
+	return fmt.Sprintf("mrttype-[%s]", key)
 }
 
 func (data RoutePolicyCommunityLists) getRn(key string) string {
@@ -730,6 +767,105 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapMatchAsnAsPathAccessList.children").Exists() {
 							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 						}
+					}
+					attrs = "{}"
+					if !child.SetAsPathPrepend.IsUnknown() && !child.SetAsPathPrepend.IsNull() && !configChild.SetAsPathPrepend.IsNull() {
+						attrs, _ = sjson.Set(attrs, "as", child.SetAsPathPrepend.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetPrepend.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.SetAsPathPrependLastAs.IsUnknown() && !child.SetAsPathPrependLastAs.IsNull() && !configChild.SetAsPathPrependLastAs.IsNull() {
+						attrs, _ = sjson.Set(attrs, "lastas", strconv.FormatInt(child.SetAsPathPrependLastAs.ValueInt64(), 10))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetPrependLastAs.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.SetTag.IsUnknown() && !child.SetTag.IsNull() && !configChild.SetTag.IsNull() {
+						attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.SetTag.ValueInt64(), 10))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetRtTag.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.SetWeight.IsUnknown() && !child.SetWeight.IsNull() && !configChild.SetWeight.IsNull() {
+						attrs, _ = sjson.Set(attrs, "weight", strconv.FormatInt(child.SetWeight.ValueInt64(), 10))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetWeight.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.SetOriginAsn.IsUnknown() && !child.SetOriginAsn.IsNull() && !configChild.SetOriginAsn.IsNull() {
+						attrs, _ = sjson.Set(attrs, "asn", strconv.FormatInt(child.SetOriginAsn.ValueInt64(), 10))
+					}
+					if !child.SetOrigin.IsUnknown() && !child.SetOrigin.IsNull() && !configChild.SetOrigin.IsNull() {
+						attrs, _ = sjson.Set(attrs, "originT", child.SetOrigin.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetOrigin.attributes", attrs)
+					}
+					{
+						attrs = "{}"
+						if !child.SetExtendedCommunityRouteTargetAdditive.IsUnknown() && !child.SetExtendedCommunityRouteTargetAdditive.IsNull() && !configChild.SetExtendedCommunityRouteTargetAdditive.IsNull() {
+							attrs, _ = sjson.Set(attrs, "additive", child.SetExtendedCommunityRouteTargetAdditive.ValueString())
+						}
+						if !child.SetExtendedCommunityRouteTargetCriteria.IsUnknown() && !child.SetExtendedCommunityRouteTargetCriteria.IsNull() && !configChild.SetExtendedCommunityRouteTargetCriteria.IsNull() {
+							attrs, _ = sjson.Set(attrs, "setCriteria", child.SetExtendedCommunityRouteTargetCriteria.ValueString())
+						}
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "rtmapSetRttComm.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "rtmapSetRttComm.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
+						for key := range child.SetExtendedCommunityRouteTargetItems {
+							configChild, configChildOk := configChild.SetExtendedCommunityRouteTargetItems[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							keyParts := strings.SplitN(key, ";", 2)
+							attrs, _ = sjson.Set(attrs, "scope", keyParts[0])
+							attrs, _ = sjson.Set(attrs, "community", keyParts[1])
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtextcomItem.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapSetRttComm.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
+					}
+					attrs = "{}"
+					if !child.SetCommunityListDelete.IsUnknown() && !child.SetCommunityListDelete.IsNull() && !configChild.SetCommunityListDelete.IsNull() {
+						attrs, _ = sjson.Set(attrs, "delete", child.SetCommunityListDelete.ValueString())
+					}
+					if !child.SetCommunityListName.IsUnknown() && !child.SetCommunityListName.IsNull() && !configChild.SetCommunityListName.IsNull() {
+						attrs, _ = sjson.Set(attrs, "name", child.SetCommunityListName.ValueString())
+					}
+					if !child.SetCommunityListCriteria.IsUnknown() && !child.SetCommunityListCriteria.IsNull() && !configChild.SetCommunityListCriteria.IsNull() {
+						attrs, _ = sjson.Set(attrs, "setCriteria", child.SetCommunityListCriteria.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetCommList.attributes", attrs)
+					}
+					for key := range child.MatchInterfaces {
+						configChild, configChildOk := configChild.MatchInterfaces[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "id", key)
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapMatchRtIf.attributes", attrs)
+					}
+					for key := range child.MatchRouteTypes {
+						configChild, configChildOk := configChild.MatchRouteTypes[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "routeT", key)
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapMatchRtType.attributes", attrs)
 					}
 				}
 			}
@@ -1282,6 +1418,162 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 													},
 												)
 											}
+											{
+												var rrtmapSetPrepend gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetPrepend.attributes.rn").String()
+														if rnValue == "setaspathprepend" {
+															rrtmapSetPrepend = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetAsPathPrepend = types.StringValue(rrtmapSetPrepend.Get("rtmapSetPrepend.attributes.as").String())
+											}
+											{
+												var rrtmapSetPrependLastAs gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetPrependLastAs.attributes.rn").String()
+														if rnValue == "setaspathlastas" {
+															rrtmapSetPrependLastAs = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetAsPathPrependLastAs = types.Int64Value(rrtmapSetPrependLastAs.Get("rtmapSetPrependLastAs.attributes.lastas").Int())
+											}
+											{
+												var rrtmapSetRtTag gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetRtTag.attributes.rn").String()
+														if rnValue == "srttag" {
+															rrtmapSetRtTag = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetTag = types.Int64Value(rrtmapSetRtTag.Get("rtmapSetRtTag.attributes.tag").Int())
+											}
+											{
+												var rrtmapSetWeight gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetWeight.attributes.rn").String()
+														if rnValue == "sweight" {
+															rrtmapSetWeight = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetWeight = types.Int64Value(rrtmapSetWeight.Get("rtmapSetWeight.attributes.weight").Int())
+											}
+											{
+												var rrtmapSetOrigin gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetOrigin.attributes.rn").String()
+														if rnValue == "origin" {
+															rrtmapSetOrigin = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetOriginAsn = types.Int64Value(rrtmapSetOrigin.Get("rtmapSetOrigin.attributes.asn").Int())
+												nestedChildrtmapEntry.SetOrigin = types.StringValue(rrtmapSetOrigin.Get("rtmapSetOrigin.attributes.originT").String())
+											}
+											{
+												var rrtmapSetRttComm gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetRttComm.attributes.rn").String()
+														if rnValue == "srtt" {
+															rrtmapSetRttComm = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetExtendedCommunityRouteTargetAdditive = types.StringValue(rrtmapSetRttComm.Get("rtmapSetRttComm.attributes.additive").String())
+												nestedChildrtmapEntry.SetExtendedCommunityRouteTargetCriteria = types.StringValue(rrtmapSetRttComm.Get("rtmapSetRttComm.attributes.setCriteria").String())
+												rrtmapSetRttComm.Get("rtmapSetRttComm").Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "rtextcomItem" {
+																	var nestedChildrtextcomItem RoutePolicyRouteMapsEntriesSetExtendedCommunityRouteTargetItems
+																	nestedMapKey := nestedValue.Get("attributes.scope").String() + ";" + nestedValue.Get("attributes.community").String()
+																	if nestedChildrtmapEntry.SetExtendedCommunityRouteTargetItems == nil {
+																		nestedChildrtmapEntry.SetExtendedCommunityRouteTargetItems = make(map[string]RoutePolicyRouteMapsEntriesSetExtendedCommunityRouteTargetItems)
+																	}
+																	nestedChildrtmapEntry.SetExtendedCommunityRouteTargetItems[nestedMapKey] = nestedChildrtextcomItem
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+											}
+											{
+												var rrtmapSetCommList gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetCommList.attributes.rn").String()
+														if rnValue == "scommlist" {
+															rrtmapSetCommList = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetCommunityListDelete = types.StringValue(rrtmapSetCommList.Get("rtmapSetCommList.attributes.delete").String())
+												nestedChildrtmapEntry.SetCommunityListName = types.StringValue(rrtmapSetCommList.Get("rtmapSetCommList.attributes.name").String())
+												nestedChildrtmapEntry.SetCommunityListCriteria = types.StringValue(rrtmapSetCommList.Get("rtmapSetCommList.attributes.setCriteria").String())
+											}
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "rtmapMatchRtIf" {
+																var nestedChildrtmapMatchRtIf RoutePolicyRouteMapsEntriesMatchInterfaces
+																nestedMapKey := nestedValue.Get("attributes.id").String()
+																if nestedChildrtmapEntry.MatchInterfaces == nil {
+																	nestedChildrtmapEntry.MatchInterfaces = make(map[string]RoutePolicyRouteMapsEntriesMatchInterfaces)
+																}
+																nestedChildrtmapEntry.MatchInterfaces[nestedMapKey] = nestedChildrtmapMatchRtIf
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "rtmapMatchRtType" {
+																var nestedChildrtmapMatchRtType RoutePolicyRouteMapsEntriesMatchRouteTypes
+																nestedMapKey := nestedValue.Get("attributes.routeT").String()
+																if nestedChildrtmapEntry.MatchRouteTypes == nil {
+																	nestedChildrtmapEntry.MatchRouteTypes = make(map[string]RoutePolicyRouteMapsEntriesMatchRouteTypes)
+																}
+																nestedChildrtmapEntry.MatchRouteTypes[nestedMapKey] = nestedChildrtmapMatchRtType
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
 											if child.Entries == nil {
 												child.Entries = make(map[string]RoutePolicyRouteMapsEntries)
 											}
@@ -2091,6 +2383,208 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					ncItem.MatchAsNumberAsPathLists[nc_] = nc_Item
 				}
 			}
+			{
+				var rrtmapSetPrepend gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetPrepend.attributes.rn").String()
+						if rnValue == "setaspathprepend" {
+							rrtmapSetPrepend = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetAsPathPrepend.IsNull() {
+					ncItem.SetAsPathPrepend = types.StringValue(rrtmapSetPrepend.Get("rtmapSetPrepend.attributes.as").String())
+				} else {
+					ncItem.SetAsPathPrepend = types.StringNull()
+				}
+			}
+			{
+				var rrtmapSetPrependLastAs gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetPrependLastAs.attributes.rn").String()
+						if rnValue == "setaspathlastas" {
+							rrtmapSetPrependLastAs = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetAsPathPrependLastAs.IsNull() {
+					ncItem.SetAsPathPrependLastAs = types.Int64Value(rrtmapSetPrependLastAs.Get("rtmapSetPrependLastAs.attributes.lastas").Int())
+				} else {
+					ncItem.SetAsPathPrependLastAs = types.Int64Null()
+				}
+			}
+			{
+				var rrtmapSetRtTag gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetRtTag.attributes.rn").String()
+						if rnValue == "srttag" {
+							rrtmapSetRtTag = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetTag.IsNull() {
+					ncItem.SetTag = types.Int64Value(rrtmapSetRtTag.Get("rtmapSetRtTag.attributes.tag").Int())
+				} else {
+					ncItem.SetTag = types.Int64Null()
+				}
+			}
+			{
+				var rrtmapSetWeight gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetWeight.attributes.rn").String()
+						if rnValue == "sweight" {
+							rrtmapSetWeight = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetWeight.IsNull() {
+					ncItem.SetWeight = types.Int64Value(rrtmapSetWeight.Get("rtmapSetWeight.attributes.weight").Int())
+				} else {
+					ncItem.SetWeight = types.Int64Null()
+				}
+			}
+			{
+				var rrtmapSetOrigin gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetOrigin.attributes.rn").String()
+						if rnValue == "origin" {
+							rrtmapSetOrigin = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetOriginAsn.IsNull() {
+					ncItem.SetOriginAsn = types.Int64Value(rrtmapSetOrigin.Get("rtmapSetOrigin.attributes.asn").Int())
+				} else {
+					ncItem.SetOriginAsn = types.Int64Null()
+				}
+				if !ncItem.SetOrigin.IsNull() {
+					ncItem.SetOrigin = types.StringValue(rrtmapSetOrigin.Get("rtmapSetOrigin.attributes.originT").String())
+				} else {
+					ncItem.SetOrigin = types.StringNull()
+				}
+			}
+			{
+				var rrtmapSetRttComm gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetRttComm.attributes.rn").String()
+						if rnValue == "srtt" {
+							rrtmapSetRttComm = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetExtendedCommunityRouteTargetAdditive.IsNull() {
+					ncItem.SetExtendedCommunityRouteTargetAdditive = types.StringValue(rrtmapSetRttComm.Get("rtmapSetRttComm.attributes.additive").String())
+				} else {
+					ncItem.SetExtendedCommunityRouteTargetAdditive = types.StringNull()
+				}
+				if !ncItem.SetExtendedCommunityRouteTargetCriteria.IsNull() {
+					ncItem.SetExtendedCommunityRouteTargetCriteria = types.StringValue(rrtmapSetRttComm.Get("rtmapSetRttComm.attributes.setCriteria").String())
+				} else {
+					ncItem.SetExtendedCommunityRouteTargetCriteria = types.StringNull()
+				}
+				for nc_ := range ncItem.SetExtendedCommunityRouteTargetItems {
+					nc_Item := ncItem.SetExtendedCommunityRouteTargetItems[nc_]
+					keyParts := strings.SplitN(nc_, ";", 2)
+					var rrtextcomItem gjson.Result
+					rrtmapSetRttComm.Get("rtmapSetRttComm.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("rtextcomItem.attributes.scope").String() == keyParts[0] &&
+								v.Get("rtextcomItem.attributes.community").String() == keyParts[1] {
+								rrtextcomItem = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rrtextcomItem.Exists() {
+						delete(ncItem.SetExtendedCommunityRouteTargetItems, nc_)
+						continue
+					}
+					ncItem.SetExtendedCommunityRouteTargetItems[nc_] = nc_Item
+				}
+			}
+			{
+				var rrtmapSetCommList gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetCommList.attributes.rn").String()
+						if rnValue == "scommlist" {
+							rrtmapSetCommList = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetCommunityListDelete.IsNull() {
+					ncItem.SetCommunityListDelete = types.StringValue(rrtmapSetCommList.Get("rtmapSetCommList.attributes.delete").String())
+				} else {
+					ncItem.SetCommunityListDelete = types.StringNull()
+				}
+				if !ncItem.SetCommunityListName.IsNull() {
+					ncItem.SetCommunityListName = types.StringValue(rrtmapSetCommList.Get("rtmapSetCommList.attributes.name").String())
+				} else {
+					ncItem.SetCommunityListName = types.StringNull()
+				}
+				if !ncItem.SetCommunityListCriteria.IsNull() {
+					ncItem.SetCommunityListCriteria = types.StringValue(rrtmapSetCommList.Get("rtmapSetCommList.attributes.setCriteria").String())
+				} else {
+					ncItem.SetCommunityListCriteria = types.StringNull()
+				}
+			}
+			for nc_ := range ncItem.MatchInterfaces {
+				nc_Item := ncItem.MatchInterfaces[nc_]
+				var rrtmapMatchRtIf gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("rtmapMatchRtIf.attributes.id").String() == nc_ {
+							rrtmapMatchRtIf = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rrtmapMatchRtIf.Exists() {
+					delete(ncItem.MatchInterfaces, nc_)
+					continue
+				}
+				ncItem.MatchInterfaces[nc_] = nc_Item
+			}
+			for nc_ := range ncItem.MatchRouteTypes {
+				nc_Item := ncItem.MatchRouteTypes[nc_]
+				var rrtmapMatchRtType gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("rtmapMatchRtType.attributes.routeT").String() == nc_ {
+							rrtmapMatchRtType = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rrtmapMatchRtType.Exists() {
+					delete(ncItem.MatchRouteTypes, nc_)
+					continue
+				}
+				ncItem.MatchRouteTypes[nc_] = nc_Item
+			}
 			item.Entries[nc] = ncItem
 		}
 		data.RouteMaps[key] = item
@@ -2471,6 +2965,34 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsRtAsnAsPathAccAtt.attributes.status", "deleted")
 						deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi_, "rtmapMatchAsnAsPathAccessList") + ".children"
 						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+					}
+				}
+				for stateKey := range stateItemdi_.SetExtendedCommunityRouteTargetItems {
+					if _, found := planItemdi_.SetExtendedCommunityRouteTargetItems[stateKey]; !found {
+						stateChild := stateItemdi_.SetExtendedCommunityRouteTargetItems[stateKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtextcomItem.attributes.rn", stateChild.getRn(stateKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtextcomItem.attributes.status", "deleted")
+						deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi_, "rtmapSetRttComm") + ".children"
+						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+					}
+				}
+				for stateChildKey := range stateItemdi_.MatchInterfaces {
+					if _, found := planItemdi_.MatchInterfaces[stateChildKey]; !found {
+						stateChild := stateItemdi_.MatchInterfaces[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapMatchRtIf.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapMatchRtIf.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for stateChildKey := range stateItemdi_.MatchRouteTypes {
+					if _, found := planItemdi_.MatchRouteTypes[stateChildKey]; !found {
+						stateChild := stateItemdi_.MatchRouteTypes[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapMatchRtType.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapMatchRtType.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 					}
 				}
 			}
@@ -2929,6 +3451,71 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 										for key := range stateChild.MatchAsNumberAsPathLists {
 											if configChild, ok := configChild.MatchAsNumberAsPathLists[key]; ok {
 												stateChild := stateChild.MatchAsNumberAsPathLists[key]
+												_ = stateChild
+												_ = configChild
+											}
+										}
+										if !stateChild.SetAsPathPrepend.IsNull() && configChild.SetAsPathPrepend.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetPrepend")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"as", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetAsPathPrependLastAs.IsNull() && configChild.SetAsPathPrependLastAs.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetPrependLastAs")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lastas", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetTag.IsNull() && configChild.SetTag.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetRtTag")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tag", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetWeight.IsNull() && configChild.SetWeight.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetWeight")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"weight", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetOriginAsn.IsNull() && configChild.SetOriginAsn.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetOrigin")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"asn", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetOrigin.IsNull() && configChild.SetOrigin.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetOrigin")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"originT", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetExtendedCommunityRouteTargetAdditive.IsNull() && configChild.SetExtendedCommunityRouteTargetAdditive.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetRttComm")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"additive", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetExtendedCommunityRouteTargetCriteria.IsNull() && configChild.SetExtendedCommunityRouteTargetCriteria.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetRttComm")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"setCriteria", "DME_UNSET_PROPERTY_MARKER")
+										}
+										for key := range stateChild.SetExtendedCommunityRouteTargetItems {
+											if configChild, ok := configChild.SetExtendedCommunityRouteTargetItems[key]; ok {
+												stateChild := stateChild.SetExtendedCommunityRouteTargetItems[key]
+												_ = stateChild
+												_ = configChild
+											}
+										}
+										if !stateChild.SetCommunityListDelete.IsNull() && configChild.SetCommunityListDelete.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetCommList")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delete", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetCommunityListName.IsNull() && configChild.SetCommunityListName.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetCommList")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetCommunityListCriteria.IsNull() && configChild.SetCommunityListCriteria.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetCommList")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"setCriteria", "DME_UNSET_PROPERTY_MARKER")
+										}
+										for key := range stateChild.MatchInterfaces {
+											if configChild, ok := configChild.MatchInterfaces[key]; ok {
+												stateChild := stateChild.MatchInterfaces[key]
+												_ = stateChild
+												_ = configChild
+											}
+										}
+										for key := range stateChild.MatchRouteTypes {
+											if configChild, ok := configChild.MatchRouteTypes[key]; ok {
+												stateChild := stateChild.MatchRouteTypes[key]
 												_ = stateChild
 												_ = configChild
 											}

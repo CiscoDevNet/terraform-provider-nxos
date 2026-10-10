@@ -36,7 +36,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/go-nxos"
 )
 
 // End of section. //template:end imports
@@ -502,8 +501,7 @@ func (r *FeatureResource) Read(ctx context.Context, req resource.ReadRequest, re
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{"fmEntity", "fmAnalytics", "fmBashShell", "fmBfd", "fmBgp", "fmDhcp", "fmEigrp", "fmEvpn", "fmGrpc", "fmHmm", "fmHsrp", "fmInterfaceVlan", "fmIsis", "fmLacp", "fmLldp", "fmMacsec", "fmNetflow", "fmNgmvpn", "fmNgoam", "fmNvo", "fmNxapi", "fmOspf", "fmOspfv3", "fmPim", "fmPtp", "fmPvlan", "fmSflow", "fmScpServer", "fmSecurityGroup", "fmServiceAcceleration", "fmSftpServer", "fmSsh", "fmTacacsplus", "fmTelemetry", "fmTelnet", "fmUdld", "fmVnSegment", "fmVpc", "fsetFeatureSet"}, FeatureSubtreeClassMinVersions))}
-		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"fmEntity", "fmAnalytics", "fmBashShell", "fmBfd", "fmBgp", "fmDhcp", "fmEigrp", "fmEvpn", "fmGrpc", "fmHmm", "fmHsrp", "fmInterfaceVlan", "fmIsis", "fmLacp", "fmLldp", "fmMacsec", "fmNetflow", "fmNgmvpn", "fmNgoam", "fmNvo", "fmNxapi", "fmOspf", "fmOspfv3", "fmPim", "fmPtp", "fmPvlan", "fmSflow", "fmScpServer", "fmSecurityGroup", "fmServiceAcceleration", "fmSftpServer", "fmSsh", "fmTacacsplus", "fmTelemetry", "fmTelnet", "fmUdld", "fmVnSegment", "fmVpc", "fsetFeatureSet"}, FeatureSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

@@ -369,11 +369,10 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 
 	if device.Managed {
 		{{- if .ChildClasses}}
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{ {{- range $i, $c := allChildClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} }, {{camelCase .Name}}SubtreeClassMinVersions))}
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{ {{- range $i, $c := allChildClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} }, {{camelCase .Name}}SubtreeClassMinVersions)
 		{{- else}}
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "no")}
+		res, err := device.Client.GetDn(state.Dn.ValueString(), nxos.Query("rsp-subtree", "no"))
 		{{- end}}
-		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

@@ -27,6 +27,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/action"
@@ -76,6 +77,9 @@ type NxosProviderData struct {
 type NxosProviderDataDevice struct {
 	Client  *nxos.Client
 	Managed bool
+	// Classes reported as unknown by the device, see GetSubtree
+	unsupportedClassesMutex sync.Mutex
+	unsupportedClasses      map[string]bool
 }
 
 func (p *NxosProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {

@@ -37,7 +37,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/go-nxos"
 )
 
 // End of section. //template:end imports
@@ -533,8 +532,7 @@ func (r *ESGResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgMatchExternalSubnetV4", "esgMatchExternalSubnetV6", "esgMatchExternalSubnetV4WithNh", "esgMatchExternalSubnetV6WithNh", "esgMatchExternalSubnetV4WithNhEncap", "esgMatchExternalSubnetV6WithNhEncap", "esgMatchInterface", "esgMatchVlanMac", "esgMatchVlanInterface", "esgAttributeEntity", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom", "esgContractEntity", "esgContract"}, ESGSubtreeClassMinVersions))}
-		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgMatchExternalSubnetV4", "esgMatchExternalSubnetV6", "esgMatchExternalSubnetV4WithNh", "esgMatchExternalSubnetV6WithNh", "esgMatchExternalSubnetV4WithNhEncap", "esgMatchExternalSubnetV6WithNhEncap", "esgMatchInterface", "esgMatchVlanMac", "esgMatchVlanInterface", "esgAttributeEntity", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom", "esgContractEntity", "esgContract"}, ESGSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

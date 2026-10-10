@@ -21,7 +21,6 @@ import (
 	"context"
 	"fmt"
 	"sort"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -36,18 +35,18 @@ type MinVersion struct {
 	Path    string
 }
 
-// SubtreeClasses returns the comma-separated list of classes to be used as `rsp-subtree-class` query parameter.
-// Classes with a minimum version higher than the device version are omitted, as NX-OS rejects queries
-// containing unknown classes. If the device version cannot be determined, all classes are returned.
-// The device version is only retrieved if minVersions is not empty.
-func SubtreeClasses(ctx context.Context, client *nxos.Client, classes []string, minVersions map[string]string) string {
+// SubtreeClasses returns the classes to be used as `rsp-subtree-class` query parameter. Classes with a
+// minimum version higher than the device version are omitted, as NX-OS rejects queries containing unknown
+// classes. If the device version cannot be determined, all classes are returned. The device version is only
+// retrieved if minVersions is not empty.
+func SubtreeClasses(ctx context.Context, client *nxos.Client, classes []string, minVersions map[string]string) []string {
 	if len(minVersions) == 0 {
-		return strings.Join(classes, ",")
+		return classes
 	}
 	version, err := client.Version()
 	if err != nil {
 		tflog.Warn(ctx, fmt.Sprintf("Failed to retrieve NX-OS version, querying all classes: %s", err))
-		return strings.Join(classes, ",")
+		return classes
 	}
 	var result []string
 	for _, c := range classes {
@@ -56,7 +55,7 @@ func SubtreeClasses(ctx context.Context, client *nxos.Client, classes []string, 
 		}
 		result = append(result, c)
 	}
-	return strings.Join(result, ",")
+	return result
 }
 
 // CheckMinVersion verifies that a request body does not contain classes or attributes that are not supported

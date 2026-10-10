@@ -37,7 +37,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/go-nxos"
 )
 
 // End of section. //template:end imports
@@ -402,8 +401,7 @@ func (r *KeychainResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey", "kcmgrMacsecKeychain", "kcmgrMacsecKeyId", "kcmgrMacsecSendlifetime", "kcmgrMacsecpsk"}, KeychainSubtreeClassMinVersions))}
-		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey", "kcmgrMacsecKeychain", "kcmgrMacsecKeyId", "kcmgrMacsecSendlifetime", "kcmgrMacsecpsk"}, KeychainSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

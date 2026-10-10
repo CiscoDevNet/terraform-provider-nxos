@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/go-nxos"
 )
 
 // End of section. //template:end imports
@@ -362,8 +361,7 @@ func (d *ESGDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgMatchExternalSubnetV4", "esgMatchExternalSubnetV6", "esgMatchExternalSubnetV4WithNh", "esgMatchExternalSubnetV6WithNh", "esgMatchExternalSubnetV4WithNhEncap", "esgMatchExternalSubnetV6WithNhEncap", "esgMatchInterface", "esgMatchVlanMac", "esgMatchVlanInterface", "esgAttributeEntity", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom", "esgContractEntity", "esgContract"}, ESGSubtreeClassMinVersions))}
-	res, err := device.Client.GetDn(config.getDn(), queries...)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgMatchExternalSubnetV4", "esgMatchExternalSubnetV6", "esgMatchExternalSubnetV4WithNh", "esgMatchExternalSubnetV6WithNh", "esgMatchExternalSubnetV4WithNhEncap", "esgMatchExternalSubnetV6WithNhEncap", "esgMatchInterface", "esgMatchVlanMac", "esgMatchVlanInterface", "esgAttributeEntity", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom", "esgContractEntity", "esgContract"}, ESGSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

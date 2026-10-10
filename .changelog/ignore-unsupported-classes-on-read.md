@@ -1,0 +1,1 @@
+- Fix resources and data sources failing to read with `Unknown class` on NX-OS releases that do not support some of their objects (e.g. releases older than the tested ones); objects not supported by the device are now ignored when reading, configuring them still fails on apply

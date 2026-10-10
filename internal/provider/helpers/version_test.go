@@ -50,13 +50,13 @@ func TestSubtreeClasses(t *testing.T) {
 	classes := []string{"a", "b", "c"}
 	minVersions := map[string]string{"b": "10.6(1)", "c": "10.5(1)"}
 
-	if got, want := SubtreeClasses(context.Background(), testVersionClient(t, "10.5(6)"), classes, minVersions), "a,c"; got != want {
+	if got, want := strings.Join(SubtreeClasses(context.Background(), testVersionClient(t, "10.5(6)"), classes, minVersions), ","), "a,c"; got != want {
 		t.Errorf("older device: got %q, want %q", got, want)
 	}
-	if got, want := SubtreeClasses(context.Background(), testVersionClient(t, "10.6(1)"), classes, minVersions), "a,b,c"; got != want {
+	if got, want := strings.Join(SubtreeClasses(context.Background(), testVersionClient(t, "10.6(1)"), classes, minVersions), ","), "a,b,c"; got != want {
 		t.Errorf("newer device: got %q, want %q", got, want)
 	}
-	if got, want := SubtreeClasses(context.Background(), testVersionClient(t, ""), classes, minVersions), "a,b,c"; got != want {
+	if got, want := strings.Join(SubtreeClasses(context.Background(), testVersionClient(t, ""), classes, minVersions), ","), "a,b,c"; got != want {
 		t.Errorf("unknown version: got %q, want %q", got, want)
 	}
 }
@@ -109,7 +109,7 @@ func TestMinVersionNoRequests(t *testing.T) {
 	t.Cleanup(server.Close)
 	client, _ := nxos.NewClient(server.URL, "usr", "pwd", true, nxos.MaxRetries(0))
 
-	if got, want := SubtreeClasses(context.Background(), client, []string{"a", "b"}, map[string]string{}), "a,b"; got != want {
+	if got, want := strings.Join(SubtreeClasses(context.Background(), client, []string{"a", "b"}, map[string]string{}), ","), "a,b"; got != want {
 		t.Errorf("got %q, want %q", got, want)
 	}
 	if diags := CheckMinVersion(context.Background(), client, "", `{"a":{"attributes":{"x":"y"}}}`, map[string]MinVersion{}); diags.HasError() {

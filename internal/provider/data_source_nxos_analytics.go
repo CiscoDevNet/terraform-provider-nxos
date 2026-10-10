@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/go-nxos"
 )
 
 // End of section. //template:end imports
@@ -475,8 +474,7 @@ func (d *AnalyticsDataSource) Read(ctx context.Context, req datasource.ReadReque
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", helpers.SubtreeClasses(ctx, device.Client, []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsMatchAcl", "analyticsRecordP", "analyticsCollector", "analyticsMonitor", "analyticsRsRecordPAtt", "analyticsCollectorBucket", "analyticsRsCollectorAtt", "analyticsTrafficAnalytics", "analyticsFwdInstTarget", "analyticsRsMonitorAtt", "analyticsRsProfAtt", "analyticsRsEventsAtt", "analyticsRsPolicyAtt"}, AnalyticsSubtreeClassMinVersions))}
-	res, err := device.Client.GetDn(config.getDn(), queries...)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsMatchAcl", "analyticsRecordP", "analyticsCollector", "analyticsMonitor", "analyticsRsRecordPAtt", "analyticsCollectorBucket", "analyticsRsCollectorAtt", "analyticsTrafficAnalytics", "analyticsFwdInstTarget", "analyticsRsMonitorAtt", "analyticsRsProfAtt", "analyticsRsEventsAtt", "analyticsRsPolicyAtt"}, AnalyticsSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

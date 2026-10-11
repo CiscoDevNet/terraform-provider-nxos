@@ -63,7 +63,7 @@ func (r *IPv4Resource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.").AddApiDocumentation("ipv4Entity", "Layer%203/ipv4:Entity/", []string{"ipv4Inst", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Inst/", "Layer%203/ipv4:Dom/", "Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.").AddApiDocumentation("ipv4Entity", "Layer%203/ipv4:Entity/", []string{"ipv4Inst", "ipv4IPLoadSharing", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Inst/", "Layer%203/ipv4:IPLoadSharing/", "Layer%203/ipv4:Dom/", "Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -149,6 +149,83 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"load_sharing_concatenation": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Concatenation.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"load_sharing_ecmp": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ECMP load sharing.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"load_sharing_exclude_l3_protocol": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude L3 Protocol field from ECMP hashing.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"load_sharing_gre_outer_hash": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("GRE Outer Hash.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"load_sharing_second_hierarchy_keyshift": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("hardware lb-2nd-hier-keyshift.").AddIntegerRangeDescription(1, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 10),
+				},
+			},
+			"load_sharing_keyshift": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("hardware lb-keyshift.").AddIntegerRangeDescription(1, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 10),
+				},
+			},
+			"load_sharing_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Load sharing mode.").AddStringEnumDescription("disabled", "destPort", "srcDest", "srcDestGre", "srcDestPort", "source", "srcDestGTPU", "srcDestSymmetric", "srcDestInnerAll", "srcDestInnerGre", "srcDestInnerGreSymmetric", "srcDestIPv6FlowLabel", "srcDestTTL", "srcDestUDF", "srcDestInnerAllInfra", "srcDestPortRocev2Opcode", "srcDestPortRocev2Queuepair", "srcDestPortRocev2Psn", "srcDestPortRocev2OpcodeQueuepair", "srcDestPortRocev2OpcodePsn", "srcDestPortRocev2QueuepairPsn", "srcDestPortRocev2OpcodeQueuepairPsn").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disabled", "destPort", "srcDest", "srcDestGre", "srcDestPort", "source", "srcDestGTPU", "srcDestSymmetric", "srcDestInnerAll", "srcDestInnerGre", "srcDestInnerGreSymmetric", "srcDestIPv6FlowLabel", "srcDestTTL", "srcDestUDF", "srcDestInnerAllInfra", "srcDestPortRocev2Opcode", "srcDestPortRocev2Queuepair", "srcDestPortRocev2Psn", "srcDestPortRocev2OpcodeQueuepair", "srcDestPortRocev2OpcodePsn", "srcDestPortRocev2QueuepairPsn", "srcDestPortRocev2OpcodeQueuepairPsn"),
+				},
+			},
+			"load_sharing_rotate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Rotate.").AddIntegerRangeDescription(1, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 63),
+				},
+			},
+			"load_sharing_udf_length": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("source-destination udf length.").AddIntegerRangeDescription(0, 32).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 32),
+				},
+			},
+			"load_sharing_udf_offset": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("source-destination udf.").AddIntegerRangeDescription(0, 127).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 127),
+				},
+			},
+			"load_sharing_universal_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Universal-ID(Random seed).").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
 				},
 			},
 			"vrfs": schema.MapNestedAttribute{
@@ -477,7 +554,7 @@ func (r *IPv4Resource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"ipv4Inst", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, IPv4SubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"ipv4Inst", "ipv4IPLoadSharing", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, IPv4SubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

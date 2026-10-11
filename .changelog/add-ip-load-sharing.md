@@ -1,0 +1,1 @@
+- Add ECMP load-sharing (`ip load-sharing address source-destination port source-destination [concatenation] [rotate <n>] [universal-id <n>]`, including GRE outer hash, UDF offset and length, and hardware lb-keyshift) configuration to `nxos_ipv4` resource and data source

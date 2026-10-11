@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This data source can read the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
   API Documentation
-  ipv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Entity/ipv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Inst/ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:If/ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Addr/
+  ipv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Entity/ipv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Inst/ipv4IPLoadSharing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:IPLoadSharing/ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:If/ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Addr/
 ---
 
 # nxos_ipv4 (Data Source)
@@ -16,6 +16,7 @@ This data source can read the IPv4 configuration on NX-OS devices, including per
 
 - [ipv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Entity/)
 - [ipv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Inst/)
+- [ipv4IPLoadSharing](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:IPLoadSharing/)
 - [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/)
 - [ipv4Route](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/)
 - [ipv4Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/)
@@ -46,6 +47,17 @@ data "nxos_ipv4" "example" {
 - `hardware_ecmp_hash_polynomial` (String) hardware Ecmp Hash-Polynomial.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
+- `load_sharing_concatenation` (String) Concatenation.
+- `load_sharing_ecmp` (String) ECMP load sharing.
+- `load_sharing_exclude_l3_protocol` (String) Exclude L3 Protocol field from ECMP hashing.
+- `load_sharing_gre_outer_hash` (String) GRE Outer Hash.
+- `load_sharing_keyshift` (Number) hardware lb-keyshift.
+- `load_sharing_mode` (String) Load sharing mode.
+- `load_sharing_rotate` (Number) Rotate.
+- `load_sharing_second_hierarchy_keyshift` (Number) hardware lb-2nd-hier-keyshift.
+- `load_sharing_udf_length` (Number) source-destination udf length.
+- `load_sharing_udf_offset` (Number) source-destination udf.
+- `load_sharing_universal_id` (Number) Universal-ID(Random seed).
 - `logging_level` (String) Logging level.
 - `redirect_syslog` (String) ipv4 redirect syslog.
 - `redirect_syslog_interval` (Number) redirect syslog interval.

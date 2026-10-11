@@ -39,6 +39,14 @@ func TestAccDataSourceNxosIPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "redirect_syslog", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "redirect_syslog_interval", "120"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "source_route", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "load_sharing_concatenation", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "load_sharing_ecmp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "load_sharing_gre_outer_hash", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "load_sharing_mode", "srcDestPort"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "load_sharing_rotate", "43"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "load_sharing_udf_length", "8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "load_sharing_udf_offset", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "load_sharing_universal_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "vrfs.VRF1.auto_discard", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "vrfs.VRF1.icmp_errors_source_interface", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "vrfs.VRF1.static_routes.1.1.1.0/24.control", "bfd"))
@@ -127,6 +135,14 @@ func testAccDataSourceNxosIPv4Config() string {
 	config += `	redirect_syslog = "disabled"` + "\n"
 	config += `	redirect_syslog_interval = 120` + "\n"
 	config += `	source_route = "disabled"` + "\n"
+	config += `	load_sharing_concatenation = "enabled"` + "\n"
+	config += `	load_sharing_ecmp = "enabled"` + "\n"
+	config += `	load_sharing_gre_outer_hash = "enabled"` + "\n"
+	config += `	load_sharing_mode = "srcDestPort"` + "\n"
+	config += `	load_sharing_rotate = 43` + "\n"
+	config += `	load_sharing_udf_length = 8` + "\n"
+	config += `	load_sharing_udf_offset = 10` + "\n"
+	config += `	load_sharing_universal_id = 1` + "\n"
 	config += `	vrfs = {` + "\n"
 	config += `		"VRF1" = {` + "\n"
 	config += `			auto_discard = "enabled"` + "\n"

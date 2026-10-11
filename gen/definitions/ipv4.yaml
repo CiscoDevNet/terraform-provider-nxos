@@ -113,6 +113,118 @@ child_classes:
           - disabled
         example: disabled
     child_classes:
+      - class_name: ipv4IPLoadSharing
+        doc_path: Layer%203/ipv4:IPLoadSharing/
+        rn: iploadsharing
+        type: single
+        tf_name: load_sharing
+        description: 'IPv4 ECMP load-sharing configuration.'
+        attributes:
+          - nxos_name: concatenation
+            tf_name: load_sharing_concatenation
+            type: String
+            description: 'Concatenation.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: ecmpLoadSharing
+            tf_name: load_sharing_ecmp
+            type: String
+            description: 'ECMP load sharing.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: excludeL3Proto
+            tf_name: load_sharing_exclude_l3_protocol
+            type: String
+            description: 'Exclude L3 Protocol field from ECMP hashing.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+            exclude_test: true
+          - nxos_name: greOuterHash
+            tf_name: load_sharing_gre_outer_hash
+            type: String
+            description: 'GRE Outer Hash.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: lb2ndHierKeyshift
+            tf_name: load_sharing_second_hierarchy_keyshift
+            type: Int64
+            description: 'hardware lb-2nd-hier-keyshift.'
+            min_int: 1
+            max_int: 10
+            example: 6
+            exclude_test: true
+          - nxos_name: lbKeyshift
+            tf_name: load_sharing_keyshift
+            type: Int64
+            description: 'hardware lb-keyshift.'
+            min_int: 1
+            max_int: 10
+            example: 5
+            exclude_test: true
+          - nxos_name: loadShareMode
+            tf_name: load_sharing_mode
+            type: String
+            description: 'Load sharing mode.'
+            enum_values:
+              - disabled
+              - destPort
+              - srcDest
+              - srcDestGre
+              - srcDestPort
+              - source
+              - srcDestGTPU
+              - srcDestSymmetric
+              - srcDestInnerAll
+              - srcDestInnerGre
+              - srcDestInnerGreSymmetric
+              - srcDestIPv6FlowLabel
+              - srcDestTTL
+              - srcDestUDF
+              - srcDestInnerAllInfra
+              - srcDestPortRocev2Opcode
+              - srcDestPortRocev2Queuepair
+              - srcDestPortRocev2Psn
+              - srcDestPortRocev2OpcodeQueuepair
+              - srcDestPortRocev2OpcodePsn
+              - srcDestPortRocev2QueuepairPsn
+              - srcDestPortRocev2OpcodeQueuepairPsn
+            example: srcDestPort
+          - nxos_name: rotate
+            tf_name: load_sharing_rotate
+            type: Int64
+            description: 'Rotate.'
+            min_int: 1
+            max_int: 63
+            example: 43
+          - nxos_name: udfLength
+            tf_name: load_sharing_udf_length
+            type: Int64
+            description: 'source-destination udf length.'
+            min_int: 0
+            max_int: 32
+            example: 8
+          - nxos_name: udfOffset
+            tf_name: load_sharing_udf_offset
+            type: Int64
+            description: 'source-destination udf.'
+            min_int: 0
+            max_int: 127
+            example: 10
+          - nxos_name: universalID
+            tf_name: load_sharing_universal_id
+            type: Int64
+            description: 'Universal-ID(Random seed).'
+            min_int: 0
+            max_int: 4294967295
+            example: 1
       - class_name: ipv4Dom
         doc_path: Layer%203/ipv4:Dom/
         rn: dom-%s

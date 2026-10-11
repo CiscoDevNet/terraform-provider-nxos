@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
   API Documentation
-  ipv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Entity/ipv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Inst/ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:If/ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Addr/
+  ipv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Entity/ipv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Inst/ipv4IPLoadSharing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:IPLoadSharing/ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:If/ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Addr/
 ---
 
 # nxos_ipv4 (Resource)
@@ -16,6 +16,7 @@ This resource can manage the IPv4 configuration on NX-OS devices, including per-
 
 - [ipv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Entity/)
 - [ipv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Inst/)
+- [ipv4IPLoadSharing](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:IPLoadSharing/)
 - [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/)
 - [ipv4Route](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/)
 - [ipv4Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/)
@@ -26,14 +27,22 @@ This resource can manage the IPv4 configuration on NX-OS devices, including per-
 
 ```terraform
 resource "nxos_ipv4" "example" {
-  admin_state              = "enabled"
-  instance_admin_state     = "enabled"
-  access_list_match_local  = "enabled"
-  control                  = "stateful-ha"
-  logging_level            = "warning"
-  redirect_syslog          = "disabled"
-  redirect_syslog_interval = 120
-  source_route             = "disabled"
+  admin_state                 = "enabled"
+  instance_admin_state        = "enabled"
+  access_list_match_local     = "enabled"
+  control                     = "stateful-ha"
+  logging_level               = "warning"
+  redirect_syslog             = "disabled"
+  redirect_syslog_interval    = 120
+  source_route                = "disabled"
+  load_sharing_concatenation  = "enabled"
+  load_sharing_ecmp           = "enabled"
+  load_sharing_gre_outer_hash = "enabled"
+  load_sharing_mode           = "srcDestPort"
+  load_sharing_rotate         = 43
+  load_sharing_udf_length     = 8
+  load_sharing_udf_offset     = 10
+  load_sharing_universal_id   = 1
   vrfs = {
     "VRF1" = {
       auto_discard                 = "enabled"
@@ -101,6 +110,28 @@ resource "nxos_ipv4" "example" {
   - Choices: `CRC16`, `CRC32HI`
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `load_sharing_concatenation` (String) Concatenation.
+  - Choices: `enabled`, `disabled`
+- `load_sharing_ecmp` (String) ECMP load sharing.
+  - Choices: `enabled`, `disabled`
+- `load_sharing_exclude_l3_protocol` (String) Exclude L3 Protocol field from ECMP hashing.
+  - Choices: `enabled`, `disabled`
+- `load_sharing_gre_outer_hash` (String) GRE Outer Hash.
+  - Choices: `enabled`, `disabled`
+- `load_sharing_keyshift` (Number) hardware lb-keyshift.
+  - Range: `1`-`10`
+- `load_sharing_mode` (String) Load sharing mode.
+  - Choices: `disabled`, `destPort`, `srcDest`, `srcDestGre`, `srcDestPort`, `source`, `srcDestGTPU`, `srcDestSymmetric`, `srcDestInnerAll`, `srcDestInnerGre`, `srcDestInnerGreSymmetric`, `srcDestIPv6FlowLabel`, `srcDestTTL`, `srcDestUDF`, `srcDestInnerAllInfra`, `srcDestPortRocev2Opcode`, `srcDestPortRocev2Queuepair`, `srcDestPortRocev2Psn`, `srcDestPortRocev2OpcodeQueuepair`, `srcDestPortRocev2OpcodePsn`, `srcDestPortRocev2QueuepairPsn`, `srcDestPortRocev2OpcodeQueuepairPsn`
+- `load_sharing_rotate` (Number) Rotate.
+  - Range: `1`-`63`
+- `load_sharing_second_hierarchy_keyshift` (Number) hardware lb-2nd-hier-keyshift.
+  - Range: `1`-`10`
+- `load_sharing_udf_length` (Number) source-destination udf length.
+  - Range: `0`-`32`
+- `load_sharing_udf_offset` (Number) source-destination udf.
+  - Range: `0`-`127`
+- `load_sharing_universal_id` (Number) Universal-ID(Random seed).
+  - Range: `0`-`4294967295`
 - `logging_level` (String) Logging level.
   - Choices: `emergency`, `alert`, `critical`, `error`, `warning`, `notification`, `informational`, `debug`
 - `redirect_syslog` (String) ipv4 redirect syslog.

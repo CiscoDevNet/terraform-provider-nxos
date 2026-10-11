@@ -56,7 +56,7 @@ func (d *IPv4DataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.").AddApiDocumentation("ipv4Entity", "Layer%203/ipv4:Entity/", []string{"ipv4Inst", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Inst/", "Layer%203/ipv4:Dom/", "Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.").AddApiDocumentation("ipv4Entity", "Layer%203/ipv4:Entity/", []string{"ipv4Inst", "ipv4IPLoadSharing", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Inst/", "Layer%203/ipv4:IPLoadSharing/", "Layer%203/ipv4:Dom/", "Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -109,6 +109,50 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			},
 			"source_route": schema.StringAttribute{
 				MarkdownDescription: "Source-Route.",
+				Computed:            true,
+			},
+			"load_sharing_concatenation": schema.StringAttribute{
+				MarkdownDescription: "Concatenation.",
+				Computed:            true,
+			},
+			"load_sharing_ecmp": schema.StringAttribute{
+				MarkdownDescription: "ECMP load sharing.",
+				Computed:            true,
+			},
+			"load_sharing_exclude_l3_protocol": schema.StringAttribute{
+				MarkdownDescription: "Exclude L3 Protocol field from ECMP hashing.",
+				Computed:            true,
+			},
+			"load_sharing_gre_outer_hash": schema.StringAttribute{
+				MarkdownDescription: "GRE Outer Hash.",
+				Computed:            true,
+			},
+			"load_sharing_second_hierarchy_keyshift": schema.Int64Attribute{
+				MarkdownDescription: "hardware lb-2nd-hier-keyshift.",
+				Computed:            true,
+			},
+			"load_sharing_keyshift": schema.Int64Attribute{
+				MarkdownDescription: "hardware lb-keyshift.",
+				Computed:            true,
+			},
+			"load_sharing_mode": schema.StringAttribute{
+				MarkdownDescription: "Load sharing mode.",
+				Computed:            true,
+			},
+			"load_sharing_rotate": schema.Int64Attribute{
+				MarkdownDescription: "Rotate.",
+				Computed:            true,
+			},
+			"load_sharing_udf_length": schema.Int64Attribute{
+				MarkdownDescription: "source-destination udf length.",
+				Computed:            true,
+			},
+			"load_sharing_udf_offset": schema.Int64Attribute{
+				MarkdownDescription: "source-destination udf.",
+				Computed:            true,
+			},
+			"load_sharing_universal_id": schema.Int64Attribute{
+				MarkdownDescription: "Universal-ID(Random seed).",
 				Computed:            true,
 			},
 			"vrfs": schema.MapNestedAttribute{
@@ -279,7 +323,7 @@ func (d *IPv4DataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipv4Inst", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, IPv4SubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipv4Inst", "ipv4IPLoadSharing", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, IPv4SubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

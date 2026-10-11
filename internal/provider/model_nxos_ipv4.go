@@ -52,6 +52,17 @@ type IPv4 struct {
 	RedirectSyslog                      types.String        `tfsdk:"redirect_syslog"`
 	RedirectSyslogInterval              types.Int64         `tfsdk:"redirect_syslog_interval"`
 	SourceRoute                         types.String        `tfsdk:"source_route"`
+	LoadSharingConcatenation            types.String        `tfsdk:"load_sharing_concatenation"`
+	LoadSharingEcmp                     types.String        `tfsdk:"load_sharing_ecmp"`
+	LoadSharingExcludeL3Protocol        types.String        `tfsdk:"load_sharing_exclude_l3_protocol"`
+	LoadSharingGreOuterHash             types.String        `tfsdk:"load_sharing_gre_outer_hash"`
+	LoadSharingSecondHierarchyKeyshift  types.Int64         `tfsdk:"load_sharing_second_hierarchy_keyshift"`
+	LoadSharingKeyshift                 types.Int64         `tfsdk:"load_sharing_keyshift"`
+	LoadSharingMode                     types.String        `tfsdk:"load_sharing_mode"`
+	LoadSharingRotate                   types.Int64         `tfsdk:"load_sharing_rotate"`
+	LoadSharingUdfLength                types.Int64         `tfsdk:"load_sharing_udf_length"`
+	LoadSharingUdfOffset                types.Int64         `tfsdk:"load_sharing_udf_offset"`
+	LoadSharingUniversalId              types.Int64         `tfsdk:"load_sharing_universal_id"`
 	Vrfs                                map[string]IPv4Vrfs `tfsdk:"vrfs"`
 }
 
@@ -209,6 +220,43 @@ func (data IPv4) toBody(config IPv4) nxos.Body {
 		_ = nestedChildrenPath
 		prevBody := body
 		body = childBody
+		attrs = "{}"
+		if !data.LoadSharingConcatenation.IsUnknown() && !data.LoadSharingConcatenation.IsNull() && !config.LoadSharingConcatenation.IsNull() {
+			attrs, _ = sjson.Set(attrs, "concatenation", data.LoadSharingConcatenation.ValueString())
+		}
+		if !data.LoadSharingEcmp.IsUnknown() && !data.LoadSharingEcmp.IsNull() && !config.LoadSharingEcmp.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ecmpLoadSharing", data.LoadSharingEcmp.ValueString())
+		}
+		if !data.LoadSharingExcludeL3Protocol.IsUnknown() && !data.LoadSharingExcludeL3Protocol.IsNull() && !config.LoadSharingExcludeL3Protocol.IsNull() {
+			attrs, _ = sjson.Set(attrs, "excludeL3Proto", data.LoadSharingExcludeL3Protocol.ValueString())
+		}
+		if !data.LoadSharingGreOuterHash.IsUnknown() && !data.LoadSharingGreOuterHash.IsNull() && !config.LoadSharingGreOuterHash.IsNull() {
+			attrs, _ = sjson.Set(attrs, "greOuterHash", data.LoadSharingGreOuterHash.ValueString())
+		}
+		if !data.LoadSharingSecondHierarchyKeyshift.IsUnknown() && !data.LoadSharingSecondHierarchyKeyshift.IsNull() && !config.LoadSharingSecondHierarchyKeyshift.IsNull() {
+			attrs, _ = sjson.Set(attrs, "lb2ndHierKeyshift", strconv.FormatInt(data.LoadSharingSecondHierarchyKeyshift.ValueInt64(), 10))
+		}
+		if !data.LoadSharingKeyshift.IsUnknown() && !data.LoadSharingKeyshift.IsNull() && !config.LoadSharingKeyshift.IsNull() {
+			attrs, _ = sjson.Set(attrs, "lbKeyshift", strconv.FormatInt(data.LoadSharingKeyshift.ValueInt64(), 10))
+		}
+		if !data.LoadSharingMode.IsUnknown() && !data.LoadSharingMode.IsNull() && !config.LoadSharingMode.IsNull() {
+			attrs, _ = sjson.Set(attrs, "loadShareMode", data.LoadSharingMode.ValueString())
+		}
+		if !data.LoadSharingRotate.IsUnknown() && !data.LoadSharingRotate.IsNull() && !config.LoadSharingRotate.IsNull() {
+			attrs, _ = sjson.Set(attrs, "rotate", strconv.FormatInt(data.LoadSharingRotate.ValueInt64(), 10))
+		}
+		if !data.LoadSharingUdfLength.IsUnknown() && !data.LoadSharingUdfLength.IsNull() && !config.LoadSharingUdfLength.IsNull() {
+			attrs, _ = sjson.Set(attrs, "udfLength", strconv.FormatInt(data.LoadSharingUdfLength.ValueInt64(), 10))
+		}
+		if !data.LoadSharingUdfOffset.IsUnknown() && !data.LoadSharingUdfOffset.IsNull() && !config.LoadSharingUdfOffset.IsNull() {
+			attrs, _ = sjson.Set(attrs, "udfOffset", strconv.FormatInt(data.LoadSharingUdfOffset.ValueInt64(), 10))
+		}
+		if !data.LoadSharingUniversalId.IsUnknown() && !data.LoadSharingUniversalId.IsNull() && !config.LoadSharingUniversalId.IsNull() {
+			attrs, _ = sjson.Set(attrs, "universalID", strconv.FormatInt(data.LoadSharingUniversalId.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv4IPLoadSharing.attributes", attrs)
+		}
 		for key, child := range data.Vrfs {
 			configChild, configChildOk := config.Vrfs[key]
 			_ = configChild
@@ -377,6 +425,30 @@ func (data *IPv4) fromBody(res gjson.Result) {
 		data.RedirectSyslog = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.redirectSyslog").String())
 		data.RedirectSyslogInterval = types.Int64Value(ripv4Inst.Get("ipv4Inst.attributes.redirectSyslogInterval").Int())
 		data.SourceRoute = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.sourceRoute").String())
+		{
+			var ripv4IPLoadSharing gjson.Result
+			ripv4Inst.Get("ipv4Inst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("ipv4IPLoadSharing.attributes.rn").String()
+					if rnValue == "iploadsharing" {
+						ripv4IPLoadSharing = v
+						return false
+					}
+					return true
+				},
+			)
+			data.LoadSharingConcatenation = types.StringValue(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.concatenation").String())
+			data.LoadSharingEcmp = types.StringValue(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.ecmpLoadSharing").String())
+			data.LoadSharingExcludeL3Protocol = types.StringValue(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.excludeL3Proto").String())
+			data.LoadSharingGreOuterHash = types.StringValue(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.greOuterHash").String())
+			data.LoadSharingSecondHierarchyKeyshift = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.lb2ndHierKeyshift").Int())
+			data.LoadSharingKeyshift = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.lbKeyshift").Int())
+			data.LoadSharingMode = types.StringValue(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.loadShareMode").String())
+			data.LoadSharingRotate = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.rotate").Int())
+			data.LoadSharingUdfLength = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.udfLength").Int())
+			data.LoadSharingUdfOffset = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.udfOffset").Int())
+			data.LoadSharingUniversalId = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.universalID").Int())
+		}
 		ripv4Inst.Get("ipv4Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -564,6 +636,74 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 		data.SourceRoute = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.sourceRoute").String())
 	} else {
 		data.SourceRoute = types.StringNull()
+	}
+	{
+		var ripv4IPLoadSharing gjson.Result
+		ripv4Inst.Get("ipv4Inst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("ipv4IPLoadSharing.attributes.rn").String()
+				if rnValue == "iploadsharing" {
+					ripv4IPLoadSharing = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.LoadSharingConcatenation.IsNull() {
+			data.LoadSharingConcatenation = types.StringValue(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.concatenation").String())
+		} else {
+			data.LoadSharingConcatenation = types.StringNull()
+		}
+		if !data.LoadSharingEcmp.IsNull() {
+			data.LoadSharingEcmp = types.StringValue(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.ecmpLoadSharing").String())
+		} else {
+			data.LoadSharingEcmp = types.StringNull()
+		}
+		if !data.LoadSharingExcludeL3Protocol.IsNull() {
+			data.LoadSharingExcludeL3Protocol = types.StringValue(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.excludeL3Proto").String())
+		} else {
+			data.LoadSharingExcludeL3Protocol = types.StringNull()
+		}
+		if !data.LoadSharingGreOuterHash.IsNull() {
+			data.LoadSharingGreOuterHash = types.StringValue(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.greOuterHash").String())
+		} else {
+			data.LoadSharingGreOuterHash = types.StringNull()
+		}
+		if !data.LoadSharingSecondHierarchyKeyshift.IsNull() {
+			data.LoadSharingSecondHierarchyKeyshift = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.lb2ndHierKeyshift").Int())
+		} else {
+			data.LoadSharingSecondHierarchyKeyshift = types.Int64Null()
+		}
+		if !data.LoadSharingKeyshift.IsNull() {
+			data.LoadSharingKeyshift = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.lbKeyshift").Int())
+		} else {
+			data.LoadSharingKeyshift = types.Int64Null()
+		}
+		if !data.LoadSharingMode.IsNull() {
+			data.LoadSharingMode = types.StringValue(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.loadShareMode").String())
+		} else {
+			data.LoadSharingMode = types.StringNull()
+		}
+		if !data.LoadSharingRotate.IsNull() {
+			data.LoadSharingRotate = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.rotate").Int())
+		} else {
+			data.LoadSharingRotate = types.Int64Null()
+		}
+		if !data.LoadSharingUdfLength.IsNull() {
+			data.LoadSharingUdfLength = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.udfLength").Int())
+		} else {
+			data.LoadSharingUdfLength = types.Int64Null()
+		}
+		if !data.LoadSharingUdfOffset.IsNull() {
+			data.LoadSharingUdfOffset = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.udfOffset").Int())
+		} else {
+			data.LoadSharingUdfOffset = types.Int64Null()
+		}
+		if !data.LoadSharingUniversalId.IsNull() {
+			data.LoadSharingUniversalId = types.Int64Value(ripv4IPLoadSharing.Get("ipv4IPLoadSharing.attributes.universalID").Int())
+		} else {
+			data.LoadSharingUniversalId = types.Int64Null()
+		}
 	}
 	for key, item := range data.Vrfs {
 		var ripv4Dom gjson.Result
@@ -825,6 +965,7 @@ func (data IPv4) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "sourceRoute", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if len(data.Vrfs) > 0 {
 			hasNestedChildren = true
 		}
@@ -837,6 +978,12 @@ func (data IPv4) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ipv4IPLoadSharing.attributes.rn", "iploadsharing")
+				deleteBody, _ = sjson.Set(deleteBody, "ipv4IPLoadSharing.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 			for key, child := range data.Vrfs {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "ipv4Dom.attributes.rn", child.getRn(key))
@@ -998,6 +1145,50 @@ func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4,
 		if !state.SourceRoute.IsNull() && config.SourceRoute.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceRoute", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingConcatenation.IsNull() && config.LoadSharingConcatenation.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"concatenation", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingEcmp.IsNull() && config.LoadSharingEcmp.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ecmpLoadSharing", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingExcludeL3Protocol.IsNull() && config.LoadSharingExcludeL3Protocol.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"excludeL3Proto", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingGreOuterHash.IsNull() && config.LoadSharingGreOuterHash.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"greOuterHash", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingSecondHierarchyKeyshift.IsNull() && config.LoadSharingSecondHierarchyKeyshift.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lb2ndHierKeyshift", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingKeyshift.IsNull() && config.LoadSharingKeyshift.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lbKeyshift", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingMode.IsNull() && config.LoadSharingMode.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loadShareMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingRotate.IsNull() && config.LoadSharingRotate.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rotate", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingUdfLength.IsNull() && config.LoadSharingUdfLength.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udfLength", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingUdfOffset.IsNull() && config.LoadSharingUdfOffset.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udfOffset", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoadSharingUniversalId.IsNull() && config.LoadSharingUniversalId.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"universalID", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.Vrfs {
 			if configChild, ok := config.Vrfs[key]; ok {

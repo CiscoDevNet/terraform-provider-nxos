@@ -1,6 +1,0 @@
-- Add external subnet selectors (VRF, IPv4/IPv6 prefix and route inject) configuration to `nxos_esg` security groups
-- Add external subnet with next-hop selectors (VRF, IPv4/IPv6 prefix, next-hop address and MPLS VPN encapsulation type) configuration to `nxos_esg` security groups
-- Add interface selectors configuration to `nxos_esg` security groups
-- Add VLAN and MAC selectors configuration to `nxos_esg` security groups
-- Add VLAN and interface selectors configuration to `nxos_esg` security groups (requires NX-OS 10.6(1) or later)
-- Add layer 4-7 type configuration to `nxos_esg` security groups

@@ -7,6 +7,55 @@ description: |-
 
 # Changelog
 
+## 0.17.0
+
+- Add BGP bestpath options (AS-path multipath relax, always compare MED, compare router ID, compare neighbor ID, MED missing as worst, MED confederation, MED non-deterministic, ignore AS-path, ignore cost community, ignore IGP metric, ignore AIGP) configuration to `nxos_bgp` VRFs
+- Add BGP peer-session templates (including local AS) and peer-policy templates (including route-map, prefix-list, filter-list, maximum-prefix and peer-policy inheritance) configuration to `nxos_bgp` VRFs
+- Add peer-policy inheritance configuration to `nxos_bgp` peer address families and peer template address families
+- Add route-map and prefix-list in/out configuration to `nxos_bgp` peer template address families
+- Add DHCP and DHCPv6 relay source interface configuration, both global and per interface, to `nxos_dhcp` resource and data source
+- Add DNS name servers (including source interface), domain lists, static IPv4 and IPv6 hosts, and per-VRF DNS (domain name, domain list and name servers) configuration to `nxos_system` resource and data source
+- Add errdisable recovery interval and per-cause errdisable detect and recovery configuration to `nxos_system` resource and data source
+- Add security contracts (source and destination security group with policy map) configuration to `nxos_esg` domains
+- Add protocol, source/destination port range, and TCP session rules configuration to `nxos_esg` class map filter entries
+- BREAKING CHANGE: Change `match_dscp` attribute of `nxos_esg` class map filter entries from a number to a string, using the DSCP names returned by the device (e.g., `AF11`, `EF`, `CS1`) and plain numbers for values without a name (e.g., `'0'`, `'56'`), to fix permanent diffs when a named DSCP value is configured
+- Add intra-group isolation configuration to `nxos_esg` security groups (requires NX-OS 10.6(3) or later)
+- Add layer 2 isolation configuration to `nxos_bridge_domain` (requires NX-OS 10.6(3) or later)
+- Add anycast gateway proxy forwarding mode configuration to `nxos_hmm` interfaces (requires NX-OS 10.6(3) or later)
+- Add VLAN mapping (enable, and mappings with optional inner VLAN and receive-only mode) configuration to `nxos_physical_interface` and `nxos_port_channel_interface`, receive-only mapping requires NX-OS 10.6(3) or later
+- Add selective QinQ (VLAN range or all VLANs to dot1q tunnel outer VLAN) configuration to `nxos_physical_interface` and `nxos_port_channel_interface`
+- Add external subnet selectors (VRF, IPv4/IPv6 prefix and route inject) configuration to `nxos_esg` security groups
+- Add external subnet with next-hop selectors (VRF, IPv4/IPv6 prefix, next-hop address and MPLS VPN encapsulation type) configuration to `nxos_esg` security groups
+- Add interface selectors configuration to `nxos_esg` security groups
+- Add VLAN and MAC selectors configuration to `nxos_esg` security groups
+- Add VLAN and interface selectors configuration to `nxos_esg` security groups (requires NX-OS 10.6(1) or later)
+- Add layer 4-7 type configuration to `nxos_esg` security groups
+- Add default-information originate (including always and route-map), SPF throttle timers, LSA timers (throttle, arrival and group pacing), graceful restart (including grace period, helper disable and planned only) and summary address configuration to `nxos_ospf` VRFs
+- Add area range (including not-advertise and cost) configuration to `nxos_ospf` areas
+- Add LSA timers (throttle, arrival and group pacing) and graceful restart (including grace period, helper disable and planned only) configuration to `nxos_ospfv3` VRFs
+- Add redistribution (protocol with route-map), default-information originate (including always and route-map), SPF throttle timers and summary prefix configuration to `nxos_ospfv3` address families
+- Add area address family default cost and area range (including not-advertise and cost) configuration to `nxos_ospfv3` areas
+- Add redistribution, per-level summary address and inter-level route distribution (route-map or all) configuration to `nxos_isis` address families
+- Add per-level SPF interval, LSP generation interval and level controls, and graceful restart (including T3 manual) configuration to `nxos_isis` VRFs
+- Add ECMP load-sharing (source/destination address and port hashing, concatenation, rotate, universal ID, GRE outer hash, UDF offset and length, and hardware load-balancing key shift) configuration to `nxos_ipv4` resource and data source
+- Add LACP configuration (system priority, system MAC and role, front-panel port numbering, rapid transition, and per-interface port priority and rate) to `nxos_system` resource and data source
+- Add load interval counters configuration to `nxos_physical_interface` and `nxos_port_channel_interface` resources and data sources
+- Add sFlow data source interfaces configuration to `nxos_hardware_telemetry` resource and data source
+- Add port-channel load-balance hash fields, rotate, concatenation, symmetric, encapsulation, FEX and MPLS label options configuration to `nxos_platform` resource and data source
+- Add MAC address table configuration (aging time, MAC move notification, MAC limits and thresholds, static MAC clean-up, and static entries with VLAN and interface or drop) to `nxos_system` resource and data source
+- Add `nxos_macsec` resource and data source (MACsec instance shutdown, MACsec policies, and per-interface MACsec keychain, fallback keychain, and policy settings)
+- Add MACsec keychains, including keys, key octet strings, cryptographic algorithms, and send lifetimes, and MACsec PSK no-show configuration to `nxos_keychain` resource and data source
+- Add NTP authentication keys and trusted keys configuration to `nxos_ntp` resource and data source
+- Add RADIUS global settings (key, timeout, retransmit, deadtime and source interface), server monitoring (test username, password and idle time), servers (key, authentication and accounting ports, and authentication/accounting usage) and server groups (including servers, VRF, source interface and deadtime) configuration to `nxos_user_management` resource and data source
+- Add set AS-path prepend (AS numbers and last AS), set tag, set weight, set origin, set extended community route target, and set community list delete configuration to `nxos_route_policy` route map entries
+- Add match interface and match route type (including EVPN route types) configuration to `nxos_route_policy` route map entries
+- Add SNMP community (group or access level, and IPv4/IPv6 ACLs) configuration to `nxos_snmp` resource and data source
+- Add SNMP host source interface and filter VRF configuration to `nxos_snmp` resource and data source
+- Add SNMP informs source interface configuration to `nxos_snmp` resource and data source
+- Add SNMP context (instance, VRF and topology) configuration to `nxos_snmp` resource and data source
+- Add vPC orphan port suspend configuration to `nxos_vpc` resource and data source
+- Fix resources and data sources failing to read with `Unknown class` on NX-OS releases that do not support some of their objects (e.g. releases older than the tested ones); objects not supported by the device are now ignored when reading, configuring them still fails on apply
+
 ## 0.16.0
 
 - Add `nxos_eigrp` resource and data source (EIGRP instances, VRFs, address families, authentication, default metric, graceful restart, metric weights, default-information originate, redistribution, redistribute maximum-prefix, table-map, stub, and per-interface address family settings including timers, metrics, passive, split-horizon, next-hop-self, authentication, distribute-lists, offset-lists, and summary addresses)

@@ -1,1 +1,0 @@
-- Add RADIUS global settings (key, timeout, retransmit, deadtime and source interface), server monitoring (test username, password and idle time), servers (key, authentication and accounting ports, and authentication/accounting usage) and server groups (including servers, VRF, source interface and deadtime) configuration to `nxos_user_management` resource and data source

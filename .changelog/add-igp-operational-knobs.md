@@ -1,7 +1,0 @@
-- Add default-information originate (including always and route-map), SPF throttle timers, LSA timers (throttle, arrival and group pacing), graceful restart (including grace period, helper disable and planned only) and summary address configuration to `nxos_ospf` VRFs
-- Add area range (including not-advertise and cost) configuration to `nxos_ospf` areas
-- Add LSA timers (throttle, arrival and group pacing) and graceful restart (including grace period, helper disable and planned only) configuration to `nxos_ospfv3` VRFs
-- Add redistribution (protocol with route-map), default-information originate (including always and route-map), SPF throttle timers and summary prefix configuration to `nxos_ospfv3` address families
-- Add area address family default cost and area range (including not-advertise and cost) configuration to `nxos_ospfv3` areas
-- Add redistribution, per-level summary address and inter-level route distribution (route-map or all) configuration to `nxos_isis` address families
-- Add per-level SPF interval, LSP generation interval and level controls, and graceful restart (including T3 manual) configuration to `nxos_isis` VRFs

@@ -1,1 +1,0 @@
-- Add BGP bestpath options (AS-path multipath relax, always compare MED, compare router ID, compare neighbor ID, MED missing as worst, MED confederation, MED non-deterministic, ignore AS-path, ignore cost community, ignore IGP metric, ignore AIGP) configuration to `nxos_bgp` VRFs

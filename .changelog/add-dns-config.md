@@ -1,1 +1,0 @@
-- Add DNS name servers (including source interface), domain lists, static IPv4 and IPv6 hosts, and per-VRF DNS (domain name, domain list and name servers) configuration to `nxos_system` resource and data source

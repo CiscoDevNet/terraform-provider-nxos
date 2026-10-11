@@ -1,1 +1,0 @@
-- Add MAC address table configuration (aging time, MAC move notification, MAC limits and thresholds, static MAC clean-up, and static entries with VLAN and interface or drop) to `nxos_system` resource and data source

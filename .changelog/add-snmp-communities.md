@@ -1,4 +1,0 @@
-- Add SNMP community (group or access level, and IPv4/IPv6 ACLs) configuration to `nxos_snmp` resource and data source
-- Add SNMP host source interface and filter VRF configuration to `nxos_snmp` resource and data source
-- Add SNMP informs source interface configuration to `nxos_snmp` resource and data source
-- Add SNMP context (instance, VRF and topology) configuration to `nxos_snmp` resource and data source

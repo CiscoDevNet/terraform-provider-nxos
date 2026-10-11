@@ -1,2 +1,0 @@
-- Add set AS-path prepend (AS numbers and last AS), set tag, set weight, set origin, set extended community route target, and set community list delete configuration to `nxos_route_policy` route map entries
-- Add match interface and match route type (including EVPN route types) configuration to `nxos_route_policy` route map entries

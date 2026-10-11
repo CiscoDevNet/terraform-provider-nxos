@@ -1,1 +1,0 @@
-- Add vPC orphan port suspend configuration to `nxos_vpc` resource and data source

@@ -1,1 +1,0 @@
-- Add NTP authentication keys and trusted keys configuration to `nxos_ntp` resource and data source

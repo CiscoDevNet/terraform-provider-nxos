@@ -1,3 +1,0 @@
-- Add load interval counters configuration to `nxos_physical_interface` and `nxos_port_channel_interface` resources and data sources
-- Add sFlow data source interfaces configuration to `nxos_hardware_telemetry` resource and data source
-- Add port-channel load-balance hash fields, rotate, concatenation, symmetric, encapsulation, FEX and MPLS label options configuration to `nxos_platform` resource and data source

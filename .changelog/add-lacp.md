@@ -1,1 +1,0 @@
-- Add LACP configuration (system priority, system MAC and role, front-panel port numbering, rapid transition, and per-interface port priority and rate) to `nxos_system` resource and data source

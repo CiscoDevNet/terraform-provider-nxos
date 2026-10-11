@@ -1,1 +1,0 @@
-- Add DHCP and DHCPv6 relay source interface configuration, both global and per interface, to `nxos_dhcp` resource and data source

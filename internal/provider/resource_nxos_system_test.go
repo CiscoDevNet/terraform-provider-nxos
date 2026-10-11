@@ -152,6 +152,14 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lacp_control", "rapid-transition"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lacp_interfaces.eth1/13.priority", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lacp_interfaces.eth1/13.transmit_rate", "fast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_aging_time", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_notification_mac_move", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_static_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_threshold_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_threshold_limit", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_user_defined_limit", "32"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_static_entries.vlan-100;00:00:11:11:22:22.interface_id", "eth1/9"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_static_entries.vlan-100;00:00:11:11:22:22.drop", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.admin_state", "up"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.auto_negotiation", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.description", "My Description"))
@@ -554,6 +562,18 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config += `		"eth1/13" = {` + "\n"
 	config += `			priority = 1000` + "\n"
 	config += `			transmit_rate = "fast"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	mac_address_table_aging_time = 600` + "\n"
+	config += `	mac_address_table_notification_mac_move = false` + "\n"
+	config += `	mac_address_table_static_clear = true` + "\n"
+	config += `	mac_address_table_threshold_interval = 300` + "\n"
+	config += `	mac_address_table_threshold_limit = 80` + "\n"
+	config += `	mac_address_table_user_defined_limit = 32` + "\n"
+	config += `	mac_address_table_static_entries = {` + "\n"
+	config += `		"vlan-100;00:00:11:11:22:22" = {` + "\n"
+	config += `			interface_id = "eth1/9"` + "\n"
+	config += `			drop = false` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	management_interfaces = {` + "\n"

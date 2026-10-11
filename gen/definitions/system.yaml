@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -1493,6 +1493,98 @@ child_classes:
                   - fast
                 description: "Specifies the rate at which the LACP packets are transmitted."
                 example: fast
+  - class_name: l2Macs
+    doc_path: Layer%202/l2:Macs/
+    rn: mac
+    type: single
+    no_delete: true
+    tf_name: mac_address_table
+    description: 'MAC address table configuration.'
+    attributes:
+      - nxos_name: aging
+        tf_name: mac_address_table_aging_time
+        type: Int64
+        min_int: 0
+        max_int: 4294967295
+        description: 'Aging time of Dynamic Mac Entries.'
+        example: 600
+      - nxos_name: macMoveNotify
+        tf_name: mac_address_table_notification_mac_move
+        type: Bool
+        description: 'Enable or disable notification of mac move.'
+        example: "false"
+      - nxos_name: staticClear
+        tf_name: mac_address_table_static_clear
+        type: Bool
+        description: 'Enable or disable the static mac entry clean up when interface is moved to down state.'
+        example: "true"
+      - nxos_name: systemLimit
+        tf_name: mac_address_table_system_limit
+        type: Int64
+        min_int: 100
+        max_int: 384000
+        description: 'System-wide limit for learnt MAC addresses.'
+        exclude_test: true
+        example: 100000
+      - nxos_name: thresholdInterval
+        tf_name: mac_address_table_threshold_interval
+        type: Int64
+        min_int: 10
+        max_int: 10000
+        description: 'mac table address threshold Interval.'
+        example: 300
+      - nxos_name: thresholdLimit
+        tf_name: mac_address_table_threshold_limit
+        type: Int64
+        min_int: 1
+        max_int: 100
+        description: 'mac table address Threshold Limit.'
+        example: 80
+      - nxos_name: userDefinedLimit
+        tf_name: mac_address_table_user_defined_limit
+        type: Int64
+        min_int: 16
+        max_int: 1256
+        description: 'User defined mac limit for number of configured MAC addresses.'
+        example: 32
+    child_classes:
+      - class_name: l2Static
+        doc_path: Layer%202/l2:Static/
+        rn: static
+        type: single
+        no_delete: true
+        tf_name: mac_address_table_static
+        description: 'Static MAC address configuration.'
+        child_classes:
+          - class_name: l2StaticEntry
+            doc_path: Layer%202/l2:StaticEntry/
+            rn: vlan-[%s]-mac-%s
+            type: list
+            tf_name: mac_address_table_static_entries
+            description: 'List of static MAC address entries.'
+            attributes:
+              - nxos_name: vlan
+                tf_name: vlan
+                type: String
+                id: true
+                description: 'Vlan.'
+                example: vlan-100
+              - nxos_name: staticMacAddress
+                tf_name: mac_address
+                type: String
+                id: true
+                description: 'MAC.'
+                example: '00:00:11:11:22:22'
+              - nxos_name: interface
+                tf_name: interface_id
+                type: String
+                description: 'Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                example: eth1/9
+              - nxos_name: dropAction
+                tf_name: drop
+                type: Bool
+                description: 'Drop.'
+                example: "false"
   - class_name: mgmtMgmtIf
     doc_path: System/mgmt%3AMgmtIf/
     rn: mgmt-[%s]

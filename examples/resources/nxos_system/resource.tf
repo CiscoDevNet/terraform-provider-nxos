@@ -155,6 +155,18 @@ resource "nxos_system" "example" {
       transmit_rate = "fast"
     }
   }
+  mac_address_table_aging_time            = 600
+  mac_address_table_notification_mac_move = false
+  mac_address_table_static_clear          = true
+  mac_address_table_threshold_interval    = 300
+  mac_address_table_threshold_limit       = 80
+  mac_address_table_user_defined_limit    = 32
+  mac_address_table_static_entries = {
+    "vlan-100;00:00:11:11:22:22" = {
+      interface_id = "eth1/9"
+      drop         = false
+    }
+  }
   management_interfaces = {
     "mgmt0" = {
       admin_state      = "up"

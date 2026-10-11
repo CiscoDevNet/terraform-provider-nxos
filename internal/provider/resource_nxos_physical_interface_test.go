@@ -94,6 +94,9 @@ func TestAccNxosPhysicalInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_rate", "50.000000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_rate_packets_per_second", "500"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.storm_control_packet_type", "bcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.load_interval_counter_1", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.load_interval_counter_2", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.load_interval_counter_3", "45"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.priority_flow_control_mode", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "physical_interfaces.eth1/10.priority_flow_control_send_tlv", "true"))
 	if os.Getenv("PHYSICAL_INTERFACE_VLAN_MAPPING") != "" {
@@ -223,6 +226,9 @@ func testAccNxosPhysicalInterfaceConfig_all() string {
 	config += `			storm_control_rate = "50.000000"` + "\n"
 	config += `			storm_control_rate_packets_per_second = 500` + "\n"
 	config += `			storm_control_packet_type = "bcast"` + "\n"
+	config += `			load_interval_counter_1 = 60` + "\n"
+	config += `			load_interval_counter_2 = 120` + "\n"
+	config += `			load_interval_counter_3 = 45` + "\n"
 	config += `			priority_flow_control_mode = "on"` + "\n"
 	config += `			priority_flow_control_send_tlv = true` + "\n"
 	if os.Getenv("PHYSICAL_INTERFACE_VLAN_MAPPING") != "" {

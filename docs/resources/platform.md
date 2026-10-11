@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.
   API Documentation
-  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/
+  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/
 ---
 
 # nxos_platform (Resource)
@@ -20,6 +20,7 @@ This resource can manage the platform configuration on NX-OS devices, including 
 - [platformNVE](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/)
 - [platformInfraVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/)
 - [platformEntityExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/)
+- [platformLoadBalance](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/)
 
 ## Example Usage
 
@@ -35,7 +36,11 @@ resource "nxos_platform" "example" {
       }
     }
   }
-  extended_dme_load_interval = 300
+  extended_dme_load_interval              = 300
+  port_channel_load_balance_concatenation = "enable"
+  port_channel_load_balance_fields        = "srcDstIp"
+  port_channel_load_balance_rotate        = 3
+  port_channel_load_balance_symmetry      = "enable"
 }
 ```
 
@@ -200,8 +205,23 @@ resource "nxos_platform" "example" {
   - Choices: `enable`, `disable`
 - `port_channel_load_balance_algorithm` (String) Pc load-balance internal algorithm.
   - Choices: `PC_LB_ALGO_DLB`, `PC_LB_ALGO_RTAG7`, `PC_LB_ALGO_RTAG7_MURMUR`, `PC_LB_ALGO_RTAG7_LOCAL_CRC`, `PC_LB_ALGO_DYNAMIC_PIN`
+- `port_channel_load_balance_concatenation` (String) Enable/Disable load-balancing concatenation parameter.
+  - Choices: `disable`, `enable`, `rotateEnable`
+- `port_channel_load_balance_encapsulation` (String) load balancing encapsulation parameter.
+  - Choices: `disable`, `gre`, `gtp`, `mpls`
+- `port_channel_load_balance_fex` (Boolean) fex based load balancing parameter.
+- `port_channel_load_balance_fields` (String) src-dst based load balancing parameters.
+  - Choices: `dstMac`, `srcMac`, `srcDstMac`, `dstIpVlan`, `srcIpVlan`, `srcDstIpVlan`, `dstL4Port`, `srcL4Port`, `srcDstL4Port`, `dstIpL4Port`, `srcIpL4Port`, `srcDstIpL4Port`, `dstIpL4PortVlan`, `srcIpL4PortVlan`, `srcDstIpL4PortVlan`, `dstIp`, `srcIp`, `srcDstIp`, `srcIpGre`, `dstIpGre`, `srcDstIpGre`, `srcDstIpOnly`, `srcDstL4PortOnly`, `ethDstIpGre`, `ethSrcIpGre`, `ethSrcDstIpGre`, `srcInnerheader`, `dstInnerheader`, `srcDstInnerheader`, `srcGtpu`, `dstGtpu`, `srcDstGtpu`, `srcIpv6FlowLabel`, `dstIpv6FlowLabel`, `srcDstIpv6FlowLabel`, `srcDstInnerheaderGtp`
+- `port_channel_load_balance_mpls_label_ip` (String) Mpls load-balance label ip.
+  - Choices: `disable`, `enable`
+- `port_channel_load_balance_mpls_label_only` (String) Mpls load-balance label only.
+  - Choices: `disable`, `enable`
 - `port_channel_load_balance_resilient` (String) Pc load-balance resilient.
   - Choices: `yes`, `no`
+- `port_channel_load_balance_rotate` (Number) Hash-input of load balancing rotate parameter.
+  - Range: `0`-`63`
+- `port_channel_load_balance_symmetry` (String) load balancing symmetry parameter.
+  - Choices: `disable`, `enable`
 - `port_channel_mpls_load_balance_label_ip` (String) Mpls load-balance label ip.
   - Choices: `DEFAULT`, `LABEL_IP`
 - `port_channel_mpls_load_balance_label_only` (String) Mpls load-balance label only.

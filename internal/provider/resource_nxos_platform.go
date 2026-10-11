@@ -63,7 +63,7 @@ func (r *PlatformResource) Metadata(ctx context.Context, req resource.MetadataRe
 func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1510,6 +1510,59 @@ func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
+			"port_channel_load_balance_concatenation": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable/Disable load-balancing concatenation parameter.").AddStringEnumDescription("disable", "enable", "rotateEnable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable", "rotateEnable"),
+				},
+			},
+			"port_channel_load_balance_encapsulation": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("load balancing encapsulation parameter.").AddStringEnumDescription("disable", "gre", "gtp", "mpls").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "gre", "gtp", "mpls"),
+				},
+			},
+			"port_channel_load_balance_fex": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("fex based load balancing parameter.").String,
+				Optional:            true,
+			},
+			"port_channel_load_balance_fields": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("src-dst based load balancing parameters.").AddStringEnumDescription("dstMac", "srcMac", "srcDstMac", "dstIpVlan", "srcIpVlan", "srcDstIpVlan", "dstL4Port", "srcL4Port", "srcDstL4Port", "dstIpL4Port", "srcIpL4Port", "srcDstIpL4Port", "dstIpL4PortVlan", "srcIpL4PortVlan", "srcDstIpL4PortVlan", "dstIp", "srcIp", "srcDstIp", "srcIpGre", "dstIpGre", "srcDstIpGre", "srcDstIpOnly", "srcDstL4PortOnly", "ethDstIpGre", "ethSrcIpGre", "ethSrcDstIpGre", "srcInnerheader", "dstInnerheader", "srcDstInnerheader", "srcGtpu", "dstGtpu", "srcDstGtpu", "srcIpv6FlowLabel", "dstIpv6FlowLabel", "srcDstIpv6FlowLabel", "srcDstInnerheaderGtp").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dstMac", "srcMac", "srcDstMac", "dstIpVlan", "srcIpVlan", "srcDstIpVlan", "dstL4Port", "srcL4Port", "srcDstL4Port", "dstIpL4Port", "srcIpL4Port", "srcDstIpL4Port", "dstIpL4PortVlan", "srcIpL4PortVlan", "srcDstIpL4PortVlan", "dstIp", "srcIp", "srcDstIp", "srcIpGre", "dstIpGre", "srcDstIpGre", "srcDstIpOnly", "srcDstL4PortOnly", "ethDstIpGre", "ethSrcIpGre", "ethSrcDstIpGre", "srcInnerheader", "dstInnerheader", "srcDstInnerheader", "srcGtpu", "dstGtpu", "srcDstGtpu", "srcIpv6FlowLabel", "dstIpv6FlowLabel", "srcDstIpv6FlowLabel", "srcDstInnerheaderGtp"),
+				},
+			},
+			"port_channel_load_balance_mpls_label_ip": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Mpls load-balance label ip.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"port_channel_load_balance_mpls_label_only": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Mpls load-balance label only.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"port_channel_load_balance_rotate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hash-input of load balancing rotate parameter.").AddIntegerRangeDescription(0, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
+				},
+			},
+			"port_channel_load_balance_symmetry": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("load balancing symmetry parameter.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
 		},
 	}
 }
@@ -1661,7 +1714,7 @@ func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended"}, PlatformSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance"}, PlatformSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

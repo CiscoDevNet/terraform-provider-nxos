@@ -249,6 +249,14 @@ type Platform struct {
 	ExtendedTcamDefaultResult                           types.String                     `tfsdk:"extended_tcam_default_result"`
 	ExtendedUdfNetflowRtpMulticastEnabled               types.Bool                       `tfsdk:"extended_udf_netflow_rtp_multicast_enabled"`
 	ExtendedVrfAwareNatEnable                           types.String                     `tfsdk:"extended_vrf_aware_nat_enable"`
+	PortChannelLoadBalanceConcatenation                 types.String                     `tfsdk:"port_channel_load_balance_concatenation"`
+	PortChannelLoadBalanceEncapsulation                 types.String                     `tfsdk:"port_channel_load_balance_encapsulation"`
+	PortChannelLoadBalanceFex                           types.Bool                       `tfsdk:"port_channel_load_balance_fex"`
+	PortChannelLoadBalanceFields                        types.String                     `tfsdk:"port_channel_load_balance_fields"`
+	PortChannelLoadBalanceMplsLabelIp                   types.String                     `tfsdk:"port_channel_load_balance_mpls_label_ip"`
+	PortChannelLoadBalanceMplsLabelOnly                 types.String                     `tfsdk:"port_channel_load_balance_mpls_label_only"`
+	PortChannelLoadBalanceRotate                        types.Int64                      `tfsdk:"port_channel_load_balance_rotate"`
+	PortChannelLoadBalanceSymmetry                      types.String                     `tfsdk:"port_channel_load_balance_symmetry"`
 }
 
 type PlatformNveInterfaces struct {
@@ -994,6 +1002,34 @@ func (data Platform) toBody(config Platform) nxos.Body {
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformEntityExtended.attributes", attrs)
 	}
+	attrs = "{}"
+	if !data.PortChannelLoadBalanceConcatenation.IsUnknown() && !data.PortChannelLoadBalanceConcatenation.IsNull() && !config.PortChannelLoadBalanceConcatenation.IsNull() {
+		attrs, _ = sjson.Set(attrs, "concatenation", data.PortChannelLoadBalanceConcatenation.ValueString())
+	}
+	if !data.PortChannelLoadBalanceEncapsulation.IsUnknown() && !data.PortChannelLoadBalanceEncapsulation.IsNull() && !config.PortChannelLoadBalanceEncapsulation.IsNull() {
+		attrs, _ = sjson.Set(attrs, "encapsulation", data.PortChannelLoadBalanceEncapsulation.ValueString())
+	}
+	if !data.PortChannelLoadBalanceFex.IsUnknown() && !data.PortChannelLoadBalanceFex.IsNull() && !config.PortChannelLoadBalanceFex.IsNull() {
+		attrs, _ = sjson.Set(attrs, "fex", strconv.FormatBool(data.PortChannelLoadBalanceFex.ValueBool()))
+	}
+	if !data.PortChannelLoadBalanceFields.IsUnknown() && !data.PortChannelLoadBalanceFields.IsNull() && !config.PortChannelLoadBalanceFields.IsNull() {
+		attrs, _ = sjson.Set(attrs, "loadBalanceAlgo", data.PortChannelLoadBalanceFields.ValueString())
+	}
+	if !data.PortChannelLoadBalanceMplsLabelIp.IsUnknown() && !data.PortChannelLoadBalanceMplsLabelIp.IsNull() && !config.PortChannelLoadBalanceMplsLabelIp.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mplsLabelIp", data.PortChannelLoadBalanceMplsLabelIp.ValueString())
+	}
+	if !data.PortChannelLoadBalanceMplsLabelOnly.IsUnknown() && !data.PortChannelLoadBalanceMplsLabelOnly.IsNull() && !config.PortChannelLoadBalanceMplsLabelOnly.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mplsLabelOnly", data.PortChannelLoadBalanceMplsLabelOnly.ValueString())
+	}
+	if !data.PortChannelLoadBalanceRotate.IsUnknown() && !data.PortChannelLoadBalanceRotate.IsNull() && !config.PortChannelLoadBalanceRotate.IsNull() {
+		attrs, _ = sjson.Set(attrs, "rotate", strconv.FormatInt(data.PortChannelLoadBalanceRotate.ValueInt64(), 10))
+	}
+	if !data.PortChannelLoadBalanceSymmetry.IsUnknown() && !data.PortChannelLoadBalanceSymmetry.IsNull() && !config.PortChannelLoadBalanceSymmetry.IsNull() {
+		attrs, _ = sjson.Set(attrs, "symmetry", data.PortChannelLoadBalanceSymmetry.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformLoadBalance.attributes", attrs)
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1288,6 +1324,27 @@ func (data *Platform) fromBody(res gjson.Result) {
 		data.ExtendedTcamDefaultResult = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.tcamDefaultResult").String())
 		data.ExtendedUdfNetflowRtpMulticastEnabled = types.BoolValue(helpers.ParseNxosBoolean(rplatformEntityExtended.Get("platformEntityExtended.attributes.udfNetflowrtpMcEnabled").String()))
 		data.ExtendedVrfAwareNatEnable = types.StringValue(rplatformEntityExtended.Get("platformEntityExtended.attributes.vrfAwareNatEnable").String())
+	}
+	{
+		var rplatformLoadBalance gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("platformLoadBalance.attributes.rn").String()
+				if rnValue == "pclb" {
+					rplatformLoadBalance = v
+					return false
+				}
+				return true
+			},
+		)
+		data.PortChannelLoadBalanceConcatenation = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.concatenation").String())
+		data.PortChannelLoadBalanceEncapsulation = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.encapsulation").String())
+		data.PortChannelLoadBalanceFex = types.BoolValue(helpers.ParseNxosBoolean(rplatformLoadBalance.Get("platformLoadBalance.attributes.fex").String()))
+		data.PortChannelLoadBalanceFields = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.loadBalanceAlgo").String())
+		data.PortChannelLoadBalanceMplsLabelIp = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.mplsLabelIp").String())
+		data.PortChannelLoadBalanceMplsLabelOnly = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.mplsLabelOnly").String())
+		data.PortChannelLoadBalanceRotate = types.Int64Value(rplatformLoadBalance.Get("platformLoadBalance.attributes.rotate").Int())
+		data.PortChannelLoadBalanceSymmetry = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.symmetry").String())
 	}
 }
 
@@ -2421,6 +2478,57 @@ func (data *Platform) updateFromBody(res gjson.Result) {
 	} else {
 		data.ExtendedVrfAwareNatEnable = types.StringNull()
 	}
+	var rplatformLoadBalance gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("platformLoadBalance.attributes.rn").String()
+			if rnValue == "pclb" {
+				rplatformLoadBalance = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.PortChannelLoadBalanceConcatenation.IsNull() {
+		data.PortChannelLoadBalanceConcatenation = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.concatenation").String())
+	} else {
+		data.PortChannelLoadBalanceConcatenation = types.StringNull()
+	}
+	if !data.PortChannelLoadBalanceEncapsulation.IsNull() {
+		data.PortChannelLoadBalanceEncapsulation = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.encapsulation").String())
+	} else {
+		data.PortChannelLoadBalanceEncapsulation = types.StringNull()
+	}
+	if !data.PortChannelLoadBalanceFex.IsNull() {
+		data.PortChannelLoadBalanceFex = types.BoolValue(helpers.ParseNxosBoolean(rplatformLoadBalance.Get("platformLoadBalance.attributes.fex").String()))
+	} else {
+		data.PortChannelLoadBalanceFex = types.BoolNull()
+	}
+	if !data.PortChannelLoadBalanceFields.IsNull() {
+		data.PortChannelLoadBalanceFields = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.loadBalanceAlgo").String())
+	} else {
+		data.PortChannelLoadBalanceFields = types.StringNull()
+	}
+	if !data.PortChannelLoadBalanceMplsLabelIp.IsNull() {
+		data.PortChannelLoadBalanceMplsLabelIp = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.mplsLabelIp").String())
+	} else {
+		data.PortChannelLoadBalanceMplsLabelIp = types.StringNull()
+	}
+	if !data.PortChannelLoadBalanceMplsLabelOnly.IsNull() {
+		data.PortChannelLoadBalanceMplsLabelOnly = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.mplsLabelOnly").String())
+	} else {
+		data.PortChannelLoadBalanceMplsLabelOnly = types.StringNull()
+	}
+	if !data.PortChannelLoadBalanceRotate.IsNull() {
+		data.PortChannelLoadBalanceRotate = types.Int64Value(rplatformLoadBalance.Get("platformLoadBalance.attributes.rotate").Int())
+	} else {
+		data.PortChannelLoadBalanceRotate = types.Int64Null()
+	}
+	if !data.PortChannelLoadBalanceSymmetry.IsNull() {
+		data.PortChannelLoadBalanceSymmetry = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.symmetry").String())
+	} else {
+		data.PortChannelLoadBalanceSymmetry = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -3091,6 +3199,38 @@ func (data Platform) toDeleteBody() nxos.Body {
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformEntityExtended"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		}
+	}
+	{
+		childBody := ""
+		if !data.PortChannelLoadBalanceConcatenation.IsNull() {
+			childBody, _ = sjson.Set(childBody, "concatenation", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PortChannelLoadBalanceEncapsulation.IsNull() {
+			childBody, _ = sjson.Set(childBody, "encapsulation", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PortChannelLoadBalanceFex.IsNull() {
+			childBody, _ = sjson.Set(childBody, "fex", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PortChannelLoadBalanceFields.IsNull() {
+			childBody, _ = sjson.Set(childBody, "loadBalanceAlgo", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PortChannelLoadBalanceMplsLabelIp.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mplsLabelIp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PortChannelLoadBalanceMplsLabelOnly.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mplsLabelOnly", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PortChannelLoadBalanceRotate.IsNull() {
+			childBody, _ = sjson.Set(childBody, "rotate", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PortChannelLoadBalanceSymmetry.IsNull() {
+			childBody, _ = sjson.Set(childBody, "symmetry", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformLoadBalance"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
@@ -3962,6 +4102,38 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 		if !state.ExtendedVrfAwareNatEnable.IsNull() && config.ExtendedVrfAwareNatEnable.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformEntityExtended")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"vrfAwareNatEnable", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PortChannelLoadBalanceConcatenation.IsNull() && config.PortChannelLoadBalanceConcatenation.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"concatenation", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PortChannelLoadBalanceEncapsulation.IsNull() && config.PortChannelLoadBalanceEncapsulation.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"encapsulation", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PortChannelLoadBalanceFex.IsNull() && config.PortChannelLoadBalanceFex.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fex", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PortChannelLoadBalanceFields.IsNull() && config.PortChannelLoadBalanceFields.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loadBalanceAlgo", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PortChannelLoadBalanceMplsLabelIp.IsNull() && config.PortChannelLoadBalanceMplsLabelIp.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mplsLabelIp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PortChannelLoadBalanceMplsLabelOnly.IsNull() && config.PortChannelLoadBalanceMplsLabelOnly.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mplsLabelOnly", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PortChannelLoadBalanceRotate.IsNull() && config.PortChannelLoadBalanceRotate.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rotate", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PortChannelLoadBalanceSymmetry.IsNull() && config.PortChannelLoadBalanceSymmetry.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"symmetry", "DME_UNSET_PROPERTY_MARKER")
 		}
 	}
 

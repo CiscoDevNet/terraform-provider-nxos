@@ -56,7 +56,7 @@ func (d *PlatformDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -927,6 +927,38 @@ func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				MarkdownDescription: "Configure Vrf Aware Nat.",
 				Computed:            true,
 			},
+			"port_channel_load_balance_concatenation": schema.StringAttribute{
+				MarkdownDescription: "Enable/Disable load-balancing concatenation parameter.",
+				Computed:            true,
+			},
+			"port_channel_load_balance_encapsulation": schema.StringAttribute{
+				MarkdownDescription: "load balancing encapsulation parameter.",
+				Computed:            true,
+			},
+			"port_channel_load_balance_fex": schema.BoolAttribute{
+				MarkdownDescription: "fex based load balancing parameter.",
+				Computed:            true,
+			},
+			"port_channel_load_balance_fields": schema.StringAttribute{
+				MarkdownDescription: "src-dst based load balancing parameters.",
+				Computed:            true,
+			},
+			"port_channel_load_balance_mpls_label_ip": schema.StringAttribute{
+				MarkdownDescription: "Mpls load-balance label ip.",
+				Computed:            true,
+			},
+			"port_channel_load_balance_mpls_label_only": schema.StringAttribute{
+				MarkdownDescription: "Mpls load-balance label only.",
+				Computed:            true,
+			},
+			"port_channel_load_balance_rotate": schema.Int64Attribute{
+				MarkdownDescription: "Hash-input of load balancing rotate parameter.",
+				Computed:            true,
+			},
+			"port_channel_load_balance_symmetry": schema.StringAttribute{
+				MarkdownDescription: "load balancing symmetry parameter.",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -959,7 +991,7 @@ func (d *PlatformDataSource) Read(ctx context.Context, req datasource.ReadReques
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended"}, PlatformSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance"}, PlatformSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

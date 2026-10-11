@@ -63,7 +63,7 @@ func (r *PhysicalInterfaceResource) Metadata(ctx context.Context, req resource.M
 func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:VlanMapping/", "System/l1:VlanTranslateTable/", "System/l1:VlanTranslateEntry/", "System/l1:PhysIfExtended/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:LoadP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:VlanMapping/", "System/l1:VlanTranslateTable/", "System/l1:VlanTranslateEntry/", "System/l1:PhysIfExtended/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -470,6 +470,27 @@ func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.Sch
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("bcast", "unk-ucast", "mcast", "all"),
+							},
+						},
+						"load_interval_counter_1": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The port load sampling interval 1 at bit-rate and packet-rate statistics.").AddIntegerRangeDescription(5, 300).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(5, 300),
+							},
+						},
+						"load_interval_counter_2": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The port load sampling interval 2 at bit-rate and packet-rate statistics.").AddIntegerRangeDescription(5, 300).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(5, 300),
+							},
+						},
+						"load_interval_counter_3": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The port load sampling interval 3 at bit-rate and packet-rate statistics.").AddIntegerRangeDescription(0, 300).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 300),
 							},
 						},
 						"multisite_interface_tracking": schema.StringAttribute{
@@ -901,7 +922,7 @@ func (r *PhysicalInterfaceResource) Read(ctx context.Context, req resource.ReadR
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

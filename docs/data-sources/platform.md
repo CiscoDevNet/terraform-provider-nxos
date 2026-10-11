@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.
   API Documentation
-  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/
+  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/
 ---
 
 # nxos_platform (Data Source)
@@ -20,6 +20,7 @@ This data source can read the platform configuration on NX-OS devices, including
 - [platformNVE](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/)
 - [platformInfraVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/)
 - [platformEntityExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/)
+- [platformLoadBalance](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/)
 
 ## Example Usage
 
@@ -120,7 +121,15 @@ data "nxos_platform" "example" {
 - `pic_core_enable` (String) Configure PIC core.
 - `port_channel_fast_convergence` (String) Port-channel Fast Convergence.
 - `port_channel_load_balance_algorithm` (String) Pc load-balance internal algorithm.
+- `port_channel_load_balance_concatenation` (String) Enable/Disable load-balancing concatenation parameter.
+- `port_channel_load_balance_encapsulation` (String) load balancing encapsulation parameter.
+- `port_channel_load_balance_fex` (Boolean) fex based load balancing parameter.
+- `port_channel_load_balance_fields` (String) src-dst based load balancing parameters.
+- `port_channel_load_balance_mpls_label_ip` (String) Mpls load-balance label ip.
+- `port_channel_load_balance_mpls_label_only` (String) Mpls load-balance label only.
 - `port_channel_load_balance_resilient` (String) Pc load-balance resilient.
+- `port_channel_load_balance_rotate` (Number) Hash-input of load balancing rotate parameter.
+- `port_channel_load_balance_symmetry` (String) load balancing symmetry parameter.
 - `port_channel_mpls_load_balance_label_ip` (String) Mpls load-balance label ip.
 - `port_channel_mpls_load_balance_label_only` (String) Mpls load-balance label only.
 - `port_channel_scale_fanout` (String) Port-channel Scale Fanout.

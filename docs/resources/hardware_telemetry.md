@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This resource can manage the hardware telemetry configuration on NX-OS devices, including sFlow.
   API Documentation
-  analyticsHwTelemetry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:HwTelemetry/sflowSflow https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Sflow/sflowInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Inst/sflowTransport https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Transport/sflowReceiver https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Receiver/
+  analyticsHwTelemetry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:HwTelemetry/sflowSflow https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Sflow/sflowInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Inst/sflowTransport https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Transport/sflowReceiver https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Receiver/sflowSflowFsDataSource https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:SflowFsDataSource/
 ---
 
 # nxos_hardware_telemetry (Resource)
@@ -19,6 +19,7 @@ This resource can manage the hardware telemetry configuration on NX-OS devices, 
 - [sflowInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Inst/)
 - [sflowTransport](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Transport/)
 - [sflowReceiver](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Receiver/)
+- [sflowSflowFsDataSource](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:SflowFsDataSource/)
 
 ## Example Usage
 
@@ -37,6 +38,9 @@ resource "nxos_hardware_telemetry" "example" {
       source_address = "10.0.0.1"
     }
   }
+  data_sources = {
+    "eth1/10" = {}
+  }
 }
 ```
 
@@ -45,6 +49,8 @@ resource "nxos_hardware_telemetry" "example" {
 
 ### Optional
 
+- `data_sources` (Attributes Map) sFlow data source interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--data_sources))
 - `device` (String) A device name from the provider configuration.
 - `receivers` (Attributes Map) sFlow receiver configuration.
   - Map key format: `<vrf_name>;<address>`
@@ -71,6 +77,10 @@ resource "nxos_hardware_telemetry" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--data_sources"></a>
+### Nested Schema for `data_sources`
+
 
 <a id="nestedatt--receivers"></a>
 ### Nested Schema for `receivers`

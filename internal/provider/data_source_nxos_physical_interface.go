@@ -56,7 +56,7 @@ func (d *PhysicalInterfaceDataSource) Metadata(_ context.Context, req datasource
 func (d *PhysicalInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:VlanMapping/", "System/l1:VlanTranslateTable/", "System/l1:VlanTranslateEntry/", "System/l1:PhysIfExtended/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:LoadP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:VlanMapping/", "System/l1:VlanTranslateTable/", "System/l1:VlanTranslateEntry/", "System/l1:PhysIfExtended/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -312,6 +312,18 @@ func (d *PhysicalInterfaceDataSource) Schema(ctx context.Context, req datasource
 							MarkdownDescription: "Packet Type.",
 							Computed:            true,
 						},
+						"load_interval_counter_1": schema.Int64Attribute{
+							MarkdownDescription: "The port load sampling interval 1 at bit-rate and packet-rate statistics.",
+							Computed:            true,
+						},
+						"load_interval_counter_2": schema.Int64Attribute{
+							MarkdownDescription: "The port load sampling interval 2 at bit-rate and packet-rate statistics.",
+							Computed:            true,
+						},
+						"load_interval_counter_3": schema.Int64Attribute{
+							MarkdownDescription: "The port load sampling interval 3 at bit-rate and packet-rate statistics.",
+							Computed:            true,
+						},
 						"multisite_interface_tracking": schema.StringAttribute{
 							MarkdownDescription: "Configure EVPN multisite tracking for DCI/Fabric interface.",
 							Computed:            true,
@@ -559,7 +571,7 @@ func (d *PhysicalInterfaceDataSource) Read(ctx context.Context, req datasource.R
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

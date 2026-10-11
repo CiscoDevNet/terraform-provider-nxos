@@ -34,6 +34,10 @@ func TestAccDataSourceNxosPlatform(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "nve_interfaces.1.ipmc_index_size", "4000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "nve_interfaces.1.infra_vlans.100.force", "Enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "extended_dme_load_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_concatenation", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_fields", "srcDstIp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_rotate", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_symmetry", "enable"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -97,6 +101,10 @@ func testAccDataSourceNxosPlatformConfig() string {
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	extended_dme_load_interval = 300` + "\n"
+	config += `	port_channel_load_balance_concatenation = "enable"` + "\n"
+	config += `	port_channel_load_balance_fields = "srcDstIp"` + "\n"
+	config += `	port_channel_load_balance_rotate = 3` + "\n"
+	config += `	port_channel_load_balance_symmetry = "enable"` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 

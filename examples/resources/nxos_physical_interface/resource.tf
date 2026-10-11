@@ -59,6 +59,9 @@ resource "nxos_physical_interface" "example" {
       storm_control_rate                     = "50.000000"
       storm_control_rate_packets_per_second  = 500
       storm_control_packet_type              = "bcast"
+      load_interval_counter_1                = 60
+      load_interval_counter_2                = 120
+      load_interval_counter_3                = 45
       priority_flow_control_mode             = "on"
       priority_flow_control_send_tlv         = true
       vlan_mapping_enable                    = true

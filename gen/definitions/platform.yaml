@@ -1835,6 +1835,115 @@ child_classes:
           - disabled
         example: enabled
         exclude_test: true
+  - class_name: platformLoadBalance
+    doc_path: System/platform:LoadBalance/
+    rn: pclb
+    type: single
+    tf_name: port_channel_load_balance
+    no_delete: true
+    description: 'Port-channel load-balance configuration.'
+    attributes:
+      - nxos_name: concatenation
+        tf_name: port_channel_load_balance_concatenation
+        type: String
+        description: 'Enable/Disable load-balancing concatenation parameter.'
+        enum_values:
+          - disable
+          - enable
+          - rotateEnable
+        example: enable
+      - nxos_name: encapsulation
+        tf_name: port_channel_load_balance_encapsulation
+        type: String
+        description: 'load balancing encapsulation parameter.'
+        enum_values:
+          - disable
+          - gre
+          - gtp
+          - mpls
+        example: gre
+        exclude_test: true
+      - nxos_name: fex
+        tf_name: port_channel_load_balance_fex
+        type: Bool
+        description: 'fex based load balancing parameter.'
+        example: true
+        exclude_test: true
+      - nxos_name: loadBalanceAlgo
+        tf_name: port_channel_load_balance_fields
+        type: String
+        description: 'src-dst based load balancing parameters.'
+        enum_values:
+          - dstMac
+          - srcMac
+          - srcDstMac
+          - dstIpVlan
+          - srcIpVlan
+          - srcDstIpVlan
+          - dstL4Port
+          - srcL4Port
+          - srcDstL4Port
+          - dstIpL4Port
+          - srcIpL4Port
+          - srcDstIpL4Port
+          - dstIpL4PortVlan
+          - srcIpL4PortVlan
+          - srcDstIpL4PortVlan
+          - dstIp
+          - srcIp
+          - srcDstIp
+          - srcIpGre
+          - dstIpGre
+          - srcDstIpGre
+          - srcDstIpOnly
+          - srcDstL4PortOnly
+          - ethDstIpGre
+          - ethSrcIpGre
+          - ethSrcDstIpGre
+          - srcInnerheader
+          - dstInnerheader
+          - srcDstInnerheader
+          - srcGtpu
+          - dstGtpu
+          - srcDstGtpu
+          - srcIpv6FlowLabel
+          - dstIpv6FlowLabel
+          - srcDstIpv6FlowLabel
+          - srcDstInnerheaderGtp
+        example: srcDstIp
+      - nxos_name: mplsLabelIp
+        tf_name: port_channel_load_balance_mpls_label_ip
+        type: String
+        description: 'Mpls load-balance label ip.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: mplsLabelOnly
+        tf_name: port_channel_load_balance_mpls_label_only
+        type: String
+        description: 'Mpls load-balance label only.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: rotate
+        tf_name: port_channel_load_balance_rotate
+        type: Int64
+        description: 'Hash-input of load balancing rotate parameter.'
+        min_int: 0
+        max_int: 63
+        example: 3
+      - nxos_name: symmetry
+        tf_name: port_channel_load_balance_symmetry
+        type: String
+        description: 'load balancing symmetry parameter.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
 test_prerequisites:
   - dn: sys/fm/nvo
     class_name: fmNvo

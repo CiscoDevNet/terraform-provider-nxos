@@ -9,5 +9,9 @@ resource "nxos_platform" "example" {
       }
     }
   }
-  extended_dme_load_interval = 300
+  extended_dme_load_interval              = 300
+  port_channel_load_balance_concatenation = "enable"
+  port_channel_load_balance_fields        = "srcDstIp"
+  port_channel_load_balance_rotate        = 3
+  port_channel_load_balance_symmetry      = "enable"
 }

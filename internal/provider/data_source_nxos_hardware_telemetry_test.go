@@ -85,6 +85,10 @@ func testAccDataSourceNxosHardwareTelemetryConfig() string {
 	config += `			source_address = "10.0.0.1"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	data_sources = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

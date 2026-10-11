@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1VlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanMapping/l1VlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateTable/l1VlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateEntry/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIfExtended/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/l1LoadP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1VlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanMapping/l1VlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateTable/l1VlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateEntry/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIfExtended/
 ---
 
 # nxos_physical_interface (Resource)
@@ -17,6 +17,7 @@ This resource can manage physical interfaces on NX-OS devices, including setting
 - [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/)
+- [l1LoadP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/)
 - [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
 - [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/)
 - [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
@@ -89,6 +90,9 @@ resource "nxos_physical_interface" "example" {
       storm_control_rate                     = "50.000000"
       storm_control_rate_packets_per_second  = 500
       storm_control_packet_type              = "bcast"
+      load_interval_counter_1                = 60
+      load_interval_counter_2                = 120
+      load_interval_counter_3                = 45
       priority_flow_control_mode             = "on"
       priority_flow_control_send_tlv         = true
       vlan_mapping_enable                    = true
@@ -197,6 +201,12 @@ Optional:
   - Range: `0`-`120`
 - `link_transmit_reset` (String) Link Transmit Reset.
   - Choices: `disable`, `enable`
+- `load_interval_counter_1` (Number) The port load sampling interval 1 at bit-rate and packet-rate statistics.
+  - Range: `5`-`300`
+- `load_interval_counter_2` (Number) The port load sampling interval 2 at bit-rate and packet-rate statistics.
+  - Range: `5`-`300`
+- `load_interval_counter_3` (Number) The port load sampling interval 3 at bit-rate and packet-rate statistics.
+  - Range: `0`-`300`
 - `mdix` (String) The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.
   - Choices: `auto`, `mdi`, `mdi-x`
 - `media_type` (String) Phy interfaces media type.

@@ -436,6 +436,34 @@ child_classes:
               - mcast
               - all
             example: bcast
+      - class_name: l1LoadP
+        rn: loadp
+        type: single
+        tf_name: load_interval
+        description: "Load interval policy."
+        doc_path: System/l1:LoadP/
+        attributes:
+          - nxos_name: loadIntvl1
+            tf_name: load_interval_counter_1
+            type: Int64
+            description: "The port load sampling interval 1 at bit-rate and packet-rate statistics."
+            min_int: 5
+            max_int: 300
+            example: 60
+          - nxos_name: loadIntvl2
+            tf_name: load_interval_counter_2
+            type: Int64
+            description: "The port load sampling interval 2 at bit-rate and packet-rate statistics."
+            min_int: 5
+            max_int: 300
+            example: 120
+          - nxos_name: loadIntvl3
+            tf_name: load_interval_counter_3
+            type: Int64
+            description: "The port load sampling interval 3 at bit-rate and packet-rate statistics."
+            min_int: 0
+            max_int: 300
+            example: 45
       - class_name: nvoMultisiteIfTracking
         doc_path: Network%20Virtualization/nvo:MultisiteIfTracking/
         rn: multisiteiftracking

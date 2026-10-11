@@ -12,4 +12,7 @@ resource "nxos_hardware_telemetry" "example" {
       source_address = "10.0.0.1"
     }
   }
+  data_sources = {
+    "eth1/10" = {}
+  }
 }

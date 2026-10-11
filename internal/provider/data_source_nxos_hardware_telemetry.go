@@ -56,7 +56,7 @@ func (d *HardwareTelemetryDataSource) Metadata(_ context.Context, req datasource
 func (d *HardwareTelemetryDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the hardware telemetry configuration on NX-OS devices, including sFlow.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst", "sflowTransport", "sflowReceiver"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/", "Flow/sflow:Transport/", "Flow/sflow:Receiver/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the hardware telemetry configuration on NX-OS devices, including sFlow.").AddApiDocumentation("analyticsHwTelemetry", "System/analytics:HwTelemetry/", []string{"sflowSflow", "sflowInst", "sflowTransport", "sflowReceiver", "sflowSflowFsDataSource"}, []string{"Flow/sflow:Sflow/", "Flow/sflow:Inst/", "Flow/sflow:Transport/", "Flow/sflow:Receiver/", "Flow/sflow:SflowFsDataSource/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -119,6 +119,13 @@ func (d *HardwareTelemetryDataSource) Schema(ctx context.Context, req datasource
 					},
 				},
 			},
+			"data_sources": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("sFlow data source interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{},
+				},
+			},
 		},
 	}
 }
@@ -151,7 +158,7 @@ func (d *HardwareTelemetryDataSource) Read(ctx context.Context, req datasource.R
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"sflowSflow", "sflowInst", "sflowTransport", "sflowReceiver"}, HardwareTelemetrySubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"sflowSflow", "sflowInst", "sflowTransport", "sflowReceiver", "sflowSflowFsDataSource"}, HardwareTelemetrySubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

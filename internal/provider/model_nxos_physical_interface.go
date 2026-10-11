@@ -104,6 +104,9 @@ type PhysicalInterfacePhysicalInterfaces struct {
 	StormControlRate                               types.String                                               `tfsdk:"storm_control_rate"`
 	StormControlRatePacketsPerSecond               types.Int64                                                `tfsdk:"storm_control_rate_packets_per_second"`
 	StormControlPacketType                         types.String                                               `tfsdk:"storm_control_packet_type"`
+	LoadIntervalCounter1                           types.Int64                                                `tfsdk:"load_interval_counter_1"`
+	LoadIntervalCounter2                           types.Int64                                                `tfsdk:"load_interval_counter_2"`
+	LoadIntervalCounter3                           types.Int64                                                `tfsdk:"load_interval_counter_3"`
 	MultisiteInterfaceTracking                     types.String                                               `tfsdk:"multisite_interface_tracking"`
 	PriorityFlowControlMode                        types.String                                               `tfsdk:"priority_flow_control_mode"`
 	PriorityFlowControlSendTlv                     types.Bool                                                 `tfsdk:"priority_flow_control_send_tlv"`
@@ -418,6 +421,19 @@ func (data PhysicalInterface) toBody(config PhysicalInterface) nxos.Body {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.l1StormCtrlP.attributes", attrs)
 			}
 			attrs = "{}"
+			if !child.LoadIntervalCounter1.IsUnknown() && !child.LoadIntervalCounter1.IsNull() && !configChild.LoadIntervalCounter1.IsNull() {
+				attrs, _ = sjson.Set(attrs, "loadIntvl1", strconv.FormatInt(child.LoadIntervalCounter1.ValueInt64(), 10))
+			}
+			if !child.LoadIntervalCounter2.IsUnknown() && !child.LoadIntervalCounter2.IsNull() && !configChild.LoadIntervalCounter2.IsNull() {
+				attrs, _ = sjson.Set(attrs, "loadIntvl2", strconv.FormatInt(child.LoadIntervalCounter2.ValueInt64(), 10))
+			}
+			if !child.LoadIntervalCounter3.IsUnknown() && !child.LoadIntervalCounter3.IsNull() && !configChild.LoadIntervalCounter3.IsNull() {
+				attrs, _ = sjson.Set(attrs, "loadIntvl3", strconv.FormatInt(child.LoadIntervalCounter3.ValueInt64(), 10))
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.l1LoadP.attributes", attrs)
+			}
+			attrs = "{}"
 			if !child.MultisiteInterfaceTracking.IsUnknown() && !child.MultisiteInterfaceTracking.IsNull() && !configChild.MultisiteInterfaceTracking.IsNull() {
 				attrs, _ = sjson.Set(attrs, "tracking", child.MultisiteInterfaceTracking.ValueString())
 			}
@@ -729,6 +745,22 @@ func (data *PhysicalInterface) fromBody(res gjson.Result) {
 							child.StormControlRate = types.StringValue(rl1StormCtrlP.Get("l1StormCtrlP.attributes.rate").String())
 							child.StormControlRatePacketsPerSecond = types.Int64Value(rl1StormCtrlP.Get("l1StormCtrlP.attributes.ratePps").Int())
 							child.StormControlPacketType = types.StringValue(rl1StormCtrlP.Get("l1StormCtrlP.attributes.type").String())
+						}
+						{
+							var rl1LoadP gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("l1LoadP.attributes.rn").String()
+									if rnValue == "loadp" {
+										rl1LoadP = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.LoadIntervalCounter1 = types.Int64Value(rl1LoadP.Get("l1LoadP.attributes.loadIntvl1").Int())
+							child.LoadIntervalCounter2 = types.Int64Value(rl1LoadP.Get("l1LoadP.attributes.loadIntvl2").Int())
+							child.LoadIntervalCounter3 = types.Int64Value(rl1LoadP.Get("l1LoadP.attributes.loadIntvl3").Int())
 						}
 						{
 							var rnvoMultisiteIfTracking gjson.Result
@@ -1234,6 +1266,34 @@ func (data *PhysicalInterface) updateFromBody(res gjson.Result) {
 				item.StormControlPacketType = types.StringValue(rl1StormCtrlP.Get("l1StormCtrlP.attributes.type").String())
 			} else {
 				item.StormControlPacketType = types.StringNull()
+			}
+		}
+		{
+			var rl1LoadP gjson.Result
+			rl1PhysIf.Get("l1PhysIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("l1LoadP.attributes.rn").String()
+					if rnValue == "loadp" {
+						rl1LoadP = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.LoadIntervalCounter1.IsNull() {
+				item.LoadIntervalCounter1 = types.Int64Value(rl1LoadP.Get("l1LoadP.attributes.loadIntvl1").Int())
+			} else {
+				item.LoadIntervalCounter1 = types.Int64Null()
+			}
+			if !item.LoadIntervalCounter2.IsNull() {
+				item.LoadIntervalCounter2 = types.Int64Value(rl1LoadP.Get("l1LoadP.attributes.loadIntvl2").Int())
+			} else {
+				item.LoadIntervalCounter2 = types.Int64Null()
+			}
+			if !item.LoadIntervalCounter3.IsNull() {
+				item.LoadIntervalCounter3 = types.Int64Value(rl1LoadP.Get("l1LoadP.attributes.loadIntvl3").Int())
+			} else {
+				item.LoadIntervalCounter3 = types.Int64Null()
 			}
 		}
 		{
@@ -1968,6 +2028,18 @@ func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state Physi
 						if !stateChild.StormControlPacketType.IsNull() && configChild.StormControlPacketType.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.LoadIntervalCounter1.IsNull() && configChild.LoadIntervalCounter1.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1LoadP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loadIntvl1", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.LoadIntervalCounter2.IsNull() && configChild.LoadIntervalCounter2.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1LoadP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loadIntvl2", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.LoadIntervalCounter3.IsNull() && configChild.LoadIntervalCounter3.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1LoadP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loadIntvl3", "DME_UNSET_PROPERTY_MARKER")
 						}
 						if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")

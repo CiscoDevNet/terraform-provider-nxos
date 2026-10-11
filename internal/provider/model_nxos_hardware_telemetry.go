@@ -39,23 +39,27 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type HardwareTelemetry struct {
-	Device                       types.String                          `tfsdk:"device"`
-	Dn                           types.String                          `tfsdk:"id"`
-	SflowAdminState              types.String                          `tfsdk:"sflow_admin_state"`
-	SflowAgentAddress            types.String                          `tfsdk:"sflow_agent_address"`
-	SflowCounterPollInterval     types.Int64                           `tfsdk:"sflow_counter_poll_interval"`
-	SflowControl                 types.String                          `tfsdk:"sflow_control"`
-	SflowExtendedBgp             types.Bool                            `tfsdk:"sflow_extended_bgp"`
-	SflowExtendedSwitch          types.Bool                            `tfsdk:"sflow_extended_switch"`
-	SflowMaxHeaderSize           types.Int64                           `tfsdk:"sflow_max_header_size"`
-	SflowPacketSamplingRate      types.Int64                           `tfsdk:"sflow_packet_sampling_rate"`
-	SflowReceiverMaxDatagramSize types.Int64                           `tfsdk:"sflow_receiver_max_datagram_size"`
-	SflowReceiverPort            types.Int64                           `tfsdk:"sflow_receiver_port"`
-	Receivers                    map[string]HardwareTelemetryReceivers `tfsdk:"receivers"`
+	Device                       types.String                            `tfsdk:"device"`
+	Dn                           types.String                            `tfsdk:"id"`
+	SflowAdminState              types.String                            `tfsdk:"sflow_admin_state"`
+	SflowAgentAddress            types.String                            `tfsdk:"sflow_agent_address"`
+	SflowCounterPollInterval     types.Int64                             `tfsdk:"sflow_counter_poll_interval"`
+	SflowControl                 types.String                            `tfsdk:"sflow_control"`
+	SflowExtendedBgp             types.Bool                              `tfsdk:"sflow_extended_bgp"`
+	SflowExtendedSwitch          types.Bool                              `tfsdk:"sflow_extended_switch"`
+	SflowMaxHeaderSize           types.Int64                             `tfsdk:"sflow_max_header_size"`
+	SflowPacketSamplingRate      types.Int64                             `tfsdk:"sflow_packet_sampling_rate"`
+	SflowReceiverMaxDatagramSize types.Int64                             `tfsdk:"sflow_receiver_max_datagram_size"`
+	SflowReceiverPort            types.Int64                             `tfsdk:"sflow_receiver_port"`
+	Receivers                    map[string]HardwareTelemetryReceivers   `tfsdk:"receivers"`
+	DataSources                  map[string]HardwareTelemetryDataSources `tfsdk:"data_sources"`
 }
 
 type HardwareTelemetryReceivers struct {
 	SourceAddress types.String `tfsdk:"source_address"`
+}
+
+type HardwareTelemetryDataSources struct {
 }
 
 type HardwareTelemetryIdentity struct {
@@ -95,6 +99,10 @@ func (data HardwareTelemetry) getDn() string {
 func (data HardwareTelemetryReceivers) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("receiver-[%s]-[%s]", keyParts[0], keyParts[1])
+}
+
+func (data HardwareTelemetryDataSources) getRn(key string) string {
+	return fmt.Sprintf("datasource-[%s]", key)
 }
 
 func (data HardwareTelemetry) getClassName() string {
@@ -189,6 +197,14 @@ func (data HardwareTelemetry) toBody(config HardwareTelemetry) nxos.Body {
 					body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 				}
 			}
+			for key := range data.DataSources {
+				configChild, configChildOk := config.DataSources[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "id", key)
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.sflowSflowFsDataSource.attributes", attrs)
+			}
 			childBody = body
 			body = prevBody
 			if parentAttrs != "{}" || gjson.Get(childBody, "sflowInst.children").Exists() {
@@ -276,6 +292,24 @@ func (data *HardwareTelemetry) fromBody(res gjson.Result) {
 					},
 				)
 			}
+			rsflowInst.Get("sflowInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "sflowSflowFsDataSource" {
+								var child HardwareTelemetryDataSources
+								mapKey := value.Get("attributes.id").String()
+								if data.DataSources == nil {
+									data.DataSources = make(map[string]HardwareTelemetryDataSources)
+								}
+								data.DataSources[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
 		}
 	}
 }
@@ -395,6 +429,23 @@ func (data *HardwareTelemetry) updateFromBody(res gjson.Result) {
 				data.Receivers[key] = item
 			}
 		}
+		for key, item := range data.DataSources {
+			var rsflowSflowFsDataSource gjson.Result
+			rsflowInst.Get("sflowInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("sflowSflowFsDataSource.attributes.id").String() == key {
+						rsflowSflowFsDataSource = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rsflowSflowFsDataSource.Exists() {
+				delete(data.DataSources, key)
+				continue
+			}
+			data.DataSources[key] = item
+		}
 	}
 }
 
@@ -487,6 +538,12 @@ func (data HardwareTelemetry) toDeleteBody() nxos.Body {
 					}
 				}
 			}
+			for key, child := range data.DataSources {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "sflowSflowFsDataSource.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "sflowSflowFsDataSource.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 			if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
 				body, _ = sjson.Delete(body, entryPath)
 				if len(gjson.Get(body, siblingsPath).Array()) == 0 {
@@ -517,6 +574,16 @@ func (data HardwareTelemetry) toBodyWithDeletes(ctx context.Context, state Hardw
 				deleteBody, _ = sjson.Set(deleteBody, "sflowReceiver.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "sflowReceiver.attributes.status", "deleted")
 				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst")+".children", "sflowTransport") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.DataSources {
+			if _, found := data.DataSources[stateKey]; !found {
+				stateChild := state.DataSources[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "sflowSflowFsDataSource.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "sflowSflowFsDataSource.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "sflowSflow")+".children", "sflowInst") + ".children"
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
@@ -580,6 +647,13 @@ func (data HardwareTelemetry) toBodyWithDeletes(ctx context.Context, state Hardw
 						break
 					}
 				}
+			}
+		}
+		for key := range state.DataSources {
+			if configChild, ok := config.DataSources[key]; ok {
+				stateChild := state.DataSources[key]
+				_ = stateChild
+				_ = configChild
 			}
 		}
 	}

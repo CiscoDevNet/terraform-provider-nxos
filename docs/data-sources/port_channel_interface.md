@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
   API Documentation
-  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/pcVlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanMapping/pcVlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateTable/pcVlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateEntry/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:RsMbrIfs/
+  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/l1LoadP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/pcVlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanMapping/pcVlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateTable/pcVlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateEntry/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Data Source)
@@ -17,6 +17,7 @@ This data source can read the configuration of port-channel interfaces on NX-OS 
 - [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIf/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/)
+- [l1LoadP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/)
 - [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
 - [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/)
 - [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
@@ -84,6 +85,9 @@ Read-Only:
 - `link_debounce_down` (Number) Administrative port link debounce interval.
 - `link_logging` (String) Administrative link logging enable.
 - `load_defer` (String) Load Defer Member Ports.
+- `load_interval_counter_1` (Number) The port load sampling interval 1 at bit-rate and packet-rate statistics.
+- `load_interval_counter_2` (Number) The port load sampling interval 2 at bit-rate and packet-rate statistics.
+- `load_interval_counter_3` (Number) The port load sampling interval 3 at bit-rate and packet-rate statistics.
 - `maximum_links` (Number) maximum links.
 - `mdix` (String) The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.
 - `medium` (String) The administrative port medium type.

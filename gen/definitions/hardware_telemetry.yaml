@@ -125,6 +125,19 @@ child_classes:
                     type: String
                     description: 'The source IP address for sent sFlow datagrams.'
                     example: 10.0.0.1
+          - class_name: sflowSflowFsDataSource
+            rn: datasource-[%s]
+            type: list
+            tf_name: data_sources
+            description: 'sFlow data source interfaces.'
+            doc_path: Flow/sflow:SflowFsDataSource/
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                example: eth1/10
 test_prerequisites:
   - dn: sys/fm/sflow
     class_name: fmSflow

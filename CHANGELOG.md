@@ -1,3 +1,7 @@
+## 0.17.1
+
+- Fix permanent diff and update error of `nxos_ntp` authentication keys when the device encrypts a key, `encryption_type` and `encrypted` are now write-only attributes
+
 ## 0.17.0
 
 - Add BGP bestpath options (AS-path multipath relax, always compare MED, compare router ID, compare neighbor ID, MED missing as worst, MED confederation, MED non-deterministic, ignore AS-path, ignore cost community, ignore IGP metric, ignore AIGP) configuration to `nxos_bgp` VRFs

@@ -1,1 +1,0 @@
-- Fix permanent diff and update error of `nxos_ntp` authentication keys when the device encrypts a key, `encryption_type` and `encrypted` are now write-only attributes

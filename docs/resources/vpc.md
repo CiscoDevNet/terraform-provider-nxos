@@ -5,7 +5,7 @@ subcategory: "Switching"
 description: |-
   This resource can manage the vPC (Virtual Port Channel) configuration on NX-OS devices, including the vPC domain with peer settings, keepalive, role priority, and peer gateway options.
   API Documentation
-  vpcEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:Entity/vpcInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:Inst/vpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:Dom/vpcKeepalive https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:Keepalive/vpcPeerLink https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:PeerLink/vpcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:If/vpcRsVpcConf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:RsVpcConf/
+  vpcEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:Entity/vpcInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:Inst/vpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:Dom/vpcKeepalive https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:Keepalive/vpcPeerLink https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:PeerLink/vpcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:If/vpcRsVpcConf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:RsVpcConf/vpcOrphanPort https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:OrphanPort/
 ---
 
 # nxos_vpc (Resource)
@@ -21,6 +21,7 @@ This resource can manage the vPC (Virtual Port Channel) configuration on NX-OS d
 - [vpcPeerLink](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:PeerLink/)
 - [vpcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:If/)
 - [vpcRsVpcConf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:RsVpcConf/)
+- [vpcOrphanPort](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vpc:OrphanPort/)
 
 ## Example Usage
 
@@ -73,6 +74,13 @@ resource "nxos_vpc" "example" {
   interfaces = {
     "1" = {
       port_channel_interface_dn = "sys/intf/aggr-[po1]"
+    }
+  }
+  orphan_ports = {
+    "eth1/10" = {
+      admin_state = "enabled"
+      description = "My orphan port"
+      name        = "ORPHAN1"
     }
   }
 }
@@ -149,6 +157,8 @@ resource "nxos_vpc" "example" {
 - `l3_peer_router_syslog_interval` (Number) L3 Peer Router Syslog Interval.
   - Range: `1`-`3600`
 - `mac_bpdu_source_version_2` (Boolean) Version 2 bpdu source mac-address.
+- `orphan_ports` (Attributes Map) List of vPC orphan ports to suspend.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--orphan_ports))
 - `peer_gateway` (String) Peer Gateway.
   - Choices: `enabled`, `disabled`
 - `peer_gateway_exclude_vlan` (String) Exclude VLAN List.
@@ -178,6 +188,17 @@ resource "nxos_vpc" "example" {
 Optional:
 
 - `port_channel_interface_dn` (String) Port-channel interface DN.
+
+
+<a id="nestedatt--orphan_ports"></a>
+### Nested Schema for `orphan_ports`
+
+Optional:
+
+- `admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `description` (String) Description.
+- `name` (String) The name of the object.
 
 ## Import
 

@@ -80,6 +80,9 @@ func TestAccNxosVPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_description", "My description"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "interfaces.1.port_channel_interface_dn", "sys/intf/aggr-[po1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "orphan_ports.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "orphan_ports.eth1/10.description", "My orphan port"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "orphan_ports.eth1/10.name", "ORPHAN1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -158,6 +161,14 @@ resource "nxos_dme" "PreReq3" {
   }
 }
 
+resource "nxos_dme" "PreReq4" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer2"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -165,7 +176,7 @@ resource "nxos_dme" "PreReq3" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVPCConfig_minimum() string {
 	config := `resource "nxos_vpc" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -224,7 +235,14 @@ func testAccNxosVPCConfig_all() string {
 	config += `			port_channel_interface_dn = "sys/intf/aggr-[po1]"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
+	config += `	orphan_ports = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			description = "My orphan port"` + "\n"
+	config += `			name = "ORPHAN1"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -38,57 +38,64 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type VPC struct {
-	Device                                  types.String             `tfsdk:"device"`
-	Dn                                      types.String             `tfsdk:"id"`
-	AdminState                              types.String             `tfsdk:"admin_state"`
-	InstanceAdminState                      types.String             `tfsdk:"instance_admin_state"`
-	Control                                 types.String             `tfsdk:"control"`
-	DomainAdminState                        types.String             `tfsdk:"domain_admin_state"`
-	DomainId                                types.Int64              `tfsdk:"domain_id"`
-	AutoRecovery                            types.String             `tfsdk:"auto_recovery"`
-	AutoRecoveryInterval                    types.Int64              `tfsdk:"auto_recovery_interval"`
-	DelayRestoreOrphanPort                  types.Int64              `tfsdk:"delay_restore_orphan_port"`
-	DelayRestoreSvi                         types.Int64              `tfsdk:"delay_restore_svi"`
-	DelayRestoreVpc                         types.Int64              `tfsdk:"delay_restore_vpc"`
-	Dscp                                    types.Int64              `tfsdk:"dscp"`
-	FastConvergence                         types.String             `tfsdk:"fast_convergence"`
-	GracefulConsistencyCheck                types.String             `tfsdk:"graceful_consistency_check"`
-	L3PeerRouter                            types.String             `tfsdk:"l3_peer_router"`
-	L3PeerRouterSyslog                      types.String             `tfsdk:"l3_peer_router_syslog"`
-	L3PeerRouterSyslogInterval              types.Int64              `tfsdk:"l3_peer_router_syslog_interval"`
-	PeerGateway                             types.String             `tfsdk:"peer_gateway"`
-	PeerIp                                  types.String             `tfsdk:"peer_ip"`
-	PeerSwitch                              types.String             `tfsdk:"peer_switch"`
-	RolePriority                            types.Int64              `tfsdk:"role_priority"`
-	SysMac                                  types.String             `tfsdk:"sys_mac"`
-	SystemPriority                          types.Int64              `tfsdk:"system_priority"`
-	Track                                   types.Int64              `tfsdk:"track"`
-	VirtualIp                               types.String             `tfsdk:"virtual_ip"`
-	DelayPeerLinkBringup                    types.Int64              `tfsdk:"delay_peer_link_bringup"`
-	ExcludeSvi                              types.String             `tfsdk:"exclude_svi"`
-	MacBpduSourceVersion2                   types.Bool               `tfsdk:"mac_bpdu_source_version_2"`
-	PeerGatewayExcludeVlan                  types.String             `tfsdk:"peer_gateway_exclude_vlan"`
-	KeepaliveDestinationIp                  types.String             `tfsdk:"keepalive_destination_ip"`
-	KeepaliveFlushTimeout                   types.Int64              `tfsdk:"keepalive_flush_timeout"`
-	KeepaliveInterval                       types.Int64              `tfsdk:"keepalive_interval"`
-	KeepalivePrecedenceType                 types.String             `tfsdk:"keepalive_precedence_type"`
-	KeepalivePrecedenceValue                types.Int64              `tfsdk:"keepalive_precedence_value"`
-	KeepaliveSourceIp                       types.String             `tfsdk:"keepalive_source_ip"`
-	KeepaliveTimeout                        types.Int64              `tfsdk:"keepalive_timeout"`
-	KeepaliveTypeOfServiceByte              types.Int64              `tfsdk:"keepalive_type_of_service_byte"`
-	KeepaliveTypeOfServiceConfigurationType types.String             `tfsdk:"keepalive_type_of_service_configuration_type"`
-	KeepaliveTypeOfServiceType              types.String             `tfsdk:"keepalive_type_of_service_type"`
-	KeepaliveTypeOfServiceValue             types.Int64              `tfsdk:"keepalive_type_of_service_value"`
-	KeepaliveUdpPort                        types.Int64              `tfsdk:"keepalive_udp_port"`
-	KeepaliveVrf                            types.String             `tfsdk:"keepalive_vrf"`
-	PeerlinkInterfaceId                     types.String             `tfsdk:"peerlink_interface_id"`
-	PeerlinkAdminState                      types.String             `tfsdk:"peerlink_admin_state"`
-	PeerlinkDescription                     types.String             `tfsdk:"peerlink_description"`
-	Interfaces                              map[string]VPCInterfaces `tfsdk:"interfaces"`
+	Device                                  types.String              `tfsdk:"device"`
+	Dn                                      types.String              `tfsdk:"id"`
+	AdminState                              types.String              `tfsdk:"admin_state"`
+	InstanceAdminState                      types.String              `tfsdk:"instance_admin_state"`
+	Control                                 types.String              `tfsdk:"control"`
+	DomainAdminState                        types.String              `tfsdk:"domain_admin_state"`
+	DomainId                                types.Int64               `tfsdk:"domain_id"`
+	AutoRecovery                            types.String              `tfsdk:"auto_recovery"`
+	AutoRecoveryInterval                    types.Int64               `tfsdk:"auto_recovery_interval"`
+	DelayRestoreOrphanPort                  types.Int64               `tfsdk:"delay_restore_orphan_port"`
+	DelayRestoreSvi                         types.Int64               `tfsdk:"delay_restore_svi"`
+	DelayRestoreVpc                         types.Int64               `tfsdk:"delay_restore_vpc"`
+	Dscp                                    types.Int64               `tfsdk:"dscp"`
+	FastConvergence                         types.String              `tfsdk:"fast_convergence"`
+	GracefulConsistencyCheck                types.String              `tfsdk:"graceful_consistency_check"`
+	L3PeerRouter                            types.String              `tfsdk:"l3_peer_router"`
+	L3PeerRouterSyslog                      types.String              `tfsdk:"l3_peer_router_syslog"`
+	L3PeerRouterSyslogInterval              types.Int64               `tfsdk:"l3_peer_router_syslog_interval"`
+	PeerGateway                             types.String              `tfsdk:"peer_gateway"`
+	PeerIp                                  types.String              `tfsdk:"peer_ip"`
+	PeerSwitch                              types.String              `tfsdk:"peer_switch"`
+	RolePriority                            types.Int64               `tfsdk:"role_priority"`
+	SysMac                                  types.String              `tfsdk:"sys_mac"`
+	SystemPriority                          types.Int64               `tfsdk:"system_priority"`
+	Track                                   types.Int64               `tfsdk:"track"`
+	VirtualIp                               types.String              `tfsdk:"virtual_ip"`
+	DelayPeerLinkBringup                    types.Int64               `tfsdk:"delay_peer_link_bringup"`
+	ExcludeSvi                              types.String              `tfsdk:"exclude_svi"`
+	MacBpduSourceVersion2                   types.Bool                `tfsdk:"mac_bpdu_source_version_2"`
+	PeerGatewayExcludeVlan                  types.String              `tfsdk:"peer_gateway_exclude_vlan"`
+	KeepaliveDestinationIp                  types.String              `tfsdk:"keepalive_destination_ip"`
+	KeepaliveFlushTimeout                   types.Int64               `tfsdk:"keepalive_flush_timeout"`
+	KeepaliveInterval                       types.Int64               `tfsdk:"keepalive_interval"`
+	KeepalivePrecedenceType                 types.String              `tfsdk:"keepalive_precedence_type"`
+	KeepalivePrecedenceValue                types.Int64               `tfsdk:"keepalive_precedence_value"`
+	KeepaliveSourceIp                       types.String              `tfsdk:"keepalive_source_ip"`
+	KeepaliveTimeout                        types.Int64               `tfsdk:"keepalive_timeout"`
+	KeepaliveTypeOfServiceByte              types.Int64               `tfsdk:"keepalive_type_of_service_byte"`
+	KeepaliveTypeOfServiceConfigurationType types.String              `tfsdk:"keepalive_type_of_service_configuration_type"`
+	KeepaliveTypeOfServiceType              types.String              `tfsdk:"keepalive_type_of_service_type"`
+	KeepaliveTypeOfServiceValue             types.Int64               `tfsdk:"keepalive_type_of_service_value"`
+	KeepaliveUdpPort                        types.Int64               `tfsdk:"keepalive_udp_port"`
+	KeepaliveVrf                            types.String              `tfsdk:"keepalive_vrf"`
+	PeerlinkInterfaceId                     types.String              `tfsdk:"peerlink_interface_id"`
+	PeerlinkAdminState                      types.String              `tfsdk:"peerlink_admin_state"`
+	PeerlinkDescription                     types.String              `tfsdk:"peerlink_description"`
+	Interfaces                              map[string]VPCInterfaces  `tfsdk:"interfaces"`
+	OrphanPorts                             map[string]VPCOrphanPorts `tfsdk:"orphan_ports"`
 }
 
 type VPCInterfaces struct {
 	PortChannelInterfaceDn types.String `tfsdk:"port_channel_interface_dn"`
+}
+
+type VPCOrphanPorts struct {
+	AdminState  types.String `tfsdk:"admin_state"`
+	Description types.String `tfsdk:"description"`
+	Name        types.String `tfsdk:"name"`
 }
 
 type VPCIdentity struct {
@@ -127,6 +134,10 @@ func (data VPC) getDn() string {
 
 func (data VPCInterfaces) getRn(key string) string {
 	return fmt.Sprintf("if-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data VPCOrphanPorts) getRn(key string) string {
+	return fmt.Sprintf("orphan-[%s]", key)
 }
 
 func (data VPC) getClassName() string {
@@ -340,6 +351,23 @@ func (data VPC) toBody(config VPC) nxos.Body {
 				body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 			}
 		}
+		for key, child := range data.OrphanPorts {
+			configChild, configChildOk := config.OrphanPorts[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+			}
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
+				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.vpcOrphanPort.attributes", attrs)
+		}
 		childBody = body
 		body = prevBody
 		if parentAttrs != "{}" || gjson.Get(childBody, "vpcInst.children").Exists() {
@@ -482,6 +510,27 @@ func (data *VPC) fromBody(res gjson.Result) {
 				},
 			)
 		}
+		rvpcInst.Get("vpcInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "vpcOrphanPort" {
+							var child VPCOrphanPorts
+							child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.Name = types.StringValue(value.Get("attributes.name").String())
+							mapKey := value.Get("attributes.id").String()
+							if data.OrphanPorts == nil {
+								data.OrphanPorts = make(map[string]VPCOrphanPorts)
+							}
+							data.OrphanPorts[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
 	}
 }
 
@@ -795,6 +844,38 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 			data.Interfaces[key] = item
 		}
 	}
+	for key, item := range data.OrphanPorts {
+		var rvpcOrphanPort gjson.Result
+		rvpcInst.Get("vpcInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("vpcOrphanPort.attributes.id").String() == key {
+					rvpcOrphanPort = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rvpcOrphanPort.Exists() {
+			delete(data.OrphanPorts, key)
+			continue
+		}
+		if !item.AdminState.IsNull() {
+			item.AdminState = types.StringValue(rvpcOrphanPort.Get("vpcOrphanPort.attributes.adminSt").String())
+		} else {
+			item.AdminState = types.StringNull()
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rvpcOrphanPort.Get("vpcOrphanPort.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.Name.IsNull() {
+			item.Name = types.StringValue(rvpcOrphanPort.Get("vpcOrphanPort.attributes.name").String())
+		} else {
+			item.Name = types.StringNull()
+		}
+		data.OrphanPorts[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -836,6 +917,16 @@ func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC, config VPC, im
 			}
 			if matchBodyPathdi == "" {
 				continue
+			}
+		}
+		for stateKey := range state.OrphanPorts {
+			if _, found := data.OrphanPorts[stateKey]; !found {
+				stateChild := state.OrphanPorts[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "vpcOrphanPort.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "vpcOrphanPort.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 	}
@@ -1032,6 +1123,27 @@ func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC, config VPC, im
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "vpcRsVpcConf")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
 						}
+					}
+				}
+			}
+		}
+		for key := range state.OrphanPorts {
+			if configChild, ok := config.OrphanPorts[key]; ok {
+				stateChild := state.OrphanPorts[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children").Array() {
+					if mv.Get("vpcOrphanPort.attributes.id").String() == key {
+						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children"+"."+strconv.Itoa(mi)+".vpcOrphanPort.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children"+"."+strconv.Itoa(mi)+".vpcOrphanPort.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children"+"."+strconv.Itoa(mi)+".vpcOrphanPort.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
 					}
 				}
 			}

@@ -48,4 +48,11 @@ resource "nxos_vpc" "example" {
       port_channel_interface_dn = "sys/intf/aggr-[po1]"
     }
   }
+  orphan_ports = {
+    "eth1/10" = {
+      admin_state = "enabled"
+      description = "My orphan port"
+      name        = "ORPHAN1"
+    }
+  }
 }

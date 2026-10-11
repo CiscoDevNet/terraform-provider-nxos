@@ -56,7 +56,7 @@ func (d *VPCDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the vPC (Virtual Port Channel) configuration on NX-OS devices, including the vPC domain with peer settings, keepalive, role priority, and peer gateway options.").AddApiDocumentation("vpcEntity", "System/vpc:Entity/", []string{"vpcInst", "vpcDom", "vpcKeepalive", "vpcPeerLink", "vpcIf", "vpcRsVpcConf"}, []string{"System/vpc:Inst/", "System/vpc:Dom/", "System/vpc:Keepalive/", "System/vpc:PeerLink/", "System/vpc:If/", "System/vpc:RsVpcConf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the vPC (Virtual Port Channel) configuration on NX-OS devices, including the vPC domain with peer settings, keepalive, role priority, and peer gateway options.").AddApiDocumentation("vpcEntity", "System/vpc:Entity/", []string{"vpcInst", "vpcDom", "vpcKeepalive", "vpcPeerLink", "vpcIf", "vpcRsVpcConf", "vpcOrphanPort"}, []string{"System/vpc:Inst/", "System/vpc:Dom/", "System/vpc:Keepalive/", "System/vpc:PeerLink/", "System/vpc:If/", "System/vpc:RsVpcConf/", "System/vpc:OrphanPort/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -255,6 +255,26 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
+			"orphan_ports": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of vPC orphan ports to suspend.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "The administrative state of the object or policy.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description.",
+							Computed:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: "The name of the object.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -287,7 +307,7 @@ func (d *VPCDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"vpcInst", "vpcDom", "vpcKeepalive", "vpcPeerLink", "vpcIf", "vpcRsVpcConf"}, VPCSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"vpcInst", "vpcDom", "vpcKeepalive", "vpcPeerLink", "vpcIf", "vpcRsVpcConf", "vpcOrphanPort"}, VPCSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

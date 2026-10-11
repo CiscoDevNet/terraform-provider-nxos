@@ -372,6 +372,37 @@ child_classes:
                     type: String
                     description: "Port-channel interface DN."
                     example: sys/intf/aggr-[po1]
+      - class_name: vpcOrphanPort
+        doc_path: System/vpc:OrphanPort/
+        rn: orphan-[%s]
+        type: list
+        tf_name: orphan_ports
+        description: "List of vPC orphan ports to suspend."
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: "Must match first field in the output of `show intf brief`. Example: `eth1/1`."
+            example: eth1/10
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            description: "The administrative state of the object or policy."
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: "Description."
+            example: "My orphan port"
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: "The name of the object."
+            example: "ORPHAN1"
 test_prerequisites:
   - dn: sys/fm/vpc
     class_name: fmVpc
@@ -394,6 +425,11 @@ test_prerequisites:
       - name: layer
         value: Layer2
   - dn: sys/intf/phys-[eth1/9]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer2
+  - dn: sys/intf/phys-[eth1/10]
     class_name: l1PhysIf
     attributes:
       - name: layer

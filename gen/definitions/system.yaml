@@ -142,7 +142,7 @@ child_classes:
               - Layer1
               - Layer2
               - Layer3
-            example: Layer3
+            example: Layer2
           - nxos_name: systemIfAdminState
             tf_name: ethernet_system_interface_admin_state
             type: String
@@ -167,6 +167,102 @@ child_classes:
             type: Bool
             description: 'Tag native vlan.'
             example: "false"
+        child_classes:
+          - class_name: ethpmErrDisRecover
+            doc_path: Interfaces/ethpm:ErrDisRecover/
+            rn: errdisrecover
+            type: single
+            no_delete: true
+            attributes:
+              - nxos_name: adminSt
+                tf_name: errdisable_recovery_admin_state
+                type: String
+                description: 'The administrative state of the object or policy.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: ctrl
+                tf_name: errdisable_recovery_control
+                type: String
+                description: 'The control state.'
+                enum_values:
+                  - stateful-ha
+                example: stateful-ha
+              - nxos_name: errDisRecovIntvl
+                tf_name: errdisable_recovery_interval
+                type: Int64
+                description: 'Error Disable Recovery Interval.'
+                min_int: 30
+                max_int: 65535
+                example: 600
+            child_classes:
+              - class_name: ethpmEvent
+                doc_path: Interfaces/ethpm:Event/
+                rn: Event-%s
+                type: list
+                tf_name: errdisable_events
+                description: 'Error disabled recovery events.'
+                attributes:
+                  - nxos_name: event
+                    tf_name: event
+                    type: String
+                    id: true
+                    description: 'Event.'
+                    enum_values:
+                      - event-link-flap
+                      - event-udld
+                      - event-bpduguard
+                      - event-loopback
+                      - event-storm-ctrl
+                      - event-dhcp-rate-lim
+                      - event-arp-inspection
+                      - event-sec-violation
+                      - event-psec-violation
+                      - event-stp-inconsist-vpc-peerlink
+                      - event-set-port-state-failed
+                      - event-debug-1
+                      - event-debug-2
+                      - event-debug-3
+                      - event-debug-4
+                      - event-debug-5
+                      - event-ip-addr-conflict
+                      - event-ipqos-mgr-error
+                      - event-ethpm
+                      - event-ipqos-dcbxp-compat-failure
+                      - event-syserr-based
+                      - unknown
+                      - event-mcp-loop
+                      - event-ep-move
+                      - event-vlan-membership
+                      - event-dcbx-no-ack
+                      - event-pause-rate-limit
+                    example: event-bpduguard
+                  - nxos_name: adminSt
+                    tf_name: admin_state
+                    type: String
+                    description: 'The administrative state of the object or policy.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: ctrl
+                    tf_name: control
+                    type: String
+                    description: 'The control state.'
+                    enum_values:
+                      - stateful-ha
+                    example: stateful-ha
+                  - nxos_name: detect
+                    tf_name: detect
+                    type: Bool
+                    description: 'Detection Enabled.'
+                    example: "true"
+                  - nxos_name: recover
+                    tf_name: recover
+                    type: Bool
+                    description: 'Recovery Enabled.'
+                    example: "true"
   - class_name: arpEntity
     doc_path: Address%20Resolution/arp%3AEntity/
     rn: arp

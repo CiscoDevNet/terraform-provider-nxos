@@ -1,0 +1,1 @@
+- Add errdisable recovery interval (`errdisable recovery interval`) and per-cause errdisable detect and recovery (`errdisable detect cause`, `errdisable recovery cause`) configuration to `nxos_system` resource and data source

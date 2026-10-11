@@ -52,11 +52,18 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ethernet_control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ethernet_interface_syslog_info", "info-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ethernet_log_event", "linkStatusEnable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ethernet_default_layer", "Layer3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ethernet_default_layer", "Layer2"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ethernet_system_interface_admin_state", "up"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ethernet_system_link_failure_laser_on", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ethernet_system_storm_control_multi_threshold", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ethernet_vlan_tag_native", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "errdisable_recovery_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "errdisable_recovery_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "errdisable_recovery_interval", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "errdisable_events.event-bpduguard.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "errdisable_events.event-bpduguard.control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "errdisable_events.event-bpduguard.detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "errdisable_events.event-bpduguard.recover", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_allow_static_arp_outside_subnet", "enabled"))
@@ -425,11 +432,22 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config += `	ethernet_control = "stateful-ha"` + "\n"
 	config += `	ethernet_interface_syslog_info = "info-1"` + "\n"
 	config += `	ethernet_log_event = "linkStatusEnable"` + "\n"
-	config += `	ethernet_default_layer = "Layer3"` + "\n"
+	config += `	ethernet_default_layer = "Layer2"` + "\n"
 	config += `	ethernet_system_interface_admin_state = "up"` + "\n"
 	config += `	ethernet_system_link_failure_laser_on = false` + "\n"
 	config += `	ethernet_system_storm_control_multi_threshold = false` + "\n"
 	config += `	ethernet_vlan_tag_native = false` + "\n"
+	config += `	errdisable_recovery_admin_state = "enabled"` + "\n"
+	config += `	errdisable_recovery_control = "stateful-ha"` + "\n"
+	config += `	errdisable_recovery_interval = 600` + "\n"
+	config += `	errdisable_events = {` + "\n"
+	config += `		"event-bpduguard" = {` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			control = "stateful-ha"` + "\n"
+	config += `			detect = true` + "\n"
+	config += `			recover = true` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	arp_admin_state = "enabled"` + "\n"
 	config += `	arp_instance_admin_state = "enabled"` + "\n"
 	config += `	arp_allow_static_arp_outside_subnet = "enabled"` + "\n"

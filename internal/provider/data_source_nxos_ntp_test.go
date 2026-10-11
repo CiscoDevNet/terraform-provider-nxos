@@ -48,8 +48,6 @@ func TestAccDataSourceNxosNTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.max_poll", "6"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.preferred", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.authentication_type", "md5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.encryption_type", "type7"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.encrypted", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.name", "KEY1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.trusted", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "source_interface", "lo0"))

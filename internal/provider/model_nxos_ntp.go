@@ -295,8 +295,6 @@ func (data *NTP) fromBody(res gjson.Result) {
 					if classname.String() == "datetimeNtpAuth" {
 						var child NTPAuthenticationKeys
 						child.AuthenticationType = types.StringValue(value.Get("attributes.authType").String())
-						child.EncryptionType = types.StringValue(value.Get("attributes.encryptType").String())
-						child.Encrypted = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.isEncrypt").String()))
 						child.Name = types.StringValue(value.Get("attributes.name").String())
 						child.Trusted = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.trusted").String()))
 						mapKey := value.Get("attributes.id").String()
@@ -466,16 +464,6 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 			item.AuthenticationType = types.StringValue(rdatetimeNtpAuth.Get("datetimeNtpAuth.attributes.authType").String())
 		} else {
 			item.AuthenticationType = types.StringNull()
-		}
-		if !item.EncryptionType.IsNull() {
-			item.EncryptionType = types.StringValue(rdatetimeNtpAuth.Get("datetimeNtpAuth.attributes.encryptType").String())
-		} else {
-			item.EncryptionType = types.StringNull()
-		}
-		if !item.Encrypted.IsNull() {
-			item.Encrypted = types.BoolValue(helpers.ParseNxosBoolean(rdatetimeNtpAuth.Get("datetimeNtpAuth.attributes.isEncrypt").String()))
-		} else {
-			item.Encrypted = types.BoolNull()
 		}
 		if !item.Name.IsNull() {
 			item.Name = types.StringValue(rdatetimeNtpAuth.Get("datetimeNtpAuth.attributes.name").String())
@@ -710,12 +698,6 @@ func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP, config NTP, im
 					if mv.Get("datetimeNtpAuth.attributes.id").String() == key {
 						if !stateChild.AuthenticationType.IsNull() && configChild.AuthenticationType.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".datetimeNtpAuth.attributes."+"authType", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.EncryptionType.IsNull() && configChild.EncryptionType.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".datetimeNtpAuth.attributes."+"encryptType", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Encrypted.IsNull() && configChild.Encrypted.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".datetimeNtpAuth.attributes."+"isEncrypt", "DME_UNSET_PROPERTY_MARKER")
 						}
 						if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".datetimeNtpAuth.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")

@@ -179,11 +179,13 @@ child_classes:
           - type6
           - type7
         example: type7
+        write_only: true
       - nxos_name: isEncrypt
         tf_name: encrypted
         type: Bool
         description: 'Is Encrypted Flag.'
         example: true
+        write_only: true
       - nxos_name: key
         tf_name: key
         type: String

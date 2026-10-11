@@ -175,6 +175,38 @@ child_classes:
         description: 'V6 Smart Relay Global Enabled.'
         example: true
     child_classes:
+      - class_name: dhcpSourceIf
+        rn: srcif
+        type: single
+        tf_name: source_interface
+        description: 'IPv4 global DHCP relay source interface.'
+        doc_path: DHCP/dhcp:SourceIf/
+        attributes:
+          - nxos_name: sourceInterface
+            tf_name: source_interface
+            type: String
+            description: 'Global Source Interface.'
+            example: lo1
+      - class_name: dhcpV6SourceIf
+        rn: v6srcif
+        type: single
+        tf_name: ipv6_source_interface
+        description: 'IPv6 global DHCP relay source interface.'
+        doc_path: DHCP/dhcp:V6SourceIf/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: ipv6_source_interface_admin_state
+            type: String
+            description: 'The administrative state of the object or policy.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: v6sourceInterface
+            tf_name: ipv6_source_interface
+            type: String
+            description: 'Global Source Interface.'
+            example: lo1
       - class_name: dhcpRelayIf
         rn: relayif-[%s]
         type: list
@@ -249,6 +281,30 @@ child_classes:
                 max_int: 65535
                 description: 'Counter.'
                 example: 1
+          - class_name: dhcpSrcIf
+            rn: srcif
+            type: single
+            tf_name: source_interface
+            description: 'IPv4 DHCP relay source interface of the interface.'
+            doc_path: DHCP/dhcp:SrcIf/
+            attributes:
+              - nxos_name: sourceInterface
+                tf_name: source_interface
+                type: String
+                description: 'Source Interface.'
+                example: lo1
+          - class_name: dhcpV6SrcIf
+            rn: v6srcif
+            type: single
+            tf_name: ipv6_source_interface
+            description: 'IPv6 DHCP relay source interface of the interface.'
+            doc_path: DHCP/dhcp:V6SrcIf/
+            attributes:
+              - nxos_name: v6sourceInterface
+                tf_name: ipv6_source_interface
+                type: String
+                description: 'Source Interface.'
+                example: lo1
 test_prerequisites:
   - dn: sys/fm/dhcp
     class_name: fmDhcp
@@ -261,3 +317,8 @@ test_prerequisites:
     attributes:
       - name: layer
         value: Layer3
+  - dn: sys/intf/lb-[lo1]
+    class_name: l3LbRtdIf
+    attributes:
+      - name: id
+        value: lo1

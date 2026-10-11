@@ -65,12 +65,17 @@ func TestAccNxosDHCP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "v4_relay", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "v6_relay", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "v6_smart_relay_global", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "source_interface", "lo1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "ipv6_source_interface_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "ipv6_source_interface", "lo1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.information_trusted", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.smart_relay", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.subnet_broadcast", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.options", "relay-info"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.v6_smart_relay", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.addresses.VRF1;1.1.1.1.counter", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.source_interface", "lo1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_source_interface", "lo1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -130,6 +135,14 @@ resource "nxos_dme" "PreReq1" {
   }
 }
 
+resource "nxos_dme" "PreReq2" {
+  dn = "sys/intf/lb-[lo1]"
+  class_name = "l3LbRtdIf"
+  content = {
+      id = "lo1"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -137,7 +150,7 @@ resource "nxos_dme" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosDHCPConfig_minimum() string {
 	config := `resource "nxos_dhcp" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -177,6 +190,9 @@ func testAccNxosDHCPConfig_all() string {
 	config += `	v4_relay = true` + "\n"
 	config += `	v6_relay = true` + "\n"
 	config += `	v6_smart_relay_global = true` + "\n"
+	config += `	source_interface = "lo1"` + "\n"
+	config += `	ipv6_source_interface_admin_state = "enabled"` + "\n"
+	config += `	ipv6_source_interface = "lo1"` + "\n"
 	config += `	relay_interfaces = {` + "\n"
 	config += `		"eth1/10" = {` + "\n"
 	config += `			information_trusted = true` + "\n"
@@ -189,9 +205,11 @@ func testAccNxosDHCPConfig_all() string {
 	config += `					counter = 1` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
+	config += `			source_interface = "lo1"` + "\n"
+	config += `			ipv6_source_interface = "lo1"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

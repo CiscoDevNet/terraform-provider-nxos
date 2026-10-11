@@ -71,17 +71,22 @@ type DHCP struct {
 	V4Relay                                types.Bool                     `tfsdk:"v4_relay"`
 	V6Relay                                types.Bool                     `tfsdk:"v6_relay"`
 	V6SmartRelayGlobal                     types.Bool                     `tfsdk:"v6_smart_relay_global"`
+	SourceInterface                        types.String                   `tfsdk:"source_interface"`
+	Ipv6SourceInterfaceAdminState          types.String                   `tfsdk:"ipv6_source_interface_admin_state"`
+	Ipv6SourceInterface                    types.String                   `tfsdk:"ipv6_source_interface"`
 	RelayInterfaces                        map[string]DHCPRelayInterfaces `tfsdk:"relay_interfaces"`
 }
 
 type DHCPRelayInterfaces struct {
-	InformationTrusted types.Bool                              `tfsdk:"information_trusted"`
-	SmartRelay         types.Bool                              `tfsdk:"smart_relay"`
-	SubnetBroadcast    types.Bool                              `tfsdk:"subnet_broadcast"`
-	Options            types.String                            `tfsdk:"options"`
-	SubnetSelection    types.String                            `tfsdk:"subnet_selection"`
-	V6SmartRelay       types.Bool                              `tfsdk:"v6_smart_relay"`
-	Addresses          map[string]DHCPRelayInterfacesAddresses `tfsdk:"addresses"`
+	InformationTrusted  types.Bool                              `tfsdk:"information_trusted"`
+	SmartRelay          types.Bool                              `tfsdk:"smart_relay"`
+	SubnetBroadcast     types.Bool                              `tfsdk:"subnet_broadcast"`
+	Options             types.String                            `tfsdk:"options"`
+	SubnetSelection     types.String                            `tfsdk:"subnet_selection"`
+	V6SmartRelay        types.Bool                              `tfsdk:"v6_smart_relay"`
+	Addresses           map[string]DHCPRelayInterfacesAddresses `tfsdk:"addresses"`
+	SourceInterface     types.String                            `tfsdk:"source_interface"`
+	Ipv6SourceInterface types.String                            `tfsdk:"ipv6_source_interface"`
 }
 
 type DHCPRelayInterfacesAddresses struct {
@@ -244,6 +249,23 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 		_ = nestedChildrenPath
 		prevBody := body
 		body = childBody
+		attrs = "{}"
+		if !data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull() && !config.SourceInterface.IsNull() {
+			attrs, _ = sjson.Set(attrs, "sourceInterface", data.SourceInterface.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpSourceIf.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.Ipv6SourceInterfaceAdminState.IsUnknown() && !data.Ipv6SourceInterfaceAdminState.IsNull() && !config.Ipv6SourceInterfaceAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.Ipv6SourceInterfaceAdminState.ValueString())
+		}
+		if !data.Ipv6SourceInterface.IsUnknown() && !data.Ipv6SourceInterface.IsNull() && !config.Ipv6SourceInterface.IsNull() {
+			attrs, _ = sjson.Set(attrs, "v6sourceInterface", data.Ipv6SourceInterface.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpV6SourceIf.attributes", attrs)
+		}
 		for key, child := range data.RelayInterfaces {
 			configChild, configChildOk := config.RelayInterfaces[key]
 			_ = configChild
@@ -285,6 +307,20 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 						attrs, _ = sjson.Set(attrs, "counter", strconv.FormatInt(child.Counter.ValueInt64(), 10))
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpRelayAddr.attributes", attrs)
+				}
+				attrs = "{}"
+				if !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
+					attrs, _ = sjson.Set(attrs, "sourceInterface", child.SourceInterface.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpSrcIf.attributes", attrs)
+				}
+				attrs = "{}"
+				if !child.Ipv6SourceInterface.IsUnknown() && !child.Ipv6SourceInterface.IsNull() && !configChild.Ipv6SourceInterface.IsNull() {
+					attrs, _ = sjson.Set(attrs, "v6sourceInterface", child.Ipv6SourceInterface.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpV6SrcIf.attributes", attrs)
 				}
 			}
 		}
@@ -345,6 +381,35 @@ func (data *DHCP) fromBody(res gjson.Result) {
 		data.V4Relay = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.v4RelayEnabled").String()))
 		data.V6Relay = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.v6RelayEnabled").String()))
 		data.V6SmartRelayGlobal = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.v6SmartRelayGlobalEnabled").String()))
+		{
+			var rdhcpSourceIf gjson.Result
+			rdhcpInst.Get("dhcpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("dhcpSourceIf.attributes.rn").String()
+					if rnValue == "srcif" {
+						rdhcpSourceIf = v
+						return false
+					}
+					return true
+				},
+			)
+			data.SourceInterface = types.StringValue(rdhcpSourceIf.Get("dhcpSourceIf.attributes.sourceInterface").String())
+		}
+		{
+			var rdhcpV6SourceIf gjson.Result
+			rdhcpInst.Get("dhcpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("dhcpV6SourceIf.attributes.rn").String()
+					if rnValue == "v6srcif" {
+						rdhcpV6SourceIf = v
+						return false
+					}
+					return true
+				},
+			)
+			data.Ipv6SourceInterfaceAdminState = types.StringValue(rdhcpV6SourceIf.Get("dhcpV6SourceIf.attributes.adminSt").String())
+			data.Ipv6SourceInterface = types.StringValue(rdhcpV6SourceIf.Get("dhcpV6SourceIf.attributes.v6sourceInterface").String())
+		}
 		rdhcpInst.Get("dhcpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -377,6 +442,34 @@ func (data *DHCP) fromBody(res gjson.Result) {
 									return true
 								},
 							)
+							{
+								var rdhcpSrcIf gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("dhcpSrcIf.attributes.rn").String()
+										if rnValue == "srcif" {
+											rdhcpSrcIf = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.SourceInterface = types.StringValue(rdhcpSrcIf.Get("dhcpSrcIf.attributes.sourceInterface").String())
+							}
+							{
+								var rdhcpV6SrcIf gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("dhcpV6SrcIf.attributes.rn").String()
+										if rnValue == "v6srcif" {
+											rdhcpV6SrcIf = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.Ipv6SourceInterface = types.StringValue(rdhcpV6SrcIf.Get("dhcpV6SrcIf.attributes.v6sourceInterface").String())
+							}
 							if data.RelayInterfaces == nil {
 								data.RelayInterfaces = make(map[string]DHCPRelayInterfaces)
 							}
@@ -557,6 +650,47 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 	} else {
 		data.V6SmartRelayGlobal = types.BoolNull()
 	}
+	{
+		var rdhcpSourceIf gjson.Result
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("dhcpSourceIf.attributes.rn").String()
+				if rnValue == "srcif" {
+					rdhcpSourceIf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.SourceInterface.IsNull() {
+			data.SourceInterface = types.StringValue(rdhcpSourceIf.Get("dhcpSourceIf.attributes.sourceInterface").String())
+		} else {
+			data.SourceInterface = types.StringNull()
+		}
+	}
+	{
+		var rdhcpV6SourceIf gjson.Result
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("dhcpV6SourceIf.attributes.rn").String()
+				if rnValue == "v6srcif" {
+					rdhcpV6SourceIf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Ipv6SourceInterfaceAdminState.IsNull() {
+			data.Ipv6SourceInterfaceAdminState = types.StringValue(rdhcpV6SourceIf.Get("dhcpV6SourceIf.attributes.adminSt").String())
+		} else {
+			data.Ipv6SourceInterfaceAdminState = types.StringNull()
+		}
+		if !data.Ipv6SourceInterface.IsNull() {
+			data.Ipv6SourceInterface = types.StringValue(rdhcpV6SourceIf.Get("dhcpV6SourceIf.attributes.v6sourceInterface").String())
+		} else {
+			data.Ipv6SourceInterface = types.StringNull()
+		}
+	}
 	for key, item := range data.RelayInterfaces {
 		var rdhcpRelayIf gjson.Result
 		rdhcpInst.Get("dhcpInst.children").ForEach(
@@ -626,6 +760,42 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 				ncItem.Counter = types.Int64Null()
 			}
 			item.Addresses[nc] = ncItem
+		}
+		{
+			var rdhcpSrcIf gjson.Result
+			rdhcpRelayIf.Get("dhcpRelayIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("dhcpSrcIf.attributes.rn").String()
+					if rnValue == "srcif" {
+						rdhcpSrcIf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.SourceInterface.IsNull() {
+				item.SourceInterface = types.StringValue(rdhcpSrcIf.Get("dhcpSrcIf.attributes.sourceInterface").String())
+			} else {
+				item.SourceInterface = types.StringNull()
+			}
+		}
+		{
+			var rdhcpV6SrcIf gjson.Result
+			rdhcpRelayIf.Get("dhcpRelayIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("dhcpV6SrcIf.attributes.rn").String()
+					if rnValue == "v6srcif" {
+						rdhcpV6SrcIf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.Ipv6SourceInterface.IsNull() {
+				item.Ipv6SourceInterface = types.StringValue(rdhcpV6SrcIf.Get("dhcpV6SrcIf.attributes.v6sourceInterface").String())
+			} else {
+				item.Ipv6SourceInterface = types.StringNull()
+			}
 		}
 		data.RelayInterfaces[key] = item
 	}
@@ -734,6 +904,8 @@ func (data DHCP) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "v6SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		hasNestedChildren = true
+		hasNestedChildren = true
 		if len(data.RelayInterfaces) > 0 {
 			hasNestedChildren = true
 		}
@@ -746,6 +918,18 @@ func (data DHCP) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpSourceIf.attributes.rn", "srcif")
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpSourceIf.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpV6SourceIf.attributes.rn", "v6srcif")
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpV6SourceIf.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 			for key, child := range data.RelayInterfaces {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayIf.attributes.rn", child.getRn(key))
@@ -923,6 +1107,18 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v6SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
+		if !state.SourceInterface.IsNull() && config.SourceInterface.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpSourceIf")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.Ipv6SourceInterfaceAdminState.IsNull() && config.Ipv6SourceInterfaceAdminState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpV6SourceIf")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.Ipv6SourceInterface.IsNull() && config.Ipv6SourceInterface.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpV6SourceIf")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v6sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+		}
 		for key := range state.RelayInterfaces {
 			if configChild, ok := config.RelayInterfaces[key]; ok {
 				stateChild := state.RelayInterfaces[key]
@@ -976,6 +1172,14 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 									}
 								}
 							}
+						}
+						if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "dhcpSrcIf")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Ipv6SourceInterface.IsNull() && configChild.Ipv6SourceInterface.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "dhcpV6SrcIf")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v6sourceInterface", "DME_UNSET_PROPERTY_MARKER")
 						}
 					}
 				}

@@ -29,6 +29,9 @@ resource "nxos_dhcp" "example" {
   v4_relay                                    = true
   v6_relay                                    = true
   v6_smart_relay_global                       = true
+  source_interface                            = "lo1"
+  ipv6_source_interface_admin_state           = "enabled"
+  ipv6_source_interface                       = "lo1"
   relay_interfaces = {
     "eth1/10" = {
       information_trusted = true
@@ -41,6 +44,8 @@ resource "nxos_dhcp" "example" {
           counter = 1
         }
       }
+      source_interface      = "lo1"
+      ipv6_source_interface = "lo1"
     }
   }
 }

@@ -63,7 +63,7 @@ func (r *DHCPResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.").AddApiDocumentation("dhcpEntity", "DHCP/dhcp:Entity/", []string{"dhcpInst", "dhcpRelayIf", "dhcpRelayAddr"}, []string{"DHCP/dhcp:Inst/", "DHCP/dhcp:RelayIf/", "DHCP/dhcp:RelayAddr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.").AddApiDocumentation("dhcpEntity", "DHCP/dhcp:Entity/", []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpSrcIf", "dhcpV6SrcIf"}, []string{"DHCP/dhcp:Inst/", "DHCP/dhcp:SourceIf/", "DHCP/dhcp:V6SourceIf/", "DHCP/dhcp:RelayIf/", "DHCP/dhcp:RelayAddr/", "DHCP/dhcp:SrcIf/", "DHCP/dhcp:V6SrcIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -206,6 +206,21 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: helpers.NewAttributeDescription("V6 Smart Relay Global Enabled.").String,
 				Optional:            true,
 			},
+			"source_interface": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global Source Interface.").String,
+				Optional:            true,
+			},
+			"ipv6_source_interface_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"ipv6_source_interface": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global Source Interface.").String,
+				Optional:            true,
+			},
 			"relay_interfaces": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("List of DHCP relay interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Optional:            true,
@@ -252,6 +267,14 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 									},
 								},
 							},
+						},
+						"source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source Interface.").String,
+							Optional:            true,
+						},
+						"ipv6_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source Interface.").String,
+							Optional:            true,
 						},
 					},
 				},
@@ -407,7 +430,7 @@ func (r *DHCPResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"dhcpInst", "dhcpRelayIf", "dhcpRelayAddr"}, DHCPSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpSrcIf", "dhcpV6SrcIf"}, DHCPSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

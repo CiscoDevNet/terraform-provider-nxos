@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.
   API Documentation
-  dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Entity/dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Inst/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayAddr/
+  dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Entity/dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Inst/dhcpSourceIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SourceIf/dhcpV6SourceIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SourceIf/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayAddr/dhcpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SrcIf/dhcpV6SrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SrcIf/
 ---
 
 # nxos_dhcp (Data Source)
@@ -16,8 +16,12 @@ This data source can read the DHCP relay configuration on NX-OS devices, includi
 
 - [dhcpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Entity/)
 - [dhcpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Inst/)
+- [dhcpSourceIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SourceIf/)
+- [dhcpV6SourceIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SourceIf/)
 - [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayIf/)
 - [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayAddr/)
+- [dhcpSrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SrcIf/)
+- [dhcpV6SrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SrcIf/)
 
 ## Example Usage
 
@@ -44,6 +48,8 @@ data "nxos_dhcp" "example" {
 - `ipv6_relay_information_option_vpn` (Boolean) IPv6 Relay Information Option Vpn Enabled.
 - `ipv6_relay_option79` (Boolean) IPv6 Relay Option79 Enabled.
 - `ipv6_relay_option_type_cisco` (Boolean) IPv6 Relay Sub-Option Type Cisco Enabled.
+- `ipv6_source_interface` (String) Global Source Interface.
+- `ipv6_source_interface_admin_state` (String) The administrative state of the object or policy.
 - `packet_strict_validation` (Boolean) Pkt Strict Validation.
 - `relay_dai` (Boolean) Dynamic ARP Inspection functionality with DHCP Relay is enabled.
 - `relay_information_option` (Boolean) Relay Information Option Enabled.
@@ -65,6 +71,7 @@ data "nxos_dhcp" "example" {
 - `snooping_information_option` (Boolean) Snooping Information Option Enabled.
 - `snooping_sub_option_format_non_tlv` (Boolean) Snooping Option82 Sub-Option Format Non-TLV Enabled.
 - `snooping_verify_mac_address` (Boolean) Snooping Verify Mac Address Enabled.
+- `source_interface` (String) Global Source Interface.
 - `v4_relay` (Boolean) DHCPv4 Enabled.
 - `v6_relay` (Boolean) DHCPv6 Enabled.
 - `v6_smart_relay_global` (Boolean) V6 Smart Relay Global Enabled.
@@ -79,8 +86,10 @@ Read-Only:
   - Key component `vrf`: vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.
   - Key component `address`: IPv4 or IPv6 address. (see [below for nested schema](#nestedatt--relay_interfaces--addresses))
 - `information_trusted` (Boolean) Information Trusted Enabled.
+- `ipv6_source_interface` (String) Source Interface.
 - `options` (String) DHCP options.
 - `smart_relay` (Boolean) Smart Relay Enabled.
+- `source_interface` (String) Source Interface.
 - `subnet_broadcast` (Boolean) Subnet Broadcast Enabled.
 - `subnet_selection` (String) DHCP relay source subnet.
 - `v6_smart_relay` (Boolean) V6 Smart Relay Enabled.

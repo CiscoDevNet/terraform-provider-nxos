@@ -25,6 +25,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -53,33 +54,69 @@ type OSPFv3Instances struct {
 }
 
 type OSPFv3InstancesVrfs struct {
-	AdminState              types.String                                  `tfsdk:"admin_state"`
-	BandwidthReference      types.Int64                                   `tfsdk:"bandwidth_reference"`
-	BandwidthReferenceUnit  types.String                                  `tfsdk:"bandwidth_reference_unit"`
-	RouterId                types.String                                  `tfsdk:"router_id"`
-	BfdControl              types.Bool                                    `tfsdk:"bfd_control"`
-	LogAdjacencyChanges     types.String                                  `tfsdk:"log_adjacency_changes"`
-	DiscardRouteExternal    types.Bool                                    `tfsdk:"discard_route_external"`
-	DiscardRouteInternal    types.Bool                                    `tfsdk:"discard_route_internal"`
-	NameLookup              types.Bool                                    `tfsdk:"name_lookup"`
-	PassiveInterfaceDefault types.Bool                                    `tfsdk:"passive_interface_default"`
-	Areas                   map[string]OSPFv3InstancesVrfsAreas           `tfsdk:"areas"`
-	AddressFamilies         map[string]OSPFv3InstancesVrfsAddressFamilies `tfsdk:"address_families"`
+	AdminState               types.String                                  `tfsdk:"admin_state"`
+	BandwidthReference       types.Int64                                   `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit   types.String                                  `tfsdk:"bandwidth_reference_unit"`
+	RouterId                 types.String                                  `tfsdk:"router_id"`
+	BfdControl               types.Bool                                    `tfsdk:"bfd_control"`
+	LogAdjacencyChanges      types.String                                  `tfsdk:"log_adjacency_changes"`
+	DiscardRouteExternal     types.Bool                                    `tfsdk:"discard_route_external"`
+	DiscardRouteInternal     types.Bool                                    `tfsdk:"discard_route_internal"`
+	NameLookup               types.Bool                                    `tfsdk:"name_lookup"`
+	PassiveInterfaceDefault  types.Bool                                    `tfsdk:"passive_interface_default"`
+	Areas                    map[string]OSPFv3InstancesVrfsAreas           `tfsdk:"areas"`
+	AddressFamilies          map[string]OSPFv3InstancesVrfsAddressFamilies `tfsdk:"address_families"`
+	LsaArrivalInterval       types.Int64                                   `tfsdk:"lsa_arrival_interval"`
+	LsaGroupPacingInterval   types.Int64                                   `tfsdk:"lsa_group_pacing_interval"`
+	LsaThrottleHoldInterval  types.Int64                                   `tfsdk:"lsa_throttle_hold_interval"`
+	LsaThrottleMaxInterval   types.Int64                                   `tfsdk:"lsa_throttle_max_interval"`
+	LsaThrottleStartInterval types.Int64                                   `tfsdk:"lsa_throttle_start_interval"`
+	GracefulRestartControl   types.String                                  `tfsdk:"graceful_restart_control"`
+	GracefulRestartPeriod    types.Int64                                   `tfsdk:"graceful_restart_period"`
+	GracefulRestartHelper    types.Bool                                    `tfsdk:"graceful_restart_helper"`
 }
 
 type OSPFv3InstancesVrfsAreas struct {
-	Redistribute           types.Bool   `tfsdk:"redistribute"`
-	NssaTranslatorRole     types.String `tfsdk:"nssa_translator_role"`
-	Summary                types.Bool   `tfsdk:"summary"`
-	SuppressForwardAddress types.Bool   `tfsdk:"suppress_forward_address"`
-	Type                   types.String `tfsdk:"type"`
+	Redistribute           types.Bool                                         `tfsdk:"redistribute"`
+	NssaTranslatorRole     types.String                                       `tfsdk:"nssa_translator_role"`
+	Summary                types.Bool                                         `tfsdk:"summary"`
+	SuppressForwardAddress types.Bool                                         `tfsdk:"suppress_forward_address"`
+	Type                   types.String                                       `tfsdk:"type"`
+	AddressFamilies        map[string]OSPFv3InstancesVrfsAreasAddressFamilies `tfsdk:"address_families"`
+}
+
+type OSPFv3InstancesVrfsAreasAddressFamilies struct {
+	Cost   types.String                                             `tfsdk:"cost"`
+	Ranges map[string]OSPFv3InstancesVrfsAreasAddressFamiliesRanges `tfsdk:"ranges"`
+}
+
+type OSPFv3InstancesVrfsAreasAddressFamiliesRanges struct {
+	Cost    types.String `tfsdk:"cost"`
+	Control types.String `tfsdk:"control"`
 }
 
 type OSPFv3InstancesVrfsAddressFamilies struct {
-	AdministrativeDistance    types.String `tfsdk:"administrative_distance"`
-	DefaultMetric             types.String `tfsdk:"default_metric"`
-	DefaultRouteNssaPbitClear types.Bool   `tfsdk:"default_route_nssa_pbit_clear"`
-	MaxEcmpCost               types.Int64  `tfsdk:"max_ecmp_cost"`
+	AdministrativeDistance              types.String                                                  `tfsdk:"administrative_distance"`
+	DefaultMetric                       types.String                                                  `tfsdk:"default_metric"`
+	DefaultRouteNssaPbitClear           types.Bool                                                    `tfsdk:"default_route_nssa_pbit_clear"`
+	MaxEcmpCost                         types.Int64                                                   `tfsdk:"max_ecmp_cost"`
+	Redistributions                     map[string]OSPFv3InstancesVrfsAddressFamiliesRedistributions  `tfsdk:"redistributions"`
+	DefaultInformationOriginateAlways   types.Bool                                                    `tfsdk:"default_information_originate_always"`
+	DefaultInformationOriginateRouteMap types.String                                                  `tfsdk:"default_information_originate_route_map"`
+	SpfThrottleHoldInterval             types.Int64                                                   `tfsdk:"spf_throttle_hold_interval"`
+	SpfThrottleInitialInterval          types.Int64                                                   `tfsdk:"spf_throttle_initial_interval"`
+	SpfThrottleMaxInterval              types.Int64                                                   `tfsdk:"spf_throttle_max_interval"`
+	SummaryAddresses                    map[string]OSPFv3InstancesVrfsAddressFamiliesSummaryAddresses `tfsdk:"summary_addresses"`
+}
+
+type OSPFv3InstancesVrfsAddressFamiliesRedistributions struct {
+	RouteMap       types.String `tfsdk:"route_map"`
+	Srv6PrefixType types.String `tfsdk:"srv6_prefix_type"`
+}
+
+type OSPFv3InstancesVrfsAddressFamiliesSummaryAddresses struct {
+	Control types.String `tfsdk:"control"`
+	Tag     types.Int64  `tfsdk:"tag"`
 }
 
 type OSPFv3Interfaces struct {
@@ -146,8 +183,25 @@ func (data OSPFv3InstancesVrfsAreas) getRn(key string) string {
 	return fmt.Sprintf("area-%s", key)
 }
 
+func (data OSPFv3InstancesVrfsAreasAddressFamilies) getRn(key string) string {
+	return fmt.Sprintf("areaaf-%s", key)
+}
+
+func (data OSPFv3InstancesVrfsAreasAddressFamiliesRanges) getRn(key string) string {
+	return fmt.Sprintf("iartsum-[%s]", key)
+}
+
 func (data OSPFv3InstancesVrfsAddressFamilies) getRn(key string) string {
 	return fmt.Sprintf("af-%s", key)
+}
+
+func (data OSPFv3InstancesVrfsAddressFamiliesRedistributions) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 3)
+	return fmt.Sprintf("interleak-%s-[%s]-%s", keyParts[0], keyParts[1], keyParts[2])
+}
+
+func (data OSPFv3InstancesVrfsAddressFamiliesSummaryAddresses) getRn(key string) string {
+	return fmt.Sprintf("extrtsum-[%s]", key)
 }
 
 func (data OSPFv3Interfaces) getRn(key string) string {
@@ -253,6 +307,41 @@ func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 							attrs, _ = sjson.Set(attrs, "type", child.Type.ValueString())
 						}
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfv3Area.attributes", attrs)
+						{
+							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfv3Area.children"
+							_ = nestedChildrenPath
+							for key, child := range child.AddressFamilies {
+								configChild, configChildOk := configChild.AddressFamilies[key]
+								_ = configChild
+								_ = configChildOk
+								attrs = "{}"
+								attrs, _ = sjson.Set(attrs, "type", key)
+								if configChildOk && !child.Cost.IsUnknown() && !child.Cost.IsNull() && !configChild.Cost.IsNull() {
+									attrs, _ = sjson.Set(attrs, "cost", child.Cost.ValueString())
+								}
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfv3AreaAf.attributes", attrs)
+								{
+									nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+									nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfv3AreaAf.children"
+									_ = nestedChildrenPath
+									for key, child := range child.Ranges {
+										configChild, configChildOk := configChild.Ranges[key]
+										_ = configChild
+										_ = configChildOk
+										attrs = "{}"
+										attrs, _ = sjson.Set(attrs, "addr", key)
+										if configChildOk && !child.Cost.IsUnknown() && !child.Cost.IsNull() && !configChild.Cost.IsNull() {
+											attrs, _ = sjson.Set(attrs, "cost", child.Cost.ValueString())
+										}
+										if configChildOk && !child.Control.IsUnknown() && !child.Control.IsNull() && !configChild.Control.IsNull() {
+											attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+										}
+										body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfv3InterAreaRtSum.attributes", attrs)
+									}
+								}
+							}
+						}
 					}
 					for key, child := range child.AddressFamilies {
 						configChild, configChildOk := configChild.AddressFamilies[key]
@@ -273,6 +362,97 @@ func (data OSPFv3) toBody(config OSPFv3) nxos.Body {
 							attrs, _ = sjson.Set(attrs, "maxEcmp", strconv.FormatInt(child.MaxEcmpCost.ValueInt64(), 10))
 						}
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfv3DomAf.attributes", attrs)
+						{
+							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfv3DomAf.children"
+							_ = nestedChildrenPath
+							for key, child := range child.Redistributions {
+								configChild, configChildOk := configChild.Redistributions[key]
+								_ = configChild
+								_ = configChildOk
+								attrs = "{}"
+								keyParts := strings.SplitN(key, ";", 3)
+								attrs, _ = sjson.Set(attrs, "proto", keyParts[0])
+								attrs, _ = sjson.Set(attrs, "inst", keyParts[1])
+								attrs, _ = sjson.Set(attrs, "asn", keyParts[2])
+								if configChildOk && !child.RouteMap.IsUnknown() && !child.RouteMap.IsNull() && !configChild.RouteMap.IsNull() {
+									attrs, _ = sjson.Set(attrs, "rtMap", child.RouteMap.ValueString())
+								}
+								if configChildOk && !child.Srv6PrefixType.IsUnknown() && !child.Srv6PrefixType.IsNull() && !configChild.Srv6PrefixType.IsNull() {
+									attrs, _ = sjson.Set(attrs, "srv6PrefixType", child.Srv6PrefixType.ValueString())
+								}
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfv3InterLeakP.attributes", attrs)
+							}
+							attrs = "{}"
+							if !child.DefaultInformationOriginateAlways.IsUnknown() && !child.DefaultInformationOriginateAlways.IsNull() && !configChild.DefaultInformationOriginateAlways.IsNull() {
+								attrs, _ = sjson.Set(attrs, "always", strconv.FormatBool(child.DefaultInformationOriginateAlways.ValueBool()))
+							}
+							if !child.DefaultInformationOriginateRouteMap.IsUnknown() && !child.DefaultInformationOriginateRouteMap.IsNull() && !configChild.DefaultInformationOriginateRouteMap.IsNull() {
+								attrs, _ = sjson.Set(attrs, "rtMap", child.DefaultInformationOriginateRouteMap.ValueString())
+							}
+							if attrs != "{}" {
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfv3DefRtLeakP.attributes", attrs)
+							}
+							attrs = "{}"
+							if !child.SpfThrottleHoldInterval.IsUnknown() && !child.SpfThrottleHoldInterval.IsNull() && !configChild.SpfThrottleHoldInterval.IsNull() {
+								attrs, _ = sjson.Set(attrs, "holdIntvl", strconv.FormatInt(child.SpfThrottleHoldInterval.ValueInt64(), 10))
+							}
+							if !child.SpfThrottleInitialInterval.IsUnknown() && !child.SpfThrottleInitialInterval.IsNull() && !configChild.SpfThrottleInitialInterval.IsNull() {
+								attrs, _ = sjson.Set(attrs, "initIntvl", strconv.FormatInt(child.SpfThrottleInitialInterval.ValueInt64(), 10))
+							}
+							if !child.SpfThrottleMaxInterval.IsUnknown() && !child.SpfThrottleMaxInterval.IsNull() && !configChild.SpfThrottleMaxInterval.IsNull() {
+								attrs, _ = sjson.Set(attrs, "maxIntvl", strconv.FormatInt(child.SpfThrottleMaxInterval.ValueInt64(), 10))
+							}
+							if attrs != "{}" {
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfv3SpfComp.attributes", attrs)
+							}
+							for key, child := range child.SummaryAddresses {
+								configChild, configChildOk := configChild.SummaryAddresses[key]
+								_ = configChild
+								_ = configChildOk
+								attrs = "{}"
+								attrs, _ = sjson.Set(attrs, "addr", key)
+								if configChildOk && !child.Control.IsUnknown() && !child.Control.IsNull() && !configChild.Control.IsNull() {
+									attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+								}
+								if configChildOk && !child.Tag.IsUnknown() && !child.Tag.IsNull() && !configChild.Tag.IsNull() {
+									attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.Tag.ValueInt64(), 10))
+								}
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfv3ExtRtSum.attributes", attrs)
+							}
+						}
+					}
+					attrs = "{}"
+					if !child.LsaArrivalInterval.IsUnknown() && !child.LsaArrivalInterval.IsNull() && !configChild.LsaArrivalInterval.IsNull() {
+						attrs, _ = sjson.Set(attrs, "arrivalIntvl", strconv.FormatInt(child.LsaArrivalInterval.ValueInt64(), 10))
+					}
+					if !child.LsaGroupPacingInterval.IsUnknown() && !child.LsaGroupPacingInterval.IsNull() && !configChild.LsaGroupPacingInterval.IsNull() {
+						attrs, _ = sjson.Set(attrs, "gpPacingIntvl", strconv.FormatInt(child.LsaGroupPacingInterval.ValueInt64(), 10))
+					}
+					if !child.LsaThrottleHoldInterval.IsUnknown() && !child.LsaThrottleHoldInterval.IsNull() && !configChild.LsaThrottleHoldInterval.IsNull() {
+						attrs, _ = sjson.Set(attrs, "holdIntvl", strconv.FormatInt(child.LsaThrottleHoldInterval.ValueInt64(), 10))
+					}
+					if !child.LsaThrottleMaxInterval.IsUnknown() && !child.LsaThrottleMaxInterval.IsNull() && !configChild.LsaThrottleMaxInterval.IsNull() {
+						attrs, _ = sjson.Set(attrs, "maxIntvl", strconv.FormatInt(child.LsaThrottleMaxInterval.ValueInt64(), 10))
+					}
+					if !child.LsaThrottleStartInterval.IsUnknown() && !child.LsaThrottleStartInterval.IsNull() && !configChild.LsaThrottleStartInterval.IsNull() {
+						attrs, _ = sjson.Set(attrs, "startIntvl", strconv.FormatInt(child.LsaThrottleStartInterval.ValueInt64(), 10))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfv3LsaCtrl.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.GracefulRestartControl.IsUnknown() && !child.GracefulRestartControl.IsNull() && !configChild.GracefulRestartControl.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ctrl", child.GracefulRestartControl.ValueString())
+					}
+					if !child.GracefulRestartPeriod.IsUnknown() && !child.GracefulRestartPeriod.IsNull() && !configChild.GracefulRestartPeriod.IsNull() {
+						attrs, _ = sjson.Set(attrs, "gracePeriod", strconv.FormatInt(child.GracefulRestartPeriod.ValueInt64(), 10))
+					}
+					if !child.GracefulRestartHelper.IsUnknown() && !child.GracefulRestartHelper.IsNull() && !configChild.GracefulRestartHelper.IsNull() {
+						attrs, _ = sjson.Set(attrs, "helper", strconv.FormatBool(child.GracefulRestartHelper.ValueBool()))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfv3Gr.attributes", attrs)
 					}
 				}
 			}
@@ -380,6 +560,45 @@ func (data *OSPFv3) fromBody(res gjson.Result) {
 																nestedChildospfv3Area.SuppressForwardAddress = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.supressFa").String()))
 																nestedChildospfv3Area.Type = types.StringValue(nestedValue.Get("attributes.type").String())
 																nestedMapKey := nestedValue.Get("attributes.id").String()
+																nestedValue.Get("children").ForEach(
+																	func(_, nestedV gjson.Result) bool {
+																		nestedV.ForEach(
+																			func(nestedClassname, nestedValue gjson.Result) bool {
+																				if nestedClassname.String() == "ospfv3AreaAf" {
+																					var nestedChildospfv3AreaAf OSPFv3InstancesVrfsAreasAddressFamilies
+																					nestedChildospfv3AreaAf.Cost = types.StringValue(nestedValue.Get("attributes.cost").String())
+																					nestedMapKey := nestedValue.Get("attributes.type").String()
+																					nestedValue.Get("children").ForEach(
+																						func(_, nestedV gjson.Result) bool {
+																							nestedV.ForEach(
+																								func(nestedClassname, nestedValue gjson.Result) bool {
+																									if nestedClassname.String() == "ospfv3InterAreaRtSum" {
+																										var nestedChildospfv3InterAreaRtSum OSPFv3InstancesVrfsAreasAddressFamiliesRanges
+																										nestedChildospfv3InterAreaRtSum.Cost = types.StringValue(nestedValue.Get("attributes.cost").String())
+																										nestedChildospfv3InterAreaRtSum.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+																										nestedMapKey := nestedValue.Get("attributes.addr").String()
+																										if nestedChildospfv3AreaAf.Ranges == nil {
+																											nestedChildospfv3AreaAf.Ranges = make(map[string]OSPFv3InstancesVrfsAreasAddressFamiliesRanges)
+																										}
+																										nestedChildospfv3AreaAf.Ranges[nestedMapKey] = nestedChildospfv3InterAreaRtSum
+																									}
+																									return true
+																								},
+																							)
+																							return true
+																						},
+																					)
+																					if nestedChildospfv3Area.AddressFamilies == nil {
+																						nestedChildospfv3Area.AddressFamilies = make(map[string]OSPFv3InstancesVrfsAreasAddressFamilies)
+																					}
+																					nestedChildospfv3Area.AddressFamilies[nestedMapKey] = nestedChildospfv3AreaAf
+																				}
+																				return true
+																			},
+																		)
+																		return true
+																	},
+																)
 																if nestedChildospfv3Dom.Areas == nil {
 																	nestedChildospfv3Dom.Areas = make(map[string]OSPFv3InstancesVrfsAreas)
 																}
@@ -402,6 +621,77 @@ func (data *OSPFv3) fromBody(res gjson.Result) {
 																nestedChildospfv3DomAf.DefaultRouteNssaPbitClear = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.defRtNssaPbitClear").String()))
 																nestedChildospfv3DomAf.MaxEcmpCost = types.Int64Value(nestedValue.Get("attributes.maxEcmp").Int())
 																nestedMapKey := nestedValue.Get("attributes.type").String()
+																nestedValue.Get("children").ForEach(
+																	func(_, nestedV gjson.Result) bool {
+																		nestedV.ForEach(
+																			func(nestedClassname, nestedValue gjson.Result) bool {
+																				if nestedClassname.String() == "ospfv3InterLeakP" {
+																					var nestedChildospfv3InterLeakP OSPFv3InstancesVrfsAddressFamiliesRedistributions
+																					nestedChildospfv3InterLeakP.RouteMap = types.StringValue(nestedValue.Get("attributes.rtMap").String())
+																					nestedChildospfv3InterLeakP.Srv6PrefixType = types.StringValue(nestedValue.Get("attributes.srv6PrefixType").String())
+																					nestedMapKey := nestedValue.Get("attributes.proto").String() + ";" + nestedValue.Get("attributes.inst").String() + ";" + nestedValue.Get("attributes.asn").String()
+																					if nestedChildospfv3DomAf.Redistributions == nil {
+																						nestedChildospfv3DomAf.Redistributions = make(map[string]OSPFv3InstancesVrfsAddressFamiliesRedistributions)
+																					}
+																					nestedChildospfv3DomAf.Redistributions[nestedMapKey] = nestedChildospfv3InterLeakP
+																				}
+																				return true
+																			},
+																		)
+																		return true
+																	},
+																)
+																{
+																	var rospfv3DefRtLeakP gjson.Result
+																	nestedValue.Get("children").ForEach(
+																		func(_, nestedV gjson.Result) bool {
+																			rnValue := nestedV.Get("ospfv3DefRtLeakP.attributes.rn").String()
+																			if rnValue == "defrtleak" {
+																				rospfv3DefRtLeakP = nestedV
+																				return false
+																			}
+																			return true
+																		},
+																	)
+																	nestedChildospfv3DomAf.DefaultInformationOriginateAlways = types.BoolValue(helpers.ParseNxosBoolean(rospfv3DefRtLeakP.Get("ospfv3DefRtLeakP.attributes.always").String()))
+																	nestedChildospfv3DomAf.DefaultInformationOriginateRouteMap = types.StringValue(rospfv3DefRtLeakP.Get("ospfv3DefRtLeakP.attributes.rtMap").String())
+																}
+																{
+																	var rospfv3SpfComp gjson.Result
+																	nestedValue.Get("children").ForEach(
+																		func(_, nestedV gjson.Result) bool {
+																			rnValue := nestedV.Get("ospfv3SpfComp.attributes.rn").String()
+																			if rnValue == "spfcomp" {
+																				rospfv3SpfComp = nestedV
+																				return false
+																			}
+																			return true
+																		},
+																	)
+																	nestedChildospfv3DomAf.SpfThrottleHoldInterval = types.Int64Value(rospfv3SpfComp.Get("ospfv3SpfComp.attributes.holdIntvl").Int())
+																	nestedChildospfv3DomAf.SpfThrottleInitialInterval = types.Int64Value(rospfv3SpfComp.Get("ospfv3SpfComp.attributes.initIntvl").Int())
+																	nestedChildospfv3DomAf.SpfThrottleMaxInterval = types.Int64Value(rospfv3SpfComp.Get("ospfv3SpfComp.attributes.maxIntvl").Int())
+																}
+																nestedValue.Get("children").ForEach(
+																	func(_, nestedV gjson.Result) bool {
+																		nestedV.ForEach(
+																			func(nestedClassname, nestedValue gjson.Result) bool {
+																				if nestedClassname.String() == "ospfv3ExtRtSum" {
+																					var nestedChildospfv3ExtRtSum OSPFv3InstancesVrfsAddressFamiliesSummaryAddresses
+																					nestedChildospfv3ExtRtSum.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+																					nestedChildospfv3ExtRtSum.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
+																					nestedMapKey := nestedValue.Get("attributes.addr").String()
+																					if nestedChildospfv3DomAf.SummaryAddresses == nil {
+																						nestedChildospfv3DomAf.SummaryAddresses = make(map[string]OSPFv3InstancesVrfsAddressFamiliesSummaryAddresses)
+																					}
+																					nestedChildospfv3DomAf.SummaryAddresses[nestedMapKey] = nestedChildospfv3ExtRtSum
+																				}
+																				return true
+																			},
+																		)
+																		return true
+																	},
+																)
 																if nestedChildospfv3Dom.AddressFamilies == nil {
 																	nestedChildospfv3Dom.AddressFamilies = make(map[string]OSPFv3InstancesVrfsAddressFamilies)
 																}
@@ -413,6 +703,40 @@ func (data *OSPFv3) fromBody(res gjson.Result) {
 													return true
 												},
 											)
+											{
+												var rospfv3LsaCtrl gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("ospfv3LsaCtrl.attributes.rn").String()
+														if rnValue == "lsactrl" {
+															rospfv3LsaCtrl = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildospfv3Dom.LsaArrivalInterval = types.Int64Value(rospfv3LsaCtrl.Get("ospfv3LsaCtrl.attributes.arrivalIntvl").Int())
+												nestedChildospfv3Dom.LsaGroupPacingInterval = types.Int64Value(rospfv3LsaCtrl.Get("ospfv3LsaCtrl.attributes.gpPacingIntvl").Int())
+												nestedChildospfv3Dom.LsaThrottleHoldInterval = types.Int64Value(rospfv3LsaCtrl.Get("ospfv3LsaCtrl.attributes.holdIntvl").Int())
+												nestedChildospfv3Dom.LsaThrottleMaxInterval = types.Int64Value(rospfv3LsaCtrl.Get("ospfv3LsaCtrl.attributes.maxIntvl").Int())
+												nestedChildospfv3Dom.LsaThrottleStartInterval = types.Int64Value(rospfv3LsaCtrl.Get("ospfv3LsaCtrl.attributes.startIntvl").Int())
+											}
+											{
+												var rospfv3Gr gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("ospfv3Gr.attributes.rn").String()
+														if rnValue == "gr" {
+															rospfv3Gr = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildospfv3Dom.GracefulRestartControl = types.StringValue(rospfv3Gr.Get("ospfv3Gr.attributes.ctrl").String())
+												nestedChildospfv3Dom.GracefulRestartPeriod = types.Int64Value(rospfv3Gr.Get("ospfv3Gr.attributes.gracePeriod").Int())
+												nestedChildospfv3Dom.GracefulRestartHelper = types.BoolValue(helpers.ParseNxosBoolean(rospfv3Gr.Get("ospfv3Gr.attributes.helper").String()))
+											}
 											if child.Vrfs == nil {
 												child.Vrfs = make(map[string]OSPFv3InstancesVrfs)
 											}
@@ -617,6 +941,57 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 				} else {
 					nc_Item.Type = types.StringNull()
 				}
+				for nc__ := range nc_Item.AddressFamilies {
+					nc__Item := nc_Item.AddressFamilies[nc__]
+					var rospfv3AreaAf gjson.Result
+					rospfv3Area.Get("ospfv3Area.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("ospfv3AreaAf.attributes.type").String() == nc__ {
+								rospfv3AreaAf = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rospfv3AreaAf.Exists() {
+						delete(nc_Item.AddressFamilies, nc__)
+						continue
+					}
+					if !nc__Item.Cost.IsNull() {
+						nc__Item.Cost = types.StringValue(rospfv3AreaAf.Get("ospfv3AreaAf.attributes.cost").String())
+					} else {
+						nc__Item.Cost = types.StringNull()
+					}
+					for nc___ := range nc__Item.Ranges {
+						nc___Item := nc__Item.Ranges[nc___]
+						var rospfv3InterAreaRtSum gjson.Result
+						rospfv3AreaAf.Get("ospfv3AreaAf.children").ForEach(
+							func(_, v gjson.Result) bool {
+								if v.Get("ospfv3InterAreaRtSum.attributes.addr").String() == nc___ {
+									rospfv3InterAreaRtSum = v
+									return false
+								}
+								return true
+							},
+						)
+						if !rospfv3InterAreaRtSum.Exists() {
+							delete(nc__Item.Ranges, nc___)
+							continue
+						}
+						if !nc___Item.Cost.IsNull() {
+							nc___Item.Cost = types.StringValue(rospfv3InterAreaRtSum.Get("ospfv3InterAreaRtSum.attributes.cost").String())
+						} else {
+							nc___Item.Cost = types.StringNull()
+						}
+						if !nc___Item.Control.IsNull() {
+							nc___Item.Control = types.StringValue(rospfv3InterAreaRtSum.Get("ospfv3InterAreaRtSum.attributes.ctrl").String())
+						} else {
+							nc___Item.Control = types.StringNull()
+						}
+						nc__Item.Ranges[nc___] = nc___Item
+					}
+					nc_Item.AddressFamilies[nc__] = nc__Item
+				}
 				ncItem.Areas[nc_] = nc_Item
 			}
 			for nc_ := range ncItem.AddressFamilies {
@@ -655,7 +1030,183 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 				} else {
 					nc_Item.MaxEcmpCost = types.Int64Null()
 				}
+				for nc__ := range nc_Item.Redistributions {
+					nc__Item := nc_Item.Redistributions[nc__]
+					keyParts := strings.SplitN(nc__, ";", 3)
+					var rospfv3InterLeakP gjson.Result
+					rospfv3DomAf.Get("ospfv3DomAf.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("ospfv3InterLeakP.attributes.proto").String() == keyParts[0] &&
+								v.Get("ospfv3InterLeakP.attributes.inst").String() == keyParts[1] &&
+								v.Get("ospfv3InterLeakP.attributes.asn").String() == keyParts[2] {
+								rospfv3InterLeakP = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rospfv3InterLeakP.Exists() {
+						delete(nc_Item.Redistributions, nc__)
+						continue
+					}
+					if !nc__Item.RouteMap.IsNull() {
+						nc__Item.RouteMap = types.StringValue(rospfv3InterLeakP.Get("ospfv3InterLeakP.attributes.rtMap").String())
+					} else {
+						nc__Item.RouteMap = types.StringNull()
+					}
+					if !nc__Item.Srv6PrefixType.IsNull() {
+						nc__Item.Srv6PrefixType = types.StringValue(rospfv3InterLeakP.Get("ospfv3InterLeakP.attributes.srv6PrefixType").String())
+					} else {
+						nc__Item.Srv6PrefixType = types.StringNull()
+					}
+					nc_Item.Redistributions[nc__] = nc__Item
+				}
+				{
+					var rospfv3DefRtLeakP gjson.Result
+					rospfv3DomAf.Get("ospfv3DomAf.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("ospfv3DefRtLeakP.attributes.rn").String()
+							if rnValue == "defrtleak" {
+								rospfv3DefRtLeakP = v
+								return false
+							}
+							return true
+						},
+					)
+					if !nc_Item.DefaultInformationOriginateAlways.IsNull() {
+						nc_Item.DefaultInformationOriginateAlways = types.BoolValue(helpers.ParseNxosBoolean(rospfv3DefRtLeakP.Get("ospfv3DefRtLeakP.attributes.always").String()))
+					} else {
+						nc_Item.DefaultInformationOriginateAlways = types.BoolNull()
+					}
+					if !nc_Item.DefaultInformationOriginateRouteMap.IsNull() {
+						nc_Item.DefaultInformationOriginateRouteMap = types.StringValue(rospfv3DefRtLeakP.Get("ospfv3DefRtLeakP.attributes.rtMap").String())
+					} else {
+						nc_Item.DefaultInformationOriginateRouteMap = types.StringNull()
+					}
+				}
+				{
+					var rospfv3SpfComp gjson.Result
+					rospfv3DomAf.Get("ospfv3DomAf.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("ospfv3SpfComp.attributes.rn").String()
+							if rnValue == "spfcomp" {
+								rospfv3SpfComp = v
+								return false
+							}
+							return true
+						},
+					)
+					if !nc_Item.SpfThrottleHoldInterval.IsNull() {
+						nc_Item.SpfThrottleHoldInterval = types.Int64Value(rospfv3SpfComp.Get("ospfv3SpfComp.attributes.holdIntvl").Int())
+					} else {
+						nc_Item.SpfThrottleHoldInterval = types.Int64Null()
+					}
+					if !nc_Item.SpfThrottleInitialInterval.IsNull() {
+						nc_Item.SpfThrottleInitialInterval = types.Int64Value(rospfv3SpfComp.Get("ospfv3SpfComp.attributes.initIntvl").Int())
+					} else {
+						nc_Item.SpfThrottleInitialInterval = types.Int64Null()
+					}
+					if !nc_Item.SpfThrottleMaxInterval.IsNull() {
+						nc_Item.SpfThrottleMaxInterval = types.Int64Value(rospfv3SpfComp.Get("ospfv3SpfComp.attributes.maxIntvl").Int())
+					} else {
+						nc_Item.SpfThrottleMaxInterval = types.Int64Null()
+					}
+				}
+				for nc__ := range nc_Item.SummaryAddresses {
+					nc__Item := nc_Item.SummaryAddresses[nc__]
+					var rospfv3ExtRtSum gjson.Result
+					rospfv3DomAf.Get("ospfv3DomAf.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("ospfv3ExtRtSum.attributes.addr").String() == nc__ {
+								rospfv3ExtRtSum = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rospfv3ExtRtSum.Exists() {
+						delete(nc_Item.SummaryAddresses, nc__)
+						continue
+					}
+					if !nc__Item.Control.IsNull() {
+						nc__Item.Control = types.StringValue(rospfv3ExtRtSum.Get("ospfv3ExtRtSum.attributes.ctrl").String())
+					} else {
+						nc__Item.Control = types.StringNull()
+					}
+					if !nc__Item.Tag.IsNull() {
+						nc__Item.Tag = types.Int64Value(rospfv3ExtRtSum.Get("ospfv3ExtRtSum.attributes.tag").Int())
+					} else {
+						nc__Item.Tag = types.Int64Null()
+					}
+					nc_Item.SummaryAddresses[nc__] = nc__Item
+				}
 				ncItem.AddressFamilies[nc_] = nc_Item
+			}
+			{
+				var rospfv3LsaCtrl gjson.Result
+				rospfv3Dom.Get("ospfv3Dom.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ospfv3LsaCtrl.attributes.rn").String()
+						if rnValue == "lsactrl" {
+							rospfv3LsaCtrl = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.LsaArrivalInterval.IsNull() {
+					ncItem.LsaArrivalInterval = types.Int64Value(rospfv3LsaCtrl.Get("ospfv3LsaCtrl.attributes.arrivalIntvl").Int())
+				} else {
+					ncItem.LsaArrivalInterval = types.Int64Null()
+				}
+				if !ncItem.LsaGroupPacingInterval.IsNull() {
+					ncItem.LsaGroupPacingInterval = types.Int64Value(rospfv3LsaCtrl.Get("ospfv3LsaCtrl.attributes.gpPacingIntvl").Int())
+				} else {
+					ncItem.LsaGroupPacingInterval = types.Int64Null()
+				}
+				if !ncItem.LsaThrottleHoldInterval.IsNull() {
+					ncItem.LsaThrottleHoldInterval = types.Int64Value(rospfv3LsaCtrl.Get("ospfv3LsaCtrl.attributes.holdIntvl").Int())
+				} else {
+					ncItem.LsaThrottleHoldInterval = types.Int64Null()
+				}
+				if !ncItem.LsaThrottleMaxInterval.IsNull() {
+					ncItem.LsaThrottleMaxInterval = types.Int64Value(rospfv3LsaCtrl.Get("ospfv3LsaCtrl.attributes.maxIntvl").Int())
+				} else {
+					ncItem.LsaThrottleMaxInterval = types.Int64Null()
+				}
+				if !ncItem.LsaThrottleStartInterval.IsNull() {
+					ncItem.LsaThrottleStartInterval = types.Int64Value(rospfv3LsaCtrl.Get("ospfv3LsaCtrl.attributes.startIntvl").Int())
+				} else {
+					ncItem.LsaThrottleStartInterval = types.Int64Null()
+				}
+			}
+			{
+				var rospfv3Gr gjson.Result
+				rospfv3Dom.Get("ospfv3Dom.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ospfv3Gr.attributes.rn").String()
+						if rnValue == "gr" {
+							rospfv3Gr = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.GracefulRestartControl.IsNull() {
+					ncItem.GracefulRestartControl = types.StringValue(rospfv3Gr.Get("ospfv3Gr.attributes.ctrl").String())
+				} else {
+					ncItem.GracefulRestartControl = types.StringNull()
+				}
+				if !ncItem.GracefulRestartPeriod.IsNull() {
+					ncItem.GracefulRestartPeriod = types.Int64Value(rospfv3Gr.Get("ospfv3Gr.attributes.gracePeriod").Int())
+				} else {
+					ncItem.GracefulRestartPeriod = types.Int64Null()
+				}
+				if !ncItem.GracefulRestartHelper.IsNull() {
+					ncItem.GracefulRestartHelper = types.BoolValue(helpers.ParseNxosBoolean(rospfv3Gr.Get("ospfv3Gr.attributes.helper").String()))
+				} else {
+					ncItem.GracefulRestartHelper = types.BoolNull()
+				}
 			}
 			item.Vrfs[nc] = ncItem
 		}
@@ -831,6 +1382,58 @@ func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config O
 						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 					}
 				}
+				for di__ := range stateItemdi_.Areas {
+					if _, found := planItemdi_.Areas[di__]; !found {
+						continue
+					}
+					stateItemdi__ := stateItemdi_.Areas[di__]
+					planItemdi__ := planItemdi_.Areas[di__]
+					matchBodyPathdi__ := ""
+					for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+						if mv.Get("ospfv3Area.attributes.id").String() == di__ {
+							matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".ospfv3Area.children"
+							break
+						}
+					}
+					if matchBodyPathdi__ == "" {
+						continue
+					}
+					for stateChildKey := range stateItemdi__.AddressFamilies {
+						if _, found := planItemdi__.AddressFamilies[stateChildKey]; !found {
+							stateChild := stateItemdi__.AddressFamilies[stateChildKey]
+							deleteBody := ""
+							deleteBody, _ = sjson.Set(deleteBody, "ospfv3AreaAf.attributes.rn", stateChild.getRn(stateChildKey))
+							deleteBody, _ = sjson.Set(deleteBody, "ospfv3AreaAf.attributes.status", "deleted")
+							body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
+						}
+					}
+					for di___ := range stateItemdi__.AddressFamilies {
+						if _, found := planItemdi__.AddressFamilies[di___]; !found {
+							continue
+						}
+						stateItemdi___ := stateItemdi__.AddressFamilies[di___]
+						planItemdi___ := planItemdi__.AddressFamilies[di___]
+						matchBodyPathdi___ := ""
+						for mi, mv := range gjson.Get(body.Str, matchBodyPathdi__).Array() {
+							if mv.Get("ospfv3AreaAf.attributes.type").String() == di___ {
+								matchBodyPathdi___ = matchBodyPathdi__ + "." + strconv.Itoa(mi) + ".ospfv3AreaAf.children"
+								break
+							}
+						}
+						if matchBodyPathdi___ == "" {
+							continue
+						}
+						for stateChildKey := range stateItemdi___.Ranges {
+							if _, found := planItemdi___.Ranges[stateChildKey]; !found {
+								stateChild := stateItemdi___.Ranges[stateChildKey]
+								deleteBody := ""
+								deleteBody, _ = sjson.Set(deleteBody, "ospfv3InterAreaRtSum.attributes.rn", stateChild.getRn(stateChildKey))
+								deleteBody, _ = sjson.Set(deleteBody, "ospfv3InterAreaRtSum.attributes.status", "deleted")
+								body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi___+".-1", deleteBody)
+							}
+						}
+					}
+				}
 				for stateChildKey := range stateItemdi_.AddressFamilies {
 					if _, found := planItemdi_.AddressFamilies[stateChildKey]; !found {
 						stateChild := stateItemdi_.AddressFamilies[stateChildKey]
@@ -838,6 +1441,41 @@ func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config O
 						deleteBody, _ = sjson.Set(deleteBody, "ospfv3DomAf.attributes.rn", stateChild.getRn(stateChildKey))
 						deleteBody, _ = sjson.Set(deleteBody, "ospfv3DomAf.attributes.status", "deleted")
 						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for di__ := range stateItemdi_.AddressFamilies {
+					if _, found := planItemdi_.AddressFamilies[di__]; !found {
+						continue
+					}
+					stateItemdi__ := stateItemdi_.AddressFamilies[di__]
+					planItemdi__ := planItemdi_.AddressFamilies[di__]
+					matchBodyPathdi__ := ""
+					for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+						if mv.Get("ospfv3DomAf.attributes.type").String() == di__ {
+							matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".ospfv3DomAf.children"
+							break
+						}
+					}
+					if matchBodyPathdi__ == "" {
+						continue
+					}
+					for stateChildKey := range stateItemdi__.Redistributions {
+						if _, found := planItemdi__.Redistributions[stateChildKey]; !found {
+							stateChild := stateItemdi__.Redistributions[stateChildKey]
+							deleteBody := ""
+							deleteBody, _ = sjson.Set(deleteBody, "ospfv3InterLeakP.attributes.rn", stateChild.getRn(stateChildKey))
+							deleteBody, _ = sjson.Set(deleteBody, "ospfv3InterLeakP.attributes.status", "deleted")
+							body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
+						}
+					}
+					for stateChildKey := range stateItemdi__.SummaryAddresses {
+						if _, found := planItemdi__.SummaryAddresses[stateChildKey]; !found {
+							stateChild := stateItemdi__.SummaryAddresses[stateChildKey]
+							deleteBody := ""
+							deleteBody, _ = sjson.Set(deleteBody, "ospfv3ExtRtSum.attributes.rn", stateChild.getRn(stateChildKey))
+							deleteBody, _ = sjson.Set(deleteBody, "ospfv3ExtRtSum.attributes.status", "deleted")
+							body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
+						}
 					}
 				}
 			}
@@ -962,6 +1600,61 @@ func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config O
 														break
 													}
 												}
+												{
+													listChildPath__ := ""
+													for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+														if mv.Get("ospfv3Area.attributes.id").String() == key {
+															listChildPath__ = listChildPath_ + "." + strconv.Itoa(mi) + ".ospfv3Area.children"
+															break
+														}
+													}
+													if listChildPath__ != "" {
+														for key := range stateChild.AddressFamilies {
+															if configChild, ok := configChild.AddressFamilies[key]; ok {
+																stateChild := stateChild.AddressFamilies[key]
+																_ = stateChild
+																_ = configChild
+																for mi, mv := range gjson.Get(body.Str, listChildPath__).Array() {
+																	if mv.Get("ospfv3AreaAf.attributes.type").String() == key {
+																		if !stateChild.Cost.IsNull() && configChild.Cost.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".ospfv3AreaAf.attributes."+"cost", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		break
+																	}
+																}
+																{
+																	listChildPath___ := ""
+																	for mi, mv := range gjson.Get(body.Str, listChildPath__).Array() {
+																		if mv.Get("ospfv3AreaAf.attributes.type").String() == key {
+																			listChildPath___ = listChildPath__ + "." + strconv.Itoa(mi) + ".ospfv3AreaAf.children"
+																			break
+																		}
+																	}
+																	if listChildPath___ != "" {
+																		for key := range stateChild.Ranges {
+																			if configChild, ok := configChild.Ranges[key]; ok {
+																				stateChild := stateChild.Ranges[key]
+																				_ = stateChild
+																				_ = configChild
+																				for mi, mv := range gjson.Get(body.Str, listChildPath___).Array() {
+																					if mv.Get("ospfv3InterAreaRtSum.attributes.addr").String() == key {
+																						if !stateChild.Cost.IsNull() && configChild.Cost.IsNull() {
+																							body.Str, _ = sjson.Set(body.Str, listChildPath___+"."+strconv.Itoa(mi)+".ospfv3InterAreaRtSum.attributes."+"cost", "DME_UNSET_PROPERTY_MARKER")
+																						}
+																						if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+																							body.Str, _ = sjson.Set(body.Str, listChildPath___+"."+strconv.Itoa(mi)+".ospfv3InterAreaRtSum.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+																						}
+																						break
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
 											}
 										}
 										for key := range stateChild.AddressFamilies {
@@ -986,7 +1679,109 @@ func (data OSPFv3) toBodyWithDeletes(ctx context.Context, state OSPFv3, config O
 														break
 													}
 												}
+												{
+													listChildPath__ := ""
+													for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+														if mv.Get("ospfv3DomAf.attributes.type").String() == key {
+															listChildPath__ = listChildPath_ + "." + strconv.Itoa(mi) + ".ospfv3DomAf.children"
+															break
+														}
+													}
+													if listChildPath__ != "" {
+														for key := range stateChild.Redistributions {
+															if configChild, ok := configChild.Redistributions[key]; ok {
+																stateChild := stateChild.Redistributions[key]
+																_ = stateChild
+																_ = configChild
+																keyParts := strings.SplitN(key, ";", 3)
+																for mi, mv := range gjson.Get(body.Str, listChildPath__).Array() {
+																	if mv.Get("ospfv3InterLeakP.attributes.proto").String() == keyParts[0] &&
+																		mv.Get("ospfv3InterLeakP.attributes.inst").String() == keyParts[1] &&
+																		mv.Get("ospfv3InterLeakP.attributes.asn").String() == keyParts[2] {
+																		if !stateChild.RouteMap.IsNull() && configChild.RouteMap.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".ospfv3InterLeakP.attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		if !stateChild.Srv6PrefixType.IsNull() && configChild.Srv6PrefixType.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".ospfv3InterLeakP.attributes."+"srv6PrefixType", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		break
+																	}
+																}
+															}
+														}
+														if !stateChild.DefaultInformationOriginateAlways.IsNull() && configChild.DefaultInformationOriginateAlways.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfv3DefRtLeakP")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"always", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.DefaultInformationOriginateRouteMap.IsNull() && configChild.DefaultInformationOriginateRouteMap.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfv3DefRtLeakP")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.SpfThrottleHoldInterval.IsNull() && configChild.SpfThrottleHoldInterval.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfv3SpfComp")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdIntvl", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.SpfThrottleInitialInterval.IsNull() && configChild.SpfThrottleInitialInterval.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfv3SpfComp")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"initIntvl", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.SpfThrottleMaxInterval.IsNull() && configChild.SpfThrottleMaxInterval.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfv3SpfComp")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxIntvl", "DME_UNSET_PROPERTY_MARKER")
+														}
+														for key := range stateChild.SummaryAddresses {
+															if configChild, ok := configChild.SummaryAddresses[key]; ok {
+																stateChild := stateChild.SummaryAddresses[key]
+																_ = stateChild
+																_ = configChild
+																for mi, mv := range gjson.Get(body.Str, listChildPath__).Array() {
+																	if mv.Get("ospfv3ExtRtSum.attributes.addr").String() == key {
+																		if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".ospfv3ExtRtSum.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		if !stateChild.Tag.IsNull() && configChild.Tag.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".ospfv3ExtRtSum.attributes."+"tag", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		break
+																	}
+																}
+															}
+														}
+													}
+												}
 											}
+										}
+										if !stateChild.LsaArrivalInterval.IsNull() && configChild.LsaArrivalInterval.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfv3LsaCtrl")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"arrivalIntvl", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.LsaGroupPacingInterval.IsNull() && configChild.LsaGroupPacingInterval.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfv3LsaCtrl")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"gpPacingIntvl", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.LsaThrottleHoldInterval.IsNull() && configChild.LsaThrottleHoldInterval.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfv3LsaCtrl")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdIntvl", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.LsaThrottleMaxInterval.IsNull() && configChild.LsaThrottleMaxInterval.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfv3LsaCtrl")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxIntvl", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.LsaThrottleStartInterval.IsNull() && configChild.LsaThrottleStartInterval.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfv3LsaCtrl")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startIntvl", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.GracefulRestartControl.IsNull() && configChild.GracefulRestartControl.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfv3Gr")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.GracefulRestartPeriod.IsNull() && configChild.GracefulRestartPeriod.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfv3Gr")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"gracePeriod", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.GracefulRestartHelper.IsNull() && configChild.GracefulRestartHelper.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfv3Gr")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"helper", "DME_UNSET_PROPERTY_MARKER")
 										}
 									}
 								}

@@ -63,7 +63,7 @@ func (r *OSPFv3Resource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPFv3 configuration on NX-OS devices, including OSPFv3 instances, VRFs, areas, and interface settings.").AddApiDocumentation("ospfv3Entity", "Routing%20and%20Forwarding/ospfv3:Entity/", []string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3DomAf", "ospfv3If"}, []string{"Routing%20and%20Forwarding/ospfv3:Inst/", "Routing%20and%20Forwarding/ospfv3:Dom/", "Routing%20and%20Forwarding/ospfv3:Area/", "Routing%20and%20Forwarding/ospfv3:DomAf/", "Routing%20and%20Forwarding/ospfv3:If/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPFv3 configuration on NX-OS devices, including OSPFv3 instances, VRFs, areas, and interface settings.").AddApiDocumentation("ospfv3Entity", "Routing%20and%20Forwarding/ospfv3:Entity/", []string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3AreaAf", "ospfv3InterAreaRtSum", "ospfv3DomAf", "ospfv3InterLeakP", "ospfv3DefRtLeakP", "ospfv3SpfComp", "ospfv3ExtRtSum", "ospfv3LsaCtrl", "ospfv3Gr", "ospfv3If"}, []string{"Routing%20and%20Forwarding/ospfv3:Inst/", "Routing%20and%20Forwarding/ospfv3:Dom/", "Routing%20and%20Forwarding/ospfv3:Area/", "Routing%20and%20Forwarding/ospfv3:AreaAf/", "Routing%20and%20Forwarding/ospfv3:InterAreaRtSum/", "Routing%20and%20Forwarding/ospfv3:DomAf/", "Routing%20and%20Forwarding/ospfv3:InterLeakP/", "Routing%20and%20Forwarding/ospfv3:DefRtLeakP/", "Routing%20and%20Forwarding/ospfv3:SpfComp/", "Routing%20and%20Forwarding/ospfv3:ExtRtSum/", "Routing%20and%20Forwarding/ospfv3:LsaCtrl/", "Routing%20and%20Forwarding/ospfv3:Gr/", "Routing%20and%20Forwarding/ospfv3:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -192,6 +192,37 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 														stringvalidator.OneOf("regular", "stub", "nssa"),
 													},
 												},
+												"address_families": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 area address families.\n  - Map key: `address_family_type` - Unicast IP address family type.\n  - Key choices: `ipv6-ucast`").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"cost": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Specify cost for default inter-area-prefix LSA. Value must be an integer range [0,16777215] or keyword: unspecified.").String,
+																Optional:            true,
+															},
+															"ranges": schema.MapNestedAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 inter-area route summarizations (area ranges).\n  - Map key: `address` - Address.").String,
+																Optional:            true,
+																NestedObject: schema.NestedAttributeObject{
+																	Attributes: map[string]schema.Attribute{
+																		"cost": schema.StringAttribute{
+																			MarkdownDescription: helpers.NewAttributeDescription("Area range cost for route summarization. Value must be an integer range [0,16777216] or keyword: unspecified.").String,
+																			Optional:            true,
+																		},
+																		"control": schema.StringAttribute{
+																			MarkdownDescription: helpers.NewAttributeDescription("Summary address no advertise.").AddStringEnumDescription("unspecified", "no-advertise").String,
+																			Optional:            true,
+																			Validators: []validator.String{
+																				stringvalidator.OneOf("unspecified", "no-advertise"),
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
 											},
 										},
 									},
@@ -219,8 +250,131 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 														int64validator.Between(1, 64),
 													},
 												},
+												"redistributions": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 route redistributions.\n  - Map key format: `<protocol>;<protocol_instance>;<asn>`\n  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.\n  - Key component `protocol_instance`: The inter protocol route leak policy instance.\n  - Key component `asn`: The autonomous system number.").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"route_map": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("The name of the default route leak policy route map. This route map name is used to control distribution.").String,
+																Optional:            true,
+															},
+															"srv6_prefix_type": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("SRv6 Prefix Type; Valid only when proto is srv6.").AddStringEnumDescription("unspecified", "locator").String,
+																Optional:            true,
+																Validators: []validator.String{
+																	stringvalidator.OneOf("unspecified", "locator"),
+																},
+															},
+														},
+													},
+												},
+												"default_information_originate_always": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Always advertise default leak.").String,
+													Optional:            true,
+												},
+												"default_information_originate_route_map": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The name of the default route leak policy route map. This route map name is used to control distribution.").String,
+													Optional:            true,
+												},
+												"spf_throttle_hold_interval": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Minimum hold time interval between SPF calculations.").AddIntegerRangeDescription(1, 600000).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 600000),
+													},
+												},
+												"spf_throttle_initial_interval": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Initial SPF schedule delay interval.").AddIntegerRangeDescription(1, 600000).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 600000),
+													},
+												},
+												"spf_throttle_max_interval": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Maximum wait time between SPF calculations.").AddIntegerRangeDescription(1, 600000).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 600000),
+													},
+												},
+												"summary_addresses": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 external route summarizations (summary-address).\n  - Map key: `address` - Address.").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"control": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Summary address no advertise. Cannot be configured together with `tag`.").AddStringEnumDescription("unspecified", "no-advertise").String,
+																Optional:            true,
+																Validators: []validator.String{
+																	stringvalidator.OneOf("unspecified", "no-advertise"),
+																},
+															},
+															"tag": schema.Int64Attribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Route tag of external route.").AddIntegerRangeDescription(0, 4294967295).String,
+																Optional:            true,
+																Validators: []validator.Int64{
+																	int64validator.Between(0, 4294967295),
+																},
+															},
+														},
+													},
+												},
 											},
 										},
+									},
+									"lsa_arrival_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Minimum interval between arrival of a LSA.").AddIntegerRangeDescription(10, 600000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(10, 600000),
+										},
+									},
+									"lsa_group_pacing_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("LSA group pacing interval.").AddIntegerRangeDescription(1, 1800).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 1800),
+										},
+									},
+									"lsa_throttle_hold_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("LSA generation throttle hold interval.").AddIntegerRangeDescription(50, 30000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(50, 30000),
+										},
+									},
+									"lsa_throttle_max_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("LSA generation throttle maximum interval.").AddIntegerRangeDescription(50, 30000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(50, 30000),
+										},
+									},
+									"lsa_throttle_start_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("LSA generation throttle start wait interval.").AddIntegerRangeDescription(0, 5000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 5000),
+										},
+									},
+									"graceful_restart_control": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Graceful restart controls like planned, complete and disabled state.").AddStringEnumDescription("planned-only", "complete", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("planned-only", "complete", "disabled"),
+										},
+									},
+									"graceful_restart_period": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Graceful restart period in seconds starting from 5 to 1800.").AddIntegerRangeDescription(5, 1800).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(5, 1800),
+										},
+									},
+									"graceful_restart_helper": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Graceful restart helper mode.").String,
+										Optional:            true,
 									},
 								},
 							},
@@ -480,7 +634,7 @@ func (r *OSPFv3Resource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3DomAf", "ospfv3If"}, OSPFv3SubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3AreaAf", "ospfv3InterAreaRtSum", "ospfv3DomAf", "ospfv3InterLeakP", "ospfv3DefRtLeakP", "ospfv3SpfComp", "ospfv3ExtRtSum", "ospfv3LsaCtrl", "ospfv3Gr", "ospfv3If"}, OSPFv3SubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

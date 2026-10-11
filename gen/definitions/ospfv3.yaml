@@ -170,6 +170,54 @@ child_classes:
                   - stub
                   - nssa
                 example: regular
+            child_classes:
+              - class_name: ospfv3AreaAf
+                doc_path: Routing%20and%20Forwarding/ospfv3:AreaAf/
+                rn: areaaf-%s
+                type: list
+                tf_name: address_families
+                description: 'List of OSPFv3 area address families.'
+                attributes:
+                  - nxos_name: type
+                    tf_name: address_family_type
+                    type: String
+                    id: true
+                    description: 'Unicast IP address family type.'
+                    enum_values:
+                      - ipv6-ucast
+                    example: ipv6-ucast
+                  - nxos_name: cost
+                    tf_name: cost
+                    type: String
+                    description: 'Specify cost for default inter-area-prefix LSA. Value must be an integer range [0,16777215] or keyword: unspecified.'
+                    example: '10'
+                child_classes:
+                  - class_name: ospfv3InterAreaRtSum
+                    doc_path: Routing%20and%20Forwarding/ospfv3:InterAreaRtSum/
+                    rn: iartsum-[%s]
+                    type: list
+                    tf_name: ranges
+                    description: 'List of OSPFv3 inter-area route summarizations (area ranges).'
+                    attributes:
+                      - nxos_name: addr
+                        tf_name: address
+                        type: String
+                        id: true
+                        description: 'Address.'
+                        example: 2001:db8::/32
+                      - nxos_name: cost
+                        tf_name: cost
+                        type: String
+                        description: 'Area range cost for route summarization. Value must be an integer range [0,16777216] or keyword: unspecified.'
+                        example: '10'
+                      - nxos_name: ctrl
+                        tf_name: control
+                        type: String
+                        description: 'Summary address no advertise.'
+                        enum_values:
+                          - unspecified
+                          - no-advertise
+                        example: no-advertise
           - class_name: ospfv3DomAf
             doc_path: Routing%20and%20Forwarding/ospfv3:DomAf/
             rn: af-%s
@@ -207,6 +255,207 @@ child_classes:
                 max_int: 64
                 description: 'Maximum Equal Cost Multi Path(ECMP).'
                 example: 16
+            child_classes:
+              - class_name: ospfv3InterLeakP
+                doc_path: Routing%20and%20Forwarding/ospfv3:InterLeakP/
+                rn: interleak-%s-[%s]-%s
+                type: list
+                tf_name: redistributions
+                description: 'List of OSPFv3 route redistributions.'
+                attributes:
+                  - nxos_name: proto
+                    tf_name: protocol
+                    type: String
+                    id: true
+                    description: 'The list of protocols to match.'
+                    enum_values:
+                      - unspecified
+                      - static
+                      - direct
+                      - bgp
+                      - isis
+                      - ospf
+                      - ospfv3
+                      - eigrp
+                      - host
+                      - rip
+                      - amt
+                      - lisp
+                      - hmm
+                      - am
+                      - srv6
+                      - dhcpv6
+                      - icmpv6
+                    example: direct
+                  - nxos_name: inst
+                    tf_name: protocol_instance
+                    type: String
+                    id: true
+                    description: 'The inter protocol route leak policy instance.'
+                    example: none
+                  - nxos_name: asn
+                    tf_name: asn
+                    type: String
+                    id: true
+                    description: 'The autonomous system number.'
+                    example: none
+                  - nxos_name: rtMap
+                    tf_name: route_map
+                    type: String
+                    description: 'The name of the default route leak policy route map. This route map name is used to control distribution.'
+                    example: RM_REDIST
+                  - nxos_name: srv6PrefixType
+                    tf_name: srv6_prefix_type
+                    type: String
+                    description: 'SRv6 Prefix Type; Valid only when proto is srv6.'
+                    enum_values:
+                      - unspecified
+                      - locator
+                    example: unspecified
+              - class_name: ospfv3DefRtLeakP
+                doc_path: Routing%20and%20Forwarding/ospfv3:DefRtLeakP/
+                rn: defrtleak
+                type: single
+                tf_name: default_information
+                description: 'OSPFv3 default route leak (default-information originate) policy.'
+                attributes:
+                  - nxos_name: always
+                    tf_name: default_information_originate_always
+                    type: Bool
+                    description: 'Always advertise default leak.'
+                    example: true
+                  - nxos_name: rtMap
+                    tf_name: default_information_originate_route_map
+                    type: String
+                    description: 'The name of the default route leak policy route map. This route map name is used to control distribution.'
+                    example: RM_DEFAULT
+              - class_name: ospfv3SpfComp
+                doc_path: Routing%20and%20Forwarding/ospfv3:SpfComp/
+                rn: spfcomp
+                type: single
+                tf_name: spf_throttle
+                description: 'OSPFv3 SPF computation frequency (timers throttle spf) configuration.'
+                attributes:
+                  - nxos_name: holdIntvl
+                    tf_name: spf_throttle_hold_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 600000
+                    description: 'Minimum hold time interval between SPF calculations.'
+                    example: 100
+                  - nxos_name: initIntvl
+                    tf_name: spf_throttle_initial_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 600000
+                    description: 'Initial SPF schedule delay interval.'
+                    example: 10
+                  - nxos_name: maxIntvl
+                    tf_name: spf_throttle_max_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 600000
+                    description: 'Maximum wait time between SPF calculations.'
+                    example: 3000
+              - class_name: ospfv3ExtRtSum
+                doc_path: Routing%20and%20Forwarding/ospfv3:ExtRtSum/
+                rn: extrtsum-[%s]
+                type: list
+                tf_name: summary_addresses
+                description: 'List of OSPFv3 external route summarizations (summary-address).'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'Address.'
+                    example: 2001:db8:1::/48
+                  - nxos_name: ctrl
+                    tf_name: control
+                    type: String
+                    description: 'Summary address no advertise. Cannot be configured together with `tag`.'
+                    enum_values:
+                      - unspecified
+                      - no-advertise
+                    exclude_test: true
+                    example: no-advertise
+                  - nxos_name: tag
+                    tf_name: tag
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Route tag of external route.'
+                    example: 5
+          - class_name: ospfv3LsaCtrl
+            doc_path: Routing%20and%20Forwarding/ospfv3:LsaCtrl/
+            rn: lsactrl
+            type: single
+            tf_name: lsa_control
+            description: 'OSPFv3 LSA frequency control (timers throttle lsa, lsa-arrival, lsa-group-pacing) configuration.'
+            attributes:
+              - nxos_name: arrivalIntvl
+                tf_name: lsa_arrival_interval
+                type: Int64
+                min_int: 10
+                max_int: 600000
+                description: 'Minimum interval between arrival of a LSA.'
+                example: 50
+              - nxos_name: gpPacingIntvl
+                tf_name: lsa_group_pacing_interval
+                type: Int64
+                min_int: 1
+                max_int: 1800
+                description: 'LSA group pacing interval.'
+                example: 20
+              - nxos_name: holdIntvl
+                tf_name: lsa_throttle_hold_interval
+                type: Int64
+                min_int: 50
+                max_int: 30000
+                description: 'LSA generation throttle hold interval.'
+                example: 50
+              - nxos_name: maxIntvl
+                tf_name: lsa_throttle_max_interval
+                type: Int64
+                min_int: 50
+                max_int: 30000
+                description: 'LSA generation throttle maximum interval.'
+                example: 3000
+              - nxos_name: startIntvl
+                tf_name: lsa_throttle_start_interval
+                type: Int64
+                min_int: 0
+                max_int: 5000
+                description: 'LSA generation throttle start wait interval.'
+                example: 10
+          - class_name: ospfv3Gr
+            doc_path: Routing%20and%20Forwarding/ospfv3:Gr/
+            rn: gr
+            type: single
+            tf_name: graceful_restart
+            description: 'OSPFv3 graceful restart configuration.'
+            attributes:
+              - nxos_name: ctrl
+                tf_name: graceful_restart_control
+                type: String
+                description: 'Graceful restart controls like planned, complete and disabled state.'
+                enum_values:
+                  - planned-only
+                  - complete
+                  - disabled
+                example: planned-only
+              - nxos_name: gracePeriod
+                tf_name: graceful_restart_period
+                type: Int64
+                min_int: 5
+                max_int: 1800
+                description: 'Graceful restart period in seconds starting from 5 to 1800.'
+                example: 30
+              - nxos_name: helper
+                tf_name: graceful_restart_helper
+                type: Bool
+                description: 'Graceful restart helper mode.'
+                example: false
   - class_name: ospfv3If
     doc_path: Routing%20and%20Forwarding/ospfv3:If/
     rn: if-[%s]

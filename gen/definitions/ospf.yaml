@@ -242,6 +242,33 @@ child_classes:
                   - stub
                   - nssa
                 example: stub
+            child_classes:
+              - class_name: ospfInterAreaRtSum
+                doc_path: Routing%20and%20Forwarding/ospf:InterAreaRtSum/
+                rn: iartsum-[%s]
+                type: list
+                tf_name: ranges
+                description: 'List of OSPF inter-area route summarizations (area ranges).'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'Address.'
+                    example: 10.1.0.0/16
+                  - nxos_name: cost
+                    tf_name: cost
+                    type: String
+                    description: 'Area range cost for route summarization. Value must be an integer range [0,16777216] or keyword: unspecified.'
+                    example: '10'
+                  - nxos_name: ctrl
+                    tf_name: control
+                    type: String
+                    description: 'Summary address no advertise.'
+                    enum_values:
+                      - unspecified
+                      - no-advertise
+                    example: no-advertise
           - class_name: ospfMaxMetricLsaP
             doc_path: Routing%20and%20Forwarding/ospf:MaxMetricLsaP/
             rn: maxmetriclsap
@@ -537,6 +564,153 @@ child_classes:
                   - unspecified
                   - locator
                 example: unspecified
+          - class_name: ospfDefRtLeakP
+            doc_path: Routing%20and%20Forwarding/ospf:DefRtLeakP/
+            rn: defrtleak
+            type: single
+            tf_name: default_information
+            description: 'OSPF default route leak (default-information originate) policy.'
+            attributes:
+              - nxos_name: always
+                tf_name: default_information_originate_always
+                type: String
+                description: 'Always advertise default route leak.'
+                enum_values:
+                  - "no"
+                  - "yes"
+                example: "yes"
+              - nxos_name: rtMap
+                tf_name: default_information_originate_route_map
+                type: String
+                description: 'The name of the default route leak policy route map. This route map name is used to control distribution.'
+                example: RM_DEFAULT
+          - class_name: ospfSpfComp
+            doc_path: Routing%20and%20Forwarding/ospf:SpfComp/
+            rn: spfcomp
+            type: single
+            tf_name: spf_throttle
+            description: 'OSPF SPF computation frequency (timers throttle spf) configuration.'
+            attributes:
+              - nxos_name: holdIntvl
+                tf_name: spf_throttle_hold_interval
+                type: Int64
+                min_int: 1
+                max_int: 600000
+                description: 'Minimum hold time interval between SPF calculations.'
+                example: 100
+              - nxos_name: initIntvl
+                tf_name: spf_throttle_initial_interval
+                type: Int64
+                min_int: 1
+                max_int: 600000
+                description: 'Initial SPF schedule delay interval.'
+                example: 10
+              - nxos_name: maxIntvl
+                tf_name: spf_throttle_max_interval
+                type: Int64
+                min_int: 1
+                max_int: 600000
+                description: 'Maximum wait time between SPF calculations.'
+                example: 3000
+          - class_name: ospfLsaCtrl
+            doc_path: Routing%20and%20Forwarding/ospf:LsaCtrl/
+            rn: lsactrl
+            type: single
+            tf_name: lsa_control
+            description: 'OSPF LSA frequency control (timers throttle lsa, lsa-arrival, lsa-group-pacing) configuration.'
+            attributes:
+              - nxos_name: arrivalIntvl
+                tf_name: lsa_arrival_interval
+                type: Int64
+                min_int: 10
+                max_int: 600000
+                description: 'Minimum interval between arrival of a LSA.'
+                example: 50
+              - nxos_name: gpPacingIntvl
+                tf_name: lsa_group_pacing_interval
+                type: Int64
+                min_int: 1
+                max_int: 1800
+                description: 'LSA group pacing interval.'
+                example: 20
+              - nxos_name: holdIntvl
+                tf_name: lsa_throttle_hold_interval
+                type: Int64
+                min_int: 50
+                max_int: 30000
+                description: 'LSA generation throttle hold interval.'
+                example: 50
+              - nxos_name: maxIntvl
+                tf_name: lsa_throttle_max_interval
+                type: Int64
+                min_int: 50
+                max_int: 30000
+                description: 'LSA generation throttle maximum interval.'
+                example: 3000
+              - nxos_name: startIntvl
+                tf_name: lsa_throttle_start_interval
+                type: Int64
+                min_int: 0
+                max_int: 5000
+                description: 'LSA generation throttle start wait interval.'
+                example: 10
+          - class_name: ospfGr
+            doc_path: Routing%20and%20Forwarding/ospf:Gr/
+            rn: gr
+            type: single
+            tf_name: graceful_restart
+            description: 'OSPF graceful restart configuration.'
+            attributes:
+              - nxos_name: ctrl
+                tf_name: graceful_restart_control
+                type: String
+                description: 'Graceful restart controls like planned, complete and disabled state.'
+                enum_values:
+                  - planned-only
+                  - complete
+                  - disabled
+                example: planned-only
+              - nxos_name: gracePeriod
+                tf_name: graceful_restart_period
+                type: Int64
+                min_int: 5
+                max_int: 1800
+                description: 'Graceful restart period in seconds starting from 5 to 1800.'
+                example: 30
+              - nxos_name: helper
+                tf_name: graceful_restart_helper
+                type: Bool
+                description: 'Graceful restart helper mode.'
+                example: false
+          - class_name: ospfExtRtSum
+            doc_path: Routing%20and%20Forwarding/ospf:ExtRtSum/
+            rn: extrtsum-[%s]
+            type: list
+            tf_name: summary_addresses
+            description: 'List of OSPF external route summarizations (summary-address).'
+            attributes:
+              - nxos_name: addr
+                tf_name: address
+                type: String
+                id: true
+                description: 'Address.'
+                example: 10.0.0.0/8
+              - nxos_name: ctrl
+                tf_name: control
+                type: String
+                description: 'Summary address no advertise. Cannot be configured together with `tag`.'
+                enum_values:
+                  - unspecified
+                  - no-advertise
+                exclude_test: true
+                example: no-advertise
+              - nxos_name: tag
+                tf_name: tag
+                type: Int64
+                min_int: 0
+                max_int: 4294967295
+                description: 'Route tag of external route.'
+                example: 5
 test_prerequisites:
   - dn: sys/fm/ospf
     class_name: fmOspf

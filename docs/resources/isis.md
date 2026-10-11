@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the IS-IS configuration on NX-OS devices, including IS-IS instances, VRFs, authentication settings, and interface configurations.
   API Documentation
-  isisEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Entity/isisInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Inst/isisDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Dom/isisDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:DomAf/isisOverload https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Overload/isisInternalIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:InternalIf/
+  isisEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Entity/isisInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Inst/isisDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Dom/isisDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:DomAf/isisInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:InterLeakP/isisRtSum https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:RtSum/isisDistribute https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Distribute/isisDomLvl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:DomLvl/isisSpfComp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:SpfComp/isisLspGen https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:LspGen/isisGr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Gr/isisOverload https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Overload/isisInternalIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:InternalIf/
 ---
 
 # nxos_isis (Resource)
@@ -18,6 +18,13 @@ This resource can manage the IS-IS configuration on NX-OS devices, including IS-
 - [isisInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Inst/)
 - [isisDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Dom/)
 - [isisDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:DomAf/)
+- [isisInterLeakP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:InterLeakP/)
+- [isisRtSum](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:RtSum/)
+- [isisDistribute](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Distribute/)
+- [isisDomLvl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:DomLvl/)
+- [isisSpfComp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:SpfComp/)
+- [isisLspGen](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:LspGen/)
+- [isisGr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Gr/)
 - [isisOverload](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:Overload/)
 - [isisInternalIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/isis:InternalIf/)
 
@@ -66,8 +73,39 @@ resource "nxos_isis" "example" {
               router_id_interface                     = "lo0"
               table_map                               = "rm1"
               table_map_filter                        = "enabled"
+              redistributions = {
+                "direct;none;none" = {
+                  route_map        = "RM_REDIST"
+                  scope            = "inter"
+                  srv6_prefix_type = "unspecified"
+                }
+              }
+              summary_addresses = {
+                "10.0.0.0/8" = {
+                  level = "l2"
+                }
+              }
+              distributions = {
+                "l2" = {
+                  destination_level = "l1"
+                  route_map         = "RM_DISTRIBUTE"
+                }
+              }
             }
           }
+          levels = {
+            "l2" = {
+              control                         = "fast-converge"
+              spf_initial_interval            = 60
+              spf_max_interval                = 5000
+              spf_second_interval             = 60
+              lsp_generation_initial_interval = 70
+              lsp_generation_max_interval     = 6000
+              lsp_generation_second_interval  = 70
+            }
+          }
+          graceful_restart_admin_state  = "disabled"
+          graceful_restart_t3_interval  = 120
           overload_startup_time         = 60
           overload_admin_state          = "always-on"
           overload_bgp_as_number        = 100
@@ -188,8 +226,15 @@ Optional:
   - Choices: `mbps`, `gbps`
 - `control` (String) Holds ISIS Domain Control messages.
   - Choices: `unspecified`, `log-adj-changes`, `hostname-dynamic-disable`
+- `graceful_restart_admin_state` (String) Graceful Restart.
+  - Choices: `enabled`, `disabled`
+- `graceful_restart_t3_interval` (Number) T3 timer for graceful restart.
+  - Range: `30`-`65535`
 - `is_type` (String) Holds ISIS Domain IS[Level] Type.
   - Choices: `l1`, `l2`, `l12`
+- `levels` (Attributes Map) List of IS-IS domain levels.
+  - Map key: `level` - Type.
+  - Key choices: `p2p`, `l1`, `l2` (see [below for nested schema](#nestedatt--instances--vrfs--levels))
 - `lsp_lifetime` (Number) Holds ISIS Domain LSP Lifetime.
   - Range: `1`-`65535`
 - `metric_type` (String) Holds ISIS Domain Metric Style.
@@ -223,6 +268,9 @@ Optional:
 - `default_information_originate_route_map` (String) Holds Route-map name for ISIS Domain address family default-information originate.
 - `distance` (Number) Holds ISIS Domain address family Administrative Distance.
   - Range: `1`-`255`
+- `distributions` (Attributes Map) List of IS-IS inter-level route distribution policies.
+  - Map key: `source_level` - Holds Source Domain for Routes Distribute Policy.
+  - Key choices: `p2p`, `l1`, `l2` (see [below for nested schema](#nestedatt--instances--vrfs--address_families--distributions))
 - `enable_bfd` (Boolean) Enabling BFD on all ISIS domain interfaces.
 - `max_ecmp` (Number) Holds ISIS Domain address family Max ECMP value.
   - Range: `1`-`64`
@@ -230,12 +278,74 @@ Optional:
   - Choices: `st`, `mt`, `mtt`
 - `prefix_advertise_passive_l1` (Boolean) Prefix advertise passive only for level-1.
 - `prefix_advertise_passive_l2` (Boolean) Prefix advertise passive only level-2.
+- `redistributions` (Attributes Map) List of IS-IS route redistributions.
+  - Map key format: `<protocol>;<protocol_instance>;<asn>`
+  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.
+  - Key component `protocol_instance`: The inter protocol route leak policy instance.
+  - Key component `asn`: The autonomous system number. (see [below for nested schema](#nestedatt--instances--vrfs--address_families--redistributions))
 - `router_id_interface` (String) Holds interface.
 - `router_id_ip_address` (String) Holds ip address to become router id.
 - `segment_routing_mpls` (Boolean) Segment routing for MPLS.
+- `summary_addresses` (Attributes Map) List of IS-IS summary addresses.
+  - Map key: `address` - Address. (see [below for nested schema](#nestedatt--instances--vrfs--address_families--summary_addresses))
 - `table_map` (String) Holds Route-map name to filter routes downloaded.
 - `table_map_filter` (String) Enables table-map for Selective route.
   - Choices: `enabled`, `disabled`
+
+<a id="nestedatt--instances--vrfs--address_families--distributions"></a>
+### Nested Schema for `instances.vrfs.address_families.distributions`
+
+Optional:
+
+- `all` (Boolean) Holds Distribution of all level-n routes. Cannot be configured together with `route_map`.
+- `destination_level` (String) Holds Destination Domain for Routes Distribute Policy.
+  - Choices: `p2p`, `l1`, `l2`
+- `route_map` (String) Holds Route-map name for Distribute Policy.
+
+
+<a id="nestedatt--instances--vrfs--address_families--redistributions"></a>
+### Nested Schema for `instances.vrfs.address_families.redistributions`
+
+Optional:
+
+- `route_map` (String) The name of the default route leak policy route map. This route map name is used to control distribution.
+- `scope` (String) The domain applicable to the capability.
+  - Choices: `intra`, `inter`, `defrt`
+- `srv6_prefix_type` (String) SRv6 Prefix Type; Valid only when proto is srv6.
+  - Choices: `unspecified`, `locator`
+
+
+<a id="nestedatt--instances--vrfs--address_families--summary_addresses"></a>
+### Nested Schema for `instances.vrfs.address_families.summary_addresses`
+
+Optional:
+
+- `level` (String) Holds summary address level.
+  - Choices: `l1`, `l2`, `l12`
+
+
+
+<a id="nestedatt--instances--vrfs--levels"></a>
+### Nested Schema for `instances.vrfs.levels`
+
+Optional:
+
+- `control` (String) Controls. Choices: `lsp-fast-flood`, `smart-psnp-ack`, `fast-converge`. Can be an empty string. Allowed formats:
+  - Single value. Example: `fast-converge`
+  - Multiple values (comma-separated). Example: `fast-converge,lsp-fast-flood`. In this case values must be in alphabetical order.
+  - Choices: `lsp-fast-flood`, `smart-psnp-ack`, `fast-converge`
+- `lsp_generation_initial_interval` (Number) The initial wait interval. This is used in the LSP generation interval controls.
+  - Range: `50`-`120000`
+- `lsp_generation_max_interval` (Number) The maximum wait interval. This is used in the LSP generation interval controls.
+  - Range: `50`-`120000`
+- `lsp_generation_second_interval` (Number) The second wait interval. This is used in the LSP generation interval controls.
+  - Range: `50`-`120000`
+- `spf_initial_interval` (Number) The initial wait interval. This is used in the LSP generation interval controls.
+  - Range: `50`-`120000`
+- `spf_max_interval` (Number) The maximum wait interval. This is used in the LSP generation interval controls.
+  - Range: `50`-`120000`
+- `spf_second_interval` (Number) The second wait interval. This is used in the LSP generation interval controls.
+  - Range: `50`-`120000`
 
 
 

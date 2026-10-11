@@ -25,6 +25,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -76,6 +77,9 @@ type ISISInstancesVrfs struct {
 	LspLifetime                  types.Int64                                 `tfsdk:"lsp_lifetime"`
 	QueueLimit                   types.Int64                                 `tfsdk:"queue_limit"`
 	AddressFamilies              map[string]ISISInstancesVrfsAddressFamilies `tfsdk:"address_families"`
+	Levels                       map[string]ISISInstancesVrfsLevels          `tfsdk:"levels"`
+	GracefulRestartAdminState    types.String                                `tfsdk:"graceful_restart_admin_state"`
+	GracefulRestartT3Interval    types.Int64                                 `tfsdk:"graceful_restart_t3_interval"`
 	OverloadStartupTime          types.Int64                                 `tfsdk:"overload_startup_time"`
 	OverloadAdminState           types.String                                `tfsdk:"overload_admin_state"`
 	OverloadBgpAsNumber          types.Int64                                 `tfsdk:"overload_bgp_as_number"`
@@ -84,20 +88,49 @@ type ISISInstancesVrfs struct {
 }
 
 type ISISInstancesVrfsAddressFamilies struct {
-	SegmentRoutingMpls                  types.Bool   `tfsdk:"segment_routing_mpls"`
-	EnableBfd                           types.Bool   `tfsdk:"enable_bfd"`
-	PrefixAdvertisePassiveL1            types.Bool   `tfsdk:"prefix_advertise_passive_l1"`
-	PrefixAdvertisePassiveL2            types.Bool   `tfsdk:"prefix_advertise_passive_l2"`
-	Control                             types.String `tfsdk:"control"`
-	DefaultInformationOriginate         types.String `tfsdk:"default_information_originate"`
-	DefaultInformationOriginateRouteMap types.String `tfsdk:"default_information_originate_route_map"`
-	Distance                            types.Int64  `tfsdk:"distance"`
-	MaxEcmp                             types.Int64  `tfsdk:"max_ecmp"`
-	MultiTopology                       types.String `tfsdk:"multi_topology"`
-	RouterIdInterface                   types.String `tfsdk:"router_id_interface"`
-	RouterIdIpAddress                   types.String `tfsdk:"router_id_ip_address"`
-	TableMap                            types.String `tfsdk:"table_map"`
-	TableMapFilter                      types.String `tfsdk:"table_map_filter"`
+	SegmentRoutingMpls                  types.Bool                                                  `tfsdk:"segment_routing_mpls"`
+	EnableBfd                           types.Bool                                                  `tfsdk:"enable_bfd"`
+	PrefixAdvertisePassiveL1            types.Bool                                                  `tfsdk:"prefix_advertise_passive_l1"`
+	PrefixAdvertisePassiveL2            types.Bool                                                  `tfsdk:"prefix_advertise_passive_l2"`
+	Control                             types.String                                                `tfsdk:"control"`
+	DefaultInformationOriginate         types.String                                                `tfsdk:"default_information_originate"`
+	DefaultInformationOriginateRouteMap types.String                                                `tfsdk:"default_information_originate_route_map"`
+	Distance                            types.Int64                                                 `tfsdk:"distance"`
+	MaxEcmp                             types.Int64                                                 `tfsdk:"max_ecmp"`
+	MultiTopology                       types.String                                                `tfsdk:"multi_topology"`
+	RouterIdInterface                   types.String                                                `tfsdk:"router_id_interface"`
+	RouterIdIpAddress                   types.String                                                `tfsdk:"router_id_ip_address"`
+	TableMap                            types.String                                                `tfsdk:"table_map"`
+	TableMapFilter                      types.String                                                `tfsdk:"table_map_filter"`
+	Redistributions                     map[string]ISISInstancesVrfsAddressFamiliesRedistributions  `tfsdk:"redistributions"`
+	SummaryAddresses                    map[string]ISISInstancesVrfsAddressFamiliesSummaryAddresses `tfsdk:"summary_addresses"`
+	Distributions                       map[string]ISISInstancesVrfsAddressFamiliesDistributions    `tfsdk:"distributions"`
+}
+
+type ISISInstancesVrfsAddressFamiliesRedistributions struct {
+	RouteMap       types.String `tfsdk:"route_map"`
+	Scope          types.String `tfsdk:"scope"`
+	Srv6PrefixType types.String `tfsdk:"srv6_prefix_type"`
+}
+
+type ISISInstancesVrfsAddressFamiliesSummaryAddresses struct {
+	Level types.String `tfsdk:"level"`
+}
+
+type ISISInstancesVrfsAddressFamiliesDistributions struct {
+	DestinationLevel types.String `tfsdk:"destination_level"`
+	All              types.Bool   `tfsdk:"all"`
+	RouteMap         types.String `tfsdk:"route_map"`
+}
+
+type ISISInstancesVrfsLevels struct {
+	Control                      types.String `tfsdk:"control"`
+	SpfInitialInterval           types.Int64  `tfsdk:"spf_initial_interval"`
+	SpfMaxInterval               types.Int64  `tfsdk:"spf_max_interval"`
+	SpfSecondInterval            types.Int64  `tfsdk:"spf_second_interval"`
+	LspGenerationInitialInterval types.Int64  `tfsdk:"lsp_generation_initial_interval"`
+	LspGenerationMaxInterval     types.Int64  `tfsdk:"lsp_generation_max_interval"`
+	LspGenerationSecondInterval  types.Int64  `tfsdk:"lsp_generation_second_interval"`
 }
 
 type ISISInterfaces struct {
@@ -199,6 +232,23 @@ func (data ISISInstancesVrfs) getRn(key string) string {
 
 func (data ISISInstancesVrfsAddressFamilies) getRn(key string) string {
 	return fmt.Sprintf("af-%s", key)
+}
+
+func (data ISISInstancesVrfsAddressFamiliesRedistributions) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 3)
+	return fmt.Sprintf("interleak-%s-[%s]-%s", keyParts[0], keyParts[1], keyParts[2])
+}
+
+func (data ISISInstancesVrfsAddressFamiliesSummaryAddresses) getRn(key string) string {
+	return fmt.Sprintf("rtsum-[%s]", key)
+}
+
+func (data ISISInstancesVrfsAddressFamiliesDistributions) getRn(key string) string {
+	return fmt.Sprintf("distribute-%s", key)
+}
+
+func (data ISISInstancesVrfsLevels) getRn(key string) string {
+	return fmt.Sprintf("lvl-%s", key)
 }
 
 func (data ISISInterfaces) getRn(key string) string {
@@ -359,6 +409,111 @@ func (data ISIS) toBody(config ISIS) nxos.Body {
 							attrs, _ = sjson.Set(attrs, "tblMapFltr", child.TableMapFilter.ValueString())
 						}
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisDomAf.attributes", attrs)
+						{
+							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".isisDomAf.children"
+							_ = nestedChildrenPath
+							for key, child := range child.Redistributions {
+								configChild, configChildOk := configChild.Redistributions[key]
+								_ = configChild
+								_ = configChildOk
+								attrs = "{}"
+								keyParts := strings.SplitN(key, ";", 3)
+								attrs, _ = sjson.Set(attrs, "proto", keyParts[0])
+								attrs, _ = sjson.Set(attrs, "inst", keyParts[1])
+								attrs, _ = sjson.Set(attrs, "asn", keyParts[2])
+								if configChildOk && !child.RouteMap.IsUnknown() && !child.RouteMap.IsNull() && !configChild.RouteMap.IsNull() {
+									attrs, _ = sjson.Set(attrs, "rtMap", child.RouteMap.ValueString())
+								}
+								if configChildOk && !child.Scope.IsUnknown() && !child.Scope.IsNull() && !configChild.Scope.IsNull() {
+									attrs, _ = sjson.Set(attrs, "scope", child.Scope.ValueString())
+								}
+								if configChildOk && !child.Srv6PrefixType.IsUnknown() && !child.Srv6PrefixType.IsNull() && !configChild.Srv6PrefixType.IsNull() {
+									attrs, _ = sjson.Set(attrs, "srv6PrefixType", child.Srv6PrefixType.ValueString())
+								}
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisInterLeakP.attributes", attrs)
+							}
+							for key, child := range child.SummaryAddresses {
+								configChild, configChildOk := configChild.SummaryAddresses[key]
+								_ = configChild
+								_ = configChildOk
+								attrs = "{}"
+								attrs, _ = sjson.Set(attrs, "addr", key)
+								if configChildOk && !child.Level.IsUnknown() && !child.Level.IsNull() && !configChild.Level.IsNull() {
+									attrs, _ = sjson.Set(attrs, "sumLevel", child.Level.ValueString())
+								}
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisRtSum.attributes", attrs)
+							}
+							for key, child := range child.Distributions {
+								configChild, configChildOk := configChild.Distributions[key]
+								_ = configChild
+								_ = configChildOk
+								attrs = "{}"
+								attrs, _ = sjson.Set(attrs, "source", key)
+								if configChildOk && !child.DestinationLevel.IsUnknown() && !child.DestinationLevel.IsNull() && !configChild.DestinationLevel.IsNull() {
+									attrs, _ = sjson.Set(attrs, "destination", child.DestinationLevel.ValueString())
+								}
+								if configChildOk && !child.All.IsUnknown() && !child.All.IsNull() && !configChild.All.IsNull() {
+									attrs, _ = sjson.Set(attrs, "all", strconv.FormatBool(child.All.ValueBool()))
+								}
+								if configChildOk && !child.RouteMap.IsUnknown() && !child.RouteMap.IsNull() && !configChild.RouteMap.IsNull() {
+									attrs, _ = sjson.Set(attrs, "rmap", child.RouteMap.ValueString())
+								}
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisDistribute.attributes", attrs)
+							}
+						}
+					}
+					for key, child := range child.Levels {
+						configChild, configChildOk := configChild.Levels[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "type", key)
+						if configChildOk && !child.Control.IsUnknown() && !child.Control.IsNull() && !configChild.Control.IsNull() {
+							attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisDomLvl.attributes", attrs)
+						{
+							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".isisDomLvl.children"
+							_ = nestedChildrenPath
+							attrs = "{}"
+							if !child.SpfInitialInterval.IsUnknown() && !child.SpfInitialInterval.IsNull() && !configChild.SpfInitialInterval.IsNull() {
+								attrs, _ = sjson.Set(attrs, "initIntvl", strconv.FormatInt(child.SpfInitialInterval.ValueInt64(), 10))
+							}
+							if !child.SpfMaxInterval.IsUnknown() && !child.SpfMaxInterval.IsNull() && !configChild.SpfMaxInterval.IsNull() {
+								attrs, _ = sjson.Set(attrs, "maxIntvl", strconv.FormatInt(child.SpfMaxInterval.ValueInt64(), 10))
+							}
+							if !child.SpfSecondInterval.IsUnknown() && !child.SpfSecondInterval.IsNull() && !configChild.SpfSecondInterval.IsNull() {
+								attrs, _ = sjson.Set(attrs, "secIntvl", strconv.FormatInt(child.SpfSecondInterval.ValueInt64(), 10))
+							}
+							if attrs != "{}" {
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisSpfComp.attributes", attrs)
+							}
+							attrs = "{}"
+							if !child.LspGenerationInitialInterval.IsUnknown() && !child.LspGenerationInitialInterval.IsNull() && !configChild.LspGenerationInitialInterval.IsNull() {
+								attrs, _ = sjson.Set(attrs, "initIntvl", strconv.FormatInt(child.LspGenerationInitialInterval.ValueInt64(), 10))
+							}
+							if !child.LspGenerationMaxInterval.IsUnknown() && !child.LspGenerationMaxInterval.IsNull() && !configChild.LspGenerationMaxInterval.IsNull() {
+								attrs, _ = sjson.Set(attrs, "maxIntvl", strconv.FormatInt(child.LspGenerationMaxInterval.ValueInt64(), 10))
+							}
+							if !child.LspGenerationSecondInterval.IsUnknown() && !child.LspGenerationSecondInterval.IsNull() && !configChild.LspGenerationSecondInterval.IsNull() {
+								attrs, _ = sjson.Set(attrs, "secIntvl", strconv.FormatInt(child.LspGenerationSecondInterval.ValueInt64(), 10))
+							}
+							if attrs != "{}" {
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisLspGen.attributes", attrs)
+							}
+						}
+					}
+					attrs = "{}"
+					if !child.GracefulRestartAdminState.IsUnknown() && !child.GracefulRestartAdminState.IsNull() && !configChild.GracefulRestartAdminState.IsNull() {
+						attrs, _ = sjson.Set(attrs, "adminSt", child.GracefulRestartAdminState.ValueString())
+					}
+					if !child.GracefulRestartT3Interval.IsUnknown() && !child.GracefulRestartT3Interval.IsNull() && !configChild.GracefulRestartT3Interval.IsNull() {
+						attrs, _ = sjson.Set(attrs, "grT3Intvl", strconv.FormatInt(child.GracefulRestartT3Interval.ValueInt64(), 10))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisGr.attributes", attrs)
 					}
 					attrs = "{}"
 					if !child.OverloadStartupTime.IsUnknown() && !child.OverloadStartupTime.IsNull() && !configChild.OverloadStartupTime.IsNull() {
@@ -599,6 +754,67 @@ func (data *ISIS) fromBody(res gjson.Result) {
 																nestedChildisisDomAf.TableMap = types.StringValue(nestedValue.Get("attributes.tblMap").String())
 																nestedChildisisDomAf.TableMapFilter = types.StringValue(nestedValue.Get("attributes.tblMapFltr").String())
 																nestedMapKey := nestedValue.Get("attributes.type").String()
+																nestedValue.Get("children").ForEach(
+																	func(_, nestedV gjson.Result) bool {
+																		nestedV.ForEach(
+																			func(nestedClassname, nestedValue gjson.Result) bool {
+																				if nestedClassname.String() == "isisInterLeakP" {
+																					var nestedChildisisInterLeakP ISISInstancesVrfsAddressFamiliesRedistributions
+																					nestedChildisisInterLeakP.RouteMap = types.StringValue(nestedValue.Get("attributes.rtMap").String())
+																					nestedChildisisInterLeakP.Scope = types.StringValue(nestedValue.Get("attributes.scope").String())
+																					nestedChildisisInterLeakP.Srv6PrefixType = types.StringValue(nestedValue.Get("attributes.srv6PrefixType").String())
+																					nestedMapKey := nestedValue.Get("attributes.proto").String() + ";" + nestedValue.Get("attributes.inst").String() + ";" + nestedValue.Get("attributes.asn").String()
+																					if nestedChildisisDomAf.Redistributions == nil {
+																						nestedChildisisDomAf.Redistributions = make(map[string]ISISInstancesVrfsAddressFamiliesRedistributions)
+																					}
+																					nestedChildisisDomAf.Redistributions[nestedMapKey] = nestedChildisisInterLeakP
+																				}
+																				return true
+																			},
+																		)
+																		return true
+																	},
+																)
+																nestedValue.Get("children").ForEach(
+																	func(_, nestedV gjson.Result) bool {
+																		nestedV.ForEach(
+																			func(nestedClassname, nestedValue gjson.Result) bool {
+																				if nestedClassname.String() == "isisRtSum" {
+																					var nestedChildisisRtSum ISISInstancesVrfsAddressFamiliesSummaryAddresses
+																					nestedChildisisRtSum.Level = types.StringValue(nestedValue.Get("attributes.sumLevel").String())
+																					nestedMapKey := nestedValue.Get("attributes.addr").String()
+																					if nestedChildisisDomAf.SummaryAddresses == nil {
+																						nestedChildisisDomAf.SummaryAddresses = make(map[string]ISISInstancesVrfsAddressFamiliesSummaryAddresses)
+																					}
+																					nestedChildisisDomAf.SummaryAddresses[nestedMapKey] = nestedChildisisRtSum
+																				}
+																				return true
+																			},
+																		)
+																		return true
+																	},
+																)
+																nestedValue.Get("children").ForEach(
+																	func(_, nestedV gjson.Result) bool {
+																		nestedV.ForEach(
+																			func(nestedClassname, nestedValue gjson.Result) bool {
+																				if nestedClassname.String() == "isisDistribute" {
+																					var nestedChildisisDistribute ISISInstancesVrfsAddressFamiliesDistributions
+																					nestedChildisisDistribute.DestinationLevel = types.StringValue(nestedValue.Get("attributes.destination").String())
+																					nestedChildisisDistribute.All = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.all").String()))
+																					nestedChildisisDistribute.RouteMap = types.StringValue(nestedValue.Get("attributes.rmap").String())
+																					nestedMapKey := nestedValue.Get("attributes.source").String()
+																					if nestedChildisisDomAf.Distributions == nil {
+																						nestedChildisisDomAf.Distributions = make(map[string]ISISInstancesVrfsAddressFamiliesDistributions)
+																					}
+																					nestedChildisisDomAf.Distributions[nestedMapKey] = nestedChildisisDistribute
+																				}
+																				return true
+																			},
+																		)
+																		return true
+																	},
+																)
 																if nestedChildisisDom.AddressFamilies == nil {
 																	nestedChildisisDom.AddressFamilies = make(map[string]ISISInstancesVrfsAddressFamilies)
 																}
@@ -610,6 +826,72 @@ func (data *ISIS) fromBody(res gjson.Result) {
 													return true
 												},
 											)
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "isisDomLvl" {
+																var nestedChildisisDomLvl ISISInstancesVrfsLevels
+																nestedChildisisDomLvl.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+																nestedMapKey := nestedValue.Get("attributes.type").String()
+																{
+																	var risisSpfComp gjson.Result
+																	nestedValue.Get("children").ForEach(
+																		func(_, nestedV gjson.Result) bool {
+																			rnValue := nestedV.Get("isisSpfComp.attributes.rn").String()
+																			if rnValue == "spfcomp" {
+																				risisSpfComp = nestedV
+																				return false
+																			}
+																			return true
+																		},
+																	)
+																	nestedChildisisDomLvl.SpfInitialInterval = types.Int64Value(risisSpfComp.Get("isisSpfComp.attributes.initIntvl").Int())
+																	nestedChildisisDomLvl.SpfMaxInterval = types.Int64Value(risisSpfComp.Get("isisSpfComp.attributes.maxIntvl").Int())
+																	nestedChildisisDomLvl.SpfSecondInterval = types.Int64Value(risisSpfComp.Get("isisSpfComp.attributes.secIntvl").Int())
+																}
+																{
+																	var risisLspGen gjson.Result
+																	nestedValue.Get("children").ForEach(
+																		func(_, nestedV gjson.Result) bool {
+																			rnValue := nestedV.Get("isisLspGen.attributes.rn").String()
+																			if rnValue == "lspgen" {
+																				risisLspGen = nestedV
+																				return false
+																			}
+																			return true
+																		},
+																	)
+																	nestedChildisisDomLvl.LspGenerationInitialInterval = types.Int64Value(risisLspGen.Get("isisLspGen.attributes.initIntvl").Int())
+																	nestedChildisisDomLvl.LspGenerationMaxInterval = types.Int64Value(risisLspGen.Get("isisLspGen.attributes.maxIntvl").Int())
+																	nestedChildisisDomLvl.LspGenerationSecondInterval = types.Int64Value(risisLspGen.Get("isisLspGen.attributes.secIntvl").Int())
+																}
+																if nestedChildisisDom.Levels == nil {
+																	nestedChildisisDom.Levels = make(map[string]ISISInstancesVrfsLevels)
+																}
+																nestedChildisisDom.Levels[nestedMapKey] = nestedChildisisDomLvl
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											{
+												var risisGr gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("isisGr.attributes.rn").String()
+														if rnValue == "gr" {
+															risisGr = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildisisDom.GracefulRestartAdminState = types.StringValue(risisGr.Get("isisGr.attributes.adminSt").String())
+												nestedChildisisDom.GracefulRestartT3Interval = types.Int64Value(risisGr.Get("isisGr.attributes.grT3Intvl").Int())
+											}
 											{
 												var risisOverload gjson.Result
 												nestedValue.Get("children").ForEach(
@@ -935,7 +1217,201 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 				} else {
 					nc_Item.TableMapFilter = types.StringNull()
 				}
+				for nc__ := range nc_Item.Redistributions {
+					nc__Item := nc_Item.Redistributions[nc__]
+					keyParts := strings.SplitN(nc__, ";", 3)
+					var risisInterLeakP gjson.Result
+					risisDomAf.Get("isisDomAf.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("isisInterLeakP.attributes.proto").String() == keyParts[0] &&
+								v.Get("isisInterLeakP.attributes.inst").String() == keyParts[1] &&
+								v.Get("isisInterLeakP.attributes.asn").String() == keyParts[2] {
+								risisInterLeakP = v
+								return false
+							}
+							return true
+						},
+					)
+					if !risisInterLeakP.Exists() {
+						delete(nc_Item.Redistributions, nc__)
+						continue
+					}
+					if !nc__Item.RouteMap.IsNull() {
+						nc__Item.RouteMap = types.StringValue(risisInterLeakP.Get("isisInterLeakP.attributes.rtMap").String())
+					} else {
+						nc__Item.RouteMap = types.StringNull()
+					}
+					if !nc__Item.Scope.IsNull() {
+						nc__Item.Scope = types.StringValue(risisInterLeakP.Get("isisInterLeakP.attributes.scope").String())
+					} else {
+						nc__Item.Scope = types.StringNull()
+					}
+					if !nc__Item.Srv6PrefixType.IsNull() {
+						nc__Item.Srv6PrefixType = types.StringValue(risisInterLeakP.Get("isisInterLeakP.attributes.srv6PrefixType").String())
+					} else {
+						nc__Item.Srv6PrefixType = types.StringNull()
+					}
+					nc_Item.Redistributions[nc__] = nc__Item
+				}
+				for nc__ := range nc_Item.SummaryAddresses {
+					nc__Item := nc_Item.SummaryAddresses[nc__]
+					var risisRtSum gjson.Result
+					risisDomAf.Get("isisDomAf.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("isisRtSum.attributes.addr").String() == nc__ {
+								risisRtSum = v
+								return false
+							}
+							return true
+						},
+					)
+					if !risisRtSum.Exists() {
+						delete(nc_Item.SummaryAddresses, nc__)
+						continue
+					}
+					if !nc__Item.Level.IsNull() {
+						nc__Item.Level = types.StringValue(risisRtSum.Get("isisRtSum.attributes.sumLevel").String())
+					} else {
+						nc__Item.Level = types.StringNull()
+					}
+					nc_Item.SummaryAddresses[nc__] = nc__Item
+				}
+				for nc__ := range nc_Item.Distributions {
+					nc__Item := nc_Item.Distributions[nc__]
+					var risisDistribute gjson.Result
+					risisDomAf.Get("isisDomAf.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("isisDistribute.attributes.source").String() == nc__ {
+								risisDistribute = v
+								return false
+							}
+							return true
+						},
+					)
+					if !risisDistribute.Exists() {
+						delete(nc_Item.Distributions, nc__)
+						continue
+					}
+					if !nc__Item.DestinationLevel.IsNull() {
+						nc__Item.DestinationLevel = types.StringValue(risisDistribute.Get("isisDistribute.attributes.destination").String())
+					} else {
+						nc__Item.DestinationLevel = types.StringNull()
+					}
+					if !nc__Item.All.IsNull() {
+						nc__Item.All = types.BoolValue(helpers.ParseNxosBoolean(risisDistribute.Get("isisDistribute.attributes.all").String()))
+					} else {
+						nc__Item.All = types.BoolNull()
+					}
+					if !nc__Item.RouteMap.IsNull() {
+						nc__Item.RouteMap = types.StringValue(risisDistribute.Get("isisDistribute.attributes.rmap").String())
+					} else {
+						nc__Item.RouteMap = types.StringNull()
+					}
+					nc_Item.Distributions[nc__] = nc__Item
+				}
 				ncItem.AddressFamilies[nc_] = nc_Item
+			}
+			for nc_ := range ncItem.Levels {
+				nc_Item := ncItem.Levels[nc_]
+				var risisDomLvl gjson.Result
+				risisDom.Get("isisDom.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("isisDomLvl.attributes.type").String() == nc_ {
+							risisDomLvl = v
+							return false
+						}
+						return true
+					},
+				)
+				if !risisDomLvl.Exists() {
+					delete(ncItem.Levels, nc_)
+					continue
+				}
+				if !nc_Item.Control.IsNull() {
+					nc_Item.Control = types.StringValue(risisDomLvl.Get("isisDomLvl.attributes.ctrl").String())
+				} else {
+					nc_Item.Control = types.StringNull()
+				}
+				{
+					var risisSpfComp gjson.Result
+					risisDomLvl.Get("isisDomLvl.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("isisSpfComp.attributes.rn").String()
+							if rnValue == "spfcomp" {
+								risisSpfComp = v
+								return false
+							}
+							return true
+						},
+					)
+					if !nc_Item.SpfInitialInterval.IsNull() {
+						nc_Item.SpfInitialInterval = types.Int64Value(risisSpfComp.Get("isisSpfComp.attributes.initIntvl").Int())
+					} else {
+						nc_Item.SpfInitialInterval = types.Int64Null()
+					}
+					if !nc_Item.SpfMaxInterval.IsNull() {
+						nc_Item.SpfMaxInterval = types.Int64Value(risisSpfComp.Get("isisSpfComp.attributes.maxIntvl").Int())
+					} else {
+						nc_Item.SpfMaxInterval = types.Int64Null()
+					}
+					if !nc_Item.SpfSecondInterval.IsNull() {
+						nc_Item.SpfSecondInterval = types.Int64Value(risisSpfComp.Get("isisSpfComp.attributes.secIntvl").Int())
+					} else {
+						nc_Item.SpfSecondInterval = types.Int64Null()
+					}
+				}
+				{
+					var risisLspGen gjson.Result
+					risisDomLvl.Get("isisDomLvl.children").ForEach(
+						func(_, v gjson.Result) bool {
+							rnValue := v.Get("isisLspGen.attributes.rn").String()
+							if rnValue == "lspgen" {
+								risisLspGen = v
+								return false
+							}
+							return true
+						},
+					)
+					if !nc_Item.LspGenerationInitialInterval.IsNull() {
+						nc_Item.LspGenerationInitialInterval = types.Int64Value(risisLspGen.Get("isisLspGen.attributes.initIntvl").Int())
+					} else {
+						nc_Item.LspGenerationInitialInterval = types.Int64Null()
+					}
+					if !nc_Item.LspGenerationMaxInterval.IsNull() {
+						nc_Item.LspGenerationMaxInterval = types.Int64Value(risisLspGen.Get("isisLspGen.attributes.maxIntvl").Int())
+					} else {
+						nc_Item.LspGenerationMaxInterval = types.Int64Null()
+					}
+					if !nc_Item.LspGenerationSecondInterval.IsNull() {
+						nc_Item.LspGenerationSecondInterval = types.Int64Value(risisLspGen.Get("isisLspGen.attributes.secIntvl").Int())
+					} else {
+						nc_Item.LspGenerationSecondInterval = types.Int64Null()
+					}
+				}
+				ncItem.Levels[nc_] = nc_Item
+			}
+			{
+				var risisGr gjson.Result
+				risisDom.Get("isisDom.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("isisGr.attributes.rn").String()
+						if rnValue == "gr" {
+							risisGr = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.GracefulRestartAdminState.IsNull() {
+					ncItem.GracefulRestartAdminState = types.StringValue(risisGr.Get("isisGr.attributes.adminSt").String())
+				} else {
+					ncItem.GracefulRestartAdminState = types.StringNull()
+				}
+				if !ncItem.GracefulRestartT3Interval.IsNull() {
+					ncItem.GracefulRestartT3Interval = types.Int64Value(risisGr.Get("isisGr.attributes.grT3Intvl").Int())
+				} else {
+					ncItem.GracefulRestartT3Interval = types.Int64Null()
+				}
 			}
 			{
 				var risisOverload gjson.Result
@@ -1289,6 +1765,74 @@ func (data ISIS) toBodyWithDeletes(ctx context.Context, state ISIS, config ISIS,
 						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 					}
 				}
+				for di__ := range stateItemdi_.AddressFamilies {
+					if _, found := planItemdi_.AddressFamilies[di__]; !found {
+						continue
+					}
+					stateItemdi__ := stateItemdi_.AddressFamilies[di__]
+					planItemdi__ := planItemdi_.AddressFamilies[di__]
+					matchBodyPathdi__ := ""
+					for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+						if mv.Get("isisDomAf.attributes.type").String() == di__ {
+							matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".isisDomAf.children"
+							break
+						}
+					}
+					if matchBodyPathdi__ == "" {
+						continue
+					}
+					for stateChildKey := range stateItemdi__.Redistributions {
+						if _, found := planItemdi__.Redistributions[stateChildKey]; !found {
+							stateChild := stateItemdi__.Redistributions[stateChildKey]
+							deleteBody := ""
+							deleteBody, _ = sjson.Set(deleteBody, "isisInterLeakP.attributes.rn", stateChild.getRn(stateChildKey))
+							deleteBody, _ = sjson.Set(deleteBody, "isisInterLeakP.attributes.status", "deleted")
+							body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
+						}
+					}
+					for stateChildKey := range stateItemdi__.SummaryAddresses {
+						if _, found := planItemdi__.SummaryAddresses[stateChildKey]; !found {
+							stateChild := stateItemdi__.SummaryAddresses[stateChildKey]
+							deleteBody := ""
+							deleteBody, _ = sjson.Set(deleteBody, "isisRtSum.attributes.rn", stateChild.getRn(stateChildKey))
+							deleteBody, _ = sjson.Set(deleteBody, "isisRtSum.attributes.status", "deleted")
+							body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
+						}
+					}
+					for stateChildKey := range stateItemdi__.Distributions {
+						if _, found := planItemdi__.Distributions[stateChildKey]; !found {
+							stateChild := stateItemdi__.Distributions[stateChildKey]
+							deleteBody := ""
+							deleteBody, _ = sjson.Set(deleteBody, "isisDistribute.attributes.rn", stateChild.getRn(stateChildKey))
+							deleteBody, _ = sjson.Set(deleteBody, "isisDistribute.attributes.status", "deleted")
+							body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
+						}
+					}
+				}
+				for stateChildKey := range stateItemdi_.Levels {
+					if _, found := planItemdi_.Levels[stateChildKey]; !found {
+						stateChild := stateItemdi_.Levels[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "isisDomLvl.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "isisDomLvl.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for di__ := range stateItemdi_.Levels {
+					if _, found := planItemdi_.Levels[di__]; !found {
+						continue
+					}
+					matchBodyPathdi__ := ""
+					for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+						if mv.Get("isisDomLvl.attributes.type").String() == di__ {
+							matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".isisDomLvl.children"
+							break
+						}
+					}
+					if matchBodyPathdi__ == "" {
+						continue
+					}
+				}
 			}
 		}
 		for stateKey := range state.Interfaces {
@@ -1456,7 +2000,136 @@ func (data ISIS) toBodyWithDeletes(ctx context.Context, state ISIS, config ISIS,
 														break
 													}
 												}
+												{
+													listChildPath__ := ""
+													for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+														if mv.Get("isisDomAf.attributes.type").String() == key {
+															listChildPath__ = listChildPath_ + "." + strconv.Itoa(mi) + ".isisDomAf.children"
+															break
+														}
+													}
+													if listChildPath__ != "" {
+														for key := range stateChild.Redistributions {
+															if configChild, ok := configChild.Redistributions[key]; ok {
+																stateChild := stateChild.Redistributions[key]
+																_ = stateChild
+																_ = configChild
+																keyParts := strings.SplitN(key, ";", 3)
+																for mi, mv := range gjson.Get(body.Str, listChildPath__).Array() {
+																	if mv.Get("isisInterLeakP.attributes.proto").String() == keyParts[0] &&
+																		mv.Get("isisInterLeakP.attributes.inst").String() == keyParts[1] &&
+																		mv.Get("isisInterLeakP.attributes.asn").String() == keyParts[2] {
+																		if !stateChild.RouteMap.IsNull() && configChild.RouteMap.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".isisInterLeakP.attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		if !stateChild.Scope.IsNull() && configChild.Scope.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".isisInterLeakP.attributes."+"scope", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		if !stateChild.Srv6PrefixType.IsNull() && configChild.Srv6PrefixType.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".isisInterLeakP.attributes."+"srv6PrefixType", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		break
+																	}
+																}
+															}
+														}
+														for key := range stateChild.SummaryAddresses {
+															if configChild, ok := configChild.SummaryAddresses[key]; ok {
+																stateChild := stateChild.SummaryAddresses[key]
+																_ = stateChild
+																_ = configChild
+																for mi, mv := range gjson.Get(body.Str, listChildPath__).Array() {
+																	if mv.Get("isisRtSum.attributes.addr").String() == key {
+																		if !stateChild.Level.IsNull() && configChild.Level.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".isisRtSum.attributes."+"sumLevel", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		break
+																	}
+																}
+															}
+														}
+														for key := range stateChild.Distributions {
+															if configChild, ok := configChild.Distributions[key]; ok {
+																stateChild := stateChild.Distributions[key]
+																_ = stateChild
+																_ = configChild
+																for mi, mv := range gjson.Get(body.Str, listChildPath__).Array() {
+																	if mv.Get("isisDistribute.attributes.source").String() == key {
+																		if !stateChild.DestinationLevel.IsNull() && configChild.DestinationLevel.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".isisDistribute.attributes."+"destination", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		if !stateChild.All.IsNull() && configChild.All.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".isisDistribute.attributes."+"all", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		if !stateChild.RouteMap.IsNull() && configChild.RouteMap.IsNull() {
+																			body.Str, _ = sjson.Set(body.Str, listChildPath__+"."+strconv.Itoa(mi)+".isisDistribute.attributes."+"rmap", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		break
+																	}
+																}
+															}
+														}
+													}
+												}
 											}
+										}
+										for key := range stateChild.Levels {
+											if configChild, ok := configChild.Levels[key]; ok {
+												stateChild := stateChild.Levels[key]
+												_ = stateChild
+												_ = configChild
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+													if mv.Get("isisDomLvl.attributes.type").String() == key {
+														if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".isisDomLvl.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+														}
+														break
+													}
+												}
+												{
+													listChildPath__ := ""
+													for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+														if mv.Get("isisDomLvl.attributes.type").String() == key {
+															listChildPath__ = listChildPath_ + "." + strconv.Itoa(mi) + ".isisDomLvl.children"
+															break
+														}
+													}
+													if listChildPath__ != "" {
+														if !stateChild.SpfInitialInterval.IsNull() && configChild.SpfInitialInterval.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "isisSpfComp")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"initIntvl", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.SpfMaxInterval.IsNull() && configChild.SpfMaxInterval.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "isisSpfComp")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxIntvl", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.SpfSecondInterval.IsNull() && configChild.SpfSecondInterval.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "isisSpfComp")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"secIntvl", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.LspGenerationInitialInterval.IsNull() && configChild.LspGenerationInitialInterval.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "isisLspGen")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"initIntvl", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.LspGenerationMaxInterval.IsNull() && configChild.LspGenerationMaxInterval.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "isisLspGen")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxIntvl", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.LspGenerationSecondInterval.IsNull() && configChild.LspGenerationSecondInterval.IsNull() {
+															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "isisLspGen")
+															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"secIntvl", "DME_UNSET_PROPERTY_MARKER")
+														}
+													}
+												}
+											}
+										}
+										if !stateChild.GracefulRestartAdminState.IsNull() && configChild.GracefulRestartAdminState.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "isisGr")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.GracefulRestartT3Interval.IsNull() && configChild.GracefulRestartT3Interval.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "isisGr")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grT3Intvl", "DME_UNSET_PROPERTY_MARKER")
 										}
 										if !stateChild.OverloadStartupTime.IsNull() && configChild.OverloadStartupTime.IsNull() {
 											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "isisOverload")

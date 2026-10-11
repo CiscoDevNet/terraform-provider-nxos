@@ -40,8 +40,39 @@ resource "nxos_isis" "example" {
               router_id_interface                     = "lo0"
               table_map                               = "rm1"
               table_map_filter                        = "enabled"
+              redistributions = {
+                "direct;none;none" = {
+                  route_map        = "RM_REDIST"
+                  scope            = "inter"
+                  srv6_prefix_type = "unspecified"
+                }
+              }
+              summary_addresses = {
+                "10.0.0.0/8" = {
+                  level = "l2"
+                }
+              }
+              distributions = {
+                "l2" = {
+                  destination_level = "l1"
+                  route_map         = "RM_DISTRIBUTE"
+                }
+              }
             }
           }
+          levels = {
+            "l2" = {
+              control                         = "fast-converge"
+              spf_initial_interval            = 60
+              spf_max_interval                = 5000
+              spf_second_interval             = 60
+              lsp_generation_initial_interval = 70
+              lsp_generation_max_interval     = 6000
+              lsp_generation_second_interval  = 70
+            }
+          }
+          graceful_restart_admin_state  = "disabled"
+          graceful_restart_t3_interval  = 120
           overload_startup_time         = 60
           overload_admin_state          = "always-on"
           overload_bgp_as_number        = 100

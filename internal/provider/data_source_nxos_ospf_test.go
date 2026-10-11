@@ -56,6 +56,8 @@ func TestAccDataSourceNxosOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.nssa_translator_role", "always"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.segment_routing_mpls", "mpls"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.type", "stub"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.ranges.10.1.0.0/16.cost", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.ranges.10.1.0.0/16.control", "no-advertise"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_await_convergence_bgp_asn", "65535"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_control", "external-lsa,startup,stub,summary-lsa"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_external_lsa", "600"))
@@ -83,6 +85,20 @@ func TestAccDataSourceNxosOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.always", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.route_map", "route_map_ospf"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.srv6_prefix_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.default_information_originate_always", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.default_information_originate_route_map", "RM_DEFAULT"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.spf_throttle_hold_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.spf_throttle_initial_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.spf_throttle_max_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.lsa_arrival_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.lsa_group_pacing_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.lsa_throttle_hold_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.lsa_throttle_max_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.lsa_throttle_start_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.graceful_restart_control", "planned-only"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.graceful_restart_period", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.graceful_restart_helper", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.summary_addresses.10.0.0.0/8.tag", "5"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -174,6 +190,12 @@ func testAccDataSourceNxosOSPFConfig() string {
 	config += `							nssa_translator_role = "always"` + "\n"
 	config += `							segment_routing_mpls = "mpls"` + "\n"
 	config += `							type = "stub"` + "\n"
+	config += `							ranges = {` + "\n"
+	config += `								"10.1.0.0/16" = {` + "\n"
+	config += `									cost = "10"` + "\n"
+	config += `									control = "no-advertise"` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
 	config += `					max_metric_await_convergence_bgp_asn = "65535"` + "\n"
@@ -213,6 +235,24 @@ func testAccDataSourceNxosOSPFConfig() string {
 	config += `							always = "no"` + "\n"
 	config += `							route_map = "route_map_ospf"` + "\n"
 	config += `							srv6_prefix_type = "unspecified"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					default_information_originate_always = "yes"` + "\n"
+	config += `					default_information_originate_route_map = "RM_DEFAULT"` + "\n"
+	config += `					spf_throttle_hold_interval = 100` + "\n"
+	config += `					spf_throttle_initial_interval = 10` + "\n"
+	config += `					spf_throttle_max_interval = 3000` + "\n"
+	config += `					lsa_arrival_interval = 50` + "\n"
+	config += `					lsa_group_pacing_interval = 20` + "\n"
+	config += `					lsa_throttle_hold_interval = 50` + "\n"
+	config += `					lsa_throttle_max_interval = 3000` + "\n"
+	config += `					lsa_throttle_start_interval = 10` + "\n"
+	config += `					graceful_restart_control = "planned-only"` + "\n"
+	config += `					graceful_restart_period = 30` + "\n"
+	config += `					graceful_restart_helper = false` + "\n"
+	config += `					summary_addresses = {` + "\n"
+	config += `						"10.0.0.0/8" = {` + "\n"
+	config += `							tag = 5` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
 	config += `				}` + "\n"

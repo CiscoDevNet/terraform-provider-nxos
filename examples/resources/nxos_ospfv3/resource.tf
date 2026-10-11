@@ -24,6 +24,17 @@ resource "nxos_ospfv3" "example" {
               summary                  = false
               suppress_forward_address = false
               type                     = "regular"
+              address_families = {
+                "ipv6-ucast" = {
+                  cost = "10"
+                  ranges = {
+                    "2001:db8::/32" = {
+                      cost    = "10"
+                      control = "no-advertise"
+                    }
+                  }
+                }
+              }
             }
           }
           address_families = {
@@ -32,8 +43,32 @@ resource "nxos_ospfv3" "example" {
               default_metric                = "1024"
               default_route_nssa_pbit_clear = true
               max_ecmp_cost                 = 16
+              redistributions = {
+                "direct;none;none" = {
+                  route_map        = "RM_REDIST"
+                  srv6_prefix_type = "unspecified"
+                }
+              }
+              default_information_originate_always    = true
+              default_information_originate_route_map = "RM_DEFAULT"
+              spf_throttle_hold_interval              = 100
+              spf_throttle_initial_interval           = 10
+              spf_throttle_max_interval               = 3000
+              summary_addresses = {
+                "2001:db8:1::/48" = {
+                  tag = 5
+                }
+              }
             }
           }
+          lsa_arrival_interval        = 50
+          lsa_group_pacing_interval   = 20
+          lsa_throttle_hold_interval  = 50
+          lsa_throttle_max_interval   = 3000
+          lsa_throttle_start_interval = 10
+          graceful_restart_control    = "planned-only"
+          graceful_restart_period     = 30
+          graceful_restart_helper     = false
         }
       }
     }

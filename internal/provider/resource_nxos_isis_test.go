@@ -70,6 +70,21 @@ func TestAccNxosISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.router_id_interface", "lo0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.table_map", "rm1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.table_map_filter", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.redistributions.direct;none;none.route_map", "RM_REDIST"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.redistributions.direct;none;none.scope", "inter"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.redistributions.direct;none;none.srv6_prefix_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.summary_addresses.10.0.0.0/8.level", "l2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.distributions.l2.destination_level", "l1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.distributions.l2.route_map", "RM_DISTRIBUTE"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.control", "fast-converge"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.spf_initial_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.spf_max_interval", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.spf_second_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.lsp_generation_initial_interval", "70"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.lsp_generation_max_interval", "6000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.lsp_generation_second_interval", "70"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.graceful_restart_admin_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.graceful_restart_t3_interval", "120"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.overload_startup_time", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.overload_admin_state", "always-on"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.vrfs.default.overload_bgp_as_number", "100"))
@@ -250,8 +265,39 @@ func testAccNxosISISConfig_all(includeWriteOnly bool) string {
 	config += `							router_id_interface = "lo0"` + "\n"
 	config += `							table_map = "rm1"` + "\n"
 	config += `							table_map_filter = "enabled"` + "\n"
+	config += `							redistributions = {` + "\n"
+	config += `								"direct;none;none" = {` + "\n"
+	config += `									route_map = "RM_REDIST"` + "\n"
+	config += `									scope = "inter"` + "\n"
+	config += `									srv6_prefix_type = "unspecified"` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
+	config += `							summary_addresses = {` + "\n"
+	config += `								"10.0.0.0/8" = {` + "\n"
+	config += `									level = "l2"` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
+	config += `							distributions = {` + "\n"
+	config += `								"l2" = {` + "\n"
+	config += `									destination_level = "l1"` + "\n"
+	config += `									route_map = "RM_DISTRIBUTE"` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
+	config += `					levels = {` + "\n"
+	config += `						"l2" = {` + "\n"
+	config += `							control = "fast-converge"` + "\n"
+	config += `							spf_initial_interval = 60` + "\n"
+	config += `							spf_max_interval = 5000` + "\n"
+	config += `							spf_second_interval = 60` + "\n"
+	config += `							lsp_generation_initial_interval = 70` + "\n"
+	config += `							lsp_generation_max_interval = 6000` + "\n"
+	config += `							lsp_generation_second_interval = 70` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					graceful_restart_admin_state = "disabled"` + "\n"
+	config += `					graceful_restart_t3_interval = 120` + "\n"
 	config += `					overload_startup_time = 60` + "\n"
 	config += `					overload_admin_state = "always-on"` + "\n"
 	config += `					overload_bgp_as_number = 100` + "\n"

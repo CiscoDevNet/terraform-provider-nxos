@@ -54,10 +54,29 @@ func TestAccNxosOSPFv3(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.summary", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.suppress_forward_address", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.type", "regular"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.address_families.ipv6-ucast.cost", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.address_families.ipv6-ucast.ranges.2001:db8::/32.cost", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.address_families.ipv6-ucast.ranges.2001:db8::/32.control", "no-advertise"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.administrative_distance", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.default_metric", "1024"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.default_route_nssa_pbit_clear", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.max_ecmp_cost", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.redistributions.direct;none;none.route_map", "RM_REDIST"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.redistributions.direct;none;none.srv6_prefix_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.default_information_originate_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.default_information_originate_route_map", "RM_DEFAULT"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.spf_throttle_hold_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.spf_throttle_initial_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.spf_throttle_max_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.summary_addresses.2001:db8:1::/48.tag", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.lsa_arrival_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.lsa_group_pacing_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.lsa_throttle_hold_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.lsa_throttle_max_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.lsa_throttle_start_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.graceful_restart_control", "planned-only"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.graceful_restart_period", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.graceful_restart_helper", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.eth1/4.advertise_secondaries", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.eth1/4.area", "0.0.0.10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.eth1/4.bfd_control", "disabled"))
@@ -185,6 +204,17 @@ func testAccNxosOSPFv3Config_all() string {
 	config += `							summary = false` + "\n"
 	config += `							suppress_forward_address = false` + "\n"
 	config += `							type = "regular"` + "\n"
+	config += `							address_families = {` + "\n"
+	config += `								"ipv6-ucast" = {` + "\n"
+	config += `									cost = "10"` + "\n"
+	config += `									ranges = {` + "\n"
+	config += `										"2001:db8::/32" = {` + "\n"
+	config += `											cost = "10"` + "\n"
+	config += `											control = "no-advertise"` + "\n"
+	config += `										}` + "\n"
+	config += `									}` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
 	config += `					address_families = {` + "\n"
@@ -193,8 +223,32 @@ func testAccNxosOSPFv3Config_all() string {
 	config += `							default_metric = "1024"` + "\n"
 	config += `							default_route_nssa_pbit_clear = true` + "\n"
 	config += `							max_ecmp_cost = 16` + "\n"
+	config += `							redistributions = {` + "\n"
+	config += `								"direct;none;none" = {` + "\n"
+	config += `									route_map = "RM_REDIST"` + "\n"
+	config += `									srv6_prefix_type = "unspecified"` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
+	config += `							default_information_originate_always = true` + "\n"
+	config += `							default_information_originate_route_map = "RM_DEFAULT"` + "\n"
+	config += `							spf_throttle_hold_interval = 100` + "\n"
+	config += `							spf_throttle_initial_interval = 10` + "\n"
+	config += `							spf_throttle_max_interval = 3000` + "\n"
+	config += `							summary_addresses = {` + "\n"
+	config += `								"2001:db8:1::/48" = {` + "\n"
+	config += `									tag = 5` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
+	config += `					lsa_arrival_interval = 50` + "\n"
+	config += `					lsa_group_pacing_interval = 20` + "\n"
+	config += `					lsa_throttle_hold_interval = 50` + "\n"
+	config += `					lsa_throttle_max_interval = 3000` + "\n"
+	config += `					lsa_throttle_start_interval = 10` + "\n"
+	config += `					graceful_restart_control = "planned-only"` + "\n"
+	config += `					graceful_restart_period = 30` + "\n"
+	config += `					graceful_restart_helper = false` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

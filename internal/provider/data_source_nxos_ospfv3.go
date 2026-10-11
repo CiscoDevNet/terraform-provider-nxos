@@ -56,7 +56,7 @@ func (d *OSPFv3DataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPFv3 configuration on NX-OS devices, including OSPFv3 instances, VRFs, areas, and interface settings.").AddApiDocumentation("ospfv3Entity", "Routing%20and%20Forwarding/ospfv3:Entity/", []string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3DomAf", "ospfv3If"}, []string{"Routing%20and%20Forwarding/ospfv3:Inst/", "Routing%20and%20Forwarding/ospfv3:Dom/", "Routing%20and%20Forwarding/ospfv3:Area/", "Routing%20and%20Forwarding/ospfv3:DomAf/", "Routing%20and%20Forwarding/ospfv3:If/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPFv3 configuration on NX-OS devices, including OSPFv3 instances, VRFs, areas, and interface settings.").AddApiDocumentation("ospfv3Entity", "Routing%20and%20Forwarding/ospfv3:Entity/", []string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3AreaAf", "ospfv3InterAreaRtSum", "ospfv3DomAf", "ospfv3InterLeakP", "ospfv3DefRtLeakP", "ospfv3SpfComp", "ospfv3ExtRtSum", "ospfv3LsaCtrl", "ospfv3Gr", "ospfv3If"}, []string{"Routing%20and%20Forwarding/ospfv3:Inst/", "Routing%20and%20Forwarding/ospfv3:Dom/", "Routing%20and%20Forwarding/ospfv3:Area/", "Routing%20and%20Forwarding/ospfv3:AreaAf/", "Routing%20and%20Forwarding/ospfv3:InterAreaRtSum/", "Routing%20and%20Forwarding/ospfv3:DomAf/", "Routing%20and%20Forwarding/ospfv3:InterLeakP/", "Routing%20and%20Forwarding/ospfv3:DefRtLeakP/", "Routing%20and%20Forwarding/ospfv3:SpfComp/", "Routing%20and%20Forwarding/ospfv3:ExtRtSum/", "Routing%20and%20Forwarding/ospfv3:LsaCtrl/", "Routing%20and%20Forwarding/ospfv3:Gr/", "Routing%20and%20Forwarding/ospfv3:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -158,6 +158,34 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													MarkdownDescription: "Configure area type as NSSA or stub.",
 													Computed:            true,
 												},
+												"address_families": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 area address families.\n  - Map key: `address_family_type` - Unicast IP address family type.\n  - Key choices: `ipv6-ucast`").String,
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"cost": schema.StringAttribute{
+																MarkdownDescription: "Specify cost for default inter-area-prefix LSA. Value must be an integer range [0,16777215] or keyword: unspecified.",
+																Computed:            true,
+															},
+															"ranges": schema.MapNestedAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 inter-area route summarizations (area ranges).\n  - Map key: `address` - Address.").String,
+																Computed:            true,
+																NestedObject: schema.NestedAttributeObject{
+																	Attributes: map[string]schema.Attribute{
+																		"cost": schema.StringAttribute{
+																			MarkdownDescription: "Area range cost for route summarization. Value must be an integer range [0,16777216] or keyword: unspecified.",
+																			Computed:            true,
+																		},
+																		"control": schema.StringAttribute{
+																			MarkdownDescription: "Summary address no advertise.",
+																			Computed:            true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
 											},
 										},
 									},
@@ -182,8 +210,92 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													MarkdownDescription: "Maximum Equal Cost Multi Path(ECMP).",
 													Computed:            true,
 												},
+												"redistributions": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 route redistributions.\n  - Map key format: `<protocol>;<protocol_instance>;<asn>`\n  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.\n  - Key component `protocol_instance`: The inter protocol route leak policy instance.\n  - Key component `asn`: The autonomous system number.").String,
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"route_map": schema.StringAttribute{
+																MarkdownDescription: "The name of the default route leak policy route map. This route map name is used to control distribution.",
+																Computed:            true,
+															},
+															"srv6_prefix_type": schema.StringAttribute{
+																MarkdownDescription: "SRv6 Prefix Type; Valid only when proto is srv6.",
+																Computed:            true,
+															},
+														},
+													},
+												},
+												"default_information_originate_always": schema.BoolAttribute{
+													MarkdownDescription: "Always advertise default leak.",
+													Computed:            true,
+												},
+												"default_information_originate_route_map": schema.StringAttribute{
+													MarkdownDescription: "The name of the default route leak policy route map. This route map name is used to control distribution.",
+													Computed:            true,
+												},
+												"spf_throttle_hold_interval": schema.Int64Attribute{
+													MarkdownDescription: "Minimum hold time interval between SPF calculations.",
+													Computed:            true,
+												},
+												"spf_throttle_initial_interval": schema.Int64Attribute{
+													MarkdownDescription: "Initial SPF schedule delay interval.",
+													Computed:            true,
+												},
+												"spf_throttle_max_interval": schema.Int64Attribute{
+													MarkdownDescription: "Maximum wait time between SPF calculations.",
+													Computed:            true,
+												},
+												"summary_addresses": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 external route summarizations (summary-address).\n  - Map key: `address` - Address.").String,
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"control": schema.StringAttribute{
+																MarkdownDescription: "Summary address no advertise. Cannot be configured together with `tag`.",
+																Computed:            true,
+															},
+															"tag": schema.Int64Attribute{
+																MarkdownDescription: "Route tag of external route.",
+																Computed:            true,
+															},
+														},
+													},
+												},
 											},
 										},
+									},
+									"lsa_arrival_interval": schema.Int64Attribute{
+										MarkdownDescription: "Minimum interval between arrival of a LSA.",
+										Computed:            true,
+									},
+									"lsa_group_pacing_interval": schema.Int64Attribute{
+										MarkdownDescription: "LSA group pacing interval.",
+										Computed:            true,
+									},
+									"lsa_throttle_hold_interval": schema.Int64Attribute{
+										MarkdownDescription: "LSA generation throttle hold interval.",
+										Computed:            true,
+									},
+									"lsa_throttle_max_interval": schema.Int64Attribute{
+										MarkdownDescription: "LSA generation throttle maximum interval.",
+										Computed:            true,
+									},
+									"lsa_throttle_start_interval": schema.Int64Attribute{
+										MarkdownDescription: "LSA generation throttle start wait interval.",
+										Computed:            true,
+									},
+									"graceful_restart_control": schema.StringAttribute{
+										MarkdownDescription: "Graceful restart controls like planned, complete and disabled state.",
+										Computed:            true,
+									},
+									"graceful_restart_period": schema.Int64Attribute{
+										MarkdownDescription: "Graceful restart period in seconds starting from 5 to 1800.",
+										Computed:            true,
+									},
+									"graceful_restart_helper": schema.BoolAttribute{
+										MarkdownDescription: "Graceful restart helper mode.",
+										Computed:            true,
 									},
 								},
 							},
@@ -291,7 +403,7 @@ func (d *OSPFv3DataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3DomAf", "ospfv3If"}, OSPFv3SubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3AreaAf", "ospfv3InterAreaRtSum", "ospfv3DomAf", "ospfv3InterLeakP", "ospfv3DefRtLeakP", "ospfv3SpfComp", "ospfv3ExtRtSum", "ospfv3LsaCtrl", "ospfv3Gr", "ospfv3If"}, OSPFv3SubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

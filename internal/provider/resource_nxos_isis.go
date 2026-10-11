@@ -63,7 +63,7 @@ func (r *ISISResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS configuration on NX-OS devices, including IS-IS instances, VRFs, authentication settings, and interface configurations.").AddApiDocumentation("isisEntity", "Routing%20and%20Forwarding/isis:Entity/", []string{"isisInst", "isisDom", "isisDomAf", "isisOverload", "isisInternalIf"}, []string{"Routing%20and%20Forwarding/isis:Inst/", "Routing%20and%20Forwarding/isis:Dom/", "Routing%20and%20Forwarding/isis:DomAf/", "Routing%20and%20Forwarding/isis:Overload/", "Routing%20and%20Forwarding/isis:InternalIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS configuration on NX-OS devices, including IS-IS instances, VRFs, authentication settings, and interface configurations.").AddApiDocumentation("isisEntity", "Routing%20and%20Forwarding/isis:Entity/", []string{"isisInst", "isisDom", "isisDomAf", "isisInterLeakP", "isisRtSum", "isisDistribute", "isisDomLvl", "isisSpfComp", "isisLspGen", "isisGr", "isisOverload", "isisInternalIf"}, []string{"Routing%20and%20Forwarding/isis:Inst/", "Routing%20and%20Forwarding/isis:Dom/", "Routing%20and%20Forwarding/isis:DomAf/", "Routing%20and%20Forwarding/isis:InterLeakP/", "Routing%20and%20Forwarding/isis:RtSum/", "Routing%20and%20Forwarding/isis:Distribute/", "Routing%20and%20Forwarding/isis:DomLvl/", "Routing%20and%20Forwarding/isis:SpfComp/", "Routing%20and%20Forwarding/isis:LspGen/", "Routing%20and%20Forwarding/isis:Gr/", "Routing%20and%20Forwarding/isis:Overload/", "Routing%20and%20Forwarding/isis:InternalIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -319,7 +319,139 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 														stringvalidator.OneOf("enabled", "disabled"),
 													},
 												},
+												"redistributions": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS route redistributions.\n  - Map key format: `<protocol>;<protocol_instance>;<asn>`\n  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.\n  - Key component `protocol_instance`: The inter protocol route leak policy instance.\n  - Key component `asn`: The autonomous system number.").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"route_map": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("The name of the default route leak policy route map. This route map name is used to control distribution.").String,
+																Optional:            true,
+															},
+															"scope": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("The domain applicable to the capability.").AddStringEnumDescription("intra", "inter", "defrt").String,
+																Optional:            true,
+																Validators: []validator.String{
+																	stringvalidator.OneOf("intra", "inter", "defrt"),
+																},
+															},
+															"srv6_prefix_type": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("SRv6 Prefix Type; Valid only when proto is srv6.").AddStringEnumDescription("unspecified", "locator").String,
+																Optional:            true,
+																Validators: []validator.String{
+																	stringvalidator.OneOf("unspecified", "locator"),
+																},
+															},
+														},
+													},
+												},
+												"summary_addresses": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS summary addresses.\n  - Map key: `address` - Address.").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"level": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Holds summary address level.").AddStringEnumDescription("l1", "l2", "l12").String,
+																Optional:            true,
+																Validators: []validator.String{
+																	stringvalidator.OneOf("l1", "l2", "l12"),
+																},
+															},
+														},
+													},
+												},
+												"distributions": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS inter-level route distribution policies.\n  - Map key: `source_level` - Holds Source Domain for Routes Distribute Policy.\n  - Key choices: `p2p`, `l1`, `l2`").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"destination_level": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Holds Destination Domain for Routes Distribute Policy.").AddStringEnumDescription("p2p", "l1", "l2").String,
+																Optional:            true,
+																Validators: []validator.String{
+																	stringvalidator.OneOf("p2p", "l1", "l2"),
+																},
+															},
+															"all": schema.BoolAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Holds Distribution of all level-n routes. Cannot be configured together with `route_map`.").String,
+																Optional:            true,
+															},
+															"route_map": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Holds Route-map name for Distribute Policy.").String,
+																Optional:            true,
+															},
+														},
+													},
+												},
 											},
+										},
+									},
+									"levels": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS domain levels.\n  - Map key: `level` - Type.\n  - Key choices: `p2p`, `l1`, `l2`").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"control": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Controls. Choices: `lsp-fast-flood`, `smart-psnp-ack`, `fast-converge`. Can be an empty string. Allowed formats:\n  - Single value. Example: `fast-converge`\n  - Multiple values (comma-separated). Example: `fast-converge,lsp-fast-flood`. In this case values must be in alphabetical order.").AddStringEnumDescription("lsp-fast-flood", "smart-psnp-ack", "fast-converge").String,
+													Optional:            true,
+												},
+												"spf_initial_interval": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The initial wait interval. This is used in the LSP generation interval controls.").AddIntegerRangeDescription(50, 120000).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(50, 120000),
+													},
+												},
+												"spf_max_interval": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The maximum wait interval. This is used in the LSP generation interval controls.").AddIntegerRangeDescription(50, 120000).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(50, 120000),
+													},
+												},
+												"spf_second_interval": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The second wait interval. This is used in the LSP generation interval controls.").AddIntegerRangeDescription(50, 120000).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(50, 120000),
+													},
+												},
+												"lsp_generation_initial_interval": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The initial wait interval. This is used in the LSP generation interval controls.").AddIntegerRangeDescription(50, 120000).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(50, 120000),
+													},
+												},
+												"lsp_generation_max_interval": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The maximum wait interval. This is used in the LSP generation interval controls.").AddIntegerRangeDescription(50, 120000).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(50, 120000),
+													},
+												},
+												"lsp_generation_second_interval": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The second wait interval. This is used in the LSP generation interval controls.").AddIntegerRangeDescription(50, 120000).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(50, 120000),
+													},
+												},
+											},
+										},
+									},
+									"graceful_restart_admin_state": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Graceful Restart.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"graceful_restart_t3_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("T3 timer for graceful restart.").AddIntegerRangeDescription(30, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(30, 65535),
 										},
 									},
 									"overload_startup_time": schema.Int64Attribute{
@@ -820,7 +952,7 @@ func (r *ISISResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"isisInst", "isisDom", "isisDomAf", "isisOverload", "isisInternalIf"}, ISISSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"isisInst", "isisDom", "isisDomAf", "isisInterLeakP", "isisRtSum", "isisDistribute", "isisDomLvl", "isisSpfComp", "isisLspGen", "isisGr", "isisOverload", "isisInternalIf"}, ISISSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

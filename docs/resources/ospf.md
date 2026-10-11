@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.
   API Documentation
-  ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Entity/ospfInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Inst/ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Dom/ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Area/ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:MaxMetricLsaP/ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:If/ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:AuthNewP/ospfInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:InterLeakP/
+  ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Entity/ospfInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Inst/ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Dom/ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Area/ospfInterAreaRtSum https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:InterAreaRtSum/ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:MaxMetricLsaP/ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:If/ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:AuthNewP/ospfInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:InterLeakP/ospfDefRtLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:DefRtLeakP/ospfSpfComp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:SpfComp/ospfLsaCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:LsaCtrl/ospfGr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Gr/ospfExtRtSum https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:ExtRtSum/
 ---
 
 # nxos_ospf (Resource)
@@ -18,10 +18,16 @@ This resource can manage the OSPF configuration on NX-OS devices, including OSPF
 - [ospfInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Inst/)
 - [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Dom/)
 - [ospfArea](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Area/)
+- [ospfInterAreaRtSum](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:InterAreaRtSum/)
 - [ospfMaxMetricLsaP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:MaxMetricLsaP/)
 - [ospfIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:If/)
 - [ospfAuthNewP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:AuthNewP/)
 - [ospfInterLeakP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:InterLeakP/)
+- [ospfDefRtLeakP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:DefRtLeakP/)
+- [ospfSpfComp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:SpfComp/)
+- [ospfLsaCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:LsaCtrl/)
+- [ospfGr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Gr/)
+- [ospfExtRtSum](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:ExtRtSum/)
 
 ## Example Usage
 
@@ -58,6 +64,12 @@ resource "nxos_ospf" "example" {
               nssa_translator_role = "always"
               segment_routing_mpls = "mpls"
               type                 = "stub"
+              ranges = {
+                "10.1.0.0/16" = {
+                  cost    = "10"
+                  control = "no-advertise"
+                }
+              }
             }
           }
           max_metric_await_convergence_bgp_asn = "65535"
@@ -97,6 +109,24 @@ resource "nxos_ospf" "example" {
               always           = "no"
               route_map        = "route_map_ospf"
               srv6_prefix_type = "unspecified"
+            }
+          }
+          default_information_originate_always    = "yes"
+          default_information_originate_route_map = "RM_DEFAULT"
+          spf_throttle_hold_interval              = 100
+          spf_throttle_initial_interval           = 10
+          spf_throttle_max_interval               = 3000
+          lsa_arrival_interval                    = 50
+          lsa_group_pacing_interval               = 20
+          lsa_throttle_hold_interval              = 50
+          lsa_throttle_max_interval               = 3000
+          lsa_throttle_start_interval             = 10
+          graceful_restart_control                = "planned-only"
+          graceful_restart_period                 = 30
+          graceful_restart_helper                 = false
+          summary_addresses = {
+            "10.0.0.0/8" = {
+              tag = 5
             }
           }
         }
@@ -152,6 +182,9 @@ Optional:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.
   - Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`
+- `default_information_originate_always` (String) Always advertise default route leak.
+  - Choices: `no`, `yes`
+- `default_information_originate_route_map` (String) The name of the default route leak policy route map. This route map name is used to control distribution.
 - `default_metric` (Number) Default metric cost for redistributed routes.
   - Range: `0`-`16777214`
 - `default_route_nssa_pbit_clear` (Boolean) Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.
@@ -160,10 +193,25 @@ Optional:
 - `distance` (Number) Administrative distance preference.
   - Range: `1`-`255`
 - `down_bit_ignore` (Boolean) Holds the status of Down-bit ignore.
+- `graceful_restart_control` (String) Graceful restart controls like planned, complete and disabled state.
+  - Choices: `planned-only`, `complete`, `disabled`
+- `graceful_restart_helper` (Boolean) Graceful restart helper mode.
+- `graceful_restart_period` (Number) Graceful restart period in seconds starting from 5 to 1800.
+  - Range: `5`-`1800`
 - `interfaces` (Attributes Map) List of OSPF interfaces.
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
 - `log_adjacency_changes` (String) Adjacency change logging level.
   - Choices: `none`, `brief`, `detail`
+- `lsa_arrival_interval` (Number) Minimum interval between arrival of a LSA.
+  - Range: `10`-`600000`
+- `lsa_group_pacing_interval` (Number) LSA group pacing interval.
+  - Range: `1`-`1800`
+- `lsa_throttle_hold_interval` (Number) LSA generation throttle hold interval.
+  - Range: `50`-`30000`
+- `lsa_throttle_max_interval` (Number) LSA generation throttle maximum interval.
+  - Range: `50`-`30000`
+- `lsa_throttle_start_interval` (Number) LSA generation throttle start wait interval.
+  - Range: `0`-`5000`
 - `max_ecmp` (Number) Maximum Equal Cost Multi Path(ECMP).
   - Range: `1`-`64`
 - `max_metric_await_convergence_bgp_asn` (String) At startup, advertise max metric until convergence of BGP ASN.
@@ -186,6 +234,14 @@ Optional:
 - `rfc1583_compatible` (Boolean) RFC 1583 compatibility for external path preferences.
 - `rfc1583_compatible_ios` (Boolean) RFC 1583 compatibility to IOS for external path preferences.
 - `router_id` (String) Router identifier for this domain.
+- `spf_throttle_hold_interval` (Number) Minimum hold time interval between SPF calculations.
+  - Range: `1`-`600000`
+- `spf_throttle_initial_interval` (Number) Initial SPF schedule delay interval.
+  - Range: `1`-`600000`
+- `spf_throttle_max_interval` (Number) Maximum wait time between SPF calculations.
+  - Range: `1`-`600000`
+- `summary_addresses` (Attributes Map) List of OSPF external route summarizations (summary-address).
+  - Map key: `address` - Address. (see [below for nested schema](#nestedatt--instances--vrfs--summary_addresses))
 
 <a id="nestedatt--instances--vrfs--areas"></a>
 ### Nested Schema for `instances.vrfs.areas`
@@ -202,10 +258,22 @@ Optional:
   - Range: `0`-`16777215`
 - `nssa_translator_role` (String) Not-so-stubby area(NSSA) translator role.
   - Choices: `always`, `candidate`, `never`
+- `ranges` (Attributes Map) List of OSPF inter-area route summarizations (area ranges).
+  - Map key: `address` - Address. (see [below for nested schema](#nestedatt--instances--vrfs--areas--ranges))
 - `segment_routing_mpls` (String) Segment routing mpls control.
   - Choices: `unspecified`, `mpls`, `disable`
 - `type` (String) Area types can be stub, nssa, backbone etc.
   - Choices: `regular`, `stub`, `nssa`
+
+<a id="nestedatt--instances--vrfs--areas--ranges"></a>
+### Nested Schema for `instances.vrfs.areas.ranges`
+
+Optional:
+
+- `control` (String) Summary address no advertise.
+  - Choices: `unspecified`, `no-advertise`
+- `cost` (String) Area range cost for route summarization. Value must be an integer range [0,16777216] or keyword: unspecified.
+
 
 
 <a id="nestedatt--instances--vrfs--interfaces"></a>
@@ -272,6 +340,17 @@ Optional:
 - `route_map` (String) The name of the default route leak policy route map. This route map name is used to control distribution.
 - `srv6_prefix_type` (String) SRv6 Prefix Type; Valid only when proto is srv6.
   - Choices: `unspecified`, `locator`
+
+
+<a id="nestedatt--instances--vrfs--summary_addresses"></a>
+### Nested Schema for `instances.vrfs.summary_addresses`
+
+Optional:
+
+- `control` (String) Summary address no advertise. Cannot be configured together with `tag`.
+  - Choices: `unspecified`, `no-advertise`
+- `tag` (Number) Route tag of external route.
+  - Range: `0`-`4294967295`
 
 ## Import
 

@@ -302,6 +302,237 @@ child_classes:
                   - enabled
                   - disabled
                 example: enabled
+            child_classes:
+              - class_name: isisInterLeakP
+                doc_path: Routing%20and%20Forwarding/isis:InterLeakP/
+                rn: interleak-%s-[%s]-%s
+                type: list
+                tf_name: redistributions
+                description: 'List of IS-IS route redistributions.'
+                attributes:
+                  - nxos_name: proto
+                    tf_name: protocol
+                    type: String
+                    id: true
+                    description: 'The list of protocols to match.'
+                    enum_values:
+                      - unspecified
+                      - static
+                      - direct
+                      - bgp
+                      - isis
+                      - ospf
+                      - ospfv3
+                      - eigrp
+                      - host
+                      - rip
+                      - amt
+                      - lisp
+                      - hmm
+                      - am
+                      - srv6
+                      - dhcpv6
+                      - icmpv6
+                    example: direct
+                  - nxos_name: inst
+                    tf_name: protocol_instance
+                    type: String
+                    id: true
+                    description: 'The inter protocol route leak policy instance.'
+                    example: none
+                  - nxos_name: asn
+                    tf_name: asn
+                    type: String
+                    id: true
+                    description: 'The autonomous system number.'
+                    example: none
+                  - nxos_name: rtMap
+                    tf_name: route_map
+                    type: String
+                    description: 'The name of the default route leak policy route map. This route map name is used to control distribution.'
+                    example: RM_REDIST
+                  - nxos_name: scope
+                    tf_name: scope
+                    type: String
+                    description: 'The domain applicable to the capability.'
+                    enum_values:
+                      - intra
+                      - inter
+                      - defrt
+                    example: inter
+                  - nxos_name: srv6PrefixType
+                    tf_name: srv6_prefix_type
+                    type: String
+                    description: 'SRv6 Prefix Type; Valid only when proto is srv6.'
+                    enum_values:
+                      - unspecified
+                      - locator
+                    example: unspecified
+              - class_name: isisRtSum
+                doc_path: Routing%20and%20Forwarding/isis:RtSum/
+                rn: rtsum-[%s]
+                type: list
+                tf_name: summary_addresses
+                description: 'List of IS-IS summary addresses.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'Address.'
+                    example: 10.0.0.0/8
+                  - nxos_name: sumLevel
+                    tf_name: level
+                    type: String
+                    description: 'Holds summary address level.'
+                    enum_values:
+                      - l1
+                      - l2
+                      - l12
+                    example: l2
+              - class_name: isisDistribute
+                doc_path: Routing%20and%20Forwarding/isis:Distribute/
+                rn: distribute-%s
+                type: list
+                tf_name: distributions
+                description: 'List of IS-IS inter-level route distribution policies.'
+                attributes:
+                  - nxos_name: source
+                    tf_name: source_level
+                    type: String
+                    id: true
+                    description: 'Holds Source Domain for Routes Distribute Policy.'
+                    enum_values:
+                      - p2p
+                      - l1
+                      - l2
+                    example: l2
+                  - nxos_name: destination
+                    tf_name: destination_level
+                    type: String
+                    description: 'Holds Destination Domain for Routes Distribute Policy.'
+                    enum_values:
+                      - p2p
+                      - l1
+                      - l2
+                    example: l1
+                  - nxos_name: all
+                    tf_name: all
+                    type: Bool
+                    description: 'Holds Distribution of all level-n routes. Cannot be configured together with `route_map`.'
+                    exclude_test: true
+                    example: true
+                  - nxos_name: rmap
+                    tf_name: route_map
+                    type: String
+                    description: 'Holds Route-map name for Distribute Policy.'
+                    example: RM_DISTRIBUTE
+          - class_name: isisDomLvl
+            doc_path: Routing%20and%20Forwarding/isis:DomLvl/
+            rn: lvl-%s
+            type: list
+            tf_name: levels
+            description: 'List of IS-IS domain levels.'
+            attributes:
+              - nxos_name: type
+                tf_name: level
+                type: String
+                id: true
+                description: 'Type.'
+                enum_values:
+                  - p2p
+                  - l1
+                  - l2
+                example: l2
+              - nxos_name: ctrl
+                tf_name: control
+                type: String
+                description: 'Controls. Choices: `lsp-fast-flood`, `smart-psnp-ack`, `fast-converge`. Can be an empty string. Allowed formats:\n  - Single value. Example: `fast-converge`\n  - Multiple values (comma-separated). Example: `fast-converge,lsp-fast-flood`. In this case values must be in alphabetical order.'
+                enum_values:
+                  - lsp-fast-flood
+                  - smart-psnp-ack
+                  - fast-converge
+                allow_non_enum_values: true
+                example: fast-converge
+            child_classes:
+              - class_name: isisSpfComp
+                doc_path: Routing%20and%20Forwarding/isis:SpfComp/
+                rn: spfcomp
+                type: single
+                tf_name: spf_interval
+                description: 'IS-IS SPF computation frequency (spf-interval) configuration.'
+                attributes:
+                  - nxos_name: initIntvl
+                    tf_name: spf_initial_interval
+                    type: Int64
+                    min_int: 50
+                    max_int: 120000
+                    description: 'The initial wait interval. This is used in the LSP generation interval controls.'
+                    example: 60
+                  - nxos_name: maxIntvl
+                    tf_name: spf_max_interval
+                    type: Int64
+                    min_int: 50
+                    max_int: 120000
+                    description: 'The maximum wait interval. This is used in the LSP generation interval controls.'
+                    example: 5000
+                  - nxos_name: secIntvl
+                    tf_name: spf_second_interval
+                    type: Int64
+                    min_int: 50
+                    max_int: 120000
+                    description: 'The second wait interval. This is used in the LSP generation interval controls.'
+                    example: 60
+              - class_name: isisLspGen
+                doc_path: Routing%20and%20Forwarding/isis:LspGen/
+                rn: lspgen
+                type: single
+                tf_name: lsp_generation_interval
+                description: 'IS-IS LSP generation interval (lsp-gen-interval) configuration.'
+                attributes:
+                  - nxos_name: initIntvl
+                    tf_name: lsp_generation_initial_interval
+                    type: Int64
+                    min_int: 50
+                    max_int: 120000
+                    description: 'The initial wait interval. This is used in the LSP generation interval controls.'
+                    example: 70
+                  - nxos_name: maxIntvl
+                    tf_name: lsp_generation_max_interval
+                    type: Int64
+                    min_int: 50
+                    max_int: 120000
+                    description: 'The maximum wait interval. This is used in the LSP generation interval controls.'
+                    example: 6000
+                  - nxos_name: secIntvl
+                    tf_name: lsp_generation_second_interval
+                    type: Int64
+                    min_int: 50
+                    max_int: 120000
+                    description: 'The second wait interval. This is used in the LSP generation interval controls.'
+                    example: 70
+          - class_name: isisGr
+            doc_path: Routing%20and%20Forwarding/isis:Gr/
+            rn: gr
+            type: single
+            tf_name: graceful_restart
+            description: 'IS-IS graceful restart configuration.'
+            attributes:
+              - nxos_name: adminSt
+                tf_name: graceful_restart_admin_state
+                type: String
+                description: 'Graceful Restart.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: grT3Intvl
+                tf_name: graceful_restart_t3_interval
+                type: Int64
+                min_int: 30
+                max_int: 65535
+                description: 'T3 timer for graceful restart.'
+                example: 120
           - class_name: isisOverload
             doc_path: Routing%20and%20Forwarding/isis:Overload/
             rn: overload

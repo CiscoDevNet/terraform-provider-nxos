@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This data source can read the OSPFv3 configuration on NX-OS devices, including OSPFv3 instances, VRFs, areas, and interface settings.
   API Documentation
-  ospfv3Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Entity/ospfv3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Inst/ospfv3Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Dom/ospfv3Area https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Area/ospfv3DomAf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:DomAf/ospfv3If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:If/
+  ospfv3Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Entity/ospfv3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Inst/ospfv3Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Dom/ospfv3Area https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Area/ospfv3AreaAf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:AreaAf/ospfv3InterAreaRtSum https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:InterAreaRtSum/ospfv3DomAf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:DomAf/ospfv3InterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:InterLeakP/ospfv3DefRtLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:DefRtLeakP/ospfv3SpfComp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:SpfComp/ospfv3ExtRtSum https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:ExtRtSum/ospfv3LsaCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:LsaCtrl/ospfv3Gr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Gr/ospfv3If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:If/
 ---
 
 # nxos_ospfv3 (Data Source)
@@ -18,7 +18,15 @@ This data source can read the OSPFv3 configuration on NX-OS devices, including O
 - [ospfv3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Inst/)
 - [ospfv3Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Dom/)
 - [ospfv3Area](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Area/)
+- [ospfv3AreaAf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:AreaAf/)
+- [ospfv3InterAreaRtSum](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:InterAreaRtSum/)
 - [ospfv3DomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:DomAf/)
+- [ospfv3InterLeakP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:InterLeakP/)
+- [ospfv3DefRtLeakP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:DefRtLeakP/)
+- [ospfv3SpfComp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:SpfComp/)
+- [ospfv3ExtRtSum](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:ExtRtSum/)
+- [ospfv3LsaCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:LsaCtrl/)
+- [ospfv3Gr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Gr/)
 - [ospfv3If](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:If/)
 
 ## Example Usage
@@ -71,7 +79,15 @@ Read-Only:
 - `bfd_control` (Boolean) Holds the controls for bfd.
 - `discard_route_external` (Boolean) Holds the controls for discard-route external.
 - `discard_route_internal` (Boolean) Holds the controls for discard-route internal.
+- `graceful_restart_control` (String) Graceful restart controls like planned, complete and disabled state.
+- `graceful_restart_helper` (Boolean) Graceful restart helper mode.
+- `graceful_restart_period` (Number) Graceful restart period in seconds starting from 5 to 1800.
 - `log_adjacency_changes` (String) Adjacency change logging level.
+- `lsa_arrival_interval` (Number) Minimum interval between arrival of a LSA.
+- `lsa_group_pacing_interval` (Number) LSA group pacing interval.
+- `lsa_throttle_hold_interval` (Number) LSA generation throttle hold interval.
+- `lsa_throttle_max_interval` (Number) LSA generation throttle maximum interval.
+- `lsa_throttle_start_interval` (Number) LSA generation throttle start wait interval.
 - `name_lookup` (Boolean) Enable Name Lookup for OSPFv3 Neighbors.
 - `passive_interface_default` (Boolean) Suppress routing updates on the interface.
 - `router_id` (String) Router identifier for this VRF.
@@ -82,9 +98,39 @@ Read-Only:
 Read-Only:
 
 - `administrative_distance` (String) Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified
+- `default_information_originate_always` (Boolean) Always advertise default leak.
+- `default_information_originate_route_map` (String) The name of the default route leak policy route map. This route map name is used to control distribution.
 - `default_metric` (String) Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified
 - `default_route_nssa_pbit_clear` (Boolean) Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.
 - `max_ecmp_cost` (Number) Maximum Equal Cost Multi Path(ECMP).
+- `redistributions` (Attributes Map) List of OSPFv3 route redistributions.
+  - Map key format: `<protocol>;<protocol_instance>;<asn>`
+  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.
+  - Key component `protocol_instance`: The inter protocol route leak policy instance.
+  - Key component `asn`: The autonomous system number. (see [below for nested schema](#nestedatt--instances--vrfs--address_families--redistributions))
+- `spf_throttle_hold_interval` (Number) Minimum hold time interval between SPF calculations.
+- `spf_throttle_initial_interval` (Number) Initial SPF schedule delay interval.
+- `spf_throttle_max_interval` (Number) Maximum wait time between SPF calculations.
+- `summary_addresses` (Attributes Map) List of OSPFv3 external route summarizations (summary-address).
+  - Map key: `address` - Address. (see [below for nested schema](#nestedatt--instances--vrfs--address_families--summary_addresses))
+
+<a id="nestedatt--instances--vrfs--address_families--redistributions"></a>
+### Nested Schema for `instances.vrfs.address_families.redistributions`
+
+Read-Only:
+
+- `route_map` (String) The name of the default route leak policy route map. This route map name is used to control distribution.
+- `srv6_prefix_type` (String) SRv6 Prefix Type; Valid only when proto is srv6.
+
+
+<a id="nestedatt--instances--vrfs--address_families--summary_addresses"></a>
+### Nested Schema for `instances.vrfs.address_families.summary_addresses`
+
+Read-Only:
+
+- `control` (String) Summary address no advertise. Cannot be configured together with `tag`.
+- `tag` (Number) Route tag of external route.
+
 
 
 <a id="nestedatt--instances--vrfs--areas"></a>
@@ -92,11 +138,33 @@ Read-Only:
 
 Read-Only:
 
+- `address_families` (Attributes Map) List of OSPFv3 area address families.
+  - Map key: `address_family_type` - Unicast IP address family type.
+  - Key choices: `ipv6-ucast` (see [below for nested schema](#nestedatt--instances--vrfs--areas--address_families))
 - `nssa_translator_role` (String) Not-so-stubby area(NSSA) translator role.
 - `redistribute` (Boolean) Send redistributed LSAs into NSSA area.
 - `summary` (Boolean) Originate summary LSA into other areas.
 - `suppress_forward_address` (Boolean) Supress forwarding address in translated LSA.
 - `type` (String) Configure area type as NSSA or stub.
+
+<a id="nestedatt--instances--vrfs--areas--address_families"></a>
+### Nested Schema for `instances.vrfs.areas.address_families`
+
+Read-Only:
+
+- `cost` (String) Specify cost for default inter-area-prefix LSA. Value must be an integer range [0,16777215] or keyword: unspecified.
+- `ranges` (Attributes Map) List of OSPFv3 inter-area route summarizations (area ranges).
+  - Map key: `address` - Address. (see [below for nested schema](#nestedatt--instances--vrfs--areas--address_families--ranges))
+
+<a id="nestedatt--instances--vrfs--areas--address_families--ranges"></a>
+### Nested Schema for `instances.vrfs.areas.address_families.ranges`
+
+Read-Only:
+
+- `control` (String) Summary address no advertise.
+- `cost` (String) Area range cost for route summarization. Value must be an integer range [0,16777216] or keyword: unspecified.
+
+
 
 
 

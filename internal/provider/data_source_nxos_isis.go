@@ -56,7 +56,7 @@ func (d *ISISDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IS-IS configuration on NX-OS devices, including IS-IS instances, VRFs, authentication settings, and interface configurations.").AddApiDocumentation("isisEntity", "Routing%20and%20Forwarding/isis:Entity/", []string{"isisInst", "isisDom", "isisDomAf", "isisOverload", "isisInternalIf"}, []string{"Routing%20and%20Forwarding/isis:Inst/", "Routing%20and%20Forwarding/isis:Dom/", "Routing%20and%20Forwarding/isis:DomAf/", "Routing%20and%20Forwarding/isis:Overload/", "Routing%20and%20Forwarding/isis:InternalIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IS-IS configuration on NX-OS devices, including IS-IS instances, VRFs, authentication settings, and interface configurations.").AddApiDocumentation("isisEntity", "Routing%20and%20Forwarding/isis:Entity/", []string{"isisInst", "isisDom", "isisDomAf", "isisInterLeakP", "isisRtSum", "isisDistribute", "isisDomLvl", "isisSpfComp", "isisLspGen", "isisGr", "isisOverload", "isisInternalIf"}, []string{"Routing%20and%20Forwarding/isis:Inst/", "Routing%20and%20Forwarding/isis:Dom/", "Routing%20and%20Forwarding/isis:DomAf/", "Routing%20and%20Forwarding/isis:InterLeakP/", "Routing%20and%20Forwarding/isis:RtSum/", "Routing%20and%20Forwarding/isis:Distribute/", "Routing%20and%20Forwarding/isis:DomLvl/", "Routing%20and%20Forwarding/isis:SpfComp/", "Routing%20and%20Forwarding/isis:LspGen/", "Routing%20and%20Forwarding/isis:Gr/", "Routing%20and%20Forwarding/isis:Overload/", "Routing%20and%20Forwarding/isis:InternalIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -244,8 +244,104 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													MarkdownDescription: "Enables table-map for Selective route.",
 													Computed:            true,
 												},
+												"redistributions": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS route redistributions.\n  - Map key format: `<protocol>;<protocol_instance>;<asn>`\n  - Key component `protocol`: The list of protocols to match. Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`.\n  - Key component `protocol_instance`: The inter protocol route leak policy instance.\n  - Key component `asn`: The autonomous system number.").String,
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"route_map": schema.StringAttribute{
+																MarkdownDescription: "The name of the default route leak policy route map. This route map name is used to control distribution.",
+																Computed:            true,
+															},
+															"scope": schema.StringAttribute{
+																MarkdownDescription: "The domain applicable to the capability.",
+																Computed:            true,
+															},
+															"srv6_prefix_type": schema.StringAttribute{
+																MarkdownDescription: "SRv6 Prefix Type; Valid only when proto is srv6.",
+																Computed:            true,
+															},
+														},
+													},
+												},
+												"summary_addresses": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS summary addresses.\n  - Map key: `address` - Address.").String,
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"level": schema.StringAttribute{
+																MarkdownDescription: "Holds summary address level.",
+																Computed:            true,
+															},
+														},
+													},
+												},
+												"distributions": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS inter-level route distribution policies.\n  - Map key: `source_level` - Holds Source Domain for Routes Distribute Policy.\n  - Key choices: `p2p`, `l1`, `l2`").String,
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"destination_level": schema.StringAttribute{
+																MarkdownDescription: "Holds Destination Domain for Routes Distribute Policy.",
+																Computed:            true,
+															},
+															"all": schema.BoolAttribute{
+																MarkdownDescription: "Holds Distribution of all level-n routes. Cannot be configured together with `route_map`.",
+																Computed:            true,
+															},
+															"route_map": schema.StringAttribute{
+																MarkdownDescription: "Holds Route-map name for Distribute Policy.",
+																Computed:            true,
+															},
+														},
+													},
+												},
 											},
 										},
+									},
+									"levels": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of IS-IS domain levels.\n  - Map key: `level` - Type.\n  - Key choices: `p2p`, `l1`, `l2`").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"control": schema.StringAttribute{
+													MarkdownDescription: "Controls. Choices: `lsp-fast-flood`, `smart-psnp-ack`, `fast-converge`. Can be an empty string. Allowed formats:\n  - Single value. Example: `fast-converge`\n  - Multiple values (comma-separated). Example: `fast-converge,lsp-fast-flood`. In this case values must be in alphabetical order.",
+													Computed:            true,
+												},
+												"spf_initial_interval": schema.Int64Attribute{
+													MarkdownDescription: "The initial wait interval. This is used in the LSP generation interval controls.",
+													Computed:            true,
+												},
+												"spf_max_interval": schema.Int64Attribute{
+													MarkdownDescription: "The maximum wait interval. This is used in the LSP generation interval controls.",
+													Computed:            true,
+												},
+												"spf_second_interval": schema.Int64Attribute{
+													MarkdownDescription: "The second wait interval. This is used in the LSP generation interval controls.",
+													Computed:            true,
+												},
+												"lsp_generation_initial_interval": schema.Int64Attribute{
+													MarkdownDescription: "The initial wait interval. This is used in the LSP generation interval controls.",
+													Computed:            true,
+												},
+												"lsp_generation_max_interval": schema.Int64Attribute{
+													MarkdownDescription: "The maximum wait interval. This is used in the LSP generation interval controls.",
+													Computed:            true,
+												},
+												"lsp_generation_second_interval": schema.Int64Attribute{
+													MarkdownDescription: "The second wait interval. This is used in the LSP generation interval controls.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"graceful_restart_admin_state": schema.StringAttribute{
+										MarkdownDescription: "Graceful Restart.",
+										Computed:            true,
+									},
+									"graceful_restart_t3_interval": schema.Int64Attribute{
+										MarkdownDescription: "T3 timer for graceful restart.",
+										Computed:            true,
 									},
 									"overload_startup_time": schema.Int64Attribute{
 										MarkdownDescription: "The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.",
@@ -524,7 +620,7 @@ func (d *ISISDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"isisInst", "isisDom", "isisDomAf", "isisOverload", "isisInternalIf"}, ISISSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"isisInst", "isisDom", "isisDomAf", "isisInterLeakP", "isisRtSum", "isisDistribute", "isisDomLvl", "isisSpfComp", "isisLspGen", "isisGr", "isisOverload", "isisInternalIf"}, ISISSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

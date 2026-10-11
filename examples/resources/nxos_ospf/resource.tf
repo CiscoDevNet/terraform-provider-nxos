@@ -30,6 +30,12 @@ resource "nxos_ospf" "example" {
               nssa_translator_role = "always"
               segment_routing_mpls = "mpls"
               type                 = "stub"
+              ranges = {
+                "10.1.0.0/16" = {
+                  cost    = "10"
+                  control = "no-advertise"
+                }
+              }
             }
           }
           max_metric_await_convergence_bgp_asn = "65535"
@@ -69,6 +75,24 @@ resource "nxos_ospf" "example" {
               always           = "no"
               route_map        = "route_map_ospf"
               srv6_prefix_type = "unspecified"
+            }
+          }
+          default_information_originate_always    = "yes"
+          default_information_originate_route_map = "RM_DEFAULT"
+          spf_throttle_hold_interval              = 100
+          spf_throttle_initial_interval           = 10
+          spf_throttle_max_interval               = 3000
+          lsa_arrival_interval                    = 50
+          lsa_group_pacing_interval               = 20
+          lsa_throttle_hold_interval              = 50
+          lsa_throttle_max_interval               = 3000
+          lsa_throttle_start_interval             = 10
+          graceful_restart_control                = "planned-only"
+          graceful_restart_period                 = 30
+          graceful_restart_helper                 = false
+          summary_addresses = {
+            "10.0.0.0/8" = {
+              tag = 5
             }
           }
         }

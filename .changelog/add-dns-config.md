@@ -1,1 +1,1 @@
-- Add DNS name servers (`ip name-server <ip> [source-interface <if>]`), domain lists (`ip domain-list`), static hosts (`ip host <name> <ipv4>`, `ipv6 host <name> <ipv6>`) and per-VRF DNS (`ip domain-name|domain-list|name-server ... use-vrf <vrf>`) configuration to `nxos_system` resource and data source
+- Add DNS name servers (including source interface), domain lists, static IPv4 and IPv6 hosts, and per-VRF DNS (domain name, domain list and name servers) configuration to `nxos_system` resource and data source

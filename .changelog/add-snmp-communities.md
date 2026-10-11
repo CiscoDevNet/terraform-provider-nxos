@@ -1,4 +1,4 @@
-- Add SNMP community (`snmp-server community <name> group|ro|rw`, `use-ipv4acl`, `use-ipv6acl`) configuration to `nxos_snmp` resource and data source
-- Add SNMP host source interface (`snmp-server host <ip> source-interface <if>`) and filter VRF (`snmp-server host <ip> filter-vrf <vrf>`) configuration to `nxos_snmp` resource and data source
-- Add SNMP informs source interface (`snmp-server source-interface informs <if>`) configuration to `nxos_snmp` resource and data source
-- Add SNMP context (`snmp-server context <name> [instance <i>] [vrf <v>] [topology <t>]`) configuration to `nxos_snmp` resource and data source
+- Add SNMP community (group or access level, and IPv4/IPv6 ACLs) configuration to `nxos_snmp` resource and data source
+- Add SNMP host source interface and filter VRF configuration to `nxos_snmp` resource and data source
+- Add SNMP informs source interface configuration to `nxos_snmp` resource and data source
+- Add SNMP context (instance, VRF and topology) configuration to `nxos_snmp` resource and data source

@@ -1,3 +1,3 @@
-- Add BGP peer-session templates (`template peer-session`, including local-as) and peer-policy templates (`template peer-policy`, including route-map, prefix-list, filter-list, maximum-prefix and `inherit peer-policy`) configuration to `nxos_bgp` VRFs
-- Add `inherit peer-policy` configuration to `nxos_bgp` peer address families and peer template address families
+- Add BGP peer-session templates (including local AS) and peer-policy templates (including route-map, prefix-list, filter-list, maximum-prefix and peer-policy inheritance) configuration to `nxos_bgp` VRFs
+- Add peer-policy inheritance configuration to `nxos_bgp` peer address families and peer template address families
 - Add route-map and prefix-list in/out configuration to `nxos_bgp` peer template address families

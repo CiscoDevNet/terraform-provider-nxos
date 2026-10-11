@@ -1,2 +1,2 @@
-- Add set AS-path prepend (`set as-path prepend <asn>...`, `set as-path prepend last-as <n>`), set tag (`set tag`), set weight (`set weight`), set origin (`set origin egp|igp|incomplete`), set extended community route target (`set extcommunity rt`), and set community list (`set comm-list <name> delete`) configuration to `nxos_route_policy` route map entries
-- Add match interface (`match interface <interface>`) and match route type (`match route-type <type>`, including EVPN route types) configuration to `nxos_route_policy` route map entries
+- Add set AS-path prepend (AS numbers and last AS), set tag, set weight, set origin, set extended community route target, and set community list delete configuration to `nxos_route_policy` route map entries
+- Add match interface and match route type (including EVPN route types) configuration to `nxos_route_policy` route map entries

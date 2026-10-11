@@ -103,6 +103,84 @@ resource "nxos_bgp" "example" {
           }
         }
       }
+      peer_session_templates = {
+        "SESS_TEMPLATE" = {
+          remote_asn                     = "65002"
+          description                    = "My Description"
+          peer_type                      = "fabric-external"
+          source_interface               = "lo0"
+          admin_state                    = "enabled"
+          affinity_group                 = 100
+          asn_type                       = "none"
+          bfd_type                       = "none"
+          bmp_server_1                   = "disabled"
+          bmp_server_2                   = "disabled"
+          capability_suppress_4_byte_asn = "disabled"
+          connection_mode                = "passive"
+          peer_control                   = "bfd"
+          dscp                           = "af11"
+          hold_time                      = 30
+          internal_vpn_client            = "disabled"
+          keepalive_interval             = 10
+          log_neighbor_changes           = "enable"
+          low_memory_exempt              = "disabled"
+          max_peer_count                 = 10
+          password_type                  = "0"
+          password                       = "secret_password"
+          private_as_control             = "none"
+          session_template               = "SESS_TEMPLATE2"
+          ebgp_multihop_ttl              = 5
+          local_asn_propagation          = "no-prepend"
+          local_asn                      = "65009"
+        }
+      }
+      peer_policy_templates = {
+        "POLICY_TEMPLATE" = {
+          advertisement_interval        = 30
+          advertise_local_labeled_route = "disabled"
+          aigp                          = "disabled"
+          allowed_self_as_count         = 3
+          as_override                   = "disabled"
+          capability_additional_paths   = "send"
+          control                       = "nh-self"
+          default_originate             = "enabled"
+          default_originate_route_map   = "DEF_ORIG_MAP"
+          dmz_link_bandwidth            = "disabled"
+          link_bandwidth_cumulative     = "disabled"
+          next_hop_self_all             = false
+          nexthop_thirdparty            = "enabled"
+          send_community_extended       = "enabled"
+          send_community_standard       = "enabled"
+          soft_reconfiguration_backup   = "inbound"
+          site_of_origin                = "soo:as2-nn2:65001:200"
+          unsuppress_map                = "UNSUPP_MAP"
+          weight                        = "100"
+          max_prefix_action             = "restart"
+          max_prefix_number             = 10000
+          max_prefix_restart_time       = 1
+          max_prefix_threshold          = 30
+          route_controls = {
+            "in" = {
+              route_map_name = "ROUTE_MAP1"
+            }
+          }
+          prefix_list_controls = {
+            "in" = {
+              list = "PREFIX_LIST1"
+            }
+          }
+          filter_list_controls = {
+            "out" = {
+              list = "AS_PATH_LIST1"
+            }
+          }
+          inherit_peer_policies = {
+            "POLICY_TEMPLATE2" = {
+              sequence = 10
+            }
+          }
+        }
+      }
       peer_templates = {
         "SPINE-PEERS" = {
           remote_asn                     = "65002"
@@ -110,6 +188,7 @@ resource "nxos_bgp" "example" {
           peer_type                      = "fabric-internal"
           source_interface               = "lo0"
           admin_state                    = "enabled"
+          affinity_group                 = 100
           asn_type                       = "none"
           bfd_type                       = "none"
           bmp_server_1                   = "disabled"
@@ -121,29 +200,51 @@ resource "nxos_bgp" "example" {
           keepalive_interval             = 60
           log_neighbor_changes           = "none"
           low_memory_exempt              = "disabled"
+          max_peer_count                 = 10
+          password_type                  = "0"
+          password                       = "secret_password"
           private_as_control             = "none"
           session_template               = "SESS_TEMPLATE"
+          ebgp_multihop_ttl              = 2
           peer_template_address_families = {
             "ipv4-ucast" = {
-              control                     = "nh-self,rr-client"
-              send_community_extended     = "enabled"
-              send_community_standard     = "enabled"
-              aigp                        = "disabled"
-              allowed_self_as_count       = 0
-              as_override                 = "disabled"
-              default_originate           = "enabled"
-              default_originate_route_map = "DEF_ORIG_MAP"
-              dmz_link_bandwidth          = "disabled"
-              link_bandwidth_cumulative   = "disabled"
-              nexthop_thirdparty          = "enabled"
-              rewrite_rt_asn              = "disabled"
-              soft_reconfiguration_backup = "none"
-              unsuppress_map              = "UNSUPP_MAP"
-              weight                      = "100"
-              max_prefix_action           = "restart"
-              max_prefix_number           = 10000
-              max_prefix_restart_time     = 1
-              max_prefix_threshold        = 30
+              control                       = "nh-self,rr-client"
+              send_community_extended       = "enabled"
+              send_community_standard       = "enabled"
+              advertisement_interval        = 30
+              advertise_local_labeled_route = "disabled"
+              aigp                          = "disabled"
+              allowed_self_as_count         = 0
+              as_override                   = "disabled"
+              default_originate             = "enabled"
+              default_originate_route_map   = "DEF_ORIG_MAP"
+              dmz_link_bandwidth            = "disabled"
+              link_bandwidth_cumulative     = "disabled"
+              nexthop_thirdparty            = "enabled"
+              rewrite_rt_asn                = "disabled"
+              soft_reconfiguration_backup   = "none"
+              site_of_origin                = "soo:as2-nn2:65001:200"
+              unsuppress_map                = "UNSUPP_MAP"
+              weight                        = "100"
+              max_prefix_action             = "restart"
+              max_prefix_number             = 10000
+              max_prefix_restart_time       = 1
+              max_prefix_threshold          = 30
+              route_controls = {
+                "in" = {
+                  route_map_name = "ROUTE_MAP1"
+                }
+              }
+              prefix_list_controls = {
+                "in" = {
+                  list = "PREFIX_LIST1"
+                }
+              }
+              inherit_peer_policies = {
+                "POLICY_TEMPLATE" = {
+                  sequence = 10
+                }
+              }
             }
           }
         }
@@ -159,8 +260,10 @@ resource "nxos_bgp" "example" {
           keepalive_interval             = 15
           ebgp_multihop_ttl              = 5
           peer_control                   = "bfd,dis-conn-check"
+          password_type                  = "0"
           password                       = "secret_password"
           admin_state                    = "enabled"
+          affinity_group                 = 100
           asn_type                       = "none"
           bfd_type                       = "none"
           bmp_server_1                   = "disabled"
@@ -175,25 +278,27 @@ resource "nxos_bgp" "example" {
           local_asn                      = "65001"
           peer_address_families = {
             "ipv4-ucast" = {
-              control                     = "nh-self"
-              send_community_extended     = "enabled"
-              send_community_standard     = "enabled"
-              aigp                        = "disabled"
-              allowed_self_as_count       = 0
-              as_override                 = "disabled"
-              default_originate           = "enabled"
-              default_originate_route_map = "DEF_ORIG_MAP"
-              dmz_link_bandwidth          = "disabled"
-              link_bandwidth_cumulative   = "disabled"
-              nexthop_thirdparty          = "enabled"
-              rewrite_rt_asn              = "disabled"
-              soft_reconfiguration_backup = "none"
-              unsuppress_map              = "UNSUPP_MAP"
-              weight                      = "100"
-              max_prefix_action           = "restart"
-              max_prefix_number           = 10000
-              max_prefix_restart_time     = 1
-              max_prefix_threshold        = 30
+              control                       = "nh-self"
+              send_community_extended       = "enabled"
+              send_community_standard       = "enabled"
+              advertisement_interval        = 30
+              advertise_local_labeled_route = "disabled"
+              aigp                          = "disabled"
+              allowed_self_as_count         = 0
+              as_override                   = "disabled"
+              default_originate             = "enabled"
+              default_originate_route_map   = "DEF_ORIG_MAP"
+              dmz_link_bandwidth            = "disabled"
+              link_bandwidth_cumulative     = "disabled"
+              nexthop_thirdparty            = "enabled"
+              rewrite_rt_asn                = "disabled"
+              soft_reconfiguration_backup   = "none"
+              unsuppress_map                = "UNSUPP_MAP"
+              weight                        = "100"
+              max_prefix_action             = "restart"
+              max_prefix_number             = 10000
+              max_prefix_restart_time       = 1
+              max_prefix_threshold          = 30
               route_controls = {
                 "in" = {
                   route_map_name = "ROUTE_MAP1"
@@ -202,6 +307,11 @@ resource "nxos_bgp" "example" {
               prefix_list_controls = {
                 "in" = {
                   list = "PREFIX_LIST1"
+                }
+              }
+              inherit_peer_policies = {
+                "POLICY_TEMPLATE" = {
+                  sequence = 10
                 }
               }
             }
@@ -215,6 +325,7 @@ resource "nxos_bgp" "example" {
           peer_template                  = "SPINE-PEERS"
           peer_type                      = "fabric-internal"
           admin_state                    = "enabled"
+          affinity_group                 = 100
           asn_type                       = "none"
           bfd_type                       = "none"
           bmp_server_1                   = "disabled"
@@ -228,6 +339,8 @@ resource "nxos_bgp" "example" {
           keepalive_interval             = 15
           log_neighbor_changes           = "none"
           low_memory_exempt              = "disabled"
+          max_peer_count                 = 10
+          password_type                  = "0"
           password                       = "secret_password"
           private_as_control             = "none"
           session_template               = "SESS_TEMPLATE"

@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This data source can read the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.
   API Documentation
-  bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpPathCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PathCtrl/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpAddlPath https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AddlPath/bgpAggAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AggAddr/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpPeerIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/
+  bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpPathCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PathCtrl/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpAddlPath https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AddlPath/bgpAggAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AggAddr/bgpSessionCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:SessionCont/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPolicyCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyCont/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpFltrCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:FltrCtrlP/bgpPolicyInheritRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpPolicyInheritRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpPolicyInheritRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/bgpPeerIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/
 ---
 
 # nxos_bgp (Data Source)
@@ -25,15 +25,27 @@ This data source can read the BGP configuration on NX-OS devices, including the 
 - [bgpInterLeakP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/)
 - [bgpAddlPath](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AddlPath/)
 - [bgpAggAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AggAddr/)
+- [bgpSessionCont](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:SessionCont/)
+- [bgpLocalAsn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/)
+- [bgpPolicyCont](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyCont/)
+- [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
+- [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
+- [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
+- [bgpFltrCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:FltrCtrlP/)
+- [bgpPolicyInheritRule](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/)
 - [bgpPeerCont](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/)
 - [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
 - [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
+- [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
+- [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
+- [bgpPolicyInheritRule](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/)
 - [bgpPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/)
 - [bgpLocalAsn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/)
 - [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
 - [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
 - [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
 - [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
+- [bgpPolicyInheritRule](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/)
 - [bgpPeerIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/)
 
 ## Example Usage
@@ -108,6 +120,10 @@ Read-Only:
 - `path_control_med_confed` (String) Compare MED only from paths originated from within a confederation.
 - `path_control_med_missing_as_worst` (String) Med Missing As Worst.
 - `path_control_med_non_deterministic` (String) Med Non-Deterministic.
+- `peer_policy_templates` (Attributes Map) List of BGP peer-policy templates.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_policy_templates))
+- `peer_session_templates` (Attributes Map) List of BGP peer-session templates.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_session_templates))
 - `peer_templates` (Attributes Map) List of BGP peer templates.
   - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
 - `peers` (Attributes Map) List of BGP peers.
@@ -252,6 +268,122 @@ Read-Only:
 - `ttl_security_hops` (Number) Enable TTL Security Mechanism.
 
 
+<a id="nestedatt--vrfs--peer_policy_templates"></a>
+### Nested Schema for `vrfs.peer_policy_templates`
+
+Read-Only:
+
+- `advertise_local_labeled_route` (String) Advertise a route with local label to peer.
+- `advertisement_interval` (Number) Neighbor advertisement interval.
+- `aigp` (String) Send and recieve AIGP attribute.
+- `allowed_self_as_count` (Number) Allowed Self AS Count.
+- `as_override` (String) Override matching AS-number while sending update.
+- `capability_additional_paths` (String) Capability Additional Paths.
+- `control` (String) Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:
+  - Single value. Example: `nh-self`
+  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.
+- `default_originate` (String) Default Originate is enabled.
+- `default_originate_route_map` (String) Default Originate Route Map.
+- `dmz_link_bandwidth` (String) Dmz-link-bandwidth.
+- `filter_list_controls` (Attributes Map) List of BGP peer-policy template filter list controls.
+  - Map key: `direction` - Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peer_policy_templates--filter_list_controls))
+- `inherit_peer_policies` (Attributes Map) List of BGP peer-policy templates to inherit from.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_policy_templates--inherit_peer_policies))
+- `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
+- `max_prefix_action` (String) Action to do when limit is exceeded.
+- `max_prefix_number` (Number) Maximum number of prefixes allowed from the peer.
+- `max_prefix_restart_time` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
+- `max_prefix_threshold` (Number) The threshold percentage of the maximum number of prefixes before a warning is issued.
+- `next_hop_self_all` (Boolean) Set address as next-hop for all routes.
+- `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
+- `prefix_list_controls` (Attributes Map) List of BGP peer-policy template prefix list controls.
+  - Map key: `direction` - Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peer_policy_templates--prefix_list_controls))
+- `route_controls` (Attributes Map) List of BGP peer-policy template route controls.
+  - Map key: `direction` - Direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peer_policy_templates--route_controls))
+- `send_community_extended` (String) Send-community extended.
+- `send_community_standard` (String) Send-community standard.
+- `site_of_origin` (String) Site-of-origin extcommunity.
+- `soft_reconfiguration_backup` (String) Soft Reconfiguration.
+- `unsuppress_map` (String) Route-map to selectively unsuppress suppressed routes.
+- `weight` (String) Weight for the neighbor.
+
+<a id="nestedatt--vrfs--peer_policy_templates--filter_list_controls"></a>
+### Nested Schema for `vrfs.peer_policy_templates.filter_list_controls`
+
+Read-Only:
+
+- `list` (String) Name of list to control the route distribution.
+
+
+<a id="nestedatt--vrfs--peer_policy_templates--inherit_peer_policies"></a>
+### Nested Schema for `vrfs.peer_policy_templates.inherit_peer_policies`
+
+Read-Only:
+
+- `sequence` (Number) Sequence Number.
+
+
+<a id="nestedatt--vrfs--peer_policy_templates--prefix_list_controls"></a>
+### Nested Schema for `vrfs.peer_policy_templates.prefix_list_controls`
+
+Read-Only:
+
+- `list` (String) Name of list to control the route distribution.
+
+
+<a id="nestedatt--vrfs--peer_policy_templates--route_controls"></a>
+### Nested Schema for `vrfs.peer_policy_templates.route_controls`
+
+Read-Only:
+
+- `route_map_name` (String) Route Map.
+
+
+
+<a id="nestedatt--vrfs--peer_session_templates"></a>
+### Nested Schema for `vrfs.peer_session_templates`
+
+Read-Only:
+
+- `admin_state` (String) Administrative State.
+- `affinity_group` (Number) Affinity group for the neighbor.
+- `asn_type` (String) Specify peer ASN type as External or Internal.
+- `bfd_type` (String) Specify BFD session type.
+- `bmp_server_1` (String) Activate BMP Server 1.
+- `bmp_server_2` (String) Activate BMP Server 2.
+- `capability_suppress_4_byte_asn` (String) Capability Suppress 4-byte-as.
+- `connection_mode` (String) Connection Mode.
+- `description` (String) Description.
+- `dscp` (String) Specify DSCP value for Locally Originated packets.
+- `ebgp_multihop_ttl` (Number) eBGP Multihop.
+- `egress_peer_engineering` (String) Egress Peer Engineering EPE for neighbor.
+- `egress_peer_engineering_peer_set` (String) Egress Peer Engineering EPE Peer-Set name.
+- `hold_time` (Number) Hold Interval.
+- `internal_vpn_client` (String) internal-vpn-client for iBGP PE-CE Support.
+- `keepalive_interval` (Number) Keepalive Interval.
+- `local_asn` (String) Local Autonomous System Number.
+- `local_asn_propagation` (String) ASN Propagation.
+- `log_neighbor_changes` (String) Log Neighbor Changes.
+- `low_memory_exempt` (String) Low Memory Exempt.
+- `max_peer_count` (Number) Maximum Peers for the prefix or interface.
+- `password` (String, Sensitive) Configure a password for neighbor.
+- `password_type` (String) Password EnCrypt Type.
+- `password_wo` (String) The write-only value of the attribute.
+- `password_wo_version` (Number) The write-only version of the attribute.
+- `peer_control` (String) Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
+  - Single value. Example: `bfd`
+  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
+- `peer_type` (String) Neighbor Fabric Type.
+- `private_as_control` (String) Private AS Control.
+- `remote_asn` (String) Autonomous System Number.
+- `session_template` (String) Importing Session Specific properties from Session Template.
+- `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
+- `ttl_security_hops` (Number) Enable TTL Security Mechanism with hop counts specified for remote peers.
+
+
 <a id="nestedatt--vrfs--peer_templates"></a>
 ### Nested Schema for `vrfs.peer_templates`
 
@@ -307,19 +439,51 @@ Read-Only:
 - `default_originate_route_map` (String) Default Originate Route Map.
 - `dmz_link_bandwidth` (String) Dmz-link-bandwidth.
 - `encapsulation_mpls` (String) Configure encapsulation type for EVPN routes.
+- `inherit_peer_policies` (Attributes Map) List of BGP peer-policy templates to inherit from.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families--inherit_peer_policies))
 - `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
 - `max_prefix_action` (String) Action to do when limit is exceeded.
 - `max_prefix_number` (Number) Maximum number of prefixes allowed from the peer.
 - `max_prefix_restart_time` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
 - `max_prefix_threshold` (Number) The threshold percentage of the maximum number of prefixes before a warning is issued.
 - `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
+- `prefix_list_controls` (Attributes Map) List of BGP peer template address family prefix list controls.
+  - Map key: `direction` - Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families--prefix_list_controls))
 - `rewrite_rt_asn` (String) Auto generate RTs for EBGP neighbor.
+- `route_controls` (Attributes Map) List of BGP peer template address family route controls.
+  - Map key: `direction` - Direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families--route_controls))
 - `send_community_extended` (String) Send-community extended.
 - `send_community_standard` (String) Send-community standard.
 - `site_of_origin` (String) Site-of-origin extcommunity.
 - `soft_reconfiguration_backup` (String) Soft Reconfiguration.
 - `unsuppress_map` (String) Route-map to selectively unsuppress suppressed routes.
 - `weight` (String) Weight for the neighbor.
+
+<a id="nestedatt--vrfs--peer_templates--peer_template_address_families--inherit_peer_policies"></a>
+### Nested Schema for `vrfs.peer_templates.peer_template_address_families.inherit_peer_policies`
+
+Read-Only:
+
+- `sequence` (Number) Sequence Number.
+
+
+<a id="nestedatt--vrfs--peer_templates--peer_template_address_families--prefix_list_controls"></a>
+### Nested Schema for `vrfs.peer_templates.peer_template_address_families.prefix_list_controls`
+
+Read-Only:
+
+- `list` (String) Name of list to control the route distribution.
+
+
+<a id="nestedatt--vrfs--peer_templates--peer_template_address_families--route_controls"></a>
+### Nested Schema for `vrfs.peer_templates.peer_template_address_families.route_controls`
+
+Read-Only:
+
+- `route_map_name` (String) Route Map.
+
 
 
 
@@ -381,6 +545,8 @@ Read-Only:
 - `default_originate_route_map` (String) Default Originate Route Map.
 - `dmz_link_bandwidth` (String) Dmz-link-bandwidth.
 - `encapsulation_mpls` (String) Configure encapsulation type for EVPN routes.
+- `inherit_peer_policies` (Attributes Map) List of BGP peer-policy templates to inherit from.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--inherit_peer_policies))
 - `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
 - `max_prefix_action` (String) Action to do when limit is exceeded.
 - `max_prefix_number` (Number) Maximum number of prefixes allowed from the peer.
@@ -400,6 +566,14 @@ Read-Only:
 - `soft_reconfiguration_backup` (String) Soft Reconfiguration.
 - `unsuppress_map` (String) Route-map to selectively unsuppress suppressed routes.
 - `weight` (String) Weight for the neighbor.
+
+<a id="nestedatt--vrfs--peers--peer_address_families--inherit_peer_policies"></a>
+### Nested Schema for `vrfs.peers.peer_address_families.inherit_peer_policies`
+
+Read-Only:
+
+- `sequence` (Number) Sequence Number.
+
 
 <a id="nestedatt--vrfs--peers--peer_address_families--prefix_list_controls"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families.prefix_list_controls`

@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.
   API Documentation
-  bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpPathCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PathCtrl/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpAddlPath https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AddlPath/bgpAggAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AggAddr/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpPeerIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/
+  bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpPathCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PathCtrl/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpAddlPath https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AddlPath/bgpAggAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AggAddr/bgpSessionCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:SessionCont/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPolicyCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyCont/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpFltrCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:FltrCtrlP/bgpPolicyInheritRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpPolicyInheritRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/bgpPolicyInheritRule https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/bgpPeerIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/
 ---
 
 # nxos_bgp (Resource)
@@ -25,15 +25,27 @@ This resource can manage the BGP configuration on NX-OS devices, including the B
 - [bgpInterLeakP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/)
 - [bgpAddlPath](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AddlPath/)
 - [bgpAggAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AggAddr/)
+- [bgpSessionCont](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:SessionCont/)
+- [bgpLocalAsn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/)
+- [bgpPolicyCont](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyCont/)
+- [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
+- [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
+- [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
+- [bgpFltrCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:FltrCtrlP/)
+- [bgpPolicyInheritRule](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/)
 - [bgpPeerCont](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/)
 - [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
 - [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
+- [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
+- [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
+- [bgpPolicyInheritRule](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/)
 - [bgpPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/)
 - [bgpLocalAsn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/)
 - [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
 - [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
 - [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
 - [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
+- [bgpPolicyInheritRule](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/)
 - [bgpPeerIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/)
 
 ## Example Usage
@@ -144,6 +156,84 @@ resource "nxos_bgp" "example" {
           }
         }
       }
+      peer_session_templates = {
+        "SESS_TEMPLATE" = {
+          remote_asn                     = "65002"
+          description                    = "My Description"
+          peer_type                      = "fabric-external"
+          source_interface               = "lo0"
+          admin_state                    = "enabled"
+          affinity_group                 = 100
+          asn_type                       = "none"
+          bfd_type                       = "none"
+          bmp_server_1                   = "disabled"
+          bmp_server_2                   = "disabled"
+          capability_suppress_4_byte_asn = "disabled"
+          connection_mode                = "passive"
+          peer_control                   = "bfd"
+          dscp                           = "af11"
+          hold_time                      = 30
+          internal_vpn_client            = "disabled"
+          keepalive_interval             = 10
+          log_neighbor_changes           = "enable"
+          low_memory_exempt              = "disabled"
+          max_peer_count                 = 10
+          password_type                  = "0"
+          password                       = "secret_password"
+          private_as_control             = "none"
+          session_template               = "SESS_TEMPLATE2"
+          ebgp_multihop_ttl              = 5
+          local_asn_propagation          = "no-prepend"
+          local_asn                      = "65009"
+        }
+      }
+      peer_policy_templates = {
+        "POLICY_TEMPLATE" = {
+          advertisement_interval        = 30
+          advertise_local_labeled_route = "disabled"
+          aigp                          = "disabled"
+          allowed_self_as_count         = 3
+          as_override                   = "disabled"
+          capability_additional_paths   = "send"
+          control                       = "nh-self"
+          default_originate             = "enabled"
+          default_originate_route_map   = "DEF_ORIG_MAP"
+          dmz_link_bandwidth            = "disabled"
+          link_bandwidth_cumulative     = "disabled"
+          next_hop_self_all             = false
+          nexthop_thirdparty            = "enabled"
+          send_community_extended       = "enabled"
+          send_community_standard       = "enabled"
+          soft_reconfiguration_backup   = "inbound"
+          site_of_origin                = "soo:as2-nn2:65001:200"
+          unsuppress_map                = "UNSUPP_MAP"
+          weight                        = "100"
+          max_prefix_action             = "restart"
+          max_prefix_number             = 10000
+          max_prefix_restart_time       = 1
+          max_prefix_threshold          = 30
+          route_controls = {
+            "in" = {
+              route_map_name = "ROUTE_MAP1"
+            }
+          }
+          prefix_list_controls = {
+            "in" = {
+              list = "PREFIX_LIST1"
+            }
+          }
+          filter_list_controls = {
+            "out" = {
+              list = "AS_PATH_LIST1"
+            }
+          }
+          inherit_peer_policies = {
+            "POLICY_TEMPLATE2" = {
+              sequence = 10
+            }
+          }
+        }
+      }
       peer_templates = {
         "SPINE-PEERS" = {
           remote_asn                     = "65002"
@@ -151,6 +241,7 @@ resource "nxos_bgp" "example" {
           peer_type                      = "fabric-internal"
           source_interface               = "lo0"
           admin_state                    = "enabled"
+          affinity_group                 = 100
           asn_type                       = "none"
           bfd_type                       = "none"
           bmp_server_1                   = "disabled"
@@ -162,29 +253,51 @@ resource "nxos_bgp" "example" {
           keepalive_interval             = 60
           log_neighbor_changes           = "none"
           low_memory_exempt              = "disabled"
+          max_peer_count                 = 10
+          password_type                  = "0"
+          password                       = "secret_password"
           private_as_control             = "none"
           session_template               = "SESS_TEMPLATE"
+          ebgp_multihop_ttl              = 2
           peer_template_address_families = {
             "ipv4-ucast" = {
-              control                     = "nh-self,rr-client"
-              send_community_extended     = "enabled"
-              send_community_standard     = "enabled"
-              aigp                        = "disabled"
-              allowed_self_as_count       = 0
-              as_override                 = "disabled"
-              default_originate           = "enabled"
-              default_originate_route_map = "DEF_ORIG_MAP"
-              dmz_link_bandwidth          = "disabled"
-              link_bandwidth_cumulative   = "disabled"
-              nexthop_thirdparty          = "enabled"
-              rewrite_rt_asn              = "disabled"
-              soft_reconfiguration_backup = "none"
-              unsuppress_map              = "UNSUPP_MAP"
-              weight                      = "100"
-              max_prefix_action           = "restart"
-              max_prefix_number           = 10000
-              max_prefix_restart_time     = 1
-              max_prefix_threshold        = 30
+              control                       = "nh-self,rr-client"
+              send_community_extended       = "enabled"
+              send_community_standard       = "enabled"
+              advertisement_interval        = 30
+              advertise_local_labeled_route = "disabled"
+              aigp                          = "disabled"
+              allowed_self_as_count         = 0
+              as_override                   = "disabled"
+              default_originate             = "enabled"
+              default_originate_route_map   = "DEF_ORIG_MAP"
+              dmz_link_bandwidth            = "disabled"
+              link_bandwidth_cumulative     = "disabled"
+              nexthop_thirdparty            = "enabled"
+              rewrite_rt_asn                = "disabled"
+              soft_reconfiguration_backup   = "none"
+              site_of_origin                = "soo:as2-nn2:65001:200"
+              unsuppress_map                = "UNSUPP_MAP"
+              weight                        = "100"
+              max_prefix_action             = "restart"
+              max_prefix_number             = 10000
+              max_prefix_restart_time       = 1
+              max_prefix_threshold          = 30
+              route_controls = {
+                "in" = {
+                  route_map_name = "ROUTE_MAP1"
+                }
+              }
+              prefix_list_controls = {
+                "in" = {
+                  list = "PREFIX_LIST1"
+                }
+              }
+              inherit_peer_policies = {
+                "POLICY_TEMPLATE" = {
+                  sequence = 10
+                }
+              }
             }
           }
         }
@@ -200,8 +313,10 @@ resource "nxos_bgp" "example" {
           keepalive_interval             = 15
           ebgp_multihop_ttl              = 5
           peer_control                   = "bfd,dis-conn-check"
+          password_type                  = "0"
           password                       = "secret_password"
           admin_state                    = "enabled"
+          affinity_group                 = 100
           asn_type                       = "none"
           bfd_type                       = "none"
           bmp_server_1                   = "disabled"
@@ -216,25 +331,27 @@ resource "nxos_bgp" "example" {
           local_asn                      = "65001"
           peer_address_families = {
             "ipv4-ucast" = {
-              control                     = "nh-self"
-              send_community_extended     = "enabled"
-              send_community_standard     = "enabled"
-              aigp                        = "disabled"
-              allowed_self_as_count       = 0
-              as_override                 = "disabled"
-              default_originate           = "enabled"
-              default_originate_route_map = "DEF_ORIG_MAP"
-              dmz_link_bandwidth          = "disabled"
-              link_bandwidth_cumulative   = "disabled"
-              nexthop_thirdparty          = "enabled"
-              rewrite_rt_asn              = "disabled"
-              soft_reconfiguration_backup = "none"
-              unsuppress_map              = "UNSUPP_MAP"
-              weight                      = "100"
-              max_prefix_action           = "restart"
-              max_prefix_number           = 10000
-              max_prefix_restart_time     = 1
-              max_prefix_threshold        = 30
+              control                       = "nh-self"
+              send_community_extended       = "enabled"
+              send_community_standard       = "enabled"
+              advertisement_interval        = 30
+              advertise_local_labeled_route = "disabled"
+              aigp                          = "disabled"
+              allowed_self_as_count         = 0
+              as_override                   = "disabled"
+              default_originate             = "enabled"
+              default_originate_route_map   = "DEF_ORIG_MAP"
+              dmz_link_bandwidth            = "disabled"
+              link_bandwidth_cumulative     = "disabled"
+              nexthop_thirdparty            = "enabled"
+              rewrite_rt_asn                = "disabled"
+              soft_reconfiguration_backup   = "none"
+              unsuppress_map                = "UNSUPP_MAP"
+              weight                        = "100"
+              max_prefix_action             = "restart"
+              max_prefix_number             = 10000
+              max_prefix_restart_time       = 1
+              max_prefix_threshold          = 30
               route_controls = {
                 "in" = {
                   route_map_name = "ROUTE_MAP1"
@@ -243,6 +360,11 @@ resource "nxos_bgp" "example" {
               prefix_list_controls = {
                 "in" = {
                   list = "PREFIX_LIST1"
+                }
+              }
+              inherit_peer_policies = {
+                "POLICY_TEMPLATE" = {
+                  sequence = 10
                 }
               }
             }
@@ -256,6 +378,7 @@ resource "nxos_bgp" "example" {
           peer_template                  = "SPINE-PEERS"
           peer_type                      = "fabric-internal"
           admin_state                    = "enabled"
+          affinity_group                 = 100
           asn_type                       = "none"
           bfd_type                       = "none"
           bmp_server_1                   = "disabled"
@@ -269,6 +392,8 @@ resource "nxos_bgp" "example" {
           keepalive_interval             = 15
           log_neighbor_changes           = "none"
           low_memory_exempt              = "disabled"
+          max_peer_count                 = 10
+          password_type                  = "0"
           password                       = "secret_password"
           private_as_control             = "none"
           session_template               = "SESS_TEMPLATE"
@@ -379,6 +504,10 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `path_control_med_non_deterministic` (String) Med Non-Deterministic.
   - Choices: `enabled`, `disabled`
+- `peer_policy_templates` (Attributes Map) List of BGP peer-policy templates.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_policy_templates))
+- `peer_session_templates` (Attributes Map) List of BGP peer-session templates.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_session_templates))
 - `peer_templates` (Attributes Map) List of BGP peer templates.
   - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
 - `peers` (Attributes Map) List of BGP peers.
@@ -587,6 +716,162 @@ Optional:
   - Range: `1`-`254`
 
 
+<a id="nestedatt--vrfs--peer_policy_templates"></a>
+### Nested Schema for `vrfs.peer_policy_templates`
+
+Optional:
+
+- `advertise_local_labeled_route` (String) Advertise a route with local label to peer.
+  - Choices: `enabled`, `disabled`
+- `advertisement_interval` (Number) Neighbor advertisement interval.
+  - Range: `1`-`600`
+- `aigp` (String) Send and recieve AIGP attribute.
+  - Choices: `enabled`, `disabled`
+- `allowed_self_as_count` (Number) Allowed Self AS Count.
+  - Range: `0`-`10`
+- `as_override` (String) Override matching AS-number while sending update.
+  - Choices: `enabled`, `disabled`
+- `capability_additional_paths` (String) Capability Additional Paths.
+  - Choices: `send`, `recv`, `send-disable`, `recv-disable`
+- `control` (String) Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:
+  - Single value. Example: `nh-self`
+  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.
+- `default_originate` (String) Default Originate is enabled.
+  - Choices: `enabled`, `disabled`
+- `default_originate_route_map` (String) Default Originate Route Map.
+- `dmz_link_bandwidth` (String) Dmz-link-bandwidth.
+  - Choices: `enabled`, `disabled`
+- `filter_list_controls` (Attributes Map) List of BGP peer-policy template filter list controls.
+  - Map key: `direction` - Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peer_policy_templates--filter_list_controls))
+- `inherit_peer_policies` (Attributes Map) List of BGP peer-policy templates to inherit from.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_policy_templates--inherit_peer_policies))
+- `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
+  - Choices: `enabled`, `disabled`
+- `max_prefix_action` (String) Action to do when limit is exceeded.
+  - Choices: `log`, `shut`, `restart`
+- `max_prefix_number` (Number) Maximum number of prefixes allowed from the peer.
+  - Range: `0`-`4294967295`
+- `max_prefix_restart_time` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
+  - Range: `1`-`65535`
+- `max_prefix_threshold` (Number) The threshold percentage of the maximum number of prefixes before a warning is issued.
+  - Range: `1`-`100`
+- `next_hop_self_all` (Boolean) Set address as next-hop for all routes.
+- `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
+  - Choices: `enabled`, `disabled`
+- `prefix_list_controls` (Attributes Map) List of BGP peer-policy template prefix list controls.
+  - Map key: `direction` - Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peer_policy_templates--prefix_list_controls))
+- `route_controls` (Attributes Map) List of BGP peer-policy template route controls.
+  - Map key: `direction` - Direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peer_policy_templates--route_controls))
+- `send_community_extended` (String) Send-community extended.
+  - Choices: `enabled`, `disabled`
+- `send_community_standard` (String) Send-community standard.
+  - Choices: `enabled`, `disabled`
+- `site_of_origin` (String) Site-of-origin extcommunity.
+- `soft_reconfiguration_backup` (String) Soft Reconfiguration.
+  - Choices: `none`, `inbound`, `inbound-always`
+- `unsuppress_map` (String) Route-map to selectively unsuppress suppressed routes.
+- `weight` (String) Weight for the neighbor.
+
+<a id="nestedatt--vrfs--peer_policy_templates--filter_list_controls"></a>
+### Nested Schema for `vrfs.peer_policy_templates.filter_list_controls`
+
+Optional:
+
+- `list` (String) Name of list to control the route distribution.
+
+
+<a id="nestedatt--vrfs--peer_policy_templates--inherit_peer_policies"></a>
+### Nested Schema for `vrfs.peer_policy_templates.inherit_peer_policies`
+
+Optional:
+
+- `sequence` (Number) Sequence Number.
+  - Range: `1`-`65535`
+
+
+<a id="nestedatt--vrfs--peer_policy_templates--prefix_list_controls"></a>
+### Nested Schema for `vrfs.peer_policy_templates.prefix_list_controls`
+
+Optional:
+
+- `list` (String) Name of list to control the route distribution.
+
+
+<a id="nestedatt--vrfs--peer_policy_templates--route_controls"></a>
+### Nested Schema for `vrfs.peer_policy_templates.route_controls`
+
+Optional:
+
+- `route_map_name` (String) Route Map.
+
+
+
+<a id="nestedatt--vrfs--peer_session_templates"></a>
+### Nested Schema for `vrfs.peer_session_templates`
+
+Optional:
+
+- `admin_state` (String) Administrative State.
+  - Choices: `enabled`, `disabled`
+- `affinity_group` (Number) Affinity group for the neighbor.
+  - Range: `0`-`65535`
+- `asn_type` (String) Specify peer ASN type as External or Internal.
+  - Choices: `none`, `external`, `internal`
+- `bfd_type` (String) Specify BFD session type.
+  - Choices: `none`, `singlehop`, `multihop`
+- `bmp_server_1` (String) Activate BMP Server 1.
+  - Choices: `enabled`, `disabled`
+- `bmp_server_2` (String) Activate BMP Server 2.
+  - Choices: `enabled`, `disabled`
+- `capability_suppress_4_byte_asn` (String) Capability Suppress 4-byte-as.
+  - Choices: `enabled`, `disabled`
+- `connection_mode` (String) Connection Mode.
+  - Choices: `passive`
+- `description` (String) Description.
+- `dscp` (String) Specify DSCP value for Locally Originated packets.
+  - Choices: `0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `cs1`, `9`, `af11`, `11`, `af12`, `13`, `af13`, `15`, `cs2`, `17`, `af21`, `19`, `af22`, `21`, `af23`, `23`, `cs3`, `25`, `af31`, `27`, `af32`, `29`, `af33`, `31`, `cs4`, `33`, `af41`, `35`, `af42`, `37`, `af43`, `39`, `cs5`, `41`, `42`, `43`, `44`, `45`, `ef`, `47`, `cs6`, `49`, `50`, `51`, `52`, `53`, `54`, `55`, `cs7`, `57`, `58`, `59`, `60`, `61`, `62`, `63`
+- `ebgp_multihop_ttl` (Number) eBGP Multihop.
+  - Range: `2`-`255`
+- `egress_peer_engineering` (String) Egress Peer Engineering EPE for neighbor.
+  - Choices: `enabled`, `disabled`
+- `egress_peer_engineering_peer_set` (String) Egress Peer Engineering EPE Peer-Set name.
+- `hold_time` (Number) Hold Interval.
+  - Range: `3`-`3600`
+- `internal_vpn_client` (String) internal-vpn-client for iBGP PE-CE Support.
+  - Choices: `enabled`, `disabled`
+- `keepalive_interval` (Number) Keepalive Interval.
+  - Range: `0`-`3600`
+- `local_asn` (String) Local Autonomous System Number.
+- `local_asn_propagation` (String) ASN Propagation.
+  - Choices: `none`, `no-prepend`, `replace-as`, `dual-as`
+- `log_neighbor_changes` (String) Log Neighbor Changes.
+  - Choices: `none`, `enable`, `disable`
+- `low_memory_exempt` (String) Low Memory Exempt.
+  - Choices: `enabled`, `disabled`
+- `max_peer_count` (Number) Maximum Peers for the prefix or interface.
+  - Range: `1`-`1000`
+- `password` (String, Sensitive) Configure a password for neighbor.
+- `password_type` (String) Password EnCrypt Type.
+  - Choices: `0`, `3`, `LINE`, `6`, `7`
+- `password_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `password_wo_version` (Number) The write-only version of the attribute.
+- `peer_control` (String) Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
+  - Single value. Example: `bfd`
+  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
+- `peer_type` (String) Neighbor Fabric Type.
+  - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`
+- `private_as_control` (String) Private AS Control.
+  - Choices: `none`, `remove-exclusive`, `remove-all`, `replace-as`
+- `remote_asn` (String) Autonomous System Number.
+- `session_template` (String) Importing Session Specific properties from Session Template.
+- `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
+- `ttl_security_hops` (Number) Enable TTL Security Mechanism with hop counts specified for remote peers.
+  - Range: `1`-`254`
+
+
 <a id="nestedatt--vrfs--peer_templates"></a>
 ### Nested Schema for `vrfs.peer_templates`
 
@@ -669,6 +954,8 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `encapsulation_mpls` (String) Configure encapsulation type for EVPN routes.
   - Choices: `enabled`, `disabled`
+- `inherit_peer_policies` (Attributes Map) List of BGP peer-policy templates to inherit from.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families--inherit_peer_policies))
 - `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
   - Choices: `enabled`, `disabled`
 - `max_prefix_action` (String) Action to do when limit is exceeded.
@@ -681,8 +968,14 @@ Optional:
   - Range: `1`-`100`
 - `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
   - Choices: `enabled`, `disabled`
+- `prefix_list_controls` (Attributes Map) List of BGP peer template address family prefix list controls.
+  - Map key: `direction` - Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families--prefix_list_controls))
 - `rewrite_rt_asn` (String) Auto generate RTs for EBGP neighbor.
   - Choices: `enabled`, `disabled`
+- `route_controls` (Attributes Map) List of BGP peer template address family route controls.
+  - Map key: `direction` - Direction.
+  - Key choices: `in`, `out` (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families--route_controls))
 - `send_community_extended` (String) Send-community extended.
   - Choices: `enabled`, `disabled`
 - `send_community_standard` (String) Send-community standard.
@@ -692,6 +985,31 @@ Optional:
   - Choices: `none`, `inbound`, `inbound-always`
 - `unsuppress_map` (String) Route-map to selectively unsuppress suppressed routes.
 - `weight` (String) Weight for the neighbor.
+
+<a id="nestedatt--vrfs--peer_templates--peer_template_address_families--inherit_peer_policies"></a>
+### Nested Schema for `vrfs.peer_templates.peer_template_address_families.inherit_peer_policies`
+
+Optional:
+
+- `sequence` (Number) Sequence Number.
+  - Range: `1`-`65535`
+
+
+<a id="nestedatt--vrfs--peer_templates--peer_template_address_families--prefix_list_controls"></a>
+### Nested Schema for `vrfs.peer_templates.peer_template_address_families.prefix_list_controls`
+
+Optional:
+
+- `list` (String) Name of list to control the route distribution.
+
+
+<a id="nestedatt--vrfs--peer_templates--peer_template_address_families--route_controls"></a>
+### Nested Schema for `vrfs.peer_templates.peer_template_address_families.route_controls`
+
+Optional:
+
+- `route_map_name` (String) Route Map.
+
 
 
 
@@ -781,6 +1099,8 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `encapsulation_mpls` (String) Configure encapsulation type for EVPN routes.
   - Choices: `enabled`, `disabled`
+- `inherit_peer_policies` (Attributes Map) List of BGP peer-policy templates to inherit from.
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--inherit_peer_policies))
 - `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
   - Choices: `enabled`, `disabled`
 - `max_prefix_action` (String) Action to do when limit is exceeded.
@@ -810,6 +1130,15 @@ Optional:
   - Choices: `none`, `inbound`, `inbound-always`
 - `unsuppress_map` (String) Route-map to selectively unsuppress suppressed routes.
 - `weight` (String) Weight for the neighbor.
+
+<a id="nestedatt--vrfs--peers--peer_address_families--inherit_peer_policies"></a>
+### Nested Schema for `vrfs.peers.peer_address_families.inherit_peer_policies`
+
+Optional:
+
+- `sequence` (Number) Sequence Number.
+  - Range: `1`-`65535`
+
 
 <a id="nestedatt--vrfs--peers--peer_address_families--prefix_list_controls"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families.prefix_list_controls`

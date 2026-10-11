@@ -80,6 +80,64 @@ resource "nxos_user_management" "example" {
       }
     }
   }
+  radius_deadtime                 = 5
+  radius_description              = "RADIUS settings"
+  radius_key                      = "secret123"
+  radius_key_encryption           = "0"
+  radius_owner_key                = "owner1"
+  radius_owner_tag                = "tag1"
+  radius_retries                  = 3
+  radius_secure_mode              = "tls"
+  radius_source_interface         = "mgmt0"
+  radius_timeout                  = 10
+  radius_monitoring_description   = "RADIUS server monitoring"
+  radius_monitoring_idle_time     = 10
+  radius_monitoring_user          = "monuser"
+  radius_monitoring_owner_key     = "owner1"
+  radius_monitoring_owner_tag     = "tag1"
+  radius_monitoring_password_type = "0"
+  radius_monitoring_password      = "monpass"
+  radius_providers = {
+    "10.1.1.1" = {
+      accounting_port          = 1646
+      authentication_port      = 1645
+      authentication_protocol  = "chap"
+      description              = "RADIUS provider"
+      dtls_client_trustpoint   = "TP1"
+      dtls_idle_timeout        = 300
+      key                      = "secret123"
+      key_encryption           = "0"
+      monitoring_idle_time     = 10
+      monitoring_password      = "monpass"
+      monitoring_password_type = "0"
+      monitoring_user          = "monuser"
+      owner_key                = "owner1"
+      owner_tag                = "tag1"
+      retries                  = 3
+      timeout                  = 10
+      tls_client_trustpoint    = "TP1"
+      tls_idle_timeout         = 300
+      use_type                 = "Auth"
+    }
+  }
+  radius_provider_groups = {
+    "RADIUS_GROUP1" = {
+      deadtime         = 5
+      description      = "RADIUS provider group"
+      owner_key        = "owner1"
+      owner_tag        = "tag1"
+      source_interface = "mgmt0"
+      vrf              = "management"
+      servers = {
+        "10.1.1.1" = {
+          description = "RADIUS server reference"
+          order       = 1
+          owner_key   = "owner1"
+          owner_tag   = "tag1"
+        }
+      }
+    }
+  }
   authentication_realm_default_role_policy     = "no-login"
   authentication_realm_description             = "AAA authentication realm"
   authentication_realm_owner_key               = "owner1"

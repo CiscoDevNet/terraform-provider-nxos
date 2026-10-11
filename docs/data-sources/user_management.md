@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
   API Documentation
-  aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserEp/aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PreLoginBanner/aaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PostLoginBanner/aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserRole/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/aaaProviderRef https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ProviderRef/aaaAuthRealm https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:AuthRealm/aaaDefaultAuth https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAuth/aaaConsoleAuth https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/aaaDefaultAuthor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAuthor/aaaDefaultAcc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAcc/
+  aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserEp/aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PreLoginBanner/aaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PostLoginBanner/aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserRole/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/aaaProviderRef https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ProviderRef/aaaRadiusEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusEp/aaaRadiusServerMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusServerMonitor/aaaRadiusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusProvider/aaaRadiusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusProviderGroup/aaaProviderRef https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ProviderRef/aaaAuthRealm https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:AuthRealm/aaaDefaultAuth https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAuth/aaaConsoleAuth https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/aaaDefaultAuthor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAuthor/aaaDefaultAcc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAcc/
 ---
 
 # nxos_user_management (Data Source)
@@ -23,6 +23,11 @@ This data source can read the user management configuration on NX-OS devices, in
 - [aaaTacacsPlusEp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/)
 - [aaaTacacsPlusProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/)
 - [aaaTacacsPlusProviderGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/)
+- [aaaProviderRef](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ProviderRef/)
+- [aaaRadiusEp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusEp/)
+- [aaaRadiusServerMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusServerMonitor/)
+- [aaaRadiusProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusProvider/)
+- [aaaRadiusProviderGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusProviderGroup/)
 - [aaaProviderRef](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ProviderRef/)
 - [aaaAuthRealm](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:AuthRealm/)
 - [aaaDefaultAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAuth/)
@@ -129,6 +134,33 @@ data "nxos_user_management" "example" {
 - `pre_login_banner_name` (String) Object name.
 - `pre_login_banner_owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `pre_login_banner_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `radius_deadtime` (Number) Duration for which non-reachable server is skipped.
+- `radius_description` (String) Description of the specified attribute.
+- `radius_key` (String, Sensitive) Global RADIUS server shared secret.
+- `radius_key_encryption` (String) Default key encryption.
+- `radius_key_wo` (String) The write-only value of the attribute.
+- `radius_key_wo_version` (Number) The write-only version of the attribute.
+- `radius_logging_level` (Number) Radius Logging level.
+- `radius_monitoring_description` (String) Description of the specified attribute.
+- `radius_monitoring_idle_time` (Number) Idle timer to monitor tacacs/radius server.
+- `radius_monitoring_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `radius_monitoring_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `radius_monitoring_password` (String, Sensitive) Password.
+- `radius_monitoring_password_type` (String) Radius Server Monitor Password type.
+- `radius_monitoring_password_wo` (String) The write-only value of the attribute.
+- `radius_monitoring_password_wo_version` (Number) The write-only version of the attribute.
+- `radius_monitoring_user` (String) Object name.
+- `radius_name` (String) Object name.
+- `radius_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `radius_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `radius_provider_groups` (Attributes Map) RADIUS provider groups.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--radius_provider_groups))
+- `radius_providers` (Attributes Map) RADIUS providers.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--radius_providers))
+- `radius_retries` (Number) The number of attempts that the authentication method is tried.
+- `radius_secure_mode` (String) Global RADIUS server secure mode.
+- `radius_source_interface` (String) Source Interface.
+- `radius_timeout` (Number) The amount of time between authentication attempts.
 - `service_password_recovery` (String) Service Password Recovery.
 - `tacacs_deadtime` (Number) Duration for which non-reachable server is skipped.
 - `tacacs_description` (String) Description of the specified attribute.
@@ -168,6 +200,62 @@ Read-Only:
 - `provider_group_6` (String) Provider Group.
 - `provider_group_7` (String) Provider Group.
 - `provider_group_8` (String) Provider Group.
+
+
+<a id="nestedatt--radius_provider_groups"></a>
+### Nested Schema for `radius_provider_groups`
+
+Read-Only:
+
+- `deadtime` (Number) Duration for which non-reachable server is skipped.
+- `description` (String) Description of the specified attribute.
+- `owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `servers` (Attributes Map) RADIUS provider group server members.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--radius_provider_groups--servers))
+- `source_interface` (String) Source Interface.
+- `vrf` (String) VRF.
+
+<a id="nestedatt--radius_provider_groups--servers"></a>
+### Nested Schema for `radius_provider_groups.servers`
+
+Read-Only:
+
+- `description` (String) Description of the specified attribute.
+- `order` (Number) Relative priority in which the AAA provider will be contacted.
+- `owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+
+
+
+<a id="nestedatt--radius_providers"></a>
+### Nested Schema for `radius_providers`
+
+Read-Only:
+
+- `accounting_port` (Number) acctPort.
+- `authentication_port` (Number) The service port number for the RADIUS service.
+- `authentication_protocol` (String) The RADIUS authentication protocol.
+- `description` (String) Description of the specified attribute.
+- `dtls_client_trustpoint` (String) DTLS Client trustpoint name.
+- `dtls_idle_timeout` (Number) DTLS Timeout in seconds.
+- `key` (String, Sensitive) A password for the AAA provider database.
+- `key_encryption` (String) Default key encryption.
+- `key_wo` (String) The write-only value of the attribute.
+- `key_wo_version` (Number) The write-only version of the attribute.
+- `monitoring_idle_time` (Number) Idle timer to monitor radius server.
+- `monitoring_password` (String, Sensitive) Periodic Server Monitoring Password.
+- `monitoring_password_type` (String) Monitoring password type.
+- `monitoring_password_wo` (String) The write-only value of the attribute.
+- `monitoring_password_wo_version` (Number) The write-only version of the attribute.
+- `monitoring_user` (String) Periodic Server Monitoring Username.
+- `owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `retries` (Number) Retries.
+- `timeout` (Number) The amount of time between authentication attempts.
+- `tls_client_trustpoint` (String) Client trustpoint name.
+- `tls_idle_timeout` (Number) TLS Timeout in seconds.
+- `use_type` (String) Usage for the radius server.
 
 
 <a id="nestedatt--tacacs_provider_groups"></a>

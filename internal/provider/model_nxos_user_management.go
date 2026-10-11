@@ -79,6 +79,31 @@ type UserManagement struct {
 	TacacsTimeout                            types.Int64                                    `tfsdk:"tacacs_timeout"`
 	TacacsProviders                          map[string]UserManagementTacacsProviders       `tfsdk:"tacacs_providers"`
 	TacacsProviderGroups                     map[string]UserManagementTacacsProviderGroups  `tfsdk:"tacacs_provider_groups"`
+	RadiusDeadtime                           types.Int64                                    `tfsdk:"radius_deadtime"`
+	RadiusDescription                        types.String                                   `tfsdk:"radius_description"`
+	RadiusKey                                types.String                                   `tfsdk:"radius_key"`
+	RadiusKeyWo                              types.String                                   `tfsdk:"radius_key_wo"`
+	RadiusKeyWoVersion                       types.Int64                                    `tfsdk:"radius_key_wo_version"`
+	RadiusKeyEncryption                      types.String                                   `tfsdk:"radius_key_encryption"`
+	RadiusLoggingLevel                       types.Int64                                    `tfsdk:"radius_logging_level"`
+	RadiusName                               types.String                                   `tfsdk:"radius_name"`
+	RadiusOwnerKey                           types.String                                   `tfsdk:"radius_owner_key"`
+	RadiusOwnerTag                           types.String                                   `tfsdk:"radius_owner_tag"`
+	RadiusRetries                            types.Int64                                    `tfsdk:"radius_retries"`
+	RadiusSecureMode                         types.String                                   `tfsdk:"radius_secure_mode"`
+	RadiusSourceInterface                    types.String                                   `tfsdk:"radius_source_interface"`
+	RadiusTimeout                            types.Int64                                    `tfsdk:"radius_timeout"`
+	RadiusMonitoringDescription              types.String                                   `tfsdk:"radius_monitoring_description"`
+	RadiusMonitoringIdleTime                 types.Int64                                    `tfsdk:"radius_monitoring_idle_time"`
+	RadiusMonitoringUser                     types.String                                   `tfsdk:"radius_monitoring_user"`
+	RadiusMonitoringOwnerKey                 types.String                                   `tfsdk:"radius_monitoring_owner_key"`
+	RadiusMonitoringOwnerTag                 types.String                                   `tfsdk:"radius_monitoring_owner_tag"`
+	RadiusMonitoringPasswordType             types.String                                   `tfsdk:"radius_monitoring_password_type"`
+	RadiusMonitoringPassword                 types.String                                   `tfsdk:"radius_monitoring_password"`
+	RadiusMonitoringPasswordWo               types.String                                   `tfsdk:"radius_monitoring_password_wo"`
+	RadiusMonitoringPasswordWoVersion        types.Int64                                    `tfsdk:"radius_monitoring_password_wo_version"`
+	RadiusProviders                          map[string]UserManagementRadiusProviders       `tfsdk:"radius_providers"`
+	RadiusProviderGroups                     map[string]UserManagementRadiusProviderGroups  `tfsdk:"radius_provider_groups"`
 	AuthenticationRealmDefaultRolePolicy     types.String                                   `tfsdk:"authentication_realm_default_role_policy"`
 	AuthenticationRealmDescription           types.String                                   `tfsdk:"authentication_realm_description"`
 	AuthenticationRealmLoggingLevel          types.Int64                                    `tfsdk:"authentication_realm_logging_level"`
@@ -204,6 +229,49 @@ type UserManagementTacacsProviderGroupsServers struct {
 	OwnerTag    types.String `tfsdk:"owner_tag"`
 }
 
+type UserManagementRadiusProviders struct {
+	AccountingPort              types.Int64  `tfsdk:"accounting_port"`
+	AuthenticationPort          types.Int64  `tfsdk:"authentication_port"`
+	AuthenticationProtocol      types.String `tfsdk:"authentication_protocol"`
+	Description                 types.String `tfsdk:"description"`
+	DtlsClientTrustpoint        types.String `tfsdk:"dtls_client_trustpoint"`
+	DtlsIdleTimeout             types.Int64  `tfsdk:"dtls_idle_timeout"`
+	Key                         types.String `tfsdk:"key"`
+	KeyWo                       types.String `tfsdk:"key_wo"`
+	KeyWoVersion                types.Int64  `tfsdk:"key_wo_version"`
+	KeyEncryption               types.String `tfsdk:"key_encryption"`
+	MonitoringIdleTime          types.Int64  `tfsdk:"monitoring_idle_time"`
+	MonitoringPassword          types.String `tfsdk:"monitoring_password"`
+	MonitoringPasswordWo        types.String `tfsdk:"monitoring_password_wo"`
+	MonitoringPasswordWoVersion types.Int64  `tfsdk:"monitoring_password_wo_version"`
+	MonitoringPasswordType      types.String `tfsdk:"monitoring_password_type"`
+	MonitoringUser              types.String `tfsdk:"monitoring_user"`
+	OwnerKey                    types.String `tfsdk:"owner_key"`
+	OwnerTag                    types.String `tfsdk:"owner_tag"`
+	Retries                     types.Int64  `tfsdk:"retries"`
+	Timeout                     types.Int64  `tfsdk:"timeout"`
+	TlsClientTrustpoint         types.String `tfsdk:"tls_client_trustpoint"`
+	TlsIdleTimeout              types.Int64  `tfsdk:"tls_idle_timeout"`
+	UseType                     types.String `tfsdk:"use_type"`
+}
+
+type UserManagementRadiusProviderGroups struct {
+	Deadtime        types.Int64                                          `tfsdk:"deadtime"`
+	Description     types.String                                         `tfsdk:"description"`
+	OwnerKey        types.String                                         `tfsdk:"owner_key"`
+	OwnerTag        types.String                                         `tfsdk:"owner_tag"`
+	SourceInterface types.String                                         `tfsdk:"source_interface"`
+	Vrf             types.String                                         `tfsdk:"vrf"`
+	Servers         map[string]UserManagementRadiusProviderGroupsServers `tfsdk:"servers"`
+}
+
+type UserManagementRadiusProviderGroupsServers struct {
+	Description types.String `tfsdk:"description"`
+	Order       types.Int64  `tfsdk:"order"`
+	OwnerKey    types.String `tfsdk:"owner_key"`
+	OwnerTag    types.String `tfsdk:"owner_tag"`
+}
+
 type UserManagementDefaultAuthorizations struct {
 	AuthorizationMethodNone types.Bool   `tfsdk:"authorization_method_none"`
 	Description             types.String `tfsdk:"description"`
@@ -271,6 +339,18 @@ func (data UserManagementTacacsProviderGroups) getRn(key string) string {
 }
 
 func (data UserManagementTacacsProviderGroupsServers) getRn(key string) string {
+	return fmt.Sprintf("providerref-[%s]", key)
+}
+
+func (data UserManagementRadiusProviders) getRn(key string) string {
+	return fmt.Sprintf("radiusprovider-[%s]", key)
+}
+
+func (data UserManagementRadiusProviderGroups) getRn(key string) string {
+	return fmt.Sprintf("radiusprovidergroup-[%s]", key)
+}
+
+func (data UserManagementRadiusProviderGroupsServers) getRn(key string) string {
 	return fmt.Sprintf("providerref-[%s]", key)
 }
 
@@ -615,6 +695,207 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 		childBody = body
 		body = prevBody
 		if parentAttrs != "{}" || gjson.Get(childBody, "aaaTacacsPlusEp.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
+	{
+		attrs = "{}"
+		if !data.RadiusDeadtime.IsUnknown() && !data.RadiusDeadtime.IsNull() && !config.RadiusDeadtime.IsNull() {
+			attrs, _ = sjson.Set(attrs, "deadtime", strconv.FormatInt(data.RadiusDeadtime.ValueInt64(), 10))
+		}
+		if !data.RadiusDescription.IsUnknown() && !data.RadiusDescription.IsNull() && !config.RadiusDescription.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", data.RadiusDescription.ValueString())
+		}
+		if !config.RadiusKeyWo.IsNull() {
+			attrs, _ = sjson.Set(attrs, "key", config.RadiusKeyWo.ValueString())
+		} else if !data.RadiusKey.IsUnknown() && !data.RadiusKey.IsNull() {
+			attrs, _ = sjson.Set(attrs, "key", data.RadiusKey.ValueString())
+		}
+		if !data.RadiusKeyEncryption.IsUnknown() && !data.RadiusKeyEncryption.IsNull() && !config.RadiusKeyEncryption.IsNull() {
+			attrs, _ = sjson.Set(attrs, "keyEnc", data.RadiusKeyEncryption.ValueString())
+		}
+		if !data.RadiusLoggingLevel.IsUnknown() && !data.RadiusLoggingLevel.IsNull() && !config.RadiusLoggingLevel.IsNull() {
+			attrs, _ = sjson.Set(attrs, "loggingLevel", strconv.FormatInt(data.RadiusLoggingLevel.ValueInt64(), 10))
+		}
+		if !data.RadiusName.IsUnknown() && !data.RadiusName.IsNull() && !config.RadiusName.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", data.RadiusName.ValueString())
+		}
+		if !data.RadiusOwnerKey.IsUnknown() && !data.RadiusOwnerKey.IsNull() && !config.RadiusOwnerKey.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerKey", data.RadiusOwnerKey.ValueString())
+		}
+		if !data.RadiusOwnerTag.IsUnknown() && !data.RadiusOwnerTag.IsNull() && !config.RadiusOwnerTag.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerTag", data.RadiusOwnerTag.ValueString())
+		}
+		if !data.RadiusRetries.IsUnknown() && !data.RadiusRetries.IsNull() && !config.RadiusRetries.IsNull() {
+			attrs, _ = sjson.Set(attrs, "retries", strconv.FormatInt(data.RadiusRetries.ValueInt64(), 10))
+		}
+		if !data.RadiusSecureMode.IsUnknown() && !data.RadiusSecureMode.IsNull() && !config.RadiusSecureMode.IsNull() {
+			attrs, _ = sjson.Set(attrs, "secureMode", data.RadiusSecureMode.ValueString())
+		}
+		if !data.RadiusSourceInterface.IsUnknown() && !data.RadiusSourceInterface.IsNull() && !config.RadiusSourceInterface.IsNull() {
+			attrs, _ = sjson.Set(attrs, "srcIf", data.RadiusSourceInterface.ValueString())
+		}
+		if !data.RadiusTimeout.IsUnknown() && !data.RadiusTimeout.IsNull() && !config.RadiusTimeout.IsNull() {
+			attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(data.RadiusTimeout.ValueInt64(), 10))
+		}
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "aaaRadiusEp.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "aaaRadiusEp.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		attrs = "{}"
+		if !data.RadiusMonitoringDescription.IsUnknown() && !data.RadiusMonitoringDescription.IsNull() && !config.RadiusMonitoringDescription.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", data.RadiusMonitoringDescription.ValueString())
+		}
+		if !data.RadiusMonitoringIdleTime.IsUnknown() && !data.RadiusMonitoringIdleTime.IsNull() && !config.RadiusMonitoringIdleTime.IsNull() {
+			attrs, _ = sjson.Set(attrs, "idleTime", strconv.FormatInt(data.RadiusMonitoringIdleTime.ValueInt64(), 10))
+		}
+		if !data.RadiusMonitoringUser.IsUnknown() && !data.RadiusMonitoringUser.IsNull() && !config.RadiusMonitoringUser.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", data.RadiusMonitoringUser.ValueString())
+		}
+		if !data.RadiusMonitoringOwnerKey.IsUnknown() && !data.RadiusMonitoringOwnerKey.IsNull() && !config.RadiusMonitoringOwnerKey.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerKey", data.RadiusMonitoringOwnerKey.ValueString())
+		}
+		if !data.RadiusMonitoringOwnerTag.IsUnknown() && !data.RadiusMonitoringOwnerTag.IsNull() && !config.RadiusMonitoringOwnerTag.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ownerTag", data.RadiusMonitoringOwnerTag.ValueString())
+		}
+		if !data.RadiusMonitoringPasswordType.IsUnknown() && !data.RadiusMonitoringPasswordType.IsNull() && !config.RadiusMonitoringPasswordType.IsNull() {
+			attrs, _ = sjson.Set(attrs, "passwordType", data.RadiusMonitoringPasswordType.ValueString())
+		}
+		if !config.RadiusMonitoringPasswordWo.IsNull() {
+			attrs, _ = sjson.Set(attrs, "pwd", config.RadiusMonitoringPasswordWo.ValueString())
+		} else if !data.RadiusMonitoringPassword.IsUnknown() && !data.RadiusMonitoringPassword.IsNull() {
+			attrs, _ = sjson.Set(attrs, "pwd", data.RadiusMonitoringPassword.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaRadiusServerMonitor.attributes", attrs)
+		}
+		for key, child := range data.RadiusProviders {
+			configChild, configChildOk := config.RadiusProviders[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "name", key)
+			if configChildOk && !child.AccountingPort.IsUnknown() && !child.AccountingPort.IsNull() && !configChild.AccountingPort.IsNull() {
+				attrs, _ = sjson.Set(attrs, "acctPort", strconv.FormatInt(child.AccountingPort.ValueInt64(), 10))
+			}
+			if configChildOk && !child.AuthenticationPort.IsUnknown() && !child.AuthenticationPort.IsNull() && !configChild.AuthenticationPort.IsNull() {
+				attrs, _ = sjson.Set(attrs, "authPort", strconv.FormatInt(child.AuthenticationPort.ValueInt64(), 10))
+			}
+			if configChildOk && !child.AuthenticationProtocol.IsUnknown() && !child.AuthenticationProtocol.IsNull() && !configChild.AuthenticationProtocol.IsNull() {
+				attrs, _ = sjson.Set(attrs, "authProtocol", child.AuthenticationProtocol.ValueString())
+			}
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if configChildOk && !child.DtlsClientTrustpoint.IsUnknown() && !child.DtlsClientTrustpoint.IsNull() && !configChild.DtlsClientTrustpoint.IsNull() {
+				attrs, _ = sjson.Set(attrs, "dtlsClientTrustpoint", child.DtlsClientTrustpoint.ValueString())
+			}
+			if configChildOk && !child.DtlsIdleTimeout.IsUnknown() && !child.DtlsIdleTimeout.IsNull() && !configChild.DtlsIdleTimeout.IsNull() {
+				attrs, _ = sjson.Set(attrs, "dtlsIdleTimeout", strconv.FormatInt(child.DtlsIdleTimeout.ValueInt64(), 10))
+			}
+			if configChildOk && !configChild.KeyWo.IsNull() {
+				attrs, _ = sjson.Set(attrs, "key", configChild.KeyWo.ValueString())
+			} else if !child.Key.IsUnknown() && !child.Key.IsNull() {
+				attrs, _ = sjson.Set(attrs, "key", child.Key.ValueString())
+			}
+			if configChildOk && !child.KeyEncryption.IsUnknown() && !child.KeyEncryption.IsNull() && !configChild.KeyEncryption.IsNull() {
+				attrs, _ = sjson.Set(attrs, "keyEnc", child.KeyEncryption.ValueString())
+			}
+			if configChildOk && !child.MonitoringIdleTime.IsUnknown() && !child.MonitoringIdleTime.IsNull() && !configChild.MonitoringIdleTime.IsNull() {
+				attrs, _ = sjson.Set(attrs, "monitoringIdleTime", strconv.FormatInt(child.MonitoringIdleTime.ValueInt64(), 10))
+			}
+			if configChildOk && !configChild.MonitoringPasswordWo.IsNull() {
+				attrs, _ = sjson.Set(attrs, "monitoringPassword", configChild.MonitoringPasswordWo.ValueString())
+			} else if !child.MonitoringPassword.IsUnknown() && !child.MonitoringPassword.IsNull() {
+				attrs, _ = sjson.Set(attrs, "monitoringPassword", child.MonitoringPassword.ValueString())
+			}
+			if configChildOk && !child.MonitoringPasswordType.IsUnknown() && !child.MonitoringPasswordType.IsNull() && !configChild.MonitoringPasswordType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "monitoringPasswordType", child.MonitoringPasswordType.ValueString())
+			}
+			if configChildOk && !child.MonitoringUser.IsUnknown() && !child.MonitoringUser.IsNull() && !configChild.MonitoringUser.IsNull() {
+				attrs, _ = sjson.Set(attrs, "monitoringUser", child.MonitoringUser.ValueString())
+			}
+			if configChildOk && !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() && !configChild.OwnerKey.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ownerKey", child.OwnerKey.ValueString())
+			}
+			if configChildOk && !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() && !configChild.OwnerTag.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ownerTag", child.OwnerTag.ValueString())
+			}
+			if configChildOk && !child.Retries.IsUnknown() && !child.Retries.IsNull() && !configChild.Retries.IsNull() {
+				attrs, _ = sjson.Set(attrs, "retries", strconv.FormatInt(child.Retries.ValueInt64(), 10))
+			}
+			if configChildOk && !child.Timeout.IsUnknown() && !child.Timeout.IsNull() && !configChild.Timeout.IsNull() {
+				attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(child.Timeout.ValueInt64(), 10))
+			}
+			if configChildOk && !child.TlsClientTrustpoint.IsUnknown() && !child.TlsClientTrustpoint.IsNull() && !configChild.TlsClientTrustpoint.IsNull() {
+				attrs, _ = sjson.Set(attrs, "tlsClientTrustpoint", child.TlsClientTrustpoint.ValueString())
+			}
+			if configChildOk && !child.TlsIdleTimeout.IsUnknown() && !child.TlsIdleTimeout.IsNull() && !configChild.TlsIdleTimeout.IsNull() {
+				attrs, _ = sjson.Set(attrs, "tlsIdleTimeout", strconv.FormatInt(child.TlsIdleTimeout.ValueInt64(), 10))
+			}
+			if configChildOk && !child.UseType.IsUnknown() && !child.UseType.IsNull() && !configChild.UseType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "useType", child.UseType.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaRadiusProvider.attributes", attrs)
+		}
+		for key, child := range data.RadiusProviderGroups {
+			configChild, configChildOk := config.RadiusProviderGroups[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "name", key)
+			if configChildOk && !child.Deadtime.IsUnknown() && !child.Deadtime.IsNull() && !configChild.Deadtime.IsNull() {
+				attrs, _ = sjson.Set(attrs, "deadtime", strconv.FormatInt(child.Deadtime.ValueInt64(), 10))
+			}
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if configChildOk && !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() && !configChild.OwnerKey.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ownerKey", child.OwnerKey.ValueString())
+			}
+			if configChildOk && !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() && !configChild.OwnerTag.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ownerTag", child.OwnerTag.ValueString())
+			}
+			if configChildOk && !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
+				attrs, _ = sjson.Set(attrs, "srcIf", child.SourceInterface.ValueString())
+			}
+			if configChildOk && !child.Vrf.IsUnknown() && !child.Vrf.IsNull() && !configChild.Vrf.IsNull() {
+				attrs, _ = sjson.Set(attrs, "vrf", child.Vrf.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaRadiusProviderGroup.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".aaaRadiusProviderGroup.children"
+				_ = nestedChildrenPath
+				for key, child := range child.Servers {
+					configChild, configChildOk := configChild.Servers[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "name", key)
+					if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+					}
+					if configChildOk && !child.Order.IsUnknown() && !child.Order.IsNull() && !configChild.Order.IsNull() {
+						attrs, _ = sjson.Set(attrs, "order", strconv.FormatInt(child.Order.ValueInt64(), 10))
+					}
+					if configChildOk && !child.OwnerKey.IsUnknown() && !child.OwnerKey.IsNull() && !configChild.OwnerKey.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ownerKey", child.OwnerKey.ValueString())
+					}
+					if configChildOk && !child.OwnerTag.IsUnknown() && !child.OwnerTag.IsNull() && !configChild.OwnerTag.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ownerTag", child.OwnerTag.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaProviderRef.attributes", attrs)
+				}
+			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "aaaRadiusEp.children").Exists() {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
@@ -1075,6 +1356,126 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 								data.TacacsProviderGroups = make(map[string]UserManagementTacacsProviderGroups)
 							}
 							data.TacacsProviderGroups[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
+	{
+		var raaaRadiusEp gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("aaaRadiusEp.attributes.rn").String()
+				if rnValue == "radiusext" {
+					raaaRadiusEp = v
+					return false
+				}
+				return true
+			},
+		)
+		data.RadiusDeadtime = types.Int64Value(raaaRadiusEp.Get("aaaRadiusEp.attributes.deadtime").Int())
+		data.RadiusDescription = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.descr").String())
+		data.RadiusLoggingLevel = types.Int64Value(raaaRadiusEp.Get("aaaRadiusEp.attributes.loggingLevel").Int())
+		data.RadiusName = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.name").String())
+		data.RadiusOwnerKey = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.ownerKey").String())
+		data.RadiusOwnerTag = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.ownerTag").String())
+		data.RadiusRetries = types.Int64Value(raaaRadiusEp.Get("aaaRadiusEp.attributes.retries").Int())
+		data.RadiusSecureMode = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.secureMode").String())
+		data.RadiusSourceInterface = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.srcIf").String())
+		data.RadiusTimeout = types.Int64Value(raaaRadiusEp.Get("aaaRadiusEp.attributes.timeout").Int())
+		{
+			var raaaRadiusServerMonitor gjson.Result
+			raaaRadiusEp.Get("aaaRadiusEp.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("aaaRadiusServerMonitor.attributes.rn").String()
+					if rnValue == "radiusservermonitor" {
+						raaaRadiusServerMonitor = v
+						return false
+					}
+					return true
+				},
+			)
+			data.RadiusMonitoringDescription = types.StringValue(raaaRadiusServerMonitor.Get("aaaRadiusServerMonitor.attributes.descr").String())
+			data.RadiusMonitoringIdleTime = types.Int64Value(raaaRadiusServerMonitor.Get("aaaRadiusServerMonitor.attributes.idleTime").Int())
+			data.RadiusMonitoringUser = types.StringValue(raaaRadiusServerMonitor.Get("aaaRadiusServerMonitor.attributes.name").String())
+			data.RadiusMonitoringOwnerKey = types.StringValue(raaaRadiusServerMonitor.Get("aaaRadiusServerMonitor.attributes.ownerKey").String())
+			data.RadiusMonitoringOwnerTag = types.StringValue(raaaRadiusServerMonitor.Get("aaaRadiusServerMonitor.attributes.ownerTag").String())
+		}
+		raaaRadiusEp.Get("aaaRadiusEp.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "aaaRadiusProvider" {
+							var child UserManagementRadiusProviders
+							child.AccountingPort = types.Int64Value(value.Get("attributes.acctPort").Int())
+							child.AuthenticationPort = types.Int64Value(value.Get("attributes.authPort").Int())
+							child.AuthenticationProtocol = types.StringValue(value.Get("attributes.authProtocol").String())
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.DtlsClientTrustpoint = types.StringValue(value.Get("attributes.dtlsClientTrustpoint").String())
+							child.DtlsIdleTimeout = types.Int64Value(value.Get("attributes.dtlsIdleTimeout").Int())
+							child.MonitoringIdleTime = types.Int64Value(value.Get("attributes.monitoringIdleTime").Int())
+							child.MonitoringUser = types.StringValue(value.Get("attributes.monitoringUser").String())
+							child.OwnerKey = types.StringValue(value.Get("attributes.ownerKey").String())
+							child.OwnerTag = types.StringValue(value.Get("attributes.ownerTag").String())
+							child.Retries = types.Int64Value(value.Get("attributes.retries").Int())
+							child.Timeout = types.Int64Value(value.Get("attributes.timeout").Int())
+							child.TlsClientTrustpoint = types.StringValue(value.Get("attributes.tlsClientTrustpoint").String())
+							child.TlsIdleTimeout = types.Int64Value(value.Get("attributes.tlsIdleTimeout").Int())
+							child.UseType = types.StringValue(value.Get("attributes.useType").String())
+							mapKey := value.Get("attributes.name").String()
+							if data.RadiusProviders == nil {
+								data.RadiusProviders = make(map[string]UserManagementRadiusProviders)
+							}
+							data.RadiusProviders[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		raaaRadiusEp.Get("aaaRadiusEp.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "aaaRadiusProviderGroup" {
+							var child UserManagementRadiusProviderGroups
+							child.Deadtime = types.Int64Value(value.Get("attributes.deadtime").Int())
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.OwnerKey = types.StringValue(value.Get("attributes.ownerKey").String())
+							child.OwnerTag = types.StringValue(value.Get("attributes.ownerTag").String())
+							child.SourceInterface = types.StringValue(value.Get("attributes.srcIf").String())
+							child.Vrf = types.StringValue(value.Get("attributes.vrf").String())
+							mapKey := value.Get("attributes.name").String()
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "aaaProviderRef" {
+												var nestedChildaaaProviderRef UserManagementRadiusProviderGroupsServers
+												nestedChildaaaProviderRef.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+												nestedChildaaaProviderRef.Order = types.Int64Value(nestedValue.Get("attributes.order").Int())
+												nestedChildaaaProviderRef.OwnerKey = types.StringValue(nestedValue.Get("attributes.ownerKey").String())
+												nestedChildaaaProviderRef.OwnerTag = types.StringValue(nestedValue.Get("attributes.ownerTag").String())
+												nestedMapKey := nestedValue.Get("attributes.name").String()
+												if child.Servers == nil {
+													child.Servers = make(map[string]UserManagementRadiusProviderGroupsServers)
+												}
+												child.Servers[nestedMapKey] = nestedChildaaaProviderRef
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							if data.RadiusProviderGroups == nil {
+								data.RadiusProviderGroups = make(map[string]UserManagementRadiusProviderGroups)
+							}
+							data.RadiusProviderGroups[mapKey] = child
 						}
 						return true
 					},
@@ -1703,6 +2104,282 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 		}
 		data.TacacsProviderGroups[key] = item
 	}
+	var raaaRadiusEp gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("aaaRadiusEp.attributes.rn").String()
+			if rnValue == "radiusext" {
+				raaaRadiusEp = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.RadiusDeadtime.IsNull() {
+		data.RadiusDeadtime = types.Int64Value(raaaRadiusEp.Get("aaaRadiusEp.attributes.deadtime").Int())
+	} else {
+		data.RadiusDeadtime = types.Int64Null()
+	}
+	if !data.RadiusDescription.IsNull() {
+		data.RadiusDescription = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.descr").String())
+	} else {
+		data.RadiusDescription = types.StringNull()
+	}
+	if !data.RadiusLoggingLevel.IsNull() {
+		data.RadiusLoggingLevel = types.Int64Value(raaaRadiusEp.Get("aaaRadiusEp.attributes.loggingLevel").Int())
+	} else {
+		data.RadiusLoggingLevel = types.Int64Null()
+	}
+	if !data.RadiusName.IsNull() {
+		data.RadiusName = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.name").String())
+	} else {
+		data.RadiusName = types.StringNull()
+	}
+	if !data.RadiusOwnerKey.IsNull() {
+		data.RadiusOwnerKey = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.ownerKey").String())
+	} else {
+		data.RadiusOwnerKey = types.StringNull()
+	}
+	if !data.RadiusOwnerTag.IsNull() {
+		data.RadiusOwnerTag = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.ownerTag").String())
+	} else {
+		data.RadiusOwnerTag = types.StringNull()
+	}
+	if !data.RadiusRetries.IsNull() {
+		data.RadiusRetries = types.Int64Value(raaaRadiusEp.Get("aaaRadiusEp.attributes.retries").Int())
+	} else {
+		data.RadiusRetries = types.Int64Null()
+	}
+	if !data.RadiusSecureMode.IsNull() {
+		data.RadiusSecureMode = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.secureMode").String())
+	} else {
+		data.RadiusSecureMode = types.StringNull()
+	}
+	if !data.RadiusSourceInterface.IsNull() {
+		data.RadiusSourceInterface = types.StringValue(raaaRadiusEp.Get("aaaRadiusEp.attributes.srcIf").String())
+	} else {
+		data.RadiusSourceInterface = types.StringNull()
+	}
+	if !data.RadiusTimeout.IsNull() {
+		data.RadiusTimeout = types.Int64Value(raaaRadiusEp.Get("aaaRadiusEp.attributes.timeout").Int())
+	} else {
+		data.RadiusTimeout = types.Int64Null()
+	}
+	{
+		var raaaRadiusServerMonitor gjson.Result
+		raaaRadiusEp.Get("aaaRadiusEp.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("aaaRadiusServerMonitor.attributes.rn").String()
+				if rnValue == "radiusservermonitor" {
+					raaaRadiusServerMonitor = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.RadiusMonitoringDescription.IsNull() {
+			data.RadiusMonitoringDescription = types.StringValue(raaaRadiusServerMonitor.Get("aaaRadiusServerMonitor.attributes.descr").String())
+		} else {
+			data.RadiusMonitoringDescription = types.StringNull()
+		}
+		if !data.RadiusMonitoringIdleTime.IsNull() {
+			data.RadiusMonitoringIdleTime = types.Int64Value(raaaRadiusServerMonitor.Get("aaaRadiusServerMonitor.attributes.idleTime").Int())
+		} else {
+			data.RadiusMonitoringIdleTime = types.Int64Null()
+		}
+		if !data.RadiusMonitoringUser.IsNull() {
+			data.RadiusMonitoringUser = types.StringValue(raaaRadiusServerMonitor.Get("aaaRadiusServerMonitor.attributes.name").String())
+		} else {
+			data.RadiusMonitoringUser = types.StringNull()
+		}
+		if !data.RadiusMonitoringOwnerKey.IsNull() {
+			data.RadiusMonitoringOwnerKey = types.StringValue(raaaRadiusServerMonitor.Get("aaaRadiusServerMonitor.attributes.ownerKey").String())
+		} else {
+			data.RadiusMonitoringOwnerKey = types.StringNull()
+		}
+		if !data.RadiusMonitoringOwnerTag.IsNull() {
+			data.RadiusMonitoringOwnerTag = types.StringValue(raaaRadiusServerMonitor.Get("aaaRadiusServerMonitor.attributes.ownerTag").String())
+		} else {
+			data.RadiusMonitoringOwnerTag = types.StringNull()
+		}
+	}
+	for key, item := range data.RadiusProviders {
+		var raaaRadiusProvider gjson.Result
+		raaaRadiusEp.Get("aaaRadiusEp.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("aaaRadiusProvider.attributes.name").String() == key {
+					raaaRadiusProvider = v
+					return false
+				}
+				return true
+			},
+		)
+		if !raaaRadiusProvider.Exists() {
+			delete(data.RadiusProviders, key)
+			continue
+		}
+		if !item.AccountingPort.IsNull() {
+			item.AccountingPort = types.Int64Value(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.acctPort").Int())
+		} else {
+			item.AccountingPort = types.Int64Null()
+		}
+		if !item.AuthenticationPort.IsNull() {
+			item.AuthenticationPort = types.Int64Value(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.authPort").Int())
+		} else {
+			item.AuthenticationPort = types.Int64Null()
+		}
+		if !item.AuthenticationProtocol.IsNull() {
+			item.AuthenticationProtocol = types.StringValue(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.authProtocol").String())
+		} else {
+			item.AuthenticationProtocol = types.StringNull()
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.DtlsClientTrustpoint.IsNull() {
+			item.DtlsClientTrustpoint = types.StringValue(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.dtlsClientTrustpoint").String())
+		} else {
+			item.DtlsClientTrustpoint = types.StringNull()
+		}
+		if !item.DtlsIdleTimeout.IsNull() {
+			item.DtlsIdleTimeout = types.Int64Value(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.dtlsIdleTimeout").Int())
+		} else {
+			item.DtlsIdleTimeout = types.Int64Null()
+		}
+		if !item.MonitoringIdleTime.IsNull() {
+			item.MonitoringIdleTime = types.Int64Value(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.monitoringIdleTime").Int())
+		} else {
+			item.MonitoringIdleTime = types.Int64Null()
+		}
+		if !item.MonitoringUser.IsNull() {
+			item.MonitoringUser = types.StringValue(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.monitoringUser").String())
+		} else {
+			item.MonitoringUser = types.StringNull()
+		}
+		if !item.OwnerKey.IsNull() {
+			item.OwnerKey = types.StringValue(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.ownerKey").String())
+		} else {
+			item.OwnerKey = types.StringNull()
+		}
+		if !item.OwnerTag.IsNull() {
+			item.OwnerTag = types.StringValue(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.ownerTag").String())
+		} else {
+			item.OwnerTag = types.StringNull()
+		}
+		if !item.Retries.IsNull() {
+			item.Retries = types.Int64Value(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.retries").Int())
+		} else {
+			item.Retries = types.Int64Null()
+		}
+		if !item.Timeout.IsNull() {
+			item.Timeout = types.Int64Value(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.timeout").Int())
+		} else {
+			item.Timeout = types.Int64Null()
+		}
+		if !item.TlsClientTrustpoint.IsNull() {
+			item.TlsClientTrustpoint = types.StringValue(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.tlsClientTrustpoint").String())
+		} else {
+			item.TlsClientTrustpoint = types.StringNull()
+		}
+		if !item.TlsIdleTimeout.IsNull() {
+			item.TlsIdleTimeout = types.Int64Value(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.tlsIdleTimeout").Int())
+		} else {
+			item.TlsIdleTimeout = types.Int64Null()
+		}
+		if !item.UseType.IsNull() {
+			item.UseType = types.StringValue(raaaRadiusProvider.Get("aaaRadiusProvider.attributes.useType").String())
+		} else {
+			item.UseType = types.StringNull()
+		}
+		data.RadiusProviders[key] = item
+	}
+	for key, item := range data.RadiusProviderGroups {
+		var raaaRadiusProviderGroup gjson.Result
+		raaaRadiusEp.Get("aaaRadiusEp.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("aaaRadiusProviderGroup.attributes.name").String() == key {
+					raaaRadiusProviderGroup = v
+					return false
+				}
+				return true
+			},
+		)
+		if !raaaRadiusProviderGroup.Exists() {
+			delete(data.RadiusProviderGroups, key)
+			continue
+		}
+		if !item.Deadtime.IsNull() {
+			item.Deadtime = types.Int64Value(raaaRadiusProviderGroup.Get("aaaRadiusProviderGroup.attributes.deadtime").Int())
+		} else {
+			item.Deadtime = types.Int64Null()
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(raaaRadiusProviderGroup.Get("aaaRadiusProviderGroup.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.OwnerKey.IsNull() {
+			item.OwnerKey = types.StringValue(raaaRadiusProviderGroup.Get("aaaRadiusProviderGroup.attributes.ownerKey").String())
+		} else {
+			item.OwnerKey = types.StringNull()
+		}
+		if !item.OwnerTag.IsNull() {
+			item.OwnerTag = types.StringValue(raaaRadiusProviderGroup.Get("aaaRadiusProviderGroup.attributes.ownerTag").String())
+		} else {
+			item.OwnerTag = types.StringNull()
+		}
+		if !item.SourceInterface.IsNull() {
+			item.SourceInterface = types.StringValue(raaaRadiusProviderGroup.Get("aaaRadiusProviderGroup.attributes.srcIf").String())
+		} else {
+			item.SourceInterface = types.StringNull()
+		}
+		if !item.Vrf.IsNull() {
+			item.Vrf = types.StringValue(raaaRadiusProviderGroup.Get("aaaRadiusProviderGroup.attributes.vrf").String())
+		} else {
+			item.Vrf = types.StringNull()
+		}
+		for nc := range item.Servers {
+			ncItem := item.Servers[nc]
+			var raaaProviderRef gjson.Result
+			raaaRadiusProviderGroup.Get("aaaRadiusProviderGroup.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("aaaProviderRef.attributes.name").String() == nc {
+						raaaProviderRef = v
+						return false
+					}
+					return true
+				},
+			)
+			if !raaaProviderRef.Exists() {
+				delete(item.Servers, nc)
+				continue
+			}
+			if !ncItem.Description.IsNull() {
+				ncItem.Description = types.StringValue(raaaProviderRef.Get("aaaProviderRef.attributes.descr").String())
+			} else {
+				ncItem.Description = types.StringNull()
+			}
+			if !ncItem.Order.IsNull() {
+				ncItem.Order = types.Int64Value(raaaProviderRef.Get("aaaProviderRef.attributes.order").Int())
+			} else {
+				ncItem.Order = types.Int64Null()
+			}
+			if !ncItem.OwnerKey.IsNull() {
+				ncItem.OwnerKey = types.StringValue(raaaProviderRef.Get("aaaProviderRef.attributes.ownerKey").String())
+			} else {
+				ncItem.OwnerKey = types.StringNull()
+			}
+			if !ncItem.OwnerTag.IsNull() {
+				ncItem.OwnerTag = types.StringValue(raaaProviderRef.Get("aaaProviderRef.attributes.ownerTag").String())
+			} else {
+				ncItem.OwnerTag = types.StringNull()
+			}
+			item.Servers[nc] = ncItem
+		}
+		data.RadiusProviderGroups[key] = item
+	}
 	var raaaAuthRealm gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -2290,6 +2967,103 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 	}
 	{
 		childBody := ""
+		if !data.RadiusDeadtime.IsNull() {
+			childBody, _ = sjson.Set(childBody, "deadtime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusDescription.IsNull() {
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusKey.IsNull() {
+			childBody, _ = sjson.Set(childBody, "key", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusKeyEncryption.IsNull() {
+			childBody, _ = sjson.Set(childBody, "keyEnc", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusLoggingLevel.IsNull() {
+			childBody, _ = sjson.Set(childBody, "loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusName.IsNull() {
+			childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusOwnerKey.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusOwnerTag.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusRetries.IsNull() {
+			childBody, _ = sjson.Set(childBody, "retries", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusSecureMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "secureMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusSourceInterface.IsNull() {
+			childBody, _ = sjson.Set(childBody, "srcIf", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.RadiusTimeout.IsNull() {
+			childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
+		}
+		hasNestedChildren := false
+		if len(data.RadiusProviders) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.RadiusProviderGroups) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaRadiusEp"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				childBody := ""
+				if !data.RadiusMonitoringDescription.IsNull() {
+					childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.RadiusMonitoringIdleTime.IsNull() {
+					childBody, _ = sjson.Set(childBody, "idleTime", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.RadiusMonitoringUser.IsNull() {
+					childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.RadiusMonitoringOwnerKey.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ownerKey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.RadiusMonitoringOwnerTag.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ownerTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.RadiusMonitoringPasswordType.IsNull() {
+					childBody, _ = sjson.Set(childBody, "passwordType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.RadiusMonitoringPassword.IsNull() {
+					childBody, _ = sjson.Set(childBody, "pwd", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".aaaRadiusServerMonitor"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			for key, child := range data.RadiusProviders {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRadiusProvider.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRadiusProvider.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.RadiusProviderGroups {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRadiusProviderGroup.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRadiusProviderGroup.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
+	}
+	{
+		childBody := ""
 		if !data.AuthenticationRealmDefaultRolePolicy.IsNull() {
 			childBody, _ = sjson.Set(childBody, "defRolePolicy", "DME_UNSET_PROPERTY_MARKER")
 		}
@@ -2610,6 +3384,52 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 				}
 			}
 		}
+		for stateKey := range state.RadiusProviders {
+			if _, found := data.RadiusProviders[stateKey]; !found {
+				stateChild := state.RadiusProviders[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRadiusProvider.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRadiusProvider.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.RadiusProviderGroups {
+			if _, found := data.RadiusProviderGroups[stateKey]; !found {
+				stateChild := state.RadiusProviderGroups[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRadiusProviderGroup.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRadiusProviderGroup.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.RadiusProviderGroups {
+			if _, found := data.RadiusProviderGroups[di]; !found {
+				continue
+			}
+			stateItemdi := state.RadiusProviderGroups[di]
+			planItemdi := data.RadiusProviderGroups[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children").Array() {
+				if mv.Get("aaaRadiusProviderGroup.attributes.name").String() == di {
+					matchBodyPathdi = helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp") + ".children" + "." + strconv.Itoa(mi) + ".aaaRadiusProviderGroup.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.Servers {
+				if _, found := planItemdi.Servers[stateChildKey]; !found {
+					stateChild := stateItemdi.Servers[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "aaaProviderRef.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "aaaProviderRef.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+		}
 		for stateKey := range state.DefaultAuthorizations {
 			if _, found := data.DefaultAuthorizations[stateKey]; !found {
 				stateChild := state.DefaultAuthorizations[stateKey]
@@ -2910,6 +3730,188 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaTacacsPlusEp")+".children").Array() {
 						if mv.Get("aaaTacacsPlusProviderGroup.attributes.name").String() == key {
 							listChildPath = helpers.FindChildPath(body.Str, bodyPath, "aaaTacacsPlusEp") + ".children" + "." + strconv.Itoa(mi) + ".aaaTacacsPlusProviderGroup.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Servers {
+							if configChild, ok := configChild.Servers[key]; ok {
+								stateChild := stateChild.Servers[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("aaaProviderRef.attributes.name").String() == key {
+										if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".aaaProviderRef.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Order.IsNull() && configChild.Order.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".aaaProviderRef.attributes."+"order", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.OwnerKey.IsNull() && configChild.OwnerKey.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".aaaProviderRef.attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.OwnerTag.IsNull() && configChild.OwnerTag.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".aaaProviderRef.attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if !state.RadiusDeadtime.IsNull() && config.RadiusDeadtime.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"deadtime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusDescription.IsNull() && config.RadiusDescription.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusLoggingLevel.IsNull() && config.RadiusLoggingLevel.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusName.IsNull() && config.RadiusName.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusOwnerKey.IsNull() && config.RadiusOwnerKey.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusOwnerTag.IsNull() && config.RadiusOwnerTag.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusRetries.IsNull() && config.RadiusRetries.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retries", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusSecureMode.IsNull() && config.RadiusSecureMode.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"secureMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusSourceInterface.IsNull() && config.RadiusSourceInterface.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusTimeout.IsNull() && config.RadiusTimeout.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusMonitoringDescription.IsNull() && config.RadiusMonitoringDescription.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")+".children", "aaaRadiusServerMonitor")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusMonitoringIdleTime.IsNull() && config.RadiusMonitoringIdleTime.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")+".children", "aaaRadiusServerMonitor")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"idleTime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusMonitoringUser.IsNull() && config.RadiusMonitoringUser.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")+".children", "aaaRadiusServerMonitor")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusMonitoringOwnerKey.IsNull() && config.RadiusMonitoringOwnerKey.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")+".children", "aaaRadiusServerMonitor")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.RadiusMonitoringOwnerTag.IsNull() && config.RadiusMonitoringOwnerTag.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "aaaRadiusEp")+".children", "aaaRadiusServerMonitor")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.RadiusProviders {
+			if configChild, ok := config.RadiusProviders[key]; ok {
+				stateChild := state.RadiusProviders[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children").Array() {
+					if mv.Get("aaaRadiusProvider.attributes.name").String() == key {
+						if !stateChild.AccountingPort.IsNull() && configChild.AccountingPort.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"acctPort", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.AuthenticationPort.IsNull() && configChild.AuthenticationPort.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"authPort", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.AuthenticationProtocol.IsNull() && configChild.AuthenticationProtocol.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"authProtocol", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.DtlsClientTrustpoint.IsNull() && configChild.DtlsClientTrustpoint.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"dtlsClientTrustpoint", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.DtlsIdleTimeout.IsNull() && configChild.DtlsIdleTimeout.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"dtlsIdleTimeout", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.MonitoringIdleTime.IsNull() && configChild.MonitoringIdleTime.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"monitoringIdleTime", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.MonitoringUser.IsNull() && configChild.MonitoringUser.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"monitoringUser", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.OwnerKey.IsNull() && configChild.OwnerKey.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.OwnerTag.IsNull() && configChild.OwnerTag.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Retries.IsNull() && configChild.Retries.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"retries", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Timeout.IsNull() && configChild.Timeout.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.TlsClientTrustpoint.IsNull() && configChild.TlsClientTrustpoint.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"tlsClientTrustpoint", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.TlsIdleTimeout.IsNull() && configChild.TlsIdleTimeout.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"tlsIdleTimeout", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.UseType.IsNull() && configChild.UseType.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProvider.attributes."+"useType", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		for key := range state.RadiusProviderGroups {
+			if configChild, ok := config.RadiusProviderGroups[key]; ok {
+				stateChild := state.RadiusProviderGroups[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children").Array() {
+					if mv.Get("aaaRadiusProviderGroup.attributes.name").String() == key {
+						if !stateChild.Deadtime.IsNull() && configChild.Deadtime.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProviderGroup.attributes."+"deadtime", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProviderGroup.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.OwnerKey.IsNull() && configChild.OwnerKey.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProviderGroup.attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.OwnerTag.IsNull() && configChild.OwnerTag.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProviderGroup.attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProviderGroup.attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Vrf.IsNull() && configChild.Vrf.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children"+"."+strconv.Itoa(mi)+".aaaRadiusProviderGroup.attributes."+"vrf", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children").Array() {
+						if mv.Get("aaaRadiusProviderGroup.attributes.name").String() == key {
+							listChildPath = helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp") + ".children" + "." + strconv.Itoa(mi) + ".aaaRadiusProviderGroup.children"
 							break
 						}
 					}

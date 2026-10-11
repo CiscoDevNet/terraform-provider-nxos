@@ -96,6 +96,52 @@ func TestAccNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.order", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.owner_key", "owner1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_deadtime", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_description", "RADIUS settings"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_key", "secret123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_key_encryption", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_retries", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_secure_mode", "tls"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_monitoring_description", "RADIUS server monitoring"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_monitoring_idle_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_monitoring_user", "monuser"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_monitoring_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_monitoring_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_monitoring_password_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_monitoring_password", "monpass"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.accounting_port", "1646"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.authentication_port", "1645"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.authentication_protocol", "chap"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.description", "RADIUS provider"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.dtls_client_trustpoint", "TP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.dtls_idle_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.key", "secret123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.key_encryption", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.monitoring_idle_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.monitoring_password", "monpass"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.monitoring_password_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.monitoring_user", "monuser"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.retries", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.tls_client_trustpoint", "TP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.tls_idle_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_providers.10.1.1.1.use_type", "Auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.deadtime", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.description", "RADIUS provider group"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.servers.10.1.1.1.description", "RADIUS server reference"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.servers.10.1.1.1.order", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.servers.10.1.1.1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.servers.10.1.1.1.owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "authentication_realm_default_role_policy", "no-login"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "authentication_realm_description", "AAA authentication realm"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "authentication_realm_owner_key", "owner1"))
@@ -280,6 +326,88 @@ func testAccNxosUserManagementConfig_all(includeWriteOnly bool) string {
 	config += `			servers = {` + "\n"
 	config += `				"10.1.1.1" = {` + "\n"
 	config += `					description = "TACACS+ server reference"` + "\n"
+	config += `					order = 1` + "\n"
+	config += `					owner_key = "owner1"` + "\n"
+	config += `					owner_tag = "tag1"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	radius_deadtime = 5` + "\n"
+	config += `	radius_description = "RADIUS settings"` + "\n"
+	if includeWriteOnly {
+		config += `	radius_key = "secret123"` + "\n"
+		config += `	radius_key_wo = "secret123"` + "\n"
+		config += `	radius_key_wo_version = 1` + "\n"
+	} else {
+		config += `	radius_key = "secret123"` + "\n"
+	}
+	config += `	radius_key_encryption = "0"` + "\n"
+	config += `	radius_owner_key = "owner1"` + "\n"
+	config += `	radius_owner_tag = "tag1"` + "\n"
+	config += `	radius_retries = 3` + "\n"
+	config += `	radius_secure_mode = "tls"` + "\n"
+	config += `	radius_source_interface = "mgmt0"` + "\n"
+	config += `	radius_timeout = 10` + "\n"
+	config += `	radius_monitoring_description = "RADIUS server monitoring"` + "\n"
+	config += `	radius_monitoring_idle_time = 10` + "\n"
+	config += `	radius_monitoring_user = "monuser"` + "\n"
+	config += `	radius_monitoring_owner_key = "owner1"` + "\n"
+	config += `	radius_monitoring_owner_tag = "tag1"` + "\n"
+	config += `	radius_monitoring_password_type = "0"` + "\n"
+	if includeWriteOnly {
+		config += `	radius_monitoring_password = "monpass"` + "\n"
+		config += `	radius_monitoring_password_wo = "monpass"` + "\n"
+		config += `	radius_monitoring_password_wo_version = 1` + "\n"
+	} else {
+		config += `	radius_monitoring_password = "monpass"` + "\n"
+	}
+	config += `	radius_providers = {` + "\n"
+	config += `		"10.1.1.1" = {` + "\n"
+	config += `			accounting_port = 1646` + "\n"
+	config += `			authentication_port = 1645` + "\n"
+	config += `			authentication_protocol = "chap"` + "\n"
+	config += `			description = "RADIUS provider"` + "\n"
+	config += `			dtls_client_trustpoint = "TP1"` + "\n"
+	config += `			dtls_idle_timeout = 300` + "\n"
+	if includeWriteOnly {
+		config += `			key = "secret123"` + "\n"
+		config += `			key_wo = "secret123"` + "\n"
+		config += `			key_wo_version = 1` + "\n"
+	} else {
+		config += `			key = "secret123"` + "\n"
+	}
+	config += `			key_encryption = "0"` + "\n"
+	config += `			monitoring_idle_time = 10` + "\n"
+	if includeWriteOnly {
+		config += `			monitoring_password = "monpass"` + "\n"
+		config += `			monitoring_password_wo = "monpass"` + "\n"
+		config += `			monitoring_password_wo_version = 1` + "\n"
+	} else {
+		config += `			monitoring_password = "monpass"` + "\n"
+	}
+	config += `			monitoring_password_type = "0"` + "\n"
+	config += `			monitoring_user = "monuser"` + "\n"
+	config += `			owner_key = "owner1"` + "\n"
+	config += `			owner_tag = "tag1"` + "\n"
+	config += `			retries = 3` + "\n"
+	config += `			timeout = 10` + "\n"
+	config += `			tls_client_trustpoint = "TP1"` + "\n"
+	config += `			tls_idle_timeout = 300` + "\n"
+	config += `			use_type = "Auth"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	radius_provider_groups = {` + "\n"
+	config += `		"RADIUS_GROUP1" = {` + "\n"
+	config += `			deadtime = 5` + "\n"
+	config += `			description = "RADIUS provider group"` + "\n"
+	config += `			owner_key = "owner1"` + "\n"
+	config += `			owner_tag = "tag1"` + "\n"
+	config += `			source_interface = "mgmt0"` + "\n"
+	config += `			vrf = "management"` + "\n"
+	config += `			servers = {` + "\n"
+	config += `				"10.1.1.1" = {` + "\n"
+	config += `					description = "RADIUS server reference"` + "\n"
 	config += `					order = 1` + "\n"
 	config += `					owner_key = "owner1"` + "\n"
 	config += `					owner_tag = "tag1"` + "\n"

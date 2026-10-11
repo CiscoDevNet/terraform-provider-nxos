@@ -56,7 +56,7 @@ func (d *UserManagementDataSource) Metadata(_ context.Context, req datasource.Me
 func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner/", "Security%20and%20Policing/aaa:PostLoginBanner/", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:AuthRealm/", "Security%20and%20Policing/aaa:DefaultAuth/", "Security%20and%20Policing/aaa:ConsoleAuth/", "Security%20and%20Policing/aaa:DefaultAuthor/", "Security%20and%20Policing/aaa:DefaultAcc/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner/", "Security%20and%20Policing/aaa:PostLoginBanner/", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:RadiusEp/", "Security%20and%20Policing/aaa:RadiusServerMonitor/", "Security%20and%20Policing/aaa:RadiusProvider/", "Security%20and%20Policing/aaa:RadiusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:AuthRealm/", "Security%20and%20Policing/aaa:DefaultAuth/", "Security%20and%20Policing/aaa:ConsoleAuth/", "Security%20and%20Policing/aaa:DefaultAuthor/", "Security%20and%20Policing/aaa:DefaultAcc/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -447,6 +447,258 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 					},
 				},
 			},
+			"radius_deadtime": schema.Int64Attribute{
+				MarkdownDescription: "Duration for which non-reachable server is skipped.",
+				Computed:            true,
+			},
+			"radius_description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"radius_key": schema.StringAttribute{
+				MarkdownDescription: "Global RADIUS server shared secret.",
+				Computed:            true,
+				Sensitive:           true,
+			},
+			"radius_key_wo": schema.StringAttribute{
+				MarkdownDescription: "The write-only value of the attribute.",
+				Computed:            true,
+			},
+			"radius_key_wo_version": schema.Int64Attribute{
+				MarkdownDescription: "The write-only version of the attribute.",
+				Computed:            true,
+			},
+			"radius_key_encryption": schema.StringAttribute{
+				MarkdownDescription: "Default key encryption.",
+				Computed:            true,
+			},
+			"radius_logging_level": schema.Int64Attribute{
+				MarkdownDescription: "Radius Logging level.",
+				Computed:            true,
+			},
+			"radius_name": schema.StringAttribute{
+				MarkdownDescription: "Object name.",
+				Computed:            true,
+			},
+			"radius_owner_key": schema.StringAttribute{
+				MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+				Computed:            true,
+			},
+			"radius_owner_tag": schema.StringAttribute{
+				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+				Computed:            true,
+			},
+			"radius_retries": schema.Int64Attribute{
+				MarkdownDescription: "The number of attempts that the authentication method is tried.",
+				Computed:            true,
+			},
+			"radius_secure_mode": schema.StringAttribute{
+				MarkdownDescription: "Global RADIUS server secure mode.",
+				Computed:            true,
+			},
+			"radius_source_interface": schema.StringAttribute{
+				MarkdownDescription: "Source Interface.",
+				Computed:            true,
+			},
+			"radius_timeout": schema.Int64Attribute{
+				MarkdownDescription: "The amount of time between authentication attempts.",
+				Computed:            true,
+			},
+			"radius_monitoring_description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"radius_monitoring_idle_time": schema.Int64Attribute{
+				MarkdownDescription: "Idle timer to monitor tacacs/radius server.",
+				Computed:            true,
+			},
+			"radius_monitoring_user": schema.StringAttribute{
+				MarkdownDescription: "Object name.",
+				Computed:            true,
+			},
+			"radius_monitoring_owner_key": schema.StringAttribute{
+				MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+				Computed:            true,
+			},
+			"radius_monitoring_owner_tag": schema.StringAttribute{
+				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+				Computed:            true,
+			},
+			"radius_monitoring_password_type": schema.StringAttribute{
+				MarkdownDescription: "Radius Server Monitor Password type.",
+				Computed:            true,
+			},
+			"radius_monitoring_password": schema.StringAttribute{
+				MarkdownDescription: "Password.",
+				Computed:            true,
+				Sensitive:           true,
+			},
+			"radius_monitoring_password_wo": schema.StringAttribute{
+				MarkdownDescription: "The write-only value of the attribute.",
+				Computed:            true,
+			},
+			"radius_monitoring_password_wo_version": schema.Int64Attribute{
+				MarkdownDescription: "The write-only version of the attribute.",
+				Computed:            true,
+			},
+			"radius_providers": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("RADIUS providers.\n  - Map key: `name` - Object name.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"accounting_port": schema.Int64Attribute{
+							MarkdownDescription: "acctPort.",
+							Computed:            true,
+						},
+						"authentication_port": schema.Int64Attribute{
+							MarkdownDescription: "The service port number for the RADIUS service.",
+							Computed:            true,
+						},
+						"authentication_protocol": schema.StringAttribute{
+							MarkdownDescription: "The RADIUS authentication protocol.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"dtls_client_trustpoint": schema.StringAttribute{
+							MarkdownDescription: "DTLS Client trustpoint name.",
+							Computed:            true,
+						},
+						"dtls_idle_timeout": schema.Int64Attribute{
+							MarkdownDescription: "DTLS Timeout in seconds.",
+							Computed:            true,
+						},
+						"key": schema.StringAttribute{
+							MarkdownDescription: "A password for the AAA provider database.",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"key_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							Computed:            true,
+						},
+						"key_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
+							Computed:            true,
+						},
+						"key_encryption": schema.StringAttribute{
+							MarkdownDescription: "Default key encryption.",
+							Computed:            true,
+						},
+						"monitoring_idle_time": schema.Int64Attribute{
+							MarkdownDescription: "Idle timer to monitor radius server.",
+							Computed:            true,
+						},
+						"monitoring_password": schema.StringAttribute{
+							MarkdownDescription: "Periodic Server Monitoring Password.",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"monitoring_password_wo": schema.StringAttribute{
+							MarkdownDescription: "The write-only value of the attribute.",
+							Computed:            true,
+						},
+						"monitoring_password_wo_version": schema.Int64Attribute{
+							MarkdownDescription: "The write-only version of the attribute.",
+							Computed:            true,
+						},
+						"monitoring_password_type": schema.StringAttribute{
+							MarkdownDescription: "Monitoring password type.",
+							Computed:            true,
+						},
+						"monitoring_user": schema.StringAttribute{
+							MarkdownDescription: "Periodic Server Monitoring Username.",
+							Computed:            true,
+						},
+						"owner_key": schema.StringAttribute{
+							MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+							Computed:            true,
+						},
+						"owner_tag": schema.StringAttribute{
+							MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+							Computed:            true,
+						},
+						"retries": schema.Int64Attribute{
+							MarkdownDescription: "Retries.",
+							Computed:            true,
+						},
+						"timeout": schema.Int64Attribute{
+							MarkdownDescription: "The amount of time between authentication attempts.",
+							Computed:            true,
+						},
+						"tls_client_trustpoint": schema.StringAttribute{
+							MarkdownDescription: "Client trustpoint name.",
+							Computed:            true,
+						},
+						"tls_idle_timeout": schema.Int64Attribute{
+							MarkdownDescription: "TLS Timeout in seconds.",
+							Computed:            true,
+						},
+						"use_type": schema.StringAttribute{
+							MarkdownDescription: "Usage for the radius server.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"radius_provider_groups": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("RADIUS provider groups.\n  - Map key: `name` - Object name.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"deadtime": schema.Int64Attribute{
+							MarkdownDescription: "Duration for which non-reachable server is skipped.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"owner_key": schema.StringAttribute{
+							MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+							Computed:            true,
+						},
+						"owner_tag": schema.StringAttribute{
+							MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+							Computed:            true,
+						},
+						"source_interface": schema.StringAttribute{
+							MarkdownDescription: "Source Interface.",
+							Computed:            true,
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: "VRF.",
+							Computed:            true,
+						},
+						"servers": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("RADIUS provider group server members.\n  - Map key: `name` - Object name.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description of the specified attribute.",
+										Computed:            true,
+									},
+									"order": schema.Int64Attribute{
+										MarkdownDescription: "Relative priority in which the AAA provider will be contacted.",
+										Computed:            true,
+									},
+									"owner_key": schema.StringAttribute{
+										MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+										Computed:            true,
+									},
+									"owner_tag": schema.StringAttribute{
+										MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"authentication_realm_default_role_policy": schema.StringAttribute{
 				MarkdownDescription: "The default role policy for the remote user with invalid CiscoAVPairs. CiscoAVPairs provide support for Remote Access Dial-In User Service attribute-value (AV) pairs.",
 				Computed:            true,
@@ -767,7 +1019,7 @@ func (d *UserManagementDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, UserManagementSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, UserManagementSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

@@ -286,12 +286,47 @@ type SystemNdVpcDomains struct {
 }
 
 type SystemDnsProfiles struct {
-	Description       types.String `tfsdk:"description"`
-	OwnerKey          types.String `tfsdk:"owner_key"`
-	OwnerTag          types.String `tfsdk:"owner_tag"`
-	DomainName        types.String `tfsdk:"domain_name"`
-	DomainDescription types.String `tfsdk:"domain_description"`
-	DomainIsDefault   types.Bool   `tfsdk:"domain_is_default"`
+	Description       types.String                            `tfsdk:"description"`
+	OwnerKey          types.String                            `tfsdk:"owner_key"`
+	OwnerTag          types.String                            `tfsdk:"owner_tag"`
+	DomainName        types.String                            `tfsdk:"domain_name"`
+	DomainDescription types.String                            `tfsdk:"domain_description"`
+	DomainIsDefault   types.Bool                              `tfsdk:"domain_is_default"`
+	Providers         map[string]SystemDnsProfilesProviders   `tfsdk:"providers"`
+	DomainLists       map[string]SystemDnsProfilesDomainLists `tfsdk:"domain_lists"`
+	Hosts             map[string]SystemDnsProfilesHosts       `tfsdk:"hosts"`
+	Vrfs              map[string]SystemDnsProfilesVrfs        `tfsdk:"vrfs"`
+}
+
+type SystemDnsProfilesProviders struct {
+	Name            types.String `tfsdk:"name"`
+	SourceInterface types.String `tfsdk:"source_interface"`
+}
+
+type SystemDnsProfilesDomainLists struct {
+	Description types.String `tfsdk:"description"`
+}
+
+type SystemDnsProfilesHosts struct {
+	Ipv4Address types.String `tfsdk:"ipv4_address"`
+	Ipv6Address types.String `tfsdk:"ipv6_address"`
+}
+
+type SystemDnsProfilesVrfs struct {
+	DomainName        types.String                                `tfsdk:"domain_name"`
+	DomainDescription types.String                                `tfsdk:"domain_description"`
+	DomainIsDefault   types.Bool                                  `tfsdk:"domain_is_default"`
+	Providers         map[string]SystemDnsProfilesVrfsProviders   `tfsdk:"providers"`
+	DomainLists       map[string]SystemDnsProfilesVrfsDomainLists `tfsdk:"domain_lists"`
+}
+
+type SystemDnsProfilesVrfsProviders struct {
+	Name            types.String `tfsdk:"name"`
+	SourceInterface types.String `tfsdk:"source_interface"`
+}
+
+type SystemDnsProfilesVrfsDomainLists struct {
+	Description types.String `tfsdk:"description"`
 }
 
 type SystemVdcs struct {
@@ -489,6 +524,30 @@ func (data SystemNdVpcDomains) getRn(key string) string {
 
 func (data SystemDnsProfiles) getRn(key string) string {
 	return fmt.Sprintf("prof-[%s]", key)
+}
+
+func (data SystemDnsProfilesProviders) getRn(key string) string {
+	return fmt.Sprintf("prov-[%s]", key)
+}
+
+func (data SystemDnsProfilesDomainLists) getRn(key string) string {
+	return fmt.Sprintf("domext-[%s]", key)
+}
+
+func (data SystemDnsProfilesHosts) getRn(key string) string {
+	return fmt.Sprintf("host-%s", key)
+}
+
+func (data SystemDnsProfilesVrfs) getRn(key string) string {
+	return fmt.Sprintf("vrf-[%s]", key)
+}
+
+func (data SystemDnsProfilesVrfsProviders) getRn(key string) string {
+	return fmt.Sprintf("prov-[%s]", key)
+}
+
+func (data SystemDnsProfilesVrfsDomainLists) getRn(key string) string {
+	return fmt.Sprintf("domext-[%s]", key)
 }
 
 func (data SystemVdcs) getRn(key string) string {
@@ -1135,6 +1194,109 @@ func (data System) toBody(config System) nxos.Body {
 				}
 				if attrs != "{}" {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsDom.attributes", attrs)
+				}
+				for key, child := range child.Providers {
+					configChild, configChildOk := configChild.Providers[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "addr", key)
+					if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
+						attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+					}
+					if configChildOk && !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
+						attrs, _ = sjson.Set(attrs, "srcIf", child.SourceInterface.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsProvider.attributes", attrs)
+				}
+				for key, child := range child.DomainLists {
+					configChild, configChildOk := configChild.DomainLists[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "name", key)
+					if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsDomExt.attributes", attrs)
+				}
+				for key, child := range child.Hosts {
+					configChild, configChildOk := configChild.Hosts[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "name", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsHost.attributes", attrs)
+					{
+						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".dnsHost.children"
+						_ = nestedChildrenPath
+						attrs = "{}"
+						if !child.Ipv4Address.IsUnknown() && !child.Ipv4Address.IsNull() && !configChild.Ipv4Address.IsNull() {
+							attrs, _ = sjson.Set(attrs, "addr", child.Ipv4Address.ValueString())
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsIpv4Host.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.Ipv6Address.IsUnknown() && !child.Ipv6Address.IsNull() && !configChild.Ipv6Address.IsNull() {
+							attrs, _ = sjson.Set(attrs, "addr", child.Ipv6Address.ValueString())
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsIpv6Host.attributes", attrs)
+						}
+					}
+				}
+				for key, child := range child.Vrfs {
+					configChild, configChildOk := configChild.Vrfs[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "name", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsVrf.attributes", attrs)
+					{
+						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".dnsVrf.children"
+						_ = nestedChildrenPath
+						attrs = "{}"
+						if !child.DomainName.IsUnknown() && !child.DomainName.IsNull() && !configChild.DomainName.IsNull() {
+							attrs, _ = sjson.Set(attrs, "name", child.DomainName.ValueString())
+						}
+						if !child.DomainDescription.IsUnknown() && !child.DomainDescription.IsNull() && !configChild.DomainDescription.IsNull() {
+							attrs, _ = sjson.Set(attrs, "descr", child.DomainDescription.ValueString())
+						}
+						if !child.DomainIsDefault.IsUnknown() && !child.DomainIsDefault.IsNull() && !configChild.DomainIsDefault.IsNull() {
+							attrs, _ = sjson.Set(attrs, "isDefault", strconv.FormatBool(child.DomainIsDefault.ValueBool()))
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsDom.attributes", attrs)
+						}
+						for key, child := range child.Providers {
+							configChild, configChildOk := configChild.Providers[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "addr", key)
+							if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
+								attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+							}
+							if configChildOk && !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
+								attrs, _ = sjson.Set(attrs, "srcIf", child.SourceInterface.ValueString())
+							}
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsProvider.attributes", attrs)
+						}
+						for key, child := range child.DomainLists {
+							configChild, configChildOk := configChild.DomainLists[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "name", key)
+							if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+								attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+							}
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dnsDomExt.attributes", attrs)
+						}
+					}
 				}
 			}
 		}
@@ -2929,6 +3091,164 @@ func (data *System) fromBody(res gjson.Result) {
 								child.DomainDescription = types.StringValue(rdnsDom.Get("dnsDom.attributes.descr").String())
 								child.DomainIsDefault = types.BoolValue(helpers.ParseNxosBoolean(rdnsDom.Get("dnsDom.attributes.isDefault").String()))
 							}
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "dnsProvider" {
+												var nestedChilddnsProvider SystemDnsProfilesProviders
+												nestedChilddnsProvider.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+												nestedChilddnsProvider.SourceInterface = types.StringValue(nestedValue.Get("attributes.srcIf").String())
+												nestedMapKey := nestedValue.Get("attributes.addr").String()
+												if child.Providers == nil {
+													child.Providers = make(map[string]SystemDnsProfilesProviders)
+												}
+												child.Providers[nestedMapKey] = nestedChilddnsProvider
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "dnsDomExt" {
+												var nestedChilddnsDomExt SystemDnsProfilesDomainLists
+												nestedChilddnsDomExt.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+												nestedMapKey := nestedValue.Get("attributes.name").String()
+												if child.DomainLists == nil {
+													child.DomainLists = make(map[string]SystemDnsProfilesDomainLists)
+												}
+												child.DomainLists[nestedMapKey] = nestedChilddnsDomExt
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "dnsHost" {
+												var nestedChilddnsHost SystemDnsProfilesHosts
+												nestedMapKey := nestedValue.Get("attributes.name").String()
+												{
+													var rdnsIpv4Host gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("dnsIpv4Host.attributes.rn").String()
+															if rnValue == "ipv4host" {
+																rdnsIpv4Host = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChilddnsHost.Ipv4Address = types.StringValue(rdnsIpv4Host.Get("dnsIpv4Host.attributes.addr").String())
+												}
+												{
+													var rdnsIpv6Host gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("dnsIpv6Host.attributes.rn").String()
+															if rnValue == "ipv6host" {
+																rdnsIpv6Host = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChilddnsHost.Ipv6Address = types.StringValue(rdnsIpv6Host.Get("dnsIpv6Host.attributes.addr").String())
+												}
+												if child.Hosts == nil {
+													child.Hosts = make(map[string]SystemDnsProfilesHosts)
+												}
+												child.Hosts[nestedMapKey] = nestedChilddnsHost
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "dnsVrf" {
+												var nestedChilddnsVrf SystemDnsProfilesVrfs
+												nestedMapKey := nestedValue.Get("attributes.name").String()
+												{
+													var rdnsDom gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("dnsDom.attributes.rn").String()
+															if rnValue == "dom" {
+																rdnsDom = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChilddnsVrf.DomainName = types.StringValue(rdnsDom.Get("dnsDom.attributes.name").String())
+													nestedChilddnsVrf.DomainDescription = types.StringValue(rdnsDom.Get("dnsDom.attributes.descr").String())
+													nestedChilddnsVrf.DomainIsDefault = types.BoolValue(helpers.ParseNxosBoolean(rdnsDom.Get("dnsDom.attributes.isDefault").String()))
+												}
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "dnsProvider" {
+																	var nestedChilddnsProvider SystemDnsProfilesVrfsProviders
+																	nestedChilddnsProvider.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+																	nestedChilddnsProvider.SourceInterface = types.StringValue(nestedValue.Get("attributes.srcIf").String())
+																	nestedMapKey := nestedValue.Get("attributes.addr").String()
+																	if nestedChilddnsVrf.Providers == nil {
+																		nestedChilddnsVrf.Providers = make(map[string]SystemDnsProfilesVrfsProviders)
+																	}
+																	nestedChilddnsVrf.Providers[nestedMapKey] = nestedChilddnsProvider
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "dnsDomExt" {
+																	var nestedChilddnsDomExt SystemDnsProfilesVrfsDomainLists
+																	nestedChilddnsDomExt.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+																	nestedMapKey := nestedValue.Get("attributes.name").String()
+																	if nestedChilddnsVrf.DomainLists == nil {
+																		nestedChilddnsVrf.DomainLists = make(map[string]SystemDnsProfilesVrfsDomainLists)
+																	}
+																	nestedChilddnsVrf.DomainLists[nestedMapKey] = nestedChilddnsDomExt
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												if child.Vrfs == nil {
+													child.Vrfs = make(map[string]SystemDnsProfilesVrfs)
+												}
+												child.Vrfs[nestedMapKey] = nestedChilddnsVrf
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
 							if data.DnsProfiles == nil {
 								data.DnsProfiles = make(map[string]SystemDnsProfiles)
 							}
@@ -4988,6 +5308,208 @@ func (data *System) updateFromBody(res gjson.Result) {
 			} else {
 				item.DomainIsDefault = types.BoolNull()
 			}
+		}
+		for nc := range item.Providers {
+			ncItem := item.Providers[nc]
+			var rdnsProvider gjson.Result
+			rdnsProf.Get("dnsProf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("dnsProvider.attributes.addr").String() == nc {
+						rdnsProvider = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rdnsProvider.Exists() {
+				delete(item.Providers, nc)
+				continue
+			}
+			if !ncItem.Name.IsNull() {
+				ncItem.Name = types.StringValue(rdnsProvider.Get("dnsProvider.attributes.name").String())
+			} else {
+				ncItem.Name = types.StringNull()
+			}
+			if !ncItem.SourceInterface.IsNull() {
+				ncItem.SourceInterface = types.StringValue(rdnsProvider.Get("dnsProvider.attributes.srcIf").String())
+			} else {
+				ncItem.SourceInterface = types.StringNull()
+			}
+			item.Providers[nc] = ncItem
+		}
+		for nc := range item.DomainLists {
+			ncItem := item.DomainLists[nc]
+			var rdnsDomExt gjson.Result
+			rdnsProf.Get("dnsProf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("dnsDomExt.attributes.name").String() == nc {
+						rdnsDomExt = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rdnsDomExt.Exists() {
+				delete(item.DomainLists, nc)
+				continue
+			}
+			if !ncItem.Description.IsNull() {
+				ncItem.Description = types.StringValue(rdnsDomExt.Get("dnsDomExt.attributes.descr").String())
+			} else {
+				ncItem.Description = types.StringNull()
+			}
+			item.DomainLists[nc] = ncItem
+		}
+		for nc := range item.Hosts {
+			ncItem := item.Hosts[nc]
+			var rdnsHost gjson.Result
+			rdnsProf.Get("dnsProf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("dnsHost.attributes.name").String() == nc {
+						rdnsHost = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rdnsHost.Exists() {
+				delete(item.Hosts, nc)
+				continue
+			}
+			{
+				var rdnsIpv4Host gjson.Result
+				rdnsHost.Get("dnsHost.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("dnsIpv4Host.attributes.rn").String()
+						if rnValue == "ipv4host" {
+							rdnsIpv4Host = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.Ipv4Address.IsNull() {
+					ncItem.Ipv4Address = types.StringValue(rdnsIpv4Host.Get("dnsIpv4Host.attributes.addr").String())
+				} else {
+					ncItem.Ipv4Address = types.StringNull()
+				}
+			}
+			{
+				var rdnsIpv6Host gjson.Result
+				rdnsHost.Get("dnsHost.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("dnsIpv6Host.attributes.rn").String()
+						if rnValue == "ipv6host" {
+							rdnsIpv6Host = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.Ipv6Address.IsNull() {
+					ncItem.Ipv6Address = types.StringValue(rdnsIpv6Host.Get("dnsIpv6Host.attributes.addr").String())
+				} else {
+					ncItem.Ipv6Address = types.StringNull()
+				}
+			}
+			item.Hosts[nc] = ncItem
+		}
+		for nc := range item.Vrfs {
+			ncItem := item.Vrfs[nc]
+			var rdnsVrf gjson.Result
+			rdnsProf.Get("dnsProf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("dnsVrf.attributes.name").String() == nc {
+						rdnsVrf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rdnsVrf.Exists() {
+				delete(item.Vrfs, nc)
+				continue
+			}
+			{
+				var rdnsDom gjson.Result
+				rdnsVrf.Get("dnsVrf.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("dnsDom.attributes.rn").String()
+						if rnValue == "dom" {
+							rdnsDom = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.DomainName.IsNull() {
+					ncItem.DomainName = types.StringValue(rdnsDom.Get("dnsDom.attributes.name").String())
+				} else {
+					ncItem.DomainName = types.StringNull()
+				}
+				if !ncItem.DomainDescription.IsNull() {
+					ncItem.DomainDescription = types.StringValue(rdnsDom.Get("dnsDom.attributes.descr").String())
+				} else {
+					ncItem.DomainDescription = types.StringNull()
+				}
+				if !ncItem.DomainIsDefault.IsNull() {
+					ncItem.DomainIsDefault = types.BoolValue(helpers.ParseNxosBoolean(rdnsDom.Get("dnsDom.attributes.isDefault").String()))
+				} else {
+					ncItem.DomainIsDefault = types.BoolNull()
+				}
+			}
+			for nc_ := range ncItem.Providers {
+				nc_Item := ncItem.Providers[nc_]
+				var rdnsProvider gjson.Result
+				rdnsVrf.Get("dnsVrf.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("dnsProvider.attributes.addr").String() == nc_ {
+							rdnsProvider = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rdnsProvider.Exists() {
+					delete(ncItem.Providers, nc_)
+					continue
+				}
+				if !nc_Item.Name.IsNull() {
+					nc_Item.Name = types.StringValue(rdnsProvider.Get("dnsProvider.attributes.name").String())
+				} else {
+					nc_Item.Name = types.StringNull()
+				}
+				if !nc_Item.SourceInterface.IsNull() {
+					nc_Item.SourceInterface = types.StringValue(rdnsProvider.Get("dnsProvider.attributes.srcIf").String())
+				} else {
+					nc_Item.SourceInterface = types.StringNull()
+				}
+				ncItem.Providers[nc_] = nc_Item
+			}
+			for nc_ := range ncItem.DomainLists {
+				nc_Item := ncItem.DomainLists[nc_]
+				var rdnsDomExt gjson.Result
+				rdnsVrf.Get("dnsVrf.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("dnsDomExt.attributes.name").String() == nc_ {
+							rdnsDomExt = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rdnsDomExt.Exists() {
+					delete(ncItem.DomainLists, nc_)
+					continue
+				}
+				if !nc_Item.Description.IsNull() {
+					nc_Item.Description = types.StringValue(rdnsDomExt.Get("dnsDomExt.attributes.descr").String())
+				} else {
+					nc_Item.Description = types.StringNull()
+				}
+				ncItem.DomainLists[nc_] = nc_Item
+			}
+			item.Vrfs[nc] = ncItem
 		}
 		data.DnsProfiles[key] = item
 	}
@@ -8312,6 +8834,8 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			if _, found := data.DnsProfiles[di]; !found {
 				continue
 			}
+			stateItemdi := state.DnsProfiles[di]
+			planItemdi := data.DnsProfiles[di]
 			matchBodyPathdi := ""
 			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dnsEntity")+".children").Array() {
 				if mv.Get("dnsProf.attributes.name").String() == di {
@@ -8321,6 +8845,92 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 			}
 			if matchBodyPathdi == "" {
 				continue
+			}
+			for stateChildKey := range stateItemdi.Providers {
+				if _, found := planItemdi.Providers[stateChildKey]; !found {
+					stateChild := stateItemdi.Providers[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "dnsProvider.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "dnsProvider.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.DomainLists {
+				if _, found := planItemdi.DomainLists[stateChildKey]; !found {
+					stateChild := stateItemdi.DomainLists[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "dnsDomExt.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "dnsDomExt.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.Hosts {
+				if _, found := planItemdi.Hosts[stateChildKey]; !found {
+					stateChild := stateItemdi.Hosts[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "dnsHost.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "dnsHost.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for di_ := range stateItemdi.Hosts {
+				if _, found := planItemdi.Hosts[di_]; !found {
+					continue
+				}
+				matchBodyPathdi_ := ""
+				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+					if mv.Get("dnsHost.attributes.name").String() == di_ {
+						matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".dnsHost.children"
+						break
+					}
+				}
+				if matchBodyPathdi_ == "" {
+					continue
+				}
+			}
+			for stateChildKey := range stateItemdi.Vrfs {
+				if _, found := planItemdi.Vrfs[stateChildKey]; !found {
+					stateChild := stateItemdi.Vrfs[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "dnsVrf.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "dnsVrf.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for di_ := range stateItemdi.Vrfs {
+				if _, found := planItemdi.Vrfs[di_]; !found {
+					continue
+				}
+				stateItemdi_ := stateItemdi.Vrfs[di_]
+				planItemdi_ := planItemdi.Vrfs[di_]
+				matchBodyPathdi_ := ""
+				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+					if mv.Get("dnsVrf.attributes.name").String() == di_ {
+						matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".dnsVrf.children"
+						break
+					}
+				}
+				if matchBodyPathdi_ == "" {
+					continue
+				}
+				for stateChildKey := range stateItemdi_.Providers {
+					if _, found := planItemdi_.Providers[stateChildKey]; !found {
+						stateChild := stateItemdi_.Providers[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "dnsProvider.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "dnsProvider.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for stateChildKey := range stateItemdi_.DomainLists {
+					if _, found := planItemdi_.DomainLists[stateChildKey]; !found {
+						stateChild := stateItemdi_.DomainLists[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "dnsDomExt.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "dnsDomExt.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
 			}
 		}
 		for stateKey := range state.Vdcs {
@@ -9089,6 +9699,128 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 						if !stateChild.DomainIsDefault.IsNull() && configChild.DomainIsDefault.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "dnsDom")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"isDefault", "DME_UNSET_PROPERTY_MARKER")
+						}
+						for key := range stateChild.Providers {
+							if configChild, ok := configChild.Providers[key]; ok {
+								stateChild := stateChild.Providers[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("dnsProvider.attributes.addr").String() == key {
+										if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".dnsProvider.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".dnsProvider.attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
+						for key := range stateChild.DomainLists {
+							if configChild, ok := configChild.DomainLists[key]; ok {
+								stateChild := stateChild.DomainLists[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("dnsDomExt.attributes.name").String() == key {
+										if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".dnsDomExt.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
+						for key := range stateChild.Hosts {
+							if configChild, ok := configChild.Hosts[key]; ok {
+								stateChild := stateChild.Hosts[key]
+								_ = stateChild
+								_ = configChild
+								{
+									listChildPath_ := ""
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("dnsHost.attributes.name").String() == key {
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".dnsHost.children"
+											break
+										}
+									}
+									if listChildPath_ != "" {
+										if !stateChild.Ipv4Address.IsNull() && configChild.Ipv4Address.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "dnsIpv4Host")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"addr", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Ipv6Address.IsNull() && configChild.Ipv6Address.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "dnsIpv6Host")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"addr", "DME_UNSET_PROPERTY_MARKER")
+										}
+									}
+								}
+							}
+						}
+						for key := range stateChild.Vrfs {
+							if configChild, ok := configChild.Vrfs[key]; ok {
+								stateChild := stateChild.Vrfs[key]
+								_ = stateChild
+								_ = configChild
+								{
+									listChildPath_ := ""
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("dnsVrf.attributes.name").String() == key {
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".dnsVrf.children"
+											break
+										}
+									}
+									if listChildPath_ != "" {
+										if !stateChild.DomainName.IsNull() && configChild.DomainName.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "dnsDom")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.DomainDescription.IsNull() && configChild.DomainDescription.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "dnsDom")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.DomainIsDefault.IsNull() && configChild.DomainIsDefault.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "dnsDom")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"isDefault", "DME_UNSET_PROPERTY_MARKER")
+										}
+										for key := range stateChild.Providers {
+											if configChild, ok := configChild.Providers[key]; ok {
+												stateChild := stateChild.Providers[key]
+												_ = stateChild
+												_ = configChild
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+													if mv.Get("dnsProvider.attributes.addr").String() == key {
+														if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".dnsProvider.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".dnsProvider.attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+														}
+														break
+													}
+												}
+											}
+										}
+										for key := range stateChild.DomainLists {
+											if configChild, ok := configChild.DomainLists[key]; ok {
+												stateChild := stateChild.DomainLists[key]
+												_ = stateChild
+												_ = configChild
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+													if mv.Get("dnsDomExt.attributes.name").String() == key {
+														if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".dnsDomExt.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+														}
+														break
+													}
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}

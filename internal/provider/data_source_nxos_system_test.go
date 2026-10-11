@@ -111,6 +111,17 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.domain_name", "example.com"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.domain_description", "DNS domain description."))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.domain_is_default", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.providers.10.1.1.1.name", "DNS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.providers.10.1.1.1.source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.domain_lists.example.net.description", "My domain list entry"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.hosts.server1.ipv4_address", "10.2.2.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.hosts.server1.ipv6_address", "2001:db8::2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.domain_name", "mgmt.example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.domain_description", "DNS domain description."))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.domain_is_default", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.providers.10.3.3.3.name", "DNS2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.providers.10.3.3.3.source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.domain_lists.mgmt.example.net.description", "My VRF domain list entry"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.name", "LEAF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.multicast_ipv4_route_memory_maximum", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.multicast_ipv4_route_memory_minimum", "50"))
@@ -453,6 +464,41 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `			domain_name = "example.com"` + "\n"
 	config += `			domain_description = "DNS domain description."` + "\n"
 	config += `			domain_is_default = false` + "\n"
+	config += `			providers = {` + "\n"
+	config += `				"10.1.1.1" = {` + "\n"
+	config += `					name = "DNS1"` + "\n"
+	config += `					source_interface = "mgmt0"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			domain_lists = {` + "\n"
+	config += `				"example.net" = {` + "\n"
+	config += `					description = "My domain list entry"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			hosts = {` + "\n"
+	config += `				"server1" = {` + "\n"
+	config += `					ipv4_address = "10.2.2.2"` + "\n"
+	config += `					ipv6_address = "2001:db8::2"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			vrfs = {` + "\n"
+	config += `				"management" = {` + "\n"
+	config += `					domain_name = "mgmt.example.com"` + "\n"
+	config += `					domain_description = "DNS domain description."` + "\n"
+	config += `					domain_is_default = false` + "\n"
+	config += `					providers = {` + "\n"
+	config += `						"10.3.3.3" = {` + "\n"
+	config += `							name = "DNS2"` + "\n"
+	config += `							source_interface = "mgmt0"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					domain_lists = {` + "\n"
+	config += `						"mgmt.example.net" = {` + "\n"
+	config += `							description = "My VRF domain list entry"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	vdcs = {` + "\n"

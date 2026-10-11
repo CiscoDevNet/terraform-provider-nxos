@@ -100,6 +100,41 @@ resource "nxos_system" "example" {
       domain_name        = "example.com"
       domain_description = "DNS domain description."
       domain_is_default  = false
+      providers = {
+        "10.1.1.1" = {
+          name             = "DNS1"
+          source_interface = "mgmt0"
+        }
+      }
+      domain_lists = {
+        "example.net" = {
+          description = "My domain list entry"
+        }
+      }
+      hosts = {
+        "server1" = {
+          ipv4_address = "10.2.2.2"
+          ipv6_address = "2001:db8::2"
+        }
+      }
+      vrfs = {
+        "management" = {
+          domain_name        = "mgmt.example.com"
+          domain_description = "DNS domain description."
+          domain_is_default  = false
+          providers = {
+            "10.3.3.3" = {
+              name             = "DNS2"
+              source_interface = "mgmt0"
+            }
+          }
+          domain_lists = {
+            "mgmt.example.net" = {
+              description = "My VRF domain list entry"
+            }
+          }
+        }
+      }
     }
   }
   vdcs = {

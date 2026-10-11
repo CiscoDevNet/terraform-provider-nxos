@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -963,6 +963,158 @@ child_classes:
                 type: Bool
                 description: 'A property used to indicate whether this domain is the default domain. Only one domain in the group can be the default.'
                 example: "false"
+          - class_name: dnsProvider
+            doc_path: DNS/dns:Provider/
+            rn: prov-[%s]
+            type: list
+            tf_name: providers
+            description: 'The DNS provider, which is a DNS server.'
+            attributes:
+              - nxos_name: addr
+                tf_name: address
+                type: String
+                id: true
+                description: 'IP address of the provider.'
+                example: 10.1.1.1
+              - nxos_name: name
+                tf_name: name
+                type: String
+                description: 'Object name.'
+                example: DNS1
+              - nxos_name: srcIf
+                tf_name: source_interface
+                type: String
+                description: 'source interface for nameserver.'
+                example: mgmt0
+          - class_name: dnsDomExt
+            doc_path: DNS/dns:DomExt/
+            rn: domext-[%s]
+            type: list
+            tf_name: domain_lists
+            description: 'Domain List.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Object name.'
+                example: example.net
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: My domain list entry
+          - class_name: dnsHost
+            doc_path: DNS/dns:Host/
+            rn: host-%s
+            type: list
+            tf_name: hosts
+            description: 'Host Name.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Host Name.'
+                example: server1
+            child_classes:
+              - class_name: dnsIpv4Host
+                doc_path: DNS/dns:Ipv4Host/
+                rn: ipv4host
+                type: single
+                attributes:
+                  - nxos_name: addr
+                    tf_name: ipv4_address
+                    type: String
+                    description: 'IPv4 Address Of Hostname.'
+                    example: 10.2.2.2
+              - class_name: dnsIpv6Host
+                doc_path: DNS/dns:Ipv6Host/
+                rn: ipv6host
+                type: single
+                attributes:
+                  - nxos_name: addr
+                    tf_name: ipv6_address
+                    type: String
+                    description: 'IPv6 Address Of Hostname.'
+                    example: 2001:db8::2
+          - class_name: dnsVrf
+            doc_path: DNS/dns:Vrf/
+            rn: vrf-[%s]
+            type: list
+            tf_name: vrfs
+            description: 'Vrf Name.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Vrf Name.'
+                example: management
+            child_classes:
+              - class_name: dnsDom
+                doc_path: DNS/dns:Dom/
+                rn: dom
+                type: single
+                tf_name: domain
+                description: 'The DNS domain.'
+                attributes:
+                  - nxos_name: name
+                    tf_name: domain_name
+                    type: String
+                    description: 'Object name.'
+                    example: mgmt.example.com
+                  - nxos_name: descr
+                    tf_name: domain_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: DNS domain description.
+                  - nxos_name: isDefault
+                    tf_name: domain_is_default
+                    type: Bool
+                    description: 'A property used to indicate whether this domain is the default domain. Only one domain in the group can be the default.'
+                    example: "false"
+              - class_name: dnsProvider
+                doc_path: DNS/dns:Provider/
+                rn: prov-[%s]
+                type: list
+                tf_name: providers
+                description: 'The DNS provider, which is a DNS server.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'IP address of the provider.'
+                    example: 10.3.3.3
+                  - nxos_name: name
+                    tf_name: name
+                    type: String
+                    description: 'Object name.'
+                    example: DNS2
+                  - nxos_name: srcIf
+                    tf_name: source_interface
+                    type: String
+                    description: 'source interface for nameserver.'
+                    example: mgmt0
+              - class_name: dnsDomExt
+                doc_path: DNS/dns:DomExt/
+                rn: domext-[%s]
+                type: list
+                tf_name: domain_lists
+                description: 'Domain List.'
+                attributes:
+                  - nxos_name: name
+                    tf_name: name
+                    type: String
+                    id: true
+                    description: 'Object name.'
+                    example: mgmt.example.net
+                  - nxos_name: descr
+                    tf_name: description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My VRF domain list entry
   - class_name: nwVdc
     doc_path: Routing%20and%20Forwarding/nw%3AVdc/
     rn: vdc-[%v]

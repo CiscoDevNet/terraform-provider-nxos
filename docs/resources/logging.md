@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This resource can manage the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.
   API Documentation
-  loggingLogging https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:LogLevel/loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Facility/syslogSyslog https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Syslog/syslogFile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:File/syslogRemoteDest https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:RemoteDest/syslogSourceInterface https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:SourceInterface/syslogTimeStamp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:TimeStamp/syslogTermMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:TermMonitor/syslogConsole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Console/syslogOriginid https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Originid/
+  loggingLogging https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:Logging/loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:LogLevel/loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:Facility/syslogSyslog https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Syslog/syslogFile https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:File/syslogRemoteDest https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:RemoteDest/syslogSourceInterface https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:SourceInterface/syslogTimeStamp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:TimeStamp/syslogTermMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:TermMonitor/syslogConsole https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Console/syslogOriginid https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Originid/
 ---
 
 # nxos_logging (Resource)
@@ -14,17 +14,17 @@ This resource can manage the logging configuration on NX-OS devices, including g
 
 ### API Documentation
 
-- [loggingLogging](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/)
-- [loggingLogLevel](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:LogLevel/)
-- [loggingFacility](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Facility/)
-- [syslogSyslog](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Syslog/)
-- [syslogFile](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:File/)
-- [syslogRemoteDest](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:RemoteDest/)
-- [syslogSourceInterface](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:SourceInterface/)
-- [syslogTimeStamp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:TimeStamp/)
-- [syslogTermMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:TermMonitor/)
-- [syslogConsole](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Console/)
-- [syslogOriginid](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/syslog:Originid/)
+- [loggingLogging](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:Logging/)
+- [loggingLogLevel](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:LogLevel/)
+- [loggingFacility](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:Facility/)
+- [syslogSyslog](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Syslog/)
+- [syslogFile](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:File/)
+- [syslogRemoteDest](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:RemoteDest/)
+- [syslogSourceInterface](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:SourceInterface/)
+- [syslogTimeStamp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:TimeStamp/)
+- [syslogTermMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:TermMonitor/)
+- [syslogConsole](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Console/)
+- [syslogOriginid](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Originid/)
 
 ## Example Usage
 

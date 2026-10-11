@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings, as well as NTP authentication keys.
   API Documentation
-  datetimeClkPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/datetimeNtpAuth https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpAuth/datetimeNtpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpSrcIf/datetimeAccessGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:AccessGroup/
+  datetimeClkPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:ClkPol/datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:NtpProvider/datetimeNtpAuth https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:NtpAuth/datetimeNtpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:NtpSrcIf/datetimeAccessGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:AccessGroup/
 ---
 
 # nxos_ntp (Resource)
@@ -14,11 +14,11 @@ This resource can manage the NTP configuration on NX-OS devices, including NTP s
 
 ### API Documentation
 
-- [datetimeClkPol](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/)
-- [datetimeNtpProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/)
-- [datetimeNtpAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpAuth/)
-- [datetimeNtpSrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpSrcIf/)
-- [datetimeAccessGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:AccessGroup/)
+- [datetimeClkPol](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:ClkPol/)
+- [datetimeNtpProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:NtpProvider/)
+- [datetimeNtpAuth](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:NtpAuth/)
+- [datetimeNtpSrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:NtpSrcIf/)
+- [datetimeAccessGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:AccessGroup/)
 
 ## Example Usage
 

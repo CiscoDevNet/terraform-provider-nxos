@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.
   API Documentation
-  bfdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:Entity/bfdInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:Inst/bfdKaP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:KaP/bfdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:If/bfdIfKaP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:IfKaP/bfdAuthP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:AuthP/
+  bfdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Entity/bfdInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Inst/bfdKaP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:KaP/bfdIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:If/bfdIfKaP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:IfKaP/bfdAuthP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:AuthP/
 ---
 
 # nxos_bfd (Resource)
@@ -14,12 +14,12 @@ This resource can manage the BFD configuration on NX-OS devices, including BFD i
 
 ### API Documentation
 
-- [bfdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:Entity/)
-- [bfdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:Inst/)
-- [bfdKaP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:KaP/)
-- [bfdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:If/)
-- [bfdIfKaP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:IfKaP/)
-- [bfdAuthP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bfd:AuthP/)
+- [bfdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Entity/)
+- [bfdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Inst/)
+- [bfdKaP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:KaP/)
+- [bfdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:If/)
+- [bfdIfKaP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:IfKaP/)
+- [bfdAuthP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:AuthP/)
 
 ## Example Usage
 

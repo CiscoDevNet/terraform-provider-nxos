@@ -5,7 +5,7 @@ subcategory: "Switching"
 description: |-
   This data source can read the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
   API Documentation
-  bdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Bridge%20Domain/bd:Entity/l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/l2VlanConfig https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:VlanConfig/
+  bdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Bridge%20Domain/bd:Entity/l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/l2:BD/l2VlanConfig https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/l2:VlanConfig/
 ---
 
 # nxos_bridge_domain (Data Source)
@@ -14,9 +14,9 @@ This data source can read the bridge domain configuration on NX-OS devices, incl
 
 ### API Documentation
 
-- [bdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Bridge%20Domain/bd:Entity/)
-- [l2BD](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/)
-- [l2VlanConfig](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:VlanConfig/)
+- [bdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Bridge%20Domain/bd:Entity/)
+- [l2BD](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/l2:BD/)
+- [l2VlanConfig](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/l2:VlanConfig/)
 
 ## Example Usage
 

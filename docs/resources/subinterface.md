@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage subinterface configurations on NX-OS devices, including VLAN encapsulation, bandwidth, MTU, and administrative state settings.
   API Documentation
-  l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:EncRtdIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/l3:EncRtdIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_subinterface (Resource)
@@ -14,8 +14,8 @@ This resource can manage subinterface configurations on NX-OS devices, including
 
 ### API Documentation
 
-- [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:EncRtdIf/)
-- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/l3:EncRtdIf/)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 

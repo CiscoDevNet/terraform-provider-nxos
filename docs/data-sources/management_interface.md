@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the management interface configuration on NX-OS devices, including administrative state, description, speed, duplex, and VRF membership.
   API Documentation
-  mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt:MgmtIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  mgmtMgmtIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/mgmt:MgmtIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_management_interface (Data Source)
@@ -14,8 +14,8 @@ This data source can read the management interface configuration on NX-OS device
 
 ### API Documentation
 
-- [mgmtMgmtIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/mgmt:MgmtIf/)
-- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [mgmtMgmtIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/mgmt:MgmtIf/)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 

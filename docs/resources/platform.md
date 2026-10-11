@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.
   API Documentation
-  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntityExtended/
+  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/
 ---
 
 # nxos_platform (Resource)
@@ -14,12 +14,12 @@ This resource can manage the platform configuration on NX-OS devices, including 
 
 ### API Documentation
 
-- [platformEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntity/)
-- [platformTcamRegion](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegion/)
-- [platformTcamRegionExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ATcamRegionExtended/)
-- [platformNVE](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3ANVE/)
-- [platformInfraVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AInfraVlan/)
-- [platformEntityExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/platform%3AEntityExtended/)
+- [platformEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/)
+- [platformTcamRegion](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/)
+- [platformTcamRegionExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/)
+- [platformNVE](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/)
+- [platformInfraVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/)
+- [platformEntityExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/)
 
 ## Example Usage
 

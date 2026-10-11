@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage loopback interface configurations on NX-OS devices, including administrative state, description, and VRF membership.
   API Documentation
-  l3LbRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:LbRtdIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  l3LbRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/l3:LbRtdIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_loopback_interface (Resource)
@@ -14,8 +14,8 @@ This resource can manage loopback interface configurations on NX-OS devices, inc
 
 ### API Documentation
 
-- [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:LbRtdIf/)
-- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/l3:LbRtdIf/)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 

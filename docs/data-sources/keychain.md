@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This data source can read the keychain configuration on NX-OS devices, including keychains and their associated key entries.
   API Documentation
-  kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Entity/kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Key/kcmgrMacsecKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/kcmgrMacsecKeyId https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/kcmgrMacsecSendlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/kcmgrMacsecpsk https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Macsecpsk/
+  kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Entity/kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Key/kcmgrMacsecKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/kcmgrMacsecKeyId https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/kcmgrMacsecSendlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/kcmgrMacsecpsk https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Macsecpsk/
 ---
 
 # nxos_keychain (Data Source)
@@ -14,14 +14,14 @@ This data source can read the keychain configuration on NX-OS devices, including
 
 ### API Documentation
 
-- [kcmgrEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Entity/)
-- [kcmgrKeychains](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/)
-- [kcmgrClassicKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/)
-- [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Key/)
-- [kcmgrMacsecKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/)
-- [kcmgrMacsecKeyId](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/)
-- [kcmgrMacsecSendlifetime](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/)
-- [kcmgrMacsecpsk](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Macsecpsk/)
+- [kcmgrEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Entity/)
+- [kcmgrKeychains](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Keychains/)
+- [kcmgrClassicKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/)
+- [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Key/)
+- [kcmgrMacsecKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/)
+- [kcmgrMacsecKeyId](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/)
+- [kcmgrMacsecSendlifetime](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/)
+- [kcmgrMacsecpsk](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Macsecpsk/)
 
 ## Example Usage
 

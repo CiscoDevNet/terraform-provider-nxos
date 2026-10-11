@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
   API Documentation
-  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/pcVlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:VlanMapping/pcVlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:VlanTranslateTable/pcVlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:VlanTranslateEntry/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
+  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/pcVlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanMapping/pcVlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateTable/pcVlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateEntry/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Resource)
@@ -14,17 +14,17 @@ This resource can manage port-channel interfaces on NX-OS devices, including cha
 
 ### API Documentation
 
-- [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/)
-- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
-- [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
-- [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
-- [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/)
-- [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
-- [pcVlanMapping](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:VlanMapping/)
-- [pcVlanTranslateTable](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:VlanTranslateTable/)
-- [pcVlanTranslateEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:VlanTranslateEntry/)
-- [pcAggrIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIfExtended/)
-- [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/)
+- [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIf/)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/)
+- [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
+- [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/)
+- [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
+- [pcVlanMapping](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanMapping/)
+- [pcVlanTranslateTable](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateTable/)
+- [pcVlanTranslateEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateEntry/)
+- [pcAggrIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIfExtended/)
+- [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:RsMbrIfs/)
 
 ## Example Usage
 

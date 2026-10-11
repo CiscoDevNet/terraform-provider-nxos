@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This data source can read the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.
   API Documentation
-  telemetryEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Entity/telemetryDestProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestProfile/telemetryDestOptVrf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestOptVrf/telemetryDestGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestGroup/telemetryDest https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Dest/telemetrySensorGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/telemetrySensorPath https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:SensorPath/telemetrySubscription https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Subscription/telemetryRsSensorGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:RsSensorGroupRel/telemetryRsDestGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:RsDestGroupRel/
+  telemetryEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Entity/telemetryDestProfile https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestProfile/telemetryDestOptVrf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptVrf/telemetryDestGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGroup/telemetryDest https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Dest/telemetrySensorGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/telemetrySensorPath https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorPath/telemetrySubscription https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Subscription/telemetryRsSensorGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:RsSensorGroupRel/telemetryRsDestGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:RsDestGroupRel/
 ---
 
 # nxos_telemetry (Data Source)
@@ -14,16 +14,16 @@ This data source can read the streaming telemetry configuration on NX-OS devices
 
 ### API Documentation
 
-- [telemetryEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Entity/)
-- [telemetryDestProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestProfile/)
-- [telemetryDestOptVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestOptVrf/)
-- [telemetryDestGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:DestGroup/)
-- [telemetryDest](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Dest/)
-- [telemetrySensorGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/)
-- [telemetrySensorPath](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:SensorPath/)
-- [telemetrySubscription](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:Subscription/)
-- [telemetryRsSensorGroupRel](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:RsSensorGroupRel/)
-- [telemetryRsDestGroupRel](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Streaming%20Telemetry/telemetry:RsDestGroupRel/)
+- [telemetryEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Entity/)
+- [telemetryDestProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestProfile/)
+- [telemetryDestOptVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptVrf/)
+- [telemetryDestGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGroup/)
+- [telemetryDest](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Dest/)
+- [telemetrySensorGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/)
+- [telemetrySensorPath](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorPath/)
+- [telemetrySubscription](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Subscription/)
+- [telemetryRsSensorGroupRel](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:RsSensorGroupRel/)
+- [telemetryRsDestGroupRel](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:RsDestGroupRel/)
 
 ## Example Usage
 

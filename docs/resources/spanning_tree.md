@@ -5,7 +5,7 @@ subcategory: "Switching"
 description: |-
   This resource can manage the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.
   API Documentation
-  stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/stpVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Vlan/
+  stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Entity/stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:If/stpVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Vlan/
 ---
 
 # nxos_spanning_tree (Resource)
@@ -14,10 +14,10 @@ This resource can manage the Spanning Tree configuration on NX-OS devices, inclu
 
 ### API Documentation
 
-- [stpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/)
-- [stpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/)
-- [stpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/)
-- [stpVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Vlan/)
+- [stpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Entity/)
+- [stpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Inst/)
+- [stpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:If/)
+- [stpVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Vlan/)
 
 ## Example Usage
 

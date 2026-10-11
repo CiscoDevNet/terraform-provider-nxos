@@ -5,7 +5,7 @@ subcategory: "Overlay"
 description: |-
   This data source can read the global EVPN configuration on NX-OS devices, including EVPN VNIs with route distinguisher and route target settings.
   API Documentation
-  rtctrlL2Evpn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/rtctrlBDEvi https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
+  rtctrlL2Evpn https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/rtctrlBDEvi https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
 ---
 
 # nxos_evpn (Data Source)
@@ -14,10 +14,10 @@ This data source can read the global EVPN configuration on NX-OS devices, includ
 
 ### API Documentation
 
-- [rtctrlL2Evpn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/)
-- [rtctrlBDEvi](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/)
-- [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
-- [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
+- [rtctrlL2Evpn](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/)
+- [rtctrlBDEvi](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/)
+- [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
+- [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
 
 ## Example Usage
 

@@ -5,7 +5,7 @@ subcategory: "Overlay"
 description: |-
   This data source can read the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
   API Documentation
-  hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:Entity/hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdInst/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdIf/
+  hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:Entity/hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdInst/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdIf/
 ---
 
 # nxos_hmm (Data Source)
@@ -14,9 +14,9 @@ This data source can read the Host Mobility Manager (HMM) configuration on NX-OS
 
 ### API Documentation
 
-- [hmmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:Entity/)
-- [hmmFwdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdInst/)
-- [hmmFwdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdIf/)
+- [hmmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:Entity/)
+- [hmmFwdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdInst/)
+- [hmmFwdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdIf/)
 
 ## Example Usage
 

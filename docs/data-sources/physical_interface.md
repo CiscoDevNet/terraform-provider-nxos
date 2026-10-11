@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1VlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanMapping/l1VlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanTranslateTable/l1VlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanTranslateEntry/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1VlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanMapping/l1VlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateTable/l1VlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateEntry/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIfExtended/
 ---
 
 # nxos_physical_interface (Data Source)
@@ -14,16 +14,16 @@ This data source can read the configuration of physical interfaces on NX-OS devi
 
 ### API Documentation
 
-- [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/)
-- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
-- [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:StormCtrlP/)
-- [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
-- [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrl/)
-- [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
-- [l1VlanMapping](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanMapping/)
-- [l1VlanTranslateTable](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanTranslateTable/)
-- [l1VlanTranslateEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:VlanTranslateEntry/)
-- [l1PhysIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIfExtended/)
+- [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIf/)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/)
+- [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
+- [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/)
+- [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
+- [l1VlanMapping](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanMapping/)
+- [l1VlanTranslateTable](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateTable/)
+- [l1VlanTranslateEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateEntry/)
+- [l1PhysIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIfExtended/)
 
 ## Example Usage
 

@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This resource can manage the SPAN configuration on NX-OS devices, including SPAN monitor sessions, source interfaces, source VLANs, and filter VLANs.
   API Documentation
-  spanEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:Entity/spanMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:Monitor/spanSourceIntf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:SourceIntf/spanSourceVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:SourceVlan/spanFilterVlan https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:FilterVlan/
+  spanEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:Entity/spanMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:Monitor/spanSourceIntf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:SourceIntf/spanSourceVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:SourceVlan/spanFilterVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:FilterVlan/
 ---
 
 # nxos_span (Resource)
@@ -14,11 +14,11 @@ This resource can manage the SPAN configuration on NX-OS devices, including SPAN
 
 ### API Documentation
 
-- [spanEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:Entity/)
-- [spanMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:Monitor/)
-- [spanSourceIntf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:SourceIntf/)
-- [spanSourceVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:SourceVlan/)
-- [spanFilterVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/span:FilterVlan/)
+- [spanEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:Entity/)
+- [spanMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:Monitor/)
+- [spanSourceIntf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:SourceIntf/)
+- [spanSourceVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:SourceVlan/)
+- [spanFilterVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:FilterVlan/)
 
 ## Example Usage
 

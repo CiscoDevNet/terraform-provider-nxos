@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the object tracking configuration on NX-OS devices, including track objects of type interface, IP route, IP SLA and track list.
   API Documentation
-  trackEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:Entity/trackObject https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:Object/trackIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:If/trackIpRoute https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:IpRoute/trackIpSla https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:IpSla/trackList https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:List/trackMember https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:Member/
+  trackEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:Entity/trackObject https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:Object/trackIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:If/trackIpRoute https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:IpRoute/trackIpSla https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:IpSla/trackList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:List/trackMember https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:Member/
 ---
 
 # nxos_track (Resource)
@@ -14,13 +14,13 @@ This resource can manage the object tracking configuration on NX-OS devices, inc
 
 ### API Documentation
 
-- [trackEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:Entity/)
-- [trackObject](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:Object/)
-- [trackIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:If/)
-- [trackIpRoute](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:IpRoute/)
-- [trackIpSla](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:IpSla/)
-- [trackList](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:List/)
-- [trackMember](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/track:Member/)
+- [trackEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:Entity/)
+- [trackObject](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:Object/)
+- [trackIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:If/)
+- [trackIpRoute](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:IpRoute/)
+- [trackIpSla](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:IpSla/)
+- [trackList](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:List/)
+- [trackMember](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/track:Member/)
 
 ## Example Usage
 

@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the PTP (Precision Time Protocol) configuration on NX-OS devices, including clock settings, domain configuration, notifications, interface-level PTP settings, and unicast peers.
   API Documentation
-  ptpPtpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpEntity/ptpPtpDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpDomain/ptpPtpNotifyHighCorr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpNotifyHighCorr/ptpPtpNotifyPortStateChg https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpNotifyPortStateChg/ptpPtpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpIf/ptpPtpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpPeer/
+  ptpPtpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpEntity/ptpPtpDomain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpDomain/ptpPtpNotifyHighCorr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpNotifyHighCorr/ptpPtpNotifyPortStateChg https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpNotifyPortStateChg/ptpPtpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpIf/ptpPtpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpPeer/
 ---
 
 # nxos_ptp (Resource)
@@ -14,12 +14,12 @@ This resource can manage the PTP (Precision Time Protocol) configuration on NX-O
 
 ### API Documentation
 
-- [ptpPtpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpEntity/)
-- [ptpPtpDomain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpDomain/)
-- [ptpPtpNotifyHighCorr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpNotifyHighCorr/)
-- [ptpPtpNotifyPortStateChg](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpNotifyPortStateChg/)
-- [ptpPtpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpIf/)
-- [ptpPtpPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/ptp:PtpPeer/)
+- [ptpPtpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpEntity/)
+- [ptpPtpDomain](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpDomain/)
+- [ptpPtpNotifyHighCorr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpNotifyHighCorr/)
+- [ptpPtpNotifyPortStateChg](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpNotifyPortStateChg/)
+- [ptpPtpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpIf/)
+- [ptpPtpPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/ptp:PtpPeer/)
 
 ## Example Usage
 

@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This data source can read the OSPFv3 configuration on NX-OS devices, including OSPFv3 instances, VRFs, areas, and interface settings.
   API Documentation
-  ospfv3Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:Entity/ospfv3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:Inst/ospfv3Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:Dom/ospfv3Area https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:Area/ospfv3DomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:DomAf/ospfv3If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:If/
+  ospfv3Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Entity/ospfv3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Inst/ospfv3Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Dom/ospfv3Area https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Area/ospfv3DomAf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:DomAf/ospfv3If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:If/
 ---
 
 # nxos_ospfv3 (Data Source)
@@ -14,12 +14,12 @@ This data source can read the OSPFv3 configuration on NX-OS devices, including O
 
 ### API Documentation
 
-- [ospfv3Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:Entity/)
-- [ospfv3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:Inst/)
-- [ospfv3Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:Dom/)
-- [ospfv3Area](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:Area/)
-- [ospfv3DomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:DomAf/)
-- [ospfv3If](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospfv3:If/)
+- [ospfv3Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Entity/)
+- [ospfv3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Inst/)
+- [ospfv3Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Dom/)
+- [ospfv3Area](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Area/)
+- [ospfv3DomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:DomAf/)
+- [ospfv3If](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:If/)
 
 ## Example Usage
 

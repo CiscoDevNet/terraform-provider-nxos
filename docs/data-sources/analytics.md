@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This data source can read the Analytics configuration on NX-OS devices, including instances, profiles, events, policies, and traffic analytics.
   API Documentation
-  analyticsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Entity/analyticsInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Inst/analyticsProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Profile/analyticsEvents https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/analyticsPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/analyticsMatchAcl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:MatchAcl/analyticsRecordP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RecordP/analyticsCollector https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Collector/analyticsMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Monitor/analyticsRsRecordPAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsRecordPAtt/analyticsCollectorBucket https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:CollectorBucket/analyticsRsCollectorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsCollectorAtt/analyticsTrafficAnalytics https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/analyticsFwdInstTarget https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:FwdInstTarget/analyticsRsMonitorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsMonitorAtt/analyticsRsProfAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsProfAtt/analyticsRsEventsAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsEventsAtt/analyticsRsPolicyAtt https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsPolicyAtt/
+  analyticsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Entity/analyticsInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Inst/analyticsProfile https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Profile/analyticsEvents https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Events/analyticsPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Policy/analyticsMatchAcl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:MatchAcl/analyticsRecordP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RecordP/analyticsCollector https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Collector/analyticsMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Monitor/analyticsRsRecordPAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsRecordPAtt/analyticsCollectorBucket https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:CollectorBucket/analyticsRsCollectorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsCollectorAtt/analyticsTrafficAnalytics https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:TrafficAnalytics/analyticsFwdInstTarget https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:FwdInstTarget/analyticsRsMonitorAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsMonitorAtt/analyticsRsProfAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsProfAtt/analyticsRsEventsAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsEventsAtt/analyticsRsPolicyAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsPolicyAtt/
 ---
 
 # nxos_analytics (Data Source)
@@ -14,24 +14,24 @@ This data source can read the Analytics configuration on NX-OS devices, includin
 
 ### API Documentation
 
-- [analyticsEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Entity/)
-- [analyticsInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Inst/)
-- [analyticsProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Profile/)
-- [analyticsEvents](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Events/)
-- [analyticsPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Policy/)
-- [analyticsMatchAcl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:MatchAcl/)
-- [analyticsRecordP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RecordP/)
-- [analyticsCollector](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Collector/)
-- [analyticsMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:Monitor/)
-- [analyticsRsRecordPAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsRecordPAtt/)
-- [analyticsCollectorBucket](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:CollectorBucket/)
-- [analyticsRsCollectorAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsCollectorAtt/)
-- [analyticsTrafficAnalytics](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:TrafficAnalytics/)
-- [analyticsFwdInstTarget](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:FwdInstTarget/)
-- [analyticsRsMonitorAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsMonitorAtt/)
-- [analyticsRsProfAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsProfAtt/)
-- [analyticsRsEventsAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsEventsAtt/)
-- [analyticsRsPolicyAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:RsPolicyAtt/)
+- [analyticsEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Entity/)
+- [analyticsInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Inst/)
+- [analyticsProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Profile/)
+- [analyticsEvents](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Events/)
+- [analyticsPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Policy/)
+- [analyticsMatchAcl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:MatchAcl/)
+- [analyticsRecordP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RecordP/)
+- [analyticsCollector](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Collector/)
+- [analyticsMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:Monitor/)
+- [analyticsRsRecordPAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsRecordPAtt/)
+- [analyticsCollectorBucket](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:CollectorBucket/)
+- [analyticsRsCollectorAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsCollectorAtt/)
+- [analyticsTrafficAnalytics](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:TrafficAnalytics/)
+- [analyticsFwdInstTarget](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:FwdInstTarget/)
+- [analyticsRsMonitorAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsMonitorAtt/)
+- [analyticsRsProfAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsProfAtt/)
+- [analyticsRsEventsAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsEventsAtt/)
+- [analyticsRsPolicyAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:RsPolicyAtt/)
 
 ## Example Usage
 

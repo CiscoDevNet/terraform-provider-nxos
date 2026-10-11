@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This resource can manage the MACsec configuration on NX-OS devices, including MACsec policies and per-interface MACsec keychain and policy settings.
   API Documentation
-  macsecEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/macsec:Entity/macsecInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/macsec:Inst/macsecPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/macsec:Policy/macsecIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/macsec:If/
+  macsecEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/macsec:Entity/macsecInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/macsec:Inst/macsecPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/macsec:Policy/macsecIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/macsec:If/
 ---
 
 # nxos_macsec (Resource)
@@ -14,10 +14,10 @@ This resource can manage the MACsec configuration on NX-OS devices, including MA
 
 ### API Documentation
 
-- [macsecEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/macsec:Entity/)
-- [macsecInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/macsec:Inst/)
-- [macsecPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/macsec:Policy/)
-- [macsecIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/macsec:If/)
+- [macsecEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/macsec:Entity/)
+- [macsecInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/macsec:Inst/)
+- [macsecPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/macsec:Policy/)
+- [macsecIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/macsec:If/)
 
 ## Example Usage
 

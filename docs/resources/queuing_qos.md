@@ -5,7 +5,7 @@ subcategory: "Quality of Service"
 description: |-
   This resource can manage the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.
   API Documentation
-  ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Queuing/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:SetRemBW/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Inst/
+  ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Queuing/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_queuing_qos (Resource)
@@ -14,16 +14,16 @@ This resource can manage the queuing QoS configuration on NX-OS devices, includi
 
 ### API Documentation
 
-- [ipqosQueuing](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Queuing/)
-- [ipqosPMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapEntity/)
-- [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapInst/)
-- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:MatchCMap/)
-- [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Priority/)
-- [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:SetRemBW/)
-- [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:ServPol/)
-- [ipqosEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Egress/)
-- [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:System/)
-- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Inst/)
+- [ipqosQueuing](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Queuing/)
+- [ipqosPMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/)
+- [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/)
+- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/)
+- [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/)
+- [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/)
+- [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/)
+- [ipqosEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/)
+- [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/)
+- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/)
 
 ## Example Usage
 

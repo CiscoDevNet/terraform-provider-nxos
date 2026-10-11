@@ -61,11 +61,11 @@ func NewResourceDescription(description string) *ResourceDescription {
 func (d *ResourceDescription) AddApiDocumentation(rootClassName, rootDocPath string, childClassNames, childDocPaths []string) *ResourceDescription {
 	var entries []string
 	if rootDocPath != "" {
-		entries = append(entries, fmt.Sprintf("- [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/%s)\n", rootClassName, rootDocPath))
+		entries = append(entries, fmt.Sprintf("- [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/%s)\n", rootClassName, rootDocPath))
 	}
 	for i, className := range childClassNames {
 		if i < len(childDocPaths) && childDocPaths[i] != "" {
-			entries = append(entries, fmt.Sprintf("- [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/%s)\n", className, childDocPaths[i]))
+			entries = append(entries, fmt.Sprintf("- [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/%s)\n", className, childDocPaths[i]))
 		}
 	}
 	if len(entries) > 0 {

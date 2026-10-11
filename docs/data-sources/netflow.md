@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This data source can read the Netflow configuration on NX-OS devices, including exporters, records, monitors, hardware profiles, and class maps.
   API Documentation
-  flowEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Entity/flowExporter https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Exporter/flowRecord https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Record/flowMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Monitor/flowRsRecord https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsRecord/flowExporterBucket https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:ExporterBucket/flowRsExporter1 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsExporter1/flowRsExporter2 https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsExporter2/flowHwProfile https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:HwProfile/flowClassMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:ClassMap/flowMatchAcl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:MatchAcl/
+  flowEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:Entity/flowExporter https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:Exporter/flowRecord https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:Record/flowMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:Monitor/flowRsRecord https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:RsRecord/flowExporterBucket https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:ExporterBucket/flowRsExporter1 https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:RsExporter1/flowRsExporter2 https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:RsExporter2/flowHwProfile https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:HwProfile/flowClassMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:ClassMap/flowMatchAcl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:MatchAcl/
 ---
 
 # nxos_netflow (Data Source)
@@ -14,17 +14,17 @@ This data source can read the Netflow configuration on NX-OS devices, including 
 
 ### API Documentation
 
-- [flowEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Entity/)
-- [flowExporter](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Exporter/)
-- [flowRecord](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Record/)
-- [flowMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:Monitor/)
-- [flowRsRecord](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsRecord/)
-- [flowExporterBucket](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:ExporterBucket/)
-- [flowRsExporter1](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsExporter1/)
-- [flowRsExporter2](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:RsExporter2/)
-- [flowHwProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:HwProfile/)
-- [flowClassMap](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:ClassMap/)
-- [flowMatchAcl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/flow:MatchAcl/)
+- [flowEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:Entity/)
+- [flowExporter](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:Exporter/)
+- [flowRecord](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:Record/)
+- [flowMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:Monitor/)
+- [flowRsRecord](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:RsRecord/)
+- [flowExporterBucket](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:ExporterBucket/)
+- [flowRsExporter1](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:RsExporter1/)
+- [flowRsExporter2](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:RsExporter2/)
+- [flowHwProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:HwProfile/)
+- [flowClassMap](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:ClassMap/)
+- [flowMatchAcl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/flow:MatchAcl/)
 
 ## Example Usage
 

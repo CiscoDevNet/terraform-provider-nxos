@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This data source can read the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
   API Documentation
-  ipv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Entity/ipv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Inst/ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Dom/ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Route/ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Nexthop/ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:If/ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Addr/
+  ipv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Entity/ipv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Inst/ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:If/ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Addr/
 ---
 
 # nxos_ipv4 (Data Source)
@@ -14,13 +14,13 @@ This data source can read the IPv4 configuration on NX-OS devices, including per
 
 ### API Documentation
 
-- [ipv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Entity/)
-- [ipv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Inst/)
-- [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Dom/)
-- [ipv4Route](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Route/)
-- [ipv4Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Nexthop/)
-- [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:If/)
-- [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Addr/)
+- [ipv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Entity/)
+- [ipv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Inst/)
+- [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/)
+- [ipv4Route](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/)
+- [ipv4Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/)
+- [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:If/)
+- [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Addr/)
 
 ## Example Usage
 

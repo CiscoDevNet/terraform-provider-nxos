@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the ICMPv6 configuration on NX-OS devices, including per-interface ICMPv6 control settings such as redirects and unreachables.
   API Documentation
-  icmpv6Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv6:Entity/icmpv6Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv6:Inst/icmpv6If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv6:If/
+  icmpv6Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/ICMP/icmpv6:Entity/icmpv6Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/ICMP/icmpv6:Inst/icmpv6If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/ICMP/icmpv6:If/
 ---
 
 # nxos_icmpv6 (Data Source)
@@ -14,9 +14,9 @@ This data source can read the ICMPv6 configuration on NX-OS devices, including p
 
 ### API Documentation
 
-- [icmpv6Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv6:Entity/)
-- [icmpv6Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv6:Inst/)
-- [icmpv6If](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv6:If/)
+- [icmpv6Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/ICMP/icmpv6:Entity/)
+- [icmpv6Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/ICMP/icmpv6:Inst/)
+- [icmpv6If](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/ICMP/icmpv6:If/)
 
 ## Example Usage
 

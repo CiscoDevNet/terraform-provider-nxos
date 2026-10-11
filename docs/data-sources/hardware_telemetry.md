@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This data source can read the hardware telemetry configuration on NX-OS devices, including sFlow.
   API Documentation
-  analyticsHwTelemetry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:HwTelemetry/sflowSflow https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Sflow/sflowInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Inst/sflowTransport https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Transport/sflowReceiver https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Receiver/
+  analyticsHwTelemetry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:HwTelemetry/sflowSflow https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Sflow/sflowInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Inst/sflowTransport https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Transport/sflowReceiver https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Receiver/
 ---
 
 # nxos_hardware_telemetry (Data Source)
@@ -14,11 +14,11 @@ This data source can read the hardware telemetry configuration on NX-OS devices,
 
 ### API Documentation
 
-- [analyticsHwTelemetry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/analytics:HwTelemetry/)
-- [sflowSflow](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Sflow/)
-- [sflowInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Inst/)
-- [sflowTransport](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Transport/)
-- [sflowReceiver](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Flow/sflow:Receiver/)
+- [analyticsHwTelemetry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/analytics:HwTelemetry/)
+- [sflowSflow](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Sflow/)
+- [sflowInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Inst/)
+- [sflowTransport](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Transport/)
+- [sflowReceiver](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/sflow:Receiver/)
 
 ## Example Usage
 

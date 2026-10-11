@@ -5,7 +5,7 @@ subcategory: "Quality of Service"
 description: |-
   This data source can read the network QoS configuration on NX-OS devices, including class maps and policy maps with MTU and pause settings.
   API Documentation
-  ipqosNwQoS https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:NwQoS/ipqosCMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:CMapEntity/ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:CMapInst/ipqosCos https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Cos/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:MatchCMap/ipqosSetMTU https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:SetMTU/ipqosPause https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Pause/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Ingress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Inst/
+  ipqosNwQoS https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NwQoS/ipqosCMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapEntity/ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapInst/ipqosCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Cos/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosSetMTU https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetMTU/ipqosPause https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Pause/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Ingress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_network_qos (Data Source)
@@ -14,19 +14,19 @@ This data source can read the network QoS configuration on NX-OS devices, includ
 
 ### API Documentation
 
-- [ipqosNwQoS](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:NwQoS/)
-- [ipqosCMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:CMapEntity/)
-- [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:CMapInst/)
-- [ipqosCos](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Cos/)
-- [ipqosPMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapEntity/)
-- [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapInst/)
-- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:MatchCMap/)
-- [ipqosSetMTU](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:SetMTU/)
-- [ipqosPause](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Pause/)
-- [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:ServPol/)
-- [ipqosIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Ingress/)
-- [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:System/)
-- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Inst/)
+- [ipqosNwQoS](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NwQoS/)
+- [ipqosCMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapEntity/)
+- [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapInst/)
+- [ipqosCos](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Cos/)
+- [ipqosPMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/)
+- [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/)
+- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/)
+- [ipqosSetMTU](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetMTU/)
+- [ipqosPause](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Pause/)
+- [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/)
+- [ipqosIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Ingress/)
+- [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/)
+- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/)
 
 ## Example Usage
 

@@ -2062,7 +2062,7 @@ child_classes:
                   - 100g-2x-pam4
                 example: 10g-4x
   - class_name: sasSas
-    doc_path: Service%20Acceleration/sas:Sas/
+    doc_path: Service%20Accelerated%20Switch/sas:Sas/
     rn: sas
     type: single
     no_delete: true
@@ -2070,14 +2070,14 @@ child_classes:
     description: 'Hypershield (Service Acceleration) configuration.'
     child_classes:
       - class_name: sasSvc
-        doc_path: Service%20Acceleration/sas:Svc/
+        doc_path: Service%20Accelerated%20Switch/sas:Svc/
         rn: svc
         type: single
         tf_name: service
         description: 'Collection of service instances.'
         child_classes:
           - class_name: sasSvcInstance
-            doc_path: Service%20Acceleration/sas:SvcInstance/
+            doc_path: Service%20Accelerated%20Switch/sas:SvcInstance/
             rn: svcinst-%s
             type: list
             tf_name: service_instances
@@ -2099,7 +2099,7 @@ child_classes:
                 test_tags: [HYPERSHIELD]
             child_classes:
               - class_name: sasSController
-                doc_path: Service%20Acceleration/sas:SController/
+                doc_path: Service%20Accelerated%20Switch/sas:SController/
                 rn: scontroller
                 type: single
                 tf_name: controller
@@ -2138,7 +2138,7 @@ child_classes:
                     example: 10.0.0.3
                     test_tags: [HYPERSHIELD]
               - class_name: sasFwSvcPolicy
-                doc_path: Service%20Acceleration/sas:FwSvcPolicy/
+                doc_path: Service%20Accelerated%20Switch/sas:FwSvcPolicy/
                 rn: fwpolicy
                 type: single
                 tf_name: firewall_policy
@@ -2155,14 +2155,14 @@ child_classes:
                     test_tags: [HYPERSHIELD]
                 child_classes:
                   - class_name: sasIpVrf
-                    doc_path: Service%20Acceleration/sas:IpVrf/
+                    doc_path: Service%20Accelerated%20Switch/sas:IpVrf/
                     rn: ipvrf
                     type: single
                     tf_name: ip_vrf
                     description: 'Collection of VRF to service-module pinning policies for IP traffic.'
                     child_classes:
                       - class_name: sasDom
-                        doc_path: Service%20Acceleration/sas:Dom/
+                        doc_path: Service%20Accelerated%20Switch/sas:Dom/
                         rn: dom-[%s]
                         type: list
                         tf_name: vrfs

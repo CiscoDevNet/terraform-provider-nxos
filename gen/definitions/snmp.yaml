@@ -160,6 +160,113 @@ child_classes:
                 type: String
                 description: 'Source interface name for Traps.'
                 example: eth1/1
+          - class_name: snmpSourceInterfaceInforms
+            doc_path: System/snmp:SourceInterfaceInforms/
+            rn: srcInterfaceInforms
+            type: single
+            tf_name: source_interface_informs
+            description: 'SNMP source interface for informs.'
+            attributes:
+              - nxos_name: ifname
+                tf_name: source_interface_informs
+                type: String
+                description: 'Source interface name for informs.'
+                example: eth1/2
+      - class_name: snmpCtx
+        doc_path: System/snmp:Ctx/
+        rn: ctx-[%s]
+        type: list
+        tf_name: contexts
+        description: 'List of SNMP contexts.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Object name.'
+            example: ctx1
+          - nxos_name: ctxInstance
+            tf_name: instance
+            type: String
+            description: 'Protocol instance associated with the SNMP context.'
+            example: inst1
+          - nxos_name: ctxTopology
+            tf_name: topology
+            type: String
+            description: 'Topology associated with the SNMP context.'
+            example: topo1
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My SNMP context'
+          - nxos_name: vrf
+            tf_name: vrf
+            type: String
+            description: 'VRF associated with the SNMP context.'
+            example: management
+      - class_name: snmpCommSecP
+        doc_path: System/snmp:CommSecP/
+        rn: community-[%s]
+        type: list
+        tf_name: communities
+        description: 'List of SNMP communities.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Object name.'
+            example: COMMUNITY1
+          - nxos_name: commAcess
+            tf_name: access
+            type: String
+            description: 'SNMP community group.'
+            enum_values:
+              - ro
+              - rw
+              - unspecified
+            example: ro
+            exclude_test: true
+          - nxos_name: contextName
+            tf_name: context
+            type: String
+            description: 'Name of the SNMP context.'
+            example: ctx1
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'My SNMP community'
+          - nxos_name: grpName
+            tf_name: group
+            type: String
+            description: 'SNMP community group.'
+            example: network-operator
+        child_classes:
+          - class_name: snmpAcl
+            doc_path: System/snmp:Acl/
+            rn: acl
+            type: single
+            tf_name: acl
+            description: 'SNMP community ACL.'
+            attributes:
+              - nxos_name: useAclName
+                tf_name: acl_name
+                type: String
+                description: 'SNMP community acl name.'
+                example: 'snmp-acl'
+                exclude_test: true
+              - nxos_name: useIpv4AclName
+                tf_name: ipv4_acl_name
+                type: String
+                description: 'SNMP community acl name.'
+                example: 'snmp-acl-v4'
+              - nxos_name: useIpv6AclName
+                tf_name: ipv6_acl_name
+                type: String
+                description: 'SNMP community acl name.'
+                example: 'snmp-acl-v6'
       - class_name: snmpLocalUser
         doc_path: System/snmp:LocalUser/
         rn: lclUser-[%s]
@@ -338,6 +445,31 @@ child_classes:
                 type: String
                 id: true
                 description: 'vrfname to be used by host.'
+                example: management
+          - class_name: snmpHostSrcInterface
+            doc_path: System/snmp:HostSrcInterface/
+            rn: hostsourceinterface
+            type: single
+            tf_name: source_interface
+            description: 'SNMP source interface for host.'
+            attributes:
+              - nxos_name: ifName
+                tf_name: source_interface
+                type: String
+                description: 'Source interface name for host.'
+                example: eth1/3
+          - class_name: snmpFilterVrf
+            doc_path: System/snmp:FilterVrf/
+            rn: filtervrf-[%s]
+            type: list
+            tf_name: filter_vrfs
+            description: 'List of VRFs used to filter notifications to the host receiver.'
+            attributes:
+              - nxos_name: vrfName
+                tf_name: name
+                type: String
+                id: true
+                description: 'VRF name to be used by host.'
                 example: management
       - class_name: snmpTraps
         doc_path: System/snmp:Traps/

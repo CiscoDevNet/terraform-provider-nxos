@@ -48,6 +48,16 @@ func TestAccDataSourceNxosSNMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "enforce_privacy", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "tcp_session_authentication", "tcpSessAuth"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "source_interface_traps", "eth1/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "source_interface_informs", "eth1/2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "contexts.ctx1.instance", "inst1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "contexts.ctx1.topology", "topo1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "contexts.ctx1.description", "My SNMP context"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "contexts.ctx1.vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "communities.COMMUNITY1.context", "ctx1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "communities.COMMUNITY1.description", "My SNMP community"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "communities.COMMUNITY1.group", "network-operator"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "communities.COMMUNITY1.ipv4_acl_name", "snmp-acl-v4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "communities.COMMUNITY1.ipv6_acl_name", "snmp-acl-v6"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "local_users.user1.authentication_type", "md5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "local_users.user1.ipv4_acl_name", "snmp-acl-v4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "local_users.user1.ipv6_acl_name", "snmp-acl-v6"))
@@ -58,6 +68,7 @@ func TestAccDataSourceNxosSNMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.notification_type", "traps"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.security_level", "auth"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.version", "v3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.source_interface", "eth1/3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "enable_all", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "aaa_server_state_change_trap_status", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "bridge_new_root_trap_status", "enable"))
@@ -155,6 +166,24 @@ func testAccDataSourceNxosSNMPConfig() string {
 	config += `	enforce_privacy = "yes"` + "\n"
 	config += `	tcp_session_authentication = "tcpSessAuth"` + "\n"
 	config += `	source_interface_traps = "eth1/1"` + "\n"
+	config += `	source_interface_informs = "eth1/2"` + "\n"
+	config += `	contexts = {` + "\n"
+	config += `		"ctx1" = {` + "\n"
+	config += `			instance = "inst1"` + "\n"
+	config += `			topology = "topo1"` + "\n"
+	config += `			description = "My SNMP context"` + "\n"
+	config += `			vrf = "management"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	communities = {` + "\n"
+	config += `		"COMMUNITY1" = {` + "\n"
+	config += `			context = "ctx1"` + "\n"
+	config += `			description = "My SNMP community"` + "\n"
+	config += `			group = "network-operator"` + "\n"
+	config += `			ipv4_acl_name = "snmp-acl-v4"` + "\n"
+	config += `			ipv6_acl_name = "snmp-acl-v6"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	local_users = {` + "\n"
 	config += `		"user1" = {` + "\n"
 	config += `			authentication_password = "Xe9$mK2v!pQr"` + "\n"
@@ -178,6 +207,11 @@ func testAccDataSourceNxosSNMPConfig() string {
 	config += `			security_level = "auth"` + "\n"
 	config += `			version = "v3"` + "\n"
 	config += `			vrfs = {` + "\n"
+	config += `				"management" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			source_interface = "eth1/3"` + "\n"
+	config += `			filter_vrfs = {` + "\n"
 	config += `				"management" = {` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"

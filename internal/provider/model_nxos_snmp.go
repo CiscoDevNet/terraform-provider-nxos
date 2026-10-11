@@ -39,105 +39,125 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type SNMP struct {
-	Device                                         types.String              `tfsdk:"device"`
-	Dn                                             types.String              `tfsdk:"id"`
-	AdminState                                     types.String              `tfsdk:"admin_state"`
-	InstanceAdminState                             types.String              `tfsdk:"instance_admin_state"`
-	Description                                    types.String              `tfsdk:"description"`
-	EngineId                                       types.String              `tfsdk:"engine_id"`
-	LoggingLevel                                   types.String              `tfsdk:"logging_level"`
-	OwnerKey                                       types.String              `tfsdk:"owner_key"`
-	OwnerTag                                       types.String              `tfsdk:"owner_tag"`
-	UnknownEngineId                                types.String              `tfsdk:"unknown_engine_id"`
-	UnknownUser                                    types.String              `tfsdk:"unknown_user"`
-	Contact                                        types.String              `tfsdk:"contact"`
-	SystemInfoDescription                          types.String              `tfsdk:"system_info_description"`
-	Location                                       types.String              `tfsdk:"location"`
-	PacketSize                                     types.Int64               `tfsdk:"packet_size"`
-	DisableAaaSync                                 types.String              `tfsdk:"disable_aaa_sync"`
-	EnforcePrivacy                                 types.String              `tfsdk:"enforce_privacy"`
-	TcpSessionAuthentication                       types.String              `tfsdk:"tcp_session_authentication"`
-	SourceInterfaceTraps                           types.String              `tfsdk:"source_interface_traps"`
-	LocalUsers                                     map[string]SNMPLocalUsers `tfsdk:"local_users"`
-	Hosts                                          map[string]SNMPHosts      `tfsdk:"hosts"`
-	EnableAll                                      types.String              `tfsdk:"enable_all"`
-	AaaServerStateChangeTrapStatus                 types.String              `tfsdk:"aaa_server_state_change_trap_status"`
-	BfdSessionDownTrapStatus                       types.String              `tfsdk:"bfd_session_down_trap_status"`
-	BfdSessionUpTrapStatus                         types.String              `tfsdk:"bfd_session_up_trap_status"`
-	BridgeNewRootTrapStatus                        types.String              `tfsdk:"bridge_new_root_trap_status"`
-	BridgeTopologyChangeTrapStatus                 types.String              `tfsdk:"bridge_topology_change_trap_status"`
-	CallhomeEventNotifyTrapStatus                  types.String              `tfsdk:"callhome_event_notify_trap_status"`
-	CallhomeSmtpSendFailTrapStatus                 types.String              `tfsdk:"callhome_smtp_send_fail_trap_status"`
-	CfsStateChangeNotifTrapStatus                  types.String              `tfsdk:"cfs_state_change_notif_trap_status"`
-	CfsMergeFailureTrapStatus                      types.String              `tfsdk:"cfs_merge_failure_trap_status"`
-	ConfigCliRunningConfigChangeTrapStatus         types.String              `tfsdk:"config_cli_running_config_change_trap_status"`
-	EntityMibChangeTrapStatus                      types.String              `tfsdk:"entity_mib_change_trap_status"`
-	EntityMibEnableStatusNotificationTrapStatus    types.String              `tfsdk:"entity_mib_enable_status_notification_trap_status"`
-	EntityFanStatusChangeTrapStatus                types.String              `tfsdk:"entity_fan_status_change_trap_status"`
-	EntityModuleInsertedTrapStatus                 types.String              `tfsdk:"entity_module_inserted_trap_status"`
-	EntityModuleRemovedTrapStatus                  types.String              `tfsdk:"entity_module_removed_trap_status"`
-	EntityModuleStatusChangeTrapStatus             types.String              `tfsdk:"entity_module_status_change_trap_status"`
-	EntityPowerOutChangeTrapStatus                 types.String              `tfsdk:"entity_power_out_change_trap_status"`
-	EntityPowerStatusChangeTrapStatus              types.String              `tfsdk:"entity_power_status_change_trap_status"`
-	EntitySensorTrapStatus                         types.String              `tfsdk:"entity_sensor_trap_status"`
-	EntityUnrecognisedModuleTrapStatus             types.String              `tfsdk:"entity_unrecognised_module_trap_status"`
-	FcdomainDomainIdNotAssignedTrapStatus          types.String              `tfsdk:"fcdomain_domain_id_not_assigned_trap_status"`
-	FcdomainFabricChangeTrapStatus                 types.String              `tfsdk:"fcdomain_fabric_change_trap_status"`
-	FcdomainNewPrincipalSwitchTrapStatus           types.String              `tfsdk:"fcdomain_new_principal_switch_trap_status"`
-	FeatureControlOpStatusChangeTrapStatus         types.String              `tfsdk:"feature_control_op_status_change_trap_status"`
-	FeatureControlCiscoOpStatusChangeTrapStatus    types.String              `tfsdk:"feature_control_cisco_op_status_change_trap_status"`
-	GenericColdStartTrapStatus                     types.String              `tfsdk:"generic_cold_start_trap_status"`
-	GenericWarmStartTrapStatus                     types.String              `tfsdk:"generic_warm_start_trap_status"`
-	HsrpStateChangeTrapStatus                      types.String              `tfsdk:"hsrp_state_change_trap_status"`
-	LicenseExpiryTrapStatus                        types.String              `tfsdk:"license_expiry_trap_status"`
-	LicenseExpiryWarningTrapStatus                 types.String              `tfsdk:"license_expiry_warning_trap_status"`
-	LicenseFileMissingTrapStatus                   types.String              `tfsdk:"license_file_missing_trap_status"`
-	LicenseNoLicenseForFeatureTrapStatus           types.String              `tfsdk:"license_no_license_for_feature_trap_status"`
-	LinkCieLinkDownTrapStatus                      types.String              `tfsdk:"link_cie_link_down_trap_status"`
-	LinkCieLinkUpTrapStatus                        types.String              `tfsdk:"link_cie_link_up_trap_status"`
-	LinkCiscoXcvrMonStatusChangeTrapStatus         types.String              `tfsdk:"link_cisco_xcvr_mon_status_change_trap_status"`
-	LinkCmnMacMoveNotificationTrapStatus           types.String              `tfsdk:"link_cmn_mac_move_notification_trap_status"`
-	LinkDelayedLinkStateChangeTrapStatus           types.String              `tfsdk:"link_delayed_link_state_change_trap_status"`
-	LinkExtendedLinkDownTrapStatus                 types.String              `tfsdk:"link_extended_link_down_trap_status"`
-	LinkExtendedLinkUpTrapStatus                   types.String              `tfsdk:"link_extended_link_up_trap_status"`
-	LinkLinkDownTrapStatus                         types.String              `tfsdk:"link_link_down_trap_status"`
-	LinkLinkUpTrapStatus                           types.String              `tfsdk:"link_link_up_trap_status"`
-	LinkErrDisableInterfaceEventTrapStatus         types.String              `tfsdk:"link_err_disable_interface_event_trap_status"`
-	LldpRemTablesChangeTrapStatus                  types.String              `tfsdk:"lldp_rem_tables_change_trap_status"`
-	MmodeMaintModeChangeTrapStatus                 types.String              `tfsdk:"mmode_maint_mode_change_trap_status"`
-	MmodeNormalModeChangeTrapStatus                types.String              `tfsdk:"mmode_normal_mode_change_trap_status"`
-	MplsLdpTrapStatus                              types.String              `tfsdk:"mpls_ldp_trap_status"`
-	MplsLdpSessionDownTrapStatus                   types.String              `tfsdk:"mpls_ldp_session_down_trap_status"`
-	MplsLdpSessionUpTrapStatus                     types.String              `tfsdk:"mpls_ldp_session_up_trap_status"`
-	MplsVpnTrapStatus                              types.String              `tfsdk:"mpls_vpn_trap_status"`
-	MplsVpnMaxThreshClearedTrapStatus              types.String              `tfsdk:"mpls_vpn_max_thresh_cleared_trap_status"`
-	MplsVpnMaxThreshExceededTrapStatus             types.String              `tfsdk:"mpls_vpn_max_thresh_exceeded_trap_status"`
-	MplsVpnMidThreshExceededTrapStatus             types.String              `tfsdk:"mpls_vpn_mid_thresh_exceeded_trap_status"`
-	MplsVpnVrfDownTrapStatus                       types.String              `tfsdk:"mpls_vpn_vrf_down_trap_status"`
-	MplsVpnVrfUpTrapStatus                         types.String              `tfsdk:"mpls_vpn_vrf_up_trap_status"`
-	MsdpBackwardTransitionTrapStatus               types.String              `tfsdk:"msdp_backward_transition_trap_status"`
-	PimNeighborLossTrapStatus                      types.String              `tfsdk:"pim_neighbor_loss_trap_status"`
-	PortSecurityAccessSecureMacViolationTrapStatus types.String              `tfsdk:"port_security_access_secure_mac_violation_trap_status"`
-	PortSecurityTrunkSecureMacViolationTrapStatus  types.String              `tfsdk:"port_security_trunk_secure_mac_violation_trap_status"`
-	RfRedundancyFrameworkTrapStatus                types.String              `tfsdk:"rf_redundancy_framework_trap_status"`
-	RmonRisingAlarmTrapStatus                      types.String              `tfsdk:"rmon_rising_alarm_trap_status"`
-	RmonFallingAlarmTrapStatus                     types.String              `tfsdk:"rmon_falling_alarm_trap_status"`
-	RmonHcRisingAlarmTrapStatus                    types.String              `tfsdk:"rmon_hc_rising_alarm_trap_status"`
-	RmonHcFallingAlarmTrapStatus                   types.String              `tfsdk:"rmon_hc_falling_alarm_trap_status"`
-	SnmpAuthenticationTrapStatus                   types.String              `tfsdk:"snmp_authentication_trap_status"`
-	StormControlCpscEventTrapStatus                types.String              `tfsdk:"storm_control_cpsc_event_trap_status"`
-	StpxInconsistencyTrapStatus                    types.String              `tfsdk:"stpx_inconsistency_trap_status"`
-	StpxLoopInconsistencyTrapStatus                types.String              `tfsdk:"stpx_loop_inconsistency_trap_status"`
-	StpxRootInconsistencyTrapStatus                types.String              `tfsdk:"stpx_root_inconsistency_trap_status"`
-	SyslogMessageGeneratedTrapStatus               types.String              `tfsdk:"syslog_message_generated_trap_status"`
-	SysmgrFailSwCoreNotifyTrapStatus               types.String              `tfsdk:"sysmgr_fail_sw_core_notify_trap_status"`
-	SystemClockChangeNotificationTrapStatus        types.String              `tfsdk:"system_clock_change_notification_trap_status"`
-	UpgradeJobStatusNotifyTrapStatus               types.String              `tfsdk:"upgrade_job_status_notify_trap_status"`
-	UpgradeOpNotifyOnCompletionTrapStatus          types.String              `tfsdk:"upgrade_op_notify_on_completion_trap_status"`
-	VtpNotifsTrapStatus                            types.String              `tfsdk:"vtp_notifs_trap_status"`
-	VtpVlanCreateTrapStatus                        types.String              `tfsdk:"vtp_vlan_create_trap_status"`
-	VtpVlanDeleteTrapStatus                        types.String              `tfsdk:"vtp_vlan_delete_trap_status"`
-	RmonEvents                                     map[string]SNMPRmonEvents `tfsdk:"rmon_events"`
+	Device                                         types.String               `tfsdk:"device"`
+	Dn                                             types.String               `tfsdk:"id"`
+	AdminState                                     types.String               `tfsdk:"admin_state"`
+	InstanceAdminState                             types.String               `tfsdk:"instance_admin_state"`
+	Description                                    types.String               `tfsdk:"description"`
+	EngineId                                       types.String               `tfsdk:"engine_id"`
+	LoggingLevel                                   types.String               `tfsdk:"logging_level"`
+	OwnerKey                                       types.String               `tfsdk:"owner_key"`
+	OwnerTag                                       types.String               `tfsdk:"owner_tag"`
+	UnknownEngineId                                types.String               `tfsdk:"unknown_engine_id"`
+	UnknownUser                                    types.String               `tfsdk:"unknown_user"`
+	Contact                                        types.String               `tfsdk:"contact"`
+	SystemInfoDescription                          types.String               `tfsdk:"system_info_description"`
+	Location                                       types.String               `tfsdk:"location"`
+	PacketSize                                     types.Int64                `tfsdk:"packet_size"`
+	DisableAaaSync                                 types.String               `tfsdk:"disable_aaa_sync"`
+	EnforcePrivacy                                 types.String               `tfsdk:"enforce_privacy"`
+	TcpSessionAuthentication                       types.String               `tfsdk:"tcp_session_authentication"`
+	SourceInterfaceTraps                           types.String               `tfsdk:"source_interface_traps"`
+	SourceInterfaceInforms                         types.String               `tfsdk:"source_interface_informs"`
+	Contexts                                       map[string]SNMPContexts    `tfsdk:"contexts"`
+	Communities                                    map[string]SNMPCommunities `tfsdk:"communities"`
+	LocalUsers                                     map[string]SNMPLocalUsers  `tfsdk:"local_users"`
+	Hosts                                          map[string]SNMPHosts       `tfsdk:"hosts"`
+	EnableAll                                      types.String               `tfsdk:"enable_all"`
+	AaaServerStateChangeTrapStatus                 types.String               `tfsdk:"aaa_server_state_change_trap_status"`
+	BfdSessionDownTrapStatus                       types.String               `tfsdk:"bfd_session_down_trap_status"`
+	BfdSessionUpTrapStatus                         types.String               `tfsdk:"bfd_session_up_trap_status"`
+	BridgeNewRootTrapStatus                        types.String               `tfsdk:"bridge_new_root_trap_status"`
+	BridgeTopologyChangeTrapStatus                 types.String               `tfsdk:"bridge_topology_change_trap_status"`
+	CallhomeEventNotifyTrapStatus                  types.String               `tfsdk:"callhome_event_notify_trap_status"`
+	CallhomeSmtpSendFailTrapStatus                 types.String               `tfsdk:"callhome_smtp_send_fail_trap_status"`
+	CfsStateChangeNotifTrapStatus                  types.String               `tfsdk:"cfs_state_change_notif_trap_status"`
+	CfsMergeFailureTrapStatus                      types.String               `tfsdk:"cfs_merge_failure_trap_status"`
+	ConfigCliRunningConfigChangeTrapStatus         types.String               `tfsdk:"config_cli_running_config_change_trap_status"`
+	EntityMibChangeTrapStatus                      types.String               `tfsdk:"entity_mib_change_trap_status"`
+	EntityMibEnableStatusNotificationTrapStatus    types.String               `tfsdk:"entity_mib_enable_status_notification_trap_status"`
+	EntityFanStatusChangeTrapStatus                types.String               `tfsdk:"entity_fan_status_change_trap_status"`
+	EntityModuleInsertedTrapStatus                 types.String               `tfsdk:"entity_module_inserted_trap_status"`
+	EntityModuleRemovedTrapStatus                  types.String               `tfsdk:"entity_module_removed_trap_status"`
+	EntityModuleStatusChangeTrapStatus             types.String               `tfsdk:"entity_module_status_change_trap_status"`
+	EntityPowerOutChangeTrapStatus                 types.String               `tfsdk:"entity_power_out_change_trap_status"`
+	EntityPowerStatusChangeTrapStatus              types.String               `tfsdk:"entity_power_status_change_trap_status"`
+	EntitySensorTrapStatus                         types.String               `tfsdk:"entity_sensor_trap_status"`
+	EntityUnrecognisedModuleTrapStatus             types.String               `tfsdk:"entity_unrecognised_module_trap_status"`
+	FcdomainDomainIdNotAssignedTrapStatus          types.String               `tfsdk:"fcdomain_domain_id_not_assigned_trap_status"`
+	FcdomainFabricChangeTrapStatus                 types.String               `tfsdk:"fcdomain_fabric_change_trap_status"`
+	FcdomainNewPrincipalSwitchTrapStatus           types.String               `tfsdk:"fcdomain_new_principal_switch_trap_status"`
+	FeatureControlOpStatusChangeTrapStatus         types.String               `tfsdk:"feature_control_op_status_change_trap_status"`
+	FeatureControlCiscoOpStatusChangeTrapStatus    types.String               `tfsdk:"feature_control_cisco_op_status_change_trap_status"`
+	GenericColdStartTrapStatus                     types.String               `tfsdk:"generic_cold_start_trap_status"`
+	GenericWarmStartTrapStatus                     types.String               `tfsdk:"generic_warm_start_trap_status"`
+	HsrpStateChangeTrapStatus                      types.String               `tfsdk:"hsrp_state_change_trap_status"`
+	LicenseExpiryTrapStatus                        types.String               `tfsdk:"license_expiry_trap_status"`
+	LicenseExpiryWarningTrapStatus                 types.String               `tfsdk:"license_expiry_warning_trap_status"`
+	LicenseFileMissingTrapStatus                   types.String               `tfsdk:"license_file_missing_trap_status"`
+	LicenseNoLicenseForFeatureTrapStatus           types.String               `tfsdk:"license_no_license_for_feature_trap_status"`
+	LinkCieLinkDownTrapStatus                      types.String               `tfsdk:"link_cie_link_down_trap_status"`
+	LinkCieLinkUpTrapStatus                        types.String               `tfsdk:"link_cie_link_up_trap_status"`
+	LinkCiscoXcvrMonStatusChangeTrapStatus         types.String               `tfsdk:"link_cisco_xcvr_mon_status_change_trap_status"`
+	LinkCmnMacMoveNotificationTrapStatus           types.String               `tfsdk:"link_cmn_mac_move_notification_trap_status"`
+	LinkDelayedLinkStateChangeTrapStatus           types.String               `tfsdk:"link_delayed_link_state_change_trap_status"`
+	LinkExtendedLinkDownTrapStatus                 types.String               `tfsdk:"link_extended_link_down_trap_status"`
+	LinkExtendedLinkUpTrapStatus                   types.String               `tfsdk:"link_extended_link_up_trap_status"`
+	LinkLinkDownTrapStatus                         types.String               `tfsdk:"link_link_down_trap_status"`
+	LinkLinkUpTrapStatus                           types.String               `tfsdk:"link_link_up_trap_status"`
+	LinkErrDisableInterfaceEventTrapStatus         types.String               `tfsdk:"link_err_disable_interface_event_trap_status"`
+	LldpRemTablesChangeTrapStatus                  types.String               `tfsdk:"lldp_rem_tables_change_trap_status"`
+	MmodeMaintModeChangeTrapStatus                 types.String               `tfsdk:"mmode_maint_mode_change_trap_status"`
+	MmodeNormalModeChangeTrapStatus                types.String               `tfsdk:"mmode_normal_mode_change_trap_status"`
+	MplsLdpTrapStatus                              types.String               `tfsdk:"mpls_ldp_trap_status"`
+	MplsLdpSessionDownTrapStatus                   types.String               `tfsdk:"mpls_ldp_session_down_trap_status"`
+	MplsLdpSessionUpTrapStatus                     types.String               `tfsdk:"mpls_ldp_session_up_trap_status"`
+	MplsVpnTrapStatus                              types.String               `tfsdk:"mpls_vpn_trap_status"`
+	MplsVpnMaxThreshClearedTrapStatus              types.String               `tfsdk:"mpls_vpn_max_thresh_cleared_trap_status"`
+	MplsVpnMaxThreshExceededTrapStatus             types.String               `tfsdk:"mpls_vpn_max_thresh_exceeded_trap_status"`
+	MplsVpnMidThreshExceededTrapStatus             types.String               `tfsdk:"mpls_vpn_mid_thresh_exceeded_trap_status"`
+	MplsVpnVrfDownTrapStatus                       types.String               `tfsdk:"mpls_vpn_vrf_down_trap_status"`
+	MplsVpnVrfUpTrapStatus                         types.String               `tfsdk:"mpls_vpn_vrf_up_trap_status"`
+	MsdpBackwardTransitionTrapStatus               types.String               `tfsdk:"msdp_backward_transition_trap_status"`
+	PimNeighborLossTrapStatus                      types.String               `tfsdk:"pim_neighbor_loss_trap_status"`
+	PortSecurityAccessSecureMacViolationTrapStatus types.String               `tfsdk:"port_security_access_secure_mac_violation_trap_status"`
+	PortSecurityTrunkSecureMacViolationTrapStatus  types.String               `tfsdk:"port_security_trunk_secure_mac_violation_trap_status"`
+	RfRedundancyFrameworkTrapStatus                types.String               `tfsdk:"rf_redundancy_framework_trap_status"`
+	RmonRisingAlarmTrapStatus                      types.String               `tfsdk:"rmon_rising_alarm_trap_status"`
+	RmonFallingAlarmTrapStatus                     types.String               `tfsdk:"rmon_falling_alarm_trap_status"`
+	RmonHcRisingAlarmTrapStatus                    types.String               `tfsdk:"rmon_hc_rising_alarm_trap_status"`
+	RmonHcFallingAlarmTrapStatus                   types.String               `tfsdk:"rmon_hc_falling_alarm_trap_status"`
+	SnmpAuthenticationTrapStatus                   types.String               `tfsdk:"snmp_authentication_trap_status"`
+	StormControlCpscEventTrapStatus                types.String               `tfsdk:"storm_control_cpsc_event_trap_status"`
+	StpxInconsistencyTrapStatus                    types.String               `tfsdk:"stpx_inconsistency_trap_status"`
+	StpxLoopInconsistencyTrapStatus                types.String               `tfsdk:"stpx_loop_inconsistency_trap_status"`
+	StpxRootInconsistencyTrapStatus                types.String               `tfsdk:"stpx_root_inconsistency_trap_status"`
+	SyslogMessageGeneratedTrapStatus               types.String               `tfsdk:"syslog_message_generated_trap_status"`
+	SysmgrFailSwCoreNotifyTrapStatus               types.String               `tfsdk:"sysmgr_fail_sw_core_notify_trap_status"`
+	SystemClockChangeNotificationTrapStatus        types.String               `tfsdk:"system_clock_change_notification_trap_status"`
+	UpgradeJobStatusNotifyTrapStatus               types.String               `tfsdk:"upgrade_job_status_notify_trap_status"`
+	UpgradeOpNotifyOnCompletionTrapStatus          types.String               `tfsdk:"upgrade_op_notify_on_completion_trap_status"`
+	VtpNotifsTrapStatus                            types.String               `tfsdk:"vtp_notifs_trap_status"`
+	VtpVlanCreateTrapStatus                        types.String               `tfsdk:"vtp_vlan_create_trap_status"`
+	VtpVlanDeleteTrapStatus                        types.String               `tfsdk:"vtp_vlan_delete_trap_status"`
+	RmonEvents                                     map[string]SNMPRmonEvents  `tfsdk:"rmon_events"`
+}
+
+type SNMPContexts struct {
+	Instance    types.String `tfsdk:"instance"`
+	Topology    types.String `tfsdk:"topology"`
+	Description types.String `tfsdk:"description"`
+	Vrf         types.String `tfsdk:"vrf"`
+}
+
+type SNMPCommunities struct {
+	Access      types.String `tfsdk:"access"`
+	Context     types.String `tfsdk:"context"`
+	Description types.String `tfsdk:"description"`
+	Group       types.String `tfsdk:"group"`
+	AclName     types.String `tfsdk:"acl_name"`
+	Ipv4AclName types.String `tfsdk:"ipv4_acl_name"`
+	Ipv6AclName types.String `tfsdk:"ipv6_acl_name"`
 }
 
 type SNMPLocalUsers struct {
@@ -164,14 +184,19 @@ type SNMPLocalUsersGroups struct {
 }
 
 type SNMPHosts struct {
-	CommunityName    types.String             `tfsdk:"community_name"`
-	NotificationType types.String             `tfsdk:"notification_type"`
-	SecurityLevel    types.String             `tfsdk:"security_level"`
-	Version          types.String             `tfsdk:"version"`
-	Vrfs             map[string]SNMPHostsVrfs `tfsdk:"vrfs"`
+	CommunityName    types.String                   `tfsdk:"community_name"`
+	NotificationType types.String                   `tfsdk:"notification_type"`
+	SecurityLevel    types.String                   `tfsdk:"security_level"`
+	Version          types.String                   `tfsdk:"version"`
+	Vrfs             map[string]SNMPHostsVrfs       `tfsdk:"vrfs"`
+	SourceInterface  types.String                   `tfsdk:"source_interface"`
+	FilterVrfs       map[string]SNMPHostsFilterVrfs `tfsdk:"filter_vrfs"`
 }
 
 type SNMPHostsVrfs struct {
+}
+
+type SNMPHostsFilterVrfs struct {
 }
 
 type SNMPRmonEvents struct {
@@ -215,6 +240,14 @@ func (data SNMP) getDn() string {
 	return "sys/snmp"
 }
 
+func (data SNMPContexts) getRn(key string) string {
+	return fmt.Sprintf("ctx-[%s]", key)
+}
+
+func (data SNMPCommunities) getRn(key string) string {
+	return fmt.Sprintf("community-[%s]", key)
+}
+
 func (data SNMPLocalUsers) getRn(key string) string {
 	return fmt.Sprintf("lclUser-[%s]", key)
 }
@@ -230,6 +263,10 @@ func (data SNMPHosts) getRn(key string) string {
 
 func (data SNMPHostsVrfs) getRn(key string) string {
 	return fmt.Sprintf("usevrf-[%s]", key)
+}
+
+func (data SNMPHostsFilterVrfs) getRn(key string) string {
+	return fmt.Sprintf("filtervrf-[%s]", key)
 }
 
 func (data SNMPRmonEvents) getRn(key string) string {
@@ -328,10 +365,75 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpSourceInterfaceTraps.attributes", attrs)
 			}
+			attrs = "{}"
+			if !data.SourceInterfaceInforms.IsUnknown() && !data.SourceInterfaceInforms.IsNull() && !config.SourceInterfaceInforms.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ifname", data.SourceInterfaceInforms.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpSourceInterfaceInforms.attributes", attrs)
+			}
 			childBody = body
 			body = prevBody
 			if parentAttrs != "{}" || gjson.Get(childBody, "snmpGlobals.children").Exists() {
 				body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+			}
+		}
+		for key, child := range data.Contexts {
+			configChild, configChildOk := config.Contexts[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "name", key)
+			if configChildOk && !child.Instance.IsUnknown() && !child.Instance.IsNull() && !configChild.Instance.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ctxInstance", child.Instance.ValueString())
+			}
+			if configChildOk && !child.Topology.IsUnknown() && !child.Topology.IsNull() && !configChild.Topology.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ctxTopology", child.Topology.ValueString())
+			}
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if configChildOk && !child.Vrf.IsUnknown() && !child.Vrf.IsNull() && !configChild.Vrf.IsNull() {
+				attrs, _ = sjson.Set(attrs, "vrf", child.Vrf.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCtx.attributes", attrs)
+		}
+		for key, child := range data.Communities {
+			configChild, configChildOk := config.Communities[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "name", key)
+			if configChildOk && !child.Access.IsUnknown() && !child.Access.IsNull() && !configChild.Access.IsNull() {
+				attrs, _ = sjson.Set(attrs, "commAcess", child.Access.ValueString())
+			}
+			if configChildOk && !child.Context.IsUnknown() && !child.Context.IsNull() && !configChild.Context.IsNull() {
+				attrs, _ = sjson.Set(attrs, "contextName", child.Context.ValueString())
+			}
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if configChildOk && !child.Group.IsUnknown() && !child.Group.IsNull() && !configChild.Group.IsNull() {
+				attrs, _ = sjson.Set(attrs, "grpName", child.Group.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpCommSecP.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".snmpCommSecP.children"
+				_ = nestedChildrenPath
+				attrs = "{}"
+				if !child.AclName.IsUnknown() && !child.AclName.IsNull() && !configChild.AclName.IsNull() {
+					attrs, _ = sjson.Set(attrs, "useAclName", child.AclName.ValueString())
+				}
+				if !child.Ipv4AclName.IsUnknown() && !child.Ipv4AclName.IsNull() && !configChild.Ipv4AclName.IsNull() {
+					attrs, _ = sjson.Set(attrs, "useIpv4AclName", child.Ipv4AclName.ValueString())
+				}
+				if !child.Ipv6AclName.IsUnknown() && !child.Ipv6AclName.IsNull() && !configChild.Ipv6AclName.IsNull() {
+					attrs, _ = sjson.Set(attrs, "useIpv6AclName", child.Ipv6AclName.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpAcl.attributes", attrs)
+				}
 			}
 		}
 		for key, child := range data.LocalUsers {
@@ -427,6 +529,21 @@ func (data SNMP) toBody(config SNMP) nxos.Body {
 					attrs = "{}"
 					attrs, _ = sjson.Set(attrs, "vrfname", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpUseVrf.attributes", attrs)
+				}
+				attrs = "{}"
+				if !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
+					attrs, _ = sjson.Set(attrs, "ifName", child.SourceInterface.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpHostSrcInterface.attributes", attrs)
+				}
+				for key := range child.FilterVrfs {
+					configChild, configChildOk := configChild.FilterVrfs[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "vrfName", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.snmpFilterVrf.attributes", attrs)
 				}
 			}
 		}
@@ -1631,7 +1748,81 @@ func (data *SNMP) fromBody(res gjson.Result) {
 				)
 				data.SourceInterfaceTraps = types.StringValue(rsnmpSourceInterfaceTraps.Get("snmpSourceInterfaceTraps.attributes.ifname").String())
 			}
+			{
+				var rsnmpSourceInterfaceInforms gjson.Result
+				rsnmpGlobals.Get("snmpGlobals.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("snmpSourceInterfaceInforms.attributes.rn").String()
+						if rnValue == "srcInterfaceInforms" {
+							rsnmpSourceInterfaceInforms = v
+							return false
+						}
+						return true
+					},
+				)
+				data.SourceInterfaceInforms = types.StringValue(rsnmpSourceInterfaceInforms.Get("snmpSourceInterfaceInforms.attributes.ifname").String())
+			}
 		}
+		rsnmpInst.Get("snmpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "snmpCtx" {
+							var child SNMPContexts
+							child.Instance = types.StringValue(value.Get("attributes.ctxInstance").String())
+							child.Topology = types.StringValue(value.Get("attributes.ctxTopology").String())
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.Vrf = types.StringValue(value.Get("attributes.vrf").String())
+							mapKey := value.Get("attributes.name").String()
+							if data.Contexts == nil {
+								data.Contexts = make(map[string]SNMPContexts)
+							}
+							data.Contexts[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rsnmpInst.Get("snmpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "snmpCommSecP" {
+							var child SNMPCommunities
+							child.Access = types.StringValue(value.Get("attributes.commAcess").String())
+							child.Context = types.StringValue(value.Get("attributes.contextName").String())
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.Group = types.StringValue(value.Get("attributes.grpName").String())
+							mapKey := value.Get("attributes.name").String()
+							{
+								var rsnmpAcl gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("snmpAcl.attributes.rn").String()
+										if rnValue == "acl" {
+											rsnmpAcl = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.AclName = types.StringValue(rsnmpAcl.Get("snmpAcl.attributes.useAclName").String())
+								child.Ipv4AclName = types.StringValue(rsnmpAcl.Get("snmpAcl.attributes.useIpv4AclName").String())
+								child.Ipv6AclName = types.StringValue(rsnmpAcl.Get("snmpAcl.attributes.useIpv6AclName").String())
+							}
+							if data.Communities == nil {
+								data.Communities = make(map[string]SNMPCommunities)
+							}
+							data.Communities[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
 		rsnmpInst.Get("snmpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -1700,6 +1891,38 @@ func (data *SNMP) fromBody(res gjson.Result) {
 													child.Vrfs = make(map[string]SNMPHostsVrfs)
 												}
 												child.Vrfs[nestedMapKey] = nestedChildsnmpUseVrf
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							{
+								var rsnmpHostSrcInterface gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("snmpHostSrcInterface.attributes.rn").String()
+										if rnValue == "hostsourceinterface" {
+											rsnmpHostSrcInterface = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.SourceInterface = types.StringValue(rsnmpHostSrcInterface.Get("snmpHostSrcInterface.attributes.ifName").String())
+							}
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "snmpFilterVrf" {
+												var nestedChildsnmpFilterVrf SNMPHostsFilterVrfs
+												nestedMapKey := nestedValue.Get("attributes.vrfName").String()
+												if child.FilterVrfs == nil {
+													child.FilterVrfs = make(map[string]SNMPHostsFilterVrfs)
+												}
+												child.FilterVrfs[nestedMapKey] = nestedChildsnmpFilterVrf
 											}
 											return true
 										},
@@ -3350,6 +3573,126 @@ func (data *SNMP) updateFromBody(res gjson.Result) {
 				data.SourceInterfaceTraps = types.StringNull()
 			}
 		}
+		{
+			var rsnmpSourceInterfaceInforms gjson.Result
+			rsnmpGlobals.Get("snmpGlobals.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpSourceInterfaceInforms.attributes.rn").String()
+					if rnValue == "srcInterfaceInforms" {
+						rsnmpSourceInterfaceInforms = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.SourceInterfaceInforms.IsNull() {
+				data.SourceInterfaceInforms = types.StringValue(rsnmpSourceInterfaceInforms.Get("snmpSourceInterfaceInforms.attributes.ifname").String())
+			} else {
+				data.SourceInterfaceInforms = types.StringNull()
+			}
+		}
+	}
+	for key, item := range data.Contexts {
+		var rsnmpCtx gjson.Result
+		rsnmpInst.Get("snmpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("snmpCtx.attributes.name").String() == key {
+					rsnmpCtx = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rsnmpCtx.Exists() {
+			delete(data.Contexts, key)
+			continue
+		}
+		if !item.Instance.IsNull() {
+			item.Instance = types.StringValue(rsnmpCtx.Get("snmpCtx.attributes.ctxInstance").String())
+		} else {
+			item.Instance = types.StringNull()
+		}
+		if !item.Topology.IsNull() {
+			item.Topology = types.StringValue(rsnmpCtx.Get("snmpCtx.attributes.ctxTopology").String())
+		} else {
+			item.Topology = types.StringNull()
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rsnmpCtx.Get("snmpCtx.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.Vrf.IsNull() {
+			item.Vrf = types.StringValue(rsnmpCtx.Get("snmpCtx.attributes.vrf").String())
+		} else {
+			item.Vrf = types.StringNull()
+		}
+		data.Contexts[key] = item
+	}
+	for key, item := range data.Communities {
+		var rsnmpCommSecP gjson.Result
+		rsnmpInst.Get("snmpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("snmpCommSecP.attributes.name").String() == key {
+					rsnmpCommSecP = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rsnmpCommSecP.Exists() {
+			delete(data.Communities, key)
+			continue
+		}
+		if !item.Access.IsNull() {
+			item.Access = types.StringValue(rsnmpCommSecP.Get("snmpCommSecP.attributes.commAcess").String())
+		} else {
+			item.Access = types.StringNull()
+		}
+		if !item.Context.IsNull() {
+			item.Context = types.StringValue(rsnmpCommSecP.Get("snmpCommSecP.attributes.contextName").String())
+		} else {
+			item.Context = types.StringNull()
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rsnmpCommSecP.Get("snmpCommSecP.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.Group.IsNull() {
+			item.Group = types.StringValue(rsnmpCommSecP.Get("snmpCommSecP.attributes.grpName").String())
+		} else {
+			item.Group = types.StringNull()
+		}
+		{
+			var rsnmpAcl gjson.Result
+			rsnmpCommSecP.Get("snmpCommSecP.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpAcl.attributes.rn").String()
+					if rnValue == "acl" {
+						rsnmpAcl = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.AclName.IsNull() {
+				item.AclName = types.StringValue(rsnmpAcl.Get("snmpAcl.attributes.useAclName").String())
+			} else {
+				item.AclName = types.StringNull()
+			}
+			if !item.Ipv4AclName.IsNull() {
+				item.Ipv4AclName = types.StringValue(rsnmpAcl.Get("snmpAcl.attributes.useIpv4AclName").String())
+			} else {
+				item.Ipv4AclName = types.StringNull()
+			}
+			if !item.Ipv6AclName.IsNull() {
+				item.Ipv6AclName = types.StringValue(rsnmpAcl.Get("snmpAcl.attributes.useIpv6AclName").String())
+			} else {
+				item.Ipv6AclName = types.StringNull()
+			}
+		}
+		data.Communities[key] = item
 	}
 	for key, item := range data.LocalUsers {
 		var rsnmpLocalUser gjson.Result
@@ -3490,6 +3833,42 @@ func (data *SNMP) updateFromBody(res gjson.Result) {
 				continue
 			}
 			item.Vrfs[nc] = ncItem
+		}
+		{
+			var rsnmpHostSrcInterface gjson.Result
+			rsnmpHost.Get("snmpHost.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("snmpHostSrcInterface.attributes.rn").String()
+					if rnValue == "hostsourceinterface" {
+						rsnmpHostSrcInterface = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.SourceInterface.IsNull() {
+				item.SourceInterface = types.StringValue(rsnmpHostSrcInterface.Get("snmpHostSrcInterface.attributes.ifName").String())
+			} else {
+				item.SourceInterface = types.StringNull()
+			}
+		}
+		for nc := range item.FilterVrfs {
+			ncItem := item.FilterVrfs[nc]
+			var rsnmpFilterVrf gjson.Result
+			rsnmpHost.Get("snmpHost.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("snmpFilterVrf.attributes.vrfName").String() == nc {
+						rsnmpFilterVrf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rsnmpFilterVrf.Exists() {
+				delete(item.FilterVrfs, nc)
+				continue
+			}
+			item.FilterVrfs[nc] = ncItem
 		}
 		data.Hosts[key] = item
 	}
@@ -5390,6 +5769,7 @@ func (data SNMP) toDeleteBody() nxos.Body {
 				childBody, _ = sjson.Set(childBody, "tcpSessionAuth", "DME_UNSET_PROPERTY_MARKER")
 			}
 			hasNestedChildren := false
+			hasNestedChildren = true
 			if childBody != "" || hasNestedChildren {
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpGlobals"
@@ -5410,7 +5790,25 @@ func (data SNMP) toDeleteBody() nxos.Body {
 						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
 				}
+				{
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "snmpSourceInterfaceInforms.attributes.rn", "srcInterfaceInforms")
+					deleteBody, _ = sjson.Set(deleteBody, "snmpSourceInterfaceInforms.attributes.status", "deleted")
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+				}
 			}
+		}
+		for key, child := range data.Contexts {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "snmpCtx.attributes.rn", child.getRn(key))
+			deleteBody, _ = sjson.Set(deleteBody, "snmpCtx.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+		for key, child := range data.Communities {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "snmpCommSecP.attributes.rn", child.getRn(key))
+			deleteBody, _ = sjson.Set(deleteBody, "snmpCommSecP.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 		}
 		for key, child := range data.LocalUsers {
 			deleteBody := ""
@@ -6837,6 +7235,41 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP,
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	if !importing {
+		for stateKey := range state.Contexts {
+			if _, found := data.Contexts[stateKey]; !found {
+				stateChild := state.Contexts[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "snmpCtx.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "snmpCtx.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "snmpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.Communities {
+			if _, found := data.Communities[stateKey]; !found {
+				stateChild := state.Communities[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "snmpCommSecP.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "snmpCommSecP.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "snmpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.Communities {
+			if _, found := data.Communities[di]; !found {
+				continue
+			}
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children").Array() {
+				if mv.Get("snmpCommSecP.attributes.name").String() == di {
+					matchBodyPathdi = helpers.FindChildPath(body.Str, bodyPath, "snmpInst") + ".children" + "." + strconv.Itoa(mi) + ".snmpCommSecP.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+		}
 		for stateKey := range state.LocalUsers {
 			if _, found := data.LocalUsers[stateKey]; !found {
 				stateChild := state.LocalUsers[stateKey]
@@ -6907,6 +7340,15 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP,
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "snmpUseVrf.attributes.rn", stateChild.getRn(stateChildKey))
 					deleteBody, _ = sjson.Set(deleteBody, "snmpUseVrf.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.FilterVrfs {
+				if _, found := planItemdi.FilterVrfs[stateChildKey]; !found {
+					stateChild := stateItemdi.FilterVrfs[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "snmpFilterVrf.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "snmpFilterVrf.attributes.status", "deleted")
 					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 				}
 			}
@@ -6995,6 +7437,81 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP,
 		if !state.SourceInterfaceTraps.IsNull() && config.SourceInterfaceTraps.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "snmpInst")+".children", "snmpGlobals")+".children", "snmpSourceInterfaceTraps")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ifname", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SourceInterfaceInforms.IsNull() && config.SourceInterfaceInforms.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "snmpInst")+".children", "snmpGlobals")+".children", "snmpSourceInterfaceInforms")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ifname", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.Contexts {
+			if configChild, ok := config.Contexts[key]; ok {
+				stateChild := state.Contexts[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children").Array() {
+					if mv.Get("snmpCtx.attributes.name").String() == key {
+						if !stateChild.Instance.IsNull() && configChild.Instance.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children"+"."+strconv.Itoa(mi)+".snmpCtx.attributes."+"ctxInstance", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Topology.IsNull() && configChild.Topology.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children"+"."+strconv.Itoa(mi)+".snmpCtx.attributes."+"ctxTopology", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children"+"."+strconv.Itoa(mi)+".snmpCtx.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Vrf.IsNull() && configChild.Vrf.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children"+"."+strconv.Itoa(mi)+".snmpCtx.attributes."+"vrf", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		for key := range state.Communities {
+			if configChild, ok := config.Communities[key]; ok {
+				stateChild := state.Communities[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children").Array() {
+					if mv.Get("snmpCommSecP.attributes.name").String() == key {
+						if !stateChild.Access.IsNull() && configChild.Access.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children"+"."+strconv.Itoa(mi)+".snmpCommSecP.attributes."+"commAcess", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Context.IsNull() && configChild.Context.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children"+"."+strconv.Itoa(mi)+".snmpCommSecP.attributes."+"contextName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children"+"."+strconv.Itoa(mi)+".snmpCommSecP.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Group.IsNull() && configChild.Group.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children"+"."+strconv.Itoa(mi)+".snmpCommSecP.attributes."+"grpName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children").Array() {
+						if mv.Get("snmpCommSecP.attributes.name").String() == key {
+							listChildPath = helpers.FindChildPath(body.Str, bodyPath, "snmpInst") + ".children" + "." + strconv.Itoa(mi) + ".snmpCommSecP.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						if !stateChild.AclName.IsNull() && configChild.AclName.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpAcl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useAclName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Ipv4AclName.IsNull() && configChild.Ipv4AclName.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpAcl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useIpv4AclName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Ipv6AclName.IsNull() && configChild.Ipv6AclName.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpAcl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useIpv6AclName", "DME_UNSET_PROPERTY_MARKER")
+						}
+					}
+				}
+			}
 		}
 		for key := range state.LocalUsers {
 			if configChild, ok := config.LocalUsers[key]; ok {
@@ -7093,6 +7610,17 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP,
 						for key := range stateChild.Vrfs {
 							if configChild, ok := configChild.Vrfs[key]; ok {
 								stateChild := stateChild.Vrfs[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpHostSrcInterface")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ifName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						for key := range stateChild.FilterVrfs {
+							if configChild, ok := configChild.FilterVrfs[key]; ok {
+								stateChild := stateChild.FilterVrfs[key]
 								_ = stateChild
 								_ = configChild
 							}

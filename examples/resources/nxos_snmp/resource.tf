@@ -16,6 +16,24 @@ resource "nxos_snmp" "example" {
   enforce_privacy            = "yes"
   tcp_session_authentication = "tcpSessAuth"
   source_interface_traps     = "eth1/1"
+  source_interface_informs   = "eth1/2"
+  contexts = {
+    "ctx1" = {
+      instance    = "inst1"
+      topology    = "topo1"
+      description = "My SNMP context"
+      vrf         = "management"
+    }
+  }
+  communities = {
+    "COMMUNITY1" = {
+      context       = "ctx1"
+      description   = "My SNMP community"
+      group         = "network-operator"
+      ipv4_acl_name = "snmp-acl-v4"
+      ipv6_acl_name = "snmp-acl-v6"
+    }
+  }
   local_users = {
     "user1" = {
       authentication_password = "Xe9$mK2v!pQr"
@@ -38,6 +56,10 @@ resource "nxos_snmp" "example" {
       security_level    = "auth"
       version           = "v3"
       vrfs = {
+        "management" = {}
+      }
+      source_interface = "eth1/3"
+      filter_vrfs = {
         "management" = {}
       }
     }

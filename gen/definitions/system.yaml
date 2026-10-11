@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -1316,6 +1316,87 @@ child_classes:
                   - port-default-disable
                 description: "Bidirectional Detection Enabled."
                 example: port-enabled
+  - class_name: lacpEntity
+    doc_path: Link%20Aggregation/lacp:Entity/
+    rn: lacp
+    type: single
+    no_delete: true
+    tf_name: lacp
+    description: 'LACP configuration.'
+    child_classes:
+      - class_name: lacpInst
+        doc_path: Link%20Aggregation/lacp:Inst/
+        rn: inst
+        type: single
+        no_delete: true
+        tf_name: lacp_instance
+        description: 'LACP instance configuration.'
+        attributes:
+          - nxos_name: adminFpPortNum
+            tf_name: lacp_front_panel_port_numbering
+            type: String
+            enum_values:
+              - disable
+              - enable
+            description: "LACP FP Based Port Numbering."
+            exclude_test: true
+            example: enable
+          - nxos_name: adminPrio
+            tf_name: lacp_system_priority
+            type: Int64
+            min_int: 1
+            max_int: 65535
+            description: "Specifies the LACP instance administrative system priority."
+            example: 1000
+          - nxos_name: adminRole
+            tf_name: lacp_system_role
+            type: String
+            enum_values:
+              - primary
+              - secondary
+            description: "System Role."
+            example: secondary
+          - nxos_name: adminSysMac
+            tf_name: lacp_system_mac
+            type: String
+            description: "System MAC."
+            example: "00:11:22:33:44:55"
+          - nxos_name: lacpctrl
+            tf_name: lacp_control
+            type: String
+            enum_values:
+              - rapid-transition
+            description: "Instance Control."
+            example: rapid-transition
+        child_classes:
+          - class_name: lacpIf
+            doc_path: Link%20Aggregation/lacp:If/
+            rn: if-[%s]
+            type: list
+            tf_name: lacp_interfaces
+            description: 'List of LACP interfaces.'
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: String
+                id: true
+                description: "Must match first field in the output of `show intf brief`. Example: `eth1/1`."
+                example: eth1/13
+              - nxos_name: prio
+                tf_name: priority
+                type: Int64
+                min_int: 1
+                max_int: 65535
+                description: "Specifies the LACP interface port priority. When there is a limitation that prevents all compatible ports from aggregating then the port priority should be set to standby mode. A higher port priority value means a lower priority for LACP."
+                example: 1000
+              - nxos_name: txRate
+                tf_name: transmit_rate
+                type: String
+                enum_values:
+                  - normal
+                  - fast
+                description: "Specifies the rate at which the LACP packets are transmitted."
+                example: fast
   - class_name: mgmtMgmtIf
     doc_path: System/mgmt%3AMgmtIf/
     rn: mgmt-[%s]
@@ -2739,3 +2820,9 @@ test_prerequisites:
     attributes:
       - name: layer
         value: Layer2
+  - dn: sys/fm/lacp
+    class_name: fmLacp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

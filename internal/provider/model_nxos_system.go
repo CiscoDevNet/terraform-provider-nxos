@@ -139,6 +139,12 @@ type System struct {
 	UdldAggressive                                types.String                          `tfsdk:"udld_aggressive"`
 	UdldMessageInterval                           types.Int64                           `tfsdk:"udld_message_interval"`
 	UdldInterfaces                                map[string]SystemUdldInterfaces       `tfsdk:"udld_interfaces"`
+	LacpFrontPanelPortNumbering                   types.String                          `tfsdk:"lacp_front_panel_port_numbering"`
+	LacpSystemPriority                            types.Int64                           `tfsdk:"lacp_system_priority"`
+	LacpSystemRole                                types.String                          `tfsdk:"lacp_system_role"`
+	LacpSystemMac                                 types.String                          `tfsdk:"lacp_system_mac"`
+	LacpControl                                   types.String                          `tfsdk:"lacp_control"`
+	LacpInterfaces                                map[string]SystemLacpInterfaces       `tfsdk:"lacp_interfaces"`
 	ManagementInterfaces                          map[string]SystemManagementInterfaces `tfsdk:"management_interfaces"`
 	LldpAdminState                                types.String                          `tfsdk:"lldp_admin_state"`
 	LldpInstanceAdminState                        types.String                          `tfsdk:"lldp_instance_admin_state"`
@@ -294,6 +300,11 @@ type SystemUdldInterfaces struct {
 	AdminState             types.String `tfsdk:"admin_state"`
 	Aggressive             types.String `tfsdk:"aggressive"`
 	BidirectionalDetection types.String `tfsdk:"bidirectional_detection"`
+}
+
+type SystemLacpInterfaces struct {
+	Priority     types.Int64  `tfsdk:"priority"`
+	TransmitRate types.String `tfsdk:"transmit_rate"`
 }
 
 type SystemManagementInterfaces struct {
@@ -461,6 +472,10 @@ func (data SystemCliAliases) getRn(key string) string {
 
 func (data SystemUdldInterfaces) getRn(key string) string {
 	return fmt.Sprintf("physif-[%s]", key)
+}
+
+func (data SystemLacpInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
 }
 
 func (data SystemManagementInterfaces) getRn(key string) string {
@@ -1318,6 +1333,67 @@ func (data System) toBody(config System) nxos.Body {
 		childBody = body
 		body = prevBody
 		if parentAttrs != "{}" || gjson.Get(childBody, "udldEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
+	{
+		attrs = "{}"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "lacpEntity.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "lacpEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		{
+			attrs = "{}"
+			if !data.LacpFrontPanelPortNumbering.IsUnknown() && !data.LacpFrontPanelPortNumbering.IsNull() && !config.LacpFrontPanelPortNumbering.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminFpPortNum", data.LacpFrontPanelPortNumbering.ValueString())
+			}
+			if !data.LacpSystemPriority.IsUnknown() && !data.LacpSystemPriority.IsNull() && !config.LacpSystemPriority.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminPrio", strconv.FormatInt(data.LacpSystemPriority.ValueInt64(), 10))
+			}
+			if !data.LacpSystemRole.IsUnknown() && !data.LacpSystemRole.IsNull() && !config.LacpSystemRole.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminRole", data.LacpSystemRole.ValueString())
+			}
+			if !data.LacpSystemMac.IsUnknown() && !data.LacpSystemMac.IsNull() && !config.LacpSystemMac.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminSysMac", data.LacpSystemMac.ValueString())
+			}
+			if !data.LacpControl.IsUnknown() && !data.LacpControl.IsNull() && !config.LacpControl.IsNull() {
+				attrs, _ = sjson.Set(attrs, "lacpctrl", data.LacpControl.ValueString())
+			}
+			childBody := ""
+			childBody, _ = sjson.SetRaw(childBody, "lacpInst.attributes", attrs)
+			parentAttrs := attrs
+			parentPath := nestedChildrenPath
+			nestedChildrenPath := "lacpInst.children"
+			_ = nestedChildrenPath
+			prevBody := body
+			body = childBody
+			for key, child := range data.LacpInterfaces {
+				configChild, configChildOk := config.LacpInterfaces[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "id", key)
+				if configChildOk && !child.Priority.IsUnknown() && !child.Priority.IsNull() && !configChild.Priority.IsNull() {
+					attrs, _ = sjson.Set(attrs, "prio", strconv.FormatInt(child.Priority.ValueInt64(), 10))
+				}
+				if configChildOk && !child.TransmitRate.IsUnknown() && !child.TransmitRate.IsNull() && !configChild.TransmitRate.IsNull() {
+					attrs, _ = sjson.Set(attrs, "txRate", child.TransmitRate.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.lacpIf.attributes", attrs)
+			}
+			childBody = body
+			body = prevBody
+			if parentAttrs != "{}" || gjson.Get(childBody, "lacpInst.children").Exists() {
+				body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "lacpEntity.children").Exists() {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
@@ -2894,6 +2970,57 @@ func (data *System) fromBody(res gjson.Result) {
 									data.UdldInterfaces = make(map[string]SystemUdldInterfaces)
 								}
 								data.UdldInterfaces[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
+		}
+	}
+	{
+		var rlacpEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("lacpEntity.attributes.rn").String()
+				if rnValue == "lacp" {
+					rlacpEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rlacpInst gjson.Result
+			rlacpEntity.Get("lacpEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("lacpInst.attributes.rn").String()
+					if rnValue == "inst" {
+						rlacpInst = v
+						return false
+					}
+					return true
+				},
+			)
+			data.LacpFrontPanelPortNumbering = types.StringValue(rlacpInst.Get("lacpInst.attributes.adminFpPortNum").String())
+			data.LacpSystemPriority = types.Int64Value(rlacpInst.Get("lacpInst.attributes.adminPrio").Int())
+			data.LacpSystemRole = types.StringValue(rlacpInst.Get("lacpInst.attributes.adminRole").String())
+			data.LacpSystemMac = types.StringValue(rlacpInst.Get("lacpInst.attributes.adminSysMac").String())
+			data.LacpControl = types.StringValue(rlacpInst.Get("lacpInst.attributes.lacpctrl").String())
+			rlacpInst.Get("lacpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "lacpIf" {
+								var child SystemLacpInterfaces
+								child.Priority = types.Int64Value(value.Get("attributes.prio").Int())
+								child.TransmitRate = types.StringValue(value.Get("attributes.txRate").String())
+								mapKey := value.Get("attributes.id").String()
+								if data.LacpInterfaces == nil {
+									data.LacpInterfaces = make(map[string]SystemLacpInterfaces)
+								}
+								data.LacpInterfaces[mapKey] = child
 							}
 							return true
 						},
@@ -4929,6 +5056,82 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.UdldInterfaces[key] = item
 		}
 	}
+	var rlacpEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("lacpEntity.attributes.rn").String()
+			if rnValue == "lacp" {
+				rlacpEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rlacpInst gjson.Result
+		rlacpEntity.Get("lacpEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("lacpInst.attributes.rn").String()
+				if rnValue == "inst" {
+					rlacpInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.LacpFrontPanelPortNumbering.IsNull() {
+			data.LacpFrontPanelPortNumbering = types.StringValue(rlacpInst.Get("lacpInst.attributes.adminFpPortNum").String())
+		} else {
+			data.LacpFrontPanelPortNumbering = types.StringNull()
+		}
+		if !data.LacpSystemPriority.IsNull() {
+			data.LacpSystemPriority = types.Int64Value(rlacpInst.Get("lacpInst.attributes.adminPrio").Int())
+		} else {
+			data.LacpSystemPriority = types.Int64Null()
+		}
+		if !data.LacpSystemRole.IsNull() {
+			data.LacpSystemRole = types.StringValue(rlacpInst.Get("lacpInst.attributes.adminRole").String())
+		} else {
+			data.LacpSystemRole = types.StringNull()
+		}
+		if !data.LacpSystemMac.IsNull() {
+			data.LacpSystemMac = types.StringValue(rlacpInst.Get("lacpInst.attributes.adminSysMac").String())
+		} else {
+			data.LacpSystemMac = types.StringNull()
+		}
+		if !data.LacpControl.IsNull() {
+			data.LacpControl = types.StringValue(rlacpInst.Get("lacpInst.attributes.lacpctrl").String())
+		} else {
+			data.LacpControl = types.StringNull()
+		}
+		for key, item := range data.LacpInterfaces {
+			var rlacpIf gjson.Result
+			rlacpInst.Get("lacpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("lacpIf.attributes.id").String() == key {
+						rlacpIf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rlacpIf.Exists() {
+				delete(data.LacpInterfaces, key)
+				continue
+			}
+			if !item.Priority.IsNull() {
+				item.Priority = types.Int64Value(rlacpIf.Get("lacpIf.attributes.prio").Int())
+			} else {
+				item.Priority = types.Int64Null()
+			}
+			if !item.TransmitRate.IsNull() {
+				item.TransmitRate = types.StringValue(rlacpIf.Get("lacpIf.attributes.txRate").String())
+			} else {
+				item.TransmitRate = types.StringNull()
+			}
+			data.LacpInterfaces[key] = item
+		}
+	}
 	for key, item := range data.ManagementInterfaces {
 		var rmgmtMgmtIf gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -6816,6 +7019,64 @@ func (data System) toDeleteBody() nxos.Body {
 			}
 		}
 	}
+	{
+		childBody := ""
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".lacpEntity"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.LacpFrontPanelPortNumbering.IsNull() {
+				childBody, _ = sjson.Set(childBody, "adminFpPortNum", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LacpSystemPriority.IsNull() {
+				childBody, _ = sjson.Set(childBody, "adminPrio", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LacpSystemRole.IsNull() {
+				childBody, _ = sjson.Set(childBody, "adminRole", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LacpSystemMac.IsNull() {
+				childBody, _ = sjson.Set(childBody, "adminSysMac", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LacpControl.IsNull() {
+				childBody, _ = sjson.Set(childBody, "lacpctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			hasNestedChildren := false
+			if len(data.LacpInterfaces) > 0 {
+				hasNestedChildren = true
+			}
+			if childBody != "" || hasNestedChildren {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".lacpInst"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				for key, child := range data.LacpInterfaces {
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "lacpIf.attributes.rn", child.getRn(key))
+					deleteBody, _ = sjson.Set(deleteBody, "lacpIf.attributes.status", "deleted")
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+				}
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
+			}
+		}
+	}
 	for key, child := range data.ManagementInterfaces {
 		childBody := ""
 		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
@@ -7576,6 +7837,16 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "udldPhysIf.attributes.status", "deleted")
 				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "udldEntity")+".children", "udldInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.LacpInterfaces {
+			if _, found := data.LacpInterfaces[stateKey]; !found {
+				stateChild := state.LacpInterfaces[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "lacpIf.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "lacpIf.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "lacpEntity")+".children", "lacpInst") + ".children"
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
@@ -8442,6 +8713,44 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 						}
 						if !stateChild.BidirectionalDetection.IsNull() && configChild.BidirectionalDetection.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "udldEntity")+".children", "udldInst")+".children"+"."+strconv.Itoa(mi)+".udldPhysIf.attributes."+"biDirDetect", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		if !state.LacpFrontPanelPortNumbering.IsNull() && config.LacpFrontPanelPortNumbering.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "lacpEntity")+".children", "lacpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminFpPortNum", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LacpSystemPriority.IsNull() && config.LacpSystemPriority.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "lacpEntity")+".children", "lacpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminPrio", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LacpSystemRole.IsNull() && config.LacpSystemRole.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "lacpEntity")+".children", "lacpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminRole", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LacpSystemMac.IsNull() && config.LacpSystemMac.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "lacpEntity")+".children", "lacpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSysMac", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LacpControl.IsNull() && config.LacpControl.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "lacpEntity")+".children", "lacpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lacpctrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.LacpInterfaces {
+			if configChild, ok := config.LacpInterfaces[key]; ok {
+				stateChild := state.LacpInterfaces[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "lacpEntity")+".children", "lacpInst")+".children").Array() {
+					if mv.Get("lacpIf.attributes.id").String() == key {
+						if !stateChild.Priority.IsNull() && configChild.Priority.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "lacpEntity")+".children", "lacpInst")+".children"+"."+strconv.Itoa(mi)+".lacpIf.attributes."+"prio", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.TransmitRate.IsNull() && configChild.TransmitRate.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "lacpEntity")+".children", "lacpInst")+".children"+"."+strconv.Itoa(mi)+".lacpIf.attributes."+"txRate", "DME_UNSET_PROPERTY_MARKER")
 						}
 						break
 					}

@@ -134,6 +134,16 @@ resource "nxos_system" "example" {
       bidirectional_detection = "port-enabled"
     }
   }
+  lacp_system_priority = 1000
+  lacp_system_role     = "secondary"
+  lacp_system_mac      = "00:11:22:33:44:55"
+  lacp_control         = "rapid-transition"
+  lacp_interfaces = {
+    "eth1/13" = {
+      priority      = 1000
+      transmit_rate = "fast"
+    }
+  }
   management_interfaces = {
     "mgmt0" = {
       admin_state      = "up"

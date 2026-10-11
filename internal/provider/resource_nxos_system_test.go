@@ -139,6 +139,12 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.admin_state", "port-enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.aggressive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "udld_interfaces.eth1/9.bidirectional_detection", "port-enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lacp_system_priority", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lacp_system_role", "secondary"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lacp_system_mac", "00:11:22:33:44:55"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lacp_control", "rapid-transition"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lacp_interfaces.eth1/13.priority", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lacp_interfaces.eth1/13.transmit_rate", "fast"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.admin_state", "up"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.auto_negotiation", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.description", "My Description"))
@@ -377,6 +383,15 @@ resource "nxos_dme" "PreReq8" {
   }
 }
 
+resource "nxos_dme" "PreReq9" {
+  dn = "sys/fm/lacp"
+  class_name = "fmLacp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -384,7 +399,7 @@ resource "nxos_dme" "PreReq8" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSystemConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -511,6 +526,16 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config += `			admin_state = "port-enabled"` + "\n"
 	config += `			aggressive = "enabled"` + "\n"
 	config += `			bidirectional_detection = "port-enabled"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	lacp_system_priority = 1000` + "\n"
+	config += `	lacp_system_role = "secondary"` + "\n"
+	config += `	lacp_system_mac = "00:11:22:33:44:55"` + "\n"
+	config += `	lacp_control = "rapid-transition"` + "\n"
+	config += `	lacp_interfaces = {` + "\n"
+	config += `		"eth1/13" = {` + "\n"
+	config += `			priority = 1000` + "\n"
+	config += `			transmit_rate = "fast"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	management_interfaces = {` + "\n"
@@ -697,7 +722,7 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config += `			secondary_vlans = "101-102"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

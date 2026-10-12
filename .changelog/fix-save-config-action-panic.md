@@ -1,0 +1,1 @@
+- Fix `nxos_save_config` action panic (nil pointer dereference) by setting `ActionData` in the provider `Configure` method

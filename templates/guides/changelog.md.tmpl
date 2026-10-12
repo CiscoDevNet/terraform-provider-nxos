@@ -7,6 +7,12 @@ description: |-
 
 # Changelog
 
+## 0.17.2
+
+- Fix `nxos_save_config` action panic (nil pointer dereference) by setting `ActionData` in the provider `Configure` method
+- Fix VLAN mapping configuration of `nxos_physical_interface` and `nxos_port_channel_interface` not being applied by the device when configured together with the switchport mode, VLAN mapping objects are now sent in a separate request after the rest of the interface configuration
+- BREAKING CHANGE: Replace `selective_qinq_vlans` attribute of `nxos_physical_interface` and `nxos_port_channel_interface` with `selective_qinq_mappings` (keyed by outer VLAN ID, with `vlans`), as the previous attribute was accepted but not applied by the device
+
 ## 0.17.1
 
 - Fix permanent diff and update error of `nxos_ntp` authentication keys when the device encrypts a key, `encryption_type` and `encrypted` are now write-only attributes

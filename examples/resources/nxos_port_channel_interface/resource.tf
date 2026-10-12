@@ -46,8 +46,12 @@ resource "nxos_port_channel_interface" "example" {
       priority_flow_control_send_tlv         = true
       vlan_mapping_enable                    = true
       selective_qinq_all                     = false
-      selective_qinq_vlans                   = "20-25"
       selective_qinq_outer_vlan_id           = "vlan-200"
+      selective_qinq_mappings = {
+        "vlan-200" = {
+          vlans = "20-25"
+        }
+      }
       vlan_mappings = {
         "vlan-11" = {
           translated_vlan_id = "vlan-10"

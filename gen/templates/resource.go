@@ -315,7 +315,7 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := device.Client.Post(plan.getDn(), body.Str)
+		_, err := {{if separateRequestClasses .ChildClasses}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequestClasses){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 			return
@@ -465,14 +465,14 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := device.Client.Post(plan.getDn(), body.Str)
+		_, err := {{if separateRequestClasses .ChildClasses}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequestClasses){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
 		}
 		if deferred {
 			body, _ = plan.toBodyWithDeletes(ctx, state, config, imp, false)
-			_, err = device.Client.Post(plan.getDn(), body.Str)
+			_, err = {{if separateRequestClasses .ChildClasses}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequestClasses){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
 			if err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 				return
@@ -484,7 +484,7 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := device.Client.Post(plan.getDn(), body.Str)
+		_, err := {{if separateRequestClasses .ChildClasses}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequestClasses){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return

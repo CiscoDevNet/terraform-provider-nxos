@@ -163,6 +163,11 @@ var {{camelCase .Name}}MinVersions = map[string]helpers.MinVersion{
 	"{{.Key}}": {Version: "{{.Version}}", Path: "{{.Path}}"},
 {{- end}}
 }
+{{- if separateRequestClasses .ChildClasses}}
+
+// {{camelCase .Name}}SeparateRequestClasses lists the classes that are sent in a second request after the rest of the body.
+var {{camelCase .Name}}SeparateRequestClasses = []string{ {{- range $i, $c := separateRequestClasses .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} }
+{{- end}}
 
 // End of section. //template:end types
 

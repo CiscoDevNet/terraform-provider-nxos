@@ -84,8 +84,10 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.priority_flow_control_send_tlv", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mapping_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.selective_qinq_all", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.selective_qinq_vlans", "20-25"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.selective_qinq_outer_vlan_id", "vlan-200"))
+	if os.Getenv("PORT_CHANNEL_INTERFACE_SELECTIVE_QINQ") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.selective_qinq_mappings.vlan-200.vlans", "20-25"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mappings.vlan-11.translated_vlan_id", "vlan-10"))
 	if testAccDeviceVersionAtLeast("10.6(3)") {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mappings.vlan-11.rx_only", "true"))
@@ -206,8 +208,14 @@ func testAccNxosPortChannelInterfaceConfig_all() string {
 	config += `			priority_flow_control_send_tlv = true` + "\n"
 	config += `			vlan_mapping_enable = true` + "\n"
 	config += `			selective_qinq_all = false` + "\n"
-	config += `			selective_qinq_vlans = "20-25"` + "\n"
 	config += `			selective_qinq_outer_vlan_id = "vlan-200"` + "\n"
+	if os.Getenv("PORT_CHANNEL_INTERFACE_SELECTIVE_QINQ") != "" {
+		config += `			selective_qinq_mappings = {` + "\n"
+		config += `				"vlan-200" = {` + "\n"
+		config += `					vlans = "20-25"` + "\n"
+		config += `				}` + "\n"
+		config += `			}` + "\n"
+	}
 	config += `			vlan_mappings = {` + "\n"
 	config += `				"vlan-11" = {` + "\n"
 	config += `					translated_vlan_id = "vlan-10"` + "\n"

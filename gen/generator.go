@@ -154,6 +154,7 @@ type YamlConfigChildClass struct {
 	NoDelete          bool                   `yaml:"no_delete"`
 	StatusReplace     bool                   `yaml:"status_replace"`
 	AutoDeleteOnEmpty bool                   `yaml:"auto_delete_on_empty"`
+	SeparateRequest   bool                   `yaml:"separate_request"`
 	TestTags          []string               `yaml:"test_tags"`
 	MinVersion        string                 `yaml:"min_version"`
 	DocMinVersion     string                 `yaml:"-"`
@@ -389,6 +390,7 @@ var functions = template.FuncMap{
 	"hasNonIdAttrs":             HasNonIdAttrs,
 	"needsPlanItem":             NeedsPlanItem,
 	"hasAutoDeleteOnEmpty":      HasAutoDeleteOnEmpty,
+	"separateRequestClasses":    SeparateRequestClasses,
 	"idCount":                   IdCount,
 	"mapKeyExpr":                MapKeyExpr,
 	"mapKeyExample":             MapKeyExample,
@@ -446,6 +448,18 @@ func HasAutoDeleteOnEmpty(children []YamlConfigChildClass) bool {
 		}
 	}
 	return false
+}
+
+// SeparateRequestClasses recursively collects the class names of all child classes with separate_request set.
+func SeparateRequestClasses(children []YamlConfigChildClass) []string {
+	var names []string
+	for _, c := range children {
+		if c.SeparateRequest {
+			names = append(names, c.ClassName)
+		}
+		names = append(names, SeparateRequestClasses(c.ChildClasses)...)
+	}
+	return names
 }
 
 // IdCount returns the number of id: true attributes.

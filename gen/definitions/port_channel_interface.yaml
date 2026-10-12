@@ -537,6 +537,7 @@ child_classes:
         type: single
         tf_name: vlan_mapping
         description: 'VLAN mapping configuration.'
+        separate_request: true
         doc_path: Interfaces/pc:VlanMapping/
         attributes:
           - nxos_name: Enabled
@@ -549,17 +550,38 @@ child_classes:
             type: Bool
             description: 'Selective QinQ for all VLANs.'
             example: false
-          - nxos_name: selectiveQinqVlans
-            tf_name: selective_qinq_vlans
-            type: String
-            description: 'List of VLANs for selective QinQ. Example: `20-25,30`.'
-            example: '20-25'
           - nxos_name: selectiveQinqTranslateVlan
             tf_name: selective_qinq_outer_vlan_id
             type: String
-            description: 'Outer VLAN ID for selective QinQ. Possible values are `vlan-XX`.'
+            description: 'Outer VLAN ID for selective QinQ for all VLANs. Possible values are `vlan-XX`.'
             example: vlan-200
         child_classes:
+          - class_name: pcSelectiveQinqTable
+            rn: selqinqtable
+            type: single
+            tf_name: selective_qinq_table
+            description: 'Selective QinQ table.'
+            doc_path: Interfaces/pc:SelectiveQinqTable/
+            child_classes:
+              - class_name: pcSelectiveQinq
+                rn: selqinq-[%s]
+                type: list
+                tf_name: selective_qinq_mappings
+                description: 'List of selective QinQ mappings.'
+                doc_path: Interfaces/pc:SelectiveQinq/
+                test_tags: [PORT_CHANNEL_INTERFACE_SELECTIVE_QINQ]
+                attributes:
+                  - nxos_name: selectiveQinqTranslateVlan
+                    tf_name: outer_vlan_id
+                    type: String
+                    id: true
+                    description: 'Selective QinQ outer VLAN ID. Possible values are `vlan-XX`.'
+                    example: vlan-200
+                  - nxos_name: selectiveQinqVlans
+                    tf_name: vlans
+                    type: String
+                    description: 'Selective QinQ VLANs. Example: `20-25,30`.'
+                    example: '20-25'
           - class_name: pcVlanTranslateTable
             rn: vlantranslatetable
             type: single

@@ -1,0 +1,2 @@
+- Fix VLAN mapping configuration of `nxos_physical_interface` and `nxos_port_channel_interface` not being applied by the device when configured together with the switchport mode, VLAN mapping objects are now sent in a separate request after the rest of the interface configuration
+- BREAKING CHANGE: Replace `selective_qinq_vlans` attribute of `nxos_physical_interface` and `nxos_port_channel_interface` with `selective_qinq_mappings` (keyed by outer VLAN ID, with `vlans`), as the previous attribute was accepted but not applied by the device

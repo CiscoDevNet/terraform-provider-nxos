@@ -75,3 +75,27 @@ func TestEnsureChildPath(t *testing.T) {
 		t.Fatalf("unexpected body: %s", body)
 	}
 }
+
+func TestSplitSeparateRequestBody(t *testing.T) {
+	body := `{"interfaceEntity":{"attributes":{},"children":[` +
+		`{"l1PhysIf":{"attributes":{"id":"eth1/1","mode":"trunk"},"children":[{"l1VlanMapping":{"attributes":{"Enabled":"yes"}}},{"nwRtVrfMbr":{"attributes":{"tDn":"sys/inst-default"}}}]}},` +
+		`{"l1PhysIf":{"attributes":{"id":"eth1/2","mode":"access"}}},` +
+		`{"l1PhysIf":{"attributes":{"id":"eth1/3","status":"deleted"},"children":[{"l1VlanMapping":{"attributes":{}}}]}}]}}`
+	mainBody, separateBody := SplitSeparateRequestBody(body, []string{"l1VlanMapping"})
+	wantMain := `{"interfaceEntity":{"attributes":{},"children":[` +
+		`{"l1PhysIf":{"attributes":{"id":"eth1/1","mode":"trunk"},"children":[{"nwRtVrfMbr":{"attributes":{"tDn":"sys/inst-default"}}}]}},` +
+		`{"l1PhysIf":{"attributes":{"id":"eth1/2","mode":"access"}}},` +
+		`{"l1PhysIf":{"attributes":{"id":"eth1/3","status":"deleted"},"children":[{"l1VlanMapping":{"attributes":{}}}]}}]}}`
+	wantSeparate := `{"interfaceEntity":{"attributes":{},"children":[{"l1PhysIf":{"attributes":{"id":"eth1/1","mode":"trunk"},"children":[{"l1VlanMapping":{"attributes":{"Enabled":"yes"}}}]}}]}}`
+	if mainBody != wantMain {
+		t.Errorf("main body:\n got %s\nwant %s", mainBody, wantMain)
+	}
+	if separateBody != wantSeparate {
+		t.Errorf("separate body:\n got %s\nwant %s", separateBody, wantSeparate)
+	}
+
+	mainBody, separateBody = SplitSeparateRequestBody(`{"interfaceEntity":{"attributes":{},"children":[{"l1PhysIf":{"attributes":{"id":"eth1/1"}}}]}}`, []string{"l1VlanMapping"})
+	if separateBody != "" || mainBody != `{"interfaceEntity":{"attributes":{},"children":[{"l1PhysIf":{"attributes":{"id":"eth1/1"}}}]}}` {
+		t.Errorf("body without separate classes must stay unchanged, got main %s separate %s", mainBody, separateBody)
+	}
+}

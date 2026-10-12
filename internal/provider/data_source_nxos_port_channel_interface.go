@@ -56,7 +56,7 @@ func (d *PortChannelInterfaceDataSource) Metadata(_ context.Context, req datasou
 func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:LoadP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "Interfaces/pc:VlanMapping/", "Interfaces/pc:VlanTranslateTable/", "Interfaces/pc:VlanTranslateEntry/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcSelectiveQinqTable", "pcSelectiveQinq", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:LoadP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "Interfaces/pc:VlanMapping/", "Interfaces/pc:SelectiveQinqTable/", "Interfaces/pc:SelectiveQinq/", "Interfaces/pc:VlanTranslateTable/", "Interfaces/pc:VlanTranslateEntry/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -304,13 +304,21 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 							MarkdownDescription: "Selective QinQ for all VLANs.",
 							Computed:            true,
 						},
-						"selective_qinq_vlans": schema.StringAttribute{
-							MarkdownDescription: "List of VLANs for selective QinQ. Example: `20-25,30`.",
+						"selective_qinq_outer_vlan_id": schema.StringAttribute{
+							MarkdownDescription: "Outer VLAN ID for selective QinQ for all VLANs. Possible values are `vlan-XX`.",
 							Computed:            true,
 						},
-						"selective_qinq_outer_vlan_id": schema.StringAttribute{
-							MarkdownDescription: "Outer VLAN ID for selective QinQ. Possible values are `vlan-XX`.",
+						"selective_qinq_mappings": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of selective QinQ mappings.\n  - Map key: `outer_vlan_id` - Selective QinQ outer VLAN ID. Possible values are `vlan-XX`.").String,
 							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vlans": schema.StringAttribute{
+										MarkdownDescription: "Selective QinQ VLANs. Example: `20-25,30`.",
+										Computed:            true,
+									},
+								},
+							},
 						},
 						"vlan_mappings": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("List of VLAN mappings.\n  - Map key: `vlan_id` - VLAN ID to be translated. Possible values are `vlan-XX`.").String,
@@ -535,7 +543,7 @@ func (d *PortChannelInterfaceDataSource) Read(ctx context.Context, req datasourc
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, PortChannelInterfaceSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcSelectiveQinqTable", "pcSelectiveQinq", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, PortChannelInterfaceSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

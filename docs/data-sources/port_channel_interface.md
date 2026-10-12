@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
   API Documentation
-  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/l1LoadP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/pcVlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanMapping/pcVlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateTable/pcVlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateEntry/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:RsMbrIfs/
+  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/l1LoadP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/pcVlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanMapping/pcSelectiveQinqTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:SelectiveQinqTable/pcSelectiveQinq https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:SelectiveQinq/pcVlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateTable/pcVlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateEntry/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Data Source)
@@ -22,6 +22,8 @@ This data source can read the configuration of port-channel interfaces on NX-OS 
 - [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/)
 - [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
 - [pcVlanMapping](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanMapping/)
+- [pcSelectiveQinqTable](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:SelectiveQinqTable/)
+- [pcSelectiveQinq](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:SelectiveQinq/)
 - [pcVlanTranslateTable](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateTable/)
 - [pcVlanTranslateEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateEntry/)
 - [pcAggrIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIfExtended/)
@@ -113,8 +115,9 @@ Read-Only:
 - `router_mac` (String) The administrative router MAC address.
 - `router_mac_ipv6_extract` (String) Disable/enable switchport ipv6 extract.
 - `selective_qinq_all` (Boolean) Selective QinQ for all VLANs.
-- `selective_qinq_outer_vlan_id` (String) Outer VLAN ID for selective QinQ. Possible values are `vlan-XX`.
-- `selective_qinq_vlans` (String) List of VLANs for selective QinQ. Example: `20-25,30`.
+- `selective_qinq_mappings` (Attributes Map) List of selective QinQ mappings.
+  - Map key: `outer_vlan_id` - Selective QinQ outer VLAN ID. Possible values are `vlan-XX`. (see [below for nested schema](#nestedatt--port_channel_interfaces--selective_qinq_mappings))
+- `selective_qinq_outer_vlan_id` (String) Outer VLAN ID for selective QinQ for all VLANs. Possible values are `vlan-XX`.
 - `shut_down_lan` (String) Shut/Unshut all LAN VLANs on interface.
 - `snmp_trap_state` (String) Administrative port snmp trap state.
 - `span_mode` (String) Administrative port span mode.
@@ -162,6 +165,14 @@ Read-Only:
 Read-Only:
 
 - `force` (Boolean) Channel group force.
+
+
+<a id="nestedatt--port_channel_interfaces--selective_qinq_mappings"></a>
+### Nested Schema for `port_channel_interfaces.selective_qinq_mappings`
+
+Read-Only:
+
+- `vlans` (String) Selective QinQ VLANs. Example: `20-25,30`.
 
 
 <a id="nestedatt--port_channel_interfaces--vlan_mappings"></a>

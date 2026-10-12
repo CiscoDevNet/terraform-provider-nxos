@@ -63,7 +63,7 @@ func (r *PhysicalInterfaceResource) Metadata(ctx context.Context, req resource.M
 func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:LoadP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:VlanMapping/", "System/l1:VlanTranslateTable/", "System/l1:VlanTranslateEntry/", "System/l1:PhysIfExtended/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1SelectiveQinqTable", "l1SelectiveQinq", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:LoadP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:VlanMapping/", "System/l1:SelectiveQinqTable/", "System/l1:SelectiveQinq/", "System/l1:VlanTranslateTable/", "System/l1:VlanTranslateEntry/", "System/l1:PhysIfExtended/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -537,13 +537,21 @@ func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.Sch
 							MarkdownDescription: helpers.NewAttributeDescription("Selective QinQ for all VLANs.").String,
 							Optional:            true,
 						},
-						"selective_qinq_vlans": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("List of VLANs for selective QinQ. Example: `20-25,30`.").String,
+						"selective_qinq_outer_vlan_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Outer VLAN ID for selective QinQ for all VLANs. Possible values are `vlan-XX`.").String,
 							Optional:            true,
 						},
-						"selective_qinq_outer_vlan_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Outer VLAN ID for selective QinQ. Possible values are `vlan-XX`.").String,
+						"selective_qinq_mappings": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of selective QinQ mappings.\n  - Map key: `outer_vlan_id` - Selective QinQ outer VLAN ID. Possible values are `vlan-XX`.").String,
 							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vlans": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Selective QinQ VLANs. Example: `20-25,30`.").String,
+										Optional:            true,
+									},
+								},
+							},
 						},
 						"vlan_mappings": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("List of VLAN mappings.\n  - Map key: `vlan_id` - VLAN ID to be translated. Possible values are `vlan-XX`.").String,
@@ -869,7 +877,7 @@ func (r *PhysicalInterfaceResource) Create(ctx context.Context, req resource.Cre
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := device.Client.Post(plan.getDn(), body.Str)
+		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PhysicalInterfaceSeparateRequestClasses)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 			return
@@ -922,7 +930,7 @@ func (r *PhysicalInterfaceResource) Read(ctx context.Context, req resource.ReadR
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1SelectiveQinqTable", "l1SelectiveQinq", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return
@@ -1014,7 +1022,7 @@ func (r *PhysicalInterfaceResource) Update(ctx context.Context, req resource.Upd
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := device.Client.Post(plan.getDn(), body.Str)
+		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PhysicalInterfaceSeparateRequestClasses)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return

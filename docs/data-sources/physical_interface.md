@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/l1LoadP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1VlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanMapping/l1VlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateTable/l1VlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateEntry/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIfExtended/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/l1LoadP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1VlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanMapping/l1SelectiveQinqTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:SelectiveQinqTable/l1SelectiveQinq https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:SelectiveQinq/l1VlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateTable/l1VlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateEntry/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIfExtended/
 ---
 
 # nxos_physical_interface (Data Source)
@@ -22,6 +22,8 @@ This data source can read the configuration of physical interfaces on NX-OS devi
 - [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/)
 - [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
 - [l1VlanMapping](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanMapping/)
+- [l1SelectiveQinqTable](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:SelectiveQinqTable/)
+- [l1SelectiveQinq](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:SelectiveQinq/)
 - [l1VlanTranslateTable](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateTable/)
 - [l1VlanTranslateEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateEntry/)
 - [l1PhysIfExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIfExtended/)
@@ -117,8 +119,9 @@ Read-Only:
 - `router_mac` (String) The administrative router MAC address.
 - `router_mac_ipv6_extract` (String) Disable/enable switchport ipv6 extract.
 - `selective_qinq_all` (Boolean) Selective QinQ for all VLANs.
-- `selective_qinq_outer_vlan_id` (String) Outer VLAN ID for selective QinQ. Possible values are `vlan-XX`.
-- `selective_qinq_vlans` (String) List of VLANs for selective QinQ. Example: `20-25,30`.
+- `selective_qinq_mappings` (Attributes Map) List of selective QinQ mappings.
+  - Map key: `outer_vlan_id` - Selective QinQ outer VLAN ID. Possible values are `vlan-XX`. (see [below for nested schema](#nestedatt--physical_interfaces--selective_qinq_mappings))
+- `selective_qinq_outer_vlan_id` (String) Outer VLAN ID for selective QinQ for all VLANs. Possible values are `vlan-XX`.
 - `shut_down_lan` (String) Shut/Unshut all LAN VLANs on interface.
 - `snmp_trap_state` (String) Administrative port snmp trap state.
 - `span_mode` (String) Administrative port span mode.
@@ -164,6 +167,14 @@ Read-Only:
 - `voice_vlan_id` (Number) Voice VLAN ID.
 - `voice_vlan_type` (String) Voice vlan type.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
+
+<a id="nestedatt--physical_interfaces--selective_qinq_mappings"></a>
+### Nested Schema for `physical_interfaces.selective_qinq_mappings`
+
+Read-Only:
+
+- `vlans` (String) Selective QinQ VLANs. Example: `20-25,30`.
+
 
 <a id="nestedatt--physical_interfaces--vlan_mappings"></a>
 ### Nested Schema for `physical_interfaces.vlan_mappings`

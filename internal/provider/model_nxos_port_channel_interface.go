@@ -44,107 +44,111 @@ type PortChannelInterface struct {
 }
 
 type PortChannelInterfacePortChannelInterfaces struct {
-	PortChannelMode                                types.String                                                     `tfsdk:"port_channel_mode"`
-	MinimumLinks                                   types.Int64                                                      `tfsdk:"minimum_links"`
-	MaximumLinks                                   types.Int64                                                      `tfsdk:"maximum_links"`
-	SuspendIndividual                              types.String                                                     `tfsdk:"suspend_individual"`
-	AccessVlan                                     types.String                                                     `tfsdk:"access_vlan"`
-	AdminState                                     types.String                                                     `tfsdk:"admin_state"`
-	AutoNegotiation                                types.String                                                     `tfsdk:"auto_negotiation"`
-	Bandwidth                                      types.Int64                                                      `tfsdk:"bandwidth"`
-	Delay                                          types.Int64                                                      `tfsdk:"delay"`
-	Description                                    types.String                                                     `tfsdk:"description"`
-	Duplex                                         types.String                                                     `tfsdk:"duplex"`
-	Layer                                          types.String                                                     `tfsdk:"layer"`
-	LinkLogging                                    types.String                                                     `tfsdk:"link_logging"`
-	Medium                                         types.String                                                     `tfsdk:"medium"`
-	Mode                                           types.String                                                     `tfsdk:"mode"`
-	Mtu                                            types.Int64                                                      `tfsdk:"mtu"`
-	NativeVlan                                     types.String                                                     `tfsdk:"native_vlan"`
-	Speed                                          types.String                                                     `tfsdk:"speed"`
-	TrunkVlans                                     types.String                                                     `tfsdk:"trunk_vlans"`
-	Dot1qEtherType                                 types.Int64                                                      `tfsdk:"dot1q_ether_type"`
-	EqualizationDelay                              types.Int64                                                      `tfsdk:"equalization_delay"`
-	GracefulConvergence                            types.String                                                     `tfsdk:"graceful_convergence"`
-	HashDistribution                               types.String                                                     `tfsdk:"hash_distribution"`
-	InheritBandwidth                               types.Int64                                                      `tfsdk:"inherit_bandwidth"`
-	ItuChannel                                     types.Int64                                                      `tfsdk:"itu_channel"`
-	LacpDelayMode                                  types.String                                                     `tfsdk:"lacp_delay_mode"`
-	LacpVpcConvergence                             types.String                                                     `tfsdk:"lacp_vpc_convergence"`
-	LinkDebounceDown                               types.Int64                                                      `tfsdk:"link_debounce_down"`
-	LoadDefer                                      types.String                                                     `tfsdk:"load_defer"`
-	Mdix                                           types.String                                                     `tfsdk:"mdix"`
-	OpticsLoopback                                 types.String                                                     `tfsdk:"optics_loopback"`
-	PortType                                       types.String                                                     `tfsdk:"port_type"`
-	PxeTransitionTimeout                           types.Int64                                                      `tfsdk:"pxe_transition_timeout"`
-	RouterMac                                      types.String                                                     `tfsdk:"router_mac"`
-	SnmpTrapState                                  types.String                                                     `tfsdk:"snmp_trap_state"`
-	SpanMode                                       types.String                                                     `tfsdk:"span_mode"`
-	Squelch                                        types.String                                                     `tfsdk:"squelch"`
-	TransmissionMode                               types.String                                                     `tfsdk:"transmission_mode"`
-	TrunkLogging                                   types.String                                                     `tfsdk:"trunk_logging"`
-	Usage                                          types.String                                                     `tfsdk:"usage"`
-	UserConfiguredFlags                            types.String                                                     `tfsdk:"user_configured_flags"`
-	VrfDn                                          types.String                                                     `tfsdk:"vrf_dn"`
-	StormControlBurstPacketsPerSecond              types.Int64                                                      `tfsdk:"storm_control_burst_packets_per_second"`
-	StormControlBurstRate                          types.String                                                     `tfsdk:"storm_control_burst_rate"`
-	StormControlRate                               types.String                                                     `tfsdk:"storm_control_rate"`
-	StormControlRatePacketsPerSecond               types.Int64                                                      `tfsdk:"storm_control_rate_packets_per_second"`
-	StormControlPacketType                         types.String                                                     `tfsdk:"storm_control_packet_type"`
-	LoadIntervalCounter1                           types.Int64                                                      `tfsdk:"load_interval_counter_1"`
-	LoadIntervalCounter2                           types.Int64                                                      `tfsdk:"load_interval_counter_2"`
-	LoadIntervalCounter3                           types.Int64                                                      `tfsdk:"load_interval_counter_3"`
-	MultisiteInterfaceTracking                     types.String                                                     `tfsdk:"multisite_interface_tracking"`
-	PriorityFlowControlMode                        types.String                                                     `tfsdk:"priority_flow_control_mode"`
-	PriorityFlowControlSendTlv                     types.Bool                                                       `tfsdk:"priority_flow_control_send_tlv"`
-	PriorityFlowControlWatchdogDisableAction       types.Bool                                                       `tfsdk:"priority_flow_control_watchdog_disable_action"`
-	PriorityFlowControlWatchdogInterfaceMultiplier types.Int64                                                      `tfsdk:"priority_flow_control_watchdog_interface_multiplier"`
-	PriorityFlowControlWatchdogInterval            types.String                                                     `tfsdk:"priority_flow_control_watchdog_interval"`
-	VlanMappingEnable                              types.Bool                                                       `tfsdk:"vlan_mapping_enable"`
-	SelectiveQinqAll                               types.Bool                                                       `tfsdk:"selective_qinq_all"`
-	SelectiveQinqVlans                             types.String                                                     `tfsdk:"selective_qinq_vlans"`
-	SelectiveQinqOuterVlanId                       types.String                                                     `tfsdk:"selective_qinq_outer_vlan_id"`
-	VlanMappings                                   map[string]PortChannelInterfacePortChannelInterfacesVlanMappings `tfsdk:"vlan_mappings"`
-	AllowMultiTag                                  types.String                                                     `tfsdk:"allow_multi_tag"`
-	AutoExcludeVlans                               types.String                                                     `tfsdk:"auto_exclude_vlans"`
-	BufferBoost                                    types.String                                                     `tfsdk:"buffer_boost"`
-	ChassisModuleSerial                            types.String                                                     `tfsdk:"chassis_module_serial"`
-	ChassisModuleSide                              types.String                                                     `tfsdk:"chassis_module_side"`
-	ChassisNumber                                  types.Int64                                                      `tfsdk:"chassis_number"`
-	ChassisProfileName                             types.String                                                     `tfsdk:"chassis_profile_name"`
-	ChassisSerial                                  types.String                                                     `tfsdk:"chassis_serial"`
-	ExtendedDescription                            types.String                                                     `tfsdk:"extended_description"`
-	FlowControlReceive                             types.Bool                                                       `tfsdk:"flow_control_receive"`
-	FlowControlSend                                types.Bool                                                       `tfsdk:"flow_control_send"`
-	FlowRedirect                                   types.Bool                                                       `tfsdk:"flow_redirect"`
-	GtpHashMode                                    types.String                                                     `tfsdk:"gtp_hash_mode"`
-	Layer3MulticastReceiverVlan                    types.Int64                                                      `tfsdk:"layer3_multicast_receiver_vlan"`
-	PortChannelType                                types.String                                                     `tfsdk:"port_channel_type"`
-	PortTypeExternal                               types.String                                                     `tfsdk:"port_type_external"`
-	PortTypeFabric                                 types.String                                                     `tfsdk:"port_type_fabric"`
-	RouterMacIpv6Extract                           types.String                                                     `tfsdk:"router_mac_ipv6_extract"`
-	ShutDownLan                                    types.String                                                     `tfsdk:"shut_down_lan"`
-	StormControlAction                             types.String                                                     `tfsdk:"storm_control_action"`
-	StormControlAction1                            types.String                                                     `tfsdk:"storm_control_action_1"`
-	StormControlAction2                            types.String                                                     `tfsdk:"storm_control_action_2"`
-	StormControlBroadcastLevel                     types.String                                                     `tfsdk:"storm_control_broadcast_level"`
-	StormControlBroadcastLevel1                    types.String                                                     `tfsdk:"storm_control_broadcast_level_1"`
-	StormControlBroadcastLevel2                    types.String                                                     `tfsdk:"storm_control_broadcast_level_2"`
-	StormControlBroadcastPacketsPerSecond          types.Int64                                                      `tfsdk:"storm_control_broadcast_packets_per_second"`
-	StormControlMulticastLevel                     types.String                                                     `tfsdk:"storm_control_multicast_level"`
-	StormControlMulticastLevel1                    types.String                                                     `tfsdk:"storm_control_multicast_level_1"`
-	StormControlMulticastLevel2                    types.String                                                     `tfsdk:"storm_control_multicast_level_2"`
-	StormControlMulticastPacketsPerSecond          types.Int64                                                      `tfsdk:"storm_control_multicast_packets_per_second"`
-	StormControlUnicastLevel                       types.String                                                     `tfsdk:"storm_control_unicast_level"`
-	StormControlUnicastLevel1                      types.String                                                     `tfsdk:"storm_control_unicast_level_1"`
-	StormControlUnicastLevel2                      types.String                                                     `tfsdk:"storm_control_unicast_level_2"`
-	StormControlUnicastPacketsPerSecond            types.Int64                                                      `tfsdk:"storm_control_unicast_packets_per_second"`
-	SwitchportBlock                                types.String                                                     `tfsdk:"switchport_block"`
-	SwitchportIsolated                             types.String                                                     `tfsdk:"switchport_isolated"`
-	SwitchportMacLearn                             types.String                                                     `tfsdk:"switchport_mac_learn"`
-	SwitchportMacPermit                            types.String                                                     `tfsdk:"switchport_mac_permit"`
-	SwitchportVirtualEthernetBridge                types.String                                                     `tfsdk:"switchport_virtual_ethernet_bridge"`
-	Members                                        map[string]PortChannelInterfacePortChannelInterfacesMembers      `tfsdk:"members"`
+	PortChannelMode                                types.String                                                              `tfsdk:"port_channel_mode"`
+	MinimumLinks                                   types.Int64                                                               `tfsdk:"minimum_links"`
+	MaximumLinks                                   types.Int64                                                               `tfsdk:"maximum_links"`
+	SuspendIndividual                              types.String                                                              `tfsdk:"suspend_individual"`
+	AccessVlan                                     types.String                                                              `tfsdk:"access_vlan"`
+	AdminState                                     types.String                                                              `tfsdk:"admin_state"`
+	AutoNegotiation                                types.String                                                              `tfsdk:"auto_negotiation"`
+	Bandwidth                                      types.Int64                                                               `tfsdk:"bandwidth"`
+	Delay                                          types.Int64                                                               `tfsdk:"delay"`
+	Description                                    types.String                                                              `tfsdk:"description"`
+	Duplex                                         types.String                                                              `tfsdk:"duplex"`
+	Layer                                          types.String                                                              `tfsdk:"layer"`
+	LinkLogging                                    types.String                                                              `tfsdk:"link_logging"`
+	Medium                                         types.String                                                              `tfsdk:"medium"`
+	Mode                                           types.String                                                              `tfsdk:"mode"`
+	Mtu                                            types.Int64                                                               `tfsdk:"mtu"`
+	NativeVlan                                     types.String                                                              `tfsdk:"native_vlan"`
+	Speed                                          types.String                                                              `tfsdk:"speed"`
+	TrunkVlans                                     types.String                                                              `tfsdk:"trunk_vlans"`
+	Dot1qEtherType                                 types.Int64                                                               `tfsdk:"dot1q_ether_type"`
+	EqualizationDelay                              types.Int64                                                               `tfsdk:"equalization_delay"`
+	GracefulConvergence                            types.String                                                              `tfsdk:"graceful_convergence"`
+	HashDistribution                               types.String                                                              `tfsdk:"hash_distribution"`
+	InheritBandwidth                               types.Int64                                                               `tfsdk:"inherit_bandwidth"`
+	ItuChannel                                     types.Int64                                                               `tfsdk:"itu_channel"`
+	LacpDelayMode                                  types.String                                                              `tfsdk:"lacp_delay_mode"`
+	LacpVpcConvergence                             types.String                                                              `tfsdk:"lacp_vpc_convergence"`
+	LinkDebounceDown                               types.Int64                                                               `tfsdk:"link_debounce_down"`
+	LoadDefer                                      types.String                                                              `tfsdk:"load_defer"`
+	Mdix                                           types.String                                                              `tfsdk:"mdix"`
+	OpticsLoopback                                 types.String                                                              `tfsdk:"optics_loopback"`
+	PortType                                       types.String                                                              `tfsdk:"port_type"`
+	PxeTransitionTimeout                           types.Int64                                                               `tfsdk:"pxe_transition_timeout"`
+	RouterMac                                      types.String                                                              `tfsdk:"router_mac"`
+	SnmpTrapState                                  types.String                                                              `tfsdk:"snmp_trap_state"`
+	SpanMode                                       types.String                                                              `tfsdk:"span_mode"`
+	Squelch                                        types.String                                                              `tfsdk:"squelch"`
+	TransmissionMode                               types.String                                                              `tfsdk:"transmission_mode"`
+	TrunkLogging                                   types.String                                                              `tfsdk:"trunk_logging"`
+	Usage                                          types.String                                                              `tfsdk:"usage"`
+	UserConfiguredFlags                            types.String                                                              `tfsdk:"user_configured_flags"`
+	VrfDn                                          types.String                                                              `tfsdk:"vrf_dn"`
+	StormControlBurstPacketsPerSecond              types.Int64                                                               `tfsdk:"storm_control_burst_packets_per_second"`
+	StormControlBurstRate                          types.String                                                              `tfsdk:"storm_control_burst_rate"`
+	StormControlRate                               types.String                                                              `tfsdk:"storm_control_rate"`
+	StormControlRatePacketsPerSecond               types.Int64                                                               `tfsdk:"storm_control_rate_packets_per_second"`
+	StormControlPacketType                         types.String                                                              `tfsdk:"storm_control_packet_type"`
+	LoadIntervalCounter1                           types.Int64                                                               `tfsdk:"load_interval_counter_1"`
+	LoadIntervalCounter2                           types.Int64                                                               `tfsdk:"load_interval_counter_2"`
+	LoadIntervalCounter3                           types.Int64                                                               `tfsdk:"load_interval_counter_3"`
+	MultisiteInterfaceTracking                     types.String                                                              `tfsdk:"multisite_interface_tracking"`
+	PriorityFlowControlMode                        types.String                                                              `tfsdk:"priority_flow_control_mode"`
+	PriorityFlowControlSendTlv                     types.Bool                                                                `tfsdk:"priority_flow_control_send_tlv"`
+	PriorityFlowControlWatchdogDisableAction       types.Bool                                                                `tfsdk:"priority_flow_control_watchdog_disable_action"`
+	PriorityFlowControlWatchdogInterfaceMultiplier types.Int64                                                               `tfsdk:"priority_flow_control_watchdog_interface_multiplier"`
+	PriorityFlowControlWatchdogInterval            types.String                                                              `tfsdk:"priority_flow_control_watchdog_interval"`
+	VlanMappingEnable                              types.Bool                                                                `tfsdk:"vlan_mapping_enable"`
+	SelectiveQinqAll                               types.Bool                                                                `tfsdk:"selective_qinq_all"`
+	SelectiveQinqOuterVlanId                       types.String                                                              `tfsdk:"selective_qinq_outer_vlan_id"`
+	SelectiveQinqMappings                          map[string]PortChannelInterfacePortChannelInterfacesSelectiveQinqMappings `tfsdk:"selective_qinq_mappings"`
+	VlanMappings                                   map[string]PortChannelInterfacePortChannelInterfacesVlanMappings          `tfsdk:"vlan_mappings"`
+	AllowMultiTag                                  types.String                                                              `tfsdk:"allow_multi_tag"`
+	AutoExcludeVlans                               types.String                                                              `tfsdk:"auto_exclude_vlans"`
+	BufferBoost                                    types.String                                                              `tfsdk:"buffer_boost"`
+	ChassisModuleSerial                            types.String                                                              `tfsdk:"chassis_module_serial"`
+	ChassisModuleSide                              types.String                                                              `tfsdk:"chassis_module_side"`
+	ChassisNumber                                  types.Int64                                                               `tfsdk:"chassis_number"`
+	ChassisProfileName                             types.String                                                              `tfsdk:"chassis_profile_name"`
+	ChassisSerial                                  types.String                                                              `tfsdk:"chassis_serial"`
+	ExtendedDescription                            types.String                                                              `tfsdk:"extended_description"`
+	FlowControlReceive                             types.Bool                                                                `tfsdk:"flow_control_receive"`
+	FlowControlSend                                types.Bool                                                                `tfsdk:"flow_control_send"`
+	FlowRedirect                                   types.Bool                                                                `tfsdk:"flow_redirect"`
+	GtpHashMode                                    types.String                                                              `tfsdk:"gtp_hash_mode"`
+	Layer3MulticastReceiverVlan                    types.Int64                                                               `tfsdk:"layer3_multicast_receiver_vlan"`
+	PortChannelType                                types.String                                                              `tfsdk:"port_channel_type"`
+	PortTypeExternal                               types.String                                                              `tfsdk:"port_type_external"`
+	PortTypeFabric                                 types.String                                                              `tfsdk:"port_type_fabric"`
+	RouterMacIpv6Extract                           types.String                                                              `tfsdk:"router_mac_ipv6_extract"`
+	ShutDownLan                                    types.String                                                              `tfsdk:"shut_down_lan"`
+	StormControlAction                             types.String                                                              `tfsdk:"storm_control_action"`
+	StormControlAction1                            types.String                                                              `tfsdk:"storm_control_action_1"`
+	StormControlAction2                            types.String                                                              `tfsdk:"storm_control_action_2"`
+	StormControlBroadcastLevel                     types.String                                                              `tfsdk:"storm_control_broadcast_level"`
+	StormControlBroadcastLevel1                    types.String                                                              `tfsdk:"storm_control_broadcast_level_1"`
+	StormControlBroadcastLevel2                    types.String                                                              `tfsdk:"storm_control_broadcast_level_2"`
+	StormControlBroadcastPacketsPerSecond          types.Int64                                                               `tfsdk:"storm_control_broadcast_packets_per_second"`
+	StormControlMulticastLevel                     types.String                                                              `tfsdk:"storm_control_multicast_level"`
+	StormControlMulticastLevel1                    types.String                                                              `tfsdk:"storm_control_multicast_level_1"`
+	StormControlMulticastLevel2                    types.String                                                              `tfsdk:"storm_control_multicast_level_2"`
+	StormControlMulticastPacketsPerSecond          types.Int64                                                               `tfsdk:"storm_control_multicast_packets_per_second"`
+	StormControlUnicastLevel                       types.String                                                              `tfsdk:"storm_control_unicast_level"`
+	StormControlUnicastLevel1                      types.String                                                              `tfsdk:"storm_control_unicast_level_1"`
+	StormControlUnicastLevel2                      types.String                                                              `tfsdk:"storm_control_unicast_level_2"`
+	StormControlUnicastPacketsPerSecond            types.Int64                                                               `tfsdk:"storm_control_unicast_packets_per_second"`
+	SwitchportBlock                                types.String                                                              `tfsdk:"switchport_block"`
+	SwitchportIsolated                             types.String                                                              `tfsdk:"switchport_isolated"`
+	SwitchportMacLearn                             types.String                                                              `tfsdk:"switchport_mac_learn"`
+	SwitchportMacPermit                            types.String                                                              `tfsdk:"switchport_mac_permit"`
+	SwitchportVirtualEthernetBridge                types.String                                                              `tfsdk:"switchport_virtual_ethernet_bridge"`
+	Members                                        map[string]PortChannelInterfacePortChannelInterfacesMembers               `tfsdk:"members"`
+}
+
+type PortChannelInterfacePortChannelInterfacesSelectiveQinqMappings struct {
+	Vlans types.String `tfsdk:"vlans"`
 }
 
 type PortChannelInterfacePortChannelInterfacesVlanMappings struct {
@@ -185,6 +189,9 @@ var PortChannelInterfaceMinVersions = map[string]helpers.MinVersion{
 	"pcVlanTranslateEntry.direction": {Version: "10.6(3)", Path: "port_channel_interfaces.vlan_mappings.rx_only"},
 }
 
+// PortChannelInterfaceSeparateRequestClasses lists the classes that are sent in a second request after the rest of the body.
+var PortChannelInterfaceSeparateRequestClasses = []string{"pcVlanMapping"}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -195,6 +202,10 @@ func (data PortChannelInterface) getDn() string {
 
 func (data PortChannelInterfacePortChannelInterfaces) getRn(key string) string {
 	return fmt.Sprintf("aggr-[%s]", key)
+}
+
+func (data PortChannelInterfacePortChannelInterfacesSelectiveQinqMappings) getRn(key string) string {
+	return fmt.Sprintf("selqinq-[%s]", key)
 }
 
 func (data PortChannelInterfacePortChannelInterfacesVlanMappings) getRn(key string) string {
@@ -429,9 +440,6 @@ func (data PortChannelInterface) toBody(config PortChannelInterface) nxos.Body {
 				if !child.SelectiveQinqAll.IsUnknown() && !child.SelectiveQinqAll.IsNull() && !configChild.SelectiveQinqAll.IsNull() {
 					attrs, _ = sjson.Set(attrs, "selectiveQinqAll", strconv.FormatBool(child.SelectiveQinqAll.ValueBool()))
 				}
-				if !child.SelectiveQinqVlans.IsUnknown() && !child.SelectiveQinqVlans.IsNull() && !configChild.SelectiveQinqVlans.IsNull() {
-					attrs, _ = sjson.Set(attrs, "selectiveQinqVlans", child.SelectiveQinqVlans.ValueString())
-				}
 				if !child.SelectiveQinqOuterVlanId.IsUnknown() && !child.SelectiveQinqOuterVlanId.IsNull() && !configChild.SelectiveQinqOuterVlanId.IsNull() {
 					attrs, _ = sjson.Set(attrs, "selectiveQinqTranslateVlan", child.SelectiveQinqOuterVlanId.ValueString())
 				}
@@ -443,6 +451,33 @@ func (data PortChannelInterface) toBody(config PortChannelInterface) nxos.Body {
 				_ = nestedChildrenPath
 				prevBody := body
 				body = childBody
+				{
+					attrs = "{}"
+					childBody := ""
+					childBody, _ = sjson.SetRaw(childBody, "pcSelectiveQinqTable.attributes", attrs)
+					parentAttrs := attrs
+					parentPath := nestedChildrenPath
+					nestedChildrenPath := "pcSelectiveQinqTable.children"
+					_ = nestedChildrenPath
+					prevBody := body
+					body = childBody
+					for key, child := range child.SelectiveQinqMappings {
+						configChild, configChildOk := configChild.SelectiveQinqMappings[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "selectiveQinqTranslateVlan", key)
+						if configChildOk && !child.Vlans.IsUnknown() && !child.Vlans.IsNull() && !configChild.Vlans.IsNull() {
+							attrs, _ = sjson.Set(attrs, "selectiveQinqVlans", child.Vlans.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pcSelectiveQinq.attributes", attrs)
+					}
+					childBody = body
+					body = prevBody
+					if parentAttrs != "{}" || gjson.Get(childBody, "pcSelectiveQinqTable.children").Exists() {
+						body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+					}
+				}
 				{
 					attrs = "{}"
 					childBody := ""
@@ -780,8 +815,39 @@ func (data *PortChannelInterface) fromBody(res gjson.Result) {
 							)
 							child.VlanMappingEnable = types.BoolValue(helpers.ParseNxosBoolean(rpcVlanMapping.Get("pcVlanMapping.attributes.Enabled").String()))
 							child.SelectiveQinqAll = types.BoolValue(helpers.ParseNxosBoolean(rpcVlanMapping.Get("pcVlanMapping.attributes.selectiveQinqAll").String()))
-							child.SelectiveQinqVlans = types.StringValue(rpcVlanMapping.Get("pcVlanMapping.attributes.selectiveQinqVlans").String())
 							child.SelectiveQinqOuterVlanId = types.StringValue(rpcVlanMapping.Get("pcVlanMapping.attributes.selectiveQinqTranslateVlan").String())
+							{
+								var rpcSelectiveQinqTable gjson.Result
+								rpcVlanMapping.Get("pcVlanMapping").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("pcSelectiveQinqTable.attributes.rn").String()
+										if rnValue == "selqinqtable" {
+											rpcSelectiveQinqTable = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								rpcSelectiveQinqTable.Get("pcSelectiveQinqTable").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "pcSelectiveQinq" {
+													var nestedChildpcSelectiveQinq PortChannelInterfacePortChannelInterfacesSelectiveQinqMappings
+													nestedChildpcSelectiveQinq.Vlans = types.StringValue(nestedValue.Get("attributes.selectiveQinqVlans").String())
+													nestedMapKey := nestedValue.Get("attributes.selectiveQinqTranslateVlan").String()
+													if child.SelectiveQinqMappings == nil {
+														child.SelectiveQinqMappings = make(map[string]PortChannelInterfacePortChannelInterfacesSelectiveQinqMappings)
+													}
+													child.SelectiveQinqMappings[nestedMapKey] = nestedChildpcSelectiveQinq
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+							}
 							{
 								var rpcVlanTranslateTable gjson.Result
 								rpcVlanMapping.Get("pcVlanMapping").Get("children").ForEach(
@@ -1301,15 +1367,46 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 			} else {
 				item.SelectiveQinqAll = types.BoolNull()
 			}
-			if !item.SelectiveQinqVlans.IsNull() {
-				item.SelectiveQinqVlans = types.StringValue(rpcVlanMapping.Get("pcVlanMapping.attributes.selectiveQinqVlans").String())
-			} else {
-				item.SelectiveQinqVlans = types.StringNull()
-			}
 			if !item.SelectiveQinqOuterVlanId.IsNull() {
 				item.SelectiveQinqOuterVlanId = types.StringValue(rpcVlanMapping.Get("pcVlanMapping.attributes.selectiveQinqTranslateVlan").String())
 			} else {
 				item.SelectiveQinqOuterVlanId = types.StringNull()
+			}
+			{
+				var rpcSelectiveQinqTable gjson.Result
+				rpcVlanMapping.Get("pcVlanMapping.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("pcSelectiveQinqTable.attributes.rn").String()
+						if rnValue == "selqinqtable" {
+							rpcSelectiveQinqTable = v
+							return false
+						}
+						return true
+					},
+				)
+				for nc := range item.SelectiveQinqMappings {
+					ncItem := item.SelectiveQinqMappings[nc]
+					var rpcSelectiveQinq gjson.Result
+					rpcSelectiveQinqTable.Get("pcSelectiveQinqTable.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("pcSelectiveQinq.attributes.selectiveQinqTranslateVlan").String() == nc {
+								rpcSelectiveQinq = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rpcSelectiveQinq.Exists() {
+						delete(item.SelectiveQinqMappings, nc)
+						continue
+					}
+					if !ncItem.Vlans.IsNull() {
+						ncItem.Vlans = types.StringValue(rpcSelectiveQinq.Get("pcSelectiveQinq.attributes.selectiveQinqVlans").String())
+					} else {
+						ncItem.Vlans = types.StringNull()
+					}
+					item.SelectiveQinqMappings[nc] = ncItem
+				}
 			}
 			{
 				var rpcVlanTranslateTable gjson.Result
@@ -1644,6 +1741,16 @@ func (data PortChannelInterface) toBodyWithDeletes(ctx context.Context, state Po
 			if matchBodyPathdi == "" {
 				continue
 			}
+			for stateKey := range stateItemdi.SelectiveQinqMappings {
+				if _, found := planItemdi.SelectiveQinqMappings[stateKey]; !found {
+					stateChild := stateItemdi.SelectiveQinqMappings[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "pcSelectiveQinq.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "pcSelectiveQinq.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "pcVlanMapping")+".children", "pcSelectiveQinqTable") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
 			for stateKey := range stateItemdi.VlanMappings {
 				if _, found := planItemdi.VlanMappings[stateKey]; !found {
 					stateChild := stateItemdi.VlanMappings[stateKey]
@@ -1879,13 +1986,24 @@ func (data PortChannelInterface) toBodyWithDeletes(ctx context.Context, state Po
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pcVlanMapping")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"selectiveQinqAll", "DME_UNSET_PROPERTY_MARKER")
 						}
-						if !stateChild.SelectiveQinqVlans.IsNull() && configChild.SelectiveQinqVlans.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pcVlanMapping")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"selectiveQinqVlans", "DME_UNSET_PROPERTY_MARKER")
-						}
 						if !stateChild.SelectiveQinqOuterVlanId.IsNull() && configChild.SelectiveQinqOuterVlanId.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pcVlanMapping")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"selectiveQinqTranslateVlan", "DME_UNSET_PROPERTY_MARKER")
+						}
+						for key := range stateChild.SelectiveQinqMappings {
+							if configChild, ok := configChild.SelectiveQinqMappings[key]; ok {
+								stateChild := stateChild.SelectiveQinqMappings[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "pcVlanMapping")+".children", "pcSelectiveQinqTable")+".children").Array() {
+									if mv.Get("pcSelectiveQinq.attributes.selectiveQinqTranslateVlan").String() == key {
+										if !stateChild.Vlans.IsNull() && configChild.Vlans.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "pcVlanMapping")+".children", "pcSelectiveQinqTable")+".children"+"."+strconv.Itoa(mi)+".pcSelectiveQinq.attributes."+"selectiveQinqVlans", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
 						}
 						for key := range stateChild.VlanMappings {
 							if configChild, ok := configChild.VlanMappings[key]; ok {

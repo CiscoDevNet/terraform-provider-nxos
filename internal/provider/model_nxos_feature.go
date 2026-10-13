@@ -77,6 +77,7 @@ type Feature struct {
 	Udld                types.String                  `tfsdk:"udld"`
 	VnSegment           types.String                  `tfsdk:"vn_segment"`
 	Vpc                 types.String                  `tfsdk:"vpc"`
+	Vtp                 types.String                  `tfsdk:"vtp"`
 	FeatureSets         map[string]FeatureFeatureSets `tfsdk:"feature_sets"`
 }
 
@@ -403,6 +404,13 @@ func (data Feature) toBody(config Feature) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmVpc.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.Vtp.IsUnknown() && !data.Vtp.IsNull() && !config.Vtp.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.Vtp.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmVtp.attributes", attrs)
 		}
 		childBody = body
 		body = prevBody
@@ -959,6 +967,20 @@ func (data *Feature) fromBody(res gjson.Result) {
 				},
 			)
 			data.Vpc = types.StringValue(rfmVpc.Get("fmVpc.attributes.adminSt").String())
+		}
+		{
+			var rfmVtp gjson.Result
+			rfmEntity.Get("fmEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("fmVtp.attributes.rn").String()
+					if rnValue == "vtp" {
+						rfmVtp = v
+						return false
+					}
+					return true
+				},
+			)
+			data.Vtp = types.StringValue(rfmVtp.Get("fmVtp.attributes.adminSt").String())
 		}
 	}
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -1664,6 +1686,24 @@ func (data *Feature) updateFromBody(res gjson.Result) {
 			data.Vpc = types.StringNull()
 		}
 	}
+	{
+		var rfmVtp gjson.Result
+		rfmEntity.Get("fmEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmVtp.attributes.rn").String()
+				if rnValue == "vtp" {
+					rfmVtp = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Vtp.IsNull() {
+			data.Vtp = types.StringValue(rfmVtp.Get("fmVtp.attributes.adminSt").String())
+		} else {
+			data.Vtp = types.StringNull()
+		}
+	}
 	for key, item := range data.FeatureSets {
 		var rfsetFeatureSet gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -2117,6 +2157,17 @@ func (data Feature) toDeleteBody() nxos.Body {
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 				}
 			}
+			{
+				childBody := ""
+				if !data.Vtp.IsNull() {
+					childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmVtp"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
 		}
 	}
 	for key, child := range data.FeatureSets {
@@ -2295,6 +2346,10 @@ func (data Feature) toBodyWithDeletes(ctx context.Context, state Feature, config
 		}
 		if !state.Vpc.IsNull() && config.Vpc.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmVpc")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.Vtp.IsNull() && config.Vtp.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmVtp")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.FeatureSets {

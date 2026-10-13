@@ -1,0 +1,100 @@
+---
+name: VTP
+class_name: vtpEntity
+dn: sys/vtp
+ds_description: This data source can read the VTP (VLAN Trunking Protocol) configuration on NX-OS devices, including domain, mode, version, password and VLAN database file settings.
+res_description: This resource can manage the VTP (VLAN Trunking Protocol) configuration on NX-OS devices, including domain, mode, version, password and VLAN database file settings.
+doc_path: Layer%202/vtp:Entity/
+doc_category: Switching
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+child_classes:
+  - class_name: vtpInst
+    doc_path: Layer%202/vtp:Inst/
+    rn: inst
+    type: single
+    tf_name: instance
+    description: 'VTP instance configuration.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: domain
+        tf_name: domain
+        type: String
+        description: 'domain.'
+        example: DOMAIN1
+      - nxos_name: filePath
+        tf_name: file_path
+        type: String
+        description: 'file.'
+        example: 'bootflash:/vtp.dat'
+      - nxos_name: mode
+        tf_name: mode
+        type: String
+        description: 'mode.'
+        enum_values:
+          - client
+          - server
+          - transparent
+          - "off"
+        example: server
+      - nxos_name: password
+        tf_name: password
+        type: String
+        description: 'password.'
+        write_only: true
+        sensitive: true
+        example: secret_password
+      - nxos_name: version
+        tf_name: version
+        type: Int64
+        min_int: 1
+        max_int: 2
+        description: 'version.'
+        example: 2
+  - class_name: vtpIntf
+    doc_path: Layer%202/vtp:Intf/
+    rn: intf-[%s]
+    type: list
+    tf_name: interfaces
+    description: 'List of VTP interfaces.'
+    attributes:
+      - nxos_name: intf
+        tf_name: interface_id
+        type: String
+        id: true
+        description: 'Id (eg: eth1/3) of L2 interface which has VTP enabled.'
+        example: eth1/9
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'Admin state of L2 interface which has VTP enabled.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+test_prerequisites:
+  - dn: sys/fm/vtp
+    class_name: fmVtp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/phys-[eth1/9]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer2

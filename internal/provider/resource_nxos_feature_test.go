@@ -83,6 +83,7 @@ func TestAccNxosFeature(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "udld", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vn_segment", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vpc", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vtp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "feature_sets.fex.admin_state", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -184,6 +185,7 @@ func testAccNxosFeatureConfig_all() string {
 	config += `	udld = "enabled"` + "\n"
 	config += `	vn_segment = "enabled"` + "\n"
 	config += `	vpc = "enabled"` + "\n"
+	config += `	vtp = "enabled"` + "\n"
 	config += `	feature_sets = {` + "\n"
 	config += `		"fex" = {` + "\n"
 	config += `			admin_state = "enabled"` + "\n"

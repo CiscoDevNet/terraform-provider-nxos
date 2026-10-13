@@ -576,6 +576,21 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmVtp
+        rn: vtp
+        type: single
+        no_delete: true
+        description: 'VTP feature configuration.'
+        doc_path: Feature%20Management/fm:Vtp/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: vtp
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
   - class_name: fsetFeatureSet
     rn: fset-[%s]
     type: list

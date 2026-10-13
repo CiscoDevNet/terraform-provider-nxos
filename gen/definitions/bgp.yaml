@@ -965,6 +965,7 @@ child_classes:
                 min_int: 0
                 max_int: 65535
                 example: 100
+                exclude_test: true
               - nxos_name: asnType
                 tf_name: asn_type
                 type: String
@@ -1545,6 +1546,7 @@ child_classes:
                 min_int: 0
                 max_int: 65535
                 example: 100
+                exclude_test: true
               - nxos_name: asnType
                 tf_name: asn_type
                 type: String
@@ -2056,6 +2058,7 @@ child_classes:
                 min_int: 0
                 max_int: 65535
                 example: 100
+                exclude_test: true
               - nxos_name: asnType
                 tf_name: asn_type
                 type: String
@@ -2497,6 +2500,7 @@ child_classes:
                 min_int: 0
                 max_int: 65535
                 example: 100
+                exclude_test: true
               - nxos_name: asnType
                 tf_name: asn_type
                 type: String

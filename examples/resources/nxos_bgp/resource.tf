@@ -110,7 +110,6 @@ resource "nxos_bgp" "example" {
           peer_type                      = "fabric-external"
           source_interface               = "lo0"
           admin_state                    = "enabled"
-          affinity_group                 = 100
           asn_type                       = "none"
           bfd_type                       = "none"
           bmp_server_1                   = "disabled"
@@ -188,7 +187,6 @@ resource "nxos_bgp" "example" {
           peer_type                      = "fabric-internal"
           source_interface               = "lo0"
           admin_state                    = "enabled"
-          affinity_group                 = 100
           asn_type                       = "none"
           bfd_type                       = "none"
           bmp_server_1                   = "disabled"
@@ -263,7 +261,6 @@ resource "nxos_bgp" "example" {
           password_type                  = "0"
           password                       = "secret_password"
           admin_state                    = "enabled"
-          affinity_group                 = 100
           asn_type                       = "none"
           bfd_type                       = "none"
           bmp_server_1                   = "disabled"
@@ -325,7 +322,6 @@ resource "nxos_bgp" "example" {
           peer_template                  = "SPINE-PEERS"
           peer_type                      = "fabric-internal"
           admin_state                    = "enabled"
-          affinity_group                 = 100
           asn_type                       = "none"
           bfd_type                       = "none"
           bmp_server_1                   = "disabled"

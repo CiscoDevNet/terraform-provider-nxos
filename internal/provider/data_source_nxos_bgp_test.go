@@ -122,7 +122,6 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.peer_type", "fabric-external"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.source_interface", "lo0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.affinity_group", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.asn_type", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.bfd_type", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.bmp_server_1", "disabled"))
@@ -174,7 +173,6 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_type", "fabric-internal"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.source_interface", "lo0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.affinity_group", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.asn_type", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.bfd_type", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.bmp_server_1", "disabled"))
@@ -225,7 +223,6 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.ebgp_multihop_ttl", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_control", "bfd,dis-conn-check"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.affinity_group", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.asn_type", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.bfd_type", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.bmp_server_1", "disabled"))
@@ -267,7 +264,6 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.peer_template", "SPINE-PEERS"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.peer_type", "fabric-internal"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.affinity_group", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.asn_type", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.bfd_type", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.bmp_server_1", "disabled"))
@@ -438,7 +434,6 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `					peer_type = "fabric-external"` + "\n"
 	config += `					source_interface = "lo0"` + "\n"
 	config += `					admin_state = "enabled"` + "\n"
-	config += `					affinity_group = 100` + "\n"
 	config += `					asn_type = "none"` + "\n"
 	config += `					bfd_type = "none"` + "\n"
 	config += `					bmp_server_1 = "disabled"` + "\n"
@@ -516,7 +511,6 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `					peer_type = "fabric-internal"` + "\n"
 	config += `					source_interface = "lo0"` + "\n"
 	config += `					admin_state = "enabled"` + "\n"
-	config += `					affinity_group = 100` + "\n"
 	config += `					asn_type = "none"` + "\n"
 	config += `					bfd_type = "none"` + "\n"
 	config += `					bmp_server_1 = "disabled"` + "\n"
@@ -591,7 +585,6 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `					password_type = "0"` + "\n"
 	config += `					password = "secret_password"` + "\n"
 	config += `					admin_state = "enabled"` + "\n"
-	config += `					affinity_group = 100` + "\n"
 	config += `					asn_type = "none"` + "\n"
 	config += `					bfd_type = "none"` + "\n"
 	config += `					bmp_server_1 = "disabled"` + "\n"
@@ -653,7 +646,6 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `					peer_template = "SPINE-PEERS"` + "\n"
 	config += `					peer_type = "fabric-internal"` + "\n"
 	config += `					admin_state = "enabled"` + "\n"
-	config += `					affinity_group = 100` + "\n"
 	config += `					asn_type = "none"` + "\n"
 	config += `					bfd_type = "none"` + "\n"
 	config += `					bmp_server_1 = "disabled"` + "\n"

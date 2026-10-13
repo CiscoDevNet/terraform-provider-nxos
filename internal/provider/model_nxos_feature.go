@@ -63,6 +63,7 @@ type Feature struct {
 	Ospf                types.String                  `tfsdk:"ospf"`
 	Ospfv3              types.String                  `tfsdk:"ospfv3"`
 	Pim                 types.String                  `tfsdk:"pim"`
+	Poe                 types.String                  `tfsdk:"poe"`
 	Ptp                 types.String                  `tfsdk:"ptp"`
 	Pvlan               types.String                  `tfsdk:"pvlan"`
 	Sflow               types.String                  `tfsdk:"sflow"`
@@ -306,6 +307,13 @@ func (data Feature) toBody(config Feature) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmPim.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.Poe.IsUnknown() && !data.Poe.IsNull() && !config.Poe.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.Poe.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmPoe.attributes", attrs)
 		}
 		attrs = "{}"
 		if !data.Ptp.IsUnknown() && !data.Ptp.IsNull() && !config.Ptp.IsNull() {
@@ -771,6 +779,20 @@ func (data *Feature) fromBody(res gjson.Result) {
 				},
 			)
 			data.Pim = types.StringValue(rfmPim.Get("fmPim.attributes.adminSt").String())
+		}
+		{
+			var rfmPoe gjson.Result
+			rfmEntity.Get("fmEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("fmPoe.attributes.rn").String()
+					if rnValue == "poe" {
+						rfmPoe = v
+						return false
+					}
+					return true
+				},
+			)
+			data.Poe = types.StringValue(rfmPoe.Get("fmPoe.attributes.adminSt").String())
 		}
 		{
 			var rfmPtp gjson.Result
@@ -1435,6 +1457,24 @@ func (data *Feature) updateFromBody(res gjson.Result) {
 		}
 	}
 	{
+		var rfmPoe gjson.Result
+		rfmEntity.Get("fmEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmPoe.attributes.rn").String()
+				if rnValue == "poe" {
+					rfmPoe = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Poe.IsNull() {
+			data.Poe = types.StringValue(rfmPoe.Get("fmPoe.attributes.adminSt").String())
+		} else {
+			data.Poe = types.StringNull()
+		}
+	}
+	{
 		var rfmPtp gjson.Result
 		rfmEntity.Get("fmEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -2005,6 +2045,17 @@ func (data Feature) toDeleteBody() nxos.Body {
 			}
 			{
 				childBody := ""
+				if !data.Poe.IsNull() {
+					childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmPoe"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childBody := ""
 				if !data.Ptp.IsNull() {
 					childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 				}
@@ -2290,6 +2341,10 @@ func (data Feature) toBodyWithDeletes(ctx context.Context, state Feature, config
 		}
 		if !state.Pim.IsNull() && config.Pim.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmPim")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.Poe.IsNull() && config.Poe.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmPoe")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !state.Ptp.IsNull() && config.Ptp.IsNull() {

@@ -7,7 +7,7 @@ ds_description: This data source can read the feature configuration on NX-OS dev
 res_description: This resource can manage the feature configuration on NX-OS devices, including the administrative state of features such as BGP, OSPF, PIM, EVPN, LACP, vPC, and others, and feature-sets such as FEX, MPLS, and virtualization.
 doc_path: System/top:System/
 doc_category: System
-test_tags: [FEATURES]
+test_tags: [FEATURE]
 child_classes:
   - class_name: fmEntity
     rn: fm
@@ -365,6 +365,22 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmPoe
+        rn: poe
+        type: single
+        no_delete: true
+        description: 'PoE feature configuration.'
+        doc_path: Feature%20Management/fm:Poe/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: poe
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+            test_tags: [FEATURE_POE]
       - class_name: fmPtp
         rn: ptp
         type: single

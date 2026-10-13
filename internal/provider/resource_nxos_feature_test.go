@@ -35,8 +35,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosFeature(t *testing.T) {
-	if os.Getenv("FEATURES") == "" {
-		t.Skip("skipping test, set environment variable FEATURES")
+	if os.Getenv("FEATURE") == "" {
+		t.Skip("skipping test, set environment variable FEATURE")
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "analytics", "enabled"))
@@ -67,6 +67,9 @@ func TestAccNxosFeature(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ospf", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ospfv3", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "pim", "enabled"))
+	if os.Getenv("FEATURE_POE") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "poe", "enabled"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ptp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "pvlan", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "sflow", "enabled"))
@@ -169,6 +172,9 @@ func testAccNxosFeatureConfig_all() string {
 	config += `	ospf = "enabled"` + "\n"
 	config += `	ospfv3 = "enabled"` + "\n"
 	config += `	pim = "enabled"` + "\n"
+	if os.Getenv("FEATURE_POE") != "" {
+		config += `	poe = "enabled"` + "\n"
+	}
 	config += `	ptp = "enabled"` + "\n"
 	config += `	pvlan = "enabled"` + "\n"
 	config += `	sflow = "enabled"` + "\n"

@@ -21,6 +21,7 @@ resource "nxos_feature" "example" {
   ospf                 = "enabled"
   ospfv3               = "enabled"
   pim                  = "enabled"
+  poe                  = "enabled"
   ptp                  = "enabled"
   pvlan                = "enabled"
   sflow                = "enabled"

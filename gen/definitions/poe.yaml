@@ -1,0 +1,108 @@
+---
+name: PoE
+class_name: poeEntity
+dn: sys/poe
+no_delete: true
+ds_description: This data source can read the PoE (Power over Ethernet) configuration on NX-OS devices, including instance, logging level and interface settings.
+res_description: This resource can manage the PoE (Power over Ethernet) configuration on NX-OS devices, including instance, logging level and interface settings.
+doc_path: Power%20over%20Ethernet/poe:Entity/
+doc_category: Interface
+test_tags: [POE]
+child_classes:
+  - class_name: poeInst
+    doc_path: Power%20over%20Ethernet/poe:Inst/
+    rn: inst
+    type: single
+    tf_name: instance
+    description: 'PoE instance configuration.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: ctrl
+        tf_name: instance_control
+        type: String
+        description: 'The control state.'
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+  - class_name: poeModLogLevel
+    doc_path: Power%20over%20Ethernet/poe:ModLogLevel/
+    rn: modloglevel
+    type: single
+    tf_name: logging
+    description: 'PoE logging level configuration.'
+    attributes:
+      - nxos_name: loggingLevel
+        tf_name: logging_level
+        type: Int64
+        min_int: 0
+        max_int: 7
+        description: 'Logging Level.'
+        example: 3
+  - class_name: poePhysIf
+    doc_path: Power%20over%20Ethernet/poe:PhysIf/
+    rn: physif-[%s]
+    type: list
+    tf_name: interfaces
+    description: 'List of PoE interfaces.'
+    attributes:
+      - nxos_name: id
+        tf_name: interface_id
+        type: String
+        id: true
+        description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+        example: eth1/10
+      - nxos_name: maxConsumption
+        tf_name: max_consumption
+        type: Int64
+        min_int: 4000
+        max_int: 60000
+        description: 'POE interface''s current max port consumption.'
+        example: 20000
+      - nxos_name: portDefaultConsumption
+        tf_name: port_default_consumption
+        type: Int64
+        min_int: 4000
+        max_int: 30000
+        description: 'POE interface''s default port consumption.'
+        example: 10000
+      - nxos_name: portMode
+        tf_name: port_mode
+        type: String
+        description: 'POE interface''s current port mode.'
+        enum_values:
+          - Default
+          - never
+          - auto
+          - static
+        example: static
+      - nxos_name: portPolice
+        tf_name: port_police
+        type: String
+        description: 'POE interface''s current port police action.'
+        enum_values:
+          - Default
+          - errdisable
+          - log
+        example: log
+      - nxos_name: portPriority
+        tf_name: port_priority
+        type: String
+        description: 'POE interface''s current port Priority.'
+        enum_values:
+          - low
+          - high
+        example: high
+test_prerequisites:
+  - dn: sys/fm/poe
+    class_name: fmPoe
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

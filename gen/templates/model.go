@@ -163,10 +163,26 @@ var {{camelCase .Name}}MinVersions = map[string]helpers.MinVersion{
 	"{{.Key}}": {Version: "{{.Version}}", Path: "{{.Path}}"},
 {{- end}}
 }
-{{- if separateRequestClasses .ChildClasses}}
+{{- if hasSeparateRequest .}}
 
-// {{camelCase .Name}}SeparateRequestClasses lists the classes that are sent in a second request after the rest of the body.
-var {{camelCase .Name}}SeparateRequestClasses = []string{ {{- range $i, $c := separateRequestClasses .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} }
+// {{camelCase .Name}}SeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
+// together with the values that reset the attributes before their object is deleted.
+var {{camelCase .Name}}SeparateRequest = helpers.SeparateRequest{
+	{{- if separateRequestClasses .ChildClasses}}
+	Classes: []string{ {{- range $i, $c := separateRequestClasses .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} },
+	{{- end}}
+	{{- if separateRequestAttributes .}}
+	Attributes: map[string]map[string]string{
+		{{- range separateRequestAttributes .}}
+		"{{.ClassName}}": {
+			{{- range .Attributes}}
+			"{{.NxosName}}": {{deleteValue .}},
+			{{- end}}
+		},
+		{{- end}}
+	},
+	{{- end}}
+}
 {{- end}}
 
 // End of section. //template:end types

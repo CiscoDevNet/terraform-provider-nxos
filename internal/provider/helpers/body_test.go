@@ -81,7 +81,7 @@ func TestSplitSeparateRequestBody(t *testing.T) {
 		`{"l1PhysIf":{"attributes":{"id":"eth1/1","mode":"trunk"},"children":[{"l1VlanMapping":{"attributes":{"Enabled":"yes"}}},{"nwRtVrfMbr":{"attributes":{"tDn":"sys/inst-default"}}}]}},` +
 		`{"l1PhysIf":{"attributes":{"id":"eth1/2","mode":"access"}}},` +
 		`{"l1PhysIf":{"attributes":{"id":"eth1/3","status":"deleted"},"children":[{"l1VlanMapping":{"attributes":{}}}]}}]}}`
-	mainBody, separateBody := SplitSeparateRequestBody(body, []string{"l1VlanMapping"})
+	mainBody, separateBody, resetBody := SplitSeparateRequestBody(body, SeparateRequest{Classes: []string{"l1VlanMapping"}})
 	wantMain := `{"interfaceEntity":{"attributes":{},"children":[` +
 		`{"l1PhysIf":{"attributes":{"id":"eth1/1","mode":"trunk"},"children":[{"nwRtVrfMbr":{"attributes":{"tDn":"sys/inst-default"}}}]}},` +
 		`{"l1PhysIf":{"attributes":{"id":"eth1/2","mode":"access"}}},` +
@@ -93,9 +93,57 @@ func TestSplitSeparateRequestBody(t *testing.T) {
 	if separateBody != wantSeparate {
 		t.Errorf("separate body:\n got %s\nwant %s", separateBody, wantSeparate)
 	}
+	if resetBody != "" {
+		t.Errorf("reset body must be empty without separate attributes, got %s", resetBody)
+	}
 
-	mainBody, separateBody = SplitSeparateRequestBody(`{"interfaceEntity":{"attributes":{},"children":[{"l1PhysIf":{"attributes":{"id":"eth1/1"}}}]}}`, []string{"l1VlanMapping"})
-	if separateBody != "" || mainBody != `{"interfaceEntity":{"attributes":{},"children":[{"l1PhysIf":{"attributes":{"id":"eth1/1"}}}]}}` {
-		t.Errorf("body without separate classes must stay unchanged, got main %s separate %s", mainBody, separateBody)
+	mainBody, separateBody, resetBody = SplitSeparateRequestBody(`{"interfaceEntity":{"attributes":{},"children":[{"l1PhysIf":{"attributes":{"id":"eth1/1"}}}]}}`, SeparateRequest{Classes: []string{"l1VlanMapping"}})
+	if separateBody != "" || resetBody != "" || mainBody != `{"interfaceEntity":{"attributes":{},"children":[{"l1PhysIf":{"attributes":{"id":"eth1/1"}}}]}}` {
+		t.Errorf("body without separate classes must stay unchanged, got main %s separate %s reset %s", mainBody, separateBody, resetBody)
+	}
+}
+
+func TestSplitSeparateRequestBodyAttributes(t *testing.T) {
+	separate := SeparateRequest{Attributes: map[string]map[string]string{
+		"platformUdf": {"qualifyRacl": "DME_UNSET_PROPERTY_MARKER", "qualifyVacl": "DME_UNSET_PROPERTY_MARKER"},
+	}}
+	body := `{"platformEntity":{"attributes":{"descr":"x"},"children":[` +
+		`{"platformTcamTemplate":{"attributes":{"name":"TPL1"}}},` +
+		`{"platformUdfEntity":{"attributes":{},"children":[` +
+		`{"platformUdf":{"attributes":{"name":"UDF1","offsetBase":"packet-start","qualifyRacl":"true"}}},` +
+		`{"platformUdf":{"attributes":{"name":"UDF2","offsetBase":"packet-start"}}},` +
+		`{"platformUdf":{"attributes":{"rn":"udf-UDF3","status":"deleted"}}}]}}]}}`
+	mainBody, separateBody, resetBody := SplitSeparateRequestBody(body, separate)
+	wantMain := `{"platformEntity":{"attributes":{"descr":"x"},"children":[` +
+		`{"platformTcamTemplate":{"attributes":{"name":"TPL1"}}},` +
+		`{"platformUdfEntity":{"attributes":{},"children":[` +
+		`{"platformUdf":{"attributes":{"name":"UDF1","offsetBase":"packet-start"}}},` +
+		`{"platformUdf":{"attributes":{"name":"UDF2","offsetBase":"packet-start"}}},` +
+		`{"platformUdf":{"attributes":{"rn":"udf-UDF3","status":"deleted"}}}]}}]}}`
+	wantSeparate := `{"platformEntity":{"attributes":{"descr":"x"},"children":[{"platformUdfEntity":{"attributes":{},"children":[` +
+		`{"platformUdf":{"attributes":{"name":"UDF1","offsetBase":"packet-start","qualifyRacl":"true"}}}]}}]}}`
+	wantReset := `{"platformEntity":{"attributes":{"descr":"x"},"children":[{"platformUdfEntity":{"attributes":{},"children":[` +
+		`{"platformUdf":{"attributes":{"rn":"udf-UDF3","status":"modified","qualifyRacl":"DME_UNSET_PROPERTY_MARKER","qualifyVacl":"DME_UNSET_PROPERTY_MARKER"}}}]}}]}}`
+	if mainBody != wantMain {
+		t.Errorf("main body:\n got %s\nwant %s", mainBody, wantMain)
+	}
+	if separateBody != wantSeparate {
+		t.Errorf("separate body:\n got %s\nwant %s", separateBody, wantSeparate)
+	}
+	if resetBody != wantReset {
+		t.Errorf("reset body:\n got %s\nwant %s", resetBody, wantReset)
+	}
+
+	// Separate attributes of the root object itself
+	mainBody, separateBody, resetBody = SplitSeparateRequestBody(`{"platformUdf":{"attributes":{"name":"UDF1","qualifyVacl":"false"}}}`, separate)
+	if mainBody != `{"platformUdf":{"attributes":{"name":"UDF1"}}}` || separateBody != `{"platformUdf":{"attributes":{"name":"UDF1","qualifyVacl":"false"}}}` || resetBody != "" {
+		t.Errorf("root object: got main %s separate %s reset %s", mainBody, separateBody, resetBody)
+	}
+
+	// A body without separate attributes stays unchanged
+	unchanged := `{"platformEntity":{"attributes":{},"children":[{"platformUdfEntity":{"attributes":{},"children":[{"platformUdf":{"attributes":{"name":"UDF1"}}}]}}]}}`
+	mainBody, separateBody, resetBody = SplitSeparateRequestBody(unchanged, separate)
+	if mainBody != unchanged || separateBody != "" || resetBody != "" {
+		t.Errorf("body without separate attributes must stay unchanged, got main %s separate %s reset %s", mainBody, separateBody, resetBody)
 	}
 }

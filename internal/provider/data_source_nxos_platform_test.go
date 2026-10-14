@@ -49,6 +49,7 @@ func TestAccDataSourceNxosPlatform(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.offset_base", "outer-header-l3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.offset_length", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.offset_position", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.qualify_racl", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -136,6 +137,7 @@ func testAccDataSourceNxosPlatformConfig() string {
 	config += `			offset_base = "outer-header-l3"` + "\n"
 	config += `			offset_length = 2` + "\n"
 	config += `			offset_position = 10` + "\n"
+	config += `			qualify_racl = true` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"

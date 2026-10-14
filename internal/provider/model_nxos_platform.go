@@ -326,6 +326,24 @@ var PlatformSubtreeClassMinVersions = map[string]string{}
 // PlatformMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var PlatformMinVersions = map[string]helpers.MinVersion{}
 
+// PlatformSeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
+// together with the values that reset the attributes before their object is deleted.
+var PlatformSeparateRequest = helpers.SeparateRequest{
+	Attributes: map[string]map[string]string{
+		"platformUdf": {
+			"qualifyIfacl":    "DME_UNSET_PROPERTY_MARKER",
+			"qualifyIpv6Racl": "DME_UNSET_PROPERTY_MARKER",
+			"qualifyRacl":     "DME_UNSET_PROPERTY_MARKER",
+			"qualifyRaclAll":  "DME_UNSET_PROPERTY_MARKER",
+			"qualifySpan":     "DME_UNSET_PROPERTY_MARKER",
+			"qualifySpanAll":  "DME_UNSET_PROPERTY_MARKER",
+			"qualifySpanV6":   "DME_UNSET_PROPERTY_MARKER",
+			"qualifySpanV6L2": "DME_UNSET_PROPERTY_MARKER",
+			"qualifyVacl":     "DME_UNSET_PROPERTY_MARKER",
+		},
+	},
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath

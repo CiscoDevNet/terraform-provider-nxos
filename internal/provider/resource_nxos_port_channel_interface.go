@@ -805,7 +805,7 @@ func (r *PortChannelInterfaceResource) Create(ctx context.Context, req resource.
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PortChannelInterfaceSeparateRequestClasses)
+		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PortChannelInterfaceSeparateRequest)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 			return
@@ -950,7 +950,7 @@ func (r *PortChannelInterfaceResource) Update(ctx context.Context, req resource.
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PortChannelInterfaceSeparateRequestClasses)
+		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PortChannelInterfaceSeparateRequest)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return

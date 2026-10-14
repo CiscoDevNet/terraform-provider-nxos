@@ -1768,7 +1768,7 @@ func (r *PlatformResource) Create(ctx context.Context, req resource.CreateReques
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := device.Client.Post(plan.getDn(), body.Str)
+		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PlatformSeparateRequest)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 			return
@@ -1913,7 +1913,7 @@ func (r *PlatformResource) Update(ctx context.Context, req resource.UpdateReques
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := device.Client.Post(plan.getDn(), body.Str)
+		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PlatformSeparateRequest)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
@@ -1958,7 +1958,7 @@ func (r *PlatformResource) Delete(ctx context.Context, req resource.DeleteReques
 	if device.Managed {
 		body := state.toDeleteBody()
 		if len(body.Str) > 0 {
-			_, err := device.Client.Post(state.getDn(), body.Str)
+			_, err := helpers.PostSeparate(device.Client, state.getDn(), body.Str, helpers.SeparateRequest{Attributes: PlatformSeparateRequest.Attributes})
 			if err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
 				return

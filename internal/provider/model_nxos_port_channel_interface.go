@@ -189,8 +189,11 @@ var PortChannelInterfaceMinVersions = map[string]helpers.MinVersion{
 	"pcVlanTranslateEntry.direction": {Version: "10.6(3)", Path: "port_channel_interfaces.vlan_mappings.rx_only"},
 }
 
-// PortChannelInterfaceSeparateRequestClasses lists the classes that are sent in a second request after the rest of the body.
-var PortChannelInterfaceSeparateRequestClasses = []string{"pcVlanMapping"}
+// PortChannelInterfaceSeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
+// together with the values that reset the attributes before their object is deleted.
+var PortChannelInterfaceSeparateRequest = helpers.SeparateRequest{
+	Classes: []string{"pcVlanMapping"},
+}
 
 // End of section. //template:end types
 

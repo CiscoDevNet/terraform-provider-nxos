@@ -315,7 +315,7 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := {{if separateRequestClasses .ChildClasses}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequestClasses){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
+		_, err := {{if hasSeparateRequest .}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequest){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 			return
@@ -465,14 +465,14 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := {{if separateRequestClasses .ChildClasses}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequestClasses){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
+		_, err := {{if hasSeparateRequest .}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequest){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
 		}
 		if deferred {
 			body, _ = plan.toBodyWithDeletes(ctx, state, config, imp, false)
-			_, err = {{if separateRequestClasses .ChildClasses}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequestClasses){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
+			_, err = {{if hasSeparateRequest .}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequest){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
 			if err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 				return
@@ -484,7 +484,7 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := {{if separateRequestClasses .ChildClasses}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequestClasses){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
+		_, err := {{if hasSeparateRequest .}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequest){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
@@ -530,7 +530,7 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 	if device.Managed {
 		body := state.toDeleteBody()
 		if len(body.Str) > 0 {
-			_, err := device.Client.Post(state.getDn(), body.Str)
+			_, err := {{if separateRequestAttributes .}}helpers.PostSeparate(device.Client, state.getDn(), body.Str, helpers.SeparateRequest{Attributes: {{camelCase .Name}}SeparateRequest.Attributes}){{else}}device.Client.Post(state.getDn(), body.Str){{end}}
 			if err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
 				return

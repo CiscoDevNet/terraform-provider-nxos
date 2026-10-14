@@ -138,6 +138,7 @@ type YamlConfigAttribute struct {
 	MaxInt             int      `yaml:"max_int"`
 	Value              string   `yaml:"value"`
 	DeleteValue        string   `yaml:"delete_value"`
+	SeparateRequest    bool     `yaml:"separate_request"`
 	ExcludeTest        bool     `yaml:"exclude_test"`
 	RequiresReplace    bool     `yaml:"requires_replace"`
 	TestTags           []string `yaml:"test_tags"`
@@ -416,6 +417,8 @@ var functions = template.FuncMap{
 	"needsPlanItem":             NeedsPlanItem,
 	"hasAutoDeleteOnEmpty":      HasAutoDeleteOnEmpty,
 	"separateRequestClasses":    SeparateRequestClasses,
+	"separateRequestAttributes": SeparateRequestAttributes,
+	"hasSeparateRequest":        HasSeparateRequest,
 	"idCount":                   IdCount,
 	"mapKeyExpr":                MapKeyExpr,
 	"mapKeyExample":             MapKeyExample,
@@ -487,6 +490,44 @@ func SeparateRequestClasses(children []YamlConfigChildClass) []string {
 		names = append(names, SeparateRequestClasses(c.ChildClasses)...)
 	}
 	return names
+}
+
+// SeparateRequestAttributeClass holds the attributes of a class that have separate_request set.
+type SeparateRequestAttributeClass struct {
+	ClassName  string
+	Attributes []YamlConfigAttribute
+}
+
+// SeparateRequestAttributes collects, for the resource class and all child classes (recursively),
+// the attributes that have separate_request set. Classes without such attributes are omitted.
+func SeparateRequestAttributes(config YamlConfig) []SeparateRequestAttributeClass {
+	var classes []SeparateRequestAttributeClass
+	add := func(className string, attrs []YamlConfigAttribute) {
+		var separate []YamlConfigAttribute
+		for _, a := range attrs {
+			if a.SeparateRequest {
+				separate = append(separate, a)
+			}
+		}
+		if len(separate) > 0 {
+			classes = append(classes, SeparateRequestAttributeClass{ClassName: className, Attributes: separate})
+		}
+	}
+	add(config.ClassName, config.Attributes)
+	var walk func(children []YamlConfigChildClass)
+	walk = func(children []YamlConfigChildClass) {
+		for _, c := range children {
+			add(c.ClassName, c.Attributes)
+			walk(c.ChildClasses)
+		}
+	}
+	walk(config.ChildClasses)
+	return classes
+}
+
+// HasSeparateRequest returns true if any child class or attribute has separate_request set.
+func HasSeparateRequest(config YamlConfig) bool {
+	return len(SeparateRequestClasses(config.ChildClasses)) > 0 || len(SeparateRequestAttributes(config)) > 0
 }
 
 // IdCount returns the number of id: true attributes.

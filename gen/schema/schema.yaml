@@ -29,6 +29,7 @@ attribute:
   max_int: int(required=False) # Maximum value of an integer, only relevant if type is "Int64"
   value: any(str(), int(), bool(), required=False) # Static value always sent to the API, attribute hidden from Terraform schema
   delete_value: str(required=False) # Value sent when the attribute is reset (on destroy or when removed from the configuration) instead of restoring the device default
+  separate_request: bool(required=False) # Set to true if the device rejects the attribute on an object created in the same request and refuses to delete the object while the attribute is set (e.g. UDF qualifiers). On create and update the attribute is sent in a second request after the rest of the body, and before the object is deleted it is reset (to delete_value, or the device default) in a request of its own.
   exclude_test: bool(required=False) # Exclude attribute from acceptance test
   requires_replace: bool(required=False) # Set to true if the attribute update forces Terraform to destroy/recreate the entire resource
   test_tags: list(str(), required=False) # List of test tags, attribute only included in test if env var is set

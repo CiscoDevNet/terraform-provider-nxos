@@ -877,7 +877,7 @@ func (r *PhysicalInterfaceResource) Create(ctx context.Context, req resource.Cre
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PhysicalInterfaceSeparateRequestClasses)
+		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PhysicalInterfaceSeparateRequest)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 			return
@@ -1022,7 +1022,7 @@ func (r *PhysicalInterfaceResource) Update(ctx context.Context, req resource.Upd
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PhysicalInterfaceSeparateRequestClasses)
+		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PhysicalInterfaceSeparateRequest)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return

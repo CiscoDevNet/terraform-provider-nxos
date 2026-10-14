@@ -196,8 +196,11 @@ var PhysicalInterfaceMinVersions = map[string]helpers.MinVersion{
 	"l1VlanTranslateEntry.direction": {Version: "10.6(3)", Path: "physical_interfaces.vlan_mappings.rx_only"},
 }
 
-// PhysicalInterfaceSeparateRequestClasses lists the classes that are sent in a second request after the rest of the body.
-var PhysicalInterfaceSeparateRequestClasses = []string{"l1VlanMapping"}
+// PhysicalInterfaceSeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
+// together with the values that reset the attributes before their object is deleted.
+var PhysicalInterfaceSeparateRequest = helpers.SeparateRequest{
+	Classes: []string{"l1VlanMapping"},
+}
 
 // End of section. //template:end types
 

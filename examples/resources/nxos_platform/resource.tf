@@ -31,6 +31,7 @@ resource "nxos_platform" "example" {
       offset_base     = "outer-header-l3"
       offset_length   = 2
       offset_position = 10
+      qualify_racl    = true
     }
   }
 }

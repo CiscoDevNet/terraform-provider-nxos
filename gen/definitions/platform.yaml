@@ -2067,54 +2067,62 @@ child_classes:
             type: Bool
             description: 'Configure UDFs to be qualified for IFACL region.'
             example: true
+            separate_request: true
             exclude_test: true
           - nxos_name: qualifyIpv6Racl
             tf_name: qualify_ipv6_racl
             type: Bool
             description: 'Configure UDFs to be qualified for IPV6 RACL region.'
             example: true
+            separate_request: true
             exclude_test: true
           - nxos_name: qualifyRacl
             tf_name: qualify_racl
             type: Bool
             description: 'Configure UDFs to be qualified for RACL region.'
             example: true
-            exclude_test: true
+            separate_request: true
           - nxos_name: qualifyRaclAll
             tf_name: qualify_racl_all
             type: Bool
             description: 'Configure UDFs to be qualified for RACL ALL region.'
             example: true
+            separate_request: true
             exclude_test: true
           - nxos_name: qualifySpan
             tf_name: qualify_span
             type: Bool
             description: 'qualifySpan.'
             example: true
+            separate_request: true
             exclude_test: true
           - nxos_name: qualifySpanAll
             tf_name: qualify_span_all
             type: Bool
             description: 'Configure UDFs to be qualified for SPAN ALL region.'
             example: true
+            separate_request: true
             exclude_test: true
           - nxos_name: qualifySpanV6
             tf_name: qualify_span_v6
             type: Bool
             description: 'qualifySpanV6.'
             example: true
+            separate_request: true
             exclude_test: true
           - nxos_name: qualifySpanV6L2
             tf_name: qualify_span_v6_l2
             type: Bool
             description: 'qualifySpanV6L2.'
             example: true
+            separate_request: true
             exclude_test: true
           - nxos_name: qualifyVacl
             tf_name: qualify_vacl
             type: Bool
             description: 'Configure UDFs to be qualified for VACL region.'
             example: true
+            separate_request: true
             exclude_test: true
 test_prerequisites:
   - dn: sys/fm/nvo

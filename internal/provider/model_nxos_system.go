@@ -7818,26 +7818,32 @@ func (data System) toDeleteBody() nxos.Body {
 				if !data.SmartLicensingTransportMode.IsNull() {
 					childBody, _ = sjson.Set(childBody, "transportMode", "DME_UNSET_PROPERTY_MARKER")
 				}
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerSmartLicensing"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".licensemanagerSmartLicensing"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.SmartLicensingTransportCsluUrl.IsNull() {
+						childBody, _ = sjson.Set(childBody, "url", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.SmartLicensingTransportCsluUrl.IsNull() {
-							childBody, _ = sjson.Set(childBody, "url", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerTransportCsluUrl"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".licensemanagerTransportCsluUrl"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
@@ -7905,41 +7911,47 @@ func (data System) toDeleteBody() nxos.Body {
 		if !data.CfsAdminState.IsNull() {
 			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
-		hasNestedChildren := false
-		if childBody != "" || hasNestedChildren {
-			childIndex := len(gjson.Get(body, childrenPath).Array())
-			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".cfsEntity"
-			if childBody == "" {
-				childBody = "{}"
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".cfsEntity"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.CfsDistribute.IsNull() {
+				childBody, _ = sjson.Set(childBody, "distribute", "DME_UNSET_PROPERTY_MARKER")
 			}
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-			nestedChildrenPath := childBodyPath + ".children"
-			_ = nestedChildrenPath
-			{
-				childBody := ""
-				if !data.CfsDistribute.IsNull() {
-					childBody, _ = sjson.Set(childBody, "distribute", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.CfsEthernetDistribution.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ethDist", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.CfsIpv4Distribution.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ipv4Dist", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.CfsIpv4MulticastAddress.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ipv4Mcast", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.CfsIpv6Distribution.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ipv6Dist", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.CfsIpv6MulticastAddress.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ipv6Mcast", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if childBody != "" {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".cfsInst"
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-				}
+			if !data.CfsEthernetDistribution.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ethDist", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CfsIpv4Distribution.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ipv4Dist", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CfsIpv4MulticastAddress.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ipv4Mcast", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CfsIpv6Distribution.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ipv6Dist", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CfsIpv6MulticastAddress.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ipv6Mcast", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".cfsInst"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
 			}
 		}
 	}
@@ -8296,26 +8308,32 @@ func (data System) toDeleteBody() nxos.Body {
 		if !data.CoppRateLimiter.IsNull() {
 			childBody, _ = sjson.Set(childBody, "enableFlag", "DME_UNSET_PROPERTY_MARKER")
 		}
-		hasNestedChildren := false
-		if childBody != "" || hasNestedChildren {
-			childIndex := len(gjson.Get(body, childrenPath).Array())
-			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".coppEntity"
-			if childBody == "" {
-				childBody = "{}"
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".coppEntity"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.CoppProfileType.IsNull() {
+				childBody, _ = sjson.Set(childBody, "prof", "DME_UNSET_PROPERTY_MARKER")
 			}
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-			nestedChildrenPath := childBodyPath + ".children"
-			_ = nestedChildrenPath
-			{
-				childBody := ""
-				if !data.CoppProfileType.IsNull() {
-					childBody, _ = sjson.Set(childBody, "prof", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if childBody != "" {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".coppProfile"
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-				}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".coppProfile"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
 			}
 		}
 	}
@@ -8347,62 +8365,74 @@ func (data System) toDeleteBody() nxos.Body {
 			_ = nestedChildrenPath
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalConsole"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".terminalConsole"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.ConsoleExecTimeout.IsNull() {
+						childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.ConsoleExecTimeout.IsNull() {
-							childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalExecTimeout"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalExecTimeout"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalVty"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".terminalVty"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.VtyExecTimeout.IsNull() {
+						childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.VtyExecTimeout.IsNull() {
-							childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalExecTimeout"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalExecTimeout"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.VtySessionLimit.IsNull() {
-							childBody, _ = sjson.Set(childBody, "sesLmt", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalSesLmt"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.VtySessionLimit.IsNull() {
+						childBody, _ = sjson.Set(childBody, "sesLmt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".terminalSesLmt"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}

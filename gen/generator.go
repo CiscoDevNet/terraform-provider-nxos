@@ -28,6 +28,7 @@ import (
 	"path"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -136,6 +137,7 @@ type YamlConfigAttribute struct {
 	MinInt             int      `yaml:"min_int"`
 	MaxInt             int      `yaml:"max_int"`
 	Value              string   `yaml:"value"`
+	DeleteValue        string   `yaml:"delete_value"`
 	ExcludeTest        bool     `yaml:"exclude_test"`
 	RequiresReplace    bool     `yaml:"requires_replace"`
 	TestTags           []string `yaml:"test_tags"`
@@ -182,6 +184,17 @@ type YamlTestChild struct {
 type YamlTestAttribute struct {
 	Name  string `yaml:"name"`
 	Value string `yaml:"value"`
+}
+
+// DeleteValue returns the Go string literal that is sent for an attribute when it is
+// reset, either on destroy or when it is removed from the configuration. This is the
+// attribute's delete_value if defined, otherwise the DME unset marker which restores
+// the device default.
+func DeleteValue(attr YamlConfigAttribute) string {
+	if attr.DeleteValue != "" {
+		return strconv.Quote(attr.DeleteValue)
+	}
+	return strconv.Quote("DME_UNSET_PROPERTY_MARKER")
 }
 
 // Templating helper function to convert TF name to GO name
@@ -416,6 +429,7 @@ var functions = template.FuncMap{
 	"minVersionChecks":          MinVersionChecks,
 	"testCond":                  TestCond,
 	"testChildClasses":          TestChildClasses,
+	"deleteValue":               DeleteValue,
 }
 
 // AllChildClassNames recursively collects all child class names.

@@ -28,6 +28,7 @@ attribute:
   min_int: int(required=False) # Minimum value of an integer, only relevant if type is "Int64"
   max_int: int(required=False) # Maximum value of an integer, only relevant if type is "Int64"
   value: any(str(), int(), bool(), required=False) # Static value always sent to the API, attribute hidden from Terraform schema
+  delete_value: str(required=False) # Value sent when the attribute is reset (on destroy or when removed from the configuration) instead of restoring the device default
   exclude_test: bool(required=False) # Exclude attribute from acceptance test
   requires_replace: bool(required=False) # Set to true if the attribute update forces Terraform to destroy/recreate the entire resource
   test_tags: list(str(), required=False) # List of test tags, attribute only included in test if env var is set

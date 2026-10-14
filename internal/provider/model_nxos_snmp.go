@@ -5768,33 +5768,38 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			if !data.TcpSessionAuthentication.IsNull() {
 				childBody, _ = sjson.Set(childBody, "tcpSessionAuth", "DME_UNSET_PROPERTY_MARKER")
 			}
-			hasNestedChildren := false
-			hasNestedChildren = true
-			if childBody != "" || hasNestedChildren {
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpGlobals"
-				if childBody == "" {
-					childBody = "{}"
+			hasAttributes := childBody != ""
+			siblingsPath := nestedChildrenPath
+			childIndex := len(gjson.Get(body, siblingsPath).Array())
+			entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+			childBodyPath := entryPath + ".snmpGlobals"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				childBody := ""
+				if !data.SourceInterfaceTraps.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ifname", "DME_UNSET_PROPERTY_MARKER")
 				}
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-				nestedChildrenPath := childBodyPath + ".children"
-				_ = nestedChildrenPath
-				{
-					childBody := ""
-					if !data.SourceInterfaceTraps.IsNull() {
-						childBody, _ = sjson.Set(childBody, "ifname", "DME_UNSET_PROPERTY_MARKER")
-					}
-					if childBody != "" {
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSourceInterfaceTraps"
-						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSourceInterfaceTraps"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 				}
-				{
-					deleteBody := ""
-					deleteBody, _ = sjson.Set(deleteBody, "snmpSourceInterfaceInforms.attributes.rn", "srcInterfaceInforms")
-					deleteBody, _ = sjson.Set(deleteBody, "snmpSourceInterfaceInforms.attributes.status", "deleted")
-					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "snmpSourceInterfaceInforms.attributes.rn", "srcInterfaceInforms")
+				deleteBody, _ = sjson.Set(deleteBody, "snmpSourceInterfaceInforms.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, entryPath)
+				if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, siblingsPath)
 				}
 			}
 		}
@@ -5840,366 +5845,414 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			_ = nestedChildrenPath
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTaaa"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTaaa"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.AaaServerStateChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.AaaServerStateChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpServerStateChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpServerStateChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTbfd"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTbfd"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.BfdSessionDownTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.BfdSessionDownTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSessionDown"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSessionDown"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.BfdSessionUpTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSessionUp"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.BfdSessionUpTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSessionUp"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTbridge"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTbridge"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.BridgeNewRootTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.BridgeNewRootTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNewRoot"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNewRoot"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.BridgeTopologyChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTopologyChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.BridgeTopologyChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTopologyChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTcallhome"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTcallhome"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.CallhomeEventNotifyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.CallhomeEventNotifyTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEventNotify"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEventNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.CallhomeSmtpSendFailTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSmtpSendFail"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.CallhomeSmtpSendFailTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpSmtpSendFail"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTcfs"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTcfs"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.CfsStateChangeNotifTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.CfsStateChangeNotifTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpStateChangeNotif"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpStateChangeNotif"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.CfsMergeFailureTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpMergeFailure"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.CfsMergeFailureTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpMergeFailure"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTconfig"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTconfig"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.ConfigCliRunningConfigChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.ConfigCliRunningConfigChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCLIRunningConfigChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCLIRunningConfigChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTentity"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTentity"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.EntityMibChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.EntityMibChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityMIBChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityMIBChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.EntityMibEnableStatusNotificationTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityMIBEnableStatusNotification"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.EntityMibEnableStatusNotificationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.EntityFanStatusChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityFanStatusChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityMIBEnableStatusNotification"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.EntityModuleInsertedTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityModuleInserted"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.EntityFanStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.EntityModuleRemovedTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityModuleRemoved"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityFanStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.EntityModuleStatusChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityModuleStatusChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.EntityModuleInsertedTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.EntityPowerOutChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityPowerOutChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityModuleInserted"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.EntityPowerStatusChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityPowerStatusChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.EntityModuleRemovedTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.EntitySensorTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntitySensor"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityModuleRemoved"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.EntityUnrecognisedModuleTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityUnrecognisedModule"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.EntityModuleStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityModuleStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityPowerOutChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityPowerOutChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityPowerStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityPowerStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntitySensorTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntitySensor"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.EntityUnrecognisedModuleTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpEntityUnrecognisedModule"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfcdomain"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTfcdomain"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.FcdomainDomainIdNotAssignedTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.FcdomainDomainIdNotAssignedTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDmDomainIdNotAssignedNotify"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDmDomainIdNotAssignedNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.FcdomainFabricChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDmFabricChangeNotify"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.FcdomainFabricChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.FcdomainNewPrincipalSwitchTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDmNewPrincipalSwitchNotify"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDmFabricChangeNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.FcdomainNewPrincipalSwitchTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDmNewPrincipalSwitchNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
@@ -6237,37 +6290,43 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTfeaturecontrol"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTfeaturecontrol"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.FeatureControlOpStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.FeatureControlOpStatusChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpFeatureOpStatusChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpFeatureOpStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCiscoFeatOpStatusChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCiscoFeatOpStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
@@ -6281,62 +6340,74 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTgeneric"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTgeneric"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.GenericColdStartTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.GenericColdStartTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpColdStart"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpColdStart"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.GenericWarmStartTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpWarmStart"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.GenericWarmStartTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpWarmStart"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpThsrp"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpThsrp"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.HsrpStateChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.HsrpStateChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpStateChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpStateChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
@@ -6350,244 +6421,268 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlicense"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTlicense"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.LicenseExpiryTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.LicenseExpiryTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyLicenseExpiry"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyLicenseExpiry"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.LicenseExpiryWarningTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyLicenseExpiryWarning"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.LicenseExpiryWarningTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.LicenseFileMissingTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyLicenseFileMissing"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyLicenseExpiryWarning"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.LicenseNoLicenseForFeatureTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyNoLicenceForFeature"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.LicenseFileMissingTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyLicenseFileMissing"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LicenseNoLicenseForFeatureTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifyNoLicenceForFeature"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlink"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTlink"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.LinkCieLinkDownTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.LinkCieLinkDownTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCieLinkDown"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCieLinkDown"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.LinkCieLinkUpTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCieLinkUp"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.LinkCieLinkUpTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCiscoXcvrMonStatusChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCieLinkUp"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.LinkCmnMacMoveNotificationTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCmnMacMoveNotification"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.LinkDelayedLinkStateChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDelayedLinkStateChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCiscoXcvrMonStatusChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.LinkExtendedLinkDownTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpExtendedLinkDown"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.LinkCmnMacMoveNotificationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.LinkExtendedLinkUpTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpExtendedLinkUp"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCmnMacMoveNotification"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.LinkLinkDownTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLinkDown"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.LinkDelayedLinkStateChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.LinkLinkUpTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLinkUp"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpDelayedLinkStateChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.LinkErrDisableInterfaceEventTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCErrDisableInterfaceEventRev1"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.LinkExtendedLinkDownTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpExtendedLinkDown"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkExtendedLinkUpTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpExtendedLinkUp"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkLinkDownTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLinkDown"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkLinkUpTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLinkUp"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.LinkErrDisableInterfaceEventTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCErrDisableInterfaceEventRev1"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTlldp"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTlldp"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.LldpRemTablesChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.LldpRemTablesChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLldpRemTablesChange"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLldpRemTablesChange"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmmode"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTmmode"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.MmodeMaintModeChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.MmodeMaintModeChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCseMaintModeChangeNotify"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCseMaintModeChangeNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.MmodeNormalModeChangeTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCseNormalModeChangeNotify"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.MmodeNormalModeChangeTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCseNormalModeChangeNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
@@ -6609,37 +6704,43 @@ func (data SNMP) toDeleteBody() nxos.Body {
 					if !data.MplsLdpTrapStatus.IsNull() {
 						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					hasNestedChildren := false
-					if childBody != "" || hasNestedChildren {
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdp"
-						if childBody == "" {
-							childBody = "{}"
+					hasAttributes := childBody != ""
+					siblingsPath := nestedChildrenPath
+					childIndex := len(gjson.Get(body, siblingsPath).Array())
+					entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+					childBodyPath := entryPath + ".snmpLdp"
+					if childBody == "" {
+						childBody = "{}"
+					}
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					nestedChildrenPath := childBodyPath + ".children"
+					_ = nestedChildrenPath
+					{
+						childBody := ""
+						if !data.MplsLdpSessionDownTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 						}
-						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						nestedChildrenPath := childBodyPath + ".children"
-						_ = nestedChildrenPath
-						{
-							childBody := ""
-							if !data.MplsLdpSessionDownTrapStatus.IsNull() {
-								childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-							}
-							if childBody != "" {
-								childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-								childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdpSessiondown"
-								body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-							}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdpSessiondown"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 						}
-						{
-							childBody := ""
-							if !data.MplsLdpSessionUpTrapStatus.IsNull() {
-								childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-							}
-							if childBody != "" {
-								childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-								childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdpSessionup"
-								body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-							}
+					}
+					{
+						childBody := ""
+						if !data.MplsLdpSessionUpTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLdpSessionup"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+					if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, entryPath)
+						if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+							body, _ = sjson.Delete(body, siblingsPath)
 						}
 					}
 				}
@@ -6648,70 +6749,76 @@ func (data SNMP) toDeleteBody() nxos.Body {
 					if !data.MplsVpnTrapStatus.IsNull() {
 						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					hasNestedChildren := false
-					if childBody != "" || hasNestedChildren {
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpn"
-						if childBody == "" {
-							childBody = "{}"
+					hasAttributes := childBody != ""
+					siblingsPath := nestedChildrenPath
+					childIndex := len(gjson.Get(body, siblingsPath).Array())
+					entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+					childBodyPath := entryPath + ".snmpVpn"
+					if childBody == "" {
+						childBody = "{}"
+					}
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					nestedChildrenPath := childBodyPath + ".children"
+					_ = nestedChildrenPath
+					{
+						childBody := ""
+						if !data.MplsVpnMaxThreshClearedTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 						}
-						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						nestedChildrenPath := childBodyPath + ".children"
-						_ = nestedChildrenPath
-						{
-							childBody := ""
-							if !data.MplsVpnMaxThreshClearedTrapStatus.IsNull() {
-								childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-							}
-							if childBody != "" {
-								childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-								childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnMaxThreshcleared"
-								body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-							}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnMaxThreshcleared"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 						}
-						{
-							childBody := ""
-							if !data.MplsVpnMaxThreshExceededTrapStatus.IsNull() {
-								childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-							}
-							if childBody != "" {
-								childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-								childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnMaxThreshexceeded"
-								body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-							}
+					}
+					{
+						childBody := ""
+						if !data.MplsVpnMaxThreshExceededTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 						}
-						{
-							childBody := ""
-							if !data.MplsVpnMidThreshExceededTrapStatus.IsNull() {
-								childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-							}
-							if childBody != "" {
-								childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-								childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnMidThreshexceeded"
-								body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-							}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnMaxThreshexceeded"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 						}
-						{
-							childBody := ""
-							if !data.MplsVpnVrfDownTrapStatus.IsNull() {
-								childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-							}
-							if childBody != "" {
-								childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-								childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnVrfdown"
-								body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-							}
+					}
+					{
+						childBody := ""
+						if !data.MplsVpnMidThreshExceededTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 						}
-						{
-							childBody := ""
-							if !data.MplsVpnVrfUpTrapStatus.IsNull() {
-								childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-							}
-							if childBody != "" {
-								childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-								childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnVrfup"
-								body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-							}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnMidThreshexceeded"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+					{
+						childBody := ""
+						if !data.MplsVpnVrfDownTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnVrfdown"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+					{
+						childBody := ""
+						if !data.MplsVpnVrfUpTrapStatus.IsNull() {
+							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if childBody != "" {
+							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVpnVrfup"
+							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+						}
+					}
+					if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, entryPath)
+						if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+							body, _ = sjson.Delete(body, siblingsPath)
 						}
 					}
 				}
@@ -6724,51 +6831,63 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTmsdp"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTmsdp"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.MsdpBackwardTransitionTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.MsdpBackwardTransitionTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpMsdpBackwardTransition"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpMsdpBackwardTransition"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTpim"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTpim"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.PimNeighborLossTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.PimNeighborLossTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpPimNeighborLoss"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpPimNeighborLoss"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
@@ -6782,120 +6901,138 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTportsecurity"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTportsecurity"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpAccessSecureMacViolation"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpAccessSecureMacViolation"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrunkSecureMacViolation"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrunkSecureMacViolation"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrf"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTrf"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.RfRedundancyFrameworkTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.RfRedundancyFrameworkTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRedundancyFramework"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRedundancyFramework"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTrmon"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTrmon"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.RmonRisingAlarmTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.RmonRisingAlarmTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRisingAlarm"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRisingAlarm"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.RmonFallingAlarmTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpFallingAlarm"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.RmonFallingAlarmTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.RmonHcRisingAlarmTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpHcRisingAlarm"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpFallingAlarm"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.RmonHcFallingAlarmTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpHcFallingAlarm"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.RmonHcRisingAlarmTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpHcRisingAlarm"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.RmonHcFallingAlarmTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpHcFallingAlarm"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
@@ -6917,209 +7054,251 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsnmp"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTsnmp"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.SnmpAuthenticationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.SnmpAuthenticationTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpAuthentication"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpAuthentication"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTstormControl"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTstormControl"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.StormControlCpscEventTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.StormControlCpscEventTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCpscEventRev1"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCpscEventRev1"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTstpx"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTstpx"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.StpxInconsistencyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.StpxInconsistencyTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpInconsistency"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpInconsistency"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.StpxLoopInconsistencyTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLoopInconsistency"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.StpxLoopInconsistencyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.StpxRootInconsistencyTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRootInconsistency"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpLoopInconsistency"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.StpxRootInconsistencyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpRootInconsistency"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsyslog"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTsyslog"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.SyslogMessageGeneratedTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.SyslogMessageGeneratedTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpMessageGenerated"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpMessageGenerated"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsysmgr"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTsysmgr"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.SysmgrFailSwCoreNotifyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.SysmgrFailSwCoreNotifyTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCseFailSwCoreNotifyExtended"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpCseFailSwCoreNotifyExtended"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTsystem"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTsystem"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.SystemClockChangeNotificationTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.SystemClockChangeNotificationTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpClockChangeNotification"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpClockChangeNotification"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTupgrade"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTupgrade"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.UpgradeJobStatusNotifyTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.UpgradeJobStatusNotifyTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpUpgradeJobStatusNotify"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpUpgradeJobStatusNotify"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpUpgradeOpNotifyOnCompletion"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpUpgradeOpNotifyOnCompletion"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}
@@ -7133,48 +7312,54 @@ func (data SNMP) toDeleteBody() nxos.Body {
 			}
 			{
 				childBody := ""
-				hasNestedChildren := false
-				if childBody != "" || hasNestedChildren {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpTvtp"
-					if childBody == "" {
-						childBody = "{}"
+				hasAttributes := childBody != ""
+				siblingsPath := nestedChildrenPath
+				childIndex := len(gjson.Get(body, siblingsPath).Array())
+				entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+				childBodyPath := entryPath + ".snmpTvtp"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				{
+					childBody := ""
+					if !data.VtpNotifsTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-					nestedChildrenPath := childBodyPath + ".children"
-					_ = nestedChildrenPath
-					{
-						childBody := ""
-						if !data.VtpNotifsTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifs"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpNotifs"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 					}
-					{
-						childBody := ""
-						if !data.VtpVlanCreateTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVlancreate"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+				}
+				{
+					childBody := ""
+					if !data.VtpVlanCreateTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
 					}
-					{
-						childBody := ""
-						if !data.VtpVlanDeleteTrapStatus.IsNull() {
-							childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if childBody != "" {
-							childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-							childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVlandelete"
-							body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-						}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVlancreate"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				{
+					childBody := ""
+					if !data.VtpVlanDeleteTrapStatus.IsNull() {
+						childBody, _ = sjson.Set(childBody, "trapstatus", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if childBody != "" {
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".snmpVlandelete"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+					}
+				}
+				if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, entryPath)
+					if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+						body, _ = sjson.Delete(body, siblingsPath)
 					}
 				}
 			}

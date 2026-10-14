@@ -335,6 +335,7 @@ child_classes:
               - disabled
             example: enabled
             exclude_test: true
+            delete_value: enabled
       - class_name: fmOspf
         rn: ospf
         type: single

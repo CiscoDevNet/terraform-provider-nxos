@@ -3285,158 +3285,164 @@ func (data Platform) toDeleteBody() nxos.Body {
 		if !data.TcamRegionVxlanP2pSize.IsNull() {
 			childBody, _ = sjson.Set(childBody, "vxlanp2pSize", "DME_UNSET_PROPERTY_MARKER")
 		}
-		hasNestedChildren := false
-		if childBody != "" || hasNestedChildren {
-			childIndex := len(gjson.Get(body, childrenPath).Array())
-			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformTcamRegion"
-			if childBody == "" {
-				childBody = "{}"
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".platformTcamRegion"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() {
+				childBody, _ = sjson.Set(childBody, "eIfaclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
 			}
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-			nestedChildrenPath := childBodyPath + ".children"
-			_ = nestedChildrenPath
-			{
-				childBody := ""
-				if !data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "eIfaclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "eIfaclAllSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "eIpv6RaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressRaclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "eRaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressCoppSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrCoppSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressFlowSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrFlowSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrHwTelemetrySize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressInterfaceAclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrIfaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressL2QosSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrL2QosSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressL3VlanQosSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrL3VlanQosSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressRaclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrRaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedEgressSupSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "egrSupSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedHardwareTelemetrySize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "hwTelemetrySize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ifaclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedInterfaceAclAllProfile.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ifaclAllProfile", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedInterfaceAclAllSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ifaclAllSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ifaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressDaclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingDaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressInterfaceAclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingIfaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingIfaclWideSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingIpv6ifaclLiteSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressL2L3QosSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingL2L3QosSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressL2QosSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingL2QosSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingL2SpanFilterSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingL3SpanFilterSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressPaclSbSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingPaclSbSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressRaclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingRaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressRbaclSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingRbaclSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressRedirectSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingRedirectSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressStormControlSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingStormControlSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressSupSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingSupSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressVaclNhSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingVaclNhSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIngressVlanQosSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ingVlanQosSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ipv6IfaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "ipv6RaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "macIfaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedMulticastNatSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "mcastNatSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedMulticastNbmSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "mcastNbmSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedRaclAllPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "raclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedRaclAllProfile.IsNull() {
-					childBody, _ = sjson.Set(childBody, "raclAllProfile", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedRaclAllSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "raclAllSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedRaclPerPortStats.IsNull() {
-					childBody, _ = sjson.Set(childBody, "raclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedRedirectV4Size.IsNull() {
-					childBody, _ = sjson.Set(childBody, "redirectV4Size", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedSpanSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "spanSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !data.TcamRegionExtendedSpanTahoeSize.IsNull() {
-					childBody, _ = sjson.Set(childBody, "spanTahSize", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if childBody != "" {
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".platformTcamRegionExtended"
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
-				}
+			if !data.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "eIfaclAllSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() {
+				childBody, _ = sjson.Set(childBody, "eIpv6RaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedEgressRaclPerPortStats.IsNull() {
+				childBody, _ = sjson.Set(childBody, "eRaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedEgressCoppSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "egrCoppSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedEgressFlowSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "egrFlowSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "egrHwTelemetrySize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedEgressInterfaceAclSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "egrIfaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedEgressL2QosSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "egrL2QosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedEgressL3VlanQosSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "egrL3VlanQosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedEgressRaclSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "egrRaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedEgressSupSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "egrSupSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedHardwareTelemetrySize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "hwTelemetrySize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ifaclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedInterfaceAclAllProfile.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ifaclAllProfile", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedInterfaceAclAllSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ifaclAllSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ifaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressDaclSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingDaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressInterfaceAclSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingIfaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingIfaclWideSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingIpv6ifaclLiteSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressL2L3QosSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingL2L3QosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressL2QosSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingL2QosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingL2SpanFilterSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingL3SpanFilterSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressPaclSbSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingPaclSbSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressRaclSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingRaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressRbaclSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingRbaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressRedirectSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingRedirectSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressStormControlSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingStormControlSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressSupSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingSupSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressVaclNhSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingVaclNhSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIngressVlanQosSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ingVlanQosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ipv6IfaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ipv6RaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() {
+				childBody, _ = sjson.Set(childBody, "macIfaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedMulticastNatSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "mcastNatSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedMulticastNbmSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "mcastNbmSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedRaclAllPerPortStats.IsNull() {
+				childBody, _ = sjson.Set(childBody, "raclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedRaclAllProfile.IsNull() {
+				childBody, _ = sjson.Set(childBody, "raclAllProfile", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedRaclAllSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "raclAllSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedRaclPerPortStats.IsNull() {
+				childBody, _ = sjson.Set(childBody, "raclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedRedirectV4Size.IsNull() {
+				childBody, _ = sjson.Set(childBody, "redirectV4Size", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedSpanSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "spanSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionExtendedSpanTahoeSize.IsNull() {
+				childBody, _ = sjson.Set(childBody, "spanTahSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".platformTcamRegionExtended"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
 			}
 		}
 	}

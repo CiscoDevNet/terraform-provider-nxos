@@ -942,8 +942,8 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
        Uses dynamic index calculation (matching toBody's approach) to ensure each
        top-level child class gets its own children array index.
        For each child:
-         - NoDelete children with sub-children: create entry, set DME_UNSET_PROPERTY_MARKER for attrs, recurse
-         - NoDelete leaf children: create entry, set DME_UNSET_PROPERTY_MARKER for attrs
+         - NoDelete children with sub-children: create entry, set delete value (default DME_UNSET_PROPERTY_MARKER) for attrs, recurse
+         - NoDelete leaf children: create entry, set delete value (default DME_UNSET_PROPERTY_MARKER) for attrs
          - Deletable single children: append delete entry
          - Deletable list children: append delete entries per item
        Context: map with:
@@ -962,17 +962,18 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- range .Attributes}}
 {{- if and (not .Id) (eq .Value "")}}
 	if !data.{{toGoName .TfName}}.IsNull() {
-		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", {{deleteValue .}})
 	}
 {{- end}}
 {{- end}}
-	{{- /* If a child is itself NoDelete with children, whether anything gets emitted below it
-	       depends on that child's own state, so emit this entry and drop it again if it ends up
-	       empty. An empty stub of a feature-gated class (e.g. lldpEntity) is rejected by NX-OS
-	       when the feature is not enabled. */}}
+	{{- /* If a child is itself a NoDelete single class, whether anything gets emitted below it
+	       (unset markers of its attributes or of its own children) depends on that child's own
+	       state, so emit this entry and drop it again if it ends up empty. An empty stub of a
+	       feature-gated class (e.g. lldpEntity) is rejected by NX-OS when the feature is not
+	       enabled. */}}
 	{{- $pruneEmpty := false}}
 	{{- range .ChildClasses}}
-	{{- if and .NoDelete (eq .Type "single") .ChildClasses}}
+	{{- if and .NoDelete (eq .Type "single")}}
 	{{- $pruneEmpty = true}}
 	{{- end}}
 	{{- end}}
@@ -1025,7 +1026,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- range .Attributes}}
 {{- if and (not .Id) (eq .Value "")}}
 	if !data.{{toGoName .TfName}}.IsNull() {
-		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", {{deleteValue .}})
 	}
 {{- end}}
 {{- end}}
@@ -1042,7 +1043,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
 {{- range .Attributes}}
 {{- if and (not .Id) (eq .Value "")}}
-		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", {{deleteValue .}})
 {{- end}}
 {{- end}}
 		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1.{{$childClassName}}.attributes", childBody)
@@ -1078,7 +1079,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	{{- range .Attributes}}
 	{{- if and (not .Id) (eq .Value "")}}
 	if !data.{{toGoName .TfName}}.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", {{deleteValue .}})
 	}
 	{{- end}}
 	{{- end}}
@@ -1245,7 +1246,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.rn", stateChild.getRn(stateKey))
 {{- range .Attributes}}
 {{- if and (not .Id) (eq .Value "")}}
-			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.{{.NxosName}}", {{deleteValue .}})
 {{- end}}
 {{- end}}
 {{- else}}
@@ -1269,7 +1270,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- /* ==================== end toBodyDeletedChildrenTemplate ==================== */}}
 
 {{- /* ==================== toBodyUnsetChildAttrsTemplate ====================
-       Emits DME_UNSET_PROPERTY_MARKER for child-class attributes that were
+       Emits the delete value (default DME_UNSET_PROPERTY_MARKER) for child-class attributes that were
        non-null in state but are now null in config.
        Single children that are not part of the body (because none of their
        attributes is set in config) are created on demand.
@@ -1294,7 +1295,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
 	if !{{$stateVar}}.{{toGoName .TfName}}.IsNull() && {{$configVar}}.{{toGoName .TfName}}.IsNull() {
 		unsetPath := helpers.EnsureChildPath(&body.Str, {{$ensurePathExpr}}, "{{$childClassName}}")
-		body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+		body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"{{.NxosName}}", {{deleteValue .}})
 	}
 {{- end}}
 {{- end}}
@@ -1318,7 +1319,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 					{{- range .Attributes}}
 					{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
 					if !stateChild.{{toGoName .TfName}}.IsNull() && configChild.{{toGoName .TfName}}.IsNull() {
-						body.Str, _ = sjson.Set(body.Str, {{$bodyPathExpr}}+"."+strconv.Itoa(mi)+".{{$childClassName}}.attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+						body.Str, _ = sjson.Set(body.Str, {{$bodyPathExpr}}+"."+strconv.Itoa(mi)+".{{$childClassName}}.attributes."+"{{.NxosName}}", {{deleteValue .}})
 					}
 					{{- end}}
 					{{- end}}
@@ -1369,7 +1370,7 @@ func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{c
 	{{- range .Attributes}}
 	{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
 	if !state.{{toGoName .TfName}}.IsNull() && config.{{toGoName .TfName}}.IsNull() {
-		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"{{.NxosName}}", "DME_UNSET_PROPERTY_MARKER")
+		body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"{{.NxosName}}", {{deleteValue .}})
 	}
 	{{- end}}
 	{{- end}}

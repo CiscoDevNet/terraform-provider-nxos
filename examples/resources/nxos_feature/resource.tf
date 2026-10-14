@@ -5,6 +5,7 @@ resource "nxos_feature" "example" {
   bgp                  = "enabled"
   dhcp                 = "enabled"
   eigrp                = "enabled"
+  epbr                 = "enabled"
   evpn                 = "enabled"
   grpc                 = "enabled"
   hmm                  = "enabled"

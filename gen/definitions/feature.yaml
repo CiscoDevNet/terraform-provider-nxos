@@ -106,6 +106,21 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmEpbr
+        rn: epbr
+        type: single
+        no_delete: true
+        description: 'ePBR feature configuration.'
+        doc_path: Feature%20Management/fm:Epbr/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: epbr
+            type: String
+            description: 'Admin status.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmEvpn
         rn: evpn
         type: single

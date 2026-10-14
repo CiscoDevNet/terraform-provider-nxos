@@ -1,0 +1,1489 @@
+---
+name: EPBR
+class_name: epbrEntity
+dn: sys/epbr
+ds_description: This data source can read the Enhanced Policy-Based Redirect (ePBR) configuration on NX-OS devices, including services with layer-3, layer-2 and DPU endpoints, reverse endpoints and probes, service chains, failover groups, policies with matches and sequences, VRF redirection, infra VLANs and interface policy attachments.
+res_description: This resource can manage the Enhanced Policy-Based Redirect (ePBR) configuration on NX-OS devices, including services with layer-3, layer-2 and DPU endpoints, reverse endpoints and probes, service chains, failover groups, policies with matches and sequences, VRF redirection, infra VLANs and interface policy attachments.
+doc_path: Routing%20and%20Forwarding/epbr:Entity/
+doc_category: Routing
+child_classes:
+  - class_name: epbrInst
+    doc_path: Routing%20and%20Forwarding/epbr:Inst/
+    rn: inst
+    type: single
+    tf_name: instance
+    description: 'ePBR instance.'
+    child_classes:
+      - class_name: epbrService
+        doc_path: Routing%20and%20Forwarding/epbr:Service/
+        rn: service-[%s]
+        type: list
+        tf_name: services
+        description: 'List of ePBR services.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'The name of the object.'
+            example: SVC1
+          - nxos_name: adminState
+            tf_name: admin_state
+            type: String
+            description: 'Administrative state for EPBR service.'
+            enum_values:
+              - noShut
+              - shut
+            example: shut
+          - nxos_name: connMode
+            tf_name: connection_mode
+            type: String
+            description: 'Connection mode.'
+            enum_values:
+              - full-duplex
+              - half-duplex
+            example: full-duplex
+          - nxos_name: holdDownThreshCount
+            tf_name: hold_down_threshold_count
+            type: Int64
+            min_int: 0
+            max_int: 10
+            description: 'Threshold count for EPBR service.'
+            example: 3
+          - nxos_name: holdDownThreshTime
+            tf_name: hold_down_threshold_time
+            type: Int64
+            min_int: 0
+            max_int: 86400
+            description: 'Threshold time for EPBR service.'
+            example: 100
+          - nxos_name: reverseSecGroup
+            tf_name: reverse_security_group
+            type: Int64
+            min_int: 0
+            max_int: 65535
+            description: 'reverse security group.'
+            example: 200
+          - nxos_name: secGroup
+            tf_name: security_group
+            type: Int64
+            min_int: 0
+            max_int: 65535
+            description: 'forward security group.'
+            example: 100
+          - nxos_name: svcIntf
+            tf_name: service_interface
+            type: String
+            description: 'Service interface.'
+            example: eth1/10
+          - nxos_name: thresholdHigh
+            tf_name: threshold_high
+            type: Int64
+            min_int: 0
+            max_int: 100
+            description: 'min active endpoints to be declared UP.'
+            example: 60
+            exclude_test: true
+          - nxos_name: thresholdLow
+            tf_name: threshold_low
+            type: Int64
+            min_int: 0
+            max_int: 100
+            description: 'max active endpoints to be declared DOWN.'
+            example: 20
+            exclude_test: true
+          - nxos_name: thresholdUp
+            tf_name: threshold_up
+            type: Int64
+            min_int: 0
+            max_int: 100
+            description: 'Minimum percentage of active endpoints for service to be declared UP.'
+            example: 50
+          - nxos_name: type
+            tf_name: type
+            type: String
+            description: 'The specific type of the object or component.'
+            enum_values:
+              - l3
+              - l2
+              - dpu
+              - l3-redirect
+            example: l3
+          - nxos_name: vrf
+            tf_name: vrf
+            type: String
+            description: 'Identifies the VRF for the NTP providers.'
+            example: default
+        child_classes:
+          - class_name: epbrProbe
+            doc_path: Routing%20and%20Forwarding/epbr:Probe/
+            rn: probe
+            type: single
+            tf_name: probe
+            description: 'ePBR service probe.'
+            attributes:
+              - nxos_name: ctrlStatusEnable
+                tf_name: probe_control
+                type: String
+                description: 'Probe control status.'
+                enum_values:
+                  - disable
+                  - enable
+                example: enable
+              - nxos_name: dnshost
+                tf_name: probe_dns_host
+                type: String
+                description: 'DNS host name.'
+                example: www.example.com
+                exclude_test: true
+              - nxos_name: frequency
+                tf_name: probe_frequency
+                type: Int64
+                min_int: 0
+                max_int: 604800
+                description: 'Probe frequency.'
+                example: 5
+              - nxos_name: httpGetStr
+                tf_name: probe_http_get
+                type: String
+                description: 'HTTP get string.'
+                example: index.html
+                exclude_test: true
+              - nxos_name: httpVersion
+                tf_name: probe_http_version
+                type: String
+                description: "HTTP version number, Supported HTTP versions are '1.0' and '1.1'."
+                example: '1.1'
+                exclude_test: true
+              - nxos_name: port
+                tf_name: probe_port
+                type: Int64
+                min_int: 0
+                max_int: 65535
+                description: 'The service port number for the LDAP service.'
+                example: 80
+              - nxos_name: probeIp
+                tf_name: probe_ip
+                type: String
+                description: 'Probe IP address.'
+                example: 10.1.1.100
+                exclude_test: true
+              - nxos_name: protocol
+                tf_name: probe_protocol
+                type: String
+                description: 'The transfer protocol to be used for data export.'
+                enum_values:
+                  - noProtocol
+                  - DNS
+                  - HTTP
+                  - ICMP
+                  - TCP
+                  - UDP
+                  - IP
+                  - LinkState
+                  - CTP
+                example: TCP
+              - nxos_name: retryDownCount
+                tf_name: probe_retry_down_count
+                type: Int64
+                min_int: 0
+                max_int: 5
+                description: 'Probe retry down count.'
+                example: 2
+              - nxos_name: retryUpCount
+                tf_name: probe_retry_up_count
+                type: Int64
+                min_int: 0
+                max_int: 5
+                description: 'Probe retry up count.'
+                example: 2
+              - nxos_name: revSourceIntf
+                tf_name: probe_reverse_source_interface
+                type: String
+                description: 'Resource source interface for probe.'
+                example: lo123
+              - nxos_name: sourceIntf
+                tf_name: probe_source_interface
+                type: String
+                description: 'Probe source interface.'
+                example: lo123
+              - nxos_name: timeout
+                tf_name: probe_timeout
+                type: Int64
+                min_int: 0
+                max_int: 604800
+                description: 'The amount of time between authentication attempts.'
+                example: 3
+              - nxos_name: trackID
+                tf_name: probe_track_id
+                type: Int64
+                min_int: 0
+                max_int: 512
+                description: 'Probe track ID.'
+                example: 10
+                exclude_test: true
+          - class_name: epbrSvcEndPoint
+            doc_path: Routing%20and%20Forwarding/epbr:SvcEndPoint/
+            rn: ep-[%s]
+            type: list
+            tf_name: endpoints
+            description: 'List of ePBR service endpoints.'
+            attributes:
+              - nxos_name: ip
+                tf_name: ip
+                type: String
+                id: true
+                description: 'The IP address.'
+                example: 10.1.1.10
+              - nxos_name: adminState
+                tf_name: admin_state
+                type: String
+                description: 'Administrative state for EPBR service endpoint.'
+                enum_values:
+                  - noShut
+                  - shut
+                example: shut
+              - nxos_name: holdDownThreshCount
+                tf_name: hold_down_threshold_count
+                type: Int64
+                min_int: 0
+                max_int: 10
+                description: 'Threshold count for EPBR service endpoint.'
+                example: 3
+              - nxos_name: holdDownThreshTime
+                tf_name: hold_down_threshold_time
+                type: Int64
+                min_int: 0
+                max_int: 86400
+                description: 'Threshold time for EPBR service endpoint.'
+                example: 100
+              - nxos_name: mode
+                tf_name: mode
+                type: String
+                description: 'Redundancy mode for EPBR service endpoint.'
+                enum_values:
+                  - primary
+                  - hot-standby
+                example: hot-standby
+              - nxos_name: svcIntf
+                tf_name: service_interface
+                type: String
+                description: 'Service endpoint interface.'
+                example: eth1/10
+                exclude_test: true
+              - nxos_name: weight
+                tf_name: weight
+                type: Int64
+                min_int: 1
+                max_int: 10
+                description: 'Weight for EPBR service endpoint.'
+                example: 3
+            child_classes:
+              - class_name: epbrProbe
+                doc_path: Routing%20and%20Forwarding/epbr:Probe/
+                rn: probe
+                type: single
+                tf_name: probe
+                description: 'ePBR service endpoint probe.'
+                attributes:
+                  - nxos_name: ctrlStatusEnable
+                    tf_name: probe_control
+                    type: String
+                    description: 'Probe control status.'
+                    enum_values:
+                      - disable
+                      - enable
+                    example: enable
+                    exclude_test: true
+                  - nxos_name: dnshost
+                    tf_name: probe_dns_host
+                    type: String
+                    description: 'DNS host name.'
+                    example: www.example.com
+                    exclude_test: true
+                  - nxos_name: frequency
+                    tf_name: probe_frequency
+                    type: Int64
+                    min_int: 0
+                    max_int: 604800
+                    description: 'Probe frequency.'
+                    example: 60
+                  - nxos_name: httpGetStr
+                    tf_name: probe_http_get
+                    type: String
+                    description: 'HTTP get string.'
+                    example: index.html
+                  - nxos_name: httpVersion
+                    tf_name: probe_http_version
+                    type: String
+                    description: "HTTP version number, Supported HTTP versions are '1.0' and '1.1'."
+                    example: '1.1'
+                  - nxos_name: port
+                    tf_name: probe_port
+                    type: Int64
+                    min_int: 0
+                    max_int: 65535
+                    description: 'The service port number for the LDAP service.'
+                    example: 80
+                    exclude_test: true
+                  - nxos_name: probeIp
+                    tf_name: probe_ip
+                    type: String
+                    description: 'Probe IP address.'
+                    example: 10.1.1.100
+                    exclude_test: true
+                  - nxos_name: protocol
+                    tf_name: probe_protocol
+                    type: String
+                    description: 'The transfer protocol to be used for data export.'
+                    enum_values:
+                      - noProtocol
+                      - DNS
+                      - HTTP
+                      - ICMP
+                      - TCP
+                      - UDP
+                      - IP
+                      - LinkState
+                      - CTP
+                    example: HTTP
+                  - nxos_name: retryDownCount
+                    tf_name: probe_retry_down_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 5
+                    description: 'Probe retry down count.'
+                    example: 2
+                  - nxos_name: retryUpCount
+                    tf_name: probe_retry_up_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 5
+                    description: 'Probe retry up count.'
+                    example: 2
+                  - nxos_name: revSourceIntf
+                    tf_name: probe_reverse_source_interface
+                    type: String
+                    description: 'Resource source interface for probe.'
+                    example: lo123
+                    exclude_test: true
+                  - nxos_name: sourceIntf
+                    tf_name: probe_source_interface
+                    type: String
+                    description: 'Probe source interface.'
+                    example: lo123
+                  - nxos_name: timeout
+                    tf_name: probe_timeout
+                    type: Int64
+                    min_int: 0
+                    max_int: 604800
+                    description: 'The amount of time between authentication attempts.'
+                    example: 30
+                  - nxos_name: trackID
+                    tf_name: probe_track_id
+                    type: Int64
+                    min_int: 0
+                    max_int: 512
+                    description: 'Probe track ID.'
+                    example: 10
+                    exclude_test: true
+              - class_name: epbrSvcEndPointReverse
+                doc_path: Routing%20and%20Forwarding/epbr:SvcEndPointReverse/
+                rn: epreverse
+                type: single
+                tf_name: reverse
+                description: 'ePBR reverse service endpoint.'
+                attributes:
+                  - nxos_name: adminState
+                    tf_name: reverse_admin_state
+                    type: String
+                    description: 'Administrative state for EPBR service endpoint.'
+                    enum_values:
+                      - noShut
+                      - shut
+                    example: shut
+                    exclude_test: true
+                  - nxos_name: holdDownThreshCount
+                    tf_name: reverse_hold_down_threshold_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 10
+                    description: 'Threshold count for EPBR service endpoint.'
+                    example: 3
+                    exclude_test: true
+                  - nxos_name: holdDownThreshTime
+                    tf_name: reverse_hold_down_threshold_time
+                    type: Int64
+                    min_int: 0
+                    max_int: 86400
+                    description: 'Threshold time for EPBR service endpoint.'
+                    example: 100
+                    exclude_test: true
+                  - nxos_name: ip
+                    tf_name: reverse_ip
+                    type: String
+                    description: 'The IP address.'
+                    example: 10.2.2.10
+                  - nxos_name: svcIntf
+                    tf_name: reverse_service_interface
+                    type: String
+                    description: 'Reverse service endpoint interface.'
+                    example: eth1/10
+                    exclude_test: true
+                child_classes:
+                  - class_name: epbrProbe
+                    doc_path: Routing%20and%20Forwarding/epbr:Probe/
+                    rn: probe
+                    type: single
+                    tf_name: probe
+                    description: 'ePBR reverse service endpoint probe.'
+                    attributes:
+                      - nxos_name: ctrlStatusEnable
+                        tf_name: reverse_probe_control
+                        type: String
+                        description: 'Probe control status.'
+                        enum_values:
+                          - disable
+                          - enable
+                        example: enable
+                        exclude_test: true
+                      - nxos_name: dnshost
+                        tf_name: reverse_probe_dns_host
+                        type: String
+                        description: 'DNS host name.'
+                        example: www.example.com
+                        exclude_test: true
+                      - nxos_name: frequency
+                        tf_name: reverse_probe_frequency
+                        type: Int64
+                        min_int: 0
+                        max_int: 604800
+                        description: 'Probe frequency.'
+                        example: 5
+                        exclude_test: true
+                      - nxos_name: httpGetStr
+                        tf_name: reverse_probe_http_get
+                        type: String
+                        description: 'HTTP get string.'
+                        example: index.html
+                        exclude_test: true
+                      - nxos_name: httpVersion
+                        tf_name: reverse_probe_http_version
+                        type: String
+                        description: "HTTP version number, Supported HTTP versions are '1.0' and '1.1'."
+                        example: '1.1'
+                        exclude_test: true
+                      - nxos_name: port
+                        tf_name: reverse_probe_port
+                        type: Int64
+                        min_int: 0
+                        max_int: 65535
+                        description: 'The service port number for the LDAP service.'
+                        example: 80
+                        exclude_test: true
+                      - nxos_name: probeIp
+                        tf_name: reverse_probe_ip
+                        type: String
+                        description: 'Probe IP address.'
+                        example: 10.1.1.100
+                        exclude_test: true
+                      - nxos_name: protocol
+                        tf_name: reverse_probe_protocol
+                        type: String
+                        description: 'The transfer protocol to be used for data export.'
+                        enum_values:
+                          - noProtocol
+                          - DNS
+                          - HTTP
+                          - ICMP
+                          - TCP
+                          - UDP
+                          - IP
+                          - LinkState
+                          - CTP
+                        example: noProtocol
+                      - nxos_name: retryDownCount
+                        tf_name: reverse_probe_retry_down_count
+                        type: Int64
+                        min_int: 0
+                        max_int: 5
+                        description: 'Probe retry down count.'
+                        example: 2
+                        exclude_test: true
+                      - nxos_name: retryUpCount
+                        tf_name: reverse_probe_retry_up_count
+                        type: Int64
+                        min_int: 0
+                        max_int: 5
+                        description: 'Probe retry up count.'
+                        example: 2
+                        exclude_test: true
+                      - nxos_name: revSourceIntf
+                        tf_name: reverse_probe_reverse_source_interface
+                        type: String
+                        description: 'Resource source interface for probe.'
+                        example: lo123
+                        exclude_test: true
+                      - nxos_name: sourceIntf
+                        tf_name: reverse_probe_source_interface
+                        type: String
+                        description: 'Probe source interface.'
+                        example: lo123
+                        exclude_test: true
+                      - nxos_name: timeout
+                        tf_name: reverse_probe_timeout
+                        type: Int64
+                        min_int: 0
+                        max_int: 604800
+                        description: 'The amount of time between authentication attempts.'
+                        example: 3
+                        exclude_test: true
+                      - nxos_name: trackID
+                        tf_name: reverse_probe_track_id
+                        type: Int64
+                        min_int: 0
+                        max_int: 512
+                        description: 'Probe track ID.'
+                        example: 10
+          - class_name: epbrSvcEndPointL2
+            doc_path: Routing%20and%20Forwarding/epbr:SvcEndPointL2/
+            rn: l2ep-[%s]
+            type: list
+            tf_name: l2_endpoints
+            description: 'List of ePBR layer-2 service endpoints.'
+            exclude_test: true
+            attributes:
+              - nxos_name: svcIntf
+                tf_name: service_interface
+                type: String
+                id: true
+                description: 'Service endpoint interface.'
+                example: eth1/12
+              - nxos_name: adminState
+                tf_name: admin_state
+                type: String
+                description: 'Administrative state for EPBR service endpoint.'
+                enum_values:
+                  - noShut
+                  - shut
+                example: shut
+                exclude_test: true
+              - nxos_name: holdDownThreshCount
+                tf_name: hold_down_threshold_count
+                type: Int64
+                min_int: 0
+                max_int: 10
+                description: 'Threshold count for EPBR service endpoint.'
+                example: 3
+                exclude_test: true
+              - nxos_name: holdDownThreshTime
+                tf_name: hold_down_threshold_time
+                type: Int64
+                min_int: 0
+                max_int: 86400
+                description: 'Threshold time for EPBR service endpoint.'
+                example: 100
+                exclude_test: true
+              - nxos_name: ip
+                tf_name: ip
+                type: String
+                description: 'The IP address.'
+                example: 10.1.1.40
+                exclude_test: true
+            child_classes:
+              - class_name: epbrProbe
+                doc_path: Routing%20and%20Forwarding/epbr:Probe/
+                rn: probe
+                type: single
+                tf_name: probe
+                description: 'ePBR layer-2 service endpoint probe.'
+                attributes:
+                  - nxos_name: ctrlStatusEnable
+                    tf_name: probe_control
+                    type: String
+                    description: 'Probe control status.'
+                    enum_values:
+                      - disable
+                      - enable
+                    example: enable
+                    exclude_test: true
+                  - nxos_name: dnshost
+                    tf_name: probe_dns_host
+                    type: String
+                    description: 'DNS host name.'
+                    example: www.example.com
+                    exclude_test: true
+                  - nxos_name: frequency
+                    tf_name: probe_frequency
+                    type: Int64
+                    min_int: 0
+                    max_int: 604800
+                    description: 'Probe frequency.'
+                    example: 10
+                  - nxos_name: httpGetStr
+                    tf_name: probe_http_get
+                    type: String
+                    description: 'HTTP get string.'
+                    example: index.html
+                    exclude_test: true
+                  - nxos_name: httpVersion
+                    tf_name: probe_http_version
+                    type: String
+                    description: "HTTP version number, Supported HTTP versions are '1.0' and '1.1'."
+                    example: '1.1'
+                    exclude_test: true
+                  - nxos_name: port
+                    tf_name: probe_port
+                    type: Int64
+                    min_int: 0
+                    max_int: 65535
+                    description: 'The service port number for the LDAP service.'
+                    example: 80
+                    exclude_test: true
+                  - nxos_name: probeIp
+                    tf_name: probe_ip
+                    type: String
+                    description: 'Probe IP address.'
+                    example: 10.1.1.100
+                    exclude_test: true
+                  - nxos_name: protocol
+                    tf_name: probe_protocol
+                    type: String
+                    description: 'The transfer protocol to be used for data export.'
+                    enum_values:
+                      - noProtocol
+                      - DNS
+                      - HTTP
+                      - ICMP
+                      - TCP
+                      - UDP
+                      - IP
+                      - LinkState
+                      - CTP
+                    example: CTP
+                  - nxos_name: retryDownCount
+                    tf_name: probe_retry_down_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 5
+                    description: 'Probe retry down count.'
+                    example: 2
+                  - nxos_name: retryUpCount
+                    tf_name: probe_retry_up_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 5
+                    description: 'Probe retry up count.'
+                    example: 2
+                  - nxos_name: revSourceIntf
+                    tf_name: probe_reverse_source_interface
+                    type: String
+                    description: 'Resource source interface for probe.'
+                    example: lo123
+                    exclude_test: true
+                  - nxos_name: sourceIntf
+                    tf_name: probe_source_interface
+                    type: String
+                    description: 'Probe source interface.'
+                    example: lo123
+                    exclude_test: true
+                  - nxos_name: timeout
+                    tf_name: probe_timeout
+                    type: Int64
+                    min_int: 0
+                    max_int: 604800
+                    description: 'The amount of time between authentication attempts.'
+                    example: 3
+                  - nxos_name: trackID
+                    tf_name: probe_track_id
+                    type: Int64
+                    min_int: 0
+                    max_int: 512
+                    description: 'Probe track ID.'
+                    example: 10
+                    exclude_test: true
+              - class_name: epbrSvcEndPointReverse
+                doc_path: Routing%20and%20Forwarding/epbr:SvcEndPointReverse/
+                rn: epreverse
+                type: single
+                tf_name: reverse
+                description: 'ePBR layer-2 reverse service endpoint.'
+                attributes:
+                  - nxos_name: adminState
+                    tf_name: reverse_admin_state
+                    type: String
+                    description: 'Administrative state for EPBR service endpoint.'
+                    enum_values:
+                      - noShut
+                      - shut
+                    example: shut
+                    exclude_test: true
+                  - nxos_name: holdDownThreshCount
+                    tf_name: reverse_hold_down_threshold_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 10
+                    description: 'Threshold count for EPBR service endpoint.'
+                    example: 3
+                    exclude_test: true
+                  - nxos_name: holdDownThreshTime
+                    tf_name: reverse_hold_down_threshold_time
+                    type: Int64
+                    min_int: 0
+                    max_int: 86400
+                    description: 'Threshold time for EPBR service endpoint.'
+                    example: 100
+                    exclude_test: true
+                  - nxos_name: ip
+                    tf_name: reverse_ip
+                    type: String
+                    description: 'The IP address.'
+                    example: 10.2.2.40
+                    exclude_test: true
+                  - nxos_name: svcIntf
+                    tf_name: reverse_service_interface
+                    type: String
+                    description: 'Reverse service endpoint interface.'
+                    example: eth1/13
+                child_classes:
+                  - class_name: epbrProbe
+                    doc_path: Routing%20and%20Forwarding/epbr:Probe/
+                    rn: probe
+                    type: single
+                    tf_name: probe
+                    description: 'ePBR layer-2 reverse service endpoint probe.'
+                    attributes:
+                      - nxos_name: ctrlStatusEnable
+                        tf_name: reverse_probe_control
+                        type: String
+                        description: 'Probe control status.'
+                        enum_values:
+                          - disable
+                          - enable
+                        example: enable
+                        exclude_test: true
+                      - nxos_name: dnshost
+                        tf_name: reverse_probe_dns_host
+                        type: String
+                        description: 'DNS host name.'
+                        example: www.example.com
+                        exclude_test: true
+                      - nxos_name: frequency
+                        tf_name: reverse_probe_frequency
+                        type: Int64
+                        min_int: 0
+                        max_int: 604800
+                        description: 'Probe frequency.'
+                        example: 10
+                      - nxos_name: httpGetStr
+                        tf_name: reverse_probe_http_get
+                        type: String
+                        description: 'HTTP get string.'
+                        example: index.html
+                        exclude_test: true
+                      - nxos_name: httpVersion
+                        tf_name: reverse_probe_http_version
+                        type: String
+                        description: "HTTP version number, Supported HTTP versions are '1.0' and '1.1'."
+                        example: '1.1'
+                        exclude_test: true
+                      - nxos_name: port
+                        tf_name: reverse_probe_port
+                        type: Int64
+                        min_int: 0
+                        max_int: 65535
+                        description: 'The service port number for the LDAP service.'
+                        example: 80
+                        exclude_test: true
+                      - nxos_name: probeIp
+                        tf_name: reverse_probe_ip
+                        type: String
+                        description: 'Probe IP address.'
+                        example: 10.1.1.100
+                        exclude_test: true
+                      - nxos_name: protocol
+                        tf_name: reverse_probe_protocol
+                        type: String
+                        description: 'The transfer protocol to be used for data export.'
+                        enum_values:
+                          - noProtocol
+                          - DNS
+                          - HTTP
+                          - ICMP
+                          - TCP
+                          - UDP
+                          - IP
+                          - LinkState
+                          - CTP
+                        example: CTP
+                      - nxos_name: retryDownCount
+                        tf_name: reverse_probe_retry_down_count
+                        type: Int64
+                        min_int: 0
+                        max_int: 5
+                        description: 'Probe retry down count.'
+                        example: 2
+                        exclude_test: true
+                      - nxos_name: retryUpCount
+                        tf_name: reverse_probe_retry_up_count
+                        type: Int64
+                        min_int: 0
+                        max_int: 5
+                        description: 'Probe retry up count.'
+                        example: 2
+                        exclude_test: true
+                      - nxos_name: revSourceIntf
+                        tf_name: reverse_probe_reverse_source_interface
+                        type: String
+                        description: 'Resource source interface for probe.'
+                        example: lo123
+                        exclude_test: true
+                      - nxos_name: sourceIntf
+                        tf_name: reverse_probe_source_interface
+                        type: String
+                        description: 'Probe source interface.'
+                        example: lo123
+                        exclude_test: true
+                      - nxos_name: timeout
+                        tf_name: reverse_probe_timeout
+                        type: Int64
+                        min_int: 0
+                        max_int: 604800
+                        description: 'The amount of time between authentication attempts.'
+                        example: 3
+                        exclude_test: true
+                      - nxos_name: trackID
+                        tf_name: reverse_probe_track_id
+                        type: Int64
+                        min_int: 0
+                        max_int: 512
+                        description: 'Probe track ID.'
+                        example: 10
+                        exclude_test: true
+          - class_name: epbrSvcEndPointDpu
+            doc_path: Routing%20and%20Forwarding/epbr:SvcEndPointDpu/
+            rn: dpuep-%v
+            type: list
+            tf_name: dpu_endpoints
+            description: 'List of ePBR DPU service endpoints.'
+            exclude_test: true
+            attributes:
+              - nxos_name: dpuNum
+                tf_name: dpu
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 16
+                description: 'Service Module number.'
+                example: 1
+              - nxos_name: adminState
+                tf_name: admin_state
+                type: String
+                description: 'Administrative state for EPBR service endpoint.'
+                enum_values:
+                  - noShut
+                  - shut
+                example: shut
+              - nxos_name: holdDownThreshCount
+                tf_name: hold_down_threshold_count
+                type: Int64
+                min_int: 0
+                max_int: 10
+                description: 'Threshold count for EPBR service endpoint.'
+                example: 3
+              - nxos_name: holdDownThreshTime
+                tf_name: hold_down_threshold_time
+                type: Int64
+                min_int: 0
+                max_int: 86400
+                description: 'Threshold time for EPBR service endpoint.'
+                example: 100
+              - nxos_name: ip
+                tf_name: ip
+                type: String
+                description: 'The IP address.'
+                example: 10.1.1.50
+              - nxos_name: svcIntf
+                tf_name: service_interface
+                type: String
+                description: 'Service endpoint interface.'
+                example: eth1/10
+              - nxos_name: vlan
+                tf_name: vlan
+                type: Int64
+                min_int: 0
+                max_int: 65535
+                description: 'Global Id assigned for VRF used as VLAN.'
+                example: 100
+      - class_name: epbrFailoverGroup
+        doc_path: Routing%20and%20Forwarding/epbr:FailoverGroup/
+        rn: failgrp-[%s]
+        type: list
+        tf_name: failover_groups
+        description: 'List of ePBR failover groups.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'The name of the object.'
+            example: FG1
+        child_classes:
+          - class_name: epbrFailoverServiceChain
+            doc_path: Routing%20and%20Forwarding/epbr:FailoverServiceChain/
+            rn: chain-[%s]
+            type: list
+            tf_name: service_chains
+            description: 'List of ePBR failover group service chains.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'The name of the service chain.'
+                example: CHAIN2
+              - nxos_name: preference
+                tf_name: preference
+                type: Int64
+                min_int: 0
+                max_int: 255
+                description: 'Preference for fallback service-chain inside EPBR failover group.'
+                example: 10
+      - class_name: epbrServiceChain
+        doc_path: Routing%20and%20Forwarding/epbr:ServiceChain/
+        rn: chain-[%s]
+        type: list
+        tf_name: service_chains
+        description: 'List of ePBR service chains.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'The name of the object.'
+            example: CHAIN1
+          - nxos_name: failoverGroup
+            tf_name: failover_group
+            type: String
+            description: 'name of the failover chain group if multisite mode is enabled.'
+            example: FG1
+          - nxos_name: lbMethod
+            tf_name: load_balance_method
+            type: String
+            description: 'load-balance method.'
+            enum_values:
+              - noLBMethod
+              - src
+              - dst
+              - src-dst-ip-proto
+            example: src
+          - nxos_name: mode
+            tf_name: mode
+            type: String
+            description: 'Service-chain mode.'
+            enum_values:
+              - no-mode
+              - multisite
+            example: multisite
+        child_classes:
+          - class_name: epbrEpbrMatchSeq
+            doc_path: Routing%20and%20Forwarding/epbr:EpbrMatchSeq/
+            rn: seq-%v
+            type: list
+            tf_name: sequences
+            description: 'List of ePBR service chain sequences.'
+            attributes:
+              - nxos_name: seqno
+                tf_name: sequence_number
+                type: Int64
+                id: true
+                description: 'Sequence number.'
+                example: 10
+              - nxos_name: name
+                tf_name: service
+                type: String
+                description: 'The name of the service.'
+                example: SVC2
+              - nxos_name: action
+                tf_name: action
+                type: String
+                description: 'route action for traffic in forward direction.'
+                enum_values:
+                  - redirect
+                  - route
+                example: route
+              - nxos_name: failaction
+                tf_name: fail_action
+                type: String
+                description: 'Fail action.'
+                enum_values:
+                  - nofailaction
+                  - bypass
+                  - forward
+                  - drop
+                example: bypass
+                exclude_test: true
+              - nxos_name: lbMethod
+                tf_name: load_balance_method
+                type: String
+                description: 'load-balance method.'
+                enum_values:
+                  - noLBMethod
+                  - src
+                  - dst
+                  - src-dst-ip-proto
+                example: dst
+              - nxos_name: revAction
+                tf_name: reverse_action
+                type: String
+                description: 'route action for traffic in reverse direction.'
+                enum_values:
+                  - redirect
+                  - route
+                example: route
+      - class_name: epbrPolicyMap
+        doc_path: Routing%20and%20Forwarding/epbr:PolicyMap/
+        rn: pmap-[%s]
+        type: list
+        tf_name: policies
+        description: 'List of ePBR policies.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'The name of the object.'
+            example: POL1
+          - nxos_name: defaultTrafficAction
+            tf_name: default_traffic_action
+            type: String
+            description: 'Default traffic forwarding behavior for EPBR policy.'
+            enum_values:
+              - redirect
+              - redirect-all
+            example: redirect
+          - nxos_name: destinationVrf
+            tf_name: destination_vrf
+            type: String
+            description: 'Destination VRF for policy.'
+            example: default
+          - nxos_name: sourceVrf
+            tf_name: source_vrf
+            type: String
+            description: 'source-vrf for policy.'
+            example: default
+          - nxos_name: statistics
+            tf_name: statistics
+            type: Bool
+            description: 'Enable statistics.'
+            example: true
+        child_classes:
+          - class_name: epbrEpbrMatch
+            doc_path: Routing%20and%20Forwarding/epbr:EpbrMatch/
+            rn: match-[%s]
+            type: list
+            tf_name: matches
+            description: 'List of ePBR policy matches.'
+            attributes:
+              - nxos_name: name
+                tf_name: access_list
+                type: String
+                id: true
+                description: 'The name of the access list.'
+                example: EPBR-ACL1
+              - nxos_name: aclType
+                tf_name: access_list_type
+                type: String
+                description: 'Access list type.'
+                enum_values:
+                  - ipv4
+                  - ipv6
+                  - l2
+                example: ipv4
+              - nxos_name: bucket
+                tf_name: buckets
+                type: Int64
+                min_int: 0
+                max_int: 256
+                description: 'Number of load-balance buckets.'
+                example: 8
+              - nxos_name: destinationVrf
+                tf_name: destination_vrf
+                type: String
+                description: 'destination-vrf for match.'
+                example: default
+              - nxos_name: isIPv6
+                tf_name: ipv6
+                type: Bool
+                description: 'IPv6 match.'
+                example: true
+                exclude_test: true
+              - nxos_name: lbMethod
+                tf_name: load_balance_method
+                type: String
+                description: 'Load-balance method.'
+                enum_values:
+                  - noLBMethod
+                  - src
+                  - dst
+                  - src-dst-ip-proto
+                example: src
+              - nxos_name: maskPosition
+                tf_name: mask_position
+                type: Int64
+                min_int: 0
+                max_int: 127
+                description: 'Load-balance mask position.'
+                example: 2
+              - nxos_name: sourceVrf
+                tf_name: source_vrf
+                type: String
+                description: 'source-vrf for match.'
+                example: default
+              - nxos_name: trafficAction
+                tf_name: traffic_action
+                type: String
+                description: 'Traffic action.'
+                enum_values:
+                  - redirect
+                  - drop
+                  - exclude
+                example: redirect
+              - nxos_name: vlans
+                tf_name: vlans
+                type: String
+                description: 'VLANs for layer-2 match.'
+                example: '200'
+                exclude_test: true
+            child_classes:
+              - class_name: epbrEpbrMatchSeq
+                doc_path: Routing%20and%20Forwarding/epbr:EpbrMatchSeq/
+                rn: seq-%v
+                type: list
+                tf_name: sequences
+                description: 'List of ePBR policy match sequences.'
+                attributes:
+                  - nxos_name: seqno
+                    tf_name: sequence_number
+                    type: Int64
+                    id: true
+                    description: 'Sequence number.'
+                    example: 10
+                  - nxos_name: name
+                    tf_name: service
+                    type: String
+                    description: 'The name of the service.'
+                    example: SVC3
+                  - nxos_name: action
+                    tf_name: action
+                    type: String
+                    description: 'route action for traffic in forward direction.'
+                    enum_values:
+                      - redirect
+                      - route
+                    example: route
+                    exclude_test: true
+                  - nxos_name: failaction
+                    tf_name: fail_action
+                    type: String
+                    description: 'Fail action.'
+                    enum_values:
+                      - nofailaction
+                      - bypass
+                      - forward
+                      - drop
+                    example: drop
+                  - nxos_name: lbMethod
+                    tf_name: load_balance_method
+                    type: String
+                    description: 'load-balance method.'
+                    enum_values:
+                      - noLBMethod
+                      - src
+                      - dst
+                      - src-dst-ip-proto
+                    example: dst
+                    exclude_test: true
+                  - nxos_name: revAction
+                    tf_name: reverse_action
+                    type: String
+                    description: 'route action for traffic in reverse direction.'
+                    enum_values:
+                      - redirect
+                      - route
+                    example: route
+                    exclude_test: true
+      - class_name: epbrDom
+        doc_path: Routing%20and%20Forwarding/epbr:Dom/
+        rn: dom-[%s]
+        type: list
+        tf_name: vrfs
+        description: 'List of ePBR VRF redirection policies.'
+        exclude_test: true
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'The name of the object.'
+            example: VRF1
+          - nxos_name: policy
+            tf_name: policy
+            type: String
+            description: 'Policy enforced for VRF redirection.'
+            example: POL1
+      - class_name: epbrInfraVlan
+        doc_path: Routing%20and%20Forwarding/epbr:InfraVlan/
+        rn: infravlan-[%s]
+        type: list
+        tf_name: infra_vlans
+        description: 'List of ePBR infra VLANs.'
+        attributes:
+          - nxos_name: name
+            tf_name: vlans
+            type: String
+            id: true
+            description: 'Infra VLAN range.'
+            example: '100'
+      - class_name: epbrEpbrIntf
+        doc_path: Routing%20and%20Forwarding/epbr:EpbrIntf/
+        rn: if-[%s]-type-%s-reverse-%s
+        type: list
+        tf_name: interfaces
+        description: 'List of ePBR interface policy attachments.'
+        attributes:
+          - nxos_name: name
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Interface ID.'
+            example: eth1/11
+          - nxos_name: ipType
+            tf_name: ip_type
+            type: String
+            id: true
+            description: 'IP type.'
+            enum_values:
+              - ipv4
+              - ipv6
+              - l2
+            example: ipv4
+          - nxos_name: reverse
+            tf_name: reverse
+            type: String
+            id: true
+            description: 'Reverse policy.'
+            enum_values:
+              - no-reverse
+              - reverse
+            example: no-reverse
+          - nxos_name: egressIntf
+            tf_name: egress_interface
+            type: String
+            description: 'Egress interface.'
+            example: eth1/15
+            exclude_test: true
+          - nxos_name: policyName
+            tf_name: policy
+            type: String
+            mandatory: true
+            description: 'The name of the ePBR policy.'
+            example: POL1
+test_prerequisites:
+  - dn: sys/fm/epbr
+    class_name: fmEpbr
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/lb-[lo123]
+    class_name: l3LbRtdIf
+    attributes:
+      - name: id
+        value: lo123
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3
+  - dn: sys/intf/phys-[eth1/11]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3
+  - dn: sys/acl/ipv4/name-[EPBR-ACL1]
+    class_name: ipv4aclACL
+    attributes:
+      - name: name
+        value: EPBR-ACL1
+    children:
+      - rn: seq-10
+        class_name: ipv4aclACE
+        attributes:
+          - name: seqNum
+            value: 10
+          - name: action
+            value: permit
+          - name: protocol
+            value: ip
+          - name: srcPrefix
+            value: 10.1.1.0
+          - name: srcPrefixLength
+            value: 24
+          - name: dstPrefix
+            value: 0.0.0.0
+          - name: dstPrefixLength
+            value: 0
+  - dn: sys/track/object-10
+    class_name: trackObject
+    attributes:
+      - name: id
+        value: 10
+    children:
+      - rn: if
+        class_name: trackIf
+        attributes:
+          - name: id
+            value: lo123
+          - name: protocolType
+            value: line-protocol
+    dependencies: [1]
+  - dn: sys/epbr
+    class_name: epbrEntity
+    no_delete: true
+    dependencies: [0]
+  - dn: sys/epbr/inst
+    class_name: epbrInst
+    no_delete: true
+    dependencies: [6]
+  - dn: sys/epbr/inst/service-[SVC2]
+    class_name: epbrService
+    no_delete: true
+    dependencies: [7]
+    attributes:
+      - name: name
+        value: SVC2
+      - name: secGroup
+        value: 300
+      - name: reverseSecGroup
+        value: 400
+    children:
+      - rn: ep-[10.1.1.20]
+        class_name: epbrSvcEndPoint
+        attributes:
+          - name: ip
+            value: 10.1.1.20
+  - dn: sys/epbr/inst/service-[SVC3]
+    class_name: epbrService
+    no_delete: true
+    dependencies: [7]
+    attributes:
+      - name: name
+        value: SVC3
+    children:
+      - rn: probe
+        class_name: epbrProbe
+        attributes:
+          - name: protocol
+            value: ICMP
+      - rn: ep-[10.1.1.30]
+        class_name: epbrSvcEndPoint
+        attributes:
+          - name: ip
+            value: 10.1.1.30
+  - dn: sys/epbr/inst/chain-[CHAIN2]
+    class_name: epbrServiceChain
+    no_delete: true
+    dependencies: [8]
+    attributes:
+      - name: name
+        value: CHAIN2
+      - name: mode
+        value: multisite
+    children:
+      - rn: seq-10
+        class_name: epbrEpbrMatchSeq
+        attributes:
+          - name: seqno
+            value: 10
+          - name: name
+            value: SVC2
+  - dn: sys/intf/phys-[eth1/12]
+    class_name: l1PhysIf
+    attributes:
+      - name: mode
+        value: trunk
+  - dn: sys/intf/phys-[eth1/13]
+    class_name: l1PhysIf
+    attributes:
+      - name: mode
+        value: trunk
+  - dn: sys/bd/bd-[vlan-200]
+    class_name: l2BD
+    attributes:
+      - name: fabEncap
+        value: vlan-200
+  - dn: sys/acl/mac/name-[EPBR-MAC1]
+    class_name: macaclACL
+    attributes:
+      - name: name
+        value: EPBR-MAC1
+  - dn: sys/acl/mac/name-[EPBR-MAC1]/seq-10
+    class_name: macaclSEQ
+    dependencies: [14]
+    attributes:
+      - name: seqNum
+        value: 10
+    children:
+      - rn: ace
+        class_name: macaclACE
+        attributes:
+          - name: action
+            value: permit
+          - name: srcPrefix
+            value: '00:00:00:00:00:00'
+          - name: srcPrefixMask
+            value: 'FF:FF:FF:FF:FF:FF'
+          - name: dstPrefix
+            value: '00:00:00:00:00:00'
+          - name: dstPrefixMask
+            value: 'FF:FF:FF:FF:FF:FF'
+additional_tests:
+  # layer-2 service with layer-2 endpoints and a layer-2 policy
+  - |-
+    resource "nxos_epbr" "test" {
+      services = {
+        "L2SVC" = {
+          type            = "l2"
+          connection_mode = "half-duplex"
+          l2_endpoints = {
+            "eth1/12" = {
+              probe_protocol            = "CTP"
+              probe_frequency           = 10
+              probe_retry_down_count    = 2
+              probe_retry_up_count      = 2
+              probe_timeout             = 3
+              reverse_service_interface = "eth1/13"
+              reverse_probe_protocol    = "CTP"
+              reverse_probe_frequency   = 10
+            }
+          }
+        }
+      }
+      policies = {
+        "L2POL" = {
+          default_traffic_action = "redirect-all"
+          matches = {
+            "EPBR-MAC1" = {
+              access_list_type = "l2"
+              vlans            = "200"
+              sequences = {
+                "10" = {
+                  service = "L2SVC"
+                }
+              }
+            }
+          }
+        }
+      }
+    }

@@ -487,6 +487,51 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmSlaResponder
+        rn: slaresponder
+        type: single
+        no_delete: true
+        description: 'SLA Responder feature configuration.'
+        doc_path: Feature%20Management/fm:SlaResponder/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: sla_responder
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmSlaSender
+        rn: slasender
+        type: single
+        no_delete: true
+        description: 'SLA Sender feature configuration.'
+        doc_path: Feature%20Management/fm:SlaSender/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: sla_sender
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmSlaTwampServer
+        rn: slatwampserver
+        type: single
+        no_delete: true
+        description: 'SLA TWAMP Server feature configuration.'
+        doc_path: Feature%20Management/fm:SlaTwampServer/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: sla_twamp_server
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmSsh
         rn: ssh
         type: single

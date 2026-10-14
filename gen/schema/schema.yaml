@@ -45,6 +45,7 @@ child_classes:
   status_replace: bool(required=False) # Set to true to emit DME `status: "replaced"` for each list child on update, ensuring duplicates on key collisions are overwritten rather than rejected. Use with caution: `replaced` resets unmodeled properties to defaults and deletes unmodeled children.
   separate_request: bool(required=False) # Set to true if the device only applies objects of this class when their parent already exists with its final configuration (e.g. VLAN mappings that depend on the switchport mode). On create and update these objects are sent in a second request after the rest of the body.
   auto_delete_on_empty: bool(required=False) # Set to true if the device removes objects of this class once their last list child is deleted. Deleting all existing children while adding new ones then fails, so on update these deletes are sent in a second request after the new children have been created.
+  exclude_test: bool(required=False) # Exclude child class (including nested child classes) from acceptance tests and examples
   test_tags: list(str(), required=False) # List of test tags, child class only included in test if env var is set
   min_version: regex('^\\d+\\.\\d+\\(\\d+[a-z]?\\)$', required=False) # Minimum NX-OS version supporting this child class (inherited by nested child classes), e.g. "10.6(1)"
   attributes: list(include('attribute'), required=False) # List of child class attributes

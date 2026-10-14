@@ -71,6 +71,9 @@ type Feature struct {
 	SecurityGroup       types.String                  `tfsdk:"security_group"`
 	ServiceAcceleration types.String                  `tfsdk:"service_acceleration"`
 	SftpServer          types.String                  `tfsdk:"sftp_server"`
+	SlaResponder        types.String                  `tfsdk:"sla_responder"`
+	SlaSender           types.String                  `tfsdk:"sla_sender"`
+	SlaTwampServer      types.String                  `tfsdk:"sla_twamp_server"`
 	Ssh                 types.String                  `tfsdk:"ssh"`
 	Tacacs              types.String                  `tfsdk:"tacacs"`
 	Telemetry           types.String                  `tfsdk:"telemetry"`
@@ -363,6 +366,27 @@ func (data Feature) toBody(config Feature) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmSftpServer.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.SlaResponder.IsUnknown() && !data.SlaResponder.IsNull() && !config.SlaResponder.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.SlaResponder.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmSlaResponder.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.SlaSender.IsUnknown() && !data.SlaSender.IsNull() && !config.SlaSender.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.SlaSender.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmSlaSender.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.SlaTwampServer.IsUnknown() && !data.SlaTwampServer.IsNull() && !config.SlaTwampServer.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.SlaTwampServer.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmSlaTwampServer.attributes", attrs)
 		}
 		attrs = "{}"
 		if !data.Ssh.IsUnknown() && !data.Ssh.IsNull() && !config.Ssh.IsNull() {
@@ -891,6 +915,48 @@ func (data *Feature) fromBody(res gjson.Result) {
 				},
 			)
 			data.SftpServer = types.StringValue(rfmSftpServer.Get("fmSftpServer.attributes.adminSt").String())
+		}
+		{
+			var rfmSlaResponder gjson.Result
+			rfmEntity.Get("fmEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("fmSlaResponder.attributes.rn").String()
+					if rnValue == "slaresponder" {
+						rfmSlaResponder = v
+						return false
+					}
+					return true
+				},
+			)
+			data.SlaResponder = types.StringValue(rfmSlaResponder.Get("fmSlaResponder.attributes.adminSt").String())
+		}
+		{
+			var rfmSlaSender gjson.Result
+			rfmEntity.Get("fmEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("fmSlaSender.attributes.rn").String()
+					if rnValue == "slasender" {
+						rfmSlaSender = v
+						return false
+					}
+					return true
+				},
+			)
+			data.SlaSender = types.StringValue(rfmSlaSender.Get("fmSlaSender.attributes.adminSt").String())
+		}
+		{
+			var rfmSlaTwampServer gjson.Result
+			rfmEntity.Get("fmEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("fmSlaTwampServer.attributes.rn").String()
+					if rnValue == "slatwampserver" {
+						rfmSlaTwampServer = v
+						return false
+					}
+					return true
+				},
+			)
+			data.SlaTwampServer = types.StringValue(rfmSlaTwampServer.Get("fmSlaTwampServer.attributes.adminSt").String())
 		}
 		{
 			var rfmSsh gjson.Result
@@ -1601,6 +1667,60 @@ func (data *Feature) updateFromBody(res gjson.Result) {
 		}
 	}
 	{
+		var rfmSlaResponder gjson.Result
+		rfmEntity.Get("fmEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmSlaResponder.attributes.rn").String()
+				if rnValue == "slaresponder" {
+					rfmSlaResponder = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.SlaResponder.IsNull() {
+			data.SlaResponder = types.StringValue(rfmSlaResponder.Get("fmSlaResponder.attributes.adminSt").String())
+		} else {
+			data.SlaResponder = types.StringNull()
+		}
+	}
+	{
+		var rfmSlaSender gjson.Result
+		rfmEntity.Get("fmEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmSlaSender.attributes.rn").String()
+				if rnValue == "slasender" {
+					rfmSlaSender = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.SlaSender.IsNull() {
+			data.SlaSender = types.StringValue(rfmSlaSender.Get("fmSlaSender.attributes.adminSt").String())
+		} else {
+			data.SlaSender = types.StringNull()
+		}
+	}
+	{
+		var rfmSlaTwampServer gjson.Result
+		rfmEntity.Get("fmEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmSlaTwampServer.attributes.rn").String()
+				if rnValue == "slatwampserver" {
+					rfmSlaTwampServer = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.SlaTwampServer.IsNull() {
+			data.SlaTwampServer = types.StringValue(rfmSlaTwampServer.Get("fmSlaTwampServer.attributes.adminSt").String())
+		} else {
+			data.SlaTwampServer = types.StringNull()
+		}
+	}
+	{
 		var rfmSsh gjson.Result
 		rfmEntity.Get("fmEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -2133,6 +2253,39 @@ func (data Feature) toDeleteBody() nxos.Body {
 			}
 			{
 				childBody := ""
+				if !data.SlaResponder.IsNull() {
+					childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmSlaResponder"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childBody := ""
+				if !data.SlaSender.IsNull() {
+					childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmSlaSender"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childBody := ""
+				if !data.SlaTwampServer.IsNull() {
+					childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmSlaTwampServer"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			{
+				childBody := ""
 				if !data.Ssh.IsNull() {
 					childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 				}
@@ -2373,6 +2526,18 @@ func (data Feature) toBodyWithDeletes(ctx context.Context, state Feature, config
 		}
 		if !state.SftpServer.IsNull() && config.SftpServer.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmSftpServer")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SlaResponder.IsNull() && config.SlaResponder.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmSlaResponder")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SlaSender.IsNull() && config.SlaSender.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmSlaSender")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SlaTwampServer.IsNull() && config.SlaTwampServer.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmSlaTwampServer")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !state.Ssh.IsNull() && config.Ssh.IsNull() {

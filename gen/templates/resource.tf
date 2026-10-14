@@ -2,7 +2,7 @@
        Context: map with "Children" ([]TfChildClass) and "Indent" (string). */ -}}
 {{- define "renderChildren" -}}
 {{- $indent := .Indent -}}
-{{- range .Children -}}
+{{- range (testChildClasses .Children) -}}
 {{- if eq .Type "single" -}}
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}

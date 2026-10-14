@@ -155,6 +155,7 @@ type YamlConfigChildClass struct {
 	StatusReplace     bool                   `yaml:"status_replace"`
 	AutoDeleteOnEmpty bool                   `yaml:"auto_delete_on_empty"`
 	SeparateRequest   bool                   `yaml:"separate_request"`
+	ExcludeTest       bool                   `yaml:"exclude_test"`
 	TestTags          []string               `yaml:"test_tags"`
 	MinVersion        string                 `yaml:"min_version"`
 	DocMinVersion     string                 `yaml:"-"`
@@ -310,6 +311,17 @@ func HasTestAttrs(attributes []YamlConfigAttribute) bool {
 	return false
 }
 
+// Templating helper function to filter out child classes excluded from tests and examples
+func TestChildClasses(children []YamlConfigChildClass) []YamlConfigChildClass {
+	var result []YamlConfigChildClass
+	for _, c := range children {
+		if !c.ExcludeTest {
+			result = append(result, c)
+		}
+	}
+	return result
+}
+
 // Templating helper function to check if any child class (recursively) is a list
 func HasListChildClasses(children []YamlConfigChildClass) bool {
 	for _, c := range children {
@@ -403,6 +415,7 @@ var functions = template.FuncMap{
 	"classMinVersions":          ClassMinVersions,
 	"minVersionChecks":          MinVersionChecks,
 	"testCond":                  TestCond,
+	"testChildClasses":          TestChildClasses,
 }
 
 // AllChildClassNames recursively collects all child class names.

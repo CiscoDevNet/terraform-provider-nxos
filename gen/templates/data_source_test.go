@@ -41,7 +41,7 @@ import (
 {{- $name := .Name}}
 {{- $pathPrefix := .PathPrefix}}
 {{- $inList := .InList}}
-{{- range .Children}}
+{{- range (testChildClasses .Children)}}
 {{- $list := .TfName}}
 {{- if testCond .TestTags .MinVersion}}
 	if {{testCond .TestTags .MinVersion}} {
@@ -189,7 +189,7 @@ resource "nxos_dme" "PreReq{{$index}}" {
        ========================================================= */}}
 {{- define "testConfigChildrenTemplate"}}
 {{- $indent := .Indent}}
-{{- range .Children}}
+{{- range (testChildClasses .Children)}}
 {{- if testCond .TestTags .MinVersion}}
 	if {{testCond .TestTags .MinVersion}} {
 {{- end}}
@@ -244,7 +244,7 @@ resource "nxos_dme" "PreReq{{$index}}" {
        Context: map with "Children" ([]TfChildClass)
        ========================================================= */}}
 {{- define "dsConfigIdAttrsTemplate"}}
-{{- range .Children}}
+{{- range (testChildClasses .Children)}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
 {{- if .Id}}

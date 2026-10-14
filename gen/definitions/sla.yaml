@@ -1,0 +1,1524 @@
+---
+name: SLA
+class_name: slaEntity
+dn: sys/sla
+ds_description: This data source can read the IP SLA configuration on NX-OS devices, including sender probes (ICMP echo, UDP echo, UDP jitter, TCP connect, DNS and HTTP operations), reactions, schedules, group schedules, responder, TWAMP responder and TWAMP server settings.
+res_description: This resource can manage the IP SLA configuration on NX-OS devices, including sender probes (ICMP echo, UDP echo, UDP jitter, TCP connect, DNS and HTTP operations), reactions, schedules, group schedules, responder, TWAMP responder and TWAMP server settings.
+doc_path: Communication/sla:Entity/
+doc_category: Monitoring
+child_classes:
+  - class_name: slaInst
+    doc_path: Communication/sla:Inst/
+    rn: inst
+    type: single
+    tf_name: instance
+    description: 'IP SLA instance.'
+    child_classes:
+      - class_name: slaSender
+        doc_path: Communication/sla:Sender/
+        rn: sender
+        type: single
+        tf_name: sender
+        description: 'IP SLA sender configuration.'
+        attributes:
+          - nxos_name: loggingLevel
+            tf_name: sender_logging_level
+            type: Int64
+            write_only: true
+            min_int: 0
+            max_int: 7
+            description: 'configures the logging level for ip sla sender. The property can be set only if feature sla sender is enabled.'
+            example: 5
+          - nxos_name: loggingTraps
+            tf_name: sender_logging_traps
+            type: Bool
+            description: 'Enable syslog traps which sends the trap meesages on reaction-config trap is enabled.'
+            example: true
+          - nxos_name: resetSender
+            tf_name: sender_reset
+            type: Bool
+            description: 'Resets all sla probe related configuration.'
+            example: true
+            exclude_test: true
+        child_classes:
+          - class_name: slaProbe
+            doc_path: Communication/sla:Probe/
+            rn: operation-%v
+            type: list
+            tf_name: probes
+            description: 'List of IP SLA probes (operations).'
+            attributes:
+              - nxos_name: id
+                tf_name: id
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 2147483647
+                description: 'Operation index which is unique for each probe, all the probe related configs and the statistics are displayed using this index.'
+                example: 1
+              - nxos_name: restart
+                tf_name: restart
+                type: Bool
+                description: 'Restarting a scheduled probe.'
+                example: true
+                exclude_test: true
+            child_classes:
+              - class_name: slaIcmpEcho
+                doc_path: Communication/sla:IcmpEcho/
+                rn: icmpecho
+                type: single
+                tf_name: icmp_echo
+                description: 'ICMP echo probe configuration.'
+                attributes:
+                  - nxos_name: bucketsKept
+                    tf_name: icmp_echo_buckets_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 60
+                    description: 'Bucket size value - Maximum number of history buckets to collect.'
+                    example: 30
+                  - nxos_name: destHostName
+                    tf_name: icmp_echo_destination_hostname
+                    type: String
+                    description: 'Destination Host Name, if IP address is resolved from DNS server.Modifying this property is not allowed in case of icmp-echo probe.'
+                    example: host1.example.com
+                    exclude_test: true
+                  - nxos_name: destip
+                    tf_name: icmp_echo_destination_ip
+                    type: String
+                    description: 'Destination IP address which is tracked by the probe.This property is not applicable if the configured probe type is HTTP or DNS. Modifying this property is not allowed in case of icmp-echo probe.'
+                    example: '10.1.1.1'
+                  - nxos_name: distributionsOfStatsKept
+                    tf_name: icmp_echo_distributions_of_statistics_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 20
+                    description: 'Maximum number of statistics distribution buckets to capture.'
+                    example: 5
+                  - nxos_name: enhancedBuckets
+                    tf_name: icmp_echo_enhanced_buckets
+                    type: Int64
+                    min_int: 0
+                    max_int: 100
+                    description: 'Number of buckets to collect data based on the enhanced interval.'
+                    example: 50
+                  - nxos_name: enhancedInterval
+                    tf_name: icmp_echo_enhanced_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 3600
+                    description: 'Aggregation interval in seconds to collect the aggregated values.'
+                    example: 900
+                  - nxos_name: filter
+                    tf_name: icmp_echo_filter
+                    type: String
+                    description: 'Bucket size value - Maximum number of history buckets to collect.'
+                    enum_values:
+                      - 'None'
+                      - All
+                      - OverThreshold
+                      - Failures
+                    example: All
+                  - nxos_name: frequency
+                    tf_name: icmp_echo_frequency
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800
+                    description: 'Frequency of an operation - The interval at which the configured destination is tracked by the probe. Frequency in seconds(default value is 60). Minimum frequency value for an IP SLAs HTTP probe operation is 60 seconds but 1 second for other probes.'
+                    example: 30
+                  - nxos_name: frequencyInMilliseconds
+                    tf_name: icmp_echo_frequency_milliseconds
+                    type: Int64
+                    min_int: 100
+                    max_int: 604800000
+                    description: 'Frequency of an operation - The interval at which the configured destination is tracked by the probe. Frequency in milliseconds(default value is 60000).'
+                    example: 30000
+                    exclude_test: true
+                  - nxos_name: hoursOfStatsKept
+                    tf_name: icmp_echo_hours_of_statistics_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 25
+                    description: 'Maximum number of statistics hour groups to capture.'
+                    example: 5
+                  - nxos_name: ipTos
+                    tf_name: icmp_echo_tos
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'TOS if the probe is tracking IPv4 destination and Traffic Class if the probe is tracking IPv6 destination.'
+                    example: 10
+                  - nxos_name: ipv6TrafficClass
+                    tf_name: icmp_echo_ipv6_traffic_class
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'TOS if the probe is tracking IPv4 destination and Traffic Class if the probe is tracking IPv6 destination.'
+                    example: 10
+                    exclude_test: true
+                  - nxos_name: livesKept
+                    tf_name: icmp_echo_lives_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 2
+                    description: 'Maximum number of history lives to collect.'
+                    example: 1
+                  - nxos_name: owner
+                    tf_name: icmp_echo_owner
+                    type: String
+                    description: 'Owner string of the probe(Max size 127).'
+                    example: OWNER1
+                  - nxos_name: reqDataSize
+                    tf_name: icmp_echo_request_data_size
+                    type: Int64
+                    min_int: 16
+                    max_int: 17512
+                    description: 'Sets the protocol data size in the payload of an IP SLAs operation''s request packet.'
+                    example: 100
+                  - nxos_name: srcHostName
+                    tf_name: icmp_echo_source_hostname
+                    type: String
+                    description: 'Source Host Name, if IP address is resolved from DNS server. Modifying this property is not allowed.'
+                    example: host2.example.com
+                    exclude_test: true
+                  - nxos_name: srcInterface
+                    tf_name: icmp_echo_source_interface
+                    type: String
+                    description: 'Source Interface in which the ingress icmp packet is received.'
+                    example: eth1/10
+                  - nxos_name: srcip
+                    tf_name: icmp_echo_source_ip
+                    type: String
+                    description: 'Source`IP address from which the configured destination is tracked by the probe. Modifying this property is not allowed.'
+                    example: '10.0.0.1'
+                    exclude_test: true
+                  - nxos_name: statsDistributionInterval
+                    tf_name: icmp_echo_statistics_distribution_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 100000
+                    description: 'Statistics distribution interval size, if the precision configured is in milliseconds, then the unit is in milliseconds else if it is microseconds, then the unit is in microseconds.'
+                    example: 10
+                  - nxos_name: tag
+                    tf_name: icmp_echo_tag
+                    type: String
+                    description: 'User defined tag string (Max Size 127).'
+                    example: TAG1
+                  - nxos_name: threshold
+                    tf_name: icmp_echo_threshold
+                    type: Int64
+                    min_int: 1
+                    max_int: 60000
+                    description: 'Operation threshold - this is an upper limit for the observed RTT for the probe. RTT value of a probe exceeding the configured threshold will be marked with Overthreshold return code.'
+                    example: 1000
+                  - nxos_name: timeout
+                    tf_name: icmp_echo_timeout
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800000
+                    description: 'Timeout of an operation - this is the maximum wait time for completing the operation. The probe will be marked with Timeout return code.'
+                    example: 2000
+                  - nxos_name: verifyData
+                    tf_name: icmp_echo_verify_data
+                    type: Bool
+                    description: 'Verify Data for Corruption. When data verification is enabled, each operation response is checked for corruption. Use the verify-data command with caution during normal operations because it generates unnecessary overhead.'
+                    example: true
+                  - nxos_name: vrf
+                    tf_name: icmp_echo_vrf
+                    type: String
+                    description: 'vrf on which the probe is configured.'
+                    example: management
+              - class_name: slaUdpEcho
+                doc_path: Communication/sla:UdpEcho/
+                rn: udpecho
+                type: single
+                exclude_test: true
+                tf_name: udp_echo
+                description: 'UDP echo probe configuration.'
+                attributes:
+                  - nxos_name: bucketsKept
+                    tf_name: udp_echo_buckets_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 60
+                    description: 'Bucket size value - Maximum number of history buckets to collect.'
+                    example: 30
+                  - nxos_name: control
+                    tf_name: udp_echo_control
+                    type: Bool
+                    description: 'To turn on/off Control Packets Exchanging mechanism between the sender and the responder, control is enabled by default.'
+                    example: false
+                  - nxos_name: dataPattern
+                    tf_name: udp_echo_data_pattern
+                    type: String
+                    description: 'Specifies the hexadecimal data pattern in udp-echo probe to test for data corruption.'
+                    example: ABCD
+                  - nxos_name: destHostName
+                    tf_name: udp_echo_destination_hostname
+                    type: String
+                    description: 'Destination Host Name, if IP address is resolved from DNS server.Modifying this property is not allowed in case of icmp-echo probe.'
+                    example: host1.example.com
+                    exclude_test: true
+                  - nxos_name: destip
+                    tf_name: udp_echo_destination_ip
+                    type: String
+                    description: 'Destination IP address which is tracked by the probe.This property is not applicable if the configured probe type is HTTP or DNS. Modifying this property is not allowed in case of icmp-echo probe.'
+                    example: '10.1.1.1'
+                  - nxos_name: distributionsOfStatsKept
+                    tf_name: udp_echo_distributions_of_statistics_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 20
+                    description: 'Maximum number of statistics distribution buckets to capture.'
+                    example: 5
+                  - nxos_name: dstPort
+                    tf_name: udp_echo_destination_port
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Destination UDP Port configuration for the UDP probe, it is must to configure the destination port.'
+                    example: 5000
+                  - nxos_name: enhancedBuckets
+                    tf_name: udp_echo_enhanced_buckets
+                    type: Int64
+                    min_int: 0
+                    max_int: 100
+                    description: 'Number of buckets to collect data based on the enhanced interval.'
+                    example: 50
+                  - nxos_name: enhancedInterval
+                    tf_name: udp_echo_enhanced_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 3600
+                    description: 'Aggregation interval in seconds to collect the aggregated values.'
+                    example: 900
+                  - nxos_name: filter
+                    tf_name: udp_echo_filter
+                    type: String
+                    description: 'Bucket size value - Maximum number of history buckets to collect.'
+                    enum_values:
+                      - 'None'
+                      - All
+                      - OverThreshold
+                      - Failures
+                    example: All
+                  - nxos_name: frequency
+                    tf_name: udp_echo_frequency
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800
+                    description: 'Frequency of an operation - The interval at which the configured destination is tracked by the probe. Frequency in seconds(default value is 60). Minimum frequency value for an IP SLAs HTTP probe operation is 60 seconds but 1 second for other probes.'
+                    example: 30
+                  - nxos_name: frequencyInMilliseconds
+                    tf_name: udp_echo_frequency_milliseconds
+                    type: Int64
+                    min_int: 100
+                    max_int: 604800000
+                    description: 'Frequency of an operation - The interval at which the configured destination is tracked by the probe. Frequency in milliseconds(default value is 60000).'
+                    example: 30000
+                    exclude_test: true
+                  - nxos_name: hoursOfStatsKept
+                    tf_name: udp_echo_hours_of_statistics_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 25
+                    description: 'Maximum number of statistics hour groups to capture.'
+                    example: 5
+                  - nxos_name: ipTos
+                    tf_name: udp_echo_tos
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'TOS if the probe is tracking IPv4 destination and Traffic Class if the probe is tracking IPv6 destination.'
+                    example: 10
+                  - nxos_name: ipv6TrafficClass
+                    tf_name: udp_echo_ipv6_traffic_class
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'TOS if the probe is tracking IPv4 destination and Traffic Class if the probe is tracking IPv6 destination.'
+                    example: 10
+                    exclude_test: true
+                  - nxos_name: livesKept
+                    tf_name: udp_echo_lives_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 2
+                    description: 'Maximum number of history lives to collect.'
+                    example: 1
+                  - nxos_name: owner
+                    tf_name: udp_echo_owner
+                    type: String
+                    description: 'Owner string of the probe(Max size 127).'
+                    example: OWNER1
+                  - nxos_name: reqDataSize
+                    tf_name: udp_echo_request_data_size
+                    type: Int64
+                    min_int: 16
+                    max_int: 17512
+                    description: 'Sets the protocol data size in the payload of an IP SLAs operation''s request packet.'
+                    example: 100
+                  - nxos_name: srcHostName
+                    tf_name: udp_echo_source_hostname
+                    type: String
+                    description: 'Source Host Name, if IP address is resolved from DNS server. Modifying this property is not allowed.'
+                    example: host2.example.com
+                    exclude_test: true
+                  - nxos_name: srcPort
+                    tf_name: udp_echo_source_port
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Source UDP Port configuration for udp echo probe and if the srcPort is not configured, then source port will be used.'
+                    example: 6000
+                  - nxos_name: srcip
+                    tf_name: udp_echo_source_ip
+                    type: String
+                    description: 'Source`IP address from which the configured destination is tracked by the probe. Modifying this property is not allowed.'
+                    example: '10.0.0.1'
+                    exclude_test: true
+                  - nxos_name: statsDistributionInterval
+                    tf_name: udp_echo_statistics_distribution_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 100000
+                    description: 'Statistics distribution interval size, if the precision configured is in milliseconds, then the unit is in milliseconds else if it is microseconds, then the unit is in microseconds.'
+                    example: 10
+                  - nxos_name: tag
+                    tf_name: udp_echo_tag
+                    type: String
+                    description: 'User defined tag string (Max Size 127).'
+                    example: TAG1
+                  - nxos_name: threshold
+                    tf_name: udp_echo_threshold
+                    type: Int64
+                    min_int: 1
+                    max_int: 60000
+                    description: 'Operation threshold - this is an upper limit for the observed RTT for the probe. RTT value of a probe exceeding the configured threshold will be marked with Overthreshold return code.'
+                    example: 1000
+                  - nxos_name: timeout
+                    tf_name: udp_echo_timeout
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800000
+                    description: 'Timeout of an operation - this is the maximum wait time for completing the operation. The probe will be marked with Timeout return code.'
+                    example: 2000
+                  - nxos_name: verifyData
+                    tf_name: udp_echo_verify_data
+                    type: Bool
+                    description: 'Verify Data for Corruption. When data verification is enabled, each operation response is checked for corruption. Use the verify-data command with caution during normal operations because it generates unnecessary overhead.'
+                    example: true
+                  - nxos_name: vrf
+                    tf_name: udp_echo_vrf
+                    type: String
+                    description: 'vrf on which the probe is configured.'
+                    example: management
+              - class_name: slaUdpJitter
+                doc_path: Communication/sla:UdpJitter/
+                rn: udpjitter
+                type: single
+                exclude_test: true
+                tf_name: udp_jitter
+                description: 'UDP jitter probe configuration.'
+                attributes:
+                  - nxos_name: absoluteClockTolerance
+                    tf_name: udp_jitter_absolute_clock_tolerance
+                    type: Int64
+                    min_int: 0
+                    max_int: 100000
+                    description: 'Oneway NTP Clock Tolerance absolute Value.'
+                    example: 100
+                  - nxos_name: advFactor
+                    tf_name: udp_jitter_advantage_factor
+                    type: Int64
+                    min_int: 0
+                    max_int: 20
+                    description: 'Advantage factor.'
+                    example: 5
+                    exclude_test: true
+                  - nxos_name: codecInterval
+                    tf_name: udp_jitter_codec_interval
+                    type: Int64
+                    min_int: 4
+                    max_int: 60000
+                    description: 'Interval between packets.'
+                    example: 40
+                    exclude_test: true
+                  - nxos_name: codecNumPkts
+                    tf_name: udp_jitter_codec_number_of_packets
+                    type: Int64
+                    min_int: 1
+                    max_int: 60000
+                    description: 'Number of packets per operation.'
+                    example: 500
+                    exclude_test: true
+                  - nxos_name: codecSize
+                    tf_name: udp_jitter_codec_size
+                    type: Int64
+                    min_int: 16
+                    max_int: 16384
+                    description: 'Number of bytes per packet.'
+                    example: 64
+                    exclude_test: true
+                  - nxos_name: codecType
+                    tf_name: udp_jitter_codec_type
+                    type: String
+                    description: 'Codec Type.'
+                    enum_values:
+                      - 'none'
+                      - g711ulaw
+                      - g711alaw
+                      - g729a
+                    example: g711alaw
+                    exclude_test: true
+                  - nxos_name: control
+                    tf_name: udp_jitter_control
+                    type: Bool
+                    description: 'To turn on/off Control Packets Exchanging mechanism between the sender and the responder, control is enabled by default.'
+                    example: false
+                  - nxos_name: destHostName
+                    tf_name: udp_jitter_destination_hostname
+                    type: String
+                    description: 'Destination Host Name, if IP address is resolved from DNS server.Modifying this property is not allowed in case of icmp-echo probe.'
+                    example: host1.example.com
+                    exclude_test: true
+                  - nxos_name: destip
+                    tf_name: udp_jitter_destination_ip
+                    type: String
+                    description: 'Destination IP address which is tracked by the probe.This property is not applicable if the configured probe type is HTTP or DNS. Modifying this property is not allowed in case of icmp-echo probe.'
+                    example: '10.1.1.1'
+                  - nxos_name: distributionsOfStatsKept
+                    tf_name: udp_jitter_distributions_of_statistics_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 20
+                    description: 'Maximum number of statistics distribution buckets to capture.'
+                    example: 5
+                  - nxos_name: dstPort
+                    tf_name: udp_jitter_destination_port
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Destion UDP Port configuration for the UDP probe, it is must to configure the destination port.'
+                    example: 5000
+                  - nxos_name: frequency
+                    tf_name: udp_jitter_frequency
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800
+                    description: 'Frequency of an operation - The interval at which the configured destination is tracked by the probe. Frequency in seconds(default value is 60). Minimum frequency value for an IP SLAs HTTP probe operation is 60 seconds but 1 second for other probes.'
+                    example: 30
+                  - nxos_name: hoursOfStatsKept
+                    tf_name: udp_jitter_hours_of_statistics_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 25
+                    description: 'Maximum number of statistics hour groups to capture.'
+                    example: 5
+                  - nxos_name: interval
+                    tf_name: udp_jitter_interval
+                    type: Int64
+                    min_int: 4
+                    max_int: 60000
+                    description: 'UDP Jitter Interval.'
+                    example: 40
+                  - nxos_name: ipTos
+                    tf_name: udp_jitter_tos
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'TOS if the probe is tracking IPv4 destination and Traffic Class if the probe is tracking IPv6 destination.'
+                    example: 10
+                  - nxos_name: ipv6TrafficClass
+                    tf_name: udp_jitter_ipv6_traffic_class
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'TOS if the probe is tracking IPv4 destination and Traffic Class if the probe is tracking IPv6 destination.'
+                    example: 10
+                    exclude_test: true
+                  - nxos_name: numPkts
+                    tf_name: udp_jitter_number_of_packets
+                    type: Int64
+                    min_int: 1
+                    max_int: 60000
+                    description: 'Number of packets per operation.'
+                    example: 20
+                  - nxos_name: operationPktPriority
+                    tf_name: udp_jitter_operation_packet_priority
+                    type: String
+                    description: 'Operation Packet Priority.'
+                    enum_values:
+                      - 'none'
+                      - normal
+                      - high
+                    example: high
+                  - nxos_name: owner
+                    tf_name: udp_jitter_owner
+                    type: String
+                    description: 'Owner string of the probe(Max size 127).'
+                    example: OWNER1
+                  - nxos_name: percentClockTolerance
+                    tf_name: udp_jitter_percent_clock_tolerance
+                    type: Int64
+                    min_int: 0
+                    max_int: 100
+                    description: 'Oneway NTP Clock Tolerance Value in percentage.'
+                    example: 10
+                    exclude_test: true
+                  - nxos_name: precision
+                    tf_name: udp_jitter_precision
+                    type: String
+                    description: 'Precision configuration.'
+                    enum_values:
+                      - microseconds
+                      - milliseconds
+                    example: microseconds
+                  - nxos_name: reqDataSize
+                    tf_name: udp_jitter_request_data_size
+                    type: Int64
+                    min_int: 16
+                    max_int: 17512
+                    description: 'Sets the protocol data size in the payload of an IP SLAs operation''s request packet.'
+                    example: 100
+                  - nxos_name: srcHostName
+                    tf_name: udp_jitter_source_hostname
+                    type: String
+                    description: 'Source Host Name, if IP address is resolved from DNS server. Modifying this property is not allowed.'
+                    example: host2.example.com
+                    exclude_test: true
+                  - nxos_name: srcPort
+                    tf_name: udp_jitter_source_port
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Source UDP Port configuration for udp-jitter probe and if the srcPort is not configured, then source port will be used.'
+                    example: 6000
+                  - nxos_name: srcip
+                    tf_name: udp_jitter_source_ip
+                    type: String
+                    description: 'Source`IP address from which the configured destination is tracked by the probe. Modifying this property is not allowed.'
+                    example: '10.0.0.1'
+                    exclude_test: true
+                  - nxos_name: statsDistributionInterval
+                    tf_name: udp_jitter_statistics_distribution_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 100000
+                    description: 'Statistics distribution interval size, if the precision configured is in milliseconds, then the unit is in milliseconds else if it is microseconds, then the unit is in microseconds.'
+                    example: 10
+                  - nxos_name: tag
+                    tf_name: udp_jitter_tag
+                    type: String
+                    description: 'User defined tag string (Max Size 127).'
+                    example: TAG1
+                  - nxos_name: threshold
+                    tf_name: udp_jitter_threshold
+                    type: Int64
+                    min_int: 1
+                    max_int: 60000
+                    description: 'Operation threshold - this is an upper limit for the observed RTT for the probe. RTT value of a probe exceeding the configured threshold will be marked with Overthreshold return code.'
+                    example: 1000
+                  - nxos_name: timeout
+                    tf_name: udp_jitter_timeout
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800000
+                    description: 'Timeout of an operation - this is the maximum wait time for completing the operation. The probe will be marked with Timeout return code.'
+                    example: 2000
+                  - nxos_name: verifyData
+                    tf_name: udp_jitter_verify_data
+                    type: Bool
+                    description: 'Verify Data for Corruption. When data verification is enabled, each operation response is checked for corruption. Use the verify-data command with caution during normal operations because it generates unnecessary overhead.'
+                    example: true
+                  - nxos_name: vrf
+                    tf_name: udp_jitter_vrf
+                    type: String
+                    description: 'vrf on which the probe is configured.'
+                    example: management
+              - class_name: slaTcpConnect
+                doc_path: Communication/sla:TcpConnect/
+                rn: tcpconnect
+                type: single
+                exclude_test: true
+                tf_name: tcp_connect
+                description: 'TCP connect probe configuration.'
+                attributes:
+                  - nxos_name: bucketsKept
+                    tf_name: tcp_connect_buckets_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 60
+                    description: 'Bucket size value - Maximum number of history buckets to collect.'
+                    example: 30
+                  - nxos_name: closeConnection
+                    tf_name: tcp_connect_close_connection
+                    type: Bool
+                    description: 'To close tcp connection of ip sla tcp-connect operation using FIN flag instead of RST flag. CLI : close-connection fin True for FIN flag.'
+                    example: true
+                  - nxos_name: control
+                    tf_name: tcp_connect_control
+                    type: Bool
+                    description: 'To turn on/off Control Packets Exchanging mechanism between the sender and the responder, control is enabled by default.'
+                    example: false
+                  - nxos_name: destHostName
+                    tf_name: tcp_connect_destination_hostname
+                    type: String
+                    description: 'Destination Host Name, if IP address is resolved from DNS server.Modifying this property is not allowed in case of icmp-echo probe.'
+                    example: host1.example.com
+                    exclude_test: true
+                  - nxos_name: destip
+                    tf_name: tcp_connect_destination_ip
+                    type: String
+                    description: 'Destination IP address which is tracked by the probe.This property is not applicable if the configured probe type is HTTP or DNS. Modifying this property is not allowed in case of icmp-echo probe.'
+                    example: '10.1.1.1'
+                  - nxos_name: distributionsOfStatsKept
+                    tf_name: tcp_connect_distributions_of_statistics_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 20
+                    description: 'Maximum number of statistics distribution buckets to capture.'
+                    example: 5
+                  - nxos_name: dstPort
+                    tf_name: tcp_connect_destination_port
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Destination TCP Port configuration for the TCP probe, it is must to configure the destination port.'
+                    example: 5000
+                  - nxos_name: enhancedBuckets
+                    tf_name: tcp_connect_enhanced_buckets
+                    type: Int64
+                    min_int: 0
+                    max_int: 100
+                    description: 'Number of buckets to collect data based on the enhanced interval.'
+                    example: 50
+                  - nxos_name: enhancedInterval
+                    tf_name: tcp_connect_enhanced_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 3600
+                    description: 'Aggregation interval in seconds to collect the aggregated values.'
+                    example: 900
+                  - nxos_name: filter
+                    tf_name: tcp_connect_filter
+                    type: String
+                    description: 'Bucket size value - Maximum number of history buckets to collect.'
+                    enum_values:
+                      - 'None'
+                      - All
+                      - OverThreshold
+                      - Failures
+                    example: All
+                  - nxos_name: frequency
+                    tf_name: tcp_connect_frequency
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800
+                    description: 'Frequency of an operation - The interval at which the configured destination is tracked by the probe. Frequency in seconds(default value is 60). Minimum frequency value for an IP SLAs HTTP probe operation is 60 seconds but 1 second for other probes.'
+                    example: 30
+                  - nxos_name: frequencyInMilliseconds
+                    tf_name: tcp_connect_frequency_milliseconds
+                    type: Int64
+                    min_int: 100
+                    max_int: 604800000
+                    description: 'Frequency of an operation - The interval at which the configured destination is tracked by the probe. Frequency in milliseconds(default value is 60000).'
+                    example: 30000
+                    exclude_test: true
+                  - nxos_name: hoursOfStatsKept
+                    tf_name: tcp_connect_hours_of_statistics_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 25
+                    description: 'Maximum number of statistics hour groups to capture.'
+                    example: 5
+                  - nxos_name: ipTos
+                    tf_name: tcp_connect_tos
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'TOS if the probe is tracking IPv4 destination and Traffic Class if the probe is tracking IPv6 destination.'
+                    example: 10
+                  - nxos_name: ipv6TrafficClass
+                    tf_name: tcp_connect_ipv6_traffic_class
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'TOS if the probe is tracking IPv4 destination and Traffic Class if the probe is tracking IPv6 destination.'
+                    example: 10
+                    exclude_test: true
+                  - nxos_name: livesKept
+                    tf_name: tcp_connect_lives_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 2
+                    description: 'Maximum number of history lives to collect.'
+                    example: 1
+                  - nxos_name: owner
+                    tf_name: tcp_connect_owner
+                    type: String
+                    description: 'Owner string of the probe(Max size 127).'
+                    example: OWNER1
+                  - nxos_name: srcHostName
+                    tf_name: tcp_connect_source_hostname
+                    type: String
+                    description: 'Source Host Name, if IP address is resolved from DNS server. Modifying this property is not allowed.'
+                    example: host2.example.com
+                    exclude_test: true
+                  - nxos_name: srcPort
+                    tf_name: tcp_connect_source_port
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Source TCP Port configuration for TCP probe, if the srcPort is not configured then the random source port will be used.'
+                    example: 6000
+                  - nxos_name: srcip
+                    tf_name: tcp_connect_source_ip
+                    type: String
+                    description: 'Source`IP address from which the configured destination is tracked by the probe. Modifying this property is not allowed.'
+                    example: '10.0.0.1'
+                    exclude_test: true
+                  - nxos_name: statsDistributionInterval
+                    tf_name: tcp_connect_statistics_distribution_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 100000
+                    description: 'Statistics distribution interval size, if the precision configured is in milliseconds, then the unit is in milliseconds else if it is microseconds, then the unit is in microseconds.'
+                    example: 10
+                  - nxos_name: tag
+                    tf_name: tcp_connect_tag
+                    type: String
+                    description: 'User defined tag string (Max Size 127).'
+                    example: TAG1
+                  - nxos_name: threshold
+                    tf_name: tcp_connect_threshold
+                    type: Int64
+                    min_int: 1
+                    max_int: 60000
+                    description: 'Operation threshold - this is an upper limit for the observed RTT for the probe. RTT value of a probe exceeding the configured threshold will be marked with Overthreshold return code.'
+                    example: 1000
+                  - nxos_name: timeout
+                    tf_name: tcp_connect_timeout
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800000
+                    description: 'Timeout of an operation - this is the maximum wait time for completing the operation. The probe will be marked with Timeout return code.'
+                    example: 2000
+                  - nxos_name: vrf
+                    tf_name: tcp_connect_vrf
+                    type: String
+                    description: 'vrf on which the probe is configured.'
+                    example: management
+              - class_name: slaDns
+                doc_path: Communication/sla:Dns/
+                rn: dns
+                type: single
+                exclude_test: true
+                tf_name: dns
+                description: 'DNS probe configuration.'
+                attributes:
+                  - nxos_name: bucketsKept
+                    tf_name: dns_buckets_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 60
+                    description: 'Bucket size value - Maximum number of history buckets to collect.'
+                    example: 30
+                  - nxos_name: distributionsOfStatsKept
+                    tf_name: dns_distributions_of_statistics_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 20
+                    description: 'Maximum number of statistics distribution buckets to capture.'
+                    example: 5
+                  - nxos_name: filter
+                    tf_name: dns_filter
+                    type: String
+                    description: 'Bucket size value - Maximum number of history buckets to collect.'
+                    enum_values:
+                      - 'None'
+                      - All
+                      - OverThreshold
+                      - Failures
+                    example: All
+                  - nxos_name: frequency
+                    tf_name: dns_frequency
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800
+                    description: 'Frequency of an operation - The interval at which the configured destination is tracked by the probe. Frequency in seconds(default value is 60). Minimum frequency value for an IP SLAs HTTP probe operation is 60 seconds but 1 second for other probes.'
+                    example: 30
+                  - nxos_name: hoursOfStatsKept
+                    tf_name: dns_hours_of_statistics_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 25
+                    description: 'Maximum number of statistics hour groups to capture.'
+                    example: 5
+                  - nxos_name: livesKept
+                    tf_name: dns_lives_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 2
+                    description: 'Maximum number of history lives to collect.'
+                    example: 1
+                  - nxos_name: nameServerHostName
+                    tf_name: dns_name_server_hostname
+                    type: String
+                    description: 'Host name of the name server, from which the DNS name server IP address is resolved. Name server IP address which is used to resolve the target host name or target host ip configured in the probe. This property is applicable only incase of DNS probe.'
+                    example: dns1.example.com
+                    exclude_test: true
+                  - nxos_name: nameServerIp
+                    tf_name: dns_name_server_ip
+                    type: String
+                    description: 'Name server IP address which is used to resolve the target host name or target host ip configured in the probe.This property is applicable only if the configured probe type is DNS.'
+                    example: '10.1.1.1'
+                  - nxos_name: owner
+                    tf_name: dns_owner
+                    type: String
+                    description: 'Owner string of the probe(Max size 127).'
+                    example: OWNER1
+                  - nxos_name: srcHostName
+                    tf_name: dns_source_hostname
+                    type: String
+                    description: 'Source Host Name, if IP address is resolved from DNS server. Modifying this property is not allowed.'
+                    example: host2.example.com
+                    exclude_test: true
+                  - nxos_name: srcPort
+                    tf_name: dns_source_port
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Source Port configuration for DNS probe.'
+                    example: 6000
+                  - nxos_name: srcip
+                    tf_name: dns_source_ip
+                    type: String
+                    description: 'Source`IP address from which the configured destination is tracked by the probe. Modifying this property is not allowed.'
+                    example: '10.0.0.1'
+                    exclude_test: true
+                  - nxos_name: statsDistributionInterval
+                    tf_name: dns_statistics_distribution_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 100000
+                    description: 'Statistics distribution interval size, if the precision configured is in milliseconds, then the unit is in milliseconds else if it is microseconds, then the unit is in microseconds.'
+                    example: 10
+                  - nxos_name: tag
+                    tf_name: dns_tag
+                    type: String
+                    description: 'User defined tag string (Max Size 127).'
+                    example: TAG1
+                  - nxos_name: targetEntry
+                    tf_name: dns_target
+                    type: String
+                    description: 'This property can be either Host name or IP address (IPv4 address format x.x.x.x),(no IPv6 support) for which the resolution happens either by name or by IP to name respectively, in the configured probe. This property is applicable only incase of DNS probe.'
+                    example: www.example.com
+                  - nxos_name: threshold
+                    tf_name: dns_threshold
+                    type: Int64
+                    min_int: 1
+                    max_int: 60000
+                    description: 'Operation threshold - this is an upper limit for the observed RTT for the probe. RTT value of a probe exceeding the configured threshold will be marked with Overthreshold return code.'
+                    example: 1000
+                  - nxos_name: timeout
+                    tf_name: dns_timeout
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800000
+                    description: 'Timeout of an operation - this is the maximum wait time for completing the operation. The probe will be marked with Timeout return code.'
+                    example: 2000
+                  - nxos_name: vrf
+                    tf_name: dns_vrf
+                    type: String
+                    description: 'vrf on which the probe is configured.'
+                    example: management
+              - class_name: slaHttp
+                doc_path: Communication/sla:Http/
+                rn: http
+                type: single
+                exclude_test: true
+                tf_name: http
+                description: 'HTTP probe configuration.'
+                attributes:
+                  - nxos_name: bucketsKept
+                    tf_name: http_buckets_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 60
+                    description: 'Bucket size value - Maximum number of history buckets to collect.'
+                    example: 30
+                  - nxos_name: cache
+                    tf_name: http_cache
+                    type: Bool
+                    description: 'The config to enable/disable the download of cached HTTP page.'
+                    example: false
+                  - nxos_name: distributionsOfStatsKept
+                    tf_name: http_distributions_of_statistics_kept
+                    type: Int64
+                    min_int: 1
+                    max_int: 20
+                    description: 'Maximum number of statistics distribution buckets to capture.'
+                    example: 5
+                  - nxos_name: filter
+                    tf_name: http_filter
+                    type: String
+                    description: 'Bucket size value - Maximum number of history buckets to collect.'
+                    enum_values:
+                      - 'None'
+                      - All
+                      - OverThreshold
+                      - Failures
+                    example: All
+                  - nxos_name: frequency
+                    tf_name: http_frequency
+                    type: Int64
+                    min_int: 60
+                    max_int: 604800
+                    description: 'Operation frequency (in seconds) using which the probes are scheduled.'
+                    example: 120
+                  - nxos_name: hoursOfStatsKept
+                    tf_name: http_hours_of_statistics_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 25
+                    description: 'Maximum number of statistics hour groups to capture.'
+                    example: 5
+                  - nxos_name: httpmethod
+                    tf_name: http_method
+                    type: String
+                    description: 'HTTP method - Currently only the get method is supported.For GET requests,IP SLAs will format the request based on the specified http URL.'
+                    enum_values:
+                      - get
+                    example: get
+                  - nxos_name: httpurl
+                    tf_name: http_url
+                    type: String
+                    description: 'URL string, expecting the input as http:[[//location[:port]]/directory]/filename.'
+                    example: 'http://10.1.1.1/index.html'
+                  - nxos_name: ipTos
+                    tf_name: http_tos
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'TOS if the probe is tracking IPv4 destination and Traffic Class if the probe is tracking IPv6 destination.'
+                    example: 10
+                  - nxos_name: ipv6TrafficClass
+                    tf_name: http_ipv6_traffic_class
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'TOS if the probe is tracking IPv4 destination and Traffic Class if the probe is tracking IPv6 destination.'
+                    example: 10
+                    exclude_test: true
+                  - nxos_name: livesKept
+                    tf_name: http_lives_kept
+                    type: Int64
+                    min_int: 0
+                    max_int: 2
+                    description: 'Maximum number of history lives to collect.'
+                    example: 1
+                  - nxos_name: owner
+                    tf_name: http_owner
+                    type: String
+                    description: 'Owner string of the probe(Max size 127).'
+                    example: OWNER1
+                  - nxos_name: proxy
+                    tf_name: http_proxy
+                    type: String
+                    description: 'Proxy information - proxy URL.'
+                    example: 'http://10.1.1.2'
+                  - nxos_name: srcHostName
+                    tf_name: http_source_hostname
+                    type: String
+                    description: 'Source Host Name, if IP address is resolved from DNS server. Modifying this property is not allowed.'
+                    example: host2.example.com
+                    exclude_test: true
+                  - nxos_name: srcPort
+                    tf_name: http_source_port
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Source Port configuration for HTTP probe.'
+                    example: 6000
+                  - nxos_name: srcip
+                    tf_name: http_source_ip
+                    type: String
+                    description: 'Source`IP address from which the configured destination is tracked by the probe. Modifying this property is not allowed.'
+                    example: '10.0.0.1'
+                    exclude_test: true
+                  - nxos_name: statsDistributionInterval
+                    tf_name: http_statistics_distribution_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 100000
+                    description: 'Statistics distribution interval size, if the precision configured is in milliseconds, then the unit is in milliseconds else if it is microseconds, then the unit is in microseconds.'
+                    example: 10
+                  - nxos_name: tag
+                    tf_name: http_tag
+                    type: String
+                    description: 'User defined tag string (Max Size 127).'
+                    example: TAG1
+                  - nxos_name: threshold
+                    tf_name: http_threshold
+                    type: Int64
+                    min_int: 1
+                    max_int: 60000
+                    description: 'Operation threshold - this is an upper limit for the observed RTT for the probe. RTT value of a probe exceeding the configured threshold will be marked with Overthreshold return code.'
+                    example: 1000
+                  - nxos_name: timeout
+                    tf_name: http_timeout
+                    type: Int64
+                    min_int: 1
+                    max_int: 604800000
+                    description: 'Timeout of an operation - this is the maximum wait time for completing the operation. The probe will be marked with Timeout return code.'
+                    example: 2000
+                  - nxos_name: version
+                    tf_name: http_version
+                    type: String
+                    description: 'HTTP version number, Supported HTTP versions are ''1.0'' and ''1.1''.'
+                    example: '1.1'
+                  - nxos_name: vrf
+                    tf_name: http_vrf
+                    type: String
+                    description: 'vrf on which the probe is configured.'
+                    example: management
+              - class_name: slaReaction
+                doc_path: Communication/sla:Reaction/
+                rn: reaction-%s
+                type: list
+                tf_name: reactions
+                description: 'List of proactive threshold monitoring reactions.'
+                attributes:
+                  - nxos_name: reactOn
+                    tf_name: react_on
+                    type: String
+                    id: true
+                    description: 'The performance parameters on which the proactive threshold monitoring and notifications are done.'
+                    enum_values:
+                      - 'none'
+                      - rtt
+                      - jitterSDAvg
+                      - jitterDSAvg
+                      - packetLossSD
+                      - packetLossDS
+                      - mos
+                      - timeout
+                      - connectionLoss
+                      - verifyError
+                      - jitterAvg
+                      - icpif
+                      - packetLateArrival
+                      - packetOutOfSequence
+                      - maxOfPositiveSD
+                      - maxOfNegativeSD
+                      - maxOfPositiveDS
+                      - maxOfNegativeDS
+                    example: rtt
+                  - nxos_name: lowerThreshold
+                    tf_name: lower_threshold
+                    type: Int64
+                    min_int: 1
+                    max_int: 60000
+                    description: 'Lower limit for Threshold.'
+                    example: 1000
+                  - nxos_name: reactionType
+                    tf_name: reaction_type
+                    type: String
+                    description: 'The config is to notify the user when the monitored performance parameter value rises above or falls below a specified threshold. The notification can be either as SNMP traps or trigger to a new probe.'
+                    enum_values:
+                      - 'none'
+                      - trapOnly
+                      - triggerOnly
+                      - trapAndTrigger
+                    example: trapAndTrigger
+                  - nxos_name: thresholdCountX
+                    tf_name: threshold_count_x
+                    type: Int64
+                    min_int: 1
+                    max_int: 16
+                    description: 'The config denotes the number of times the monitored performance parameter value rises above or falls below a specified threshold. This config applies only for the thresholdType 1. average 2. consecutive 3. xOfy.'
+                    example: 3
+                  - nxos_name: thresholdCountY
+                    tf_name: threshold_count_y
+                    type: Int64
+                    min_int: 1
+                    max_int: 16
+                    description: 'The config denotes the number of times the monitored performance parameter value rises above or falls below a specified threshold. This config applies only for the thresholdType xOfy.'
+                    example: 10
+                  - nxos_name: thresholdType
+                    tf_name: threshold_type
+                    type: String
+                    description: 'The config says when the configured reactionType should be triggered.'
+                    enum_values:
+                      - never
+                      - immediate
+                      - consecutive
+                      - xOfy
+                      - average
+                    example: xOfy
+                  - nxos_name: upperThreshold
+                    tf_name: upper_threshold
+                    type: Int64
+                    min_int: 1
+                    max_int: 60000
+                    description: 'Upper limit for Threshold.'
+                    example: 2000
+              - class_name: slaReactionTrigger
+                doc_path: Communication/sla:ReactionTrigger/
+                rn: trigger-%v
+                type: list
+                tf_name: reaction_triggers
+                description: 'List of reaction triggers.'
+                attributes:
+                  - nxos_name: targetProbe
+                    tf_name: target_probe
+                    type: Int64
+                    id: true
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'The target entry Number which will be triggered when the reactionType is configured as trapAndTrigger or triggerOnly. It is mandatory that this targetId probe should be configured prior to setting this property.'
+                    example: 2
+              - class_name: slaScheduler
+                doc_path: Communication/sla:Scheduler/
+                rn: schedule
+                type: single
+                tf_name: schedule
+                description: 'Probe schedule configuration.'
+                attributes:
+                  - nxos_name: ageOut
+                    tf_name: schedule_age_out
+                    type: Int64
+                    min_int: 0
+                    max_int: 2073600
+                    description: 'How long to keep this probe, when inactive (in seconds).'
+                    example: 86400
+                  - nxos_name: dayOfTheMonth
+                    tf_name: schedule_day_of_month
+                    type: Int64
+                    min_int: 0
+                    max_int: 31
+                    description: 'At which day of the configured month, the probe is to be started.Setting the value as zero means current day of the time. This property is applicable only when the startProbe proeprty is set as At.'
+                    example: 15
+                    exclude_test: true
+                  - nxos_name: life
+                    tf_name: schedule_life
+                    type: Int64
+                    min_int: 0
+                    max_int: 2147483647
+                    description: 'Length of time to execute in seconds.'
+                    example: 7200
+                  - nxos_name: month
+                    tf_name: schedule_month
+                    type: String
+                    description: 'At which month, the probe is to be started. This property is applicable only when the startProbe proeprty is set as At.'
+                    enum_values:
+                      - 'None'
+                      - January
+                      - February
+                      - March
+                      - April
+                      - May
+                      - June
+                      - July
+                      - August
+                      - September
+                      - October
+                      - November
+                      - December
+                    example: March
+                    exclude_test: true
+                  - nxos_name: recurring
+                    tf_name: schedule_recurring
+                    type: Bool
+                    description: 'Probe to be scheduled automatically every day.'
+                    example: true
+                  - nxos_name: startProbe
+                    tf_name: schedule_start_probe
+                    type: String
+                    description: 'When the probe is to be started.'
+                    enum_values:
+                      - Now
+                      - At
+                      - Pending
+                      - After
+                    example: At
+                  - nxos_name: startTime
+                    tf_name: schedule_start_time
+                    type: String
+                    description: 'When to start this probe on a given day and month in Hour(s):Minute(s):Second(s) i.e in (H:M:S) format. This property is applicable only when the startProbe proeprty is set as At or After.'
+                    example: '10:00:00'
+          - class_name: slaGrpScheduler
+            doc_path: Communication/sla:GrpScheduler/
+            rn: groupschedule-%v
+            type: list
+            tf_name: group_schedules
+            description: 'List of IP SLA group schedules.'
+            attributes:
+              - nxos_name: grpSchedulerId
+                tf_name: id
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 65535
+                description: 'Group scheduler index.'
+                example: 1
+              - nxos_name: ageOut
+                tf_name: age_out
+                type: Int64
+                min_int: 0
+                max_int: 2073600
+                description: 'How long to keep the probes, when inactive (in seconds).'
+                example: 3600
+              - nxos_name: dayOfTheMonth
+                tf_name: day_of_month
+                type: Int64
+                min_int: 0
+                max_int: 31
+                description: 'At which day of the configured month, the probe is to be started.Setting the value as zero means current day of the time. This property is applicable only when the startProbe proeprty is set as At.'
+                example: 15
+                exclude_test: true
+              - nxos_name: frequency
+                tf_name: frequency
+                type: Int64
+                min_int: 1
+                max_int: 604800
+                description: 'Group operation frequency (in seconds) using which the probes are scheduled.'
+                example: 30
+              - nxos_name: frequencyRange
+                tf_name: frequency_range
+                type: String
+                description: 'Group operation frequency (in seconds) either in range as x-y, frequency-range is used for random scheduling.'
+                example: 10-20
+                exclude_test: true
+              - nxos_name: life
+                tf_name: life
+                type: Int64
+                min_int: 0
+                max_int: 2147483647
+                description: 'Length of time to execute in seconds.'
+                example: 7200
+              - nxos_name: modifyGrpSchedule
+                tf_name: modify_group_schedule
+                type: String
+                description: 'modify the existing group schedule.'
+                enum_values:
+                  - create
+                  - add
+                  - delete
+                example: add
+                exclude_test: true
+              - nxos_name: month
+                tf_name: month
+                type: String
+                description: 'At which month, the probe is to be started. This property is applicable only when the startProbe proeprty is set as At.'
+                enum_values:
+                  - 'None'
+                  - January
+                  - February
+                  - March
+                  - April
+                  - May
+                  - June
+                  - July
+                  - August
+                  - September
+                  - October
+                  - November
+                  - December
+                example: March
+                exclude_test: true
+              - nxos_name: probeList
+                tf_name: probe_list
+                type: String
+                description: 'Multiple probe ID''s to be group scheduled, List of one or more identification(ID) numbers of the IP SLAs operations to be included in a new multioperation schedule. (Max up to 125 characters). Indicate ranges of operation ID numbers with a hyphen. Individual ID numbers and ranges of ID numbers are delimited by a comma. For example, enter a list of operation ID numbers in any of the following ways: x-y,a-b,c-f or x,y,a,b,c,f or x-y,a,b,c-f.'
+                example: '3'
+              - nxos_name: reschedule
+                tf_name: reschedule
+                type: Bool
+                description: 'Restarting a scheduled probe.'
+                example: true
+                exclude_test: true
+              - nxos_name: schedulePeriod
+                tf_name: schedule_period
+                type: Int64
+                min_int: 0
+                max_int: 604800
+                description: 'Group schedule period in seconds, This is the time period in which the group of the probes configured in probeList are scheduled at an equal gap between them.'
+                example: 10
+              - nxos_name: startProbe
+                tf_name: start_probe
+                type: String
+                description: 'When the probe is to be started.'
+                enum_values:
+                  - Now
+                  - At
+                  - Pending
+                  - After
+                example: After
+              - nxos_name: startTime
+                tf_name: start_time
+                type: String
+                description: 'When to start this probe on a given day and month in Hour(s):Minute(s):Second(s) i.e in (H:M:S) format. This property is applicable only when the startProbe proeprty is set as At or After.'
+                example: '01:00:00'
+      - class_name: slaResponder
+        doc_path: Communication/sla:Responder/
+        rn: responder
+        type: single
+        tf_name: responder
+        description: 'IP SLA responder configuration.'
+        attributes:
+          - nxos_name: adminState
+            tf_name: responder_admin_state
+            type: Bool
+            description: 'Enable or disable the ip sla responder. To enable responder, feature sla responder is to be enabled.'
+            example: true
+          - nxos_name: loggingLevel
+            tf_name: responder_logging_level
+            type: Int64
+            write_only: true
+            min_int: 0
+            max_int: 7
+            description: 'configures the logging level for ip sla responder. The property can be set only if feature sla responder is enabled.'
+            example: 5
+        child_classes:
+          - class_name: slaPermanentResponder
+            doc_path: Communication/sla:PermanentResponder/
+            rn: type-%s-port-%v-ip-[%s]
+            type: list
+            tf_name: permanent_responders
+            description: 'List of permanent responders.'
+            attributes:
+              - nxos_name: protocol
+                tf_name: protocol
+                type: String
+                id: true
+                description: 'Responder protocol types supported types are udp-echo, tcp-connect.'
+                enum_values:
+                  - udp
+                  - tcp
+                example: udp
+              - nxos_name: port
+                tf_name: port
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 65535
+                description: 'Port on which the responder is listenening to receive the packets from the sender. This property is applicable only for TCP or UDP protocol. Required only if ip sla sender probe''s control is disabled. Permanently enables the responder functionality on the specified port.'
+                example: 5000
+              - nxos_name: ipAddress
+                tf_name: ip_address
+                type: String
+                id: true
+                description: 'IP on which the responder is listenening to receive the packets from the sender. This property is applicable only for TCP or UDP protocol. Required only if ip sla sender probe''s control is disabled. Permanently enables the responder functionality on the specified port and IP. If the user needs wild card IP address, then use 0.0.0.0(any IP).'
+                example: '10.1.1.1'
+          - class_name: slaTwampResponder
+            doc_path: Communication/sla:TwampResponder/
+            rn: twampresponder
+            type: single
+            tf_name: twamp_responder
+            description: 'TWAMP responder configuration.'
+            attributes:
+              - nxos_name: adminState
+                tf_name: twamp_responder_admin_state
+                type: Bool
+                description: 'Enable or disable the twamp responder. To enable twamp responder, feature sla responder is to be enabled.'
+                example: true
+              - nxos_name: timeout
+                tf_name: twamp_responder_timeout
+                type: Int64
+                min_int: 1
+                max_int: 604800
+                description: 'TWAMP Responder Session inactivity timeout in seconds (default 900).'
+                example: 600
+      - class_name: slaTwampServer
+        doc_path: Communication/sla:TwampServer/
+        rn: twampserver
+        type: single
+        tf_name: twamp_server
+        description: 'TWAMP server configuration.'
+        attributes:
+          - nxos_name: adminState
+            tf_name: twamp_server_admin_state
+            type: Bool
+            description: 'Enable or disable the ip sla twamp server. To enable twamp-server, feature sla twamp-server is to be enabled.'
+            example: true
+          - nxos_name: inactivityTimer
+            tf_name: twamp_server_inactivity_timer
+            type: Int64
+            min_int: 1
+            max_int: 6000
+            description: 'TWAMP Server Inactivity Timer, Max number of inactive seconds (default 900).'
+            example: 600
+          - nxos_name: loggingLevel
+            tf_name: twamp_server_logging_level
+            type: Int64
+            write_only: true
+            min_int: 0
+            max_int: 7
+            description: 'configures the logging level for twamp server. The property can be set only if feature sla twamp-server is enabled.'
+            example: 5
+          - nxos_name: port
+            tf_name: twamp_server_port
+            type: Int64
+            min_int: 1
+            max_int: 65535
+            description: 'TWAMP Server Port on which the TCP control connection is established.(default 862).'
+            example: 5862
+test_prerequisites:
+  - dn: sys/fm/slasender
+    class_name: fmSlaSender
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/sla
+    class_name: slaEntity
+    no_delete: true
+    dependencies: [0]
+  - dn: sys/sla/inst
+    class_name: slaInst
+    no_delete: true
+    dependencies: [1]
+  - dn: sys/sla/inst/sender
+    class_name: slaSender
+    no_delete: true
+    dependencies: [2]
+  - dn: sys/sla/inst/sender/operation-2
+    class_name: slaProbe
+    no_delete: true
+    dependencies: [3]
+    attributes:
+      - name: id
+        value: 2
+    children:
+      - rn: icmpecho
+        class_name: slaIcmpEcho
+        attributes:
+          - name: destip
+            value: 10.1.1.2
+  - dn: sys/sla/inst/sender/operation-3
+    class_name: slaProbe
+    no_delete: true
+    dependencies: [3]
+    attributes:
+      - name: id
+        value: 3
+    children:
+      - rn: icmpecho
+        class_name: slaIcmpEcho
+        attributes:
+          - name: destip
+            value: 10.1.1.3
+  - dn: sys/fm/slaresponder
+    class_name: fmSlaResponder
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/slatwampserver
+    class_name: fmSlaTwampServer
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

@@ -43,7 +43,7 @@ import (
 {{- define "resourceTestChecksTemplate"}}
 {{- $name := .Name}}
 {{- $prefix := .Prefix}}
-{{- range .Children}}
+{{- range (testChildClasses .Children)}}
 {{- $list := .TfName}}
 {{- if testCond .TestTags .MinVersion}}
 	if {{testCond .TestTags .MinVersion}} {
@@ -244,7 +244,7 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
        ========================================================= */}}
 {{- define "testConfigChildrenTemplate"}}
 {{- $indent := .Indent}}
-{{- range .Children}}
+{{- range (testChildClasses .Children)}}
 {{- if testCond .TestTags .MinVersion}}
 	if {{testCond .TestTags .MinVersion}} {
 {{- end}}

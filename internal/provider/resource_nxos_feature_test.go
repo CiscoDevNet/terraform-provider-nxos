@@ -79,6 +79,9 @@ func TestAccNxosFeature(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "service_acceleration", "enabled"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "sftp_server", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "sla_responder", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "sla_sender", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "sla_twamp_server", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ssh", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "tacacs", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "telemetry", "enabled"))
@@ -184,6 +187,9 @@ func testAccNxosFeatureConfig_all() string {
 		config += `	service_acceleration = "enabled"` + "\n"
 	}
 	config += `	sftp_server = "enabled"` + "\n"
+	config += `	sla_responder = "enabled"` + "\n"
+	config += `	sla_sender = "enabled"` + "\n"
+	config += `	sla_twamp_server = "enabled"` + "\n"
 	config += `	ssh = "enabled"` + "\n"
 	config += `	tacacs = "enabled"` + "\n"
 	config += `	telemetry = "enabled"` + "\n"

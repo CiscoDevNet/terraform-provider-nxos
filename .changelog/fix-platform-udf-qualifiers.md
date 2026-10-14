@@ -1,1 +1,0 @@
-- Fix creating and deleting UDFs with TCAM region qualifiers (`qualify_*` attributes) in `nxos_platform` resource

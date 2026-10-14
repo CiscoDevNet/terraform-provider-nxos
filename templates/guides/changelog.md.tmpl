@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.18.2
+
+- Fix creating and deleting UDFs with TCAM region qualifiers (`qualify_*` attributes) in `nxos_platform` resource
+
 ## 0.18.1
 
 - Fix destroy of `nxos_feature`, `nxos_platform`, `nxos_snmp`, `nxos_system` and `nxos_user_management` not resetting attributes of nested non-deletable objects to their defaults, e.g. features enabled by `nxos_feature` (including `vtp`) are now disabled on destroy

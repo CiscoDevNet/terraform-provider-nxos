@@ -1,3 +1,8 @@
+## 0.18.1
+
+- Fix destroy of `nxos_feature`, `nxos_platform`, `nxos_snmp`, `nxos_system` and `nxos_user_management` not resetting attributes of nested non-deletable objects to their defaults, e.g. features enabled by `nxos_feature` (including `vtp`) are now disabled on destroy
+- Keep NX-API enabled when the `nxapi` attribute of `nxos_feature` is removed or the resource is destroyed, to avoid losing access to the device
+
 ## 0.18.0
 
 - Add `nxos_epbr` resource and data source

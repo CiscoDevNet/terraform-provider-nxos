@@ -1,2 +1,0 @@
-- Add `nxos_epbr` resource and data source
-- Add ePBR feature configuration to `nxos_feature` resource and data source

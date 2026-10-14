@@ -1,2 +1,0 @@
-- Add policy-based routing (PBR) configuration to `nxos_route_policy` resource and data source, including set next-hop addresses (with track and VRF), set interfaces, IPv6 access list matches, and IPv4/IPv6 policy route-map interface assignments
-- Add PBR feature configuration to `nxos_feature` resource and data source

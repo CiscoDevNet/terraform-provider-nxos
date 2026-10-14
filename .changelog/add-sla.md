@@ -1,2 +1,0 @@
-- Add `nxos_sla` resource and data source
-- Add SLA sender, SLA responder and SLA TWAMP server feature configuration to `nxos_feature` resource and data source

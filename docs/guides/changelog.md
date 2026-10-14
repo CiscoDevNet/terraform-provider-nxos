@@ -7,6 +7,21 @@ description: |-
 
 # Changelog
 
+## 0.18.0
+
+- Add `nxos_epbr` resource and data source
+- Add ePBR feature configuration to `nxos_feature` resource and data source
+- Add policy-based routing (PBR) configuration to `nxos_route_policy` resource and data source, including set next-hop addresses (with track and VRF), set interfaces, IPv6 access list matches, and IPv4/IPv6 policy route-map interface assignments
+- Add PBR feature configuration to `nxos_feature` resource and data source
+- Add TCAM templates (including UDF qualifiers) and user-defined fields (UDFs) configuration to `nxos_platform` resource and data source
+- Add `dot1q_tunnel_transit_range` attribute to `nxos_platform` resource and data source
+- Add `nxos_poe` resource and data source
+- Add PoE feature configuration to `nxos_feature` resource and data source
+- Add `nxos_sla` resource and data source
+- Add SLA sender, SLA responder and SLA TWAMP server feature configuration to `nxos_feature` resource and data source
+- Add `nxos_vtp` resource and data source
+- Add VTP feature configuration to `nxos_feature` resource and data source
+
 ## 0.17.2
 
 - Fix `nxos_save_config` action panic (nil pointer dereference) by setting `ActionData` in the provider `Configure` method

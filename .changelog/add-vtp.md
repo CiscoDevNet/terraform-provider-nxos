@@ -1,2 +1,0 @@
-- Add `nxos_vtp` resource and data source
-- Add VTP feature configuration to `nxos_feature` resource and data source

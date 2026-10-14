@@ -1,2 +1,0 @@
-- Add `nxos_poe` resource and data source
-- Add PoE feature configuration to `nxos_feature` resource and data source

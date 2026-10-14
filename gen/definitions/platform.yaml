@@ -41,6 +41,12 @@ attributes:
       - enable
     example: enable
     exclude_test: true
+  - nxos_name: dot1qTunnelTransitRange
+    tf_name: dot1q_tunnel_transit_range
+    type: String
+    description: 'Enable Dot1Q tunnel transit for a range of vlans for multi-tag Ethernet frames.'
+    example: '10-20'
+    exclude_test: true
   - nxos_name: globalTxSpan
     tf_name: global_tx_span
     type: String
@@ -1944,6 +1950,172 @@ child_classes:
           - disable
           - enable
         example: enable
+  - class_name: platformTcamTemplate
+    doc_path: System/platform%3ATcamTemplate/
+    rn: template-[%s]
+    type: list
+    tf_name: tcam_templates
+    description: 'User-defined TCAM template configuration.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Name of the user-defined tcam template.'
+        example: TPL1
+      - nxos_name: refTemplate
+        tf_name: reference_template
+        type: String
+        description: 'Select a default template as reference.'
+        enum_values:
+          - unspecified
+          - l3
+          - l2-l3
+          - nfe
+          - nfe2
+        example: l3
+    child_classes:
+      - class_name: platformUdfTcamTemplate
+        doc_path: System/platform%3AUdfTcamTemplate/
+        rn: udftcamtype-[%s]-udfname-[%s]
+        type: list
+        tf_name: udfs
+        description: 'List of TCAM template UDF qualifiers.'
+        test_tags: [PLATFORM_FRETTA]
+        attributes:
+          - nxos_name: udfTcamType
+            tf_name: tcam_type
+            type: String
+            id: true
+            description: 'Select the tcam udf type.'
+            example: racl
+          - nxos_name: udfName
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of the user-defined tcam udf.'
+            example: UDF1
+  - class_name: platformUdfEntity
+    doc_path: System/platform%3AUdfEntity/
+    rn: udf
+    type: single
+    tf_name: udf
+    no_delete: true
+    description: 'User-defined field (UDF) configuration.'
+    attributes:
+      - nxos_name: descr
+        tf_name: udf_description
+        type: String
+        description: 'UdfEntity Description.'
+        example: 'My UDFs'
+    child_classes:
+      - class_name: platformUdf
+        doc_path: System/platform%3AUdf/
+        rn: udf-[%s]
+        type: list
+        tf_name: udfs
+        description: 'List of user-defined fields (UDFs).'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Udf Name.'
+            example: UDF1
+          - nxos_name: mplsStack1
+            tf_name: mpls_stack_1
+            type: Bool
+            description: 'Configure UDF for first level (inner) of MPLS encapsulation.'
+            example: true
+          - nxos_name: mplsStack2
+            tf_name: mpls_stack_2
+            type: Bool
+            description: 'Configure UDF for second level (outer) of MPLS encapsulation.'
+            example: true
+          - nxos_name: netflowRtp
+            tf_name: netflow_rtp
+            type: Bool
+            description: 'Configure netflow rtp udf.'
+            example: true
+          - nxos_name: offsetBase
+            tf_name: offset_base
+            type: String
+            description: 'Offset Base.'
+            enum_values:
+              - packet-start
+              - outer-header-l3
+              - outer-header-l4
+              - inner-header-l3
+              - inner-header-l4
+            example: outer-header-l3
+          - nxos_name: offsetLength
+            tf_name: offset_length
+            type: Int64
+            description: 'offsetLength 1-2.'
+            min_int: 1
+            max_int: 2
+            example: 2
+          - nxos_name: offsetPosition
+            tf_name: offset_position
+            type: Int64
+            description: 'offsetPosition from base 0-127.'
+            min_int: 0
+            max_int: 127
+            example: 10
+          - nxos_name: qualifyIfacl
+            tf_name: qualify_ifacl
+            type: Bool
+            description: 'Configure UDFs to be qualified for IFACL region.'
+            example: true
+            exclude_test: true
+          - nxos_name: qualifyIpv6Racl
+            tf_name: qualify_ipv6_racl
+            type: Bool
+            description: 'Configure UDFs to be qualified for IPV6 RACL region.'
+            example: true
+            exclude_test: true
+          - nxos_name: qualifyRacl
+            tf_name: qualify_racl
+            type: Bool
+            description: 'Configure UDFs to be qualified for RACL region.'
+            example: true
+            exclude_test: true
+          - nxos_name: qualifyRaclAll
+            tf_name: qualify_racl_all
+            type: Bool
+            description: 'Configure UDFs to be qualified for RACL ALL region.'
+            example: true
+            exclude_test: true
+          - nxos_name: qualifySpan
+            tf_name: qualify_span
+            type: Bool
+            description: 'qualifySpan.'
+            example: true
+            exclude_test: true
+          - nxos_name: qualifySpanAll
+            tf_name: qualify_span_all
+            type: Bool
+            description: 'Configure UDFs to be qualified for SPAN ALL region.'
+            example: true
+            exclude_test: true
+          - nxos_name: qualifySpanV6
+            tf_name: qualify_span_v6
+            type: Bool
+            description: 'qualifySpanV6.'
+            example: true
+            exclude_test: true
+          - nxos_name: qualifySpanV6L2
+            tf_name: qualify_span_v6_l2
+            type: Bool
+            description: 'qualifySpanV6L2.'
+            example: true
+            exclude_test: true
+          - nxos_name: qualifyVacl
+            tf_name: qualify_vacl
+            type: Bool
+            description: 'Configure UDFs to be qualified for VACL region.'
+            example: true
+            exclude_test: true
 test_prerequisites:
   - dn: sys/fm/nvo
     class_name: fmNvo

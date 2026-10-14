@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.
   API Documentation
-  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/
+  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/platformTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/platformUdfTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/platformUdfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/platformUdf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdf/
 ---
 
 # nxos_platform (Resource)
@@ -21,6 +21,10 @@ This resource can manage the platform configuration on NX-OS devices, including 
 - [platformInfraVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/)
 - [platformEntityExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/)
 - [platformLoadBalance](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/)
+- [platformTcamTemplate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/)
+- [platformUdfTcamTemplate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/)
+- [platformUdfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/)
+- [platformUdf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdf/)
 
 ## Example Usage
 
@@ -41,6 +45,25 @@ resource "nxos_platform" "example" {
   port_channel_load_balance_fields        = "srcDstIp"
   port_channel_load_balance_rotate        = 3
   port_channel_load_balance_symmetry      = "enable"
+  tcam_templates = {
+    "TPL1" = {
+      reference_template = "l3"
+      udfs = {
+        "racl;UDF1" = {}
+      }
+    }
+  }
+  udf_description = "My UDFs"
+  udfs = {
+    "UDF1" = {
+      mpls_stack_1    = true
+      mpls_stack_2    = true
+      netflow_rtp     = true
+      offset_base     = "outer-header-l3"
+      offset_length   = 2
+      offset_position = 10
+    }
+  }
 }
 ```
 
@@ -57,6 +80,7 @@ resource "nxos_platform" "example" {
 - `device` (String) A device name from the provider configuration.
 - `disable_parse_error` (String) Used to disable/enable hardware profile disable parse-err.
   - Choices: `disable`, `enable`
+- `dot1q_tunnel_transit_range` (String) Enable Dot1Q tunnel transit for a range of vlans for multi-tag Ethernet frames.
 - `extended_acl_disable_redirect_share` (String) Disable acl redirect share.
   - Choices: `disable`, `enable`
 - `extended_atomic_update` (String) To optimize enable/disable atomic update.
@@ -453,6 +477,11 @@ resource "nxos_platform" "example" {
   - Range: `0`-`2147483647`
 - `tcam_syslog_threshold` (Number) Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for TCAM. The default is 90 percent of the total available shared buffer.
   - Range: `1`-`100`
+- `tcam_templates` (Attributes Map) User-defined TCAM template configuration.
+  - Map key: `name` - Name of the user-defined tcam template. (see [below for nested schema](#nestedatt--tcam_templates))
+- `udf_description` (String) UdfEntity Description.
+- `udfs` (Attributes Map) List of user-defined fields (UDFs).
+  - Map key: `name` - Udf Name. (see [below for nested schema](#nestedatt--udfs))
 - `unicast_max_limit` (Number) Maximum limit for unicast LPM routes.
   - Range: `0`-`8000`
 - `unicast_syslog_threshold` (Number) Specifies to generate a syslog entry when the specified maximum buffer size is exceeded for unicast cases. The default is 90 percent of the total available shared buffer.
@@ -489,6 +518,49 @@ Optional:
 
 - `force` (String) Force flag if infra vlan added by force.
   - Choices: `Disable`, `Enable`
+
+
+
+<a id="nestedatt--tcam_templates"></a>
+### Nested Schema for `tcam_templates`
+
+Optional:
+
+- `reference_template` (String) Select a default template as reference.
+  - Choices: `unspecified`, `l3`, `l2-l3`, `nfe`, `nfe2`
+- `udfs` (Attributes Map) List of TCAM template UDF qualifiers.
+  - Map key format: `<tcam_type>;<name>`
+  - Key component `tcam_type`: Select the tcam udf type.
+  - Key component `name`: Name of the user-defined tcam udf. (see [below for nested schema](#nestedatt--tcam_templates--udfs))
+
+<a id="nestedatt--tcam_templates--udfs"></a>
+### Nested Schema for `tcam_templates.udfs`
+
+
+
+<a id="nestedatt--udfs"></a>
+### Nested Schema for `udfs`
+
+Optional:
+
+- `mpls_stack_1` (Boolean) Configure UDF for first level (inner) of MPLS encapsulation.
+- `mpls_stack_2` (Boolean) Configure UDF for second level (outer) of MPLS encapsulation.
+- `netflow_rtp` (Boolean) Configure netflow rtp udf.
+- `offset_base` (String) Offset Base.
+  - Choices: `packet-start`, `outer-header-l3`, `outer-header-l4`, `inner-header-l3`, `inner-header-l4`
+- `offset_length` (Number) offsetLength 1-2.
+  - Range: `1`-`2`
+- `offset_position` (Number) offsetPosition from base 0-127.
+  - Range: `0`-`127`
+- `qualify_ifacl` (Boolean) Configure UDFs to be qualified for IFACL region.
+- `qualify_ipv6_racl` (Boolean) Configure UDFs to be qualified for IPV6 RACL region.
+- `qualify_racl` (Boolean) Configure UDFs to be qualified for RACL region.
+- `qualify_racl_all` (Boolean) Configure UDFs to be qualified for RACL ALL region.
+- `qualify_span` (Boolean) qualifySpan.
+- `qualify_span_all` (Boolean) Configure UDFs to be qualified for SPAN ALL region.
+- `qualify_span_v6` (Boolean) qualifySpanV6.
+- `qualify_span_v6_l2` (Boolean) qualifySpanV6L2.
+- `qualify_vacl` (Boolean) Configure UDFs to be qualified for VACL region.
 
 ## Import
 

@@ -56,7 +56,7 @@ func (d *PlatformDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -81,6 +81,10 @@ func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 			},
 			"disable_parse_error": schema.StringAttribute{
 				MarkdownDescription: "Used to disable/enable hardware profile disable parse-err.",
+				Computed:            true,
+			},
+			"dot1q_tunnel_transit_range": schema.StringAttribute{
+				MarkdownDescription: "Enable Dot1Q tunnel transit for a range of vlans for multi-tag Ethernet frames.",
 				Computed:            true,
 			},
 			"global_tx_span": schema.StringAttribute{
@@ -959,6 +963,97 @@ func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				MarkdownDescription: "load balancing symmetry parameter.",
 				Computed:            true,
 			},
+			"tcam_templates": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("User-defined TCAM template configuration.\n  - Map key: `name` - Name of the user-defined tcam template.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"reference_template": schema.StringAttribute{
+							MarkdownDescription: "Select a default template as reference.",
+							Computed:            true,
+						},
+						"udfs": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of TCAM template UDF qualifiers.\n  - Map key format: `<tcam_type>;<name>`\n  - Key component `tcam_type`: Select the tcam udf type.\n  - Key component `name`: Name of the user-defined tcam udf.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+					},
+				},
+			},
+			"udf_description": schema.StringAttribute{
+				MarkdownDescription: "UdfEntity Description.",
+				Computed:            true,
+			},
+			"udfs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of user-defined fields (UDFs).\n  - Map key: `name` - Udf Name.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"mpls_stack_1": schema.BoolAttribute{
+							MarkdownDescription: "Configure UDF for first level (inner) of MPLS encapsulation.",
+							Computed:            true,
+						},
+						"mpls_stack_2": schema.BoolAttribute{
+							MarkdownDescription: "Configure UDF for second level (outer) of MPLS encapsulation.",
+							Computed:            true,
+						},
+						"netflow_rtp": schema.BoolAttribute{
+							MarkdownDescription: "Configure netflow rtp udf.",
+							Computed:            true,
+						},
+						"offset_base": schema.StringAttribute{
+							MarkdownDescription: "Offset Base.",
+							Computed:            true,
+						},
+						"offset_length": schema.Int64Attribute{
+							MarkdownDescription: "offsetLength 1-2.",
+							Computed:            true,
+						},
+						"offset_position": schema.Int64Attribute{
+							MarkdownDescription: "offsetPosition from base 0-127.",
+							Computed:            true,
+						},
+						"qualify_ifacl": schema.BoolAttribute{
+							MarkdownDescription: "Configure UDFs to be qualified for IFACL region.",
+							Computed:            true,
+						},
+						"qualify_ipv6_racl": schema.BoolAttribute{
+							MarkdownDescription: "Configure UDFs to be qualified for IPV6 RACL region.",
+							Computed:            true,
+						},
+						"qualify_racl": schema.BoolAttribute{
+							MarkdownDescription: "Configure UDFs to be qualified for RACL region.",
+							Computed:            true,
+						},
+						"qualify_racl_all": schema.BoolAttribute{
+							MarkdownDescription: "Configure UDFs to be qualified for RACL ALL region.",
+							Computed:            true,
+						},
+						"qualify_span": schema.BoolAttribute{
+							MarkdownDescription: "qualifySpan.",
+							Computed:            true,
+						},
+						"qualify_span_all": schema.BoolAttribute{
+							MarkdownDescription: "Configure UDFs to be qualified for SPAN ALL region.",
+							Computed:            true,
+						},
+						"qualify_span_v6": schema.BoolAttribute{
+							MarkdownDescription: "qualifySpanV6.",
+							Computed:            true,
+						},
+						"qualify_span_v6_l2": schema.BoolAttribute{
+							MarkdownDescription: "qualifySpanV6L2.",
+							Computed:            true,
+						},
+						"qualify_vacl": schema.BoolAttribute{
+							MarkdownDescription: "Configure UDFs to be qualified for VACL region.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -991,7 +1086,7 @@ func (d *PlatformDataSource) Read(ctx context.Context, req datasource.ReadReques
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance"}, PlatformSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

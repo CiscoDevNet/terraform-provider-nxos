@@ -1,0 +1,2 @@
+- Add TCAM templates (including UDF qualifiers) and user-defined fields (UDFs) configuration to `nxos_platform` resource and data source
+- Add `dot1q_tunnel_transit_range` attribute to `nxos_platform` resource and data source

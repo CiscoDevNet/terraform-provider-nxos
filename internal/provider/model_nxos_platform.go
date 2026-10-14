@@ -25,6 +25,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -44,6 +45,7 @@ type Platform struct {
 	AclTapAggregation                                   types.String                     `tfsdk:"acl_tap_aggregation"`
 	Description                                         types.String                     `tfsdk:"description"`
 	DisableParseError                                   types.String                     `tfsdk:"disable_parse_error"`
+	Dot1qTunnelTransitRange                             types.String                     `tfsdk:"dot1q_tunnel_transit_range"`
 	GlobalTxSpan                                        types.String                     `tfsdk:"global_tx_span"`
 	HighMulticastPriority                               types.String                     `tfsdk:"high_multicast_priority"`
 	HardwareLouResourceThreshold                        types.Int64                      `tfsdk:"hardware_lou_resource_threshold"`
@@ -257,6 +259,9 @@ type Platform struct {
 	PortChannelLoadBalanceMplsLabelOnly                 types.String                     `tfsdk:"port_channel_load_balance_mpls_label_only"`
 	PortChannelLoadBalanceRotate                        types.Int64                      `tfsdk:"port_channel_load_balance_rotate"`
 	PortChannelLoadBalanceSymmetry                      types.String                     `tfsdk:"port_channel_load_balance_symmetry"`
+	TcamTemplates                                       map[string]PlatformTcamTemplates `tfsdk:"tcam_templates"`
+	UdfDescription                                      types.String                     `tfsdk:"udf_description"`
+	Udfs                                                map[string]PlatformUdfs          `tfsdk:"udfs"`
 }
 
 type PlatformNveInterfaces struct {
@@ -267,6 +272,32 @@ type PlatformNveInterfaces struct {
 
 type PlatformNveInterfacesInfraVlans struct {
 	Force types.String `tfsdk:"force"`
+}
+
+type PlatformTcamTemplates struct {
+	ReferenceTemplate types.String                         `tfsdk:"reference_template"`
+	Udfs              map[string]PlatformTcamTemplatesUdfs `tfsdk:"udfs"`
+}
+
+type PlatformTcamTemplatesUdfs struct {
+}
+
+type PlatformUdfs struct {
+	MplsStack1      types.Bool   `tfsdk:"mpls_stack_1"`
+	MplsStack2      types.Bool   `tfsdk:"mpls_stack_2"`
+	NetflowRtp      types.Bool   `tfsdk:"netflow_rtp"`
+	OffsetBase      types.String `tfsdk:"offset_base"`
+	OffsetLength    types.Int64  `tfsdk:"offset_length"`
+	OffsetPosition  types.Int64  `tfsdk:"offset_position"`
+	QualifyIfacl    types.Bool   `tfsdk:"qualify_ifacl"`
+	QualifyIpv6Racl types.Bool   `tfsdk:"qualify_ipv6_racl"`
+	QualifyRacl     types.Bool   `tfsdk:"qualify_racl"`
+	QualifyRaclAll  types.Bool   `tfsdk:"qualify_racl_all"`
+	QualifySpan     types.Bool   `tfsdk:"qualify_span"`
+	QualifySpanAll  types.Bool   `tfsdk:"qualify_span_all"`
+	QualifySpanV6   types.Bool   `tfsdk:"qualify_span_v6"`
+	QualifySpanV6L2 types.Bool   `tfsdk:"qualify_span_v6_l2"`
+	QualifyVacl     types.Bool   `tfsdk:"qualify_vacl"`
 }
 
 type PlatformIdentity struct {
@@ -311,6 +342,19 @@ func (data PlatformNveInterfacesInfraVlans) getRn(key string) string {
 	return fmt.Sprintf("infravlan-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
+func (data PlatformTcamTemplates) getRn(key string) string {
+	return fmt.Sprintf("template-[%s]", key)
+}
+
+func (data PlatformTcamTemplatesUdfs) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("udftcamtype-[%s]-udfname-[%s]", keyParts[0], keyParts[1])
+}
+
+func (data PlatformUdfs) getRn(key string) string {
+	return fmt.Sprintf("udf-[%s]", key)
+}
+
 func (data Platform) getClassName() string {
 	return "platformEntity"
 }
@@ -333,6 +377,9 @@ func (data Platform) toBody(config Platform) nxos.Body {
 	}
 	if !data.DisableParseError.IsUnknown() && !data.DisableParseError.IsNull() && !config.DisableParseError.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"disParseErr", data.DisableParseError.ValueString())
+	}
+	if !data.Dot1qTunnelTransitRange.IsUnknown() && !data.Dot1qTunnelTransitRange.IsNull() && !config.Dot1qTunnelTransitRange.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dot1qTunnelTransitRange", data.Dot1qTunnelTransitRange.ValueString())
 	}
 	if !data.GlobalTxSpan.IsUnknown() && !data.GlobalTxSpan.IsNull() && !config.GlobalTxSpan.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"globalTxSpan", data.GlobalTxSpan.ValueString())
@@ -1030,6 +1077,104 @@ func (data Platform) toBody(config Platform) nxos.Body {
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformLoadBalance.attributes", attrs)
 	}
+	for key, child := range data.TcamTemplates {
+		configChild, configChildOk := config.TcamTemplates[key]
+		_ = configChild
+		_ = configChildOk
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "name", key)
+		if configChildOk && !child.ReferenceTemplate.IsUnknown() && !child.ReferenceTemplate.IsNull() && !configChild.ReferenceTemplate.IsNull() {
+			attrs, _ = sjson.Set(attrs, "refTemplate", child.ReferenceTemplate.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformTcamTemplate.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".platformTcamTemplate.children"
+			_ = nestedChildrenPath
+			for key := range child.Udfs {
+				configChild, configChildOk := configChild.Udfs[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				keyParts := strings.SplitN(key, ";", 2)
+				attrs, _ = sjson.Set(attrs, "udfTcamType", keyParts[0])
+				attrs, _ = sjson.Set(attrs, "udfName", keyParts[1])
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.platformUdfTcamTemplate.attributes", attrs)
+			}
+		}
+	}
+	{
+		attrs = "{}"
+		if !data.UdfDescription.IsUnknown() && !data.UdfDescription.IsNull() && !config.UdfDescription.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", data.UdfDescription.ValueString())
+		}
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "platformUdfEntity.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "platformUdfEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		for key, child := range data.Udfs {
+			configChild, configChildOk := config.Udfs[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "name", key)
+			if configChildOk && !child.MplsStack1.IsUnknown() && !child.MplsStack1.IsNull() && !configChild.MplsStack1.IsNull() {
+				attrs, _ = sjson.Set(attrs, "mplsStack1", strconv.FormatBool(child.MplsStack1.ValueBool()))
+			}
+			if configChildOk && !child.MplsStack2.IsUnknown() && !child.MplsStack2.IsNull() && !configChild.MplsStack2.IsNull() {
+				attrs, _ = sjson.Set(attrs, "mplsStack2", strconv.FormatBool(child.MplsStack2.ValueBool()))
+			}
+			if configChildOk && !child.NetflowRtp.IsUnknown() && !child.NetflowRtp.IsNull() && !configChild.NetflowRtp.IsNull() {
+				attrs, _ = sjson.Set(attrs, "netflowRtp", strconv.FormatBool(child.NetflowRtp.ValueBool()))
+			}
+			if configChildOk && !child.OffsetBase.IsUnknown() && !child.OffsetBase.IsNull() && !configChild.OffsetBase.IsNull() {
+				attrs, _ = sjson.Set(attrs, "offsetBase", child.OffsetBase.ValueString())
+			}
+			if configChildOk && !child.OffsetLength.IsUnknown() && !child.OffsetLength.IsNull() && !configChild.OffsetLength.IsNull() {
+				attrs, _ = sjson.Set(attrs, "offsetLength", strconv.FormatInt(child.OffsetLength.ValueInt64(), 10))
+			}
+			if configChildOk && !child.OffsetPosition.IsUnknown() && !child.OffsetPosition.IsNull() && !configChild.OffsetPosition.IsNull() {
+				attrs, _ = sjson.Set(attrs, "offsetPosition", strconv.FormatInt(child.OffsetPosition.ValueInt64(), 10))
+			}
+			if configChildOk && !child.QualifyIfacl.IsUnknown() && !child.QualifyIfacl.IsNull() && !configChild.QualifyIfacl.IsNull() {
+				attrs, _ = sjson.Set(attrs, "qualifyIfacl", strconv.FormatBool(child.QualifyIfacl.ValueBool()))
+			}
+			if configChildOk && !child.QualifyIpv6Racl.IsUnknown() && !child.QualifyIpv6Racl.IsNull() && !configChild.QualifyIpv6Racl.IsNull() {
+				attrs, _ = sjson.Set(attrs, "qualifyIpv6Racl", strconv.FormatBool(child.QualifyIpv6Racl.ValueBool()))
+			}
+			if configChildOk && !child.QualifyRacl.IsUnknown() && !child.QualifyRacl.IsNull() && !configChild.QualifyRacl.IsNull() {
+				attrs, _ = sjson.Set(attrs, "qualifyRacl", strconv.FormatBool(child.QualifyRacl.ValueBool()))
+			}
+			if configChildOk && !child.QualifyRaclAll.IsUnknown() && !child.QualifyRaclAll.IsNull() && !configChild.QualifyRaclAll.IsNull() {
+				attrs, _ = sjson.Set(attrs, "qualifyRaclAll", strconv.FormatBool(child.QualifyRaclAll.ValueBool()))
+			}
+			if configChildOk && !child.QualifySpan.IsUnknown() && !child.QualifySpan.IsNull() && !configChild.QualifySpan.IsNull() {
+				attrs, _ = sjson.Set(attrs, "qualifySpan", strconv.FormatBool(child.QualifySpan.ValueBool()))
+			}
+			if configChildOk && !child.QualifySpanAll.IsUnknown() && !child.QualifySpanAll.IsNull() && !configChild.QualifySpanAll.IsNull() {
+				attrs, _ = sjson.Set(attrs, "qualifySpanAll", strconv.FormatBool(child.QualifySpanAll.ValueBool()))
+			}
+			if configChildOk && !child.QualifySpanV6.IsUnknown() && !child.QualifySpanV6.IsNull() && !configChild.QualifySpanV6.IsNull() {
+				attrs, _ = sjson.Set(attrs, "qualifySpanV6", strconv.FormatBool(child.QualifySpanV6.ValueBool()))
+			}
+			if configChildOk && !child.QualifySpanV6L2.IsUnknown() && !child.QualifySpanV6L2.IsNull() && !configChild.QualifySpanV6L2.IsNull() {
+				attrs, _ = sjson.Set(attrs, "qualifySpanV6L2", strconv.FormatBool(child.QualifySpanV6L2.ValueBool()))
+			}
+			if configChildOk && !child.QualifyVacl.IsUnknown() && !child.QualifyVacl.IsNull() && !configChild.QualifyVacl.IsNull() {
+				attrs, _ = sjson.Set(attrs, "qualifyVacl", strconv.FormatBool(child.QualifyVacl.ValueBool()))
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.platformUdf.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "platformUdfEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1043,6 +1188,7 @@ func (data *Platform) fromBody(res gjson.Result) {
 	data.AclTapAggregation = types.StringValue(res.Get(data.getClassName() + ".attributes.aclTapAggregation").String())
 	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
 	data.DisableParseError = types.StringValue(res.Get(data.getClassName() + ".attributes.disParseErr").String())
+	data.Dot1qTunnelTransitRange = types.StringValue(res.Get(data.getClassName() + ".attributes.dot1qTunnelTransitRange").String())
 	data.GlobalTxSpan = types.StringValue(res.Get(data.getClassName() + ".attributes.globalTxSpan").String())
 	data.HighMulticastPriority = types.StringValue(res.Get(data.getClassName() + ".attributes.highMulticastPriority").String())
 	data.HardwareLouResourceThreshold = types.Int64Value(res.Get(data.getClassName() + ".attributes.hwLouResThreshold").Int())
@@ -1346,6 +1492,90 @@ func (data *Platform) fromBody(res gjson.Result) {
 		data.PortChannelLoadBalanceRotate = types.Int64Value(rplatformLoadBalance.Get("platformLoadBalance.attributes.rotate").Int())
 		data.PortChannelLoadBalanceSymmetry = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.symmetry").String())
 	}
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "platformTcamTemplate" {
+						var child PlatformTcamTemplates
+						child.ReferenceTemplate = types.StringValue(value.Get("attributes.refTemplate").String())
+						mapKey := value.Get("attributes.name").String()
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "platformUdfTcamTemplate" {
+											var nestedChildplatformUdfTcamTemplate PlatformTcamTemplatesUdfs
+											nestedMapKey := nestedValue.Get("attributes.udfTcamType").String() + ";" + nestedValue.Get("attributes.udfName").String()
+											if child.Udfs == nil {
+												child.Udfs = make(map[string]PlatformTcamTemplatesUdfs)
+											}
+											child.Udfs[nestedMapKey] = nestedChildplatformUdfTcamTemplate
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						if data.TcamTemplates == nil {
+							data.TcamTemplates = make(map[string]PlatformTcamTemplates)
+						}
+						data.TcamTemplates[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	{
+		var rplatformUdfEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("platformUdfEntity.attributes.rn").String()
+				if rnValue == "udf" {
+					rplatformUdfEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.UdfDescription = types.StringValue(rplatformUdfEntity.Get("platformUdfEntity.attributes.descr").String())
+		rplatformUdfEntity.Get("platformUdfEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "platformUdf" {
+							var child PlatformUdfs
+							child.MplsStack1 = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mplsStack1").String()))
+							child.MplsStack2 = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mplsStack2").String()))
+							child.NetflowRtp = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.netflowRtp").String()))
+							child.OffsetBase = types.StringValue(value.Get("attributes.offsetBase").String())
+							child.OffsetLength = types.Int64Value(value.Get("attributes.offsetLength").Int())
+							child.OffsetPosition = types.Int64Value(value.Get("attributes.offsetPosition").Int())
+							child.QualifyIfacl = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.qualifyIfacl").String()))
+							child.QualifyIpv6Racl = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.qualifyIpv6Racl").String()))
+							child.QualifyRacl = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.qualifyRacl").String()))
+							child.QualifyRaclAll = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.qualifyRaclAll").String()))
+							child.QualifySpan = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.qualifySpan").String()))
+							child.QualifySpanAll = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.qualifySpanAll").String()))
+							child.QualifySpanV6 = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.qualifySpanV6").String()))
+							child.QualifySpanV6L2 = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.qualifySpanV6L2").String()))
+							child.QualifyVacl = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.qualifyVacl").String()))
+							mapKey := value.Get("attributes.name").String()
+							if data.Udfs == nil {
+								data.Udfs = make(map[string]PlatformUdfs)
+							}
+							data.Udfs[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody
@@ -1372,6 +1602,11 @@ func (data *Platform) updateFromBody(res gjson.Result) {
 		data.DisableParseError = types.StringValue(res.Get(data.getClassName() + ".attributes.disParseErr").String())
 	} else {
 		data.DisableParseError = types.StringNull()
+	}
+	if !data.Dot1qTunnelTransitRange.IsNull() {
+		data.Dot1qTunnelTransitRange = types.StringValue(res.Get(data.getClassName() + ".attributes.dot1qTunnelTransitRange").String())
+	} else {
+		data.Dot1qTunnelTransitRange = types.StringNull()
 	}
 	if !data.GlobalTxSpan.IsNull() {
 		data.GlobalTxSpan = types.StringValue(res.Get(data.getClassName() + ".attributes.globalTxSpan").String())
@@ -2529,6 +2764,156 @@ func (data *Platform) updateFromBody(res gjson.Result) {
 	} else {
 		data.PortChannelLoadBalanceSymmetry = types.StringNull()
 	}
+	for key, item := range data.TcamTemplates {
+		var rplatformTcamTemplate gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("platformTcamTemplate.attributes.name").String() == key {
+					rplatformTcamTemplate = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rplatformTcamTemplate.Exists() {
+			delete(data.TcamTemplates, key)
+			continue
+		}
+		if !item.ReferenceTemplate.IsNull() {
+			item.ReferenceTemplate = types.StringValue(rplatformTcamTemplate.Get("platformTcamTemplate.attributes.refTemplate").String())
+		} else {
+			item.ReferenceTemplate = types.StringNull()
+		}
+		for nc := range item.Udfs {
+			ncItem := item.Udfs[nc]
+			keyParts := strings.SplitN(nc, ";", 2)
+			var rplatformUdfTcamTemplate gjson.Result
+			rplatformTcamTemplate.Get("platformTcamTemplate.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("platformUdfTcamTemplate.attributes.udfTcamType").String() == keyParts[0] &&
+						v.Get("platformUdfTcamTemplate.attributes.udfName").String() == keyParts[1] {
+						rplatformUdfTcamTemplate = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rplatformUdfTcamTemplate.Exists() {
+				delete(item.Udfs, nc)
+				continue
+			}
+			item.Udfs[nc] = ncItem
+		}
+		data.TcamTemplates[key] = item
+	}
+	var rplatformUdfEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("platformUdfEntity.attributes.rn").String()
+			if rnValue == "udf" {
+				rplatformUdfEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.UdfDescription.IsNull() {
+		data.UdfDescription = types.StringValue(rplatformUdfEntity.Get("platformUdfEntity.attributes.descr").String())
+	} else {
+		data.UdfDescription = types.StringNull()
+	}
+	for key, item := range data.Udfs {
+		var rplatformUdf gjson.Result
+		rplatformUdfEntity.Get("platformUdfEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("platformUdf.attributes.name").String() == key {
+					rplatformUdf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rplatformUdf.Exists() {
+			delete(data.Udfs, key)
+			continue
+		}
+		if !item.MplsStack1.IsNull() {
+			item.MplsStack1 = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.mplsStack1").String()))
+		} else {
+			item.MplsStack1 = types.BoolNull()
+		}
+		if !item.MplsStack2.IsNull() {
+			item.MplsStack2 = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.mplsStack2").String()))
+		} else {
+			item.MplsStack2 = types.BoolNull()
+		}
+		if !item.NetflowRtp.IsNull() {
+			item.NetflowRtp = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.netflowRtp").String()))
+		} else {
+			item.NetflowRtp = types.BoolNull()
+		}
+		if !item.OffsetBase.IsNull() {
+			item.OffsetBase = types.StringValue(rplatformUdf.Get("platformUdf.attributes.offsetBase").String())
+		} else {
+			item.OffsetBase = types.StringNull()
+		}
+		if !item.OffsetLength.IsNull() {
+			item.OffsetLength = types.Int64Value(rplatformUdf.Get("platformUdf.attributes.offsetLength").Int())
+		} else {
+			item.OffsetLength = types.Int64Null()
+		}
+		if !item.OffsetPosition.IsNull() {
+			item.OffsetPosition = types.Int64Value(rplatformUdf.Get("platformUdf.attributes.offsetPosition").Int())
+		} else {
+			item.OffsetPosition = types.Int64Null()
+		}
+		if !item.QualifyIfacl.IsNull() {
+			item.QualifyIfacl = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.qualifyIfacl").String()))
+		} else {
+			item.QualifyIfacl = types.BoolNull()
+		}
+		if !item.QualifyIpv6Racl.IsNull() {
+			item.QualifyIpv6Racl = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.qualifyIpv6Racl").String()))
+		} else {
+			item.QualifyIpv6Racl = types.BoolNull()
+		}
+		if !item.QualifyRacl.IsNull() {
+			item.QualifyRacl = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.qualifyRacl").String()))
+		} else {
+			item.QualifyRacl = types.BoolNull()
+		}
+		if !item.QualifyRaclAll.IsNull() {
+			item.QualifyRaclAll = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.qualifyRaclAll").String()))
+		} else {
+			item.QualifyRaclAll = types.BoolNull()
+		}
+		if !item.QualifySpan.IsNull() {
+			item.QualifySpan = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.qualifySpan").String()))
+		} else {
+			item.QualifySpan = types.BoolNull()
+		}
+		if !item.QualifySpanAll.IsNull() {
+			item.QualifySpanAll = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.qualifySpanAll").String()))
+		} else {
+			item.QualifySpanAll = types.BoolNull()
+		}
+		if !item.QualifySpanV6.IsNull() {
+			item.QualifySpanV6 = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.qualifySpanV6").String()))
+		} else {
+			item.QualifySpanV6 = types.BoolNull()
+		}
+		if !item.QualifySpanV6L2.IsNull() {
+			item.QualifySpanV6L2 = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.qualifySpanV6L2").String()))
+		} else {
+			item.QualifySpanV6L2 = types.BoolNull()
+		}
+		if !item.QualifyVacl.IsNull() {
+			item.QualifyVacl = types.BoolValue(helpers.ParseNxosBoolean(rplatformUdf.Get("platformUdf.attributes.qualifyVacl").String()))
+		} else {
+			item.QualifyVacl = types.BoolNull()
+		}
+		data.Udfs[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -2548,6 +2933,9 @@ func (data Platform) toDeleteBody() nxos.Body {
 	}
 	if !data.DisableParseError.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"disParseErr", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Dot1qTunnelTransitRange.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dot1qTunnelTransitRange", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.GlobalTxSpan.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"globalTxSpan", "DME_UNSET_PROPERTY_MARKER")
@@ -3234,6 +3622,38 @@ func (data Platform) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
+	for key, child := range data.TcamTemplates {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "platformTcamTemplate.attributes.rn", child.getRn(key))
+		deleteBody, _ = sjson.Set(deleteBody, "platformTcamTemplate.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		childBody := ""
+		if !data.UdfDescription.IsNull() {
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		hasNestedChildren := false
+		if len(data.Udfs) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformUdfEntity"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.Udfs {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "platformUdf.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "platformUdf.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -3280,6 +3700,52 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 				}
 			}
 		}
+		for stateKey := range state.TcamTemplates {
+			if _, found := data.TcamTemplates[stateKey]; !found {
+				stateChild := state.TcamTemplates[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "platformTcamTemplate.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "platformTcamTemplate.attributes.status", "deleted")
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.TcamTemplates {
+			if _, found := data.TcamTemplates[di]; !found {
+				continue
+			}
+			stateItemdi := state.TcamTemplates[di]
+			planItemdi := data.TcamTemplates[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("platformTcamTemplate.attributes.name").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".platformTcamTemplate.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.Udfs {
+				if _, found := planItemdi.Udfs[stateChildKey]; !found {
+					stateChild := stateItemdi.Udfs[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "platformUdfTcamTemplate.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "platformUdfTcamTemplate.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+		}
+		for stateKey := range state.Udfs {
+			if _, found := data.Udfs[stateKey]; !found {
+				stateChild := state.Udfs[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "platformUdf.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "platformUdf.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformUdfEntity") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
 	}
 
 	if !importing {
@@ -3294,6 +3760,9 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 		}
 		if !state.DisableParseError.IsNull() && config.DisableParseError.IsNull() {
 			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"disParseErr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.Dot1qTunnelTransitRange.IsNull() && config.Dot1qTunnelTransitRange.IsNull() {
+			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"dot1qTunnelTransitRange", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !state.GlobalTxSpan.IsNull() && config.GlobalTxSpan.IsNull() {
 			body.Str, _ = sjson.Set(body.Str, data.getClassName()+".attributes."+"globalTxSpan", "DME_UNSET_PROPERTY_MARKER")
@@ -4134,6 +4603,100 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 		if !state.PortChannelLoadBalanceSymmetry.IsNull() && config.PortChannelLoadBalanceSymmetry.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"symmetry", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.TcamTemplates {
+			if configChild, ok := config.TcamTemplates[key]; ok {
+				stateChild := state.TcamTemplates[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("platformTcamTemplate.attributes.name").String() == key {
+						if !stateChild.ReferenceTemplate.IsNull() && configChild.ReferenceTemplate.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".platformTcamTemplate.attributes."+"refTemplate", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("platformTcamTemplate.attributes.name").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".platformTcamTemplate.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Udfs {
+							if configChild, ok := configChild.Udfs[key]; ok {
+								stateChild := stateChild.Udfs[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+					}
+				}
+			}
+		}
+		if !state.UdfDescription.IsNull() && config.UdfDescription.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformUdfEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.Udfs {
+			if configChild, ok := config.Udfs[key]; ok {
+				stateChild := state.Udfs[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children").Array() {
+					if mv.Get("platformUdf.attributes.name").String() == key {
+						if !stateChild.MplsStack1.IsNull() && configChild.MplsStack1.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"mplsStack1", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.MplsStack2.IsNull() && configChild.MplsStack2.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"mplsStack2", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.NetflowRtp.IsNull() && configChild.NetflowRtp.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"netflowRtp", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.OffsetBase.IsNull() && configChild.OffsetBase.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"offsetBase", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.OffsetLength.IsNull() && configChild.OffsetLength.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"offsetLength", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.OffsetPosition.IsNull() && configChild.OffsetPosition.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"offsetPosition", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QualifyIfacl.IsNull() && configChild.QualifyIfacl.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"qualifyIfacl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QualifyIpv6Racl.IsNull() && configChild.QualifyIpv6Racl.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"qualifyIpv6Racl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QualifyRacl.IsNull() && configChild.QualifyRacl.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"qualifyRacl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QualifyRaclAll.IsNull() && configChild.QualifyRaclAll.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"qualifyRaclAll", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QualifySpan.IsNull() && configChild.QualifySpan.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"qualifySpan", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QualifySpanAll.IsNull() && configChild.QualifySpanAll.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"qualifySpanAll", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QualifySpanV6.IsNull() && configChild.QualifySpanV6.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"qualifySpanV6", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QualifySpanV6L2.IsNull() && configChild.QualifySpanV6L2.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"qualifySpanV6L2", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QualifyVacl.IsNull() && configChild.QualifyVacl.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformUdfEntity")+".children"+"."+strconv.Itoa(mi)+".platformUdf.attributes."+"qualifyVacl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
 		}
 	}
 

@@ -22,6 +22,7 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -42,6 +43,16 @@ func TestAccNxosPlatform(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "port_channel_load_balance_fields", "srcDstIp"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "port_channel_load_balance_rotate", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "port_channel_load_balance_symmetry", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "tcam_templates.TPL1.reference_template", "l3"))
+	if os.Getenv("PLATFORM_FRETTA") != "" {
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udf_description", "My UDFs"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.mpls_stack_1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.mpls_stack_2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.netflow_rtp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.offset_base", "outer-header-l3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.offset_length", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.offset_position", "10"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -145,6 +156,28 @@ func testAccNxosPlatformConfig_all() string {
 	config += `	port_channel_load_balance_fields = "srcDstIp"` + "\n"
 	config += `	port_channel_load_balance_rotate = 3` + "\n"
 	config += `	port_channel_load_balance_symmetry = "enable"` + "\n"
+	config += `	tcam_templates = {` + "\n"
+	config += `		"TPL1" = {` + "\n"
+	config += `			reference_template = "l3"` + "\n"
+	if os.Getenv("PLATFORM_FRETTA") != "" {
+		config += `			udfs = {` + "\n"
+		config += `				"racl;UDF1" = {` + "\n"
+		config += `				}` + "\n"
+		config += `			}` + "\n"
+	}
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	udf_description = "My UDFs"` + "\n"
+	config += `	udfs = {` + "\n"
+	config += `		"UDF1" = {` + "\n"
+	config += `			mpls_stack_1 = true` + "\n"
+	config += `			mpls_stack_2 = true` + "\n"
+	config += `			netflow_rtp = true` + "\n"
+	config += `			offset_base = "outer-header-l3"` + "\n"
+	config += `			offset_length = 2` + "\n"
+	config += `			offset_position = 10` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config

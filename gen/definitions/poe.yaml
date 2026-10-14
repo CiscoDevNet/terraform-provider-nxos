@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the PoE (Power over Ethernet) configuration on NX-OS devices, including instance, logging level and interface settings.
 res_description: This resource can manage the PoE (Power over Ethernet) configuration on NX-OS devices, including instance, logging level and interface settings.
 doc_path: Power%20over%20Ethernet/poe:Entity/
-doc_category: Interface
+doc_category: System
 test_tags: [POE]
 child_classes:
   - class_name: poeInst

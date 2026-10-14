@@ -374,6 +374,27 @@ child_classes:
                     description: 'DN of Access List. For example: `sys/acl/ipv4/name-[ACL1]` or `sys/rpm/accesslist-[1.2.3.4/32]`.'
                     example: sys/rpm/accesslist-[1.2.3.4/32]
                     id: true
+          - class_name: rtmapMatchRtDstV6
+            doc_path: Routing%20and%20Forwarding/rtmap:MatchRtDstV6/
+            rn: mrtdstv6
+            type: single
+            tf_name: match_route_ipv6
+            description: 'Match IPv6 Route configuration.'
+            exclude_test: true
+            child_classes:
+              - class_name: rtmapRsRtDstV6AccAtt
+                doc_path: Routing%20and%20Forwarding/rtmap:RsRtDstV6AccAtt/
+                rn: rsrtDstV6AccAtt-[%s]
+                type: list
+                tf_name: match_route_ipv6_access_lists
+                description: 'List of Match IPv6 Route Access Lists.'
+                attributes:
+                  - nxos_name: tDn
+                    tf_name: access_list_dn
+                    type: String
+                    description: 'DN of IPv6 Access List. For example: `sys/rpm/accesslist-[ACL1]`.'
+                    example: sys/rpm/accesslist-[ACL1]
+                    id: true
           - class_name: rtmapSetRegComm
             doc_path: Routing%20and%20Forwarding/rtmap:SetRegComm/
             rn: sregcomm
@@ -912,6 +933,46 @@ child_classes:
                   - R6
                   - redistributed-direct
                 example: internal
+          - class_name: rtmapSetNh
+            doc_path: Routing%20and%20Forwarding/rtmap:SetNh/
+            rn: nh-[%s]
+            type: list
+            tf_name: set_next_hops
+            description: 'List of Set Next-Hop Addresses.'
+            exclude_test: true
+            attributes:
+              - nxos_name: addr
+                tf_name: address
+                type: String
+                id: true
+                description: 'The peer IP address.'
+                example: 1.2.3.4
+              - nxos_name: trackId
+                tf_name: track_id
+                type: Int64
+                description: 'Track id for Next Hop VA Address.'
+                min_int: 0
+                max_int: 512
+                example: 10
+              - nxos_name: vrf
+                tf_name: vrf
+                type: String
+                description: 'VRF over which given next-hop must be resolved.'
+                example: VRF1
+          - class_name: rtmapSetIntf
+            doc_path: Routing%20and%20Forwarding/rtmap:SetIntf/
+            rn: sintf-[%s]
+            type: list
+            tf_name: set_interfaces
+            description: 'List of Set Interfaces.'
+            exclude_test: true
+            attributes:
+              - nxos_name: if
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'set interface for route-map. Must match first field in the output of `show intf brief`. Example: `null0` or `vlan100`.'
+                example: null0
   - class_name: rtregcomRule
     doc_path: Routing%20and%20Forwarding/rtregcom:Rule/
     rn: rtregcom-[%s]
@@ -1077,4 +1138,137 @@ child_classes:
             type: String
             description: 'Regular Expression.'
             example: '_65110_'
+  - class_name: rpmInst
+    doc_path: Routing%20and%20Forwarding/rpm:Inst/
+    rn: inst
+    type: single
+    tf_name: instance
+    description: 'Route Policy Instance.'
+    child_classes:
+      - class_name: rpmRpmIf
+        doc_path: Routing%20and%20Forwarding/rpm:RpmIf/
+        rn: rpmif-[%s]
+        type: list
+        tf_name: ipv4_policy_interfaces
+        description: 'List of interfaces with an IPv4 policy based routing route map.'
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Interface id over which the pbr policy is configured. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.'
+            example: vlan10
+          - nxos_name: rmapname
+            tf_name: route_map_name
+            type: String
+            description: 'IP Route map Policy Name.'
+            example: PBR_ROUTE_MAP_V4
+      - class_name: rpmRpmv6If
+        doc_path: Routing%20and%20Forwarding/rpm:Rpmv6If/
+        rn: rpmv6if-[%s]
+        type: list
+        tf_name: ipv6_policy_interfaces
+        description: 'List of interfaces with an IPv6 policy based routing route map.'
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Interface id over which the pbr policy is configured. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.'
+            example: vlan10
+          - nxos_name: rmapname
+            tf_name: route_map_name
+            type: String
+            description: 'IP Route map Policy Name.'
+            example: PBR_ROUTE_MAP_V6
 test_prerequisites:
+  - dn: sys/fm/pbr
+    class_name: fmPbr
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/svi-[vlan10]
+    class_name: sviIf
+    dependencies: [1]
+    attributes:
+      - name: id
+        value: vlan10
+  - dn: sys/track/object-10
+    class_name: trackObject
+    attributes:
+      - name: id
+        value: 10
+    children:
+      - rn: if
+        class_name: trackIf
+        attributes:
+          - name: id
+            value: vlan10
+          - name: protocolType
+            value: line-protocol
+    dependencies: [2]
+additional_tests:
+  # policy based routing route maps applied to an interface
+  - |-
+    resource "nxos_route_policy" "test" {
+      route_maps = {
+        "PBR_ROUTE_MAP_V4" = {
+          entries = {
+            10 = {
+              action                 = "permit"
+              set_vrf_v4             = "enabled"
+              verify_availability_v4 = "enabled"
+              match_route_access_lists = {
+                "sys/rpm/accesslist-[ACL1]" = {}
+              }
+              set_next_hops = {
+                "1.2.3.4" = {
+                  track_id = 10
+                  vrf      = "VRF1"
+                }
+                "1.2.3.5" = {
+                  vrf = "VRF1"
+                }
+              }
+            }
+            20 = {
+              action = "permit"
+              set_interfaces = {
+                "null0" = {}
+              }
+            }
+          }
+        }
+        "PBR_ROUTE_MAP_V6" = {
+          entries = {
+            10 = {
+              action = "permit"
+              match_route_ipv6_access_lists = {
+                "sys/rpm/accesslist-[ACL1]" = {}
+              }
+              set_next_hops = {
+                "2001:db8::1" = {}
+              }
+            }
+          }
+        }
+      }
+      ipv4_policy_interfaces = {
+        "vlan10" = {
+          route_map_name = "PBR_ROUTE_MAP_V4"
+        }
+      }
+      ipv6_policy_interfaces = {
+        "vlan10" = {
+          route_map_name = "PBR_ROUTE_MAP_V6"
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3]
+    }

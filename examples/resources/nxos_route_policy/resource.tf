@@ -143,4 +143,14 @@ resource "nxos_route_policy" "example" {
       }
     }
   }
+  ipv4_policy_interfaces = {
+    "vlan10" = {
+      route_map_name = "PBR_ROUTE_MAP_V4"
+    }
+  }
+  ipv6_policy_interfaces = {
+    "vlan10" = {
+      route_map_name = "PBR_ROUTE_MAP_V6"
+    }
+  }
 }

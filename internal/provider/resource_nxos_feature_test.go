@@ -66,6 +66,7 @@ func TestAccNxosFeature(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "nv_overlay", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ospf", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ospfv3", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "pbr", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "pim", "enabled"))
 	if os.Getenv("FEATURE_POE") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "poe", "enabled"))
@@ -174,6 +175,7 @@ func testAccNxosFeatureConfig_all() string {
 	config += `	nv_overlay = "enabled"` + "\n"
 	config += `	ospf = "enabled"` + "\n"
 	config += `	ospfv3 = "enabled"` + "\n"
+	config += `	pbr = "enabled"` + "\n"
 	config += `	pim = "enabled"` + "\n"
 	if os.Getenv("FEATURE_POE") != "" {
 		config += `	poe = "enabled"` + "\n"

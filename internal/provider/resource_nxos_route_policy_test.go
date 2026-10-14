@@ -101,6 +101,8 @@ func TestAccNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.entries.10.action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.action", "deny"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.regex", "_65110_"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_policy_interfaces.vlan10.route_map_name", "PBR_ROUTE_MAP_V4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv6_policy_interfaces.vlan10.route_map_name", "PBR_ROUTE_MAP_V6"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -110,7 +112,7 @@ func TestAccNxosRoutePolicy(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosRoutePolicyConfig_all(),
+				Config: testAccNxosRoutePolicyPrerequisitesConfig + testAccNxosRoutePolicyConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -124,6 +126,9 @@ func TestAccNxosRoutePolicy(t *testing.T) {
 				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
 				ExpectNonEmptyPlan: true,
 				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+			},
+			{
+				Config: testAccNxosRoutePolicyPrerequisitesConfig + testAccNxosRoutePolicyConfigAdditional0,
 			},
 		},
 	})
@@ -142,12 +147,61 @@ func nxosRoutePolicyImportStateIdFunc(resourceName string) resource.ImportStateI
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosRoutePolicyPrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/pbr"
+  class_name = "fmPbr"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq1" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq2" {
+  dn = "sys/intf/svi-[vlan10]"
+  class_name = "sviIf"
+  content = {
+      id = "vlan10"
+  }
+  depends_on = [nxos_dme.PreReq1, ]
+}
+
+resource "nxos_dme" "PreReq3" {
+  dn = "sys/track/object-10"
+  class_name = "trackObject"
+  content = {
+      id = "10"
+  }
+  children = [
+    {
+      rn         = "if"
+      class_name = "trackIf"
+      content = {
+          id = "vlan10"
+          protocolType = "line-protocol"
+      }
+    },
+  ]
+  depends_on = [nxos_dme.PreReq2, ]
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosRoutePolicyConfig_minimum() string {
 	config := `resource "nxos_route_policy" "test" {` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -311,8 +365,77 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	ipv4_policy_interfaces = {` + "\n"
+	config += `		"vlan10" = {` + "\n"
+	config += `			route_map_name = "PBR_ROUTE_MAP_V4"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ipv6_policy_interfaces = {` + "\n"
+	config += `		"vlan10" = {` + "\n"
+	config += `			route_map_name = "PBR_ROUTE_MAP_V6"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
+
+const testAccNxosRoutePolicyConfigAdditional0 = `
+resource "nxos_route_policy" "test" {
+  route_maps = {
+    "PBR_ROUTE_MAP_V4" = {
+      entries = {
+        10 = {
+          action                 = "permit"
+          set_vrf_v4             = "enabled"
+          verify_availability_v4 = "enabled"
+          match_route_access_lists = {
+            "sys/rpm/accesslist-[ACL1]" = {}
+          }
+          set_next_hops = {
+            "1.2.3.4" = {
+              track_id = 10
+              vrf      = "VRF1"
+            }
+            "1.2.3.5" = {
+              vrf = "VRF1"
+            }
+          }
+        }
+        20 = {
+          action = "permit"
+          set_interfaces = {
+            "null0" = {}
+          }
+        }
+      }
+    }
+    "PBR_ROUTE_MAP_V6" = {
+      entries = {
+        10 = {
+          action = "permit"
+          match_route_ipv6_access_lists = {
+            "sys/rpm/accesslist-[ACL1]" = {}
+          }
+          set_next_hops = {
+            "2001:db8::1" = {}
+          }
+        }
+      }
+    }
+  }
+  ipv4_policy_interfaces = {
+    "vlan10" = {
+      route_map_name = "PBR_ROUTE_MAP_V4"
+    }
+  }
+  ipv6_policy_interfaces = {
+    "vlan10" = {
+      route_map_name = "PBR_ROUTE_MAP_V6"
+    }
+  }
+  depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3]
+}
+`
 
 // End of section. //template:end testAccConfigAll

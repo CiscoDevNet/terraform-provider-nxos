@@ -20,6 +20,7 @@ resource "nxos_feature" "example" {
   nv_overlay           = "enabled"
   ospf                 = "enabled"
   ospfv3               = "enabled"
+  pbr                  = "enabled"
   pim                  = "enabled"
   poe                  = "enabled"
   ptp                  = "enabled"

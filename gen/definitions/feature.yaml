@@ -350,6 +350,21 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmPbr
+        rn: pbr
+        type: single
+        no_delete: true
+        description: 'PBR feature configuration.'
+        doc_path: Feature%20Management/fm:Pbr/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: pbr
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmPim
         rn: pim
         type: single

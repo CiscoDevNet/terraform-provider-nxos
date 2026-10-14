@@ -39,14 +39,16 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type RoutePolicy struct {
-	Device            types.String                            `tfsdk:"device"`
-	Dn                types.String                            `tfsdk:"id"`
-	AdminState        types.String                            `tfsdk:"admin_state"`
-	Ipv4PrefixLists   map[string]RoutePolicyIpv4PrefixLists   `tfsdk:"ipv4_prefix_lists"`
-	Ipv6PrefixLists   map[string]RoutePolicyIpv6PrefixLists   `tfsdk:"ipv6_prefix_lists"`
-	RouteMaps         map[string]RoutePolicyRouteMaps         `tfsdk:"route_maps"`
-	CommunityLists    map[string]RoutePolicyCommunityLists    `tfsdk:"community_lists"`
-	AsPathAccessLists map[string]RoutePolicyAsPathAccessLists `tfsdk:"as_path_access_lists"`
+	Device               types.String                               `tfsdk:"device"`
+	Dn                   types.String                               `tfsdk:"id"`
+	AdminState           types.String                               `tfsdk:"admin_state"`
+	Ipv4PrefixLists      map[string]RoutePolicyIpv4PrefixLists      `tfsdk:"ipv4_prefix_lists"`
+	Ipv6PrefixLists      map[string]RoutePolicyIpv6PrefixLists      `tfsdk:"ipv6_prefix_lists"`
+	RouteMaps            map[string]RoutePolicyRouteMaps            `tfsdk:"route_maps"`
+	CommunityLists       map[string]RoutePolicyCommunityLists       `tfsdk:"community_lists"`
+	AsPathAccessLists    map[string]RoutePolicyAsPathAccessLists    `tfsdk:"as_path_access_lists"`
+	Ipv4PolicyInterfaces map[string]RoutePolicyIpv4PolicyInterfaces `tfsdk:"ipv4_policy_interfaces"`
+	Ipv6PolicyInterfaces map[string]RoutePolicyIpv6PolicyInterfaces `tfsdk:"ipv6_policy_interfaces"`
 }
 
 type RoutePolicyIpv4PrefixLists struct {
@@ -102,6 +104,7 @@ type RoutePolicyRouteMapsEntries struct {
 	SetPolicyTag                            types.Int64                                                                `tfsdk:"set_policy_tag"`
 	MatchRoutePrefixLists                   map[string]RoutePolicyRouteMapsEntriesMatchRoutePrefixLists                `tfsdk:"match_route_prefix_lists"`
 	MatchRouteAccessLists                   map[string]RoutePolicyRouteMapsEntriesMatchRouteAccessLists                `tfsdk:"match_route_access_lists"`
+	MatchRouteIpv6AccessLists               map[string]RoutePolicyRouteMapsEntriesMatchRouteIpv6AccessLists            `tfsdk:"match_route_ipv6_access_lists"`
 	SetRegularCommunityAdditive             types.String                                                               `tfsdk:"set_regular_community_additive"`
 	SetRegularCommunityNoCommunity          types.String                                                               `tfsdk:"set_regular_community_no_community"`
 	SetRegularCommunityCriteria             types.String                                                               `tfsdk:"set_regular_community_criteria"`
@@ -143,12 +146,17 @@ type RoutePolicyRouteMapsEntries struct {
 	SetCommunityListCriteria                types.String                                                               `tfsdk:"set_community_list_criteria"`
 	MatchInterfaces                         map[string]RoutePolicyRouteMapsEntriesMatchInterfaces                      `tfsdk:"match_interfaces"`
 	MatchRouteTypes                         map[string]RoutePolicyRouteMapsEntriesMatchRouteTypes                      `tfsdk:"match_route_types"`
+	SetNextHops                             map[string]RoutePolicyRouteMapsEntriesSetNextHops                          `tfsdk:"set_next_hops"`
+	SetInterfaces                           map[string]RoutePolicyRouteMapsEntriesSetInterfaces                        `tfsdk:"set_interfaces"`
 }
 
 type RoutePolicyRouteMapsEntriesMatchRoutePrefixLists struct {
 }
 
 type RoutePolicyRouteMapsEntriesMatchRouteAccessLists struct {
+}
+
+type RoutePolicyRouteMapsEntriesMatchRouteIpv6AccessLists struct {
 }
 
 type RoutePolicyRouteMapsEntriesSetRegularCommunityItems struct {
@@ -178,6 +186,14 @@ type RoutePolicyRouteMapsEntriesMatchInterfaces struct {
 }
 
 type RoutePolicyRouteMapsEntriesMatchRouteTypes struct {
+}
+
+type RoutePolicyRouteMapsEntriesSetNextHops struct {
+	TrackId types.Int64  `tfsdk:"track_id"`
+	Vrf     types.String `tfsdk:"vrf"`
+}
+
+type RoutePolicyRouteMapsEntriesSetInterfaces struct {
 }
 
 type RoutePolicyCommunityLists struct {
@@ -210,6 +226,14 @@ type RoutePolicyAsPathAccessListsEntries struct {
 	Description types.String `tfsdk:"description"`
 	Name        types.String `tfsdk:"name"`
 	Regex       types.String `tfsdk:"regex"`
+}
+
+type RoutePolicyIpv4PolicyInterfaces struct {
+	RouteMapName types.String `tfsdk:"route_map_name"`
+}
+
+type RoutePolicyIpv6PolicyInterfaces struct {
+	RouteMapName types.String `tfsdk:"route_map_name"`
 }
 
 type RoutePolicyIdentity struct {
@@ -278,6 +302,10 @@ func (data RoutePolicyRouteMapsEntriesMatchRouteAccessLists) getRn(key string) s
 	return fmt.Sprintf("rtrtDstAccAtt-[%s]", key)
 }
 
+func (data RoutePolicyRouteMapsEntriesMatchRouteIpv6AccessLists) getRn(key string) string {
+	return fmt.Sprintf("rsrtDstV6AccAtt-[%s]", key)
+}
+
 func (data RoutePolicyRouteMapsEntriesSetRegularCommunityItems) getRn(key string) string {
 	return fmt.Sprintf("item-%s", key)
 }
@@ -315,6 +343,14 @@ func (data RoutePolicyRouteMapsEntriesMatchRouteTypes) getRn(key string) string 
 	return fmt.Sprintf("mrttype-[%s]", key)
 }
 
+func (data RoutePolicyRouteMapsEntriesSetNextHops) getRn(key string) string {
+	return fmt.Sprintf("nh-[%s]", key)
+}
+
+func (data RoutePolicyRouteMapsEntriesSetInterfaces) getRn(key string) string {
+	return fmt.Sprintf("sintf-[%s]", key)
+}
+
 func (data RoutePolicyCommunityLists) getRn(key string) string {
 	return fmt.Sprintf("rtregcom-[%s]", key)
 }
@@ -333,6 +369,14 @@ func (data RoutePolicyAsPathAccessLists) getRn(key string) string {
 
 func (data RoutePolicyAsPathAccessListsEntries) getRn(key string) string {
 	return fmt.Sprintf("ent-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data RoutePolicyIpv4PolicyInterfaces) getRn(key string) string {
+	return fmt.Sprintf("rpmif-[%s]", key)
+}
+
+func (data RoutePolicyIpv6PolicyInterfaces) getRn(key string) string {
+	return fmt.Sprintf("rpmv6if-[%s]", key)
 }
 
 func (data RoutePolicy) getClassName() string {
@@ -544,6 +588,30 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						childBody = body
 						body = prevBody
 						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapMatchRtDst.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
+					}
+					{
+						attrs = "{}"
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "rtmapMatchRtDstV6.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "rtmapMatchRtDstV6.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
+						for key := range child.MatchRouteIpv6AccessLists {
+							configChild, configChildOk := configChild.MatchRouteIpv6AccessLists[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "tDn", key)
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapRsRtDstV6AccAtt.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapMatchRtDstV6.children").Exists() {
 							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 						}
 					}
@@ -867,6 +935,28 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						attrs, _ = sjson.Set(attrs, "routeT", key)
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapMatchRtType.attributes", attrs)
 					}
+					for key, child := range child.SetNextHops {
+						configChild, configChildOk := configChild.SetNextHops[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "addr", key)
+						if configChildOk && !child.TrackId.IsUnknown() && !child.TrackId.IsNull() && !configChild.TrackId.IsNull() {
+							attrs, _ = sjson.Set(attrs, "trackId", strconv.FormatInt(child.TrackId.ValueInt64(), 10))
+						}
+						if configChildOk && !child.Vrf.IsUnknown() && !child.Vrf.IsNull() && !configChild.Vrf.IsNull() {
+							attrs, _ = sjson.Set(attrs, "vrf", child.Vrf.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetNh.attributes", attrs)
+					}
+					for key := range child.SetInterfaces {
+						configChild, configChildOk := configChild.SetInterfaces[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "if", key)
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetIntf.attributes", attrs)
+					}
 				}
 			}
 		}
@@ -966,6 +1056,44 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 				}
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtlistEntry.attributes", attrs)
 			}
+		}
+	}
+	{
+		attrs = "{}"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "rpmInst.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "rpmInst.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		for key, child := range data.Ipv4PolicyInterfaces {
+			configChild, configChildOk := config.Ipv4PolicyInterfaces[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			if configChildOk && !child.RouteMapName.IsUnknown() && !child.RouteMapName.IsNull() && !configChild.RouteMapName.IsNull() {
+				attrs, _ = sjson.Set(attrs, "rmapname", child.RouteMapName.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rpmRpmIf.attributes", attrs)
+		}
+		for key, child := range data.Ipv6PolicyInterfaces {
+			configChild, configChildOk := config.Ipv6PolicyInterfaces[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			if configChildOk && !child.RouteMapName.IsUnknown() && !child.RouteMapName.IsNull() && !configChild.RouteMapName.IsNull() {
+				attrs, _ = sjson.Set(attrs, "rmapname", child.RouteMapName.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rpmRpmv6If.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "rpmInst.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
 
@@ -1136,6 +1264,37 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 																		nestedChildrtmapEntry.MatchRouteAccessLists = make(map[string]RoutePolicyRouteMapsEntriesMatchRouteAccessLists)
 																	}
 																	nestedChildrtmapEntry.MatchRouteAccessLists[nestedMapKey] = nestedChildrtmapRsRtDstAccAtt
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+											}
+											{
+												var rrtmapMatchRtDstV6 gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapMatchRtDstV6.attributes.rn").String()
+														if rnValue == "mrtdstv6" {
+															rrtmapMatchRtDstV6 = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												rrtmapMatchRtDstV6.Get("rtmapMatchRtDstV6").Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "rtmapRsRtDstV6AccAtt" {
+																	var nestedChildrtmapRsRtDstV6AccAtt RoutePolicyRouteMapsEntriesMatchRouteIpv6AccessLists
+																	nestedMapKey := nestedValue.Get("attributes.tDn").String()
+																	if nestedChildrtmapEntry.MatchRouteIpv6AccessLists == nil {
+																		nestedChildrtmapEntry.MatchRouteIpv6AccessLists = make(map[string]RoutePolicyRouteMapsEntriesMatchRouteIpv6AccessLists)
+																	}
+																	nestedChildrtmapEntry.MatchRouteIpv6AccessLists[nestedMapKey] = nestedChildrtmapRsRtDstV6AccAtt
 																}
 																return true
 															},
@@ -1574,6 +1733,44 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 													return true
 												},
 											)
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "rtmapSetNh" {
+																var nestedChildrtmapSetNh RoutePolicyRouteMapsEntriesSetNextHops
+																nestedChildrtmapSetNh.TrackId = types.Int64Value(nestedValue.Get("attributes.trackId").Int())
+																nestedChildrtmapSetNh.Vrf = types.StringValue(nestedValue.Get("attributes.vrf").String())
+																nestedMapKey := nestedValue.Get("attributes.addr").String()
+																if nestedChildrtmapEntry.SetNextHops == nil {
+																	nestedChildrtmapEntry.SetNextHops = make(map[string]RoutePolicyRouteMapsEntriesSetNextHops)
+																}
+																nestedChildrtmapEntry.SetNextHops[nestedMapKey] = nestedChildrtmapSetNh
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "rtmapSetIntf" {
+																var nestedChildrtmapSetIntf RoutePolicyRouteMapsEntriesSetInterfaces
+																nestedMapKey := nestedValue.Get("attributes.if").String()
+																if nestedChildrtmapEntry.SetInterfaces == nil {
+																	nestedChildrtmapEntry.SetInterfaces = make(map[string]RoutePolicyRouteMapsEntriesSetInterfaces)
+																}
+																nestedChildrtmapEntry.SetInterfaces[nestedMapKey] = nestedChildrtmapSetIntf
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
 											if child.Entries == nil {
 												child.Entries = make(map[string]RoutePolicyRouteMapsEntries)
 											}
@@ -1700,6 +1897,57 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 			return true
 		},
 	)
+	{
+		var rrpmInst gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("rpmInst.attributes.rn").String()
+				if rnValue == "inst" {
+					rrpmInst = v
+					return false
+				}
+				return true
+			},
+		)
+		rrpmInst.Get("rpmInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "rpmRpmIf" {
+							var child RoutePolicyIpv4PolicyInterfaces
+							child.RouteMapName = types.StringValue(value.Get("attributes.rmapname").String())
+							mapKey := value.Get("attributes.id").String()
+							if data.Ipv4PolicyInterfaces == nil {
+								data.Ipv4PolicyInterfaces = make(map[string]RoutePolicyIpv4PolicyInterfaces)
+							}
+							data.Ipv4PolicyInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rrpmInst.Get("rpmInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "rpmRpmv6If" {
+							var child RoutePolicyIpv6PolicyInterfaces
+							child.RouteMapName = types.StringValue(value.Get("attributes.rmapname").String())
+							mapKey := value.Get("attributes.id").String()
+							if data.Ipv6PolicyInterfaces == nil {
+								data.Ipv6PolicyInterfaces = make(map[string]RoutePolicyIpv6PolicyInterfaces)
+							}
+							data.Ipv6PolicyInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody
@@ -2015,6 +2263,37 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 						continue
 					}
 					ncItem.MatchRouteAccessLists[nc_] = nc_Item
+				}
+			}
+			{
+				var rrtmapMatchRtDstV6 gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapMatchRtDstV6.attributes.rn").String()
+						if rnValue == "mrtdstv6" {
+							rrtmapMatchRtDstV6 = v
+							return false
+						}
+						return true
+					},
+				)
+				for nc_ := range ncItem.MatchRouteIpv6AccessLists {
+					nc_Item := ncItem.MatchRouteIpv6AccessLists[nc_]
+					var rrtmapRsRtDstV6AccAtt gjson.Result
+					rrtmapMatchRtDstV6.Get("rtmapMatchRtDstV6.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("rtmapRsRtDstV6AccAtt.attributes.tDn").String() == nc_ {
+								rrtmapRsRtDstV6AccAtt = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rrtmapRsRtDstV6AccAtt.Exists() {
+						delete(ncItem.MatchRouteIpv6AccessLists, nc_)
+						continue
+					}
+					ncItem.MatchRouteIpv6AccessLists[nc_] = nc_Item
 				}
 			}
 			{
@@ -2585,6 +2864,52 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 				}
 				ncItem.MatchRouteTypes[nc_] = nc_Item
 			}
+			for nc_ := range ncItem.SetNextHops {
+				nc_Item := ncItem.SetNextHops[nc_]
+				var rrtmapSetNh gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("rtmapSetNh.attributes.addr").String() == nc_ {
+							rrtmapSetNh = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rrtmapSetNh.Exists() {
+					delete(ncItem.SetNextHops, nc_)
+					continue
+				}
+				if !nc_Item.TrackId.IsNull() {
+					nc_Item.TrackId = types.Int64Value(rrtmapSetNh.Get("rtmapSetNh.attributes.trackId").Int())
+				} else {
+					nc_Item.TrackId = types.Int64Null()
+				}
+				if !nc_Item.Vrf.IsNull() {
+					nc_Item.Vrf = types.StringValue(rrtmapSetNh.Get("rtmapSetNh.attributes.vrf").String())
+				} else {
+					nc_Item.Vrf = types.StringNull()
+				}
+				ncItem.SetNextHops[nc_] = nc_Item
+			}
+			for nc_ := range ncItem.SetInterfaces {
+				nc_Item := ncItem.SetInterfaces[nc_]
+				var rrtmapSetIntf gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("rtmapSetIntf.attributes.if").String() == nc_ {
+							rrtmapSetIntf = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rrtmapSetIntf.Exists() {
+					delete(ncItem.SetInterfaces, nc_)
+					continue
+				}
+				ncItem.SetInterfaces[nc_] = nc_Item
+			}
 			item.Entries[nc] = ncItem
 		}
 		data.RouteMaps[key] = item
@@ -2747,6 +3072,61 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 		}
 		data.AsPathAccessLists[key] = item
 	}
+	var rrpmInst gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("rpmInst.attributes.rn").String()
+			if rnValue == "inst" {
+				rrpmInst = v
+				return false
+			}
+			return true
+		},
+	)
+	for key, item := range data.Ipv4PolicyInterfaces {
+		var rrpmRpmIf gjson.Result
+		rrpmInst.Get("rpmInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("rpmRpmIf.attributes.id").String() == key {
+					rrpmRpmIf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rrpmRpmIf.Exists() {
+			delete(data.Ipv4PolicyInterfaces, key)
+			continue
+		}
+		if !item.RouteMapName.IsNull() {
+			item.RouteMapName = types.StringValue(rrpmRpmIf.Get("rpmRpmIf.attributes.rmapname").String())
+		} else {
+			item.RouteMapName = types.StringNull()
+		}
+		data.Ipv4PolicyInterfaces[key] = item
+	}
+	for key, item := range data.Ipv6PolicyInterfaces {
+		var rrpmRpmv6If gjson.Result
+		rrpmInst.Get("rpmInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("rpmRpmv6If.attributes.id").String() == key {
+					rrpmRpmv6If = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rrpmRpmv6If.Exists() {
+			delete(data.Ipv6PolicyInterfaces, key)
+			continue
+		}
+		if !item.RouteMapName.IsNull() {
+			item.RouteMapName = types.StringValue(rrpmRpmv6If.Get("rpmRpmv6If.attributes.rmapname").String())
+		} else {
+			item.RouteMapName = types.StringNull()
+		}
+		data.Ipv6PolicyInterfaces[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -2908,6 +3288,16 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 					}
 				}
+				for stateKey := range stateItemdi_.MatchRouteIpv6AccessLists {
+					if _, found := planItemdi_.MatchRouteIpv6AccessLists[stateKey]; !found {
+						stateChild := stateItemdi_.MatchRouteIpv6AccessLists[stateKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsRtDstV6AccAtt.attributes.rn", stateChild.getRn(stateKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsRtDstV6AccAtt.attributes.status", "deleted")
+						deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi_, "rtmapMatchRtDstV6") + ".children"
+						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+					}
+				}
 				for stateKey := range stateItemdi_.SetRegularCommunityItems {
 					if _, found := planItemdi_.SetRegularCommunityItems[stateKey]; !found {
 						stateChild := stateItemdi_.SetRegularCommunityItems[stateKey]
@@ -2992,6 +3382,24 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 						deleteBody := ""
 						deleteBody, _ = sjson.Set(deleteBody, "rtmapMatchRtType.attributes.rn", stateChild.getRn(stateChildKey))
 						deleteBody, _ = sjson.Set(deleteBody, "rtmapMatchRtType.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for stateChildKey := range stateItemdi_.SetNextHops {
+					if _, found := planItemdi_.SetNextHops[stateChildKey]; !found {
+						stateChild := stateItemdi_.SetNextHops[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapSetNh.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapSetNh.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for stateChildKey := range stateItemdi_.SetInterfaces {
+					if _, found := planItemdi_.SetInterfaces[stateChildKey]; !found {
+						stateChild := stateItemdi_.SetInterfaces[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapSetIntf.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapSetIntf.attributes.status", "deleted")
 						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 					}
 				}
@@ -3093,6 +3501,26 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 					deleteBody, _ = sjson.Set(deleteBody, "rtlistEntry.attributes.status", "deleted")
 					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 				}
+			}
+		}
+		for stateKey := range state.Ipv4PolicyInterfaces {
+			if _, found := data.Ipv4PolicyInterfaces[stateKey]; !found {
+				stateChild := state.Ipv4PolicyInterfaces[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "rpmRpmIf.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "rpmRpmIf.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "rpmInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.Ipv6PolicyInterfaces {
+			if _, found := data.Ipv6PolicyInterfaces[stateKey]; !found {
+				stateChild := state.Ipv6PolicyInterfaces[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "rpmRpmv6If.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "rpmRpmv6If.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "rpmInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 	}
@@ -3318,6 +3746,13 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 												_ = configChild
 											}
 										}
+										for key := range stateChild.MatchRouteIpv6AccessLists {
+											if configChild, ok := configChild.MatchRouteIpv6AccessLists[key]; ok {
+												stateChild := stateChild.MatchRouteIpv6AccessLists[key]
+												_ = stateChild
+												_ = configChild
+											}
+										}
 										if !stateChild.SetRegularCommunityAdditive.IsNull() && configChild.SetRegularCommunityAdditive.IsNull() {
 											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetRegComm")
 											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"additive", "DME_UNSET_PROPERTY_MARKER")
@@ -3520,6 +3955,31 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 												_ = configChild
 											}
 										}
+										for key := range stateChild.SetNextHops {
+											if configChild, ok := configChild.SetNextHops[key]; ok {
+												stateChild := stateChild.SetNextHops[key]
+												_ = stateChild
+												_ = configChild
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+													if mv.Get("rtmapSetNh.attributes.addr").String() == key {
+														if !stateChild.TrackId.IsNull() && configChild.TrackId.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".rtmapSetNh.attributes."+"trackId", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.Vrf.IsNull() && configChild.Vrf.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".rtmapSetNh.attributes."+"vrf", "DME_UNSET_PROPERTY_MARKER")
+														}
+														break
+													}
+												}
+											}
+										}
+										for key := range stateChild.SetInterfaces {
+											if configChild, ok := configChild.SetInterfaces[key]; ok {
+												stateChild := stateChild.SetInterfaces[key]
+												_ = stateChild
+												_ = configChild
+											}
+										}
 									}
 								}
 							}
@@ -3659,6 +4119,36 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 								}
 							}
 						}
+					}
+				}
+			}
+		}
+		for key := range state.Ipv4PolicyInterfaces {
+			if configChild, ok := config.Ipv4PolicyInterfaces[key]; ok {
+				stateChild := state.Ipv4PolicyInterfaces[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "rpmInst")+".children").Array() {
+					if mv.Get("rpmRpmIf.attributes.id").String() == key {
+						if !stateChild.RouteMapName.IsNull() && configChild.RouteMapName.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "rpmInst")+".children"+"."+strconv.Itoa(mi)+".rpmRpmIf.attributes."+"rmapname", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		for key := range state.Ipv6PolicyInterfaces {
+			if configChild, ok := config.Ipv6PolicyInterfaces[key]; ok {
+				stateChild := state.Ipv6PolicyInterfaces[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "rpmInst")+".children").Array() {
+					if mv.Get("rpmRpmv6If.attributes.id").String() == key {
+						if !stateChild.RouteMapName.IsNull() && configChild.RouteMapName.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "rpmInst")+".children"+"."+strconv.Itoa(mi)+".rpmRpmv6If.attributes."+"rmapname", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
 					}
 				}
 			}

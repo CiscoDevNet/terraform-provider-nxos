@@ -96,12 +96,14 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.entries.10.action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.action", "deny"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.regex", "_65110_"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv4_policy_interfaces.vlan10.route_map_name", "PBR_ROUTE_MAP_V4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv6_policy_interfaces.vlan10.route_map_name", "PBR_ROUTE_MAP_V6"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosRoutePolicyConfig(),
+				Config: testAccDataSourceNxosRoutePolicyPrerequisitesConfig + testAccDataSourceNxosRoutePolicyConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -111,6 +113,54 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosRoutePolicyPrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/pbr"
+  class_name = "fmPbr"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq1" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq2" {
+  dn = "sys/intf/svi-[vlan10]"
+  class_name = "sviIf"
+  content = {
+      id = "vlan10"
+  }
+  depends_on = [nxos_dme.PreReq1, ]
+}
+
+resource "nxos_dme" "PreReq3" {
+  dn = "sys/track/object-10"
+  class_name = "trackObject"
+  content = {
+      id = "10"
+  }
+  children = [
+    {
+      rn         = "if"
+      class_name = "trackIf"
+      content = {
+          id = "vlan10"
+          protocolType = "line-protocol"
+      }
+    },
+  ]
+  depends_on = [nxos_dme.PreReq2, ]
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -271,6 +321,17 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	ipv4_policy_interfaces = {` + "\n"
+	config += `		"vlan10" = {` + "\n"
+	config += `			route_map_name = "PBR_ROUTE_MAP_V4"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ipv6_policy_interfaces = {` + "\n"
+	config += `		"vlan10" = {` + "\n"
+	config += `			route_map_name = "PBR_ROUTE_MAP_V6"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

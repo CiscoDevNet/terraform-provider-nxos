@@ -665,8 +665,19 @@ func buildTfChildClasses(children []YamlConfigChildClass) []YamlConfigChildClass
 	var result []YamlConfigChildClass
 	for _, c := range children {
 		if c.Type == "single" && allAttributesHaveValue(c.Attributes) {
-			// Promote this class's children up
+			// Promote this class's children up, inheriting its test settings
 			promoted := buildTfChildClasses(c.ChildClasses)
+			for j := range promoted {
+				p := &promoted[j]
+				p.ExcludeTest = p.ExcludeTest || c.ExcludeTest
+				p.MinVersion = maxVersion(c.MinVersion, p.MinVersion)
+				if len(c.TestTags) > 0 {
+					if len(p.TestTags) > 0 {
+						log.Fatalf("test_tags on both hidden class %s and its child class %s are not supported", c.ClassName, p.ClassName)
+					}
+					p.TestTags = c.TestTags
+				}
+			}
 			result = append(result, promoted...)
 		} else {
 			flattened := c

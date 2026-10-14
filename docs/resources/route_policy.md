@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the route policy configuration on NX-OS devices, including IPv4 and IPv6 prefix lists and route maps with match and set criteria.
   API Documentation
-  rpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rpm:Entity/rtpfxRuleV4 https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/rtpfxEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtpfx:Entry/rtpfxRuleV6 https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtpfx:RuleV6/rtpfxEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtpfx:Entry/rtmapRule https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:Rule/rtmapEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:Entry/rtmapSetPolicyTag https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetPolicyTag/rtmapMatchRtDst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/rtmapRsRtDstAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/rtmapRsRtDstAccAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAccAtt/rtmapSetRegComm https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetRegComm/rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Item/rtmapMatchRtTag https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/rtmapSetMetric https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetMetric/rtmapSetMetricType https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetMetricType/rtmapSetNhPeerAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/rtmapSetPref https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetPref/rtmapSetPathSelection https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetPathSelection/rtmapSetEvpn https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetEvpn/rtmapMatchRtNh https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtNh/rtmapRsRtNhAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtNhAtt/rtmapMatchRegComm https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRegComm/rtmapRsRegCommAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRegCommAtt/rtmapMatchAsPathAccessList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchAsPathAccessList/rtmapRsRtAsPathAccAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtAsPathAccAtt/rtmapMatchAsnAsPathAccessList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchAsnAsPathAccessList/rtmapRsRtAsnAsPathAccAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtAsnAsPathAccAtt/rtmapSetPrepend https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetPrepend/rtmapSetPrependLastAs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetPrependLastAs/rtmapSetRtTag https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetRtTag/rtmapSetWeight https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetWeight/rtmapSetOrigin https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetOrigin/rtmapSetRttComm https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetRttComm/rtextcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtextcom:Item/rtmapSetCommList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetCommList/rtmapMatchRtIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtIf/rtmapMatchRtType https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtType/rtregcomRule https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Rule/rtregcomEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Entry/rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Item/rtlistRule https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtlist:Rule/rtlistEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtlist:Entry/
+  rpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rpm:Entity/rtpfxRuleV4 https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/rtpfxEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtpfx:Entry/rtpfxRuleV6 https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtpfx:RuleV6/rtpfxEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtpfx:Entry/rtmapRule https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:Rule/rtmapEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:Entry/rtmapSetPolicyTag https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetPolicyTag/rtmapMatchRtDst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/rtmapRsRtDstAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/rtmapRsRtDstAccAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAccAtt/rtmapMatchRtDstV6 https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtDstV6/rtmapRsRtDstV6AccAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstV6AccAtt/rtmapSetRegComm https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetRegComm/rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Item/rtmapMatchRtTag https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/rtmapSetMetric https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetMetric/rtmapSetMetricType https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetMetricType/rtmapSetNhPeerAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetNhPeerAddr/rtmapSetPref https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetPref/rtmapSetPathSelection https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetPathSelection/rtmapSetEvpn https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetEvpn/rtmapMatchRtNh https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtNh/rtmapRsRtNhAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtNhAtt/rtmapMatchRegComm https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRegComm/rtmapRsRegCommAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRegCommAtt/rtmapMatchAsPathAccessList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchAsPathAccessList/rtmapRsRtAsPathAccAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtAsPathAccAtt/rtmapMatchAsnAsPathAccessList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchAsnAsPathAccessList/rtmapRsRtAsnAsPathAccAtt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtAsnAsPathAccAtt/rtmapSetPrepend https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetPrepend/rtmapSetPrependLastAs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetPrependLastAs/rtmapSetRtTag https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetRtTag/rtmapSetWeight https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetWeight/rtmapSetOrigin https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetOrigin/rtmapSetRttComm https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetRttComm/rtextcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtextcom:Item/rtmapSetCommList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetCommList/rtmapMatchRtIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtIf/rtmapMatchRtType https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtType/rtmapSetNh https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetNh/rtmapSetIntf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetIntf/rtregcomRule https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Rule/rtregcomEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Entry/rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Item/rtlistRule https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtlist:Rule/rtlistEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtlist:Entry/rpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rpm:Inst/rpmRpmIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rpm:RpmIf/rpmRpmv6If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rpm:Rpmv6If/
 ---
 
 # nxos_route_policy (Resource)
@@ -25,6 +25,8 @@ This resource can manage the route policy configuration on NX-OS devices, includ
 - [rtmapMatchRtDst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/)
 - [rtmapRsRtDstAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/)
 - [rtmapRsRtDstAccAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAccAtt/)
+- [rtmapMatchRtDstV6](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtDstV6/)
+- [rtmapRsRtDstV6AccAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:RsRtDstV6AccAtt/)
 - [rtmapSetRegComm](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetRegComm/)
 - [rtregcomItem](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Item/)
 - [rtmapMatchRtTag](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/)
@@ -52,11 +54,16 @@ This resource can manage the route policy configuration on NX-OS devices, includ
 - [rtmapSetCommList](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetCommList/)
 - [rtmapMatchRtIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtIf/)
 - [rtmapMatchRtType](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:MatchRtType/)
+- [rtmapSetNh](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetNh/)
+- [rtmapSetIntf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtmap:SetIntf/)
 - [rtregcomRule](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Rule/)
 - [rtregcomEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Entry/)
 - [rtregcomItem](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtregcom:Item/)
 - [rtlistRule](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtlist:Rule/)
 - [rtlistEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtlist:Entry/)
+- [rpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rpm:Inst/)
+- [rpmRpmIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rpm:RpmIf/)
+- [rpmRpmv6If](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rpm:Rpmv6If/)
 
 ## Example Usage
 
@@ -206,6 +213,16 @@ resource "nxos_route_policy" "example" {
       }
     }
   }
+  ipv4_policy_interfaces = {
+    "vlan10" = {
+      route_map_name = "PBR_ROUTE_MAP_V4"
+    }
+  }
+  ipv6_policy_interfaces = {
+    "vlan10" = {
+      route_map_name = "PBR_ROUTE_MAP_V6"
+    }
+  }
 }
 ```
 
@@ -221,8 +238,12 @@ resource "nxos_route_policy" "example" {
 - `community_lists` (Attributes Map) List of Community Lists.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--community_lists))
 - `device` (String) A device name from the provider configuration.
+- `ipv4_policy_interfaces` (Attributes Map) List of interfaces with an IPv4 policy based routing route map.
+  - Map key: `interface_id` - Interface id over which the pbr policy is configured. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`. (see [below for nested schema](#nestedatt--ipv4_policy_interfaces))
 - `ipv4_prefix_lists` (Attributes Map) List of IPv4 Prefix Lists.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--ipv4_prefix_lists))
+- `ipv6_policy_interfaces` (Attributes Map) List of interfaces with an IPv6 policy based routing route map.
+  - Map key: `interface_id` - Interface id over which the pbr policy is configured. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`. (see [below for nested schema](#nestedatt--ipv6_policy_interfaces))
 - `ipv6_prefix_lists` (Attributes Map) List of IPv6 Prefix Lists.
   - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--ipv6_prefix_lists))
 - `route_maps` (Attributes Map) List of Route Maps.
@@ -293,6 +314,14 @@ Optional:
 
 
 
+<a id="nestedatt--ipv4_policy_interfaces"></a>
+### Nested Schema for `ipv4_policy_interfaces`
+
+Optional:
+
+- `route_map_name` (String) IP Route map Policy Name.
+
+
 <a id="nestedatt--ipv4_prefix_lists"></a>
 ### Nested Schema for `ipv4_prefix_lists`
 
@@ -321,6 +350,14 @@ Optional:
 - `to_range` (Number) The end of a range to describe the prefix length if the criteria is not an exact match.
   - Range: `0`-`128`
 
+
+
+<a id="nestedatt--ipv6_policy_interfaces"></a>
+### Nested Schema for `ipv6_policy_interfaces`
+
+Optional:
+
+- `route_map_name` (String) IP Route map Policy Name.
 
 
 <a id="nestedatt--ipv6_prefix_lists"></a>
@@ -398,6 +435,8 @@ Optional:
   - Map key: `community_list_dn` - DN of Community List. For example: `sys/rpm/rtregcom-[COMMUNITY_LIST1]`. (see [below for nested schema](#nestedatt--route_maps--entries--match_regular_community_lists))
 - `match_route_access_lists` (Attributes Map) List of Match Route Access Lists.
   - Map key: `access_list_dn` - DN of Access List. For example: `sys/acl/ipv4/name-[ACL1]` or `sys/rpm/accesslist-[1.2.3.4/32]`. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_access_lists))
+- `match_route_ipv6_access_lists` (Attributes Map) List of Match IPv6 Route Access Lists.
+  - Map key: `access_list_dn` - DN of IPv6 Access List. For example: `sys/rpm/accesslist-[ACL1]`. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_ipv6_access_lists))
 - `match_route_prefix_lists` (Attributes Map) List of Match Route Prefix Lists.
   - Map key: `prefix_list_dn` - DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]` (see [below for nested schema](#nestedatt--route_maps--entries--match_route_prefix_lists))
 - `match_route_types` (Attributes Map) List of Match Route Types.
@@ -429,6 +468,8 @@ Optional:
   - Map key format: `<scope>;<community>`
   - Key component `scope`: The domain applicable to the capability. Choices: `transitive`, `non-transitive`.
   - Key component `community`: Community. (see [below for nested schema](#nestedatt--route_maps--entries--set_extended_community_route_target_items))
+- `set_interfaces` (Attributes Map) List of Set Interfaces.
+  - Map key: `interface_id` - set interface for route-map. Must match first field in the output of `show intf brief`. Example: `null0` or `vlan100`. (see [below for nested schema](#nestedatt--route_maps--entries--set_interfaces))
 - `set_local_preference` (Number) Local Preference.
   - Range: `0`-`4294967295`
 - `set_metric` (String) Specifies the ISIS interface metric.
@@ -455,6 +496,8 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `set_next_hop_v6_unchanged` (String) Set IPv6 Next Hop Unchanged.
   - Choices: `enabled`, `disabled`
+- `set_next_hops` (Attributes Map) List of Set Next-Hop Addresses.
+  - Map key: `address` - The peer IP address. (see [below for nested schema](#nestedatt--route_maps--entries--set_next_hops))
 - `set_origin` (String) Origin Type.
   - Choices: `egp`, `igp`, `incomplete`
 - `set_origin_asn` (Number) Autonomous System Number.
@@ -508,6 +551,10 @@ Optional:
 ### Nested Schema for `route_maps.entries.match_route_access_lists`
 
 
+<a id="nestedatt--route_maps--entries--match_route_ipv6_access_lists"></a>
+### Nested Schema for `route_maps.entries.match_route_ipv6_access_lists`
+
+
 <a id="nestedatt--route_maps--entries--match_route_prefix_lists"></a>
 ### Nested Schema for `route_maps.entries.match_route_prefix_lists`
 
@@ -522,6 +569,20 @@ Optional:
 
 <a id="nestedatt--route_maps--entries--set_extended_community_route_target_items"></a>
 ### Nested Schema for `route_maps.entries.set_extended_community_route_target_items`
+
+
+<a id="nestedatt--route_maps--entries--set_interfaces"></a>
+### Nested Schema for `route_maps.entries.set_interfaces`
+
+
+<a id="nestedatt--route_maps--entries--set_next_hops"></a>
+### Nested Schema for `route_maps.entries.set_next_hops`
+
+Optional:
+
+- `track_id` (Number) Track id for Next Hop VA Address.
+  - Range: `0`-`512`
+- `vrf` (String) VRF over which given next-hop must be resolved.
 
 
 <a id="nestedatt--route_maps--entries--set_regular_community_items"></a>

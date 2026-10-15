@@ -56,7 +56,7 @@ func (d *DHCPDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *DHCPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.").AddApiDocumentation("dhcpEntity", "DHCP/dhcp:Entity/", []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpSrcIf", "dhcpV6SrcIf"}, []string{"DHCP/dhcp:Inst/", "DHCP/dhcp:SourceIf/", "DHCP/dhcp:V6SourceIf/", "DHCP/dhcp:RelayIf/", "DHCP/dhcp:RelayAddr/", "DHCP/dhcp:SrcIf/", "DHCP/dhcp:V6SrcIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.").AddApiDocumentation("dhcpEntity", "DHCP/dhcp:Entity/", []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpV6RelayAddr", "dhcpSrcIf", "dhcpV6SrcIf"}, []string{"DHCP/dhcp:Inst/", "DHCP/dhcp:SourceIf/", "DHCP/dhcp:V6SourceIf/", "DHCP/dhcp:RelayIf/", "DHCP/dhcp:RelayAddr/", "DHCP/dhcp:V6RelayAddr/", "DHCP/dhcp:SrcIf/", "DHCP/dhcp:V6SrcIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -240,6 +240,18 @@ func (d *DHCPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 								},
 							},
 						},
+						"ipv6_addresses": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of DHCPv6 relay addresses.\n  - Map key format: `<vrf>;<address>;<destination_interface>`\n  - Key component `vrf`: VRF. Use `!unspecified` if no VRF is configured.\n  - Key component `address`: v6 Address.\n  - Key component `destination_interface`: Destination Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`. Use `unspecified` if no destination interface is configured.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"counter": schema.Int64Attribute{
+										MarkdownDescription: "Counter.",
+										Computed:            true,
+									},
+								},
+							},
+						},
 						"source_interface": schema.StringAttribute{
 							MarkdownDescription: "Source Interface.",
 							Computed:            true,
@@ -283,7 +295,7 @@ func (d *DHCPDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpSrcIf", "dhcpV6SrcIf"}, DHCPSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpV6RelayAddr", "dhcpSrcIf", "dhcpV6SrcIf"}, DHCPSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

@@ -70,6 +70,7 @@ func TestAccDataSourceNxosDHCP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.options", "relay-info"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.v6_smart_relay", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.addresses.VRF1;1.1.1.1.counter", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_addresses.VRF1;ff02::1:2;eth1/11.counter", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.source_interface", "lo1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_source_interface", "lo1"))
 	resource.Test(t, resource.TestCase{
@@ -162,6 +163,11 @@ func testAccDataSourceNxosDHCPConfig() string {
 	config += `			v6_smart_relay = false` + "\n"
 	config += `			addresses = {` + "\n"
 	config += `				"VRF1;1.1.1.1" = {` + "\n"
+	config += `					counter = 1` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			ipv6_addresses = {` + "\n"
+	config += `				"VRF1;ff02::1:2;eth1/11" = {` + "\n"
 	config += `					counter = 1` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"

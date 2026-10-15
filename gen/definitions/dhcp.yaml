@@ -281,6 +281,38 @@ child_classes:
                 max_int: 65535
                 description: 'Counter.'
                 example: 1
+          - class_name: dhcpV6RelayAddr
+            rn: addrv6-[%s]-[%s]-[%s]
+            type: list
+            tf_name: ipv6_addresses
+            description: 'List of DHCPv6 relay addresses.'
+            doc_path: DHCP/dhcp:V6RelayAddr/
+            attributes:
+              - nxos_name: vrf
+                tf_name: vrf
+                type: String
+                id: true
+                description: 'VRF. Use `!unspecified` if no VRF is configured.'
+                example: VRF1
+              - nxos_name: address
+                tf_name: address
+                type: String
+                id: true
+                description: 'v6 Address.'
+                example: ff02::1:2
+              - nxos_name: dstif
+                tf_name: destination_interface
+                type: String
+                id: true
+                description: 'Destination Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`. Use `unspecified` if no destination interface is configured.'
+                example: eth1/11
+              - nxos_name: counter
+                tf_name: counter
+                type: Int64
+                min_int: 0
+                max_int: 65535
+                description: 'Counter.'
+                example: 1
           - class_name: dhcpSrcIf
             rn: srcif
             type: single

@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.
   API Documentation
-  dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Entity/dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Inst/dhcpSourceIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SourceIf/dhcpV6SourceIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SourceIf/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayAddr/dhcpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SrcIf/dhcpV6SrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SrcIf/
+  dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Entity/dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Inst/dhcpSourceIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SourceIf/dhcpV6SourceIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SourceIf/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayAddr/dhcpV6RelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6RelayAddr/dhcpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SrcIf/dhcpV6SrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SrcIf/
 ---
 
 # nxos_dhcp (Resource)
@@ -20,6 +20,7 @@ This resource can manage the DHCP relay configuration on NX-OS devices, includin
 - [dhcpV6SourceIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SourceIf/)
 - [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayIf/)
 - [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayAddr/)
+- [dhcpV6RelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6RelayAddr/)
 - [dhcpSrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SrcIf/)
 - [dhcpV6SrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SrcIf/)
 
@@ -69,6 +70,11 @@ resource "nxos_dhcp" "example" {
       v6_smart_relay      = false
       addresses = {
         "VRF1;1.1.1.1" = {
+          counter = 1
+        }
+      }
+      ipv6_addresses = {
+        "VRF1;ff02::1:2;eth1/11" = {
           counter = 1
         }
       }
@@ -139,6 +145,11 @@ Optional:
   - Key component `vrf`: vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.
   - Key component `address`: IPv4 or IPv6 address. (see [below for nested schema](#nestedatt--relay_interfaces--addresses))
 - `information_trusted` (Boolean) Information Trusted Enabled.
+- `ipv6_addresses` (Attributes Map) List of DHCPv6 relay addresses.
+  - Map key format: `<vrf>;<address>;<destination_interface>`
+  - Key component `vrf`: VRF. Use `!unspecified` if no VRF is configured.
+  - Key component `address`: v6 Address.
+  - Key component `destination_interface`: Destination Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`. Use `unspecified` if no destination interface is configured. (see [below for nested schema](#nestedatt--relay_interfaces--ipv6_addresses))
 - `ipv6_source_interface` (String) Source Interface.
 - `options` (String) DHCP options.
   - Choices: `none`, `relay-info`
@@ -150,6 +161,15 @@ Optional:
 
 <a id="nestedatt--relay_interfaces--addresses"></a>
 ### Nested Schema for `relay_interfaces.addresses`
+
+Optional:
+
+- `counter` (Number) Counter.
+  - Range: `0`-`65535`
+
+
+<a id="nestedatt--relay_interfaces--ipv6_addresses"></a>
+### Nested Schema for `relay_interfaces.ipv6_addresses`
 
 Optional:
 

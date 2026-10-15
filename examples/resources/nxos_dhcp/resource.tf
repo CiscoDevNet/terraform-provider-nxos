@@ -44,6 +44,11 @@ resource "nxos_dhcp" "example" {
           counter = 1
         }
       }
+      ipv6_addresses = {
+        "VRF1;ff02::1:2;eth1/11" = {
+          counter = 1
+        }
+      }
       source_interface      = "lo1"
       ipv6_source_interface = "lo1"
     }

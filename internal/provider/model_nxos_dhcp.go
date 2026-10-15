@@ -78,18 +78,23 @@ type DHCP struct {
 }
 
 type DHCPRelayInterfaces struct {
-	InformationTrusted  types.Bool                              `tfsdk:"information_trusted"`
-	SmartRelay          types.Bool                              `tfsdk:"smart_relay"`
-	SubnetBroadcast     types.Bool                              `tfsdk:"subnet_broadcast"`
-	Options             types.String                            `tfsdk:"options"`
-	SubnetSelection     types.String                            `tfsdk:"subnet_selection"`
-	V6SmartRelay        types.Bool                              `tfsdk:"v6_smart_relay"`
-	Addresses           map[string]DHCPRelayInterfacesAddresses `tfsdk:"addresses"`
-	SourceInterface     types.String                            `tfsdk:"source_interface"`
-	Ipv6SourceInterface types.String                            `tfsdk:"ipv6_source_interface"`
+	InformationTrusted  types.Bool                                  `tfsdk:"information_trusted"`
+	SmartRelay          types.Bool                                  `tfsdk:"smart_relay"`
+	SubnetBroadcast     types.Bool                                  `tfsdk:"subnet_broadcast"`
+	Options             types.String                                `tfsdk:"options"`
+	SubnetSelection     types.String                                `tfsdk:"subnet_selection"`
+	V6SmartRelay        types.Bool                                  `tfsdk:"v6_smart_relay"`
+	Addresses           map[string]DHCPRelayInterfacesAddresses     `tfsdk:"addresses"`
+	Ipv6Addresses       map[string]DHCPRelayInterfacesIpv6Addresses `tfsdk:"ipv6_addresses"`
+	SourceInterface     types.String                                `tfsdk:"source_interface"`
+	Ipv6SourceInterface types.String                                `tfsdk:"ipv6_source_interface"`
 }
 
 type DHCPRelayInterfacesAddresses struct {
+	Counter types.Int64 `tfsdk:"counter"`
+}
+
+type DHCPRelayInterfacesIpv6Addresses struct {
 	Counter types.Int64 `tfsdk:"counter"`
 }
 
@@ -134,6 +139,11 @@ func (data DHCPRelayInterfaces) getRn(key string) string {
 func (data DHCPRelayInterfacesAddresses) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("addr-[%s]-[%s]", keyParts[0], keyParts[1])
+}
+
+func (data DHCPRelayInterfacesIpv6Addresses) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 3)
+	return fmt.Sprintf("addrv6-[%s]-[%s]-[%s]", keyParts[0], keyParts[1], keyParts[2])
 }
 
 func (data DHCP) getClassName() string {
@@ -308,6 +318,20 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpRelayAddr.attributes", attrs)
 				}
+				for key, child := range child.Ipv6Addresses {
+					configChild, configChildOk := configChild.Ipv6Addresses[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					keyParts := strings.SplitN(key, ";", 3)
+					attrs, _ = sjson.Set(attrs, "vrf", keyParts[0])
+					attrs, _ = sjson.Set(attrs, "address", keyParts[1])
+					attrs, _ = sjson.Set(attrs, "dstif", keyParts[2])
+					if configChildOk && !child.Counter.IsUnknown() && !child.Counter.IsNull() && !configChild.Counter.IsNull() {
+						attrs, _ = sjson.Set(attrs, "counter", strconv.FormatInt(child.Counter.ValueInt64(), 10))
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpV6RelayAddr.attributes", attrs)
+				}
 				attrs = "{}"
 				if !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
 					attrs, _ = sjson.Set(attrs, "sourceInterface", child.SourceInterface.ValueString())
@@ -435,6 +459,25 @@ func (data *DHCP) fromBody(res gjson.Result) {
 													child.Addresses = make(map[string]DHCPRelayInterfacesAddresses)
 												}
 												child.Addresses[nestedMapKey] = nestedChilddhcpRelayAddr
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "dhcpV6RelayAddr" {
+												var nestedChilddhcpV6RelayAddr DHCPRelayInterfacesIpv6Addresses
+												nestedChilddhcpV6RelayAddr.Counter = types.Int64Value(nestedValue.Get("attributes.counter").Int())
+												nestedMapKey := nestedValue.Get("attributes.vrf").String() + ";" + nestedValue.Get("attributes.address").String() + ";" + nestedValue.Get("attributes.dstif").String()
+												if child.Ipv6Addresses == nil {
+													child.Ipv6Addresses = make(map[string]DHCPRelayInterfacesIpv6Addresses)
+												}
+												child.Ipv6Addresses[nestedMapKey] = nestedChilddhcpV6RelayAddr
 											}
 											return true
 										},
@@ -761,6 +804,32 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 			}
 			item.Addresses[nc] = ncItem
 		}
+		for nc := range item.Ipv6Addresses {
+			ncItem := item.Ipv6Addresses[nc]
+			keyParts := strings.SplitN(nc, ";", 3)
+			var rdhcpV6RelayAddr gjson.Result
+			rdhcpRelayIf.Get("dhcpRelayIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("dhcpV6RelayAddr.attributes.vrf").String() == keyParts[0] &&
+						v.Get("dhcpV6RelayAddr.attributes.address").String() == keyParts[1] &&
+						v.Get("dhcpV6RelayAddr.attributes.dstif").String() == keyParts[2] {
+						rdhcpV6RelayAddr = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rdhcpV6RelayAddr.Exists() {
+				delete(item.Ipv6Addresses, nc)
+				continue
+			}
+			if !ncItem.Counter.IsNull() {
+				ncItem.Counter = types.Int64Value(rdhcpV6RelayAddr.Get("dhcpV6RelayAddr.attributes.counter").Int())
+			} else {
+				ncItem.Counter = types.Int64Null()
+			}
+			item.Ipv6Addresses[nc] = ncItem
+		}
 		{
 			var rdhcpSrcIf gjson.Result
 			rdhcpRelayIf.Get("dhcpRelayIf.children").ForEach(
@@ -982,6 +1051,15 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 				}
 			}
+			for stateChildKey := range stateItemdi.Ipv6Addresses {
+				if _, found := planItemdi.Ipv6Addresses[stateChildKey]; !found {
+					stateChild := stateItemdi.Ipv6Addresses[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "dhcpV6RelayAddr.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "dhcpV6RelayAddr.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
 		}
 	}
 
@@ -1167,6 +1245,24 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 										mv.Get("dhcpRelayAddr.attributes.address").String() == keyParts[1] {
 										if !stateChild.Counter.IsNull() && configChild.Counter.IsNull() {
 											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".dhcpRelayAddr.attributes."+"counter", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
+						for key := range stateChild.Ipv6Addresses {
+							if configChild, ok := configChild.Ipv6Addresses[key]; ok {
+								stateChild := stateChild.Ipv6Addresses[key]
+								_ = stateChild
+								_ = configChild
+								keyParts := strings.SplitN(key, ";", 3)
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("dhcpV6RelayAddr.attributes.vrf").String() == keyParts[0] &&
+										mv.Get("dhcpV6RelayAddr.attributes.address").String() == keyParts[1] &&
+										mv.Get("dhcpV6RelayAddr.attributes.dstif").String() == keyParts[2] {
+										if !stateChild.Counter.IsNull() && configChild.Counter.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".dhcpV6RelayAddr.attributes."+"counter", "DME_UNSET_PROPERTY_MARKER")
 										}
 										break
 									}

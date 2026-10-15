@@ -1,3 +1,7 @@
+## 0.18.3
+
+- Add IPv6 DHCP relay addresses (`ipv6_addresses`) to `relay_interfaces` of `nxos_dhcp` resource and data source
+
 ## 0.18.2
 
 - Fix creating and deleting UDFs with TCAM region qualifiers (`qualify_*` attributes) in `nxos_platform` resource

@@ -1,1 +1,0 @@
-- Add IPv6 DHCP relay addresses (`ipv6_addresses`) to `relay_interfaces` of `nxos_dhcp` resource and data source

@@ -1,1 +1,0 @@
-- Retry requests rejected by NX-OS due to frequent invocation of a command (e.g. changing the `shutdown` attribute of `nxos_macsec` or destroying it within 30 seconds of a previous MACsec status change)

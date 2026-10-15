@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.18.4
+
+- Retry requests rejected by NX-OS due to frequent invocation of a command (e.g. changing the `shutdown` attribute of `nxos_macsec` or destroying it within 30 seconds of a previous MACsec status change)
+
 ## 0.18.3
 
 - Add IPv6 DHCP relay addresses (`ipv6_addresses`) to `relay_interfaces` of `nxos_dhcp` resource and data source

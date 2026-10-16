@@ -42,6 +42,13 @@ func TestAccDataSourceNxosQueuingQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.min_threshold_unit", "kbytes"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.optimization", "mesh"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.weight", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.shape_max_rate", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.shape_max_rate_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.shape_min_rate", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.shape_min_rate_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.queue_limit_unit", "kbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.queue_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.burst_detect_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "system_out_policy_map_name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_map_statistics", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_interface_out.eth1/10.policy_map_name", "PM1"))
@@ -168,6 +175,13 @@ func testAccDataSourceNxosQueuingQoSConfig() string {
 	config += `					min_threshold_unit = "kbytes"` + "\n"
 	config += `					optimization = "mesh"` + "\n"
 	config += `					weight = 5` + "\n"
+	config += `					shape_max_rate = 2000` + "\n"
+	config += `					shape_max_rate_unit = "mbps"` + "\n"
+	config += `					shape_min_rate = 1000` + "\n"
+	config += `					shape_min_rate_unit = "mbps"` + "\n"
+	config += `					queue_limit_unit = "kbytes"` + "\n"
+	config += `					queue_limit = 1000` + "\n"
+	config += `					burst_detect_state = "enabled"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

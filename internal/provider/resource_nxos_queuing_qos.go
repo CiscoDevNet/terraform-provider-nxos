@@ -63,7 +63,7 @@ func (r *QueuingQoSResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.").AddApiDocumentation("ipqosQueuing", "Qos/ipqos:Queuing/", []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ipqosIf", "ipqosInst"}, []string{"Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/", "Qos/ipqos:RandomDetect/", "Qos/ipqos:Afd/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/", "Qos/ipqos:If/", "Qos/ipqos:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.").AddApiDocumentation("ipqosQueuing", "Qos/ipqos:Queuing/", []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosSetBW", "ipqosShape", "ipqosQueueLimit", "ipqosBurstDetect", "ipqosBurstDetectState", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ipqosIf", "ipqosInst"}, []string{"Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/", "Qos/ipqos:RandomDetect/", "Qos/ipqos:Afd/", "Qos/ipqos:SetBW/", "Qos/ipqos:Shape/", "Qos/ipqos:QueueLimit/", "Qos/ipqos:BurstDetect/", "Qos/ipqos:BurstDetectState/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/", "Qos/ipqos:If/", "Qos/ipqos:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -189,6 +189,97 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(1, 52428800),
+										},
+									},
+									"bandwidth": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Available bandwidth.").AddIntegerRangeDescription(0, 100).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 100),
+										},
+									},
+									"shape_max_rate": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Maximum shape rate.").AddIntegerRangeDescription(0, 400000000000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 400000000000),
+										},
+									},
+									"shape_max_rate_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Maximum shape rate unit.").AddStringEnumDescription("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct"),
+										},
+									},
+									"shape_min_rate": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Minimum shape rate.").AddIntegerRangeDescription(0, 400000000000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 400000000000),
+										},
+									},
+									"shape_min_rate_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Minimum shape rate unit.").AddStringEnumDescription("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct"),
+										},
+									},
+									"queue_limit_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Bytes/kbytes/mbytes.").AddStringEnumDescription("none", "packets", "bytes", "kbytes", "mbytes", "gbytes", "ms", "us", "perc").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "packets", "bytes", "kbytes", "mbytes", "gbytes", "ms", "us", "perc"),
+										},
+									},
+									"queue_limit": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Value in bytes/kbytes/mbytes.").AddIntegerRangeDescription(0, 12582913).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 12582913),
+										},
+									},
+									"queue_limit_dynamic": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Queue-limit dynamic value.").AddIntegerRangeDescription(0, 255).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 255),
+										},
+									},
+									"burst_detect_fall_threshold_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Fall Threshold Unit for Micro burst detection.").AddStringEnumDescription("none", "bytes", "pct").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "bytes", "pct"),
+										},
+									},
+									"burst_detect_fall_threshold": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Fall Threshold value for Micro burst detection.").AddIntegerRangeDescription(0, 13319072).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 13319072),
+										},
+									},
+									"burst_detect_rise_threshold_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Rise Threshold Unit for Micro burst detection.").AddStringEnumDescription("none", "bytes", "pct").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "bytes", "pct"),
+										},
+									},
+									"burst_detect_rise_threshold": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Rise Threshold value for Micro burst detection.").AddIntegerRangeDescription(0, 13319072).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 13319072),
+										},
+									},
+									"burst_detect_state": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Burst detect state enabled/disabled.").AddStringEnumDescription("disabled", "enabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("disabled", "enabled"),
 										},
 									},
 								},
@@ -372,7 +463,7 @@ func (r *QueuingQoSResource) Read(ctx context.Context, req resource.ReadRequest,
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ipqosIf", "ipqosInst"}, QueuingQoSSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosSetBW", "ipqosShape", "ipqosQueueLimit", "ipqosBurstDetect", "ipqosBurstDetectState", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ipqosIf", "ipqosInst"}, QueuingQoSSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

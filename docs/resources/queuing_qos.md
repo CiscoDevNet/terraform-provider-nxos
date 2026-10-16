@@ -5,7 +5,7 @@ subcategory: "Quality of Service"
 description: |-
   This resource can manage the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.
   API Documentation
-  ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Queuing/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/ipqosRandomDetect https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:RandomDetect/ipqosAfd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Afd/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
+  ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Queuing/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/ipqosRandomDetect https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:RandomDetect/ipqosAfd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Afd/ipqosSetBW https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetBW/ipqosShape https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Shape/ipqosQueueLimit https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:QueueLimit/ipqosBurstDetect https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:BurstDetect/ipqosBurstDetectState https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:BurstDetectState/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_queuing_qos (Resource)
@@ -22,6 +22,11 @@ This resource can manage the queuing QoS configuration on NX-OS devices, includi
 - [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/)
 - [ipqosRandomDetect](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:RandomDetect/)
 - [ipqosAfd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Afd/)
+- [ipqosSetBW](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetBW/)
+- [ipqosShape](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Shape/)
+- [ipqosQueueLimit](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:QueueLimit/)
+- [ipqosBurstDetect](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:BurstDetect/)
+- [ipqosBurstDetectState](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:BurstDetectState/)
 - [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/)
 - [ipqosEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/)
 - [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/)
@@ -38,16 +43,23 @@ resource "nxos_queuing_qos" "example" {
       match_type = "match-any"
       match_class_maps = {
         "c-out-q1" = {
-          priority           = 3
-          cap_average        = false
-          drop_availability  = 7
-          random_detect_ecn  = true
-          max_threshold      = 3000
-          max_threshold_unit = "kbytes"
-          min_threshold      = 150
-          min_threshold_unit = "kbytes"
-          optimization       = "mesh"
-          weight             = 5
+          priority            = 3
+          cap_average         = false
+          drop_availability   = 7
+          random_detect_ecn   = true
+          max_threshold       = 3000
+          max_threshold_unit  = "kbytes"
+          min_threshold       = 150
+          min_threshold_unit  = "kbytes"
+          optimization        = "mesh"
+          weight              = 5
+          shape_max_rate      = 2000
+          shape_max_rate_unit = "mbps"
+          shape_min_rate      = 1000
+          shape_min_rate_unit = "mbps"
+          queue_limit_unit    = "kbytes"
+          queue_limit         = 1000
+          burst_detect_state  = "enabled"
         }
       }
     }
@@ -105,6 +117,18 @@ Optional:
 Optional:
 
 - `afd_ecn` (Boolean) Approximate Fair Discard ECN flag.
+- `bandwidth` (Number) Available bandwidth.
+  - Range: `0`-`100`
+- `burst_detect_fall_threshold` (Number) Fall Threshold value for Micro burst detection.
+  - Range: `0`-`13319072`
+- `burst_detect_fall_threshold_unit` (String) Fall Threshold Unit for Micro burst detection.
+  - Choices: `none`, `bytes`, `pct`
+- `burst_detect_rise_threshold` (Number) Rise Threshold value for Micro burst detection.
+  - Range: `0`-`13319072`
+- `burst_detect_rise_threshold_unit` (String) Rise Threshold Unit for Micro burst detection.
+  - Choices: `none`, `bytes`, `pct`
+- `burst_detect_state` (String) Burst detect state enabled/disabled.
+  - Choices: `disabled`, `enabled`
 - `cap_average` (Boolean) cap average.
 - `drop_availability` (Number) drop availability range.
   - Range: `0`-`100`
@@ -126,9 +150,23 @@ Optional:
   - Range: `1`-`52428800`
 - `queue_desired_unit` (String) Units for Approximate Fair Discard value.
   - Choices: `none`, `bytes`, `kbytes`, `mbytes`
+- `queue_limit` (Number) Value in bytes/kbytes/mbytes.
+  - Range: `0`-`12582913`
+- `queue_limit_dynamic` (Number) Queue-limit dynamic value.
+  - Range: `0`-`255`
+- `queue_limit_unit` (String) Bytes/kbytes/mbytes.
+  - Choices: `none`, `packets`, `bytes`, `kbytes`, `mbytes`, `gbytes`, `ms`, `us`, `perc`
 - `random_detect_ecn` (Boolean) ecn flag.
 - `remaining_bandwidth` (Number) Remaining bandwidth.
   - Range: `0`-`100`
+- `shape_max_rate` (Number) Maximum shape rate.
+  - Range: `0`-`400000000000`
+- `shape_max_rate_unit` (String) Maximum shape rate unit.
+  - Choices: `unspecified`, `bps`, `kbps`, `mbps`, `gbps`, `pps`, `pct`
+- `shape_min_rate` (Number) Minimum shape rate.
+  - Range: `0`-`400000000000`
+- `shape_min_rate_unit` (String) Minimum shape rate unit.
+  - Choices: `unspecified`, `bps`, `kbps`, `mbps`, `gbps`, `pps`, `pct`
 - `weight` (Number) weight range.
   - Range: `0`-`15`
 

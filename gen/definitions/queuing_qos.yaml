@@ -198,6 +198,160 @@ child_classes:
                     min_int: 1
                     max_int: 52428800
                     example: 150
+              - class_name: ipqosSetBW
+                doc_path: Qos/ipqos:SetBW/
+                rn: setBW
+                type: single
+                tf_name: bandwidth
+                description: 'Bandwidth configuration.'
+                attributes:
+                  - nxos_name: val
+                    tf_name: bandwidth
+                    type: Int64
+                    description: 'Available bandwidth.'
+                    min_int: 0
+                    max_int: 100
+                    example: 20
+                    exclude_test: true
+              - class_name: ipqosShape
+                doc_path: Qos/ipqos:Shape/
+                rn: shape
+                type: single
+                tf_name: shape
+                description: 'Shape configuration.'
+                attributes:
+                  - nxos_name: max
+                    tf_name: shape_max_rate
+                    type: Int64
+                    description: 'Maximum shape rate.'
+                    min_int: 0
+                    max_int: 400000000000
+                    example: 2000
+                  - nxos_name: maxRateUnit
+                    tf_name: shape_max_rate_unit
+                    type: String
+                    description: 'Maximum shape rate unit.'
+                    enum_values:
+                      - unspecified
+                      - bps
+                      - kbps
+                      - mbps
+                      - gbps
+                      - pps
+                      - pct
+                    example: mbps
+                  - nxos_name: min
+                    tf_name: shape_min_rate
+                    type: Int64
+                    description: 'Minimum shape rate.'
+                    min_int: 0
+                    max_int: 400000000000
+                    example: 1000
+                  - nxos_name: minRateUnit
+                    tf_name: shape_min_rate_unit
+                    type: String
+                    description: 'Minimum shape rate unit.'
+                    enum_values:
+                      - unspecified
+                      - bps
+                      - kbps
+                      - mbps
+                      - gbps
+                      - pps
+                      - pct
+                    example: mbps
+              - class_name: ipqosQueueLimit
+                doc_path: Qos/ipqos:QueueLimit/
+                rn: QueueLimit
+                type: single
+                tf_name: queue_limit
+                description: 'Queue limit configuration.'
+                attributes:
+                  - nxos_name: QueueLimitUnit
+                    tf_name: queue_limit_unit
+                    type: String
+                    description: 'Bytes/kbytes/mbytes.'
+                    enum_values:
+                      - none
+                      - packets
+                      - bytes
+                      - kbytes
+                      - mbytes
+                      - gbytes
+                      - ms
+                      - us
+                      - perc
+                    example: kbytes
+                  - nxos_name: QueueLimitVal
+                    tf_name: queue_limit
+                    type: Int64
+                    description: 'Value in bytes/kbytes/mbytes.'
+                    min_int: 0
+                    max_int: 12582913
+                    example: 1000
+                  - nxos_name: dynamic
+                    tf_name: queue_limit_dynamic
+                    type: Int64
+                    description: 'Queue-limit dynamic value.'
+                    min_int: 0
+                    max_int: 255
+                    example: 5
+                    exclude_test: true
+              - class_name: ipqosBurstDetect
+                doc_path: Qos/ipqos:BurstDetect/
+                rn: burstdetect
+                type: single
+                tf_name: burst_detect
+                description: 'Micro burst detection configuration.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: fallThresUnit
+                    tf_name: burst_detect_fall_threshold_unit
+                    type: String
+                    description: 'Fall Threshold Unit for Micro burst detection.'
+                    enum_values:
+                      - none
+                      - bytes
+                      - pct
+                    example: bytes
+                  - nxos_name: fallThreshold
+                    tf_name: burst_detect_fall_threshold
+                    type: Int64
+                    description: 'Fall Threshold value for Micro burst detection.'
+                    min_int: 0
+                    max_int: 13319072
+                    example: 10000
+                  - nxos_name: riseThresUnit
+                    tf_name: burst_detect_rise_threshold_unit
+                    type: String
+                    description: 'Rise Threshold Unit for Micro burst detection.'
+                    enum_values:
+                      - none
+                      - bytes
+                      - pct
+                    example: bytes
+                  - nxos_name: riseThreshold
+                    tf_name: burst_detect_rise_threshold
+                    type: Int64
+                    description: 'Rise Threshold value for Micro burst detection.'
+                    min_int: 0
+                    max_int: 13319072
+                    example: 20000
+              - class_name: ipqosBurstDetectState
+                doc_path: Qos/ipqos:BurstDetectState/
+                rn: burstdetectstate
+                type: single
+                tf_name: burst_detect_state
+                description: 'Micro burst detection state configuration.'
+                attributes:
+                  - nxos_name: val
+                    tf_name: burst_detect_state
+                    type: String
+                    description: 'Burst detect state enabled/disabled.'
+                    enum_values:
+                      - disabled
+                      - enabled
+                    example: enabled
   - class_name: ipqosServPol
     doc_path: Qos/ipqos:ServPol/
     rn: policy

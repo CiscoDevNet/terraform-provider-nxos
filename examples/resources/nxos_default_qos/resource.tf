@@ -69,4 +69,10 @@ resource "nxos_default_qos" "example" {
       policy_map_statistics = false
     }
   }
+  policy_nve_interface_in = {
+    "1" = {
+      policy_map_name       = "PM1"
+      policy_map_statistics = false
+    }
+  }
 }

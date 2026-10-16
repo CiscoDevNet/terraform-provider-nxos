@@ -64,6 +64,8 @@ func TestAccDataSourceNxosDefaultQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_qos_group", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_interface_in.eth1/10.policy_map_name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_interface_in.eth1/10.policy_map_statistics", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_nve_interface_in.1.policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_nve_interface_in.1.policy_map_statistics", "false"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -86,6 +88,25 @@ resource "nxos_dme" "PreReq0" {
   content = {
       name = "ACL1"
   }
+}
+
+resource "nxos_dme" "PreReq1" {
+  dn = "sys/fm/nvo"
+  class_name = "fmNvo"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq2" {
+  dn = "sys/eps/epId-1"
+  class_name = "nvoEp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+  depends_on = [nxos_dme.PreReq1, ]
 }
 
 `
@@ -172,7 +193,13 @@ func testAccDataSourceNxosDefaultQoSConfig() string {
 	config += `			policy_map_statistics = false` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
+	config += `	policy_nve_interface_in = {` + "\n"
+	config += `		"1" = {` + "\n"
+	config += `			policy_map_name = "PM1"` + "\n"
+	config += `			policy_map_statistics = false` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -1062,7 +1062,14 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", {{deleteValue .}})
 {{- end}}
 {{- end}}
+{{- if .ChildClasses}}
+		itemBody := ""
+		itemBody, _ = sjson.SetRaw(itemBody, "{{$childClassName}}.attributes", childBody)
+		{{- template "noDeleteListItemChildrenTemplate" (makeMap "Children" .ChildClasses "ItemExpr" "child" "BodyVar" "itemBody" "ChildrenPath" (printf "%s.children" $childClassName) "Level" "")}}
+		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1", itemBody)
+{{- else}}
 		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1.{{$childClassName}}.attributes", childBody)
+{{- end}}
 	}
 {{- end}}
 {{- else}}
@@ -1085,6 +1092,95 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- end}}
 {{- end}}
 {{- /* ==================== end toDeleteBodyChildrenTemplate ==================== */}}
+
+{{- /* ==================== noDeleteListItemChildrenTemplate ====================
+       A NoDelete list item stays on the device when it is destroyed or removed from the
+       configuration, so its configured children have to be cleaned up explicitly:
+         - Deletable children are deleted (e.g. a policy map assigned to an interface)
+         - NoDelete children get the delete value (default DME_UNSET_PROPERTY_MARKER) for their
+           configured attributes and are recursed into; they are left out if nothing is configured
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "ItemExpr" (string) - Go expression for the list item
+         "BodyVar" (string) - Go variable holding the item body
+         "ChildrenPath" (string) - sjson path to the children array within the item body
+         "Level" (string) - Suffix that keeps local variable names unique across nesting levels
+       ========================================================= */}}
+{{- define "noDeleteListItemChildrenTemplate"}}
+{{- $itemExpr := .ItemExpr}}
+{{- $bodyVar := .BodyVar}}
+{{- $childrenPath := .ChildrenPath}}
+{{- $level := .Level}}
+{{- range .Children}}
+{{- $childClassName := .ClassName}}
+{{- if eq .Type "single"}}
+{{- if not .NoDelete}}
+{{- $configured := ""}}
+{{- range .Attributes}}
+{{- if and (not .Id) (eq .Value "")}}
+{{- if $configured}}{{$configured = printf "%s || " $configured}}{{end}}
+{{- $configured = printf "%s!%s.%s.IsNull()" $configured $itemExpr (toGoName .TfName)}}
+{{- end}}
+{{- end}}
+{{- range .ChildClasses}}
+{{- if eq .Type "list"}}
+{{- if $configured}}{{$configured = printf "%s || " $configured}}{{end}}
+{{- $configured = printf "%slen(%s.%s) > 0" $configured $itemExpr (toGoName .TfName)}}
+{{- else}}
+{{- range .Attributes}}
+{{- if and (not .Id) (eq .Value "")}}
+{{- if $configured}}{{$configured = printf "%s || " $configured}}{{end}}
+{{- $configured = printf "%s!%s.%s.IsNull()" $configured $itemExpr (toGoName .TfName)}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- if $configured}}
+		if {{$configured}} {
+			{{$bodyVar}}, _ = sjson.Set({{$bodyVar}}, "{{$childrenPath}}.-1.{{$childClassName}}.attributes", map[string]interface{}{"rn": "{{.Rn}}", "status": "deleted"})
+		}
+{{- end}}
+{{- else}}
+		{
+			nestedBody{{$level}} := ""
+{{- range .Attributes}}
+{{- if and (not .Id) (eq .Value "")}}
+			if !{{$itemExpr}}.{{toGoName .TfName}}.IsNull() {
+				nestedBody{{$level}}, _ = sjson.Set(nestedBody{{$level}}, "{{$childClassName}}.attributes.{{.NxosName}}", {{deleteValue .}})
+			}
+{{- end}}
+{{- end}}
+			{{- if .ChildClasses}}
+			{{- template "noDeleteListItemChildrenTemplate" (makeMap "Children" .ChildClasses "ItemExpr" $itemExpr "BodyVar" (printf "nestedBody%s" $level) "ChildrenPath" (printf "%s.children" $childClassName) "Level" (printf "%s_" $level))}}
+			{{- end}}
+			if nestedBody{{$level}} != "" {
+				nestedBody{{$level}}, _ = sjson.Set(nestedBody{{$level}}, "{{$childClassName}}.attributes.rn", "{{.Rn}}")
+				{{$bodyVar}}, _ = sjson.SetRaw({{$bodyVar}}, "{{$childrenPath}}.-1", nestedBody{{$level}})
+			}
+		}
+{{- end}}
+{{- else if eq .Type "list"}}
+		for nestedKey{{$level}}, nestedChild{{$level}} := range {{$itemExpr}}.{{toGoName .TfName}} {
+{{- if not .NoDelete}}
+			{{$bodyVar}}, _ = sjson.Set({{$bodyVar}}, "{{$childrenPath}}.-1.{{$childClassName}}.attributes", map[string]interface{}{"rn": nestedChild{{$level}}.getRn(nestedKey{{$level}}), "status": "deleted"})
+{{- else}}
+			nestedBody{{$level}} := ""
+			nestedBody{{$level}}, _ = sjson.Set(nestedBody{{$level}}, "{{$childClassName}}.attributes.rn", nestedChild{{$level}}.getRn(nestedKey{{$level}}))
+{{- range .Attributes}}
+{{- if and (not .Id) (eq .Value "")}}
+			nestedBody{{$level}}, _ = sjson.Set(nestedBody{{$level}}, "{{$childClassName}}.attributes.{{.NxosName}}", {{deleteValue .}})
+{{- end}}
+{{- end}}
+			{{- if .ChildClasses}}
+			{{- template "noDeleteListItemChildrenTemplate" (makeMap "Children" .ChildClasses "ItemExpr" (printf "nestedChild%s" $level) "BodyVar" (printf "nestedBody%s" $level) "ChildrenPath" (printf "%s.children" $childClassName) "Level" (printf "%s_" $level))}}
+			{{- end}}
+			{{$bodyVar}}, _ = sjson.SetRaw({{$bodyVar}}, "{{$childrenPath}}.-1", nestedBody{{$level}})
+{{- end}}
+		}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end noDeleteListItemChildrenTemplate ==================== */}}
 
 func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	body := ""
@@ -1265,6 +1361,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.{{.NxosName}}", {{deleteValue .}})
 {{- end}}
 {{- end}}
+			{{- template "noDeleteListItemChildrenTemplate" (makeMap "Children" .ChildClasses "ItemExpr" "stateChild" "BodyVar" "deleteBody" "ChildrenPath" (printf "%s.children" $childClassName) "Level" "")}}
 {{- else}}
 			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.rn", stateChild.getRn(stateKey))
 			deleteBody, _ = sjson.Set(deleteBody, "{{$childClassName}}.attributes.status", "deleted")

@@ -20,4 +20,10 @@ resource "nxos_queuing_qos" "example" {
   }
   system_out_policy_map_name = "PM1"
   policy_map_statistics      = false
+  policy_interface_out = {
+    "eth1/10" = {
+      policy_map_name       = "PM1"
+      policy_map_statistics = false
+    }
+  }
 }

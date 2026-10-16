@@ -63,7 +63,7 @@ func (r *QueuingQoSResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.").AddApiDocumentation("ipqosQueuing", "Qos/ipqos:Queuing/", []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, []string{"Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/", "Qos/ipqos:RandomDetect/", "Qos/ipqos:Afd/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.").AddApiDocumentation("ipqosQueuing", "Qos/ipqos:Queuing/", []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ipqosIf", "ipqosInst"}, []string{"Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/", "Qos/ipqos:RandomDetect/", "Qos/ipqos:Afd/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/", "Qos/ipqos:If/", "Qos/ipqos:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -204,6 +204,22 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"policy_map_statistics": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Turn on/off statistics.").String,
 				Optional:            true,
+			},
+			"policy_interface_out": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of interfaces with egress queuing policy assignments.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"policy_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy-map Name.").String,
+							Optional:            true,
+						},
+						"policy_map_statistics": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Turn on/off statistics.").String,
+							Optional:            true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -356,7 +372,7 @@ func (r *QueuingQoSResource) Read(ctx context.Context, req resource.ReadRequest,
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, QueuingQoSSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ipqosIf", "ipqosInst"}, QueuingQoSSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

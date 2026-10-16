@@ -595,9 +595,55 @@ child_classes:
                     type: Bool
                     description: 'Turn on/off statistics.'
                     example: false
+          - class_name: ipqosNveIf
+            doc_path: Qos/ipqos:NveIf/
+            rn: nveif-%v
+            type: list
+            tf_name: policy_nve_interface_in
+            description: 'List of NVE interfaces with ingress QoS policy assignments.'
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: Int64
+                id: true
+                description: 'Nve Interface id for service-policy.'
+                min_int: 0
+                max_int: 4294967295
+                example: 1
+            child_classes:
+              - class_name: ipqosInst
+                doc_path: Qos/ipqos:Inst/
+                rn: pmap
+                type: single
+                tf_name: policy_map
+                description: 'Ingress QoS policy map assignment.'
+                attributes:
+                  - nxos_name: name
+                    tf_name: policy_map_name
+                    type: String
+                    description: 'Policy-map Name.'
+                    example: PM1
+                  - nxos_name: stats
+                    tf_name: policy_map_statistics
+                    type: Bool
+                    description: 'Turn on/off statistics.'
+                    example: false
 test_prerequisites:
   - dn: sys/acl/ipv4/name-[ACL1]
     class_name: ipv4aclACL
     attributes:
       - name: name
         value: ACL1
+  - dn: sys/fm/nvo
+    class_name: fmNvo
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/eps/epId-1
+    class_name: nvoEp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+    dependencies: [1]

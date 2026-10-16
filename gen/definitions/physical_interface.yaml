@@ -542,6 +542,7 @@ child_classes:
         tf_name: load_interval
         description: 'Load interval policy.'
         doc_path: System/l1:LoadP/
+        no_delete: true
         attributes:
           - nxos_name: loadIntvl1
             tf_name: load_interval_counter_1
@@ -726,6 +727,7 @@ child_classes:
         tf_name: extended
         description: 'Physical interface extended configuration.'
         doc_path: System/l1:PhysIfExtended/
+        no_delete: true
         attributes:
           - nxos_name: allowMultiTag
             tf_name: allow_multi_tag

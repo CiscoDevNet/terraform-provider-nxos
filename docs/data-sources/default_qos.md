@@ -5,7 +5,7 @@ subcategory: "Quality of Service"
 description: |-
   This data source can read the default QoS configuration on NX-OS devices, including class maps with DSCP matching and policy maps with policing and QoS group settings.
   API Documentation
-  ipqosDefaultQoS https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:DefaultQoS/ipqosCMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapEntity/ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapInst/ipqosDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Dscp/ipqosNotDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotDscp/ipqosDscpTunnel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:DscpTunnel/ipqosCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Cos/ipqosNotCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotCos/ipqosPrecedence https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Precedence/ipqosNotPrecedence https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotPrecedence/ipqosQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:QoSGrp/ipqosAcl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Acl/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosSetQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetQoSGrp/ipqosSetDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetDscp/ipqosSetDscpTunnel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetDscpTunnel/ipqosSetCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetCos/ipqosSetPrecedence https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetPrecedence/ipqosPolice https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Police/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Ingress/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
+  ipqosDefaultQoS https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:DefaultQoS/ipqosCMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapEntity/ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapInst/ipqosDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Dscp/ipqosNotDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotDscp/ipqosDscpTunnel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:DscpTunnel/ipqosCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Cos/ipqosNotCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotCos/ipqosPrecedence https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Precedence/ipqosNotPrecedence https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotPrecedence/ipqosQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:QoSGrp/ipqosAcl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Acl/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosSetQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetQoSGrp/ipqosSetDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetDscp/ipqosSetDscpTunnel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetDscpTunnel/ipqosSetCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetCos/ipqosSetPrecedence https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetPrecedence/ipqosPolice https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Police/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Ingress/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/ipqosNveIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NveIf/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_default_qos (Data Source)
@@ -39,6 +39,8 @@ This data source can read the default QoS configuration on NX-OS devices, includ
 - [ipqosIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Ingress/)
 - [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:If/)
 - [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/)
+- [ipqosNveIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NveIf/)
+- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/)
 
 ## Example Usage
 
@@ -63,6 +65,9 @@ data "nxos_default_qos" "example" {
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--policy_interface_in))
 - `policy_maps` (Attributes Map) List of policy maps.
   - Map key: `name` - Name of policy-map. (see [below for nested schema](#nestedatt--policy_maps))
+- `policy_nve_interface_in` (Attributes Map) List of NVE interfaces with ingress QoS policy assignments.
+  - Map key: `interface_id` - Nve Interface id for service-policy.
+  - Key range: `0`-`4294967295` (see [below for nested schema](#nestedatt--policy_nve_interface_in))
 
 <a id="nestedatt--class_maps"></a>
 ### Nested Schema for `class_maps`
@@ -186,3 +191,13 @@ Read-Only:
 - `set_precedence_tunnel` (Boolean) tunnel on or off.
 - `set_precedence_value` (String) Precedence value.
 - `set_qos_group_id` (Number) QoS group ID.
+
+
+
+<a id="nestedatt--policy_nve_interface_in"></a>
+### Nested Schema for `policy_nve_interface_in`
+
+Read-Only:
+
+- `policy_map_name` (String) Policy-map Name.
+- `policy_map_statistics` (Boolean) Turn on/off statistics.

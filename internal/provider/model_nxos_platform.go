@@ -3567,7 +3567,12 @@ func (data Platform) toDeleteBody() nxos.Body {
 		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
 		childBody, _ = sjson.Set(childBody, "ipmcIndexSize", "DME_UNSET_PROPERTY_MARKER")
 		childBody, _ = sjson.Set(childBody, "overlayVlanId", "DME_UNSET_PROPERTY_MARKER")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformNVE.attributes", childBody)
+		itemBody := ""
+		itemBody, _ = sjson.SetRaw(itemBody, "platformNVE.attributes", childBody)
+		for nestedKey, nestedChild := range child.InfraVlans {
+			itemBody, _ = sjson.Set(itemBody, "platformNVE.children.-1.platformInfraVlan.attributes", map[string]interface{}{"rn": nestedChild.getRn(nestedKey), "status": "deleted"})
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
 	}
 	{
 		childBody := ""
@@ -3821,6 +3826,9 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 				deleteBody, _ = sjson.Set(deleteBody, "platformNVE.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "platformNVE.attributes.ipmcIndexSize", "DME_UNSET_PROPERTY_MARKER")
 				deleteBody, _ = sjson.Set(deleteBody, "platformNVE.attributes.overlayVlanId", "DME_UNSET_PROPERTY_MARKER")
+				for nestedKey, nestedChild := range stateChild.InfraVlans {
+					deleteBody, _ = sjson.Set(deleteBody, "platformNVE.children.-1.platformInfraVlan.attributes", map[string]interface{}{"rn": nestedChild.getRn(nestedKey), "status": "deleted"})
+				}
 				deletePath := bodyPath
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}

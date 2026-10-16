@@ -38,11 +38,12 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type DefaultQoS struct {
-	Device            types.String                           `tfsdk:"device"`
-	Dn                types.String                           `tfsdk:"id"`
-	ClassMaps         map[string]DefaultQoSClassMaps         `tfsdk:"class_maps"`
-	PolicyMaps        map[string]DefaultQoSPolicyMaps        `tfsdk:"policy_maps"`
-	PolicyInterfaceIn map[string]DefaultQoSPolicyInterfaceIn `tfsdk:"policy_interface_in"`
+	Device               types.String                              `tfsdk:"device"`
+	Dn                   types.String                              `tfsdk:"id"`
+	ClassMaps            map[string]DefaultQoSClassMaps            `tfsdk:"class_maps"`
+	PolicyMaps           map[string]DefaultQoSPolicyMaps           `tfsdk:"policy_maps"`
+	PolicyInterfaceIn    map[string]DefaultQoSPolicyInterfaceIn    `tfsdk:"policy_interface_in"`
+	PolicyNveInterfaceIn map[string]DefaultQoSPolicyNveInterfaceIn `tfsdk:"policy_nve_interface_in"`
 }
 
 type DefaultQoSClassMaps struct {
@@ -126,6 +127,11 @@ type DefaultQoSPolicyMapsMatchClassMaps struct {
 }
 
 type DefaultQoSPolicyInterfaceIn struct {
+	PolicyMapName       types.String `tfsdk:"policy_map_name"`
+	PolicyMapStatistics types.Bool   `tfsdk:"policy_map_statistics"`
+}
+
+type DefaultQoSPolicyNveInterfaceIn struct {
 	PolicyMapName       types.String `tfsdk:"policy_map_name"`
 	PolicyMapStatistics types.Bool   `tfsdk:"policy_map_statistics"`
 }
@@ -214,6 +220,10 @@ func (data DefaultQoSPolicyMapsMatchClassMaps) getRn(key string) string {
 
 func (data DefaultQoSPolicyInterfaceIn) getRn(key string) string {
 	return fmt.Sprintf("intf-[%s]", key)
+}
+
+func (data DefaultQoSPolicyNveInterfaceIn) getRn(key string) string {
+	return fmt.Sprintf("nveif-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
 
 func (data DefaultQoS) getClassName() string {
@@ -528,6 +538,29 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosIf.children"
+					_ = nestedChildrenPath
+					attrs = "{}"
+					if !child.PolicyMapName.IsUnknown() && !child.PolicyMapName.IsNull() && !configChild.PolicyMapName.IsNull() {
+						attrs, _ = sjson.Set(attrs, "name", child.PolicyMapName.ValueString())
+					}
+					if !child.PolicyMapStatistics.IsUnknown() && !child.PolicyMapStatistics.IsNull() && !configChild.PolicyMapStatistics.IsNull() {
+						attrs, _ = sjson.Set(attrs, "stats", strconv.FormatBool(child.PolicyMapStatistics.ValueBool()))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosInst.attributes", attrs)
+					}
+				}
+			}
+			for key, child := range data.PolicyNveInterfaceIn {
+				configChild, configChildOk := config.PolicyNveInterfaceIn[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "id", key)
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosNveIf.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosNveIf.children"
 					_ = nestedChildrenPath
 					attrs = "{}"
 					if !child.PolicyMapName.IsUnknown() && !child.PolicyMapName.IsNull() && !configChild.PolicyMapName.IsNull() {
@@ -966,6 +999,39 @@ func (data *DefaultQoS) fromBody(res gjson.Result) {
 									data.PolicyInterfaceIn = make(map[string]DefaultQoSPolicyInterfaceIn)
 								}
 								data.PolicyInterfaceIn[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
+			ripqosIngress.Get("ipqosIngress.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "ipqosNveIf" {
+								var child DefaultQoSPolicyNveInterfaceIn
+								mapKey := value.Get("attributes.id").String()
+								{
+									var ripqosInst gjson.Result
+									value.Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("ipqosInst.attributes.rn").String()
+											if rnValue == "pmap" {
+												ripqosInst = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+									child.PolicyMapStatistics = types.BoolValue(helpers.ParseNxosBoolean(ripqosInst.Get("ipqosInst.attributes.stats").String()))
+								}
+								if data.PolicyNveInterfaceIn == nil {
+									data.PolicyNveInterfaceIn = make(map[string]DefaultQoSPolicyNveInterfaceIn)
+								}
+								data.PolicyNveInterfaceIn[mapKey] = child
 							}
 							return true
 						},
@@ -1529,6 +1595,46 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 			}
 			data.PolicyInterfaceIn[key] = item
 		}
+		for key, item := range data.PolicyNveInterfaceIn {
+			var ripqosNveIf gjson.Result
+			ripqosIngress.Get("ipqosIngress.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipqosNveIf.attributes.id").String() == key {
+						ripqosNveIf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripqosNveIf.Exists() {
+				delete(data.PolicyNveInterfaceIn, key)
+				continue
+			}
+			{
+				var ripqosInst gjson.Result
+				ripqosNveIf.Get("ipqosNveIf.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ipqosInst.attributes.rn").String()
+						if rnValue == "pmap" {
+							ripqosInst = v
+							return false
+						}
+						return true
+					},
+				)
+				if !item.PolicyMapName.IsNull() {
+					item.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+				} else {
+					item.PolicyMapName = types.StringNull()
+				}
+				if !item.PolicyMapStatistics.IsNull() {
+					item.PolicyMapStatistics = types.BoolValue(helpers.ParseNxosBoolean(ripqosInst.Get("ipqosInst.attributes.stats").String()))
+				} else {
+					item.PolicyMapStatistics = types.BoolNull()
+				}
+			}
+			data.PolicyNveInterfaceIn[key] = item
+		}
 	}
 }
 
@@ -1607,6 +1713,9 @@ func (data DefaultQoS) toDeleteBody() nxos.Body {
 			if len(data.PolicyInterfaceIn) > 0 {
 				hasNestedChildren = true
 			}
+			if len(data.PolicyNveInterfaceIn) > 0 {
+				hasNestedChildren = true
+			}
 			if childBody != "" || hasNestedChildren {
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosIngress"
@@ -1620,6 +1729,12 @@ func (data DefaultQoS) toDeleteBody() nxos.Body {
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.rn", child.getRn(key))
 					deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.status", "deleted")
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+				}
+				for key, child := range data.PolicyNveInterfaceIn {
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosNveIf.attributes.rn", child.getRn(key))
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosNveIf.attributes.status", "deleted")
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 				}
 			}
@@ -1817,6 +1932,31 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress")+".children").Array() {
 				if mv.Get("ipqosIf.attributes.name").String() == di {
 					matchBodyPathdi = helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress") + ".children" + "." + strconv.Itoa(mi) + ".ipqosIf.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+		}
+		for stateKey := range state.PolicyNveInterfaceIn {
+			if _, found := data.PolicyNveInterfaceIn[stateKey]; !found {
+				stateChild := state.PolicyNveInterfaceIn[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ipqosNveIf.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "ipqosNveIf.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.PolicyNveInterfaceIn {
+			if _, found := data.PolicyNveInterfaceIn[di]; !found {
+				continue
+			}
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress")+".children").Array() {
+				if mv.Get("ipqosNveIf.attributes.id").String() == di {
+					matchBodyPathdi = helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress") + ".children" + "." + strconv.Itoa(mi) + ".ipqosNveIf.children"
 					break
 				}
 			}
@@ -2103,6 +2243,32 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress")+".children").Array() {
 						if mv.Get("ipqosIf.attributes.name").String() == key {
 							listChildPath = helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress") + ".children" + "." + strconv.Itoa(mi) + ".ipqosIf.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						if !stateChild.PolicyMapName.IsNull() && configChild.PolicyMapName.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.PolicyMapStatistics.IsNull() && configChild.PolicyMapStatistics.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stats", "DME_UNSET_PROPERTY_MARKER")
+						}
+					}
+				}
+			}
+		}
+		for key := range state.PolicyNveInterfaceIn {
+			if configChild, ok := config.PolicyNveInterfaceIn[key]; ok {
+				stateChild := state.PolicyNveInterfaceIn[key]
+				_ = stateChild
+				_ = configChild
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress")+".children").Array() {
+						if mv.Get("ipqosNveIf.attributes.id").String() == key {
+							listChildPath = helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress") + ".children" + "." + strconv.Itoa(mi) + ".ipqosNveIf.children"
 							break
 						}
 					}

@@ -97,9 +97,11 @@ child_classes:
         rn: rtvrfMbr
         type: single
         doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+        no_delete: true
         attributes:
           - nxos_name: tDn
             tf_name: vrf_dn
             type: String
             description: 'DN of VRF. For example: `sys/inst-management`.'
             example: sys/inst-management
+            delete_value: sys/inst-management

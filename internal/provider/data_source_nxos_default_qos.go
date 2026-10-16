@@ -56,7 +56,7 @@ func (d *DefaultQoSDataSource) Metadata(_ context.Context, req datasource.Metada
 func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS configuration on NX-OS devices, including class maps with DSCP matching and policy maps with policing and QoS group settings.").AddApiDocumentation("ipqosDefaultQoS", "Qos/ipqos:DefaultQoS/", []string{"ipqosCMapEntity", "ipqosCMapInst", "ipqosDscp", "ipqosNotDscp", "ipqosDscpTunnel", "ipqosCos", "ipqosNotCos", "ipqosPrecedence", "ipqosNotPrecedence", "ipqosQoSGrp", "ipqosAcl", "ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosSetDscp", "ipqosSetDscpTunnel", "ipqosSetCos", "ipqosSetPrecedence", "ipqosPolice", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst"}, []string{"Qos/ipqos:CMapEntity/", "Qos/ipqos:CMapInst/", "Qos/ipqos:Dscp/", "Qos/ipqos:NotDscp/", "Qos/ipqos:DscpTunnel/", "Qos/ipqos:Cos/", "Qos/ipqos:NotCos/", "Qos/ipqos:Precedence/", "Qos/ipqos:NotPrecedence/", "Qos/ipqos:QoSGrp/", "Qos/ipqos:Acl/", "Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:SetQoSGrp/", "Qos/ipqos:SetDscp/", "Qos/ipqos:SetDscpTunnel/", "Qos/ipqos:SetCos/", "Qos/ipqos:SetPrecedence/", "Qos/ipqos:Police/", "Qos/ipqos:ServPol/", "Qos/ipqos:Ingress/", "Qos/ipqos:If/", "Qos/ipqos:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS configuration on NX-OS devices, including class maps with DSCP matching and policy maps with policing and QoS group settings.").AddApiDocumentation("ipqosDefaultQoS", "Qos/ipqos:DefaultQoS/", []string{"ipqosCMapEntity", "ipqosCMapInst", "ipqosDscp", "ipqosNotDscp", "ipqosDscpTunnel", "ipqosCos", "ipqosNotCos", "ipqosPrecedence", "ipqosNotPrecedence", "ipqosQoSGrp", "ipqosAcl", "ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosSetDscp", "ipqosSetDscpTunnel", "ipqosSetCos", "ipqosSetPrecedence", "ipqosPolice", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst", "ipqosNveIf", "ipqosInst"}, []string{"Qos/ipqos:CMapEntity/", "Qos/ipqos:CMapInst/", "Qos/ipqos:Dscp/", "Qos/ipqos:NotDscp/", "Qos/ipqos:DscpTunnel/", "Qos/ipqos:Cos/", "Qos/ipqos:NotCos/", "Qos/ipqos:Precedence/", "Qos/ipqos:NotPrecedence/", "Qos/ipqos:QoSGrp/", "Qos/ipqos:Acl/", "Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:SetQoSGrp/", "Qos/ipqos:SetDscp/", "Qos/ipqos:SetDscpTunnel/", "Qos/ipqos:SetCos/", "Qos/ipqos:SetPrecedence/", "Qos/ipqos:Police/", "Qos/ipqos:ServPol/", "Qos/ipqos:Ingress/", "Qos/ipqos:If/", "Qos/ipqos:Inst/", "Qos/ipqos:NveIf/", "Qos/ipqos:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -306,6 +306,22 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
+			"policy_nve_interface_in": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of NVE interfaces with ingress QoS policy assignments.\n  - Map key: `interface_id` - Nve Interface id for service-policy.\n  - Key range: `0`-`4294967295`").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"policy_map_name": schema.StringAttribute{
+							MarkdownDescription: "Policy-map Name.",
+							Computed:            true,
+						},
+						"policy_map_statistics": schema.BoolAttribute{
+							MarkdownDescription: "Turn on/off statistics.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -338,7 +354,7 @@ func (d *DefaultQoSDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipqosCMapEntity", "ipqosCMapInst", "ipqosDscp", "ipqosNotDscp", "ipqosDscpTunnel", "ipqosCos", "ipqosNotCos", "ipqosPrecedence", "ipqosNotPrecedence", "ipqosQoSGrp", "ipqosAcl", "ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosSetDscp", "ipqosSetDscpTunnel", "ipqosSetCos", "ipqosSetPrecedence", "ipqosPolice", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst"}, DefaultQoSSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipqosCMapEntity", "ipqosCMapInst", "ipqosDscp", "ipqosNotDscp", "ipqosDscpTunnel", "ipqosCos", "ipqosNotCos", "ipqosPrecedence", "ipqosNotPrecedence", "ipqosQoSGrp", "ipqosAcl", "ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosSetDscp", "ipqosSetDscpTunnel", "ipqosSetCos", "ipqosSetPrecedence", "ipqosPolice", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst", "ipqosNveIf", "ipqosInst"}, DefaultQoSSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

@@ -7779,7 +7779,58 @@ func (data System) toDeleteBody() nxos.Body {
 		childBody := ""
 		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
 		childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1.nwVdc.attributes", childBody)
+		itemBody := ""
+		itemBody, _ = sjson.SetRaw(itemBody, "nwVdc.attributes", childBody)
+		{
+			nestedBody := ""
+			if !child.MulticastIpv4RouteMemoryMaximum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.m4rtMemMax", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.MulticastIpv4RouteMemoryMinimum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.m4rtMemMin", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.MulticastIpv6RouteMemoryMaximum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.m6rtMemMax", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.MulticastIpv6RouteMemoryMinimum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.m6rtMemMin", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.PortChannelMaximum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.poMax", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.PortChannelMinimum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.poMin", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.UnicastIpv4RouteMemoryMaximum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.u4rtMemMax", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.UnicastIpv4RouteMemoryMinimum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.u4rtMemMin", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.UnicastIpv6RouteMemoryMaximum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.u6rtMemMax", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.UnicastIpv6RouteMemoryMinimum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.u6rtMemMin", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.VlanMaximum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.vlanMax", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.VlanMinimum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.vlanMin", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.VrfMaximum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.vrfMax", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child.VrfMinimum.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.vrfMin", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if nestedBody != "" {
+				nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.rn", "limres")
+				itemBody, _ = sjson.SetRaw(itemBody, "nwVdc.children.-1", nestedBody)
+			}
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
 	}
 	for key, child := range data.CliAliases {
 		deleteBody := ""
@@ -8969,6 +9020,55 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "nwVdc.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "nwVdc.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+				{
+					nestedBody := ""
+					if !stateChild.MulticastIpv4RouteMemoryMaximum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.m4rtMemMax", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.MulticastIpv4RouteMemoryMinimum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.m4rtMemMin", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.MulticastIpv6RouteMemoryMaximum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.m6rtMemMax", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.MulticastIpv6RouteMemoryMinimum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.m6rtMemMin", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.PortChannelMaximum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.poMax", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.PortChannelMinimum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.poMin", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.UnicastIpv4RouteMemoryMaximum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.u4rtMemMax", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.UnicastIpv4RouteMemoryMinimum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.u4rtMemMin", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.UnicastIpv6RouteMemoryMaximum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.u6rtMemMax", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.UnicastIpv6RouteMemoryMinimum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.u6rtMemMin", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.VlanMaximum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.vlanMax", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.VlanMinimum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.vlanMin", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.VrfMaximum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.vrfMax", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !stateChild.VrfMinimum.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.vrfMin", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if nestedBody != "" {
+						nestedBody, _ = sjson.Set(nestedBody, "resmgrLimRes.attributes.rn", "limres")
+						deleteBody, _ = sjson.SetRaw(deleteBody, "nwVdc.children.-1", nestedBody)
+					}
+				}
 				deletePath := bodyPath
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}

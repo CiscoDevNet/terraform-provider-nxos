@@ -234,6 +234,38 @@ child_classes:
                     type: Bool
                     description: 'Turn on/off statistics.'
                     example: false
+          - class_name: ipqosIf
+            doc_path: Qos/ipqos:If/
+            rn: intf-[%s]
+            type: list
+            tf_name: policy_interface_out
+            description: 'List of interfaces with egress queuing policy assignments.'
+            no_delete: true
+            attributes:
+              - nxos_name: name
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                example: eth1/10
+            child_classes:
+              - class_name: ipqosInst
+                doc_path: Qos/ipqos:Inst/
+                rn: pmap
+                type: single
+                tf_name: policy_map
+                description: 'Egress queuing policy map assignment.'
+                attributes:
+                  - nxos_name: name
+                    tf_name: policy_map_name
+                    type: String
+                    description: 'Policy-map Name.'
+                    example: PM1
+                  - nxos_name: stats
+                    tf_name: policy_map_statistics
+                    type: Bool
+                    description: 'Turn on/off statistics.'
+                    example: false
 test_prerequisites:
   - dn: sys/ipqos/queuing/p/name-[PM1]
     class_name: ipqosPMapInst

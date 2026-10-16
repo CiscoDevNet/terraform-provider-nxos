@@ -5,7 +5,7 @@ subcategory: "Quality of Service"
 description: |-
   This data source can read the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.
   API Documentation
-  ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Queuing/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/ipqosRandomDetect https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:RandomDetect/ipqosAfd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Afd/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
+  ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Queuing/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/ipqosRandomDetect https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:RandomDetect/ipqosAfd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Afd/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_queuing_qos (Data Source)
@@ -26,6 +26,8 @@ This data source can read the queuing QoS configuration on NX-OS devices, includ
 - [ipqosEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/)
 - [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/)
 - [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/)
+- [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:If/)
+- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/)
 
 ## Example Usage
 
@@ -44,10 +46,21 @@ data "nxos_queuing_qos" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+- `policy_interface_out` (Attributes Map) List of interfaces with egress queuing policy assignments.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--policy_interface_out))
 - `policy_map_statistics` (Boolean) Turn on/off statistics.
 - `policy_maps` (Attributes Map) List of policy maps.
   - Map key: `name` - Name of policy-map. (see [below for nested schema](#nestedatt--policy_maps))
 - `system_out_policy_map_name` (String) Policy-map Name.
+
+<a id="nestedatt--policy_interface_out"></a>
+### Nested Schema for `policy_interface_out`
+
+Read-Only:
+
+- `policy_map_name` (String) Policy-map Name.
+- `policy_map_statistics` (Boolean) Turn on/off statistics.
+
 
 <a id="nestedatt--policy_maps"></a>
 ### Nested Schema for `policy_maps`

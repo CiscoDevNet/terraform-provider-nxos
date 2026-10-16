@@ -293,7 +293,19 @@ func (data ManagementInterface) toDeleteBody() nxos.Body {
 		childBody, _ = sjson.Set(childBody, "mtu", "DME_UNSET_PROPERTY_MARKER")
 		childBody, _ = sjson.Set(childBody, "snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
 		childBody, _ = sjson.Set(childBody, "speed", "DME_UNSET_PROPERTY_MARKER")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1.mgmtMgmtIf.attributes", childBody)
+		itemBody := ""
+		itemBody, _ = sjson.SetRaw(itemBody, "mgmtMgmtIf.attributes", childBody)
+		{
+			nestedBody := ""
+			if !child.VrfDn.IsNull() {
+				nestedBody, _ = sjson.Set(nestedBody, "nwRtVrfMbr.attributes.tDn", "sys/inst-management")
+			}
+			if nestedBody != "" {
+				nestedBody, _ = sjson.Set(nestedBody, "nwRtVrfMbr.attributes.rn", "rtvrfMbr")
+				itemBody, _ = sjson.SetRaw(itemBody, "mgmtMgmtIf.children.-1", nestedBody)
+			}
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
 	}
 
 	return nxos.Body{Str: body}
@@ -316,6 +328,16 @@ func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state Man
 				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
 				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
 				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.speed", "DME_UNSET_PROPERTY_MARKER")
+				{
+					nestedBody := ""
+					if !stateChild.VrfDn.IsNull() {
+						nestedBody, _ = sjson.Set(nestedBody, "nwRtVrfMbr.attributes.tDn", "sys/inst-management")
+					}
+					if nestedBody != "" {
+						nestedBody, _ = sjson.Set(nestedBody, "nwRtVrfMbr.attributes.rn", "rtvrfMbr")
+						deleteBody, _ = sjson.SetRaw(deleteBody, "mgmtMgmtIf.children.-1", nestedBody)
+					}
+				}
 				deletePath := bodyPath
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
@@ -382,7 +404,7 @@ func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state Man
 					if listChildPath != "" {
 						if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "sys/inst-management")
 						}
 					}
 				}

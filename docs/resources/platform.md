@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.
   API Documentation
-  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/platformTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/platformUdfTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/platformUdfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/platformUdf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdf/
+  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/platformPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/platformTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/platformUdfTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/platformUdfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/platformUdf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdf/
 ---
 
 # nxos_platform (Resource)
@@ -21,6 +21,7 @@ This resource can manage the platform configuration on NX-OS devices, including 
 - [platformInfraVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/)
 - [platformEntityExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/)
 - [platformLoadBalance](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/)
+- [platformPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/)
 - [platformTcamTemplate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/)
 - [platformUdfTcamTemplate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/)
 - [platformUdfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/)
@@ -45,6 +46,11 @@ resource "nxos_platform" "example" {
   port_channel_load_balance_fields        = "srcDstIp"
   port_channel_load_balance_rotate        = 3
   port_channel_load_balance_symmetry      = "enable"
+  pfc_watchdog_auto_restore_multiplier    = 20
+  pfc_watchdog_mode                       = "on"
+  pfc_watchdog_fixed_restore_multiplier   = 50
+  pfc_watchdog_interval                   = 200
+  pfc_watchdog_shutdown_multiplier        = 5
   tcam_templates = {
     "TPL1" = {
       reference_template = "l3"
@@ -224,6 +230,20 @@ resource "nxos_platform" "example" {
   - Choices: `enabled`, `disabled`
 - `pbr_skip_self_ip` (String) Configure Skipping PBR for self-ip packets.
   - Choices: `enabled`, `disabled`
+- `pfc_watchdog_auto_restore_multiplier` (Number) PFC WD Auto shutdown multiplier.
+  - Range: `0`-`100`
+- `pfc_watchdog_fixed_restore_multiplier` (Number) PFC WD Fixed shutdown multiplier.
+  - Range: `0`-`400`
+- `pfc_watchdog_forced_on` (String) PFC WD forced on.
+  - Choices: `off`, `on`
+- `pfc_watchdog_internal_interface_multiplier` (Number) PFC WD Internal interface multiplier.
+  - Range: `0`-`10`
+- `pfc_watchdog_interval` (Number) PFC WD poll interval.
+  - Range: `25`-`1000`
+- `pfc_watchdog_mode` (String) PFC WD enabled.
+  - Choices: `off`, `on`
+- `pfc_watchdog_shutdown_multiplier` (Number) PFC WD Shutdown multiplier.
+  - Range: `1`-`40`
 - `pic_core_enable` (String) Configure PIC core.
   - Choices: `enabled`, `disabled`
 - `port_channel_fast_convergence` (String) Port-channel Fast Convergence.

@@ -259,6 +259,13 @@ type Platform struct {
 	PortChannelLoadBalanceMplsLabelOnly                 types.String                     `tfsdk:"port_channel_load_balance_mpls_label_only"`
 	PortChannelLoadBalanceRotate                        types.Int64                      `tfsdk:"port_channel_load_balance_rotate"`
 	PortChannelLoadBalanceSymmetry                      types.String                     `tfsdk:"port_channel_load_balance_symmetry"`
+	PfcWatchdogAutoRestoreMultiplier                    types.Int64                      `tfsdk:"pfc_watchdog_auto_restore_multiplier"`
+	PfcWatchdogMode                                     types.String                     `tfsdk:"pfc_watchdog_mode"`
+	PfcWatchdogFixedRestoreMultiplier                   types.Int64                      `tfsdk:"pfc_watchdog_fixed_restore_multiplier"`
+	PfcWatchdogForcedOn                                 types.String                     `tfsdk:"pfc_watchdog_forced_on"`
+	PfcWatchdogInternalInterfaceMultiplier              types.Int64                      `tfsdk:"pfc_watchdog_internal_interface_multiplier"`
+	PfcWatchdogInterval                                 types.Int64                      `tfsdk:"pfc_watchdog_interval"`
+	PfcWatchdogShutdownMultiplier                       types.Int64                      `tfsdk:"pfc_watchdog_shutdown_multiplier"`
 	TcamTemplates                                       map[string]PlatformTcamTemplates `tfsdk:"tcam_templates"`
 	UdfDescription                                      types.String                     `tfsdk:"udf_description"`
 	Udfs                                                map[string]PlatformUdfs          `tfsdk:"udfs"`
@@ -1095,6 +1102,31 @@ func (data Platform) toBody(config Platform) nxos.Body {
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformLoadBalance.attributes", attrs)
 	}
+	attrs = "{}"
+	if !data.PfcWatchdogAutoRestoreMultiplier.IsUnknown() && !data.PfcWatchdogAutoRestoreMultiplier.IsNull() && !config.PfcWatchdogAutoRestoreMultiplier.IsNull() {
+		attrs, _ = sjson.Set(attrs, "autoRestoreMultiplier", strconv.FormatInt(data.PfcWatchdogAutoRestoreMultiplier.ValueInt64(), 10))
+	}
+	if !data.PfcWatchdogMode.IsUnknown() && !data.PfcWatchdogMode.IsNull() && !config.PfcWatchdogMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "cfgMode", data.PfcWatchdogMode.ValueString())
+	}
+	if !data.PfcWatchdogFixedRestoreMultiplier.IsUnknown() && !data.PfcWatchdogFixedRestoreMultiplier.IsNull() && !config.PfcWatchdogFixedRestoreMultiplier.IsNull() {
+		attrs, _ = sjson.Set(attrs, "fixedRestoreMultiplier", strconv.FormatInt(data.PfcWatchdogFixedRestoreMultiplier.ValueInt64(), 10))
+	}
+	if !data.PfcWatchdogForcedOn.IsUnknown() && !data.PfcWatchdogForcedOn.IsNull() && !config.PfcWatchdogForcedOn.IsNull() {
+		attrs, _ = sjson.Set(attrs, "forcedOn", data.PfcWatchdogForcedOn.ValueString())
+	}
+	if !data.PfcWatchdogInternalInterfaceMultiplier.IsUnknown() && !data.PfcWatchdogInternalInterfaceMultiplier.IsNull() && !config.PfcWatchdogInternalInterfaceMultiplier.IsNull() {
+		attrs, _ = sjson.Set(attrs, "internalIntfMultiplier", strconv.FormatInt(data.PfcWatchdogInternalInterfaceMultiplier.ValueInt64(), 10))
+	}
+	if !data.PfcWatchdogInterval.IsUnknown() && !data.PfcWatchdogInterval.IsNull() && !config.PfcWatchdogInterval.IsNull() {
+		attrs, _ = sjson.Set(attrs, "interval", strconv.FormatInt(data.PfcWatchdogInterval.ValueInt64(), 10))
+	}
+	if !data.PfcWatchdogShutdownMultiplier.IsUnknown() && !data.PfcWatchdogShutdownMultiplier.IsNull() && !config.PfcWatchdogShutdownMultiplier.IsNull() {
+		attrs, _ = sjson.Set(attrs, "shutdownMultiplier", strconv.FormatInt(data.PfcWatchdogShutdownMultiplier.ValueInt64(), 10))
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformPriorFlowCtrlWd.attributes", attrs)
+	}
 	for key, child := range data.TcamTemplates {
 		configChild, configChildOk := config.TcamTemplates[key]
 		_ = configChild
@@ -1509,6 +1541,26 @@ func (data *Platform) fromBody(res gjson.Result) {
 		data.PortChannelLoadBalanceMplsLabelOnly = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.mplsLabelOnly").String())
 		data.PortChannelLoadBalanceRotate = types.Int64Value(rplatformLoadBalance.Get("platformLoadBalance.attributes.rotate").Int())
 		data.PortChannelLoadBalanceSymmetry = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.symmetry").String())
+	}
+	{
+		var rplatformPriorFlowCtrlWd gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("platformPriorFlowCtrlWd.attributes.rn").String()
+				if rnValue == "priorflowctrlwd" {
+					rplatformPriorFlowCtrlWd = v
+					return false
+				}
+				return true
+			},
+		)
+		data.PfcWatchdogAutoRestoreMultiplier = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.autoRestoreMultiplier").Int())
+		data.PfcWatchdogMode = types.StringValue(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.cfgMode").String())
+		data.PfcWatchdogFixedRestoreMultiplier = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.fixedRestoreMultiplier").Int())
+		data.PfcWatchdogForcedOn = types.StringValue(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.forcedOn").String())
+		data.PfcWatchdogInternalInterfaceMultiplier = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.internalIntfMultiplier").Int())
+		data.PfcWatchdogInterval = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.interval").Int())
+		data.PfcWatchdogShutdownMultiplier = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.shutdownMultiplier").Int())
 	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -2782,6 +2834,52 @@ func (data *Platform) updateFromBody(res gjson.Result) {
 	} else {
 		data.PortChannelLoadBalanceSymmetry = types.StringNull()
 	}
+	var rplatformPriorFlowCtrlWd gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("platformPriorFlowCtrlWd.attributes.rn").String()
+			if rnValue == "priorflowctrlwd" {
+				rplatformPriorFlowCtrlWd = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.PfcWatchdogAutoRestoreMultiplier.IsNull() {
+		data.PfcWatchdogAutoRestoreMultiplier = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.autoRestoreMultiplier").Int())
+	} else {
+		data.PfcWatchdogAutoRestoreMultiplier = types.Int64Null()
+	}
+	if !data.PfcWatchdogMode.IsNull() {
+		data.PfcWatchdogMode = types.StringValue(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.cfgMode").String())
+	} else {
+		data.PfcWatchdogMode = types.StringNull()
+	}
+	if !data.PfcWatchdogFixedRestoreMultiplier.IsNull() {
+		data.PfcWatchdogFixedRestoreMultiplier = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.fixedRestoreMultiplier").Int())
+	} else {
+		data.PfcWatchdogFixedRestoreMultiplier = types.Int64Null()
+	}
+	if !data.PfcWatchdogForcedOn.IsNull() {
+		data.PfcWatchdogForcedOn = types.StringValue(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.forcedOn").String())
+	} else {
+		data.PfcWatchdogForcedOn = types.StringNull()
+	}
+	if !data.PfcWatchdogInternalInterfaceMultiplier.IsNull() {
+		data.PfcWatchdogInternalInterfaceMultiplier = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.internalIntfMultiplier").Int())
+	} else {
+		data.PfcWatchdogInternalInterfaceMultiplier = types.Int64Null()
+	}
+	if !data.PfcWatchdogInterval.IsNull() {
+		data.PfcWatchdogInterval = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.interval").Int())
+	} else {
+		data.PfcWatchdogInterval = types.Int64Null()
+	}
+	if !data.PfcWatchdogShutdownMultiplier.IsNull() {
+		data.PfcWatchdogShutdownMultiplier = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.shutdownMultiplier").Int())
+	} else {
+		data.PfcWatchdogShutdownMultiplier = types.Int64Null()
+	}
 	for key, item := range data.TcamTemplates {
 		var rplatformTcamTemplate gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -3643,6 +3741,35 @@ func (data Platform) toDeleteBody() nxos.Body {
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformLoadBalance"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		}
+	}
+	{
+		childBody := ""
+		if !data.PfcWatchdogAutoRestoreMultiplier.IsNull() {
+			childBody, _ = sjson.Set(childBody, "autoRestoreMultiplier", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PfcWatchdogMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "cfgMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PfcWatchdogFixedRestoreMultiplier.IsNull() {
+			childBody, _ = sjson.Set(childBody, "fixedRestoreMultiplier", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PfcWatchdogForcedOn.IsNull() {
+			childBody, _ = sjson.Set(childBody, "forcedOn", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PfcWatchdogInternalInterfaceMultiplier.IsNull() {
+			childBody, _ = sjson.Set(childBody, "internalIntfMultiplier", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PfcWatchdogInterval.IsNull() {
+			childBody, _ = sjson.Set(childBody, "interval", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.PfcWatchdogShutdownMultiplier.IsNull() {
+			childBody, _ = sjson.Set(childBody, "shutdownMultiplier", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformPriorFlowCtrlWd"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
@@ -4627,6 +4754,34 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 		if !state.PortChannelLoadBalanceSymmetry.IsNull() && config.PortChannelLoadBalanceSymmetry.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"symmetry", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PfcWatchdogAutoRestoreMultiplier.IsNull() && config.PfcWatchdogAutoRestoreMultiplier.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformPriorFlowCtrlWd")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"autoRestoreMultiplier", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PfcWatchdogMode.IsNull() && config.PfcWatchdogMode.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformPriorFlowCtrlWd")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"cfgMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PfcWatchdogFixedRestoreMultiplier.IsNull() && config.PfcWatchdogFixedRestoreMultiplier.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformPriorFlowCtrlWd")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fixedRestoreMultiplier", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PfcWatchdogForcedOn.IsNull() && config.PfcWatchdogForcedOn.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformPriorFlowCtrlWd")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"forcedOn", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PfcWatchdogInternalInterfaceMultiplier.IsNull() && config.PfcWatchdogInternalInterfaceMultiplier.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformPriorFlowCtrlWd")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"internalIntfMultiplier", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PfcWatchdogInterval.IsNull() && config.PfcWatchdogInterval.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformPriorFlowCtrlWd")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.PfcWatchdogShutdownMultiplier.IsNull() && config.PfcWatchdogShutdownMultiplier.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformPriorFlowCtrlWd")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"shutdownMultiplier", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.TcamTemplates {
 			if configChild, ok := config.TcamTemplates[key]; ok {

@@ -63,7 +63,7 @@ func (r *PlatformResource) Metadata(ctx context.Context, req resource.MetadataRe
 func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1567,6 +1567,55 @@ func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
+			"pfc_watchdog_auto_restore_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PFC WD Auto shutdown multiplier.").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
+			"pfc_watchdog_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PFC WD enabled.").AddStringEnumDescription("off", "on").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("off", "on"),
+				},
+			},
+			"pfc_watchdog_fixed_restore_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PFC WD Fixed shutdown multiplier.").AddIntegerRangeDescription(0, 400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 400),
+				},
+			},
+			"pfc_watchdog_forced_on": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PFC WD forced on.").AddStringEnumDescription("off", "on").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("off", "on"),
+				},
+			},
+			"pfc_watchdog_internal_interface_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PFC WD Internal interface multiplier.").AddIntegerRangeDescription(0, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 10),
+				},
+			},
+			"pfc_watchdog_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PFC WD poll interval.").AddIntegerRangeDescription(25, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(25, 1000),
+				},
+			},
+			"pfc_watchdog_shutdown_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PFC WD Shutdown multiplier.").AddIntegerRangeDescription(1, 40).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 40),
+				},
+			},
 			"tcam_templates": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("User-defined TCAM template configuration.\n  - Map key: `name` - Name of the user-defined tcam template.").String,
 				Optional:            true,
@@ -1821,7 +1870,7 @@ func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

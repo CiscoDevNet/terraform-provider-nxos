@@ -39,6 +39,11 @@ func TestAccDataSourceNxosPlatform(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_fields", "srcDstIp"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_rotate", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_symmetry", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_auto_restore_multiplier", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_mode", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_fixed_restore_multiplier", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_interval", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_shutdown_multiplier", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "tcam_templates.TPL1.reference_template", "l3"))
 	if os.Getenv("PLATFORM_FRETTA") != "" {
 	}
@@ -117,6 +122,11 @@ func testAccDataSourceNxosPlatformConfig() string {
 	config += `	port_channel_load_balance_fields = "srcDstIp"` + "\n"
 	config += `	port_channel_load_balance_rotate = 3` + "\n"
 	config += `	port_channel_load_balance_symmetry = "enable"` + "\n"
+	config += `	pfc_watchdog_auto_restore_multiplier = 20` + "\n"
+	config += `	pfc_watchdog_mode = "on"` + "\n"
+	config += `	pfc_watchdog_fixed_restore_multiplier = 50` + "\n"
+	config += `	pfc_watchdog_interval = 200` + "\n"
+	config += `	pfc_watchdog_shutdown_multiplier = 5` + "\n"
 	config += `	tcam_templates = {` + "\n"
 	config += `		"TPL1" = {` + "\n"
 	config += `			reference_template = "l3"` + "\n"

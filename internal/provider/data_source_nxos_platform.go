@@ -56,7 +56,7 @@ func (d *PlatformDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -963,6 +963,34 @@ func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				MarkdownDescription: "load balancing symmetry parameter.",
 				Computed:            true,
 			},
+			"pfc_watchdog_auto_restore_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "PFC WD Auto shutdown multiplier.",
+				Computed:            true,
+			},
+			"pfc_watchdog_mode": schema.StringAttribute{
+				MarkdownDescription: "PFC WD enabled.",
+				Computed:            true,
+			},
+			"pfc_watchdog_fixed_restore_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "PFC WD Fixed shutdown multiplier.",
+				Computed:            true,
+			},
+			"pfc_watchdog_forced_on": schema.StringAttribute{
+				MarkdownDescription: "PFC WD forced on.",
+				Computed:            true,
+			},
+			"pfc_watchdog_internal_interface_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "PFC WD Internal interface multiplier.",
+				Computed:            true,
+			},
+			"pfc_watchdog_interval": schema.Int64Attribute{
+				MarkdownDescription: "PFC WD poll interval.",
+				Computed:            true,
+			},
+			"pfc_watchdog_shutdown_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "PFC WD Shutdown multiplier.",
+				Computed:            true,
+			},
 			"tcam_templates": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("User-defined TCAM template configuration.\n  - Map key: `name` - Name of the user-defined tcam template.").String,
 				Computed:            true,
@@ -1086,7 +1114,7 @@ func (d *PlatformDataSource) Read(ctx context.Context, req datasource.ReadReques
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

@@ -14,6 +14,11 @@ resource "nxos_platform" "example" {
   port_channel_load_balance_fields        = "srcDstIp"
   port_channel_load_balance_rotate        = 3
   port_channel_load_balance_symmetry      = "enable"
+  pfc_watchdog_auto_restore_multiplier    = 20
+  pfc_watchdog_mode                       = "on"
+  pfc_watchdog_fixed_restore_multiplier   = 50
+  pfc_watchdog_interval                   = 200
+  pfc_watchdog_shutdown_multiplier        = 5
   tcam_templates = {
     "TPL1" = {
       reference_template = "l3"

@@ -1950,6 +1950,67 @@ child_classes:
           - disable
           - enable
         example: enable
+  - class_name: platformPriorFlowCtrlWd
+    doc_path: System/platform%3APriorFlowCtrlWd/
+    rn: priorflowctrlwd
+    type: single
+    tf_name: pfc_watchdog
+    no_delete: true
+    description: 'Global priority flow control (PFC) watchdog configuration.'
+    attributes:
+      - nxos_name: autoRestoreMultiplier
+        tf_name: pfc_watchdog_auto_restore_multiplier
+        type: Int64
+        description: 'PFC WD Auto shutdown multiplier.'
+        min_int: 0
+        max_int: 100
+        example: 20
+      - nxos_name: cfgMode
+        tf_name: pfc_watchdog_mode
+        type: String
+        description: 'PFC WD enabled.'
+        enum_values:
+          - "off"
+          - "on"
+        example: "on"
+      - nxos_name: fixedRestoreMultiplier
+        tf_name: pfc_watchdog_fixed_restore_multiplier
+        type: Int64
+        description: 'PFC WD Fixed shutdown multiplier.'
+        min_int: 0
+        max_int: 400
+        example: 50
+      - nxos_name: forcedOn
+        tf_name: pfc_watchdog_forced_on
+        type: String
+        description: 'PFC WD forced on.'
+        enum_values:
+          - "off"
+          - "on"
+        example: "on"
+        exclude_test: true
+      - nxos_name: internalIntfMultiplier
+        tf_name: pfc_watchdog_internal_interface_multiplier
+        type: Int64
+        description: 'PFC WD Internal interface multiplier.'
+        min_int: 0
+        max_int: 10
+        example: 3
+        exclude_test: true
+      - nxos_name: interval
+        tf_name: pfc_watchdog_interval
+        type: Int64
+        description: 'PFC WD poll interval.'
+        min_int: 25
+        max_int: 1000
+        example: 200
+      - nxos_name: shutdownMultiplier
+        tf_name: pfc_watchdog_shutdown_multiplier
+        type: Int64
+        description: 'PFC WD Shutdown multiplier.'
+        min_int: 1
+        max_int: 40
+        example: 5
   - class_name: platformTcamTemplate
     doc_path: System/platform%3ATcamTemplate/
     rn: template-[%s]

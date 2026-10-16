@@ -5,6 +5,24 @@ resource "nxos_default_qos" "example" {
       dscp_values = {
         "ef" = {}
       }
+      not_dscp_values = {
+        "af11" = {}
+      }
+      cos_values = {
+        "3" = {}
+      }
+      not_cos_values = {
+        "5" = {}
+      }
+      precedence_values = {
+        "critical" = {}
+      }
+      not_precedence_values = {
+        "flash" = {}
+      }
+      access_groups = {
+        "ACL1" = {}
+      }
     }
   }
   policy_maps = {
@@ -13,6 +31,11 @@ resource "nxos_default_qos" "example" {
       match_class_maps = {
         "Voice" = {
           set_qos_group_id              = 1
+          set_dscp_tunnel               = false
+          set_dscp_value                = "af21"
+          set_cos_value                 = "3"
+          set_precedence_tunnel         = false
+          set_precedence_value          = "critical"
           police_bc_rate                = 200
           police_bc_unit                = "mbytes"
           police_be_rate                = 200

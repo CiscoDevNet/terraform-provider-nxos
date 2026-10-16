@@ -38,6 +38,11 @@ func TestAccNxosDefaultQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "class_maps.Voice.match_type", "match-any"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_type", "match-any"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_qos_group_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_dscp_tunnel", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_dscp_value", "af21"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_cos_value", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_precedence_tunnel", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_precedence_value", "critical"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_bc_rate", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_bc_unit", "mbytes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_be_rate", "200"))
@@ -72,7 +77,7 @@ func TestAccNxosDefaultQoS(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQoSConfig_all(),
+				Config: testAccNxosDefaultQoSPrerequisitesConfig + testAccNxosDefaultQoSConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -104,12 +109,23 @@ func nxosDefaultQoSImportStateIdFunc(resourceName string) resource.ImportStateId
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosDefaultQoSPrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/acl/ipv4/name-[ACL1]"
+  class_name = "ipv4aclACL"
+  content = {
+      name = "ACL1"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosDefaultQoSConfig_minimum() string {
 	config := `resource "nxos_default_qos" "test" {` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -126,6 +142,30 @@ func testAccNxosDefaultQoSConfig_all() string {
 	config += `				"ef" = {` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
+	config += `			not_dscp_values = {` + "\n"
+	config += `				"af11" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			cos_values = {` + "\n"
+	config += `				"3" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			not_cos_values = {` + "\n"
+	config += `				"5" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			precedence_values = {` + "\n"
+	config += `				"critical" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			not_precedence_values = {` + "\n"
+	config += `				"flash" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			access_groups = {` + "\n"
+	config += `				"ACL1" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	policy_maps = {` + "\n"
@@ -134,6 +174,11 @@ func testAccNxosDefaultQoSConfig_all() string {
 	config += `			match_class_maps = {` + "\n"
 	config += `				"Voice" = {` + "\n"
 	config += `					set_qos_group_id = 1` + "\n"
+	config += `					set_dscp_tunnel = false` + "\n"
+	config += `					set_dscp_value = "af21"` + "\n"
+	config += `					set_cos_value = "3"` + "\n"
+	config += `					set_precedence_tunnel = false` + "\n"
+	config += `					set_precedence_value = "critical"` + "\n"
 	config += `					police_bc_rate = 200` + "\n"
 	config += `					police_bc_unit = "mbytes"` + "\n"
 	config += `					police_be_rate = 200` + "\n"
@@ -167,6 +212,7 @@ func testAccNxosDefaultQoSConfig_all() string {
 	config += `			policy_map_statistics = false` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

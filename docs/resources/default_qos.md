@@ -5,7 +5,7 @@ subcategory: "Quality of Service"
 description: |-
   This resource can manage the default QoS configuration on NX-OS devices, including class maps with DSCP matching and policy maps with policing and QoS group settings.
   API Documentation
-  ipqosDefaultQoS https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:DefaultQoS/ipqosCMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapEntity/ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapInst/ipqosDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Dscp/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosSetQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetQoSGrp/ipqosPolice https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Police/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Ingress/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
+  ipqosDefaultQoS https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:DefaultQoS/ipqosCMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapEntity/ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapInst/ipqosDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Dscp/ipqosNotDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotDscp/ipqosDscpTunnel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:DscpTunnel/ipqosCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Cos/ipqosNotCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotCos/ipqosPrecedence https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Precedence/ipqosNotPrecedence https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotPrecedence/ipqosQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:QoSGrp/ipqosAcl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Acl/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosSetQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetQoSGrp/ipqosSetDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetDscp/ipqosSetDscpTunnel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetDscpTunnel/ipqosSetCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetCos/ipqosSetPrecedence https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetPrecedence/ipqosPolice https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Police/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Ingress/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_default_qos (Resource)
@@ -18,10 +18,22 @@ This resource can manage the default QoS configuration on NX-OS devices, includi
 - [ipqosCMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapEntity/)
 - [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:CMapInst/)
 - [ipqosDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Dscp/)
+- [ipqosNotDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotDscp/)
+- [ipqosDscpTunnel](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:DscpTunnel/)
+- [ipqosCos](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Cos/)
+- [ipqosNotCos](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotCos/)
+- [ipqosPrecedence](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Precedence/)
+- [ipqosNotPrecedence](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:NotPrecedence/)
+- [ipqosQoSGrp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:QoSGrp/)
+- [ipqosAcl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Acl/)
 - [ipqosPMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/)
 - [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/)
 - [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/)
 - [ipqosSetQoSGrp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetQoSGrp/)
+- [ipqosSetDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetDscp/)
+- [ipqosSetDscpTunnel](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetDscpTunnel/)
+- [ipqosSetCos](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetCos/)
+- [ipqosSetPrecedence](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetPrecedence/)
 - [ipqosPolice](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Police/)
 - [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/)
 - [ipqosIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Ingress/)
@@ -38,6 +50,24 @@ resource "nxos_default_qos" "example" {
       dscp_values = {
         "ef" = {}
       }
+      not_dscp_values = {
+        "af11" = {}
+      }
+      cos_values = {
+        "3" = {}
+      }
+      not_cos_values = {
+        "5" = {}
+      }
+      precedence_values = {
+        "critical" = {}
+      }
+      not_precedence_values = {
+        "flash" = {}
+      }
+      access_groups = {
+        "ACL1" = {}
+      }
     }
   }
   policy_maps = {
@@ -46,6 +76,11 @@ resource "nxos_default_qos" "example" {
       match_class_maps = {
         "Voice" = {
           set_qos_group_id              = 1
+          set_dscp_tunnel               = false
+          set_dscp_value                = "af21"
+          set_cos_value                 = "3"
+          set_precedence_tunnel         = false
+          set_precedence_value          = "critical"
           police_bc_rate                = 200
           police_bc_unit                = "mbytes"
           police_be_rate                = 200
@@ -104,13 +139,66 @@ resource "nxos_default_qos" "example" {
 
 Optional:
 
+- `access_groups` (Attributes Map) List of ACLs to match.
+  - Map key: `name` - Match using ACL. (see [below for nested schema](#nestedatt--class_maps--access_groups))
+- `cos_values` (Attributes Map) List of CoS values to match.
+  - Map key: `value` - Cos value.
+  - Key range: `0`-`7` (see [below for nested schema](#nestedatt--class_maps--cos_values))
+- `dscp_tunnel_values` (Attributes Map) List of outer DSCP values to match.
+  - Map key: `value` - Outer DSCP value to match. (see [below for nested schema](#nestedatt--class_maps--dscp_tunnel_values))
 - `dscp_values` (Attributes Map) List of DSCP values to match.
   - Map key: `value` - Dscp value. (see [below for nested schema](#nestedatt--class_maps--dscp_values))
 - `match_type` (String) Match-any, match-all or match-first.
   - Choices: `match-any`, `match-all`, `match-first`
+- `not_cos_values` (Attributes Map) List of CoS values to not match.
+  - Map key: `value` - Not cos value.
+  - Key range: `0`-`7` (see [below for nested schema](#nestedatt--class_maps--not_cos_values))
+- `not_dscp_values` (Attributes Map) List of DSCP values to not match.
+  - Map key: `value` - Not dscp value. (see [below for nested schema](#nestedatt--class_maps--not_dscp_values))
+- `not_precedence_values` (Attributes Map) List of precedence values to not match.
+  - Map key: `value` - Not precedence value.
+  - Key choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network` (see [below for nested schema](#nestedatt--class_maps--not_precedence_values))
+- `precedence_values` (Attributes Map) List of precedence values to match.
+  - Map key: `value` - Precedence value.
+  - Key choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network` (see [below for nested schema](#nestedatt--class_maps--precedence_values))
+- `qos_group_values` (Attributes Map) List of QoS group values to match.
+  - Map key: `value` - QoS group ID.
+  - Key range: `0`-`7` (see [below for nested schema](#nestedatt--class_maps--qos_group_values))
+
+<a id="nestedatt--class_maps--access_groups"></a>
+### Nested Schema for `class_maps.access_groups`
+
+
+<a id="nestedatt--class_maps--cos_values"></a>
+### Nested Schema for `class_maps.cos_values`
+
+
+<a id="nestedatt--class_maps--dscp_tunnel_values"></a>
+### Nested Schema for `class_maps.dscp_tunnel_values`
+
 
 <a id="nestedatt--class_maps--dscp_values"></a>
 ### Nested Schema for `class_maps.dscp_values`
+
+
+<a id="nestedatt--class_maps--not_cos_values"></a>
+### Nested Schema for `class_maps.not_cos_values`
+
+
+<a id="nestedatt--class_maps--not_dscp_values"></a>
+### Nested Schema for `class_maps.not_dscp_values`
+
+
+<a id="nestedatt--class_maps--not_precedence_values"></a>
+### Nested Schema for `class_maps.not_precedence_values`
+
+
+<a id="nestedatt--class_maps--precedence_values"></a>
+### Nested Schema for `class_maps.precedence_values`
+
+
+<a id="nestedatt--class_maps--qos_group_values"></a>
+### Nested Schema for `class_maps.qos_group_values`
 
 
 
@@ -183,6 +271,14 @@ Optional:
 - `police_violate_set_qos_group` (Number) set qos-group for violating traffic.
   - Range: `0`-`7`
 - `previous_class_map` (String) Insert after the given class-map.
+- `set_cos_value` (String) Cos value.
+  - Choices: `0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `None`
+- `set_dscp_tunnel` (Boolean) set dscp tunnel on or off.
+- `set_dscp_tunnel_value` (String) Dscp value for setting outer header.
+- `set_dscp_value` (String) Dscp value.
+- `set_precedence_tunnel` (Boolean) tunnel on or off.
+- `set_precedence_value` (String) Precedence value.
+  - Choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network`
 - `set_qos_group_id` (Number) QoS group ID.
   - Range: `0`-`7`
 

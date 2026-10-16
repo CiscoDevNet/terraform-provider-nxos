@@ -56,7 +56,7 @@ func (d *DefaultQoSDataSource) Metadata(_ context.Context, req datasource.Metada
 func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS configuration on NX-OS devices, including class maps with DSCP matching and policy maps with policing and QoS group settings.").AddApiDocumentation("ipqosDefaultQoS", "Qos/ipqos:DefaultQoS/", []string{"ipqosCMapEntity", "ipqosCMapInst", "ipqosDscp", "ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosPolice", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst"}, []string{"Qos/ipqos:CMapEntity/", "Qos/ipqos:CMapInst/", "Qos/ipqos:Dscp/", "Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:SetQoSGrp/", "Qos/ipqos:Police/", "Qos/ipqos:ServPol/", "Qos/ipqos:Ingress/", "Qos/ipqos:If/", "Qos/ipqos:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS configuration on NX-OS devices, including class maps with DSCP matching and policy maps with policing and QoS group settings.").AddApiDocumentation("ipqosDefaultQoS", "Qos/ipqos:DefaultQoS/", []string{"ipqosCMapEntity", "ipqosCMapInst", "ipqosDscp", "ipqosNotDscp", "ipqosDscpTunnel", "ipqosCos", "ipqosNotCos", "ipqosPrecedence", "ipqosNotPrecedence", "ipqosQoSGrp", "ipqosAcl", "ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosSetDscp", "ipqosSetDscpTunnel", "ipqosSetCos", "ipqosSetPrecedence", "ipqosPolice", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst"}, []string{"Qos/ipqos:CMapEntity/", "Qos/ipqos:CMapInst/", "Qos/ipqos:Dscp/", "Qos/ipqos:NotDscp/", "Qos/ipqos:DscpTunnel/", "Qos/ipqos:Cos/", "Qos/ipqos:NotCos/", "Qos/ipqos:Precedence/", "Qos/ipqos:NotPrecedence/", "Qos/ipqos:QoSGrp/", "Qos/ipqos:Acl/", "Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:SetQoSGrp/", "Qos/ipqos:SetDscp/", "Qos/ipqos:SetDscpTunnel/", "Qos/ipqos:SetCos/", "Qos/ipqos:SetPrecedence/", "Qos/ipqos:Police/", "Qos/ipqos:ServPol/", "Qos/ipqos:Ingress/", "Qos/ipqos:If/", "Qos/ipqos:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -78,6 +78,62 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 						},
 						"dscp_values": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("List of DSCP values to match.\n  - Map key: `value` - Dscp value.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"not_dscp_values": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of DSCP values to not match.\n  - Map key: `value` - Not dscp value.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"dscp_tunnel_values": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of outer DSCP values to match.\n  - Map key: `value` - Outer DSCP value to match.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"cos_values": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of CoS values to match.\n  - Map key: `value` - Cos value.\n  - Key range: `0`-`7`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"not_cos_values": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of CoS values to not match.\n  - Map key: `value` - Not cos value.\n  - Key range: `0`-`7`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"precedence_values": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of precedence values to match.\n  - Map key: `value` - Precedence value.\n  - Key choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"not_precedence_values": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of precedence values to not match.\n  - Map key: `value` - Not precedence value.\n  - Key choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"qos_group_values": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of QoS group values to match.\n  - Map key: `value` - QoS group ID.\n  - Key range: `0`-`7`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"access_groups": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of ACLs to match.\n  - Map key: `name` - Match using ACL.").String,
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{},
@@ -110,6 +166,30 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 									},
 									"set_qos_group_id": schema.Int64Attribute{
 										MarkdownDescription: "QoS group ID.",
+										Computed:            true,
+									},
+									"set_dscp_tunnel": schema.BoolAttribute{
+										MarkdownDescription: "set dscp tunnel on or off.",
+										Computed:            true,
+									},
+									"set_dscp_value": schema.StringAttribute{
+										MarkdownDescription: "Dscp value.",
+										Computed:            true,
+									},
+									"set_dscp_tunnel_value": schema.StringAttribute{
+										MarkdownDescription: "Dscp value for setting outer header.",
+										Computed:            true,
+									},
+									"set_cos_value": schema.StringAttribute{
+										MarkdownDescription: "Cos value.",
+										Computed:            true,
+									},
+									"set_precedence_tunnel": schema.BoolAttribute{
+										MarkdownDescription: "tunnel on or off.",
+										Computed:            true,
+									},
+									"set_precedence_value": schema.StringAttribute{
+										MarkdownDescription: "Precedence value.",
 										Computed:            true,
 									},
 									"police_bc_rate": schema.Int64Attribute{
@@ -258,7 +338,7 @@ func (d *DefaultQoSDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipqosCMapEntity", "ipqosCMapInst", "ipqosDscp", "ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosPolice", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst"}, DefaultQoSSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipqosCMapEntity", "ipqosCMapInst", "ipqosDscp", "ipqosNotDscp", "ipqosDscpTunnel", "ipqosCos", "ipqosNotCos", "ipqosPrecedence", "ipqosNotPrecedence", "ipqosQoSGrp", "ipqosAcl", "ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosSetDscp", "ipqosSetDscpTunnel", "ipqosSetCos", "ipqosSetPrecedence", "ipqosPolice", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst"}, DefaultQoSSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

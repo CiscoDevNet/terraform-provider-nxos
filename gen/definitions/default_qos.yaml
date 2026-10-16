@@ -50,6 +50,136 @@ child_classes:
                 id: true
                 description: 'Dscp value.'
                 example: ef
+          - class_name: ipqosNotDscp
+            rn: dscpNot-%v
+            type: list
+            tf_name: not_dscp_values
+            description: 'List of DSCP values to not match.'
+            doc_path: Qos/ipqos:NotDscp/
+            attributes:
+              - nxos_name: val
+                tf_name: value
+                type: String
+                id: true
+                description: 'Not dscp value.'
+                example: af11
+          - class_name: ipqosDscpTunnel
+            rn: dscptunnel-%v
+            type: list
+            tf_name: dscp_tunnel_values
+            description: 'List of outer DSCP values to match.'
+            exclude_test: true
+            doc_path: Qos/ipqos:DscpTunnel/
+            attributes:
+              - nxos_name: val
+                tf_name: value
+                type: String
+                id: true
+                description: 'Outer DSCP value to match.'
+                example: af22
+          - class_name: ipqosCos
+            rn: cos-%v
+            type: list
+            tf_name: cos_values
+            description: 'List of CoS values to match.'
+            doc_path: Qos/ipqos:Cos/
+            attributes:
+              - nxos_name: val
+                tf_name: value
+                type: Int64
+                id: true
+                description: 'Cos value.'
+                min_int: 0
+                max_int: 7
+                example: 3
+          - class_name: ipqosNotCos
+            rn: cosNot-%v
+            type: list
+            tf_name: not_cos_values
+            description: 'List of CoS values to not match.'
+            doc_path: Qos/ipqos:NotCos/
+            attributes:
+              - nxos_name: val
+                tf_name: value
+                type: Int64
+                id: true
+                description: 'Not cos value.'
+                min_int: 0
+                max_int: 7
+                example: 5
+          - class_name: ipqosPrecedence
+            rn: precedence-%v
+            type: list
+            tf_name: precedence_values
+            description: 'List of precedence values to match.'
+            doc_path: Qos/ipqos:Precedence/
+            attributes:
+              - nxos_name: val
+                tf_name: value
+                type: String
+                id: true
+                description: 'Precedence value.'
+                enum_values:
+                  - routine
+                  - priority
+                  - immediate
+                  - flash
+                  - flash-override
+                  - critical
+                  - internet
+                  - network
+                example: critical
+          - class_name: ipqosNotPrecedence
+            rn: precedenceNot-%v
+            type: list
+            tf_name: not_precedence_values
+            description: 'List of precedence values to not match.'
+            doc_path: Qos/ipqos:NotPrecedence/
+            attributes:
+              - nxos_name: val
+                tf_name: value
+                type: String
+                id: true
+                description: 'Not precedence value.'
+                enum_values:
+                  - routine
+                  - priority
+                  - immediate
+                  - flash
+                  - flash-override
+                  - critical
+                  - internet
+                  - network
+                example: flash
+          - class_name: ipqosQoSGrp
+            rn: grp-%v
+            type: list
+            tf_name: qos_group_values
+            description: 'List of QoS group values to match.'
+            exclude_test: true
+            doc_path: Qos/ipqos:QoSGrp/
+            attributes:
+              - nxos_name: id
+                tf_name: value
+                type: Int64
+                id: true
+                description: 'QoS group ID.'
+                min_int: 0
+                max_int: 7
+                example: 2
+          - class_name: ipqosAcl
+            rn: acl-[%s]
+            type: list
+            tf_name: access_groups
+            description: 'List of ACLs to match.'
+            doc_path: Qos/ipqos:Acl/
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Match using ACL.'
+                example: ACL1
   - class_name: ipqosPMapEntity
     doc_path: Qos/ipqos:PMapEntity/
     rn: p
@@ -119,6 +249,84 @@ child_classes:
                     min_int: 0
                     max_int: 7
                     example: 1
+              - class_name: ipqosSetDscp
+                doc_path: Qos/ipqos:SetDscp/
+                rn: setDscp
+                type: single
+                tf_name: set_dscp
+                description: 'Set DSCP configuration.'
+                attributes:
+                  - nxos_name: tunnel
+                    tf_name: set_dscp_tunnel
+                    type: Bool
+                    description: 'set dscp tunnel on or off.'
+                    example: false
+                  - nxos_name: val
+                    tf_name: set_dscp_value
+                    type: String
+                    description: 'Dscp value.'
+                    example: af21
+              - class_name: ipqosSetDscpTunnel
+                doc_path: Qos/ipqos:SetDscpTunnel/
+                rn: setdscptunnel
+                type: single
+                tf_name: set_dscp_tunnel
+                description: 'Set DSCP tunnel configuration.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: val
+                    tf_name: set_dscp_tunnel_value
+                    type: String
+                    description: 'Dscp value for setting outer header.'
+                    example: af31
+              - class_name: ipqosSetCos
+                doc_path: Qos/ipqos:SetCos/
+                rn: setCos
+                type: single
+                tf_name: set_cos
+                description: 'Set CoS configuration.'
+                attributes:
+                  - nxos_name: val
+                    tf_name: set_cos_value
+                    type: String
+                    description: 'Cos value.'
+                    enum_values:
+                      - "0"
+                      - "1"
+                      - "2"
+                      - "3"
+                      - "4"
+                      - "5"
+                      - "6"
+                      - "7"
+                      - None
+                    example: "3"
+              - class_name: ipqosSetPrecedence
+                doc_path: Qos/ipqos:SetPrecedence/
+                rn: setPrecedence
+                type: single
+                tf_name: set_precedence
+                description: 'Set precedence configuration.'
+                attributes:
+                  - nxos_name: tunnel
+                    tf_name: set_precedence_tunnel
+                    type: Bool
+                    description: 'tunnel on or off.'
+                    example: false
+                  - nxos_name: val
+                    tf_name: set_precedence_value
+                    type: String
+                    description: 'Precedence value.'
+                    enum_values:
+                      - routine
+                      - priority
+                      - immediate
+                      - flash
+                      - flash-override
+                      - critical
+                      - internet
+                      - network
+                    example: critical
               - class_name: ipqosPolice
                 doc_path: Qos/ipqos:Police/
                 rn: police
@@ -387,3 +595,9 @@ child_classes:
                     type: Bool
                     description: 'Turn on/off statistics.'
                     example: false
+test_prerequisites:
+  - dn: sys/acl/ipv4/name-[ACL1]
+    class_name: ipv4aclACL
+    attributes:
+      - name: name
+        value: ACL1

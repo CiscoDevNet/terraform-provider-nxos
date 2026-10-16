@@ -46,11 +46,43 @@ type DefaultQoS struct {
 }
 
 type DefaultQoSClassMaps struct {
-	MatchType  types.String                             `tfsdk:"match_type"`
-	DscpValues map[string]DefaultQoSClassMapsDscpValues `tfsdk:"dscp_values"`
+	MatchType           types.String                                      `tfsdk:"match_type"`
+	DscpValues          map[string]DefaultQoSClassMapsDscpValues          `tfsdk:"dscp_values"`
+	NotDscpValues       map[string]DefaultQoSClassMapsNotDscpValues       `tfsdk:"not_dscp_values"`
+	DscpTunnelValues    map[string]DefaultQoSClassMapsDscpTunnelValues    `tfsdk:"dscp_tunnel_values"`
+	CosValues           map[string]DefaultQoSClassMapsCosValues           `tfsdk:"cos_values"`
+	NotCosValues        map[string]DefaultQoSClassMapsNotCosValues        `tfsdk:"not_cos_values"`
+	PrecedenceValues    map[string]DefaultQoSClassMapsPrecedenceValues    `tfsdk:"precedence_values"`
+	NotPrecedenceValues map[string]DefaultQoSClassMapsNotPrecedenceValues `tfsdk:"not_precedence_values"`
+	QosGroupValues      map[string]DefaultQoSClassMapsQosGroupValues      `tfsdk:"qos_group_values"`
+	AccessGroups        map[string]DefaultQoSClassMapsAccessGroups        `tfsdk:"access_groups"`
 }
 
 type DefaultQoSClassMapsDscpValues struct {
+}
+
+type DefaultQoSClassMapsNotDscpValues struct {
+}
+
+type DefaultQoSClassMapsDscpTunnelValues struct {
+}
+
+type DefaultQoSClassMapsCosValues struct {
+}
+
+type DefaultQoSClassMapsNotCosValues struct {
+}
+
+type DefaultQoSClassMapsPrecedenceValues struct {
+}
+
+type DefaultQoSClassMapsNotPrecedenceValues struct {
+}
+
+type DefaultQoSClassMapsQosGroupValues struct {
+}
+
+type DefaultQoSClassMapsAccessGroups struct {
 }
 
 type DefaultQoSPolicyMaps struct {
@@ -62,6 +94,12 @@ type DefaultQoSPolicyMapsMatchClassMaps struct {
 	NextClassMap               types.String `tfsdk:"next_class_map"`
 	PreviousClassMap           types.String `tfsdk:"previous_class_map"`
 	SetQosGroupId              types.Int64  `tfsdk:"set_qos_group_id"`
+	SetDscpTunnel              types.Bool   `tfsdk:"set_dscp_tunnel"`
+	SetDscpValue               types.String `tfsdk:"set_dscp_value"`
+	SetDscpTunnelValue         types.String `tfsdk:"set_dscp_tunnel_value"`
+	SetCosValue                types.String `tfsdk:"set_cos_value"`
+	SetPrecedenceTunnel        types.Bool   `tfsdk:"set_precedence_tunnel"`
+	SetPrecedenceValue         types.String `tfsdk:"set_precedence_value"`
 	PoliceBcRate               types.Int64  `tfsdk:"police_bc_rate"`
 	PoliceBcUnit               types.String `tfsdk:"police_bc_unit"`
 	PoliceBeRate               types.Int64  `tfsdk:"police_be_rate"`
@@ -134,6 +172,38 @@ func (data DefaultQoSClassMapsDscpValues) getRn(key string) string {
 	return fmt.Sprintf("dscp-%v", key)
 }
 
+func (data DefaultQoSClassMapsNotDscpValues) getRn(key string) string {
+	return fmt.Sprintf("dscpNot-%v", key)
+}
+
+func (data DefaultQoSClassMapsDscpTunnelValues) getRn(key string) string {
+	return fmt.Sprintf("dscptunnel-%v", key)
+}
+
+func (data DefaultQoSClassMapsCosValues) getRn(key string) string {
+	return fmt.Sprintf("cos-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data DefaultQoSClassMapsNotCosValues) getRn(key string) string {
+	return fmt.Sprintf("cosNot-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data DefaultQoSClassMapsPrecedenceValues) getRn(key string) string {
+	return fmt.Sprintf("precedence-%v", key)
+}
+
+func (data DefaultQoSClassMapsNotPrecedenceValues) getRn(key string) string {
+	return fmt.Sprintf("precedenceNot-%v", key)
+}
+
+func (data DefaultQoSClassMapsQosGroupValues) getRn(key string) string {
+	return fmt.Sprintf("grp-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data DefaultQoSClassMapsAccessGroups) getRn(key string) string {
+	return fmt.Sprintf("acl-[%s]", key)
+}
+
 func (data DefaultQoSPolicyMaps) getRn(key string) string {
 	return fmt.Sprintf("name-%s", key)
 }
@@ -191,6 +261,70 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 					attrs, _ = sjson.Set(attrs, "val", key)
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosDscp.attributes", attrs)
 				}
+				for key := range child.NotDscpValues {
+					configChild, configChildOk := configChild.NotDscpValues[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "val", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosNotDscp.attributes", attrs)
+				}
+				for key := range child.DscpTunnelValues {
+					configChild, configChildOk := configChild.DscpTunnelValues[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "val", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosDscpTunnel.attributes", attrs)
+				}
+				for key := range child.CosValues {
+					configChild, configChildOk := configChild.CosValues[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "val", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosCos.attributes", attrs)
+				}
+				for key := range child.NotCosValues {
+					configChild, configChildOk := configChild.NotCosValues[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "val", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosNotCos.attributes", attrs)
+				}
+				for key := range child.PrecedenceValues {
+					configChild, configChildOk := configChild.PrecedenceValues[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "val", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosPrecedence.attributes", attrs)
+				}
+				for key := range child.NotPrecedenceValues {
+					configChild, configChildOk := configChild.NotPrecedenceValues[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "val", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosNotPrecedence.attributes", attrs)
+				}
+				for key := range child.QosGroupValues {
+					configChild, configChildOk := configChild.QosGroupValues[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "id", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosQoSGrp.attributes", attrs)
+				}
+				for key := range child.AccessGroups {
+					configChild, configChildOk := configChild.AccessGroups[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "name", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosAcl.attributes", attrs)
+				}
 			}
 		}
 		childBody = body
@@ -246,6 +380,40 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 						}
 						if attrs != "{}" {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosSetQoSGrp.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.SetDscpTunnel.IsUnknown() && !child.SetDscpTunnel.IsNull() && !configChild.SetDscpTunnel.IsNull() {
+							attrs, _ = sjson.Set(attrs, "tunnel", strconv.FormatBool(child.SetDscpTunnel.ValueBool()))
+						}
+						if !child.SetDscpValue.IsUnknown() && !child.SetDscpValue.IsNull() && !configChild.SetDscpValue.IsNull() {
+							attrs, _ = sjson.Set(attrs, "val", child.SetDscpValue.ValueString())
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosSetDscp.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.SetDscpTunnelValue.IsUnknown() && !child.SetDscpTunnelValue.IsNull() && !configChild.SetDscpTunnelValue.IsNull() {
+							attrs, _ = sjson.Set(attrs, "val", child.SetDscpTunnelValue.ValueString())
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosSetDscpTunnel.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.SetCosValue.IsUnknown() && !child.SetCosValue.IsNull() && !configChild.SetCosValue.IsNull() {
+							attrs, _ = sjson.Set(attrs, "val", child.SetCosValue.ValueString())
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosSetCos.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.SetPrecedenceTunnel.IsUnknown() && !child.SetPrecedenceTunnel.IsNull() && !configChild.SetPrecedenceTunnel.IsNull() {
+							attrs, _ = sjson.Set(attrs, "tunnel", strconv.FormatBool(child.SetPrecedenceTunnel.ValueBool()))
+						}
+						if !child.SetPrecedenceValue.IsUnknown() && !child.SetPrecedenceValue.IsNull() && !configChild.SetPrecedenceValue.IsNull() {
+							attrs, _ = sjson.Set(attrs, "val", child.SetPrecedenceValue.ValueString())
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosSetPrecedence.attributes", attrs)
 						}
 						attrs = "{}"
 						if !child.PoliceBcRate.IsUnknown() && !child.PoliceBcRate.IsNull() && !configChild.PoliceBcRate.IsNull() {
@@ -432,6 +600,150 @@ func (data *DefaultQoS) fromBody(res gjson.Result) {
 									return true
 								},
 							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "ipqosNotDscp" {
+												var nestedChildipqosNotDscp DefaultQoSClassMapsNotDscpValues
+												nestedMapKey := nestedValue.Get("attributes.val").String()
+												if child.NotDscpValues == nil {
+													child.NotDscpValues = make(map[string]DefaultQoSClassMapsNotDscpValues)
+												}
+												child.NotDscpValues[nestedMapKey] = nestedChildipqosNotDscp
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "ipqosDscpTunnel" {
+												var nestedChildipqosDscpTunnel DefaultQoSClassMapsDscpTunnelValues
+												nestedMapKey := nestedValue.Get("attributes.val").String()
+												if child.DscpTunnelValues == nil {
+													child.DscpTunnelValues = make(map[string]DefaultQoSClassMapsDscpTunnelValues)
+												}
+												child.DscpTunnelValues[nestedMapKey] = nestedChildipqosDscpTunnel
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "ipqosCos" {
+												var nestedChildipqosCos DefaultQoSClassMapsCosValues
+												nestedMapKey := nestedValue.Get("attributes.val").String()
+												if child.CosValues == nil {
+													child.CosValues = make(map[string]DefaultQoSClassMapsCosValues)
+												}
+												child.CosValues[nestedMapKey] = nestedChildipqosCos
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "ipqosNotCos" {
+												var nestedChildipqosNotCos DefaultQoSClassMapsNotCosValues
+												nestedMapKey := nestedValue.Get("attributes.val").String()
+												if child.NotCosValues == nil {
+													child.NotCosValues = make(map[string]DefaultQoSClassMapsNotCosValues)
+												}
+												child.NotCosValues[nestedMapKey] = nestedChildipqosNotCos
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "ipqosPrecedence" {
+												var nestedChildipqosPrecedence DefaultQoSClassMapsPrecedenceValues
+												nestedMapKey := nestedValue.Get("attributes.val").String()
+												if child.PrecedenceValues == nil {
+													child.PrecedenceValues = make(map[string]DefaultQoSClassMapsPrecedenceValues)
+												}
+												child.PrecedenceValues[nestedMapKey] = nestedChildipqosPrecedence
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "ipqosNotPrecedence" {
+												var nestedChildipqosNotPrecedence DefaultQoSClassMapsNotPrecedenceValues
+												nestedMapKey := nestedValue.Get("attributes.val").String()
+												if child.NotPrecedenceValues == nil {
+													child.NotPrecedenceValues = make(map[string]DefaultQoSClassMapsNotPrecedenceValues)
+												}
+												child.NotPrecedenceValues[nestedMapKey] = nestedChildipqosNotPrecedence
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "ipqosQoSGrp" {
+												var nestedChildipqosQoSGrp DefaultQoSClassMapsQosGroupValues
+												nestedMapKey := nestedValue.Get("attributes.id").String()
+												if child.QosGroupValues == nil {
+													child.QosGroupValues = make(map[string]DefaultQoSClassMapsQosGroupValues)
+												}
+												child.QosGroupValues[nestedMapKey] = nestedChildipqosQoSGrp
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "ipqosAcl" {
+												var nestedChildipqosAcl DefaultQoSClassMapsAccessGroups
+												nestedMapKey := nestedValue.Get("attributes.name").String()
+												if child.AccessGroups == nil {
+													child.AccessGroups = make(map[string]DefaultQoSClassMapsAccessGroups)
+												}
+												child.AccessGroups[nestedMapKey] = nestedChildipqosAcl
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
 							if data.ClassMaps == nil {
 								data.ClassMaps = make(map[string]DefaultQoSClassMaps)
 							}
@@ -486,6 +798,64 @@ func (data *DefaultQoS) fromBody(res gjson.Result) {
 														},
 													)
 													nestedChildipqosMatchCMap.SetQosGroupId = types.Int64Value(ripqosSetQoSGrp.Get("ipqosSetQoSGrp.attributes.id").Int())
+												}
+												{
+													var ripqosSetDscp gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("ipqosSetDscp.attributes.rn").String()
+															if rnValue == "setDscp" {
+																ripqosSetDscp = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildipqosMatchCMap.SetDscpTunnel = types.BoolValue(helpers.ParseNxosBoolean(ripqosSetDscp.Get("ipqosSetDscp.attributes.tunnel").String()))
+													nestedChildipqosMatchCMap.SetDscpValue = types.StringValue(ripqosSetDscp.Get("ipqosSetDscp.attributes.val").String())
+												}
+												{
+													var ripqosSetDscpTunnel gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("ipqosSetDscpTunnel.attributes.rn").String()
+															if rnValue == "setdscptunnel" {
+																ripqosSetDscpTunnel = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildipqosMatchCMap.SetDscpTunnelValue = types.StringValue(ripqosSetDscpTunnel.Get("ipqosSetDscpTunnel.attributes.val").String())
+												}
+												{
+													var ripqosSetCos gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("ipqosSetCos.attributes.rn").String()
+															if rnValue == "setCos" {
+																ripqosSetCos = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildipqosMatchCMap.SetCosValue = types.StringValue(ripqosSetCos.Get("ipqosSetCos.attributes.val").String())
+												}
+												{
+													var ripqosSetPrecedence gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("ipqosSetPrecedence.attributes.rn").String()
+															if rnValue == "setPrecedence" {
+																ripqosSetPrecedence = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildipqosMatchCMap.SetPrecedenceTunnel = types.BoolValue(helpers.ParseNxosBoolean(ripqosSetPrecedence.Get("ipqosSetPrecedence.attributes.tunnel").String()))
+													nestedChildipqosMatchCMap.SetPrecedenceValue = types.StringValue(ripqosSetPrecedence.Get("ipqosSetPrecedence.attributes.val").String())
 												}
 												{
 													var ripqosPolice gjson.Result
@@ -661,6 +1031,150 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 			}
 			item.DscpValues[nc] = ncItem
 		}
+		for nc := range item.NotDscpValues {
+			ncItem := item.NotDscpValues[nc]
+			var ripqosNotDscp gjson.Result
+			ripqosCMapInst.Get("ipqosCMapInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipqosNotDscp.attributes.val").String() == nc {
+						ripqosNotDscp = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripqosNotDscp.Exists() {
+				delete(item.NotDscpValues, nc)
+				continue
+			}
+			item.NotDscpValues[nc] = ncItem
+		}
+		for nc := range item.DscpTunnelValues {
+			ncItem := item.DscpTunnelValues[nc]
+			var ripqosDscpTunnel gjson.Result
+			ripqosCMapInst.Get("ipqosCMapInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipqosDscpTunnel.attributes.val").String() == nc {
+						ripqosDscpTunnel = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripqosDscpTunnel.Exists() {
+				delete(item.DscpTunnelValues, nc)
+				continue
+			}
+			item.DscpTunnelValues[nc] = ncItem
+		}
+		for nc := range item.CosValues {
+			ncItem := item.CosValues[nc]
+			var ripqosCos gjson.Result
+			ripqosCMapInst.Get("ipqosCMapInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipqosCos.attributes.val").String() == nc {
+						ripqosCos = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripqosCos.Exists() {
+				delete(item.CosValues, nc)
+				continue
+			}
+			item.CosValues[nc] = ncItem
+		}
+		for nc := range item.NotCosValues {
+			ncItem := item.NotCosValues[nc]
+			var ripqosNotCos gjson.Result
+			ripqosCMapInst.Get("ipqosCMapInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipqosNotCos.attributes.val").String() == nc {
+						ripqosNotCos = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripqosNotCos.Exists() {
+				delete(item.NotCosValues, nc)
+				continue
+			}
+			item.NotCosValues[nc] = ncItem
+		}
+		for nc := range item.PrecedenceValues {
+			ncItem := item.PrecedenceValues[nc]
+			var ripqosPrecedence gjson.Result
+			ripqosCMapInst.Get("ipqosCMapInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipqosPrecedence.attributes.val").String() == nc {
+						ripqosPrecedence = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripqosPrecedence.Exists() {
+				delete(item.PrecedenceValues, nc)
+				continue
+			}
+			item.PrecedenceValues[nc] = ncItem
+		}
+		for nc := range item.NotPrecedenceValues {
+			ncItem := item.NotPrecedenceValues[nc]
+			var ripqosNotPrecedence gjson.Result
+			ripqosCMapInst.Get("ipqosCMapInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipqosNotPrecedence.attributes.val").String() == nc {
+						ripqosNotPrecedence = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripqosNotPrecedence.Exists() {
+				delete(item.NotPrecedenceValues, nc)
+				continue
+			}
+			item.NotPrecedenceValues[nc] = ncItem
+		}
+		for nc := range item.QosGroupValues {
+			ncItem := item.QosGroupValues[nc]
+			var ripqosQoSGrp gjson.Result
+			ripqosCMapInst.Get("ipqosCMapInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipqosQoSGrp.attributes.id").String() == nc {
+						ripqosQoSGrp = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripqosQoSGrp.Exists() {
+				delete(item.QosGroupValues, nc)
+				continue
+			}
+			item.QosGroupValues[nc] = ncItem
+		}
+		for nc := range item.AccessGroups {
+			ncItem := item.AccessGroups[nc]
+			var ripqosAcl gjson.Result
+			ripqosCMapInst.Get("ipqosCMapInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipqosAcl.attributes.name").String() == nc {
+						ripqosAcl = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripqosAcl.Exists() {
+				delete(item.AccessGroups, nc)
+				continue
+			}
+			item.AccessGroups[nc] = ncItem
+		}
 		data.ClassMaps[key] = item
 	}
 	var ripqosPMapEntity gjson.Result
@@ -736,6 +1250,88 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 					ncItem.SetQosGroupId = types.Int64Value(ripqosSetQoSGrp.Get("ipqosSetQoSGrp.attributes.id").Int())
 				} else {
 					ncItem.SetQosGroupId = types.Int64Null()
+				}
+			}
+			{
+				var ripqosSetDscp gjson.Result
+				ripqosMatchCMap.Get("ipqosMatchCMap.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ipqosSetDscp.attributes.rn").String()
+						if rnValue == "setDscp" {
+							ripqosSetDscp = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetDscpTunnel.IsNull() {
+					ncItem.SetDscpTunnel = types.BoolValue(helpers.ParseNxosBoolean(ripqosSetDscp.Get("ipqosSetDscp.attributes.tunnel").String()))
+				} else {
+					ncItem.SetDscpTunnel = types.BoolNull()
+				}
+				if !ncItem.SetDscpValue.IsNull() {
+					ncItem.SetDscpValue = types.StringValue(ripqosSetDscp.Get("ipqosSetDscp.attributes.val").String())
+				} else {
+					ncItem.SetDscpValue = types.StringNull()
+				}
+			}
+			{
+				var ripqosSetDscpTunnel gjson.Result
+				ripqosMatchCMap.Get("ipqosMatchCMap.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ipqosSetDscpTunnel.attributes.rn").String()
+						if rnValue == "setdscptunnel" {
+							ripqosSetDscpTunnel = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetDscpTunnelValue.IsNull() {
+					ncItem.SetDscpTunnelValue = types.StringValue(ripqosSetDscpTunnel.Get("ipqosSetDscpTunnel.attributes.val").String())
+				} else {
+					ncItem.SetDscpTunnelValue = types.StringNull()
+				}
+			}
+			{
+				var ripqosSetCos gjson.Result
+				ripqosMatchCMap.Get("ipqosMatchCMap.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ipqosSetCos.attributes.rn").String()
+						if rnValue == "setCos" {
+							ripqosSetCos = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetCosValue.IsNull() {
+					ncItem.SetCosValue = types.StringValue(ripqosSetCos.Get("ipqosSetCos.attributes.val").String())
+				} else {
+					ncItem.SetCosValue = types.StringNull()
+				}
+			}
+			{
+				var ripqosSetPrecedence gjson.Result
+				ripqosMatchCMap.Get("ipqosMatchCMap.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ipqosSetPrecedence.attributes.rn").String()
+						if rnValue == "setPrecedence" {
+							ripqosSetPrecedence = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetPrecedenceTunnel.IsNull() {
+					ncItem.SetPrecedenceTunnel = types.BoolValue(helpers.ParseNxosBoolean(ripqosSetPrecedence.Get("ipqosSetPrecedence.attributes.tunnel").String()))
+				} else {
+					ncItem.SetPrecedenceTunnel = types.BoolNull()
+				}
+				if !ncItem.SetPrecedenceValue.IsNull() {
+					ncItem.SetPrecedenceValue = types.StringValue(ripqosSetPrecedence.Get("ipqosSetPrecedence.attributes.val").String())
+				} else {
+					ncItem.SetPrecedenceValue = types.StringNull()
 				}
 			}
 			{
@@ -1079,6 +1675,78 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 				}
 			}
+			for stateChildKey := range stateItemdi.NotDscpValues {
+				if _, found := planItemdi.NotDscpValues[stateChildKey]; !found {
+					stateChild := stateItemdi.NotDscpValues[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosNotDscp.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosNotDscp.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.DscpTunnelValues {
+				if _, found := planItemdi.DscpTunnelValues[stateChildKey]; !found {
+					stateChild := stateItemdi.DscpTunnelValues[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosDscpTunnel.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosDscpTunnel.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.CosValues {
+				if _, found := planItemdi.CosValues[stateChildKey]; !found {
+					stateChild := stateItemdi.CosValues[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosCos.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosCos.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.NotCosValues {
+				if _, found := planItemdi.NotCosValues[stateChildKey]; !found {
+					stateChild := stateItemdi.NotCosValues[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosNotCos.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosNotCos.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.PrecedenceValues {
+				if _, found := planItemdi.PrecedenceValues[stateChildKey]; !found {
+					stateChild := stateItemdi.PrecedenceValues[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosPrecedence.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosPrecedence.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.NotPrecedenceValues {
+				if _, found := planItemdi.NotPrecedenceValues[stateChildKey]; !found {
+					stateChild := stateItemdi.NotPrecedenceValues[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosNotPrecedence.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosNotPrecedence.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.QosGroupValues {
+				if _, found := planItemdi.QosGroupValues[stateChildKey]; !found {
+					stateChild := stateItemdi.QosGroupValues[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosQoSGrp.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosQoSGrp.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.AccessGroups {
+				if _, found := planItemdi.AccessGroups[stateChildKey]; !found {
+					stateChild := stateItemdi.AccessGroups[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosAcl.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipqosAcl.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
 		}
 		for stateKey := range state.PolicyMaps {
 			if _, found := data.PolicyMaps[stateKey]; !found {
@@ -1190,6 +1858,62 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 								_ = configChild
 							}
 						}
+						for key := range stateChild.NotDscpValues {
+							if configChild, ok := configChild.NotDscpValues[key]; ok {
+								stateChild := stateChild.NotDscpValues[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.DscpTunnelValues {
+							if configChild, ok := configChild.DscpTunnelValues[key]; ok {
+								stateChild := stateChild.DscpTunnelValues[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.CosValues {
+							if configChild, ok := configChild.CosValues[key]; ok {
+								stateChild := stateChild.CosValues[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.NotCosValues {
+							if configChild, ok := configChild.NotCosValues[key]; ok {
+								stateChild := stateChild.NotCosValues[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.PrecedenceValues {
+							if configChild, ok := configChild.PrecedenceValues[key]; ok {
+								stateChild := stateChild.PrecedenceValues[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.NotPrecedenceValues {
+							if configChild, ok := configChild.NotPrecedenceValues[key]; ok {
+								stateChild := stateChild.NotPrecedenceValues[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.QosGroupValues {
+							if configChild, ok := configChild.QosGroupValues[key]; ok {
+								stateChild := stateChild.QosGroupValues[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.AccessGroups {
+							if configChild, ok := configChild.AccessGroups[key]; ok {
+								stateChild := stateChild.AccessGroups[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
 					}
 				}
 			}
@@ -1244,6 +1968,30 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 										if !stateChild.SetQosGroupId.IsNull() && configChild.SetQosGroupId.IsNull() {
 											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetQoSGrp")
 											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"id", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetDscpTunnel.IsNull() && configChild.SetDscpTunnel.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscp")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tunnel", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetDscpValue.IsNull() && configChild.SetDscpValue.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscp")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetDscpTunnelValue.IsNull() && configChild.SetDscpTunnelValue.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscpTunnel")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetCosValue.IsNull() && configChild.SetCosValue.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetCos")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetPrecedenceTunnel.IsNull() && configChild.SetPrecedenceTunnel.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetPrecedence")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tunnel", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetPrecedenceValue.IsNull() && configChild.SetPrecedenceValue.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetPrecedence")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
 										}
 										if !stateChild.PoliceBcRate.IsNull() && configChild.PoliceBcRate.IsNull() {
 											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")

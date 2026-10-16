@@ -8788,15 +8788,6 @@ func (data System) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "fexTrunk", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
-		if len(data.Pvlans) > 0 {
-			hasNestedChildren = true
-		}
-		if len(data.PvlanInterfaces) > 0 {
-			hasNestedChildren = true
-		}
-		if len(data.PvlanSvis) > 0 {
-			hasNestedChildren = true
-		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pvlanPrivateVlan"
@@ -8806,24 +8797,6 @@ func (data System) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			for key, child := range data.Pvlans {
-				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "pvlanVlan.attributes.rn", child.getRn(key))
-				deleteBody, _ = sjson.Set(deleteBody, "pvlanVlan.attributes.status", "deleted")
-				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-			}
-			for key, child := range data.PvlanInterfaces {
-				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "pvlanIf.attributes.rn", child.getRn(key))
-				deleteBody, _ = sjson.Set(deleteBody, "pvlanIf.attributes.status", "deleted")
-				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-			}
-			for key, child := range data.PvlanSvis {
-				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "pvlanSvi.attributes.rn", child.getRn(key))
-				deleteBody, _ = sjson.Set(deleteBody, "pvlanSvi.attributes.status", "deleted")
-				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-			}
 		}
 	}
 

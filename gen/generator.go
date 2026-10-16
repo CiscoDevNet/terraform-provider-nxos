@@ -155,6 +155,7 @@ type YamlConfigChildClass struct {
 	DocPath           string                 `yaml:"doc_path"`
 	Mandatory         bool                   `yaml:"mandatory"`
 	NoDelete          bool                   `yaml:"no_delete"`
+	KeepOnDestroy     bool                   `yaml:"keep_on_destroy"`
 	StatusReplace     bool                   `yaml:"status_replace"`
 	AutoDeleteOnEmpty bool                   `yaml:"auto_delete_on_empty"`
 	SeparateRequest   bool                   `yaml:"separate_request"`

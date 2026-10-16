@@ -2944,8 +2944,9 @@ child_classes:
         doc_path: Layer%202/pvlan:Vlan/
         rn: vlan-[%s]
         type: list
+        keep_on_destroy: true
         tf_name: pvlans
-        description: 'VLAN configuration and operation for PVLAN.'
+        description: 'VLAN configuration and operation for PVLAN. Not removed when the resource is destroyed, disabling the `private-vlan` feature removes it.'
         attributes:
           - nxos_name: id
             tf_name: vlan_id
@@ -2972,8 +2973,9 @@ child_classes:
         doc_path: Layer%202/pvlan:If/
         rn: if-[%s]
         type: list
+        keep_on_destroy: true
         tf_name: pvlan_interfaces
-        description: 'PVLAN port configurations.'
+        description: 'PVLAN port configurations. Not removed when the resource is destroyed, disabling the `private-vlan` feature removes it.'
         attributes:
           - nxos_name: if
             tf_name: interface_id
@@ -3097,8 +3099,9 @@ child_classes:
         doc_path: Layer%202/pvlan:Svi/
         rn: svi-[%s]
         type: list
+        keep_on_destroy: true
         tf_name: pvlan_svis
-        description: 'SVI configuration for propagating L3 capabilities to secondary VLANs.'
+        description: 'SVI configuration for propagating L3 capabilities to secondary VLANs. Not removed when the resource is destroyed, disabling the `private-vlan` feature removes it.'
         attributes:
           - nxos_name: if
             tf_name: interface_id

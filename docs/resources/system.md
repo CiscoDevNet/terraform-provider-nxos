@@ -805,11 +805,11 @@ resource "nxos_system" "example" {
   - Choices: `enabled`, `disabled`
 - `pvlan_fex_trunk` (String) Enable or disable PVLANs for FEX trunk.
   - Choices: `enabled`, `disabled`
-- `pvlan_interfaces` (Attributes Map) PVLAN port configurations.
+- `pvlan_interfaces` (Attributes Map) PVLAN port configurations. Not removed when the resource is destroyed, disabling the `private-vlan` feature removes it.
   - Map key: `interface_id` - Interface id of port with PVLAN. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`. (see [below for nested schema](#nestedatt--pvlan_interfaces))
-- `pvlan_svis` (Attributes Map) SVI configuration for propagating L3 capabilities to secondary VLANs.
+- `pvlan_svis` (Attributes Map) SVI configuration for propagating L3 capabilities to secondary VLANs. Not removed when the resource is destroyed, disabling the `private-vlan` feature removes it.
   - Map key: `interface_id` - Interface id of port with PVLAN. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`. (see [below for nested schema](#nestedatt--pvlan_svis))
-- `pvlans` (Attributes Map) VLAN configuration and operation for PVLAN.
+- `pvlans` (Attributes Map) VLAN configuration and operation for PVLAN. Not removed when the resource is destroyed, disabling the `private-vlan` feature removes it.
   - Map key: `vlan_id` - VLAN ID in a PVLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`. (see [below for nested schema](#nestedatt--pvlans))
 - `service_instances` (Attributes Map) SAS service instances.
   - Map key: `name` - Name of service policy. (see [below for nested schema](#nestedatt--service_instances))

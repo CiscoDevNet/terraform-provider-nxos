@@ -958,6 +958,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
        Uses dynamic index calculation (matching toBody's approach) to ensure each
        top-level child class gets its own children array index.
        For each child:
+         - KeepOnDestroy children: skipped, they stay on the device unchanged
          - NoDelete children with sub-children: create entry, set delete value (default DME_UNSET_PROPERTY_MARKER) for attrs, recurse
          - NoDelete leaf children: create entry, set delete value (default DME_UNSET_PROPERTY_MARKER) for attrs
          - Deletable single children: append delete entry
@@ -970,7 +971,8 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- $childrenPathVar := .ChildrenPathVar}}
 {{- range .Children}}
 {{- $childClassName := .ClassName}}
-{{- if .NoDelete}}
+{{- if .KeepOnDestroy}}
+{{- else if .NoDelete}}
 {{- if eq .Type "single"}}
 {{- if .ChildClasses}}
 	{
@@ -989,7 +991,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	       enabled. */}}
 	{{- $pruneEmpty := false}}
 	{{- range .ChildClasses}}
-	{{- if and .NoDelete (eq .Type "single")}}
+	{{- if and .NoDelete (not .KeepOnDestroy) (eq .Type "single")}}
 	{{- $pruneEmpty = true}}
 	{{- end}}
 	{{- end}}
@@ -1015,7 +1017,8 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{{- else}}
 	hasNestedChildren := false
 	{{- range .ChildClasses}}
-	{{- if eq .Type "list"}}
+	{{- if .KeepOnDestroy}}
+	{{- else if eq .Type "list"}}
 	if len(data.{{toGoName .TfName}}) > 0 {
 		hasNestedChildren = true
 	}
@@ -1097,6 +1100,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
        A NoDelete list item stays on the device when it is destroyed or removed from the
        configuration, so its configured children have to be cleaned up explicitly:
          - Deletable children are deleted (e.g. a policy map assigned to an interface)
+         - KeepOnDestroy children are skipped and stay on the device unchanged
          - NoDelete children get the delete value (default DME_UNSET_PROPERTY_MARKER) for their
            configured attributes and are recursed into; they are left out if nothing is configured
        Context: map with:
@@ -1113,7 +1117,8 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- $level := .Level}}
 {{- range .Children}}
 {{- $childClassName := .ClassName}}
-{{- if eq .Type "single"}}
+{{- if .KeepOnDestroy}}
+{{- else if eq .Type "single"}}
 {{- if not .NoDelete}}
 {{- $configured := ""}}
 {{- range .Attributes}}

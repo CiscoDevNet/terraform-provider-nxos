@@ -1987,7 +1987,7 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"pvlans": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("VLAN configuration and operation for PVLAN.\n  - Map key: `vlan_id` - VLAN ID in a PVLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VLAN configuration and operation for PVLAN. Not removed when the resource is destroyed, disabling the `private-vlan` feature removes it.\n  - Map key: `vlan_id` - VLAN ID in a PVLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -2006,7 +2006,7 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"pvlan_interfaces": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("PVLAN port configurations.\n  - Map key: `interface_id` - Interface id of port with PVLAN. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("PVLAN port configurations. Not removed when the resource is destroyed, disabling the `private-vlan` feature removes it.\n  - Map key: `interface_id` - Interface id of port with PVLAN. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -2062,7 +2062,7 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"pvlan_svis": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SVI configuration for propagating L3 capabilities to secondary VLANs.\n  - Map key: `interface_id` - Interface id of port with PVLAN. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("SVI configuration for propagating L3 capabilities to secondary VLANs. Not removed when the resource is destroyed, disabling the `private-vlan` feature removes it.\n  - Map key: `interface_id` - Interface id of port with PVLAN. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

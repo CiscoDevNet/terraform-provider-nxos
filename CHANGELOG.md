@@ -1,3 +1,19 @@
+## 0.19.0
+
+- Add CoS, precedence, QoS group, ACL and outer (tunnel) DSCP match criteria, as well as negated DSCP, CoS and precedence match criteria, to `class_maps` of `nxos_default_qos` resource and data source
+- Add DSCP, outer (tunnel) DSCP, CoS and precedence marking (`set_dscp_*`, `set_cos_value`, `set_precedence_*` attributes) to `match_class_maps` of `nxos_default_qos` resource and data source
+- Add dynamic load balancing (DLB) configuration (`dlb`), including static pinning (`dlb_static_pinnings`), to `nxos_platform` resource and data source
+- Add `set_dlb_mode` attribute to `match_class_maps` of `nxos_default_qos` resource and data source
+- Add global hardware QoS configuration (`qos_*` attributes), including lossless buffer tuning (PFC static, no-drop PG thresholds, pool sizes), AFD profile and ETRAP settings, to `nxos_platform` resource and data source
+- Add global priority flow control (PFC) watchdog configuration (`pfc_watchdog_*` attributes) to `nxos_platform` resource and data source
+- Add per-interface egress queuing policy map assignments (`policy_interface_out`) to `nxos_queuing_qos` resource and data source
+- Add NVE interface ingress QoS policy map assignments (`policy_nve_interface_in`) to `nxos_default_qos` resource and data source
+- Fix destroy of `nxos_physical_interface`, `nxos_platform` and `nxos_system` (and removal of list items) not removing nested configuration of non-deletable objects, e.g. storm control, PFC and load interval settings of physical interfaces or NVE infra VLANs are now removed or reset to their defaults
+- Add bandwidth, shaping, queue limit and micro burst detection configuration to `match_class_maps` of `nxos_queuing_qos` resource and data source
+- Add WRED/ECN random detect and Approximate Fair Discard (AFD) configuration to `match_class_maps` of `nxos_queuing_qos` resource and data source
+- Add global QoS configuration (`qos_dynamic_buffer_sharing`, `qos_statistics`, `qos_policies_statistics`, `qos_reset_dei` and `qos_mode` attributes) to `nxos_system` resource and data source
+- Fix destroy of `nxos_system` hanging the NX-OS private VLAN process when `pvlans`, `pvlan_interfaces` or `pvlan_svis` are configured: they are no longer deleted on destroy (disabling the `private-vlan` feature removes them), as NX-OS processes their removal asynchronously and the following deletion of the referenced interfaces and VLANs could block it
+
 ## 0.18.4
 
 - Retry requests rejected by NX-OS due to frequent invocation of a command (e.g. changing the `shutdown` attribute of `nxos_macsec` or destroying it within 30 seconds of a previous MACsec status change)

@@ -1,1 +1,0 @@
-- Add global priority flow control (PFC) watchdog configuration (`pfc_watchdog_*` attributes) to `nxos_platform` resource and data source

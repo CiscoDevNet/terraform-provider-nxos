@@ -1,1 +1,0 @@
-- Add bandwidth, shaping, queue limit and micro burst detection configuration to `match_class_maps` of `nxos_queuing_qos` resource and data source

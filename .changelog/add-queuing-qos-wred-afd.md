@@ -1,1 +1,0 @@
-- Add WRED/ECN random detect and Approximate Fair Discard (AFD) configuration to `match_class_maps` of `nxos_queuing_qos` resource and data source

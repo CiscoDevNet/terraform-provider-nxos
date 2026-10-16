@@ -1,3 +1,0 @@
-- Add per-interface egress queuing policy map assignments (`policy_interface_out`) to `nxos_queuing_qos` resource and data source
-- Add NVE interface ingress QoS policy map assignments (`policy_nve_interface_in`) to `nxos_default_qos` resource and data source
-- Fix destroy of `nxos_physical_interface`, `nxos_platform` and `nxos_system` (and removal of list items) not removing nested configuration of non-deletable objects, e.g. storm control, PFC and load interval settings of physical interfaces or NVE infra VLANs are now removed or reset to their defaults

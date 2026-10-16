@@ -1,1 +1,0 @@
-- Add global QoS configuration (`qos_dynamic_buffer_sharing`, `qos_statistics`, `qos_policies_statistics`, `qos_reset_dei` and `qos_mode` attributes) to `nxos_system` resource and data source

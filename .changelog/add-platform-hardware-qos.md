@@ -1,1 +1,0 @@
-- Add global hardware QoS configuration (`qos_*` attributes), including lossless buffer tuning (PFC static, no-drop PG thresholds, pool sizes), AFD profile and ETRAP settings, to `nxos_platform` resource and data source

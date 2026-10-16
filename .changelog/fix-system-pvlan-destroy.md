@@ -1,1 +1,0 @@
-- Fix destroy of `nxos_system` hanging the NX-OS private VLAN process when `pvlans`, `pvlan_interfaces` or `pvlan_svis` are configured: they are no longer deleted on destroy (disabling the `private-vlan` feature removes them), as NX-OS processes their removal asynchronously and the following deletion of the referenced interfaces and VLANs could block it

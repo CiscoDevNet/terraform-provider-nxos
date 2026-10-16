@@ -1,2 +1,0 @@
-- Add CoS, precedence, QoS group, ACL and outer (tunnel) DSCP match criteria, as well as negated DSCP, CoS and precedence match criteria, to `class_maps` of `nxos_default_qos` resource and data source
-- Add DSCP, outer (tunnel) DSCP, CoS and precedence marking (`set_dscp_*`, `set_cos_value`, `set_precedence_*` attributes) to `match_class_maps` of `nxos_default_qos` resource and data source

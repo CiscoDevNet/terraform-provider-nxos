@@ -353,15 +353,6 @@ resource "nxos_dme" "PreReq1" {
 }
 
 resource "nxos_dme" "PreReq2" {
-  dn = "sys/fm/pvlan"
-  class_name = "fmPvlan"
-  delete = false
-  content = {
-      adminSt = "enabled"
-  }
-}
-
-resource "nxos_dme" "PreReq3" {
   dn = "sys/fm/ifvlan"
   class_name = "fmInterfaceVlan"
   delete = false
@@ -370,7 +361,7 @@ resource "nxos_dme" "PreReq3" {
   }
 }
 
-resource "nxos_dme" "PreReq4" {
+resource "nxos_dme" "PreReq3" {
   dn = "sys/bd/bd-[vlan-100]"
   class_name = "l2BD"
   content = {
@@ -378,7 +369,7 @@ resource "nxos_dme" "PreReq4" {
   }
 }
 
-resource "nxos_dme" "PreReq5" {
+resource "nxos_dme" "PreReq4" {
   dn = "sys/bd/bd-[vlan-101]"
   class_name = "l2BD"
   content = {
@@ -386,7 +377,7 @@ resource "nxos_dme" "PreReq5" {
   }
 }
 
-resource "nxos_dme" "PreReq6" {
+resource "nxos_dme" "PreReq5" {
   dn = "sys/bd/bd-[vlan-102]"
   class_name = "l2BD"
   content = {
@@ -394,21 +385,30 @@ resource "nxos_dme" "PreReq6" {
   }
 }
 
-resource "nxos_dme" "PreReq7" {
+resource "nxos_dme" "PreReq6" {
   dn = "sys/intf/svi-[vlan100]"
   class_name = "sviIf"
   content = {
       id = "vlan100"
   }
-  depends_on = [nxos_dme.PreReq3, nxos_dme.PreReq4, ]
+  depends_on = [nxos_dme.PreReq2, nxos_dme.PreReq3, ]
 }
 
-resource "nxos_dme" "PreReq8" {
+resource "nxos_dme" "PreReq7" {
   dn = "sys/intf/phys-[eth1/9]"
   class_name = "l1PhysIf"
   content = {
       layer = "Layer2"
   }
+}
+
+resource "nxos_dme" "PreReq8" {
+  dn = "sys/fm/pvlan"
+  class_name = "fmPvlan"
+  content = {
+      adminSt = "enabled"
+  }
+  depends_on = [nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, ]
 }
 
 resource "nxos_dme" "PreReq9" {

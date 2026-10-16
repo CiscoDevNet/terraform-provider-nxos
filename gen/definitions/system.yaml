@@ -3165,12 +3165,6 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
-  - dn: sys/fm/pvlan
-    class_name: fmPvlan
-    no_delete: true
-    attributes:
-      - name: adminSt
-        value: enabled
   - dn: sys/fm/ifvlan
     class_name: fmInterfaceVlan
     no_delete: true
@@ -3194,7 +3188,7 @@ test_prerequisites:
         value: vlan-102
   - dn: sys/intf/svi-[vlan100]
     class_name: sviIf
-    dependencies: [3, 4]
+    dependencies: [2, 3]
     attributes:
       - name: id
         value: vlan100
@@ -3203,6 +3197,12 @@ test_prerequisites:
     attributes:
       - name: layer
         value: Layer2
+  - dn: sys/fm/pvlan
+    class_name: fmPvlan
+    dependencies: [3, 4, 5, 6, 7]
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/fm/lacp
     class_name: fmLacp
     no_delete: true

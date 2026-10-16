@@ -101,6 +101,7 @@ type DefaultQoSPolicyMapsMatchClassMaps struct {
 	SetCosValue                types.String `tfsdk:"set_cos_value"`
 	SetPrecedenceTunnel        types.Bool   `tfsdk:"set_precedence_tunnel"`
 	SetPrecedenceValue         types.String `tfsdk:"set_precedence_value"`
+	SetDlbMode                 types.String `tfsdk:"set_dlb_mode"`
 	PoliceBcRate               types.Int64  `tfsdk:"police_bc_rate"`
 	PoliceBcUnit               types.String `tfsdk:"police_bc_unit"`
 	PoliceBeRate               types.Int64  `tfsdk:"police_be_rate"`
@@ -424,6 +425,13 @@ func (data DefaultQoS) toBody(config DefaultQoS) nxos.Body {
 						}
 						if attrs != "{}" {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosSetPrecedence.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.SetDlbMode.IsUnknown() && !child.SetDlbMode.IsNull() && !configChild.SetDlbMode.IsNull() {
+							attrs, _ = sjson.Set(attrs, "mode", child.SetDlbMode.ValueString())
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosSetDlbMode.attributes", attrs)
 						}
 						attrs = "{}"
 						if !child.PoliceBcRate.IsUnknown() && !child.PoliceBcRate.IsNull() && !configChild.PoliceBcRate.IsNull() {
@@ -889,6 +897,20 @@ func (data *DefaultQoS) fromBody(res gjson.Result) {
 													)
 													nestedChildipqosMatchCMap.SetPrecedenceTunnel = types.BoolValue(helpers.ParseNxosBoolean(ripqosSetPrecedence.Get("ipqosSetPrecedence.attributes.tunnel").String()))
 													nestedChildipqosMatchCMap.SetPrecedenceValue = types.StringValue(ripqosSetPrecedence.Get("ipqosSetPrecedence.attributes.val").String())
+												}
+												{
+													var ripqosSetDlbMode gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("ipqosSetDlbMode.attributes.rn").String()
+															if rnValue == "setdlbmode" {
+																ripqosSetDlbMode = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildipqosMatchCMap.SetDlbMode = types.StringValue(ripqosSetDlbMode.Get("ipqosSetDlbMode.attributes.mode").String())
 												}
 												{
 													var ripqosPolice gjson.Result
@@ -1398,6 +1420,24 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 					ncItem.SetPrecedenceValue = types.StringValue(ripqosSetPrecedence.Get("ipqosSetPrecedence.attributes.val").String())
 				} else {
 					ncItem.SetPrecedenceValue = types.StringNull()
+				}
+			}
+			{
+				var ripqosSetDlbMode gjson.Result
+				ripqosMatchCMap.Get("ipqosMatchCMap.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ipqosSetDlbMode.attributes.rn").String()
+						if rnValue == "setdlbmode" {
+							ripqosSetDlbMode = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetDlbMode.IsNull() {
+					ncItem.SetDlbMode = types.StringValue(ripqosSetDlbMode.Get("ipqosSetDlbMode.attributes.mode").String())
+				} else {
+					ncItem.SetDlbMode = types.StringNull()
 				}
 			}
 			{
@@ -2132,6 +2172,10 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 										if !stateChild.SetPrecedenceValue.IsNull() && configChild.SetPrecedenceValue.IsNull() {
 											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetPrecedence")
 											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.SetDlbMode.IsNull() && configChild.SetDlbMode.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDlbMode")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
 										}
 										if !stateChild.PoliceBcRate.IsNull() && configChild.PoliceBcRate.IsNull() {
 											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")

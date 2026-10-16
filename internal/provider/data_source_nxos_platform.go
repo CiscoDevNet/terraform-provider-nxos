@@ -56,7 +56,7 @@ func (d *PlatformDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3AQos/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformDlbEntity", "platformDlbStaticPinning", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform:DlbEntity/", "System/platform:DlbStaticPinning/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3AQos/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -963,6 +963,90 @@ func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				MarkdownDescription: "load balancing symmetry parameter.",
 				Computed:            true,
 			},
+			"dlb_allow_all_interfaces": schema.BoolAttribute{
+				MarkdownDescription: "DLB allow all interfaces.",
+				Computed:            true,
+			},
+			"dlb_decay_factor": schema.Int64Attribute{
+				MarkdownDescription: "Controls the impact of past port load data on current port load calculations.",
+				Computed:            true,
+			},
+			"dlb_description": schema.StringAttribute{
+				MarkdownDescription: "DLB description.",
+				Computed:            true,
+			},
+			"dlb_dre_threshold_level_1": schema.Int64Attribute{
+				MarkdownDescription: "DLB DRE Threshold Level-1 in percentage.",
+				Computed:            true,
+			},
+			"dlb_dre_threshold_level_2": schema.Int64Attribute{
+				MarkdownDescription: "DLB DRE Threshold Level-2 in percentage.",
+				Computed:            true,
+			},
+			"dlb_dre_threshold_level_3": schema.Int64Attribute{
+				MarkdownDescription: "DLB DRE Threshold Level-3 in percentage.",
+				Computed:            true,
+			},
+			"dlb_dre_threshold_level_4": schema.Int64Attribute{
+				MarkdownDescription: "DLB DRE Threshold Level-4 in percentage.",
+				Computed:            true,
+			},
+			"dlb_dre_threshold_level_5": schema.Int64Attribute{
+				MarkdownDescription: "DLB DRE Threshold Level-5 in percentage.",
+				Computed:            true,
+			},
+			"dlb_dre_threshold_level_6": schema.Int64Attribute{
+				MarkdownDescription: "DLB DRE Threshold Level-6 in percentage.",
+				Computed:            true,
+			},
+			"dlb_dre_threshold_level_7": schema.Int64Attribute{
+				MarkdownDescription: "DLB DRE Threshold Level-7 in percentage.",
+				Computed:            true,
+			},
+			"dlb_enabled": schema.BoolAttribute{
+				MarkdownDescription: "DLB status.",
+				Computed:            true,
+			},
+			"dlb_flowlet_aging": schema.Int64Attribute{
+				MarkdownDescription: "DLB Flowlet Aging Timer in microseconds.",
+				Computed:            true,
+			},
+			"dlb_interfaces": schema.StringAttribute{
+				MarkdownDescription: "DLB interface list - needs Restart.",
+				Computed:            true,
+			},
+			"dlb_load_awareness": schema.BoolAttribute{
+				MarkdownDescription: "Use port load for port selection.",
+				Computed:            true,
+			},
+			"dlb_mac_address": schema.StringAttribute{
+				MarkdownDescription: "DLB MAC Address.",
+				Computed:            true,
+			},
+			"dlb_mode": schema.StringAttribute{
+				MarkdownDescription: "DLB Mode.",
+				Computed:            true,
+			},
+			"dlb_sampling_interval": schema.Int64Attribute{
+				MarkdownDescription: "Time interval for each port load collection in nsec.",
+				Computed:            true,
+			},
+			"dlb_static_pinning": schema.BoolAttribute{
+				MarkdownDescription: "DLB Static Pinning.",
+				Computed:            true,
+			},
+			"dlb_static_pinnings": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of DLB static pinning source/destination interface pairs.\n  - Map key: `source_interface` - Source interface to Pair.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"destination_interface": schema.StringAttribute{
+							MarkdownDescription: "Destination interface to Pair.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"pfc_watchdog_auto_restore_multiplier": schema.Int64Attribute{
 				MarkdownDescription: "PFC WD Auto shutdown multiplier.",
 				Computed:            true,
@@ -1314,7 +1398,7 @@ func (d *PlatformDataSource) Read(ctx context.Context, req datasource.ReadReques
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformDlbEntity", "platformDlbStaticPinning", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

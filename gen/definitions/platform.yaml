@@ -1950,6 +1950,152 @@ child_classes:
           - disable
           - enable
         example: enable
+  - class_name: platformDlbEntity
+    doc_path: System/platform:DlbEntity/
+    rn: dlb
+    type: single
+    tf_name: dlb
+    no_delete: true
+    description: 'Dynamic load balancing (DLB) configuration.'
+    attributes:
+      - nxos_name: allowAllInterface
+        tf_name: dlb_allow_all_interfaces
+        type: Bool
+        description: 'DLB allow all interfaces.'
+        example: true
+      - nxos_name: decayFactor
+        tf_name: dlb_decay_factor
+        type: Int64
+        description: 'Controls the impact of past port load data on current port load calculations.'
+        min_int: 0
+        max_int: 255
+        example: 4
+      - nxos_name: descr
+        tf_name: dlb_description
+        type: String
+        description: 'DLB description.'
+        example: 'My DLB'
+      - nxos_name: dreThresholdsLevel1
+        tf_name: dlb_dre_threshold_level_1
+        type: Int64
+        description: 'DLB DRE Threshold Level-1 in percentage.'
+        min_int: 0
+        max_int: 100
+        example: 40
+      - nxos_name: dreThresholdsLevel2
+        tf_name: dlb_dre_threshold_level_2
+        type: Int64
+        description: 'DLB DRE Threshold Level-2 in percentage.'
+        min_int: 0
+        max_int: 100
+        example: 35
+      - nxos_name: dreThresholdsLevel3
+        tf_name: dlb_dre_threshold_level_3
+        type: Int64
+        description: 'DLB DRE Threshold Level-3 in percentage.'
+        min_int: 0
+        max_int: 100
+        example: 30
+      - nxos_name: dreThresholdsLevel4
+        tf_name: dlb_dre_threshold_level_4
+        type: Int64
+        description: 'DLB DRE Threshold Level-4 in percentage.'
+        min_int: 0
+        max_int: 100
+        example: 25
+      - nxos_name: dreThresholdsLevel5
+        tf_name: dlb_dre_threshold_level_5
+        type: Int64
+        description: 'DLB DRE Threshold Level-5 in percentage.'
+        min_int: 0
+        max_int: 100
+        example: 20
+      - nxos_name: dreThresholdsLevel6
+        tf_name: dlb_dre_threshold_level_6
+        type: Int64
+        description: 'DLB DRE Threshold Level-6 in percentage.'
+        min_int: 0
+        max_int: 100
+        example: 15
+      - nxos_name: dreThresholdsLevel7
+        tf_name: dlb_dre_threshold_level_7
+        type: Int64
+        description: 'DLB DRE Threshold Level-7 in percentage.'
+        min_int: 0
+        max_int: 100
+        example: 10
+      - nxos_name: enabled
+        tf_name: dlb_enabled
+        type: Bool
+        description: 'DLB status.'
+        example: true
+        exclude_test: true
+      - nxos_name: flowletAgingTimer
+        tf_name: dlb_flowlet_aging
+        type: Int64
+        description: 'DLB Flowlet Aging Timer in microseconds.'
+        min_int: 0
+        max_int: 4294967295
+        example: 1000
+      - nxos_name: intfList
+        tf_name: dlb_interfaces
+        type: String
+        description: 'DLB interface list - needs Restart.'
+        example: 'eth1/10,eth1/11'
+      - nxos_name: loadAwareness
+        tf_name: dlb_load_awareness
+        type: Bool
+        description: 'Use port load for port selection.'
+        example: false
+      - nxos_name: macAddr
+        tf_name: dlb_mac_address
+        type: String
+        description: 'DLB MAC Address.'
+        example: '00:AA:BB:CC:DD:EE'
+      - nxos_name: mode
+        tf_name: dlb_mode
+        type: String
+        description: 'DLB Mode.'
+        enum_values:
+          - FLOWLET
+          - PER_PACKET
+          - POLICY_DRIVEN_FLOWLET
+          - POLICY_DRIVEN_PER_PACKET
+          - POLICY_DRIVEN_MIXED_DEFAULT_FLOWLET
+          - POLICY_DRIVEN_MIXED_DEFAULT_PER_PACKET
+          - POLICY_DRIVEN_MIXED_DEFAULT_ECMP
+        example: PER_PACKET
+      - nxos_name: samplingInterval
+        tf_name: dlb_sampling_interval
+        type: Int64
+        description: 'Time interval for each port load collection in nsec.'
+        min_int: 0
+        max_int: 4294967295
+        example: 64000
+      - nxos_name: staticPinning
+        tf_name: dlb_static_pinning
+        type: Bool
+        description: 'DLB Static Pinning.'
+        example: true
+    child_classes:
+      - class_name: platformDlbStaticPinning
+        doc_path: System/platform:DlbStaticPinning/
+        rn: static-[%s]
+        type: list
+        tf_name: dlb_static_pinnings
+        description: 'List of DLB static pinning source/destination interface pairs.'
+        attributes:
+          - nxos_name: srcInterface
+            tf_name: source_interface
+            type: String
+            id: true
+            description: 'Source interface to Pair.'
+            example: eth1/10
+          - nxos_name: dstInterface
+            tf_name: destination_interface
+            type: String
+            description: 'Destination interface to Pair.'
+            example: eth1/11
   - class_name: platformPriorFlowCtrlWd
     doc_path: System/platform%3APriorFlowCtrlWd/
     rn: priorflowctrlwd

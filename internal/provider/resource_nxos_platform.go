@@ -63,7 +63,7 @@ func (r *PlatformResource) Metadata(ctx context.Context, req resource.MetadataRe
 func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3AQos/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformDlbEntity", "platformDlbStaticPinning", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform:DlbEntity/", "System/platform:DlbStaticPinning/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3AQos/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1567,6 +1567,123 @@ func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
+			"dlb_allow_all_interfaces": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB allow all interfaces.").String,
+				Optional:            true,
+			},
+			"dlb_decay_factor": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Controls the impact of past port load data on current port load calculations.").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"dlb_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB description.").String,
+				Optional:            true,
+			},
+			"dlb_dre_threshold_level_1": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB DRE Threshold Level-1 in percentage.").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
+			"dlb_dre_threshold_level_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB DRE Threshold Level-2 in percentage.").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
+			"dlb_dre_threshold_level_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB DRE Threshold Level-3 in percentage.").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
+			"dlb_dre_threshold_level_4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB DRE Threshold Level-4 in percentage.").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
+			"dlb_dre_threshold_level_5": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB DRE Threshold Level-5 in percentage.").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
+			"dlb_dre_threshold_level_6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB DRE Threshold Level-6 in percentage.").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
+			"dlb_dre_threshold_level_7": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB DRE Threshold Level-7 in percentage.").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
+			"dlb_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB status.").String,
+				Optional:            true,
+			},
+			"dlb_flowlet_aging": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB Flowlet Aging Timer in microseconds.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"dlb_interfaces": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB interface list - needs Restart.").String,
+				Optional:            true,
+			},
+			"dlb_load_awareness": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use port load for port selection.").String,
+				Optional:            true,
+			},
+			"dlb_mac_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB MAC Address.").String,
+				Optional:            true,
+			},
+			"dlb_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB Mode.").AddStringEnumDescription("FLOWLET", "PER_PACKET", "POLICY_DRIVEN_FLOWLET", "POLICY_DRIVEN_PER_PACKET", "POLICY_DRIVEN_MIXED_DEFAULT_FLOWLET", "POLICY_DRIVEN_MIXED_DEFAULT_PER_PACKET", "POLICY_DRIVEN_MIXED_DEFAULT_ECMP").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("FLOWLET", "PER_PACKET", "POLICY_DRIVEN_FLOWLET", "POLICY_DRIVEN_PER_PACKET", "POLICY_DRIVEN_MIXED_DEFAULT_FLOWLET", "POLICY_DRIVEN_MIXED_DEFAULT_PER_PACKET", "POLICY_DRIVEN_MIXED_DEFAULT_ECMP"),
+				},
+			},
+			"dlb_sampling_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time interval for each port load collection in nsec.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"dlb_static_pinning": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DLB Static Pinning.").String,
+				Optional:            true,
+			},
+			"dlb_static_pinnings": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of DLB static pinning source/destination interface pairs.\n  - Map key: `source_interface` - Source interface to Pair.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"destination_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Destination interface to Pair.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 			"pfc_watchdog_auto_restore_multiplier": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("PFC WD Auto shutdown multiplier.").AddIntegerRangeDescription(0, 100).String,
 				Optional:            true,
@@ -2217,7 +2334,7 @@ func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformDlbEntity", "platformDlbStaticPinning", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

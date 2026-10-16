@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.
   API Documentation
-  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/platformPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/platformQos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AQos/platformTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/platformUdfTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/platformUdfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/platformUdf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdf/
+  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/platformDlbEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:DlbEntity/platformDlbStaticPinning https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:DlbStaticPinning/platformPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/platformQos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AQos/platformTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/platformUdfTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/platformUdfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/platformUdf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdf/
 ---
 
 # nxos_platform (Data Source)
@@ -21,6 +21,8 @@ This data source can read the platform configuration on NX-OS devices, including
 - [platformInfraVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/)
 - [platformEntityExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/)
 - [platformLoadBalance](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/)
+- [platformDlbEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:DlbEntity/)
+- [platformDlbStaticPinning](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:DlbStaticPinning/)
 - [platformPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/)
 - [platformQos](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AQos/)
 - [platformTcamTemplate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/)
@@ -48,6 +50,26 @@ data "nxos_platform" "example" {
 - `acl_tap_aggregation` (String) Configure tap-aggregation feature.
 - `description` (String) Container to hold platform data of apps.
 - `disable_parse_error` (String) Used to disable/enable hardware profile disable parse-err.
+- `dlb_allow_all_interfaces` (Boolean) DLB allow all interfaces.
+- `dlb_decay_factor` (Number) Controls the impact of past port load data on current port load calculations.
+- `dlb_description` (String) DLB description.
+- `dlb_dre_threshold_level_1` (Number) DLB DRE Threshold Level-1 in percentage.
+- `dlb_dre_threshold_level_2` (Number) DLB DRE Threshold Level-2 in percentage.
+- `dlb_dre_threshold_level_3` (Number) DLB DRE Threshold Level-3 in percentage.
+- `dlb_dre_threshold_level_4` (Number) DLB DRE Threshold Level-4 in percentage.
+- `dlb_dre_threshold_level_5` (Number) DLB DRE Threshold Level-5 in percentage.
+- `dlb_dre_threshold_level_6` (Number) DLB DRE Threshold Level-6 in percentage.
+- `dlb_dre_threshold_level_7` (Number) DLB DRE Threshold Level-7 in percentage.
+- `dlb_enabled` (Boolean) DLB status.
+- `dlb_flowlet_aging` (Number) DLB Flowlet Aging Timer in microseconds.
+- `dlb_interfaces` (String) DLB interface list - needs Restart.
+- `dlb_load_awareness` (Boolean) Use port load for port selection.
+- `dlb_mac_address` (String) DLB MAC Address.
+- `dlb_mode` (String) DLB Mode.
+- `dlb_sampling_interval` (Number) Time interval for each port load collection in nsec.
+- `dlb_static_pinning` (Boolean) DLB Static Pinning.
+- `dlb_static_pinnings` (Attributes Map) List of DLB static pinning source/destination interface pairs.
+  - Map key: `source_interface` - Source interface to Pair. (see [below for nested schema](#nestedatt--dlb_static_pinnings))
 - `dot1q_tunnel_transit_range` (String) Enable Dot1Q tunnel transit for a range of vlans for multi-tag Ethernet frames.
 - `extended_acl_disable_redirect_share` (String) Disable acl redirect share.
 - `extended_atomic_update` (String) To optimize enable/disable atomic update.
@@ -327,6 +349,14 @@ data "nxos_platform" "example" {
 - `unknown_unicast_flood` (String) Hardware flood post-routed traffic on SVI if dest-mac->layer2-port binding unknown.
 - `urpf_status` (String) Unicast Reverse Path Forwarding Status.
 - `wrr_unicast_bandwidth` (Number) WRR Unicast Bandwidth Value.
+
+<a id="nestedatt--dlb_static_pinnings"></a>
+### Nested Schema for `dlb_static_pinnings`
+
+Read-Only:
+
+- `destination_interface` (String) Destination interface to Pair.
+
 
 <a id="nestedatt--nve_interfaces"></a>
 ### Nested Schema for `nve_interfaces`

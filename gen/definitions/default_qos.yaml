@@ -327,6 +327,23 @@ child_classes:
                       - internet
                       - network
                     example: critical
+              - class_name: ipqosSetDlbMode
+                doc_path: Qos/ipqos:SetDlbMode/
+                rn: setdlbmode
+                type: single
+                tf_name: set_dlb_mode
+                description: 'Set DLB mode configuration.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: mode
+                    tf_name: set_dlb_mode
+                    type: String
+                    description: 'Set dlb mode.'
+                    enum_values:
+                      - undefined
+                      - flowlet
+                      - per-packet
+                    example: per-packet
               - class_name: ipqosPolice
                 doc_path: Qos/ipqos:Police/
                 rn: police

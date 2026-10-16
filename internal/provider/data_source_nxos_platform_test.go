@@ -39,6 +39,24 @@ func TestAccDataSourceNxosPlatform(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_fields", "srcDstIp"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_rotate", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_symmetry", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_allow_all_interfaces", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_decay_factor", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_description", "My DLB"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_1", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_2", "35"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_3", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_4", "25"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_5", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_6", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_7", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_flowlet_aging", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_interfaces", "eth1/10,eth1/11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_load_awareness", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_mac_address", "00:AA:BB:CC:DD:EE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_mode", "PER_PACKET"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_sampling_interval", "64000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_static_pinning", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_static_pinnings.eth1/10.destination_interface", "eth1/11"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_auto_restore_multiplier", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_mode", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_fixed_restore_multiplier", "50"))
@@ -140,6 +158,28 @@ func testAccDataSourceNxosPlatformConfig() string {
 	config += `	port_channel_load_balance_fields = "srcDstIp"` + "\n"
 	config += `	port_channel_load_balance_rotate = 3` + "\n"
 	config += `	port_channel_load_balance_symmetry = "enable"` + "\n"
+	config += `	dlb_allow_all_interfaces = true` + "\n"
+	config += `	dlb_decay_factor = 4` + "\n"
+	config += `	dlb_description = "My DLB"` + "\n"
+	config += `	dlb_dre_threshold_level_1 = 40` + "\n"
+	config += `	dlb_dre_threshold_level_2 = 35` + "\n"
+	config += `	dlb_dre_threshold_level_3 = 30` + "\n"
+	config += `	dlb_dre_threshold_level_4 = 25` + "\n"
+	config += `	dlb_dre_threshold_level_5 = 20` + "\n"
+	config += `	dlb_dre_threshold_level_6 = 15` + "\n"
+	config += `	dlb_dre_threshold_level_7 = 10` + "\n"
+	config += `	dlb_flowlet_aging = 1000` + "\n"
+	config += `	dlb_interfaces = "eth1/10,eth1/11"` + "\n"
+	config += `	dlb_load_awareness = false` + "\n"
+	config += `	dlb_mac_address = "00:AA:BB:CC:DD:EE"` + "\n"
+	config += `	dlb_mode = "PER_PACKET"` + "\n"
+	config += `	dlb_sampling_interval = 64000` + "\n"
+	config += `	dlb_static_pinning = true` + "\n"
+	config += `	dlb_static_pinnings = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `			destination_interface = "eth1/11"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	pfc_watchdog_auto_restore_multiplier = 20` + "\n"
 	config += `	pfc_watchdog_mode = "on"` + "\n"
 	config += `	pfc_watchdog_fixed_restore_multiplier = 50` + "\n"

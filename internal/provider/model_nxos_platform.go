@@ -39,286 +39,305 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type Platform struct {
-	Device                                              types.String                     `tfsdk:"device"`
-	Dn                                                  types.String                     `tfsdk:"id"`
-	AccessListMatchInnerHeader                          types.String                     `tfsdk:"access_list_match_inner_header"`
-	AclTapAggregation                                   types.String                     `tfsdk:"acl_tap_aggregation"`
-	Description                                         types.String                     `tfsdk:"description"`
-	DisableParseError                                   types.String                     `tfsdk:"disable_parse_error"`
-	Dot1qTunnelTransitRange                             types.String                     `tfsdk:"dot1q_tunnel_transit_range"`
-	GlobalTxSpan                                        types.String                     `tfsdk:"global_tx_span"`
-	HighMulticastPriority                               types.String                     `tfsdk:"high_multicast_priority"`
-	HardwareLouResourceThreshold                        types.Int64                      `tfsdk:"hardware_lou_resource_threshold"`
-	IngressBdIfaclLabelOptimization                     types.String                     `tfsdk:"ingress_bd_ifacl_label_optimization"`
-	IngressRaclSize                                     types.String                     `tfsdk:"ingress_racl_size"`
-	IngressReplicationRoundRobin                        types.Bool                       `tfsdk:"ingress_replication_round_robin"`
-	IpStatistics                                        types.String                     `tfsdk:"ip_statistics"`
-	Ipv6AlpmCarveValue                                  types.Int64                      `tfsdk:"ipv6_alpm_carve_value"`
-	Ipv6LpmMaxEntries                                   types.Int64                      `tfsdk:"ipv6_lpm_max_entries"`
-	LpmMaxLimit                                         types.Int64                      `tfsdk:"lpm_max_limit"`
-	MulticastDcsCheck                                   types.String                     `tfsdk:"multicast_dcs_check"`
-	MulticastFlexStats                                  types.String                     `tfsdk:"multicast_flex_stats"`
-	MulticastLpmMaxEntries                              types.Int64                      `tfsdk:"multicast_lpm_max_entries"`
-	MulticastNlb                                        types.String                     `tfsdk:"multicast_nlb"`
-	MulticastRaclBridge                                 types.String                     `tfsdk:"multicast_racl_bridge"`
-	MldSnooping                                         types.String                     `tfsdk:"mld_snooping"`
-	MplsAdjacencyStatsMode                              types.String                     `tfsdk:"mpls_adjacency_stats_mode"`
-	MplsEcmpMode                                        types.String                     `tfsdk:"mpls_ecmp_mode"`
-	MroutingDisableL2Update                             types.String                     `tfsdk:"mrouting_disable_l2_update"`
-	MroutingDisableSecondRouteUpdate                    types.String                     `tfsdk:"mrouting_disable_second_route_update"`
-	MroutingPerformanceMode                             types.String                     `tfsdk:"mrouting_performance_mode"`
-	MulticastMaxLimit                                   types.Int64                      `tfsdk:"multicast_max_limit"`
-	MulticastRpfCheckOptimization                       types.String                     `tfsdk:"multicast_rpf_check_optimization"`
-	MulticastServiceReflectPort                         types.Int64                      `tfsdk:"multicast_service_reflect_port"`
-	MulticastSyslogThreshold                            types.Int64                      `tfsdk:"multicast_syslog_threshold"`
-	OpenflowForwardPdu                                  types.String                     `tfsdk:"openflow_forward_pdu"`
-	PbrSkipSelfIp                                       types.String                     `tfsdk:"pbr_skip_self_ip"`
-	PortChannelFastConvergence                          types.String                     `tfsdk:"port_channel_fast_convergence"`
-	PortChannelLoadBalanceAlgorithm                     types.String                     `tfsdk:"port_channel_load_balance_algorithm"`
-	PortChannelLoadBalanceResilient                     types.String                     `tfsdk:"port_channel_load_balance_resilient"`
-	PortChannelMplsLoadBalanceLabelIp                   types.String                     `tfsdk:"port_channel_mpls_load_balance_label_ip"`
-	PortChannelMplsLoadBalanceLabelOnly                 types.String                     `tfsdk:"port_channel_mpls_load_balance_label_only"`
-	PortChannelScaleFanout                              types.String                     `tfsdk:"port_channel_scale_fanout"`
-	PicCoreEnable                                       types.String                     `tfsdk:"pic_core_enable"`
-	ProfileFrontPortMode                                types.String                     `tfsdk:"profile_front_port_mode"`
-	ProfileMode                                         types.String                     `tfsdk:"profile_mode"`
-	ProfileTuple                                        types.String                     `tfsdk:"profile_tuple"`
-	PstatConfiguration                                  types.String                     `tfsdk:"pstat_configuration"`
-	QosMinBuffer                                        types.String                     `tfsdk:"qos_min_buffer"`
-	RoutingMode                                         types.String                     `tfsdk:"routing_mode"`
-	ServiceTemplateName                                 types.String                     `tfsdk:"service_template_name"`
-	SviAndSiFlexStats                                   types.String                     `tfsdk:"svi_and_si_flex_stats"`
-	SviFlexStats                                        types.String                     `tfsdk:"svi_flex_stats"`
-	SwitchMode                                          types.String                     `tfsdk:"switch_mode"`
-	SwitchingFabricSpeed                                types.String                     `tfsdk:"switching_fabric_speed"`
-	SwitchingMode                                       types.String                     `tfsdk:"switching_mode"`
-	SystemFabricMode                                    types.String                     `tfsdk:"system_fabric_mode"`
-	TcamSyslogThreshold                                 types.Int64                      `tfsdk:"tcam_syslog_threshold"`
-	UnicastMaxLimit                                     types.Int64                      `tfsdk:"unicast_max_limit"`
-	UnicastSyslogThreshold                              types.Int64                      `tfsdk:"unicast_syslog_threshold"`
-	UnicastTrace                                        types.String                     `tfsdk:"unicast_trace"`
-	UnknownUnicastFlood                                 types.String                     `tfsdk:"unknown_unicast_flood"`
-	UrpfStatus                                          types.String                     `tfsdk:"urpf_status"`
-	WrrUnicastBandwidth                                 types.Int64                      `tfsdk:"wrr_unicast_bandwidth"`
-	TcamRegionArpAclSize                                types.Int64                      `tfsdk:"tcam_region_arp_acl_size"`
-	TcamRegionCoppSize                                  types.Int64                      `tfsdk:"tcam_region_copp_size"`
-	TcamRegionCoppSystemSize                            types.Int64                      `tfsdk:"tcam_region_copp_system_size"`
-	TcamRegionEgressIpv6QosSize                         types.Int64                      `tfsdk:"tcam_region_egress_ipv6_qos_size"`
-	TcamRegionEgressIpv6RaclSize                        types.Int64                      `tfsdk:"tcam_region_egress_ipv6_racl_size"`
-	TcamRegionEgressMacQosSize                          types.Int64                      `tfsdk:"tcam_region_egress_mac_qos_size"`
-	TcamRegionEgressQosLiteSize                         types.Int64                      `tfsdk:"tcam_region_egress_qos_lite_size"`
-	TcamRegionEgressQosSize                             types.Int64                      `tfsdk:"tcam_region_egress_qos_size"`
-	TcamRegionEgressRaclSize                            types.Int64                      `tfsdk:"tcam_region_egress_racl_size"`
-	TcamRegionEgressVaclSize                            types.Int64                      `tfsdk:"tcam_region_egress_vacl_size"`
-	TcamRegionFcoeEgressSize                            types.Int64                      `tfsdk:"tcam_region_fcoe_egress_size"`
-	TcamRegionFcoeIngressSize                           types.Int64                      `tfsdk:"tcam_region_fcoe_ingress_size"`
-	TcamRegionFhsSize                                   types.Int64                      `tfsdk:"tcam_region_fhs_size"`
-	TcamRegionInterfaceAclLiteSize                      types.Int64                      `tfsdk:"tcam_region_interface_acl_lite_size"`
-	TcamRegionInterfaceAclSize                          types.Int64                      `tfsdk:"tcam_region_interface_acl_size"`
-	TcamRegionInterfaceAclUdfSize                       types.Int64                      `tfsdk:"tcam_region_interface_acl_udf_size"`
-	TcamRegionIngressFlowRedirectSize                   types.Int64                      `tfsdk:"tcam_region_ingress_flow_redirect_size"`
-	TcamRegionIngressFlowSize                           types.Int64                      `tfsdk:"tcam_region_ingress_flow_size"`
-	TcamRegionIpsgSize                                  types.Int64                      `tfsdk:"tcam_region_ipsg_size"`
-	TcamRegionIpv6InterfaceAclSize                      types.Int64                      `tfsdk:"tcam_region_ipv6_interface_acl_size"`
-	TcamRegionIpv6L3QosSize                             types.Int64                      `tfsdk:"tcam_region_ipv6_l3_qos_size"`
-	TcamRegionIpv6PbrSize                               types.Int64                      `tfsdk:"tcam_region_ipv6_pbr_size"`
-	TcamRegionIpv6QosSize                               types.Int64                      `tfsdk:"tcam_region_ipv6_qos_size"`
-	TcamRegionIpv6RaclSize                              types.Int64                      `tfsdk:"tcam_region_ipv6_racl_size"`
-	TcamRegionIpv6SpanL2Size                            types.Int64                      `tfsdk:"tcam_region_ipv6_span_l2_size"`
-	TcamRegionIpv6SpanSize                              types.Int64                      `tfsdk:"tcam_region_ipv6_span_size"`
-	TcamRegionIpv6SupSize                               types.Int64                      `tfsdk:"tcam_region_ipv6_sup_size"`
-	TcamRegionIpv6VaclSize                              types.Int64                      `tfsdk:"tcam_region_ipv6_vacl_size"`
-	TcamRegionIpv6VlanQosSize                           types.Int64                      `tfsdk:"tcam_region_ipv6_vlan_qos_size"`
-	TcamRegionL3QosIntraLiteSize                        types.Int64                      `tfsdk:"tcam_region_l3_qos_intra_lite_size"`
-	TcamRegionMacInterfaceAclSize                       types.Int64                      `tfsdk:"tcam_region_mac_interface_acl_size"`
-	TcamRegionMacL3QosSize                              types.Int64                      `tfsdk:"tcam_region_mac_l3_qos_size"`
-	TcamRegionMacQosSize                                types.Int64                      `tfsdk:"tcam_region_mac_qos_size"`
-	TcamRegionMacVaclSize                               types.Int64                      `tfsdk:"tcam_region_mac_vacl_size"`
-	TcamRegionMacVlanQosSize                            types.Int64                      `tfsdk:"tcam_region_mac_vlan_qos_size"`
-	TcamRegionMulticastBidirSize                        types.Int64                      `tfsdk:"tcam_region_multicast_bidir_size"`
-	TcamRegionMplsDoublewide                            types.Bool                       `tfsdk:"tcam_region_mpls_doublewide"`
-	TcamRegionMplsSize                                  types.Int64                      `tfsdk:"tcam_region_mpls_size"`
-	TcamRegionMvpnSize                                  types.Int64                      `tfsdk:"tcam_region_mvpn_size"`
-	TcamRegionN9kArpAclSize                             types.Int64                      `tfsdk:"tcam_region_n9k_arp_acl_size"`
-	TcamRegionNatSize                                   types.Int64                      `tfsdk:"tcam_region_nat_size"`
-	TcamRegionOpenflowDoublewide                        types.Bool                       `tfsdk:"tcam_region_openflow_doublewide"`
-	TcamRegionOpenflowLiteSize                          types.Int64                      `tfsdk:"tcam_region_openflow_lite_size"`
-	TcamRegionOpenflowSize                              types.Int64                      `tfsdk:"tcam_region_openflow_size"`
-	TcamRegionPbrSize                                   types.Int64                      `tfsdk:"tcam_region_pbr_size"`
-	TcamRegionQosIntraLiteSize                          types.Int64                      `tfsdk:"tcam_region_qos_intra_lite_size"`
-	TcamRegionQosSize                                   types.Int64                      `tfsdk:"tcam_region_qos_size"`
-	TcamRegionQosLabelSize                              types.Int64                      `tfsdk:"tcam_region_qos_label_size"`
-	TcamRegionRaclLiteSize                              types.Int64                      `tfsdk:"tcam_region_racl_lite_size"`
-	TcamRegionRaclSize                                  types.Int64                      `tfsdk:"tcam_region_racl_size"`
-	TcamRegionRaclUdfSize                               types.Int64                      `tfsdk:"tcam_region_racl_udf_size"`
-	TcamRegionSupSize                                   types.Int64                      `tfsdk:"tcam_region_sup_size"`
-	TcamRegionSviSize                                   types.Int64                      `tfsdk:"tcam_region_svi_size"`
-	TcamRegionTcpNatSize                                types.Int64                      `tfsdk:"tcam_region_tcp_nat_size"`
-	TcamRegionVaclLiteSize                              types.Int64                      `tfsdk:"tcam_region_vacl_lite_size"`
-	TcamRegionVaclSize                                  types.Int64                      `tfsdk:"tcam_region_vacl_size"`
-	TcamRegionVpcConvergenceSize                        types.Int64                      `tfsdk:"tcam_region_vpc_convergence_size"`
-	TcamRegionVlanQosIntraLiteSize                      types.Int64                      `tfsdk:"tcam_region_vlan_qos_intra_lite_size"`
-	TcamRegionVlanQosSize                               types.Int64                      `tfsdk:"tcam_region_vlan_qos_size"`
-	TcamRegionVxlanP2pSize                              types.Int64                      `tfsdk:"tcam_region_vxlan_p2p_size"`
-	TcamRegionExtendedEgressInterfaceAclAllPerPortStats types.Bool                       `tfsdk:"tcam_region_extended_egress_interface_acl_all_per_port_stats"`
-	TcamRegionExtendedEgressInterfaceAclAllSize         types.Int64                      `tfsdk:"tcam_region_extended_egress_interface_acl_all_size"`
-	TcamRegionExtendedEgressIpv6RaclPerPortStats        types.Bool                       `tfsdk:"tcam_region_extended_egress_ipv6_racl_per_port_stats"`
-	TcamRegionExtendedEgressRaclPerPortStats            types.Bool                       `tfsdk:"tcam_region_extended_egress_racl_per_port_stats"`
-	TcamRegionExtendedEgressCoppSize                    types.Int64                      `tfsdk:"tcam_region_extended_egress_copp_size"`
-	TcamRegionExtendedEgressFlowSize                    types.Int64                      `tfsdk:"tcam_region_extended_egress_flow_size"`
-	TcamRegionExtendedEgressHardwareTelemetrySize       types.Int64                      `tfsdk:"tcam_region_extended_egress_hardware_telemetry_size"`
-	TcamRegionExtendedEgressInterfaceAclSize            types.Int64                      `tfsdk:"tcam_region_extended_egress_interface_acl_size"`
-	TcamRegionExtendedEgressL2QosSize                   types.Int64                      `tfsdk:"tcam_region_extended_egress_l2_qos_size"`
-	TcamRegionExtendedEgressL3VlanQosSize               types.Int64                      `tfsdk:"tcam_region_extended_egress_l3_vlan_qos_size"`
-	TcamRegionExtendedEgressRaclSize                    types.Int64                      `tfsdk:"tcam_region_extended_egress_racl_size"`
-	TcamRegionExtendedEgressSupSize                     types.Int64                      `tfsdk:"tcam_region_extended_egress_sup_size"`
-	TcamRegionExtendedHardwareTelemetrySize             types.Int64                      `tfsdk:"tcam_region_extended_hardware_telemetry_size"`
-	TcamRegionExtendedInterfaceAclAllPerPortStats       types.Bool                       `tfsdk:"tcam_region_extended_interface_acl_all_per_port_stats"`
-	TcamRegionExtendedInterfaceAclAllProfile            types.Int64                      `tfsdk:"tcam_region_extended_interface_acl_all_profile"`
-	TcamRegionExtendedInterfaceAclAllSize               types.Int64                      `tfsdk:"tcam_region_extended_interface_acl_all_size"`
-	TcamRegionExtendedInterfaceAclPerPortStats          types.Bool                       `tfsdk:"tcam_region_extended_interface_acl_per_port_stats"`
-	TcamRegionExtendedIngressDaclSize                   types.Int64                      `tfsdk:"tcam_region_extended_ingress_dacl_size"`
-	TcamRegionExtendedIngressInterfaceAclSize           types.Int64                      `tfsdk:"tcam_region_extended_ingress_interface_acl_size"`
-	TcamRegionExtendedIngressInterfaceAclWideSize       types.Int64                      `tfsdk:"tcam_region_extended_ingress_interface_acl_wide_size"`
-	TcamRegionExtendedIngressIpv6InterfaceAclLiteSize   types.Int64                      `tfsdk:"tcam_region_extended_ingress_ipv6_interface_acl_lite_size"`
-	TcamRegionExtendedIngressL2L3QosSize                types.Int64                      `tfsdk:"tcam_region_extended_ingress_l2_l3_qos_size"`
-	TcamRegionExtendedIngressL2QosSize                  types.Int64                      `tfsdk:"tcam_region_extended_ingress_l2_qos_size"`
-	TcamRegionExtendedIngressL2SpanFilterSize           types.Int64                      `tfsdk:"tcam_region_extended_ingress_l2_span_filter_size"`
-	TcamRegionExtendedIngressL3SpanFilterSize           types.Int64                      `tfsdk:"tcam_region_extended_ingress_l3_span_filter_size"`
-	TcamRegionExtendedIngressPaclSbSize                 types.Int64                      `tfsdk:"tcam_region_extended_ingress_pacl_sb_size"`
-	TcamRegionExtendedIngressRaclSize                   types.Int64                      `tfsdk:"tcam_region_extended_ingress_racl_size"`
-	TcamRegionExtendedIngressRbaclSize                  types.Int64                      `tfsdk:"tcam_region_extended_ingress_rbacl_size"`
-	TcamRegionExtendedIngressRedirectSize               types.Int64                      `tfsdk:"tcam_region_extended_ingress_redirect_size"`
-	TcamRegionExtendedIngressStormControlSize           types.Int64                      `tfsdk:"tcam_region_extended_ingress_storm_control_size"`
-	TcamRegionExtendedIngressSupSize                    types.Int64                      `tfsdk:"tcam_region_extended_ingress_sup_size"`
-	TcamRegionExtendedIngressVaclNhSize                 types.Int64                      `tfsdk:"tcam_region_extended_ingress_vacl_nh_size"`
-	TcamRegionExtendedIngressVlanQosSize                types.Int64                      `tfsdk:"tcam_region_extended_ingress_vlan_qos_size"`
-	TcamRegionExtendedIpv6InterfaceAclPerPortStats      types.Bool                       `tfsdk:"tcam_region_extended_ipv6_interface_acl_per_port_stats"`
-	TcamRegionExtendedIpv6RaclPerPortStats              types.Bool                       `tfsdk:"tcam_region_extended_ipv6_racl_per_port_stats"`
-	TcamRegionExtendedMacInterfaceAclPerPortStats       types.Bool                       `tfsdk:"tcam_region_extended_mac_interface_acl_per_port_stats"`
-	TcamRegionExtendedMulticastNatSize                  types.Int64                      `tfsdk:"tcam_region_extended_multicast_nat_size"`
-	TcamRegionExtendedMulticastNbmSize                  types.Int64                      `tfsdk:"tcam_region_extended_multicast_nbm_size"`
-	TcamRegionExtendedRaclAllPerPortStats               types.Bool                       `tfsdk:"tcam_region_extended_racl_all_per_port_stats"`
-	TcamRegionExtendedRaclAllProfile                    types.Int64                      `tfsdk:"tcam_region_extended_racl_all_profile"`
-	TcamRegionExtendedRaclAllSize                       types.Int64                      `tfsdk:"tcam_region_extended_racl_all_size"`
-	TcamRegionExtendedRaclPerPortStats                  types.Bool                       `tfsdk:"tcam_region_extended_racl_per_port_stats"`
-	TcamRegionExtendedRedirectV4Size                    types.Int64                      `tfsdk:"tcam_region_extended_redirect_v4_size"`
-	TcamRegionExtendedSpanSize                          types.Int64                      `tfsdk:"tcam_region_extended_span_size"`
-	TcamRegionExtendedSpanTahoeSize                     types.Int64                      `tfsdk:"tcam_region_extended_span_tahoe_size"`
-	NveInterfaces                                       map[string]PlatformNveInterfaces `tfsdk:"nve_interfaces"`
-	ExtendedAclDisableRedirectShare                     types.String                     `tfsdk:"extended_acl_disable_redirect_share"`
-	ExtendedAtomicUpdate                                types.String                     `tfsdk:"extended_atomic_update"`
-	ExtendedAtomicUpdateStrict                          types.String                     `tfsdk:"extended_atomic_update_strict"`
-	ExtendedCounterManagerBfdScale                      types.Int64                      `tfsdk:"extended_counter_manager_bfd_scale"`
-	ExtendedCounterManagerEcnScale                      types.Int64                      `tfsdk:"extended_counter_manager_ecn_scale"`
-	ExtendedCounterManagerEgressAclScale                types.Int64                      `tfsdk:"extended_counter_manager_egress_acl_scale"`
-	ExtendedCounterManagerFeatureBfd                    types.Int64                      `tfsdk:"extended_counter_manager_feature_bfd"`
-	ExtendedCounterManagerFeatureEcn                    types.Int64                      `tfsdk:"extended_counter_manager_feature_ecn"`
-	ExtendedCounterManagerFeatureEgressAcl              types.Int64                      `tfsdk:"extended_counter_manager_feature_egress_acl"`
-	ExtendedCounterManagerFeatureIngressAcl             types.Int64                      `tfsdk:"extended_counter_manager_feature_ingress_acl"`
-	ExtendedCounterManagerFeatureL2vni                  types.Int64                      `tfsdk:"extended_counter_manager_feature_l2vni"`
-	ExtendedCounterManagerFeatureL3vni                  types.Int64                      `tfsdk:"extended_counter_manager_feature_l3vni"`
-	ExtendedCounterManagerFeatureSi                     types.Int64                      `tfsdk:"extended_counter_manager_feature_si"`
-	ExtendedCounterManagerFeatureSvi                    types.Int64                      `tfsdk:"extended_counter_manager_feature_svi"`
-	ExtendedCounterManagerFeatureTunnel                 types.Int64                      `tfsdk:"extended_counter_manager_feature_tunnel"`
-	ExtendedCounterManagerFeatureVlan                   types.Int64                      `tfsdk:"extended_counter_manager_feature_vlan"`
-	ExtendedCounterManagerFeatureVoq                    types.Int64                      `tfsdk:"extended_counter_manager_feature_voq"`
-	ExtendedCounterManagerIngressAclScale               types.Int64                      `tfsdk:"extended_counter_manager_ingress_acl_scale"`
-	ExtendedCounterManagerL2vniScale                    types.Int64                      `tfsdk:"extended_counter_manager_l2vni_scale"`
-	ExtendedCounterManagerL3vniScale                    types.Int64                      `tfsdk:"extended_counter_manager_l3vni_scale"`
-	ExtendedCounterManagerSiScale                       types.Int64                      `tfsdk:"extended_counter_manager_si_scale"`
-	ExtendedCounterManagerSviScale                      types.Int64                      `tfsdk:"extended_counter_manager_svi_scale"`
-	ExtendedCounterManagerTunnelScale                   types.Int64                      `tfsdk:"extended_counter_manager_tunnel_scale"`
-	ExtendedCounterManagerVlanScale                     types.Int64                      `tfsdk:"extended_counter_manager_vlan_scale"`
-	ExtendedCounterManagerVoqScale                      types.Int64                      `tfsdk:"extended_counter_manager_voq_scale"`
-	ExtendedDmeLoadInterval                             types.Int64                      `tfsdk:"extended_dme_load_interval"`
-	ExtendedEgressL2QosIfaclLabelSize                   types.String                     `tfsdk:"extended_egress_l2_qos_ifacl_label_size"`
-	ExtendedGpe5TimerEnable                             types.Bool                       `tfsdk:"extended_gpe5_timer_enable"`
-	ExtendedHardwareQosLatencyOptimized                 types.Bool                       `tfsdk:"extended_hardware_qos_latency_optimized"`
-	ExtendedIngressPaclIfaclLabelSize                   types.String                     `tfsdk:"extended_ingress_pacl_ifacl_label_size"`
-	ExtendedIngressVrfNatBdLabelWidth                   types.Int64                      `tfsdk:"extended_ingress_vrf_nat_bd_label_width"`
-	ExtendedMulticastNlbStickPortChannel                types.String                     `tfsdk:"extended_multicast_nlb_stick_port_channel"`
-	ExtendedMulticastStatsDisable                       types.String                     `tfsdk:"extended_multicast_stats_disable"`
-	ExtendedMplsQosPipeMode                             types.String                     `tfsdk:"extended_mpls_qos_pipe_mode"`
-	ExtendedMulticastPriority                           types.Int64                      `tfsdk:"extended_multicast_priority"`
-	ExtendedPbrEcmpPaths                                types.Int64                      `tfsdk:"extended_pbr_ecmp_paths"`
-	ExtendedPbrFastConvergence                          types.String                     `tfsdk:"extended_pbr_fast_convergence"`
-	ExtendedPbrMatchDefaultRoute                        types.String                     `tfsdk:"extended_pbr_match_default_route"`
-	ExtendedPtpCorrectionHardware                       types.Bool                       `tfsdk:"extended_ptp_correction_hardware"`
-	ExtendedSiFlexStats                                 types.String                     `tfsdk:"extended_si_flex_stats"`
-	ExtendedStatsTemplate                               types.String                     `tfsdk:"extended_stats_template"`
-	ExtendedStormControlPriority                        types.String                     `tfsdk:"extended_storm_control_priority"`
-	ExtendedTcamDefaultResult                           types.String                     `tfsdk:"extended_tcam_default_result"`
-	ExtendedUdfNetflowRtpMulticastEnabled               types.Bool                       `tfsdk:"extended_udf_netflow_rtp_multicast_enabled"`
-	ExtendedVrfAwareNatEnable                           types.String                     `tfsdk:"extended_vrf_aware_nat_enable"`
-	PortChannelLoadBalanceConcatenation                 types.String                     `tfsdk:"port_channel_load_balance_concatenation"`
-	PortChannelLoadBalanceEncapsulation                 types.String                     `tfsdk:"port_channel_load_balance_encapsulation"`
-	PortChannelLoadBalanceFex                           types.Bool                       `tfsdk:"port_channel_load_balance_fex"`
-	PortChannelLoadBalanceFields                        types.String                     `tfsdk:"port_channel_load_balance_fields"`
-	PortChannelLoadBalanceMplsLabelIp                   types.String                     `tfsdk:"port_channel_load_balance_mpls_label_ip"`
-	PortChannelLoadBalanceMplsLabelOnly                 types.String                     `tfsdk:"port_channel_load_balance_mpls_label_only"`
-	PortChannelLoadBalanceRotate                        types.Int64                      `tfsdk:"port_channel_load_balance_rotate"`
-	PortChannelLoadBalanceSymmetry                      types.String                     `tfsdk:"port_channel_load_balance_symmetry"`
-	PfcWatchdogAutoRestoreMultiplier                    types.Int64                      `tfsdk:"pfc_watchdog_auto_restore_multiplier"`
-	PfcWatchdogMode                                     types.String                     `tfsdk:"pfc_watchdog_mode"`
-	PfcWatchdogFixedRestoreMultiplier                   types.Int64                      `tfsdk:"pfc_watchdog_fixed_restore_multiplier"`
-	PfcWatchdogForcedOn                                 types.String                     `tfsdk:"pfc_watchdog_forced_on"`
-	PfcWatchdogInternalInterfaceMultiplier              types.Int64                      `tfsdk:"pfc_watchdog_internal_interface_multiplier"`
-	PfcWatchdogInterval                                 types.Int64                      `tfsdk:"pfc_watchdog_interval"`
-	PfcWatchdogShutdownMultiplier                       types.Int64                      `tfsdk:"pfc_watchdog_shutdown_multiplier"`
-	QosBufferPeakMonitorCounter0Class0                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class0"`
-	QosBufferPeakMonitorCounter0Class1                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class1"`
-	QosBufferPeakMonitorCounter0Class2                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class2"`
-	QosBufferPeakMonitorCounter0Class3                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class3"`
-	QosBufferPeakMonitorCounter0Class4                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class4"`
-	QosBufferPeakMonitorCounter0Class5                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class5"`
-	QosBufferPeakMonitorCounter0Class6                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class6"`
-	QosBufferPeakMonitorCounter0Class7                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class7"`
-	QosBurstDetectFallThresholdUnit                     types.String                     `tfsdk:"qos_burst_detect_fall_threshold_unit"`
-	QosBurstDetectFallThreshold                         types.Int64                      `tfsdk:"qos_burst_detect_fall_threshold"`
-	QosBurstDetectMaxRecords                            types.Int64                      `tfsdk:"qos_burst_detect_max_records"`
-	QosBurstDetectRiseThresholdUnit                     types.String                     `tfsdk:"qos_burst_detect_rise_threshold_unit"`
-	QosBurstDetectRiseThreshold                         types.Int64                      `tfsdk:"qos_burst_detect_rise_threshold"`
-	QosClassifyNsOnly                                   types.String                     `tfsdk:"qos_classify_ns_only"`
-	QosCpuSize                                          types.Int64                      `tfsdk:"qos_cpu_size"`
-	QosDppAgePeriod                                     types.Int64                      `tfsdk:"qos_dpp_age_period"`
-	QosDppMaxPackets                                    types.Int64                      `tfsdk:"qos_dpp_max_packets"`
-	QosDropPoolSize                                     types.Int64                      `tfsdk:"qos_drop_pool_size"`
-	QosEoqStatsClass                                    types.String                     `tfsdk:"qos_eoq_stats_class"`
-	QosEtrapAgePeriod                                   types.Int64                      `tfsdk:"qos_etrap_age_period"`
-	QosEtrapBandwidthThreshold                          types.Int64                      `tfsdk:"qos_etrap_bandwidth_threshold"`
-	QosEtrapByteCount                                   types.Int64                      `tfsdk:"qos_etrap_byte_count"`
-	QosHeadroomSize                                     types.Int64                      `tfsdk:"qos_headroom_size"`
-	QosInputBufferPeak                                  types.String                     `tfsdk:"qos_input_buffer_peak"`
-	QosIncludeIpg                                       types.String                     `tfsdk:"qos_include_ipg"`
-	QosLcpuSize                                         types.Int64                      `tfsdk:"qos_lcpu_size"`
-	QosMacIpg                                           types.Int64                      `tfsdk:"qos_mac_ipg"`
-	QosMulticastQosGroup3Traffic                        types.String                     `tfsdk:"qos_multicast_qos_group3_traffic"`
-	QosNodropDynamicQueueLimit                          types.Int64                      `tfsdk:"qos_nodrop_dynamic_queue_limit"`
-	QosNodropResumeOffset                               types.Int64                      `tfsdk:"qos_nodrop_resume_offset"`
-	QosNodropPgGreenThreshold                           types.Int64                      `tfsdk:"qos_nodrop_pg_green_threshold"`
-	QosNodropPgRedThreshold                             types.Int64                      `tfsdk:"qos_nodrop_pg_red_threshold"`
-	QosNodropPgSize                                     types.Int64                      `tfsdk:"qos_nodrop_pg_size"`
-	QosNodropPgSizeFx                                   types.Int64                      `tfsdk:"qos_nodrop_pg_size_fx"`
-	QosNodropPgYellowThreshold                          types.Int64                      `tfsdk:"qos_nodrop_pg_yellow_threshold"`
-	QosNodropPoolSize                                   types.Int64                      `tfsdk:"qos_nodrop_pool_size"`
-	QosNodropQueueGreenThreshold                        types.Int64                      `tfsdk:"qos_nodrop_queue_green_threshold"`
-	QosNodropQueueGreenThresholdFx                      types.Int64                      `tfsdk:"qos_nodrop_queue_green_threshold_fx"`
-	QosNodropQueueYellowThreshold                       types.Int64                      `tfsdk:"qos_nodrop_queue_yellow_threshold"`
-	QosNsBufferProfile                                  types.String                     `tfsdk:"qos_ns_buffer_profile"`
-	QosOutputQueueDropsType                             types.String                     `tfsdk:"qos_output_queue_drops_type"`
-	QosPfcMulticastDrop                                 types.String                     `tfsdk:"qos_pfc_multicast_drop"`
-	QosPfcStatic                                        types.String                     `tfsdk:"qos_pfc_static"`
-	QosPgHeadroomReserve                                types.Int64                      `tfsdk:"qos_pg_headroom_reserve"`
-	QosPgMinValue                                       types.Int64                      `tfsdk:"qos_pg_min_value"`
-	QosPgNoMin                                          types.Bool                       `tfsdk:"qos_pg_no_min"`
-	QosPgShare                                          types.String                     `tfsdk:"qos_pg_share"`
-	QosQueueNoisePercent                                types.Int64                      `tfsdk:"qos_queue_noise_percent"`
-	QosAfdProfile                                       types.String                     `tfsdk:"qos_afd_profile"`
-	QosSpanSize                                         types.Int64                      `tfsdk:"qos_span_size"`
-	TcamTemplates                                       map[string]PlatformTcamTemplates `tfsdk:"tcam_templates"`
-	UdfDescription                                      types.String                     `tfsdk:"udf_description"`
-	Udfs                                                map[string]PlatformUdfs          `tfsdk:"udfs"`
+	Device                                              types.String                         `tfsdk:"device"`
+	Dn                                                  types.String                         `tfsdk:"id"`
+	AccessListMatchInnerHeader                          types.String                         `tfsdk:"access_list_match_inner_header"`
+	AclTapAggregation                                   types.String                         `tfsdk:"acl_tap_aggregation"`
+	Description                                         types.String                         `tfsdk:"description"`
+	DisableParseError                                   types.String                         `tfsdk:"disable_parse_error"`
+	Dot1qTunnelTransitRange                             types.String                         `tfsdk:"dot1q_tunnel_transit_range"`
+	GlobalTxSpan                                        types.String                         `tfsdk:"global_tx_span"`
+	HighMulticastPriority                               types.String                         `tfsdk:"high_multicast_priority"`
+	HardwareLouResourceThreshold                        types.Int64                          `tfsdk:"hardware_lou_resource_threshold"`
+	IngressBdIfaclLabelOptimization                     types.String                         `tfsdk:"ingress_bd_ifacl_label_optimization"`
+	IngressRaclSize                                     types.String                         `tfsdk:"ingress_racl_size"`
+	IngressReplicationRoundRobin                        types.Bool                           `tfsdk:"ingress_replication_round_robin"`
+	IpStatistics                                        types.String                         `tfsdk:"ip_statistics"`
+	Ipv6AlpmCarveValue                                  types.Int64                          `tfsdk:"ipv6_alpm_carve_value"`
+	Ipv6LpmMaxEntries                                   types.Int64                          `tfsdk:"ipv6_lpm_max_entries"`
+	LpmMaxLimit                                         types.Int64                          `tfsdk:"lpm_max_limit"`
+	MulticastDcsCheck                                   types.String                         `tfsdk:"multicast_dcs_check"`
+	MulticastFlexStats                                  types.String                         `tfsdk:"multicast_flex_stats"`
+	MulticastLpmMaxEntries                              types.Int64                          `tfsdk:"multicast_lpm_max_entries"`
+	MulticastNlb                                        types.String                         `tfsdk:"multicast_nlb"`
+	MulticastRaclBridge                                 types.String                         `tfsdk:"multicast_racl_bridge"`
+	MldSnooping                                         types.String                         `tfsdk:"mld_snooping"`
+	MplsAdjacencyStatsMode                              types.String                         `tfsdk:"mpls_adjacency_stats_mode"`
+	MplsEcmpMode                                        types.String                         `tfsdk:"mpls_ecmp_mode"`
+	MroutingDisableL2Update                             types.String                         `tfsdk:"mrouting_disable_l2_update"`
+	MroutingDisableSecondRouteUpdate                    types.String                         `tfsdk:"mrouting_disable_second_route_update"`
+	MroutingPerformanceMode                             types.String                         `tfsdk:"mrouting_performance_mode"`
+	MulticastMaxLimit                                   types.Int64                          `tfsdk:"multicast_max_limit"`
+	MulticastRpfCheckOptimization                       types.String                         `tfsdk:"multicast_rpf_check_optimization"`
+	MulticastServiceReflectPort                         types.Int64                          `tfsdk:"multicast_service_reflect_port"`
+	MulticastSyslogThreshold                            types.Int64                          `tfsdk:"multicast_syslog_threshold"`
+	OpenflowForwardPdu                                  types.String                         `tfsdk:"openflow_forward_pdu"`
+	PbrSkipSelfIp                                       types.String                         `tfsdk:"pbr_skip_self_ip"`
+	PortChannelFastConvergence                          types.String                         `tfsdk:"port_channel_fast_convergence"`
+	PortChannelLoadBalanceAlgorithm                     types.String                         `tfsdk:"port_channel_load_balance_algorithm"`
+	PortChannelLoadBalanceResilient                     types.String                         `tfsdk:"port_channel_load_balance_resilient"`
+	PortChannelMplsLoadBalanceLabelIp                   types.String                         `tfsdk:"port_channel_mpls_load_balance_label_ip"`
+	PortChannelMplsLoadBalanceLabelOnly                 types.String                         `tfsdk:"port_channel_mpls_load_balance_label_only"`
+	PortChannelScaleFanout                              types.String                         `tfsdk:"port_channel_scale_fanout"`
+	PicCoreEnable                                       types.String                         `tfsdk:"pic_core_enable"`
+	ProfileFrontPortMode                                types.String                         `tfsdk:"profile_front_port_mode"`
+	ProfileMode                                         types.String                         `tfsdk:"profile_mode"`
+	ProfileTuple                                        types.String                         `tfsdk:"profile_tuple"`
+	PstatConfiguration                                  types.String                         `tfsdk:"pstat_configuration"`
+	QosMinBuffer                                        types.String                         `tfsdk:"qos_min_buffer"`
+	RoutingMode                                         types.String                         `tfsdk:"routing_mode"`
+	ServiceTemplateName                                 types.String                         `tfsdk:"service_template_name"`
+	SviAndSiFlexStats                                   types.String                         `tfsdk:"svi_and_si_flex_stats"`
+	SviFlexStats                                        types.String                         `tfsdk:"svi_flex_stats"`
+	SwitchMode                                          types.String                         `tfsdk:"switch_mode"`
+	SwitchingFabricSpeed                                types.String                         `tfsdk:"switching_fabric_speed"`
+	SwitchingMode                                       types.String                         `tfsdk:"switching_mode"`
+	SystemFabricMode                                    types.String                         `tfsdk:"system_fabric_mode"`
+	TcamSyslogThreshold                                 types.Int64                          `tfsdk:"tcam_syslog_threshold"`
+	UnicastMaxLimit                                     types.Int64                          `tfsdk:"unicast_max_limit"`
+	UnicastSyslogThreshold                              types.Int64                          `tfsdk:"unicast_syslog_threshold"`
+	UnicastTrace                                        types.String                         `tfsdk:"unicast_trace"`
+	UnknownUnicastFlood                                 types.String                         `tfsdk:"unknown_unicast_flood"`
+	UrpfStatus                                          types.String                         `tfsdk:"urpf_status"`
+	WrrUnicastBandwidth                                 types.Int64                          `tfsdk:"wrr_unicast_bandwidth"`
+	TcamRegionArpAclSize                                types.Int64                          `tfsdk:"tcam_region_arp_acl_size"`
+	TcamRegionCoppSize                                  types.Int64                          `tfsdk:"tcam_region_copp_size"`
+	TcamRegionCoppSystemSize                            types.Int64                          `tfsdk:"tcam_region_copp_system_size"`
+	TcamRegionEgressIpv6QosSize                         types.Int64                          `tfsdk:"tcam_region_egress_ipv6_qos_size"`
+	TcamRegionEgressIpv6RaclSize                        types.Int64                          `tfsdk:"tcam_region_egress_ipv6_racl_size"`
+	TcamRegionEgressMacQosSize                          types.Int64                          `tfsdk:"tcam_region_egress_mac_qos_size"`
+	TcamRegionEgressQosLiteSize                         types.Int64                          `tfsdk:"tcam_region_egress_qos_lite_size"`
+	TcamRegionEgressQosSize                             types.Int64                          `tfsdk:"tcam_region_egress_qos_size"`
+	TcamRegionEgressRaclSize                            types.Int64                          `tfsdk:"tcam_region_egress_racl_size"`
+	TcamRegionEgressVaclSize                            types.Int64                          `tfsdk:"tcam_region_egress_vacl_size"`
+	TcamRegionFcoeEgressSize                            types.Int64                          `tfsdk:"tcam_region_fcoe_egress_size"`
+	TcamRegionFcoeIngressSize                           types.Int64                          `tfsdk:"tcam_region_fcoe_ingress_size"`
+	TcamRegionFhsSize                                   types.Int64                          `tfsdk:"tcam_region_fhs_size"`
+	TcamRegionInterfaceAclLiteSize                      types.Int64                          `tfsdk:"tcam_region_interface_acl_lite_size"`
+	TcamRegionInterfaceAclSize                          types.Int64                          `tfsdk:"tcam_region_interface_acl_size"`
+	TcamRegionInterfaceAclUdfSize                       types.Int64                          `tfsdk:"tcam_region_interface_acl_udf_size"`
+	TcamRegionIngressFlowRedirectSize                   types.Int64                          `tfsdk:"tcam_region_ingress_flow_redirect_size"`
+	TcamRegionIngressFlowSize                           types.Int64                          `tfsdk:"tcam_region_ingress_flow_size"`
+	TcamRegionIpsgSize                                  types.Int64                          `tfsdk:"tcam_region_ipsg_size"`
+	TcamRegionIpv6InterfaceAclSize                      types.Int64                          `tfsdk:"tcam_region_ipv6_interface_acl_size"`
+	TcamRegionIpv6L3QosSize                             types.Int64                          `tfsdk:"tcam_region_ipv6_l3_qos_size"`
+	TcamRegionIpv6PbrSize                               types.Int64                          `tfsdk:"tcam_region_ipv6_pbr_size"`
+	TcamRegionIpv6QosSize                               types.Int64                          `tfsdk:"tcam_region_ipv6_qos_size"`
+	TcamRegionIpv6RaclSize                              types.Int64                          `tfsdk:"tcam_region_ipv6_racl_size"`
+	TcamRegionIpv6SpanL2Size                            types.Int64                          `tfsdk:"tcam_region_ipv6_span_l2_size"`
+	TcamRegionIpv6SpanSize                              types.Int64                          `tfsdk:"tcam_region_ipv6_span_size"`
+	TcamRegionIpv6SupSize                               types.Int64                          `tfsdk:"tcam_region_ipv6_sup_size"`
+	TcamRegionIpv6VaclSize                              types.Int64                          `tfsdk:"tcam_region_ipv6_vacl_size"`
+	TcamRegionIpv6VlanQosSize                           types.Int64                          `tfsdk:"tcam_region_ipv6_vlan_qos_size"`
+	TcamRegionL3QosIntraLiteSize                        types.Int64                          `tfsdk:"tcam_region_l3_qos_intra_lite_size"`
+	TcamRegionMacInterfaceAclSize                       types.Int64                          `tfsdk:"tcam_region_mac_interface_acl_size"`
+	TcamRegionMacL3QosSize                              types.Int64                          `tfsdk:"tcam_region_mac_l3_qos_size"`
+	TcamRegionMacQosSize                                types.Int64                          `tfsdk:"tcam_region_mac_qos_size"`
+	TcamRegionMacVaclSize                               types.Int64                          `tfsdk:"tcam_region_mac_vacl_size"`
+	TcamRegionMacVlanQosSize                            types.Int64                          `tfsdk:"tcam_region_mac_vlan_qos_size"`
+	TcamRegionMulticastBidirSize                        types.Int64                          `tfsdk:"tcam_region_multicast_bidir_size"`
+	TcamRegionMplsDoublewide                            types.Bool                           `tfsdk:"tcam_region_mpls_doublewide"`
+	TcamRegionMplsSize                                  types.Int64                          `tfsdk:"tcam_region_mpls_size"`
+	TcamRegionMvpnSize                                  types.Int64                          `tfsdk:"tcam_region_mvpn_size"`
+	TcamRegionN9kArpAclSize                             types.Int64                          `tfsdk:"tcam_region_n9k_arp_acl_size"`
+	TcamRegionNatSize                                   types.Int64                          `tfsdk:"tcam_region_nat_size"`
+	TcamRegionOpenflowDoublewide                        types.Bool                           `tfsdk:"tcam_region_openflow_doublewide"`
+	TcamRegionOpenflowLiteSize                          types.Int64                          `tfsdk:"tcam_region_openflow_lite_size"`
+	TcamRegionOpenflowSize                              types.Int64                          `tfsdk:"tcam_region_openflow_size"`
+	TcamRegionPbrSize                                   types.Int64                          `tfsdk:"tcam_region_pbr_size"`
+	TcamRegionQosIntraLiteSize                          types.Int64                          `tfsdk:"tcam_region_qos_intra_lite_size"`
+	TcamRegionQosSize                                   types.Int64                          `tfsdk:"tcam_region_qos_size"`
+	TcamRegionQosLabelSize                              types.Int64                          `tfsdk:"tcam_region_qos_label_size"`
+	TcamRegionRaclLiteSize                              types.Int64                          `tfsdk:"tcam_region_racl_lite_size"`
+	TcamRegionRaclSize                                  types.Int64                          `tfsdk:"tcam_region_racl_size"`
+	TcamRegionRaclUdfSize                               types.Int64                          `tfsdk:"tcam_region_racl_udf_size"`
+	TcamRegionSupSize                                   types.Int64                          `tfsdk:"tcam_region_sup_size"`
+	TcamRegionSviSize                                   types.Int64                          `tfsdk:"tcam_region_svi_size"`
+	TcamRegionTcpNatSize                                types.Int64                          `tfsdk:"tcam_region_tcp_nat_size"`
+	TcamRegionVaclLiteSize                              types.Int64                          `tfsdk:"tcam_region_vacl_lite_size"`
+	TcamRegionVaclSize                                  types.Int64                          `tfsdk:"tcam_region_vacl_size"`
+	TcamRegionVpcConvergenceSize                        types.Int64                          `tfsdk:"tcam_region_vpc_convergence_size"`
+	TcamRegionVlanQosIntraLiteSize                      types.Int64                          `tfsdk:"tcam_region_vlan_qos_intra_lite_size"`
+	TcamRegionVlanQosSize                               types.Int64                          `tfsdk:"tcam_region_vlan_qos_size"`
+	TcamRegionVxlanP2pSize                              types.Int64                          `tfsdk:"tcam_region_vxlan_p2p_size"`
+	TcamRegionExtendedEgressInterfaceAclAllPerPortStats types.Bool                           `tfsdk:"tcam_region_extended_egress_interface_acl_all_per_port_stats"`
+	TcamRegionExtendedEgressInterfaceAclAllSize         types.Int64                          `tfsdk:"tcam_region_extended_egress_interface_acl_all_size"`
+	TcamRegionExtendedEgressIpv6RaclPerPortStats        types.Bool                           `tfsdk:"tcam_region_extended_egress_ipv6_racl_per_port_stats"`
+	TcamRegionExtendedEgressRaclPerPortStats            types.Bool                           `tfsdk:"tcam_region_extended_egress_racl_per_port_stats"`
+	TcamRegionExtendedEgressCoppSize                    types.Int64                          `tfsdk:"tcam_region_extended_egress_copp_size"`
+	TcamRegionExtendedEgressFlowSize                    types.Int64                          `tfsdk:"tcam_region_extended_egress_flow_size"`
+	TcamRegionExtendedEgressHardwareTelemetrySize       types.Int64                          `tfsdk:"tcam_region_extended_egress_hardware_telemetry_size"`
+	TcamRegionExtendedEgressInterfaceAclSize            types.Int64                          `tfsdk:"tcam_region_extended_egress_interface_acl_size"`
+	TcamRegionExtendedEgressL2QosSize                   types.Int64                          `tfsdk:"tcam_region_extended_egress_l2_qos_size"`
+	TcamRegionExtendedEgressL3VlanQosSize               types.Int64                          `tfsdk:"tcam_region_extended_egress_l3_vlan_qos_size"`
+	TcamRegionExtendedEgressRaclSize                    types.Int64                          `tfsdk:"tcam_region_extended_egress_racl_size"`
+	TcamRegionExtendedEgressSupSize                     types.Int64                          `tfsdk:"tcam_region_extended_egress_sup_size"`
+	TcamRegionExtendedHardwareTelemetrySize             types.Int64                          `tfsdk:"tcam_region_extended_hardware_telemetry_size"`
+	TcamRegionExtendedInterfaceAclAllPerPortStats       types.Bool                           `tfsdk:"tcam_region_extended_interface_acl_all_per_port_stats"`
+	TcamRegionExtendedInterfaceAclAllProfile            types.Int64                          `tfsdk:"tcam_region_extended_interface_acl_all_profile"`
+	TcamRegionExtendedInterfaceAclAllSize               types.Int64                          `tfsdk:"tcam_region_extended_interface_acl_all_size"`
+	TcamRegionExtendedInterfaceAclPerPortStats          types.Bool                           `tfsdk:"tcam_region_extended_interface_acl_per_port_stats"`
+	TcamRegionExtendedIngressDaclSize                   types.Int64                          `tfsdk:"tcam_region_extended_ingress_dacl_size"`
+	TcamRegionExtendedIngressInterfaceAclSize           types.Int64                          `tfsdk:"tcam_region_extended_ingress_interface_acl_size"`
+	TcamRegionExtendedIngressInterfaceAclWideSize       types.Int64                          `tfsdk:"tcam_region_extended_ingress_interface_acl_wide_size"`
+	TcamRegionExtendedIngressIpv6InterfaceAclLiteSize   types.Int64                          `tfsdk:"tcam_region_extended_ingress_ipv6_interface_acl_lite_size"`
+	TcamRegionExtendedIngressL2L3QosSize                types.Int64                          `tfsdk:"tcam_region_extended_ingress_l2_l3_qos_size"`
+	TcamRegionExtendedIngressL2QosSize                  types.Int64                          `tfsdk:"tcam_region_extended_ingress_l2_qos_size"`
+	TcamRegionExtendedIngressL2SpanFilterSize           types.Int64                          `tfsdk:"tcam_region_extended_ingress_l2_span_filter_size"`
+	TcamRegionExtendedIngressL3SpanFilterSize           types.Int64                          `tfsdk:"tcam_region_extended_ingress_l3_span_filter_size"`
+	TcamRegionExtendedIngressPaclSbSize                 types.Int64                          `tfsdk:"tcam_region_extended_ingress_pacl_sb_size"`
+	TcamRegionExtendedIngressRaclSize                   types.Int64                          `tfsdk:"tcam_region_extended_ingress_racl_size"`
+	TcamRegionExtendedIngressRbaclSize                  types.Int64                          `tfsdk:"tcam_region_extended_ingress_rbacl_size"`
+	TcamRegionExtendedIngressRedirectSize               types.Int64                          `tfsdk:"tcam_region_extended_ingress_redirect_size"`
+	TcamRegionExtendedIngressStormControlSize           types.Int64                          `tfsdk:"tcam_region_extended_ingress_storm_control_size"`
+	TcamRegionExtendedIngressSupSize                    types.Int64                          `tfsdk:"tcam_region_extended_ingress_sup_size"`
+	TcamRegionExtendedIngressVaclNhSize                 types.Int64                          `tfsdk:"tcam_region_extended_ingress_vacl_nh_size"`
+	TcamRegionExtendedIngressVlanQosSize                types.Int64                          `tfsdk:"tcam_region_extended_ingress_vlan_qos_size"`
+	TcamRegionExtendedIpv6InterfaceAclPerPortStats      types.Bool                           `tfsdk:"tcam_region_extended_ipv6_interface_acl_per_port_stats"`
+	TcamRegionExtendedIpv6RaclPerPortStats              types.Bool                           `tfsdk:"tcam_region_extended_ipv6_racl_per_port_stats"`
+	TcamRegionExtendedMacInterfaceAclPerPortStats       types.Bool                           `tfsdk:"tcam_region_extended_mac_interface_acl_per_port_stats"`
+	TcamRegionExtendedMulticastNatSize                  types.Int64                          `tfsdk:"tcam_region_extended_multicast_nat_size"`
+	TcamRegionExtendedMulticastNbmSize                  types.Int64                          `tfsdk:"tcam_region_extended_multicast_nbm_size"`
+	TcamRegionExtendedRaclAllPerPortStats               types.Bool                           `tfsdk:"tcam_region_extended_racl_all_per_port_stats"`
+	TcamRegionExtendedRaclAllProfile                    types.Int64                          `tfsdk:"tcam_region_extended_racl_all_profile"`
+	TcamRegionExtendedRaclAllSize                       types.Int64                          `tfsdk:"tcam_region_extended_racl_all_size"`
+	TcamRegionExtendedRaclPerPortStats                  types.Bool                           `tfsdk:"tcam_region_extended_racl_per_port_stats"`
+	TcamRegionExtendedRedirectV4Size                    types.Int64                          `tfsdk:"tcam_region_extended_redirect_v4_size"`
+	TcamRegionExtendedSpanSize                          types.Int64                          `tfsdk:"tcam_region_extended_span_size"`
+	TcamRegionExtendedSpanTahoeSize                     types.Int64                          `tfsdk:"tcam_region_extended_span_tahoe_size"`
+	NveInterfaces                                       map[string]PlatformNveInterfaces     `tfsdk:"nve_interfaces"`
+	ExtendedAclDisableRedirectShare                     types.String                         `tfsdk:"extended_acl_disable_redirect_share"`
+	ExtendedAtomicUpdate                                types.String                         `tfsdk:"extended_atomic_update"`
+	ExtendedAtomicUpdateStrict                          types.String                         `tfsdk:"extended_atomic_update_strict"`
+	ExtendedCounterManagerBfdScale                      types.Int64                          `tfsdk:"extended_counter_manager_bfd_scale"`
+	ExtendedCounterManagerEcnScale                      types.Int64                          `tfsdk:"extended_counter_manager_ecn_scale"`
+	ExtendedCounterManagerEgressAclScale                types.Int64                          `tfsdk:"extended_counter_manager_egress_acl_scale"`
+	ExtendedCounterManagerFeatureBfd                    types.Int64                          `tfsdk:"extended_counter_manager_feature_bfd"`
+	ExtendedCounterManagerFeatureEcn                    types.Int64                          `tfsdk:"extended_counter_manager_feature_ecn"`
+	ExtendedCounterManagerFeatureEgressAcl              types.Int64                          `tfsdk:"extended_counter_manager_feature_egress_acl"`
+	ExtendedCounterManagerFeatureIngressAcl             types.Int64                          `tfsdk:"extended_counter_manager_feature_ingress_acl"`
+	ExtendedCounterManagerFeatureL2vni                  types.Int64                          `tfsdk:"extended_counter_manager_feature_l2vni"`
+	ExtendedCounterManagerFeatureL3vni                  types.Int64                          `tfsdk:"extended_counter_manager_feature_l3vni"`
+	ExtendedCounterManagerFeatureSi                     types.Int64                          `tfsdk:"extended_counter_manager_feature_si"`
+	ExtendedCounterManagerFeatureSvi                    types.Int64                          `tfsdk:"extended_counter_manager_feature_svi"`
+	ExtendedCounterManagerFeatureTunnel                 types.Int64                          `tfsdk:"extended_counter_manager_feature_tunnel"`
+	ExtendedCounterManagerFeatureVlan                   types.Int64                          `tfsdk:"extended_counter_manager_feature_vlan"`
+	ExtendedCounterManagerFeatureVoq                    types.Int64                          `tfsdk:"extended_counter_manager_feature_voq"`
+	ExtendedCounterManagerIngressAclScale               types.Int64                          `tfsdk:"extended_counter_manager_ingress_acl_scale"`
+	ExtendedCounterManagerL2vniScale                    types.Int64                          `tfsdk:"extended_counter_manager_l2vni_scale"`
+	ExtendedCounterManagerL3vniScale                    types.Int64                          `tfsdk:"extended_counter_manager_l3vni_scale"`
+	ExtendedCounterManagerSiScale                       types.Int64                          `tfsdk:"extended_counter_manager_si_scale"`
+	ExtendedCounterManagerSviScale                      types.Int64                          `tfsdk:"extended_counter_manager_svi_scale"`
+	ExtendedCounterManagerTunnelScale                   types.Int64                          `tfsdk:"extended_counter_manager_tunnel_scale"`
+	ExtendedCounterManagerVlanScale                     types.Int64                          `tfsdk:"extended_counter_manager_vlan_scale"`
+	ExtendedCounterManagerVoqScale                      types.Int64                          `tfsdk:"extended_counter_manager_voq_scale"`
+	ExtendedDmeLoadInterval                             types.Int64                          `tfsdk:"extended_dme_load_interval"`
+	ExtendedEgressL2QosIfaclLabelSize                   types.String                         `tfsdk:"extended_egress_l2_qos_ifacl_label_size"`
+	ExtendedGpe5TimerEnable                             types.Bool                           `tfsdk:"extended_gpe5_timer_enable"`
+	ExtendedHardwareQosLatencyOptimized                 types.Bool                           `tfsdk:"extended_hardware_qos_latency_optimized"`
+	ExtendedIngressPaclIfaclLabelSize                   types.String                         `tfsdk:"extended_ingress_pacl_ifacl_label_size"`
+	ExtendedIngressVrfNatBdLabelWidth                   types.Int64                          `tfsdk:"extended_ingress_vrf_nat_bd_label_width"`
+	ExtendedMulticastNlbStickPortChannel                types.String                         `tfsdk:"extended_multicast_nlb_stick_port_channel"`
+	ExtendedMulticastStatsDisable                       types.String                         `tfsdk:"extended_multicast_stats_disable"`
+	ExtendedMplsQosPipeMode                             types.String                         `tfsdk:"extended_mpls_qos_pipe_mode"`
+	ExtendedMulticastPriority                           types.Int64                          `tfsdk:"extended_multicast_priority"`
+	ExtendedPbrEcmpPaths                                types.Int64                          `tfsdk:"extended_pbr_ecmp_paths"`
+	ExtendedPbrFastConvergence                          types.String                         `tfsdk:"extended_pbr_fast_convergence"`
+	ExtendedPbrMatchDefaultRoute                        types.String                         `tfsdk:"extended_pbr_match_default_route"`
+	ExtendedPtpCorrectionHardware                       types.Bool                           `tfsdk:"extended_ptp_correction_hardware"`
+	ExtendedSiFlexStats                                 types.String                         `tfsdk:"extended_si_flex_stats"`
+	ExtendedStatsTemplate                               types.String                         `tfsdk:"extended_stats_template"`
+	ExtendedStormControlPriority                        types.String                         `tfsdk:"extended_storm_control_priority"`
+	ExtendedTcamDefaultResult                           types.String                         `tfsdk:"extended_tcam_default_result"`
+	ExtendedUdfNetflowRtpMulticastEnabled               types.Bool                           `tfsdk:"extended_udf_netflow_rtp_multicast_enabled"`
+	ExtendedVrfAwareNatEnable                           types.String                         `tfsdk:"extended_vrf_aware_nat_enable"`
+	PortChannelLoadBalanceConcatenation                 types.String                         `tfsdk:"port_channel_load_balance_concatenation"`
+	PortChannelLoadBalanceEncapsulation                 types.String                         `tfsdk:"port_channel_load_balance_encapsulation"`
+	PortChannelLoadBalanceFex                           types.Bool                           `tfsdk:"port_channel_load_balance_fex"`
+	PortChannelLoadBalanceFields                        types.String                         `tfsdk:"port_channel_load_balance_fields"`
+	PortChannelLoadBalanceMplsLabelIp                   types.String                         `tfsdk:"port_channel_load_balance_mpls_label_ip"`
+	PortChannelLoadBalanceMplsLabelOnly                 types.String                         `tfsdk:"port_channel_load_balance_mpls_label_only"`
+	PortChannelLoadBalanceRotate                        types.Int64                          `tfsdk:"port_channel_load_balance_rotate"`
+	PortChannelLoadBalanceSymmetry                      types.String                         `tfsdk:"port_channel_load_balance_symmetry"`
+	DlbAllowAllInterfaces                               types.Bool                           `tfsdk:"dlb_allow_all_interfaces"`
+	DlbDecayFactor                                      types.Int64                          `tfsdk:"dlb_decay_factor"`
+	DlbDescription                                      types.String                         `tfsdk:"dlb_description"`
+	DlbDreThresholdLevel1                               types.Int64                          `tfsdk:"dlb_dre_threshold_level_1"`
+	DlbDreThresholdLevel2                               types.Int64                          `tfsdk:"dlb_dre_threshold_level_2"`
+	DlbDreThresholdLevel3                               types.Int64                          `tfsdk:"dlb_dre_threshold_level_3"`
+	DlbDreThresholdLevel4                               types.Int64                          `tfsdk:"dlb_dre_threshold_level_4"`
+	DlbDreThresholdLevel5                               types.Int64                          `tfsdk:"dlb_dre_threshold_level_5"`
+	DlbDreThresholdLevel6                               types.Int64                          `tfsdk:"dlb_dre_threshold_level_6"`
+	DlbDreThresholdLevel7                               types.Int64                          `tfsdk:"dlb_dre_threshold_level_7"`
+	DlbEnabled                                          types.Bool                           `tfsdk:"dlb_enabled"`
+	DlbFlowletAging                                     types.Int64                          `tfsdk:"dlb_flowlet_aging"`
+	DlbInterfaces                                       types.String                         `tfsdk:"dlb_interfaces"`
+	DlbLoadAwareness                                    types.Bool                           `tfsdk:"dlb_load_awareness"`
+	DlbMacAddress                                       types.String                         `tfsdk:"dlb_mac_address"`
+	DlbMode                                             types.String                         `tfsdk:"dlb_mode"`
+	DlbSamplingInterval                                 types.Int64                          `tfsdk:"dlb_sampling_interval"`
+	DlbStaticPinning                                    types.Bool                           `tfsdk:"dlb_static_pinning"`
+	DlbStaticPinnings                                   map[string]PlatformDlbStaticPinnings `tfsdk:"dlb_static_pinnings"`
+	PfcWatchdogAutoRestoreMultiplier                    types.Int64                          `tfsdk:"pfc_watchdog_auto_restore_multiplier"`
+	PfcWatchdogMode                                     types.String                         `tfsdk:"pfc_watchdog_mode"`
+	PfcWatchdogFixedRestoreMultiplier                   types.Int64                          `tfsdk:"pfc_watchdog_fixed_restore_multiplier"`
+	PfcWatchdogForcedOn                                 types.String                         `tfsdk:"pfc_watchdog_forced_on"`
+	PfcWatchdogInternalInterfaceMultiplier              types.Int64                          `tfsdk:"pfc_watchdog_internal_interface_multiplier"`
+	PfcWatchdogInterval                                 types.Int64                          `tfsdk:"pfc_watchdog_interval"`
+	PfcWatchdogShutdownMultiplier                       types.Int64                          `tfsdk:"pfc_watchdog_shutdown_multiplier"`
+	QosBufferPeakMonitorCounter0Class0                  types.String                         `tfsdk:"qos_buffer_peak_monitor_counter0_class0"`
+	QosBufferPeakMonitorCounter0Class1                  types.String                         `tfsdk:"qos_buffer_peak_monitor_counter0_class1"`
+	QosBufferPeakMonitorCounter0Class2                  types.String                         `tfsdk:"qos_buffer_peak_monitor_counter0_class2"`
+	QosBufferPeakMonitorCounter0Class3                  types.String                         `tfsdk:"qos_buffer_peak_monitor_counter0_class3"`
+	QosBufferPeakMonitorCounter0Class4                  types.String                         `tfsdk:"qos_buffer_peak_monitor_counter0_class4"`
+	QosBufferPeakMonitorCounter0Class5                  types.String                         `tfsdk:"qos_buffer_peak_monitor_counter0_class5"`
+	QosBufferPeakMonitorCounter0Class6                  types.String                         `tfsdk:"qos_buffer_peak_monitor_counter0_class6"`
+	QosBufferPeakMonitorCounter0Class7                  types.String                         `tfsdk:"qos_buffer_peak_monitor_counter0_class7"`
+	QosBurstDetectFallThresholdUnit                     types.String                         `tfsdk:"qos_burst_detect_fall_threshold_unit"`
+	QosBurstDetectFallThreshold                         types.Int64                          `tfsdk:"qos_burst_detect_fall_threshold"`
+	QosBurstDetectMaxRecords                            types.Int64                          `tfsdk:"qos_burst_detect_max_records"`
+	QosBurstDetectRiseThresholdUnit                     types.String                         `tfsdk:"qos_burst_detect_rise_threshold_unit"`
+	QosBurstDetectRiseThreshold                         types.Int64                          `tfsdk:"qos_burst_detect_rise_threshold"`
+	QosClassifyNsOnly                                   types.String                         `tfsdk:"qos_classify_ns_only"`
+	QosCpuSize                                          types.Int64                          `tfsdk:"qos_cpu_size"`
+	QosDppAgePeriod                                     types.Int64                          `tfsdk:"qos_dpp_age_period"`
+	QosDppMaxPackets                                    types.Int64                          `tfsdk:"qos_dpp_max_packets"`
+	QosDropPoolSize                                     types.Int64                          `tfsdk:"qos_drop_pool_size"`
+	QosEoqStatsClass                                    types.String                         `tfsdk:"qos_eoq_stats_class"`
+	QosEtrapAgePeriod                                   types.Int64                          `tfsdk:"qos_etrap_age_period"`
+	QosEtrapBandwidthThreshold                          types.Int64                          `tfsdk:"qos_etrap_bandwidth_threshold"`
+	QosEtrapByteCount                                   types.Int64                          `tfsdk:"qos_etrap_byte_count"`
+	QosHeadroomSize                                     types.Int64                          `tfsdk:"qos_headroom_size"`
+	QosInputBufferPeak                                  types.String                         `tfsdk:"qos_input_buffer_peak"`
+	QosIncludeIpg                                       types.String                         `tfsdk:"qos_include_ipg"`
+	QosLcpuSize                                         types.Int64                          `tfsdk:"qos_lcpu_size"`
+	QosMacIpg                                           types.Int64                          `tfsdk:"qos_mac_ipg"`
+	QosMulticastQosGroup3Traffic                        types.String                         `tfsdk:"qos_multicast_qos_group3_traffic"`
+	QosNodropDynamicQueueLimit                          types.Int64                          `tfsdk:"qos_nodrop_dynamic_queue_limit"`
+	QosNodropResumeOffset                               types.Int64                          `tfsdk:"qos_nodrop_resume_offset"`
+	QosNodropPgGreenThreshold                           types.Int64                          `tfsdk:"qos_nodrop_pg_green_threshold"`
+	QosNodropPgRedThreshold                             types.Int64                          `tfsdk:"qos_nodrop_pg_red_threshold"`
+	QosNodropPgSize                                     types.Int64                          `tfsdk:"qos_nodrop_pg_size"`
+	QosNodropPgSizeFx                                   types.Int64                          `tfsdk:"qos_nodrop_pg_size_fx"`
+	QosNodropPgYellowThreshold                          types.Int64                          `tfsdk:"qos_nodrop_pg_yellow_threshold"`
+	QosNodropPoolSize                                   types.Int64                          `tfsdk:"qos_nodrop_pool_size"`
+	QosNodropQueueGreenThreshold                        types.Int64                          `tfsdk:"qos_nodrop_queue_green_threshold"`
+	QosNodropQueueGreenThresholdFx                      types.Int64                          `tfsdk:"qos_nodrop_queue_green_threshold_fx"`
+	QosNodropQueueYellowThreshold                       types.Int64                          `tfsdk:"qos_nodrop_queue_yellow_threshold"`
+	QosNsBufferProfile                                  types.String                         `tfsdk:"qos_ns_buffer_profile"`
+	QosOutputQueueDropsType                             types.String                         `tfsdk:"qos_output_queue_drops_type"`
+	QosPfcMulticastDrop                                 types.String                         `tfsdk:"qos_pfc_multicast_drop"`
+	QosPfcStatic                                        types.String                         `tfsdk:"qos_pfc_static"`
+	QosPgHeadroomReserve                                types.Int64                          `tfsdk:"qos_pg_headroom_reserve"`
+	QosPgMinValue                                       types.Int64                          `tfsdk:"qos_pg_min_value"`
+	QosPgNoMin                                          types.Bool                           `tfsdk:"qos_pg_no_min"`
+	QosPgShare                                          types.String                         `tfsdk:"qos_pg_share"`
+	QosQueueNoisePercent                                types.Int64                          `tfsdk:"qos_queue_noise_percent"`
+	QosAfdProfile                                       types.String                         `tfsdk:"qos_afd_profile"`
+	QosSpanSize                                         types.Int64                          `tfsdk:"qos_span_size"`
+	TcamTemplates                                       map[string]PlatformTcamTemplates     `tfsdk:"tcam_templates"`
+	UdfDescription                                      types.String                         `tfsdk:"udf_description"`
+	Udfs                                                map[string]PlatformUdfs              `tfsdk:"udfs"`
 }
 
 type PlatformNveInterfaces struct {
@@ -329,6 +348,10 @@ type PlatformNveInterfaces struct {
 
 type PlatformNveInterfacesInfraVlans struct {
 	Force types.String `tfsdk:"force"`
+}
+
+type PlatformDlbStaticPinnings struct {
+	DestinationInterface types.String `tfsdk:"destination_interface"`
 }
 
 type PlatformTcamTemplates struct {
@@ -415,6 +438,10 @@ func (data PlatformNveInterfaces) getRn(key string) string {
 
 func (data PlatformNveInterfacesInfraVlans) getRn(key string) string {
 	return fmt.Sprintf("infravlan-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data PlatformDlbStaticPinnings) getRn(key string) string {
+	return fmt.Sprintf("static-[%s]", key)
 }
 
 func (data PlatformTcamTemplates) getRn(key string) string {
@@ -1152,6 +1179,87 @@ func (data Platform) toBody(config Platform) nxos.Body {
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformLoadBalance.attributes", attrs)
 	}
+	{
+		attrs = "{}"
+		if !data.DlbAllowAllInterfaces.IsUnknown() && !data.DlbAllowAllInterfaces.IsNull() && !config.DlbAllowAllInterfaces.IsNull() {
+			attrs, _ = sjson.Set(attrs, "allowAllInterface", strconv.FormatBool(data.DlbAllowAllInterfaces.ValueBool()))
+		}
+		if !data.DlbDecayFactor.IsUnknown() && !data.DlbDecayFactor.IsNull() && !config.DlbDecayFactor.IsNull() {
+			attrs, _ = sjson.Set(attrs, "decayFactor", strconv.FormatInt(data.DlbDecayFactor.ValueInt64(), 10))
+		}
+		if !data.DlbDescription.IsUnknown() && !data.DlbDescription.IsNull() && !config.DlbDescription.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", data.DlbDescription.ValueString())
+		}
+		if !data.DlbDreThresholdLevel1.IsUnknown() && !data.DlbDreThresholdLevel1.IsNull() && !config.DlbDreThresholdLevel1.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dreThresholdsLevel1", strconv.FormatInt(data.DlbDreThresholdLevel1.ValueInt64(), 10))
+		}
+		if !data.DlbDreThresholdLevel2.IsUnknown() && !data.DlbDreThresholdLevel2.IsNull() && !config.DlbDreThresholdLevel2.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dreThresholdsLevel2", strconv.FormatInt(data.DlbDreThresholdLevel2.ValueInt64(), 10))
+		}
+		if !data.DlbDreThresholdLevel3.IsUnknown() && !data.DlbDreThresholdLevel3.IsNull() && !config.DlbDreThresholdLevel3.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dreThresholdsLevel3", strconv.FormatInt(data.DlbDreThresholdLevel3.ValueInt64(), 10))
+		}
+		if !data.DlbDreThresholdLevel4.IsUnknown() && !data.DlbDreThresholdLevel4.IsNull() && !config.DlbDreThresholdLevel4.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dreThresholdsLevel4", strconv.FormatInt(data.DlbDreThresholdLevel4.ValueInt64(), 10))
+		}
+		if !data.DlbDreThresholdLevel5.IsUnknown() && !data.DlbDreThresholdLevel5.IsNull() && !config.DlbDreThresholdLevel5.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dreThresholdsLevel5", strconv.FormatInt(data.DlbDreThresholdLevel5.ValueInt64(), 10))
+		}
+		if !data.DlbDreThresholdLevel6.IsUnknown() && !data.DlbDreThresholdLevel6.IsNull() && !config.DlbDreThresholdLevel6.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dreThresholdsLevel6", strconv.FormatInt(data.DlbDreThresholdLevel6.ValueInt64(), 10))
+		}
+		if !data.DlbDreThresholdLevel7.IsUnknown() && !data.DlbDreThresholdLevel7.IsNull() && !config.DlbDreThresholdLevel7.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dreThresholdsLevel7", strconv.FormatInt(data.DlbDreThresholdLevel7.ValueInt64(), 10))
+		}
+		if !data.DlbEnabled.IsUnknown() && !data.DlbEnabled.IsNull() && !config.DlbEnabled.IsNull() {
+			attrs, _ = sjson.Set(attrs, "enabled", strconv.FormatBool(data.DlbEnabled.ValueBool()))
+		}
+		if !data.DlbFlowletAging.IsUnknown() && !data.DlbFlowletAging.IsNull() && !config.DlbFlowletAging.IsNull() {
+			attrs, _ = sjson.Set(attrs, "flowletAgingTimer", strconv.FormatInt(data.DlbFlowletAging.ValueInt64(), 10))
+		}
+		if !data.DlbInterfaces.IsUnknown() && !data.DlbInterfaces.IsNull() && !config.DlbInterfaces.IsNull() {
+			attrs, _ = sjson.Set(attrs, "intfList", data.DlbInterfaces.ValueString())
+		}
+		if !data.DlbLoadAwareness.IsUnknown() && !data.DlbLoadAwareness.IsNull() && !config.DlbLoadAwareness.IsNull() {
+			attrs, _ = sjson.Set(attrs, "loadAwareness", strconv.FormatBool(data.DlbLoadAwareness.ValueBool()))
+		}
+		if !data.DlbMacAddress.IsUnknown() && !data.DlbMacAddress.IsNull() && !config.DlbMacAddress.IsNull() {
+			attrs, _ = sjson.Set(attrs, "macAddr", data.DlbMacAddress.ValueString())
+		}
+		if !data.DlbMode.IsUnknown() && !data.DlbMode.IsNull() && !config.DlbMode.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mode", data.DlbMode.ValueString())
+		}
+		if !data.DlbSamplingInterval.IsUnknown() && !data.DlbSamplingInterval.IsNull() && !config.DlbSamplingInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "samplingInterval", strconv.FormatInt(data.DlbSamplingInterval.ValueInt64(), 10))
+		}
+		if !data.DlbStaticPinning.IsUnknown() && !data.DlbStaticPinning.IsNull() && !config.DlbStaticPinning.IsNull() {
+			attrs, _ = sjson.Set(attrs, "staticPinning", strconv.FormatBool(data.DlbStaticPinning.ValueBool()))
+		}
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "platformDlbEntity.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "platformDlbEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		for key, child := range data.DlbStaticPinnings {
+			configChild, configChildOk := config.DlbStaticPinnings[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "srcInterface", key)
+			if configChildOk && !child.DestinationInterface.IsUnknown() && !child.DestinationInterface.IsNull() && !configChild.DestinationInterface.IsNull() {
+				attrs, _ = sjson.Set(attrs, "dstInterface", child.DestinationInterface.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.platformDlbStaticPinning.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "platformDlbEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
 	attrs = "{}"
 	if !data.PfcWatchdogAutoRestoreMultiplier.IsUnknown() && !data.PfcWatchdogAutoRestoreMultiplier.IsNull() && !config.PfcWatchdogAutoRestoreMultiplier.IsNull() {
 		attrs, _ = sjson.Set(attrs, "autoRestoreMultiplier", strconv.FormatInt(data.PfcWatchdogAutoRestoreMultiplier.ValueInt64(), 10))
@@ -1745,6 +1853,56 @@ func (data *Platform) fromBody(res gjson.Result) {
 		data.PortChannelLoadBalanceMplsLabelOnly = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.mplsLabelOnly").String())
 		data.PortChannelLoadBalanceRotate = types.Int64Value(rplatformLoadBalance.Get("platformLoadBalance.attributes.rotate").Int())
 		data.PortChannelLoadBalanceSymmetry = types.StringValue(rplatformLoadBalance.Get("platformLoadBalance.attributes.symmetry").String())
+	}
+	{
+		var rplatformDlbEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("platformDlbEntity.attributes.rn").String()
+				if rnValue == "dlb" {
+					rplatformDlbEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.DlbAllowAllInterfaces = types.BoolValue(helpers.ParseNxosBoolean(rplatformDlbEntity.Get("platformDlbEntity.attributes.allowAllInterface").String()))
+		data.DlbDecayFactor = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.decayFactor").Int())
+		data.DlbDescription = types.StringValue(rplatformDlbEntity.Get("platformDlbEntity.attributes.descr").String())
+		data.DlbDreThresholdLevel1 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel1").Int())
+		data.DlbDreThresholdLevel2 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel2").Int())
+		data.DlbDreThresholdLevel3 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel3").Int())
+		data.DlbDreThresholdLevel4 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel4").Int())
+		data.DlbDreThresholdLevel5 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel5").Int())
+		data.DlbDreThresholdLevel6 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel6").Int())
+		data.DlbDreThresholdLevel7 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel7").Int())
+		data.DlbEnabled = types.BoolValue(helpers.ParseNxosBoolean(rplatformDlbEntity.Get("platformDlbEntity.attributes.enabled").String()))
+		data.DlbFlowletAging = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.flowletAgingTimer").Int())
+		data.DlbInterfaces = types.StringValue(rplatformDlbEntity.Get("platformDlbEntity.attributes.intfList").String())
+		data.DlbLoadAwareness = types.BoolValue(helpers.ParseNxosBoolean(rplatformDlbEntity.Get("platformDlbEntity.attributes.loadAwareness").String()))
+		data.DlbMacAddress = types.StringValue(rplatformDlbEntity.Get("platformDlbEntity.attributes.macAddr").String())
+		data.DlbMode = types.StringValue(rplatformDlbEntity.Get("platformDlbEntity.attributes.mode").String())
+		data.DlbSamplingInterval = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.samplingInterval").Int())
+		data.DlbStaticPinning = types.BoolValue(helpers.ParseNxosBoolean(rplatformDlbEntity.Get("platformDlbEntity.attributes.staticPinning").String()))
+		rplatformDlbEntity.Get("platformDlbEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "platformDlbStaticPinning" {
+							var child PlatformDlbStaticPinnings
+							child.DestinationInterface = types.StringValue(value.Get("attributes.dstInterface").String())
+							mapKey := value.Get("attributes.srcInterface").String()
+							if data.DlbStaticPinnings == nil {
+								data.DlbStaticPinnings = make(map[string]PlatformDlbStaticPinnings)
+							}
+							data.DlbStaticPinnings[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
 	}
 	{
 		var rplatformPriorFlowCtrlWd gjson.Result
@@ -3101,6 +3259,129 @@ func (data *Platform) updateFromBody(res gjson.Result) {
 	} else {
 		data.PortChannelLoadBalanceSymmetry = types.StringNull()
 	}
+	var rplatformDlbEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("platformDlbEntity.attributes.rn").String()
+			if rnValue == "dlb" {
+				rplatformDlbEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.DlbAllowAllInterfaces.IsNull() {
+		data.DlbAllowAllInterfaces = types.BoolValue(helpers.ParseNxosBoolean(rplatformDlbEntity.Get("platformDlbEntity.attributes.allowAllInterface").String()))
+	} else {
+		data.DlbAllowAllInterfaces = types.BoolNull()
+	}
+	if !data.DlbDecayFactor.IsNull() {
+		data.DlbDecayFactor = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.decayFactor").Int())
+	} else {
+		data.DlbDecayFactor = types.Int64Null()
+	}
+	if !data.DlbDescription.IsNull() {
+		data.DlbDescription = types.StringValue(rplatformDlbEntity.Get("platformDlbEntity.attributes.descr").String())
+	} else {
+		data.DlbDescription = types.StringNull()
+	}
+	if !data.DlbDreThresholdLevel1.IsNull() {
+		data.DlbDreThresholdLevel1 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel1").Int())
+	} else {
+		data.DlbDreThresholdLevel1 = types.Int64Null()
+	}
+	if !data.DlbDreThresholdLevel2.IsNull() {
+		data.DlbDreThresholdLevel2 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel2").Int())
+	} else {
+		data.DlbDreThresholdLevel2 = types.Int64Null()
+	}
+	if !data.DlbDreThresholdLevel3.IsNull() {
+		data.DlbDreThresholdLevel3 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel3").Int())
+	} else {
+		data.DlbDreThresholdLevel3 = types.Int64Null()
+	}
+	if !data.DlbDreThresholdLevel4.IsNull() {
+		data.DlbDreThresholdLevel4 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel4").Int())
+	} else {
+		data.DlbDreThresholdLevel4 = types.Int64Null()
+	}
+	if !data.DlbDreThresholdLevel5.IsNull() {
+		data.DlbDreThresholdLevel5 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel5").Int())
+	} else {
+		data.DlbDreThresholdLevel5 = types.Int64Null()
+	}
+	if !data.DlbDreThresholdLevel6.IsNull() {
+		data.DlbDreThresholdLevel6 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel6").Int())
+	} else {
+		data.DlbDreThresholdLevel6 = types.Int64Null()
+	}
+	if !data.DlbDreThresholdLevel7.IsNull() {
+		data.DlbDreThresholdLevel7 = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.dreThresholdsLevel7").Int())
+	} else {
+		data.DlbDreThresholdLevel7 = types.Int64Null()
+	}
+	if !data.DlbEnabled.IsNull() {
+		data.DlbEnabled = types.BoolValue(helpers.ParseNxosBoolean(rplatformDlbEntity.Get("platformDlbEntity.attributes.enabled").String()))
+	} else {
+		data.DlbEnabled = types.BoolNull()
+	}
+	if !data.DlbFlowletAging.IsNull() {
+		data.DlbFlowletAging = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.flowletAgingTimer").Int())
+	} else {
+		data.DlbFlowletAging = types.Int64Null()
+	}
+	if !data.DlbInterfaces.IsNull() {
+		data.DlbInterfaces = types.StringValue(rplatformDlbEntity.Get("platformDlbEntity.attributes.intfList").String())
+	} else {
+		data.DlbInterfaces = types.StringNull()
+	}
+	if !data.DlbLoadAwareness.IsNull() {
+		data.DlbLoadAwareness = types.BoolValue(helpers.ParseNxosBoolean(rplatformDlbEntity.Get("platformDlbEntity.attributes.loadAwareness").String()))
+	} else {
+		data.DlbLoadAwareness = types.BoolNull()
+	}
+	if !data.DlbMacAddress.IsNull() {
+		data.DlbMacAddress = types.StringValue(rplatformDlbEntity.Get("platformDlbEntity.attributes.macAddr").String())
+	} else {
+		data.DlbMacAddress = types.StringNull()
+	}
+	if !data.DlbMode.IsNull() {
+		data.DlbMode = types.StringValue(rplatformDlbEntity.Get("platformDlbEntity.attributes.mode").String())
+	} else {
+		data.DlbMode = types.StringNull()
+	}
+	if !data.DlbSamplingInterval.IsNull() {
+		data.DlbSamplingInterval = types.Int64Value(rplatformDlbEntity.Get("platformDlbEntity.attributes.samplingInterval").Int())
+	} else {
+		data.DlbSamplingInterval = types.Int64Null()
+	}
+	if !data.DlbStaticPinning.IsNull() {
+		data.DlbStaticPinning = types.BoolValue(helpers.ParseNxosBoolean(rplatformDlbEntity.Get("platformDlbEntity.attributes.staticPinning").String()))
+	} else {
+		data.DlbStaticPinning = types.BoolNull()
+	}
+	for key, item := range data.DlbStaticPinnings {
+		var rplatformDlbStaticPinning gjson.Result
+		rplatformDlbEntity.Get("platformDlbEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("platformDlbStaticPinning.attributes.srcInterface").String() == key {
+					rplatformDlbStaticPinning = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rplatformDlbStaticPinning.Exists() {
+			delete(data.DlbStaticPinnings, key)
+			continue
+		}
+		if !item.DestinationInterface.IsNull() {
+			item.DestinationInterface = types.StringValue(rplatformDlbStaticPinning.Get("platformDlbStaticPinning.attributes.dstInterface").String())
+		} else {
+			item.DestinationInterface = types.StringNull()
+		}
+		data.DlbStaticPinnings[key] = item
+	}
 	var rplatformPriorFlowCtrlWd gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -4279,6 +4560,83 @@ func (data Platform) toDeleteBody() nxos.Body {
 	}
 	{
 		childBody := ""
+		if !data.DlbAllowAllInterfaces.IsNull() {
+			childBody, _ = sjson.Set(childBody, "allowAllInterface", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbDecayFactor.IsNull() {
+			childBody, _ = sjson.Set(childBody, "decayFactor", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbDescription.IsNull() {
+			childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbDreThresholdLevel1.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dreThresholdsLevel1", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbDreThresholdLevel2.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dreThresholdsLevel2", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbDreThresholdLevel3.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dreThresholdsLevel3", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbDreThresholdLevel4.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dreThresholdsLevel4", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbDreThresholdLevel5.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dreThresholdsLevel5", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbDreThresholdLevel6.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dreThresholdsLevel6", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbDreThresholdLevel7.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dreThresholdsLevel7", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbEnabled.IsNull() {
+			childBody, _ = sjson.Set(childBody, "enabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbFlowletAging.IsNull() {
+			childBody, _ = sjson.Set(childBody, "flowletAgingTimer", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbInterfaces.IsNull() {
+			childBody, _ = sjson.Set(childBody, "intfList", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbLoadAwareness.IsNull() {
+			childBody, _ = sjson.Set(childBody, "loadAwareness", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbMacAddress.IsNull() {
+			childBody, _ = sjson.Set(childBody, "macAddr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbSamplingInterval.IsNull() {
+			childBody, _ = sjson.Set(childBody, "samplingInterval", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.DlbStaticPinning.IsNull() {
+			childBody, _ = sjson.Set(childBody, "staticPinning", "DME_UNSET_PROPERTY_MARKER")
+		}
+		hasNestedChildren := false
+		if len(data.DlbStaticPinnings) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformDlbEntity"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.DlbStaticPinnings {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "platformDlbStaticPinning.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "platformDlbStaticPinning.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
+	}
+	{
+		childBody := ""
 		if !data.PfcWatchdogAutoRestoreMultiplier.IsNull() {
 			childBody, _ = sjson.Set(childBody, "autoRestoreMultiplier", "DME_UNSET_PROPERTY_MARKER")
 		}
@@ -4543,6 +4901,16 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 					deleteBody, _ = sjson.Set(deleteBody, "platformInfraVlan.attributes.status", "deleted")
 					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 				}
+			}
+		}
+		for stateKey := range state.DlbStaticPinnings {
+			if _, found := data.DlbStaticPinnings[stateKey]; !found {
+				stateChild := state.DlbStaticPinnings[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "platformDlbStaticPinning.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "platformDlbStaticPinning.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 		for stateKey := range state.TcamTemplates {
@@ -5448,6 +5816,93 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 		if !state.PortChannelLoadBalanceSymmetry.IsNull() && config.PortChannelLoadBalanceSymmetry.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformLoadBalance")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"symmetry", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbAllowAllInterfaces.IsNull() && config.DlbAllowAllInterfaces.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"allowAllInterface", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbDecayFactor.IsNull() && config.DlbDecayFactor.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"decayFactor", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbDescription.IsNull() && config.DlbDescription.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbDreThresholdLevel1.IsNull() && config.DlbDreThresholdLevel1.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dreThresholdsLevel1", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbDreThresholdLevel2.IsNull() && config.DlbDreThresholdLevel2.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dreThresholdsLevel2", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbDreThresholdLevel3.IsNull() && config.DlbDreThresholdLevel3.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dreThresholdsLevel3", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbDreThresholdLevel4.IsNull() && config.DlbDreThresholdLevel4.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dreThresholdsLevel4", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbDreThresholdLevel5.IsNull() && config.DlbDreThresholdLevel5.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dreThresholdsLevel5", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbDreThresholdLevel6.IsNull() && config.DlbDreThresholdLevel6.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dreThresholdsLevel6", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbDreThresholdLevel7.IsNull() && config.DlbDreThresholdLevel7.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dreThresholdsLevel7", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbEnabled.IsNull() && config.DlbEnabled.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"enabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbFlowletAging.IsNull() && config.DlbFlowletAging.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"flowletAgingTimer", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbInterfaces.IsNull() && config.DlbInterfaces.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"intfList", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbLoadAwareness.IsNull() && config.DlbLoadAwareness.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loadAwareness", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbMacAddress.IsNull() && config.DlbMacAddress.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"macAddr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbMode.IsNull() && config.DlbMode.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbSamplingInterval.IsNull() && config.DlbSamplingInterval.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"samplingInterval", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DlbStaticPinning.IsNull() && config.DlbStaticPinning.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformDlbEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"staticPinning", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.DlbStaticPinnings {
+			if configChild, ok := config.DlbStaticPinnings[key]; ok {
+				stateChild := state.DlbStaticPinnings[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformDlbEntity")+".children").Array() {
+					if mv.Get("platformDlbStaticPinning.attributes.srcInterface").String() == key {
+						if !stateChild.DestinationInterface.IsNull() && configChild.DestinationInterface.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "platformDlbEntity")+".children"+"."+strconv.Itoa(mi)+".platformDlbStaticPinning.attributes."+"dstInterface", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
 		}
 		if !state.PfcWatchdogAutoRestoreMultiplier.IsNull() && config.PfcWatchdogAutoRestoreMultiplier.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformPriorFlowCtrlWd")

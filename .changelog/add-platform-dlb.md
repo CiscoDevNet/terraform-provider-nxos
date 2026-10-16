@@ -1,0 +1,2 @@
+- Add dynamic load balancing (DLB) configuration (`dlb`), including static pinning (`dlb_static_pinnings`), to `nxos_platform` resource and data source
+- Add `set_dlb_mode` attribute to `match_class_maps` of `nxos_default_qos` resource and data source

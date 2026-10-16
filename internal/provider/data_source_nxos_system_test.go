@@ -201,6 +201,8 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_interfaces.eth1/1.port_description", "My Port"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_rate_limiter", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "qos_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "qos_statistics", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "console_exec_timeout", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vty_exec_timeout", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vty_session_limit", "16"))
@@ -615,6 +617,8 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `	}` + "\n"
 	config += `	copp_admin_state = "enabled"` + "\n"
 	config += `	copp_rate_limiter = true` + "\n"
+	config += `	qos_mode = true` + "\n"
+	config += `	qos_statistics = "disabled"` + "\n"
 	config += `	console_exec_timeout = 30` + "\n"
 	config += `	vty_exec_timeout = 30` + "\n"
 	config += `	vty_session_limit = 16` + "\n"

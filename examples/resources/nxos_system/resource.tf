@@ -251,6 +251,8 @@ resource "nxos_system" "example" {
   }
   copp_admin_state              = "enabled"
   copp_rate_limiter             = true
+  qos_mode                      = true
+  qos_statistics                = "disabled"
   console_exec_timeout          = 30
   vty_exec_timeout              = 30
   vty_session_limit             = 16

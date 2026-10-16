@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -2195,6 +2195,46 @@ child_classes:
               - dense
             example: strict
             exclude_test: true
+  - class_name: ipqosEntity
+    doc_path: Qos/ipqos%3AEntity/
+    rn: ipqos
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: dynamicBufferShare
+        tf_name: qos_dynamic_buffer_sharing
+        type: Bool
+        description: 'Globally enable/disable dynamic-buffer-sharing.'
+        example: true
+        exclude_test: true
+      - nxos_name: mode
+        tf_name: qos_mode
+        type: Bool
+        description: 'System QoS Mode, sets the mode.'
+        example: true
+      - nxos_name: qosPoliciesStatsState
+        tf_name: qos_policies_statistics
+        type: String
+        description: 'Globally enable/disable QoS-Policies statistics.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
+      - nxos_name: resetDei
+        tf_name: qos_reset_dei
+        type: Bool
+        description: 'Globally reset dei bit.'
+        example: true
+        exclude_test: true
+      - nxos_name: statsState
+        tf_name: qos_statistics
+        type: String
+        description: 'Globally enable/disable QoS statistics.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
   - class_name: terminalTerminal
     doc_path: System/terminal:Terminal/
     rn: terml

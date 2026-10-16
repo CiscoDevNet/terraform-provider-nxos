@@ -184,6 +184,11 @@ type System struct {
 	CoppAdminState                                types.String                                  `tfsdk:"copp_admin_state"`
 	CoppRateLimiter                               types.Bool                                    `tfsdk:"copp_rate_limiter"`
 	CoppProfileType                               types.String                                  `tfsdk:"copp_profile_type"`
+	QosDynamicBufferSharing                       types.Bool                                    `tfsdk:"qos_dynamic_buffer_sharing"`
+	QosMode                                       types.Bool                                    `tfsdk:"qos_mode"`
+	QosPoliciesStatistics                         types.String                                  `tfsdk:"qos_policies_statistics"`
+	QosResetDei                                   types.Bool                                    `tfsdk:"qos_reset_dei"`
+	QosStatistics                                 types.String                                  `tfsdk:"qos_statistics"`
 	ConsoleExecTimeout                            types.Int64                                   `tfsdk:"console_exec_timeout"`
 	VtyExecTimeout                                types.Int64                                   `tfsdk:"vty_exec_timeout"`
 	VtySessionLimit                               types.Int64                                   `tfsdk:"vty_session_limit"`
@@ -1961,6 +1966,25 @@ func (data System) toBody(config System) nxos.Body {
 		if parentAttrs != "{}" || gjson.Get(childBody, "coppEntity.children").Exists() {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
+	}
+	attrs = "{}"
+	if !data.QosDynamicBufferSharing.IsUnknown() && !data.QosDynamicBufferSharing.IsNull() && !config.QosDynamicBufferSharing.IsNull() {
+		attrs, _ = sjson.Set(attrs, "dynamicBufferShare", strconv.FormatBool(data.QosDynamicBufferSharing.ValueBool()))
+	}
+	if !data.QosMode.IsUnknown() && !data.QosMode.IsNull() && !config.QosMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mode", strconv.FormatBool(data.QosMode.ValueBool()))
+	}
+	if !data.QosPoliciesStatistics.IsUnknown() && !data.QosPoliciesStatistics.IsNull() && !config.QosPoliciesStatistics.IsNull() {
+		attrs, _ = sjson.Set(attrs, "qosPoliciesStatsState", data.QosPoliciesStatistics.ValueString())
+	}
+	if !data.QosResetDei.IsUnknown() && !data.QosResetDei.IsNull() && !config.QosResetDei.IsNull() {
+		attrs, _ = sjson.Set(attrs, "resetDei", strconv.FormatBool(data.QosResetDei.ValueBool()))
+	}
+	if !data.QosStatistics.IsUnknown() && !data.QosStatistics.IsNull() && !config.QosStatistics.IsNull() {
+		attrs, _ = sjson.Set(attrs, "statsState", data.QosStatistics.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.ipqosEntity.attributes", attrs)
 	}
 	{
 		attrs = "{}"
@@ -3777,6 +3801,24 @@ func (data *System) fromBody(res gjson.Result) {
 			)
 			data.CoppProfileType = types.StringValue(rcoppProfile.Get("coppProfile.attributes.prof").String())
 		}
+	}
+	{
+		var ripqosEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("ipqosEntity.attributes.rn").String()
+				if rnValue == "ipqos" {
+					ripqosEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.QosDynamicBufferSharing = types.BoolValue(helpers.ParseNxosBoolean(ripqosEntity.Get("ipqosEntity.attributes.dynamicBufferShare").String()))
+		data.QosMode = types.BoolValue(helpers.ParseNxosBoolean(ripqosEntity.Get("ipqosEntity.attributes.mode").String()))
+		data.QosPoliciesStatistics = types.StringValue(ripqosEntity.Get("ipqosEntity.attributes.qosPoliciesStatsState").String())
+		data.QosResetDei = types.BoolValue(helpers.ParseNxosBoolean(ripqosEntity.Get("ipqosEntity.attributes.resetDei").String()))
+		data.QosStatistics = types.StringValue(ripqosEntity.Get("ipqosEntity.attributes.statsState").String())
 	}
 	{
 		var rterminalTerminal gjson.Result
@@ -6406,6 +6448,42 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.CoppProfileType = types.StringNull()
 		}
 	}
+	var ripqosEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("ipqosEntity.attributes.rn").String()
+			if rnValue == "ipqos" {
+				ripqosEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.QosDynamicBufferSharing.IsNull() {
+		data.QosDynamicBufferSharing = types.BoolValue(helpers.ParseNxosBoolean(ripqosEntity.Get("ipqosEntity.attributes.dynamicBufferShare").String()))
+	} else {
+		data.QosDynamicBufferSharing = types.BoolNull()
+	}
+	if !data.QosMode.IsNull() {
+		data.QosMode = types.BoolValue(helpers.ParseNxosBoolean(ripqosEntity.Get("ipqosEntity.attributes.mode").String()))
+	} else {
+		data.QosMode = types.BoolNull()
+	}
+	if !data.QosPoliciesStatistics.IsNull() {
+		data.QosPoliciesStatistics = types.StringValue(ripqosEntity.Get("ipqosEntity.attributes.qosPoliciesStatsState").String())
+	} else {
+		data.QosPoliciesStatistics = types.StringNull()
+	}
+	if !data.QosResetDei.IsNull() {
+		data.QosResetDei = types.BoolValue(helpers.ParseNxosBoolean(ripqosEntity.Get("ipqosEntity.attributes.resetDei").String()))
+	} else {
+		data.QosResetDei = types.BoolNull()
+	}
+	if !data.QosStatistics.IsNull() {
+		data.QosStatistics = types.StringValue(ripqosEntity.Get("ipqosEntity.attributes.statsState").String())
+	} else {
+		data.QosStatistics = types.StringNull()
+	}
 	var rterminalTerminal gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -8386,6 +8464,29 @@ func (data System) toDeleteBody() nxos.Body {
 			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
 				body, _ = sjson.Delete(body, siblingsPath)
 			}
+		}
+	}
+	{
+		childBody := ""
+		if !data.QosDynamicBufferSharing.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dynamicBufferShare", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosMode.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosPoliciesStatistics.IsNull() {
+			childBody, _ = sjson.Set(childBody, "qosPoliciesStatsState", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosResetDei.IsNull() {
+			childBody, _ = sjson.Set(childBody, "resetDei", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosStatistics.IsNull() {
+			childBody, _ = sjson.Set(childBody, "statsState", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEntity"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
 	{
@@ -10407,6 +10508,26 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		if !state.CoppProfileType.IsNull() && config.CoppProfileType.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "coppEntity")+".children", "coppProfile")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"prof", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosDynamicBufferSharing.IsNull() && config.QosDynamicBufferSharing.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dynamicBufferShare", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosMode.IsNull() && config.QosMode.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosPoliciesStatistics.IsNull() && config.QosPoliciesStatistics.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"qosPoliciesStatsState", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosResetDei.IsNull() && config.QosResetDei.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"resetDei", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosStatistics.IsNull() && config.QosStatistics.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"statsState", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !state.ConsoleExecTimeout.IsNull() && config.ConsoleExecTimeout.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "terminalTerminal")+".children", "terminalLine")+".children", "terminalConsole")+".children", "terminalExecTimeout")

@@ -266,6 +266,56 @@ type Platform struct {
 	PfcWatchdogInternalInterfaceMultiplier              types.Int64                      `tfsdk:"pfc_watchdog_internal_interface_multiplier"`
 	PfcWatchdogInterval                                 types.Int64                      `tfsdk:"pfc_watchdog_interval"`
 	PfcWatchdogShutdownMultiplier                       types.Int64                      `tfsdk:"pfc_watchdog_shutdown_multiplier"`
+	QosBufferPeakMonitorCounter0Class0                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class0"`
+	QosBufferPeakMonitorCounter0Class1                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class1"`
+	QosBufferPeakMonitorCounter0Class2                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class2"`
+	QosBufferPeakMonitorCounter0Class3                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class3"`
+	QosBufferPeakMonitorCounter0Class4                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class4"`
+	QosBufferPeakMonitorCounter0Class5                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class5"`
+	QosBufferPeakMonitorCounter0Class6                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class6"`
+	QosBufferPeakMonitorCounter0Class7                  types.String                     `tfsdk:"qos_buffer_peak_monitor_counter0_class7"`
+	QosBurstDetectFallThresholdUnit                     types.String                     `tfsdk:"qos_burst_detect_fall_threshold_unit"`
+	QosBurstDetectFallThreshold                         types.Int64                      `tfsdk:"qos_burst_detect_fall_threshold"`
+	QosBurstDetectMaxRecords                            types.Int64                      `tfsdk:"qos_burst_detect_max_records"`
+	QosBurstDetectRiseThresholdUnit                     types.String                     `tfsdk:"qos_burst_detect_rise_threshold_unit"`
+	QosBurstDetectRiseThreshold                         types.Int64                      `tfsdk:"qos_burst_detect_rise_threshold"`
+	QosClassifyNsOnly                                   types.String                     `tfsdk:"qos_classify_ns_only"`
+	QosCpuSize                                          types.Int64                      `tfsdk:"qos_cpu_size"`
+	QosDppAgePeriod                                     types.Int64                      `tfsdk:"qos_dpp_age_period"`
+	QosDppMaxPackets                                    types.Int64                      `tfsdk:"qos_dpp_max_packets"`
+	QosDropPoolSize                                     types.Int64                      `tfsdk:"qos_drop_pool_size"`
+	QosEoqStatsClass                                    types.String                     `tfsdk:"qos_eoq_stats_class"`
+	QosEtrapAgePeriod                                   types.Int64                      `tfsdk:"qos_etrap_age_period"`
+	QosEtrapBandwidthThreshold                          types.Int64                      `tfsdk:"qos_etrap_bandwidth_threshold"`
+	QosEtrapByteCount                                   types.Int64                      `tfsdk:"qos_etrap_byte_count"`
+	QosHeadroomSize                                     types.Int64                      `tfsdk:"qos_headroom_size"`
+	QosInputBufferPeak                                  types.String                     `tfsdk:"qos_input_buffer_peak"`
+	QosIncludeIpg                                       types.String                     `tfsdk:"qos_include_ipg"`
+	QosLcpuSize                                         types.Int64                      `tfsdk:"qos_lcpu_size"`
+	QosMacIpg                                           types.Int64                      `tfsdk:"qos_mac_ipg"`
+	QosMulticastQosGroup3Traffic                        types.String                     `tfsdk:"qos_multicast_qos_group3_traffic"`
+	QosNodropDynamicQueueLimit                          types.Int64                      `tfsdk:"qos_nodrop_dynamic_queue_limit"`
+	QosNodropResumeOffset                               types.Int64                      `tfsdk:"qos_nodrop_resume_offset"`
+	QosNodropPgGreenThreshold                           types.Int64                      `tfsdk:"qos_nodrop_pg_green_threshold"`
+	QosNodropPgRedThreshold                             types.Int64                      `tfsdk:"qos_nodrop_pg_red_threshold"`
+	QosNodropPgSize                                     types.Int64                      `tfsdk:"qos_nodrop_pg_size"`
+	QosNodropPgSizeFx                                   types.Int64                      `tfsdk:"qos_nodrop_pg_size_fx"`
+	QosNodropPgYellowThreshold                          types.Int64                      `tfsdk:"qos_nodrop_pg_yellow_threshold"`
+	QosNodropPoolSize                                   types.Int64                      `tfsdk:"qos_nodrop_pool_size"`
+	QosNodropQueueGreenThreshold                        types.Int64                      `tfsdk:"qos_nodrop_queue_green_threshold"`
+	QosNodropQueueGreenThresholdFx                      types.Int64                      `tfsdk:"qos_nodrop_queue_green_threshold_fx"`
+	QosNodropQueueYellowThreshold                       types.Int64                      `tfsdk:"qos_nodrop_queue_yellow_threshold"`
+	QosNsBufferProfile                                  types.String                     `tfsdk:"qos_ns_buffer_profile"`
+	QosOutputQueueDropsType                             types.String                     `tfsdk:"qos_output_queue_drops_type"`
+	QosPfcMulticastDrop                                 types.String                     `tfsdk:"qos_pfc_multicast_drop"`
+	QosPfcStatic                                        types.String                     `tfsdk:"qos_pfc_static"`
+	QosPgHeadroomReserve                                types.Int64                      `tfsdk:"qos_pg_headroom_reserve"`
+	QosPgMinValue                                       types.Int64                      `tfsdk:"qos_pg_min_value"`
+	QosPgNoMin                                          types.Bool                       `tfsdk:"qos_pg_no_min"`
+	QosPgShare                                          types.String                     `tfsdk:"qos_pg_share"`
+	QosQueueNoisePercent                                types.Int64                      `tfsdk:"qos_queue_noise_percent"`
+	QosAfdProfile                                       types.String                     `tfsdk:"qos_afd_profile"`
+	QosSpanSize                                         types.Int64                      `tfsdk:"qos_span_size"`
 	TcamTemplates                                       map[string]PlatformTcamTemplates `tfsdk:"tcam_templates"`
 	UdfDescription                                      types.String                     `tfsdk:"udf_description"`
 	Udfs                                                map[string]PlatformUdfs          `tfsdk:"udfs"`
@@ -1127,6 +1177,160 @@ func (data Platform) toBody(config Platform) nxos.Body {
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformPriorFlowCtrlWd.attributes", attrs)
 	}
+	attrs = "{}"
+	if !data.QosBufferPeakMonitorCounter0Class0.IsUnknown() && !data.QosBufferPeakMonitorCounter0Class0.IsNull() && !config.QosBufferPeakMonitorCounter0Class0.IsNull() {
+		attrs, _ = sjson.Set(attrs, "bufPeakMonitorCnt0Class0", data.QosBufferPeakMonitorCounter0Class0.ValueString())
+	}
+	if !data.QosBufferPeakMonitorCounter0Class1.IsUnknown() && !data.QosBufferPeakMonitorCounter0Class1.IsNull() && !config.QosBufferPeakMonitorCounter0Class1.IsNull() {
+		attrs, _ = sjson.Set(attrs, "bufPeakMonitorCnt0Class1", data.QosBufferPeakMonitorCounter0Class1.ValueString())
+	}
+	if !data.QosBufferPeakMonitorCounter0Class2.IsUnknown() && !data.QosBufferPeakMonitorCounter0Class2.IsNull() && !config.QosBufferPeakMonitorCounter0Class2.IsNull() {
+		attrs, _ = sjson.Set(attrs, "bufPeakMonitorCnt0Class2", data.QosBufferPeakMonitorCounter0Class2.ValueString())
+	}
+	if !data.QosBufferPeakMonitorCounter0Class3.IsUnknown() && !data.QosBufferPeakMonitorCounter0Class3.IsNull() && !config.QosBufferPeakMonitorCounter0Class3.IsNull() {
+		attrs, _ = sjson.Set(attrs, "bufPeakMonitorCnt0Class3", data.QosBufferPeakMonitorCounter0Class3.ValueString())
+	}
+	if !data.QosBufferPeakMonitorCounter0Class4.IsUnknown() && !data.QosBufferPeakMonitorCounter0Class4.IsNull() && !config.QosBufferPeakMonitorCounter0Class4.IsNull() {
+		attrs, _ = sjson.Set(attrs, "bufPeakMonitorCnt0Class4", data.QosBufferPeakMonitorCounter0Class4.ValueString())
+	}
+	if !data.QosBufferPeakMonitorCounter0Class5.IsUnknown() && !data.QosBufferPeakMonitorCounter0Class5.IsNull() && !config.QosBufferPeakMonitorCounter0Class5.IsNull() {
+		attrs, _ = sjson.Set(attrs, "bufPeakMonitorCnt0Class5", data.QosBufferPeakMonitorCounter0Class5.ValueString())
+	}
+	if !data.QosBufferPeakMonitorCounter0Class6.IsUnknown() && !data.QosBufferPeakMonitorCounter0Class6.IsNull() && !config.QosBufferPeakMonitorCounter0Class6.IsNull() {
+		attrs, _ = sjson.Set(attrs, "bufPeakMonitorCnt0Class6", data.QosBufferPeakMonitorCounter0Class6.ValueString())
+	}
+	if !data.QosBufferPeakMonitorCounter0Class7.IsUnknown() && !data.QosBufferPeakMonitorCounter0Class7.IsNull() && !config.QosBufferPeakMonitorCounter0Class7.IsNull() {
+		attrs, _ = sjson.Set(attrs, "bufPeakMonitorCnt0Class7", data.QosBufferPeakMonitorCounter0Class7.ValueString())
+	}
+	if !data.QosBurstDetectFallThresholdUnit.IsUnknown() && !data.QosBurstDetectFallThresholdUnit.IsNull() && !config.QosBurstDetectFallThresholdUnit.IsNull() {
+		attrs, _ = sjson.Set(attrs, "burstDetectFallThreshUnit", data.QosBurstDetectFallThresholdUnit.ValueString())
+	}
+	if !data.QosBurstDetectFallThreshold.IsUnknown() && !data.QosBurstDetectFallThreshold.IsNull() && !config.QosBurstDetectFallThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "burstDetectFallThreshold", strconv.FormatInt(data.QosBurstDetectFallThreshold.ValueInt64(), 10))
+	}
+	if !data.QosBurstDetectMaxRecords.IsUnknown() && !data.QosBurstDetectMaxRecords.IsNull() && !config.QosBurstDetectMaxRecords.IsNull() {
+		attrs, _ = sjson.Set(attrs, "burstDetectMaxRecords", strconv.FormatInt(data.QosBurstDetectMaxRecords.ValueInt64(), 10))
+	}
+	if !data.QosBurstDetectRiseThresholdUnit.IsUnknown() && !data.QosBurstDetectRiseThresholdUnit.IsNull() && !config.QosBurstDetectRiseThresholdUnit.IsNull() {
+		attrs, _ = sjson.Set(attrs, "burstDetectRiseThreshUnit", data.QosBurstDetectRiseThresholdUnit.ValueString())
+	}
+	if !data.QosBurstDetectRiseThreshold.IsUnknown() && !data.QosBurstDetectRiseThreshold.IsNull() && !config.QosBurstDetectRiseThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "burstDetectRiseThreshold", strconv.FormatInt(data.QosBurstDetectRiseThreshold.ValueInt64(), 10))
+	}
+	if !data.QosClassifyNsOnly.IsUnknown() && !data.QosClassifyNsOnly.IsNull() && !config.QosClassifyNsOnly.IsNull() {
+		attrs, _ = sjson.Set(attrs, "classify", data.QosClassifyNsOnly.ValueString())
+	}
+	if !data.QosCpuSize.IsUnknown() && !data.QosCpuSize.IsNull() && !config.QosCpuSize.IsNull() {
+		attrs, _ = sjson.Set(attrs, "cpuSize", strconv.FormatInt(data.QosCpuSize.ValueInt64(), 10))
+	}
+	if !data.QosDppAgePeriod.IsUnknown() && !data.QosDppAgePeriod.IsNull() && !config.QosDppAgePeriod.IsNull() {
+		attrs, _ = sjson.Set(attrs, "dppAgePeriod", strconv.FormatInt(data.QosDppAgePeriod.ValueInt64(), 10))
+	}
+	if !data.QosDppMaxPackets.IsUnknown() && !data.QosDppMaxPackets.IsNull() && !config.QosDppMaxPackets.IsNull() {
+		attrs, _ = sjson.Set(attrs, "dppMaxNumPkts", strconv.FormatInt(data.QosDppMaxPackets.ValueInt64(), 10))
+	}
+	if !data.QosDropPoolSize.IsUnknown() && !data.QosDropPoolSize.IsNull() && !config.QosDropPoolSize.IsNull() {
+		attrs, _ = sjson.Set(attrs, "dropPoolSize", strconv.FormatInt(data.QosDropPoolSize.ValueInt64(), 10))
+	}
+	if !data.QosEoqStatsClass.IsUnknown() && !data.QosEoqStatsClass.IsNull() && !config.QosEoqStatsClass.IsNull() {
+		attrs, _ = sjson.Set(attrs, "eoqStatsClass", data.QosEoqStatsClass.ValueString())
+	}
+	if !data.QosEtrapAgePeriod.IsUnknown() && !data.QosEtrapAgePeriod.IsNull() && !config.QosEtrapAgePeriod.IsNull() {
+		attrs, _ = sjson.Set(attrs, "etrapAgePeriod", strconv.FormatInt(data.QosEtrapAgePeriod.ValueInt64(), 10))
+	}
+	if !data.QosEtrapBandwidthThreshold.IsUnknown() && !data.QosEtrapBandwidthThreshold.IsNull() && !config.QosEtrapBandwidthThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "etrapBandwidthThreshold", strconv.FormatInt(data.QosEtrapBandwidthThreshold.ValueInt64(), 10))
+	}
+	if !data.QosEtrapByteCount.IsUnknown() && !data.QosEtrapByteCount.IsNull() && !config.QosEtrapByteCount.IsNull() {
+		attrs, _ = sjson.Set(attrs, "etrapByteCount", strconv.FormatInt(data.QosEtrapByteCount.ValueInt64(), 10))
+	}
+	if !data.QosHeadroomSize.IsUnknown() && !data.QosHeadroomSize.IsNull() && !config.QosHeadroomSize.IsNull() {
+		attrs, _ = sjson.Set(attrs, "headroomSize", strconv.FormatInt(data.QosHeadroomSize.ValueInt64(), 10))
+	}
+	if !data.QosInputBufferPeak.IsUnknown() && !data.QosInputBufferPeak.IsNull() && !config.QosInputBufferPeak.IsNull() {
+		attrs, _ = sjson.Set(attrs, "inputBufferPeak", data.QosInputBufferPeak.ValueString())
+	}
+	if !data.QosIncludeIpg.IsUnknown() && !data.QosIncludeIpg.IsNull() && !config.QosIncludeIpg.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ipg", data.QosIncludeIpg.ValueString())
+	}
+	if !data.QosLcpuSize.IsUnknown() && !data.QosLcpuSize.IsNull() && !config.QosLcpuSize.IsNull() {
+		attrs, _ = sjson.Set(attrs, "lCpuSize", strconv.FormatInt(data.QosLcpuSize.ValueInt64(), 10))
+	}
+	if !data.QosMacIpg.IsUnknown() && !data.QosMacIpg.IsNull() && !config.QosMacIpg.IsNull() {
+		attrs, _ = sjson.Set(attrs, "macIpgVal", strconv.FormatInt(data.QosMacIpg.ValueInt64(), 10))
+	}
+	if !data.QosMulticastQosGroup3Traffic.IsUnknown() && !data.QosMulticastQosGroup3Traffic.IsNull() && !config.QosMulticastQosGroup3Traffic.IsNull() {
+		attrs, _ = sjson.Set(attrs, "mcQosGroup3Traffic", data.QosMulticastQosGroup3Traffic.ValueString())
+	}
+	if !data.QosNodropDynamicQueueLimit.IsUnknown() && !data.QosNodropDynamicQueueLimit.IsNull() && !config.QosNodropDynamicQueueLimit.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ndDynamicQlimit", strconv.FormatInt(data.QosNodropDynamicQueueLimit.ValueInt64(), 10))
+	}
+	if !data.QosNodropResumeOffset.IsUnknown() && !data.QosNodropResumeOffset.IsNull() && !config.QosNodropResumeOffset.IsNull() {
+		attrs, _ = sjson.Set(attrs, "ndResumeOffset", strconv.FormatInt(data.QosNodropResumeOffset.ValueInt64(), 10))
+	}
+	if !data.QosNodropPgGreenThreshold.IsUnknown() && !data.QosNodropPgGreenThreshold.IsNull() && !config.QosNodropPgGreenThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "nodropPgGreenThresh", strconv.FormatInt(data.QosNodropPgGreenThreshold.ValueInt64(), 10))
+	}
+	if !data.QosNodropPgRedThreshold.IsUnknown() && !data.QosNodropPgRedThreshold.IsNull() && !config.QosNodropPgRedThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "nodropPgRedThresh", strconv.FormatInt(data.QosNodropPgRedThreshold.ValueInt64(), 10))
+	}
+	if !data.QosNodropPgSize.IsUnknown() && !data.QosNodropPgSize.IsNull() && !config.QosNodropPgSize.IsNull() {
+		attrs, _ = sjson.Set(attrs, "nodropPgSize", strconv.FormatInt(data.QosNodropPgSize.ValueInt64(), 10))
+	}
+	if !data.QosNodropPgSizeFx.IsUnknown() && !data.QosNodropPgSizeFx.IsNull() && !config.QosNodropPgSizeFx.IsNull() {
+		attrs, _ = sjson.Set(attrs, "nodropPgSizeFx", strconv.FormatInt(data.QosNodropPgSizeFx.ValueInt64(), 10))
+	}
+	if !data.QosNodropPgYellowThreshold.IsUnknown() && !data.QosNodropPgYellowThreshold.IsNull() && !config.QosNodropPgYellowThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "nodropPgYellowThresh", strconv.FormatInt(data.QosNodropPgYellowThreshold.ValueInt64(), 10))
+	}
+	if !data.QosNodropPoolSize.IsUnknown() && !data.QosNodropPoolSize.IsNull() && !config.QosNodropPoolSize.IsNull() {
+		attrs, _ = sjson.Set(attrs, "nodropPoolSize", strconv.FormatInt(data.QosNodropPoolSize.ValueInt64(), 10))
+	}
+	if !data.QosNodropQueueGreenThreshold.IsUnknown() && !data.QosNodropQueueGreenThreshold.IsNull() && !config.QosNodropQueueGreenThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "nodropQueueGreenThresh", strconv.FormatInt(data.QosNodropQueueGreenThreshold.ValueInt64(), 10))
+	}
+	if !data.QosNodropQueueGreenThresholdFx.IsUnknown() && !data.QosNodropQueueGreenThresholdFx.IsNull() && !config.QosNodropQueueGreenThresholdFx.IsNull() {
+		attrs, _ = sjson.Set(attrs, "nodropQueueGreenThreshFx", strconv.FormatInt(data.QosNodropQueueGreenThresholdFx.ValueInt64(), 10))
+	}
+	if !data.QosNodropQueueYellowThreshold.IsUnknown() && !data.QosNodropQueueYellowThreshold.IsNull() && !config.QosNodropQueueYellowThreshold.IsNull() {
+		attrs, _ = sjson.Set(attrs, "nodropQueueYellowThresh", strconv.FormatInt(data.QosNodropQueueYellowThreshold.ValueInt64(), 10))
+	}
+	if !data.QosNsBufferProfile.IsUnknown() && !data.QosNsBufferProfile.IsNull() && !config.QosNsBufferProfile.IsNull() {
+		attrs, _ = sjson.Set(attrs, "nsBufferProfile", data.QosNsBufferProfile.ValueString())
+	}
+	if !data.QosOutputQueueDropsType.IsUnknown() && !data.QosOutputQueueDropsType.IsNull() && !config.QosOutputQueueDropsType.IsNull() {
+		attrs, _ = sjson.Set(attrs, "oqDropsType", data.QosOutputQueueDropsType.ValueString())
+	}
+	if !data.QosPfcMulticastDrop.IsUnknown() && !data.QosPfcMulticastDrop.IsNull() && !config.QosPfcMulticastDrop.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pfcMcDrop", data.QosPfcMulticastDrop.ValueString())
+	}
+	if !data.QosPfcStatic.IsUnknown() && !data.QosPfcStatic.IsNull() && !config.QosPfcStatic.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pfcStatic", data.QosPfcStatic.ValueString())
+	}
+	if !data.QosPgHeadroomReserve.IsUnknown() && !data.QosPgHeadroomReserve.IsNull() && !config.QosPgHeadroomReserve.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pgHdrmReserve", strconv.FormatInt(data.QosPgHeadroomReserve.ValueInt64(), 10))
+	}
+	if !data.QosPgMinValue.IsUnknown() && !data.QosPgMinValue.IsNull() && !config.QosPgMinValue.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pgMinValue", strconv.FormatInt(data.QosPgMinValue.ValueInt64(), 10))
+	}
+	if !data.QosPgNoMin.IsUnknown() && !data.QosPgNoMin.IsNull() && !config.QosPgNoMin.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pgNoMin", strconv.FormatBool(data.QosPgNoMin.ValueBool()))
+	}
+	if !data.QosPgShare.IsUnknown() && !data.QosPgShare.IsNull() && !config.QosPgShare.IsNull() {
+		attrs, _ = sjson.Set(attrs, "pgShare", data.QosPgShare.ValueString())
+	}
+	if !data.QosQueueNoisePercent.IsUnknown() && !data.QosQueueNoisePercent.IsNull() && !config.QosQueueNoisePercent.IsNull() {
+		attrs, _ = sjson.Set(attrs, "qNoisePercent", strconv.FormatInt(data.QosQueueNoisePercent.ValueInt64(), 10))
+	}
+	if !data.QosAfdProfile.IsUnknown() && !data.QosAfdProfile.IsNull() && !config.QosAfdProfile.IsNull() {
+		attrs, _ = sjson.Set(attrs, "qosAfdNSBuffProfile", data.QosAfdProfile.ValueString())
+	}
+	if !data.QosSpanSize.IsUnknown() && !data.QosSpanSize.IsNull() && !config.QosSpanSize.IsNull() {
+		attrs, _ = sjson.Set(attrs, "spanSize", strconv.FormatInt(data.QosSpanSize.ValueInt64(), 10))
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformQos.attributes", attrs)
+	}
 	for key, child := range data.TcamTemplates {
 		configChild, configChildOk := config.TcamTemplates[key]
 		_ = configChild
@@ -1561,6 +1765,69 @@ func (data *Platform) fromBody(res gjson.Result) {
 		data.PfcWatchdogInternalInterfaceMultiplier = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.internalIntfMultiplier").Int())
 		data.PfcWatchdogInterval = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.interval").Int())
 		data.PfcWatchdogShutdownMultiplier = types.Int64Value(rplatformPriorFlowCtrlWd.Get("platformPriorFlowCtrlWd.attributes.shutdownMultiplier").Int())
+	}
+	{
+		var rplatformQos gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("platformQos.attributes.rn").String()
+				if rnValue == "qos" {
+					rplatformQos = v
+					return false
+				}
+				return true
+			},
+		)
+		data.QosBufferPeakMonitorCounter0Class0 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class0").String())
+		data.QosBufferPeakMonitorCounter0Class1 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class1").String())
+		data.QosBufferPeakMonitorCounter0Class2 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class2").String())
+		data.QosBufferPeakMonitorCounter0Class3 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class3").String())
+		data.QosBufferPeakMonitorCounter0Class4 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class4").String())
+		data.QosBufferPeakMonitorCounter0Class5 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class5").String())
+		data.QosBufferPeakMonitorCounter0Class6 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class6").String())
+		data.QosBufferPeakMonitorCounter0Class7 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class7").String())
+		data.QosBurstDetectFallThresholdUnit = types.StringValue(rplatformQos.Get("platformQos.attributes.burstDetectFallThreshUnit").String())
+		data.QosBurstDetectFallThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.burstDetectFallThreshold").Int())
+		data.QosBurstDetectMaxRecords = types.Int64Value(rplatformQos.Get("platformQos.attributes.burstDetectMaxRecords").Int())
+		data.QosBurstDetectRiseThresholdUnit = types.StringValue(rplatformQos.Get("platformQos.attributes.burstDetectRiseThreshUnit").String())
+		data.QosBurstDetectRiseThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.burstDetectRiseThreshold").Int())
+		data.QosClassifyNsOnly = types.StringValue(rplatformQos.Get("platformQos.attributes.classify").String())
+		data.QosCpuSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.cpuSize").Int())
+		data.QosDppAgePeriod = types.Int64Value(rplatformQos.Get("platformQos.attributes.dppAgePeriod").Int())
+		data.QosDppMaxPackets = types.Int64Value(rplatformQos.Get("platformQos.attributes.dppMaxNumPkts").Int())
+		data.QosDropPoolSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.dropPoolSize").Int())
+		data.QosEoqStatsClass = types.StringValue(rplatformQos.Get("platformQos.attributes.eoqStatsClass").String())
+		data.QosEtrapAgePeriod = types.Int64Value(rplatformQos.Get("platformQos.attributes.etrapAgePeriod").Int())
+		data.QosEtrapBandwidthThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.etrapBandwidthThreshold").Int())
+		data.QosEtrapByteCount = types.Int64Value(rplatformQos.Get("platformQos.attributes.etrapByteCount").Int())
+		data.QosHeadroomSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.headroomSize").Int())
+		data.QosInputBufferPeak = types.StringValue(rplatformQos.Get("platformQos.attributes.inputBufferPeak").String())
+		data.QosIncludeIpg = types.StringValue(rplatformQos.Get("platformQos.attributes.ipg").String())
+		data.QosLcpuSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.lCpuSize").Int())
+		data.QosMacIpg = types.Int64Value(rplatformQos.Get("platformQos.attributes.macIpgVal").Int())
+		data.QosMulticastQosGroup3Traffic = types.StringValue(rplatformQos.Get("platformQos.attributes.mcQosGroup3Traffic").String())
+		data.QosNodropDynamicQueueLimit = types.Int64Value(rplatformQos.Get("platformQos.attributes.ndDynamicQlimit").Int())
+		data.QosNodropResumeOffset = types.Int64Value(rplatformQos.Get("platformQos.attributes.ndResumeOffset").Int())
+		data.QosNodropPgGreenThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPgGreenThresh").Int())
+		data.QosNodropPgRedThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPgRedThresh").Int())
+		data.QosNodropPgSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPgSize").Int())
+		data.QosNodropPgSizeFx = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPgSizeFx").Int())
+		data.QosNodropPgYellowThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPgYellowThresh").Int())
+		data.QosNodropPoolSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPoolSize").Int())
+		data.QosNodropQueueGreenThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropQueueGreenThresh").Int())
+		data.QosNodropQueueGreenThresholdFx = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropQueueGreenThreshFx").Int())
+		data.QosNodropQueueYellowThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropQueueYellowThresh").Int())
+		data.QosNsBufferProfile = types.StringValue(rplatformQos.Get("platformQos.attributes.nsBufferProfile").String())
+		data.QosOutputQueueDropsType = types.StringValue(rplatformQos.Get("platformQos.attributes.oqDropsType").String())
+		data.QosPfcMulticastDrop = types.StringValue(rplatformQos.Get("platformQos.attributes.pfcMcDrop").String())
+		data.QosPfcStatic = types.StringValue(rplatformQos.Get("platformQos.attributes.pfcStatic").String())
+		data.QosPgHeadroomReserve = types.Int64Value(rplatformQos.Get("platformQos.attributes.pgHdrmReserve").Int())
+		data.QosPgMinValue = types.Int64Value(rplatformQos.Get("platformQos.attributes.pgMinValue").Int())
+		data.QosPgNoMin = types.BoolValue(helpers.ParseNxosBoolean(rplatformQos.Get("platformQos.attributes.pgNoMin").String()))
+		data.QosPgShare = types.StringValue(rplatformQos.Get("platformQos.attributes.pgShare").String())
+		data.QosQueueNoisePercent = types.Int64Value(rplatformQos.Get("platformQos.attributes.qNoisePercent").Int())
+		data.QosAfdProfile = types.StringValue(rplatformQos.Get("platformQos.attributes.qosAfdNSBuffProfile").String())
+		data.QosSpanSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.spanSize").Int())
 	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -2880,6 +3147,267 @@ func (data *Platform) updateFromBody(res gjson.Result) {
 	} else {
 		data.PfcWatchdogShutdownMultiplier = types.Int64Null()
 	}
+	var rplatformQos gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("platformQos.attributes.rn").String()
+			if rnValue == "qos" {
+				rplatformQos = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.QosBufferPeakMonitorCounter0Class0.IsNull() {
+		data.QosBufferPeakMonitorCounter0Class0 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class0").String())
+	} else {
+		data.QosBufferPeakMonitorCounter0Class0 = types.StringNull()
+	}
+	if !data.QosBufferPeakMonitorCounter0Class1.IsNull() {
+		data.QosBufferPeakMonitorCounter0Class1 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class1").String())
+	} else {
+		data.QosBufferPeakMonitorCounter0Class1 = types.StringNull()
+	}
+	if !data.QosBufferPeakMonitorCounter0Class2.IsNull() {
+		data.QosBufferPeakMonitorCounter0Class2 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class2").String())
+	} else {
+		data.QosBufferPeakMonitorCounter0Class2 = types.StringNull()
+	}
+	if !data.QosBufferPeakMonitorCounter0Class3.IsNull() {
+		data.QosBufferPeakMonitorCounter0Class3 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class3").String())
+	} else {
+		data.QosBufferPeakMonitorCounter0Class3 = types.StringNull()
+	}
+	if !data.QosBufferPeakMonitorCounter0Class4.IsNull() {
+		data.QosBufferPeakMonitorCounter0Class4 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class4").String())
+	} else {
+		data.QosBufferPeakMonitorCounter0Class4 = types.StringNull()
+	}
+	if !data.QosBufferPeakMonitorCounter0Class5.IsNull() {
+		data.QosBufferPeakMonitorCounter0Class5 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class5").String())
+	} else {
+		data.QosBufferPeakMonitorCounter0Class5 = types.StringNull()
+	}
+	if !data.QosBufferPeakMonitorCounter0Class6.IsNull() {
+		data.QosBufferPeakMonitorCounter0Class6 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class6").String())
+	} else {
+		data.QosBufferPeakMonitorCounter0Class6 = types.StringNull()
+	}
+	if !data.QosBufferPeakMonitorCounter0Class7.IsNull() {
+		data.QosBufferPeakMonitorCounter0Class7 = types.StringValue(rplatformQos.Get("platformQos.attributes.bufPeakMonitorCnt0Class7").String())
+	} else {
+		data.QosBufferPeakMonitorCounter0Class7 = types.StringNull()
+	}
+	if !data.QosBurstDetectFallThresholdUnit.IsNull() {
+		data.QosBurstDetectFallThresholdUnit = types.StringValue(rplatformQos.Get("platformQos.attributes.burstDetectFallThreshUnit").String())
+	} else {
+		data.QosBurstDetectFallThresholdUnit = types.StringNull()
+	}
+	if !data.QosBurstDetectFallThreshold.IsNull() {
+		data.QosBurstDetectFallThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.burstDetectFallThreshold").Int())
+	} else {
+		data.QosBurstDetectFallThreshold = types.Int64Null()
+	}
+	if !data.QosBurstDetectMaxRecords.IsNull() {
+		data.QosBurstDetectMaxRecords = types.Int64Value(rplatformQos.Get("platformQos.attributes.burstDetectMaxRecords").Int())
+	} else {
+		data.QosBurstDetectMaxRecords = types.Int64Null()
+	}
+	if !data.QosBurstDetectRiseThresholdUnit.IsNull() {
+		data.QosBurstDetectRiseThresholdUnit = types.StringValue(rplatformQos.Get("platformQos.attributes.burstDetectRiseThreshUnit").String())
+	} else {
+		data.QosBurstDetectRiseThresholdUnit = types.StringNull()
+	}
+	if !data.QosBurstDetectRiseThreshold.IsNull() {
+		data.QosBurstDetectRiseThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.burstDetectRiseThreshold").Int())
+	} else {
+		data.QosBurstDetectRiseThreshold = types.Int64Null()
+	}
+	if !data.QosClassifyNsOnly.IsNull() {
+		data.QosClassifyNsOnly = types.StringValue(rplatformQos.Get("platformQos.attributes.classify").String())
+	} else {
+		data.QosClassifyNsOnly = types.StringNull()
+	}
+	if !data.QosCpuSize.IsNull() {
+		data.QosCpuSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.cpuSize").Int())
+	} else {
+		data.QosCpuSize = types.Int64Null()
+	}
+	if !data.QosDppAgePeriod.IsNull() {
+		data.QosDppAgePeriod = types.Int64Value(rplatformQos.Get("platformQos.attributes.dppAgePeriod").Int())
+	} else {
+		data.QosDppAgePeriod = types.Int64Null()
+	}
+	if !data.QosDppMaxPackets.IsNull() {
+		data.QosDppMaxPackets = types.Int64Value(rplatformQos.Get("platformQos.attributes.dppMaxNumPkts").Int())
+	} else {
+		data.QosDppMaxPackets = types.Int64Null()
+	}
+	if !data.QosDropPoolSize.IsNull() {
+		data.QosDropPoolSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.dropPoolSize").Int())
+	} else {
+		data.QosDropPoolSize = types.Int64Null()
+	}
+	if !data.QosEoqStatsClass.IsNull() {
+		data.QosEoqStatsClass = types.StringValue(rplatformQos.Get("platformQos.attributes.eoqStatsClass").String())
+	} else {
+		data.QosEoqStatsClass = types.StringNull()
+	}
+	if !data.QosEtrapAgePeriod.IsNull() {
+		data.QosEtrapAgePeriod = types.Int64Value(rplatformQos.Get("platformQos.attributes.etrapAgePeriod").Int())
+	} else {
+		data.QosEtrapAgePeriod = types.Int64Null()
+	}
+	if !data.QosEtrapBandwidthThreshold.IsNull() {
+		data.QosEtrapBandwidthThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.etrapBandwidthThreshold").Int())
+	} else {
+		data.QosEtrapBandwidthThreshold = types.Int64Null()
+	}
+	if !data.QosEtrapByteCount.IsNull() {
+		data.QosEtrapByteCount = types.Int64Value(rplatformQos.Get("platformQos.attributes.etrapByteCount").Int())
+	} else {
+		data.QosEtrapByteCount = types.Int64Null()
+	}
+	if !data.QosHeadroomSize.IsNull() {
+		data.QosHeadroomSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.headroomSize").Int())
+	} else {
+		data.QosHeadroomSize = types.Int64Null()
+	}
+	if !data.QosInputBufferPeak.IsNull() {
+		data.QosInputBufferPeak = types.StringValue(rplatformQos.Get("platformQos.attributes.inputBufferPeak").String())
+	} else {
+		data.QosInputBufferPeak = types.StringNull()
+	}
+	if !data.QosIncludeIpg.IsNull() {
+		data.QosIncludeIpg = types.StringValue(rplatformQos.Get("platformQos.attributes.ipg").String())
+	} else {
+		data.QosIncludeIpg = types.StringNull()
+	}
+	if !data.QosLcpuSize.IsNull() {
+		data.QosLcpuSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.lCpuSize").Int())
+	} else {
+		data.QosLcpuSize = types.Int64Null()
+	}
+	if !data.QosMacIpg.IsNull() {
+		data.QosMacIpg = types.Int64Value(rplatformQos.Get("platformQos.attributes.macIpgVal").Int())
+	} else {
+		data.QosMacIpg = types.Int64Null()
+	}
+	if !data.QosMulticastQosGroup3Traffic.IsNull() {
+		data.QosMulticastQosGroup3Traffic = types.StringValue(rplatformQos.Get("platformQos.attributes.mcQosGroup3Traffic").String())
+	} else {
+		data.QosMulticastQosGroup3Traffic = types.StringNull()
+	}
+	if !data.QosNodropDynamicQueueLimit.IsNull() {
+		data.QosNodropDynamicQueueLimit = types.Int64Value(rplatformQos.Get("platformQos.attributes.ndDynamicQlimit").Int())
+	} else {
+		data.QosNodropDynamicQueueLimit = types.Int64Null()
+	}
+	if !data.QosNodropResumeOffset.IsNull() {
+		data.QosNodropResumeOffset = types.Int64Value(rplatformQos.Get("platformQos.attributes.ndResumeOffset").Int())
+	} else {
+		data.QosNodropResumeOffset = types.Int64Null()
+	}
+	if !data.QosNodropPgGreenThreshold.IsNull() {
+		data.QosNodropPgGreenThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPgGreenThresh").Int())
+	} else {
+		data.QosNodropPgGreenThreshold = types.Int64Null()
+	}
+	if !data.QosNodropPgRedThreshold.IsNull() {
+		data.QosNodropPgRedThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPgRedThresh").Int())
+	} else {
+		data.QosNodropPgRedThreshold = types.Int64Null()
+	}
+	if !data.QosNodropPgSize.IsNull() {
+		data.QosNodropPgSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPgSize").Int())
+	} else {
+		data.QosNodropPgSize = types.Int64Null()
+	}
+	if !data.QosNodropPgSizeFx.IsNull() {
+		data.QosNodropPgSizeFx = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPgSizeFx").Int())
+	} else {
+		data.QosNodropPgSizeFx = types.Int64Null()
+	}
+	if !data.QosNodropPgYellowThreshold.IsNull() {
+		data.QosNodropPgYellowThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPgYellowThresh").Int())
+	} else {
+		data.QosNodropPgYellowThreshold = types.Int64Null()
+	}
+	if !data.QosNodropPoolSize.IsNull() {
+		data.QosNodropPoolSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropPoolSize").Int())
+	} else {
+		data.QosNodropPoolSize = types.Int64Null()
+	}
+	if !data.QosNodropQueueGreenThreshold.IsNull() {
+		data.QosNodropQueueGreenThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropQueueGreenThresh").Int())
+	} else {
+		data.QosNodropQueueGreenThreshold = types.Int64Null()
+	}
+	if !data.QosNodropQueueGreenThresholdFx.IsNull() {
+		data.QosNodropQueueGreenThresholdFx = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropQueueGreenThreshFx").Int())
+	} else {
+		data.QosNodropQueueGreenThresholdFx = types.Int64Null()
+	}
+	if !data.QosNodropQueueYellowThreshold.IsNull() {
+		data.QosNodropQueueYellowThreshold = types.Int64Value(rplatformQos.Get("platformQos.attributes.nodropQueueYellowThresh").Int())
+	} else {
+		data.QosNodropQueueYellowThreshold = types.Int64Null()
+	}
+	if !data.QosNsBufferProfile.IsNull() {
+		data.QosNsBufferProfile = types.StringValue(rplatformQos.Get("platformQos.attributes.nsBufferProfile").String())
+	} else {
+		data.QosNsBufferProfile = types.StringNull()
+	}
+	if !data.QosOutputQueueDropsType.IsNull() {
+		data.QosOutputQueueDropsType = types.StringValue(rplatformQos.Get("platformQos.attributes.oqDropsType").String())
+	} else {
+		data.QosOutputQueueDropsType = types.StringNull()
+	}
+	if !data.QosPfcMulticastDrop.IsNull() {
+		data.QosPfcMulticastDrop = types.StringValue(rplatformQos.Get("platformQos.attributes.pfcMcDrop").String())
+	} else {
+		data.QosPfcMulticastDrop = types.StringNull()
+	}
+	if !data.QosPfcStatic.IsNull() {
+		data.QosPfcStatic = types.StringValue(rplatformQos.Get("platformQos.attributes.pfcStatic").String())
+	} else {
+		data.QosPfcStatic = types.StringNull()
+	}
+	if !data.QosPgHeadroomReserve.IsNull() {
+		data.QosPgHeadroomReserve = types.Int64Value(rplatformQos.Get("platformQos.attributes.pgHdrmReserve").Int())
+	} else {
+		data.QosPgHeadroomReserve = types.Int64Null()
+	}
+	if !data.QosPgMinValue.IsNull() {
+		data.QosPgMinValue = types.Int64Value(rplatformQos.Get("platformQos.attributes.pgMinValue").Int())
+	} else {
+		data.QosPgMinValue = types.Int64Null()
+	}
+	if !data.QosPgNoMin.IsNull() {
+		data.QosPgNoMin = types.BoolValue(helpers.ParseNxosBoolean(rplatformQos.Get("platformQos.attributes.pgNoMin").String()))
+	} else {
+		data.QosPgNoMin = types.BoolNull()
+	}
+	if !data.QosPgShare.IsNull() {
+		data.QosPgShare = types.StringValue(rplatformQos.Get("platformQos.attributes.pgShare").String())
+	} else {
+		data.QosPgShare = types.StringNull()
+	}
+	if !data.QosQueueNoisePercent.IsNull() {
+		data.QosQueueNoisePercent = types.Int64Value(rplatformQos.Get("platformQos.attributes.qNoisePercent").Int())
+	} else {
+		data.QosQueueNoisePercent = types.Int64Null()
+	}
+	if !data.QosAfdProfile.IsNull() {
+		data.QosAfdProfile = types.StringValue(rplatformQos.Get("platformQos.attributes.qosAfdNSBuffProfile").String())
+	} else {
+		data.QosAfdProfile = types.StringNull()
+	}
+	if !data.QosSpanSize.IsNull() {
+		data.QosSpanSize = types.Int64Value(rplatformQos.Get("platformQos.attributes.spanSize").Int())
+	} else {
+		data.QosSpanSize = types.Int64Null()
+	}
 	for key, item := range data.TcamTemplates {
 		var rplatformTcamTemplate gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -3775,6 +4303,164 @@ func (data Platform) toDeleteBody() nxos.Body {
 		if childBody != "" {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformPriorFlowCtrlWd"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		}
+	}
+	{
+		childBody := ""
+		if !data.QosBufferPeakMonitorCounter0Class0.IsNull() {
+			childBody, _ = sjson.Set(childBody, "bufPeakMonitorCnt0Class0", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBufferPeakMonitorCounter0Class1.IsNull() {
+			childBody, _ = sjson.Set(childBody, "bufPeakMonitorCnt0Class1", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBufferPeakMonitorCounter0Class2.IsNull() {
+			childBody, _ = sjson.Set(childBody, "bufPeakMonitorCnt0Class2", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBufferPeakMonitorCounter0Class3.IsNull() {
+			childBody, _ = sjson.Set(childBody, "bufPeakMonitorCnt0Class3", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBufferPeakMonitorCounter0Class4.IsNull() {
+			childBody, _ = sjson.Set(childBody, "bufPeakMonitorCnt0Class4", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBufferPeakMonitorCounter0Class5.IsNull() {
+			childBody, _ = sjson.Set(childBody, "bufPeakMonitorCnt0Class5", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBufferPeakMonitorCounter0Class6.IsNull() {
+			childBody, _ = sjson.Set(childBody, "bufPeakMonitorCnt0Class6", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBufferPeakMonitorCounter0Class7.IsNull() {
+			childBody, _ = sjson.Set(childBody, "bufPeakMonitorCnt0Class7", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBurstDetectFallThresholdUnit.IsNull() {
+			childBody, _ = sjson.Set(childBody, "burstDetectFallThreshUnit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBurstDetectFallThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "burstDetectFallThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBurstDetectMaxRecords.IsNull() {
+			childBody, _ = sjson.Set(childBody, "burstDetectMaxRecords", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBurstDetectRiseThresholdUnit.IsNull() {
+			childBody, _ = sjson.Set(childBody, "burstDetectRiseThreshUnit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosBurstDetectRiseThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "burstDetectRiseThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosClassifyNsOnly.IsNull() {
+			childBody, _ = sjson.Set(childBody, "classify", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosCpuSize.IsNull() {
+			childBody, _ = sjson.Set(childBody, "cpuSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosDppAgePeriod.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dppAgePeriod", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosDppMaxPackets.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dppMaxNumPkts", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosDropPoolSize.IsNull() {
+			childBody, _ = sjson.Set(childBody, "dropPoolSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosEoqStatsClass.IsNull() {
+			childBody, _ = sjson.Set(childBody, "eoqStatsClass", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosEtrapAgePeriod.IsNull() {
+			childBody, _ = sjson.Set(childBody, "etrapAgePeriod", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosEtrapBandwidthThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "etrapBandwidthThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosEtrapByteCount.IsNull() {
+			childBody, _ = sjson.Set(childBody, "etrapByteCount", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosHeadroomSize.IsNull() {
+			childBody, _ = sjson.Set(childBody, "headroomSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosInputBufferPeak.IsNull() {
+			childBody, _ = sjson.Set(childBody, "inputBufferPeak", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosIncludeIpg.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ipg", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosLcpuSize.IsNull() {
+			childBody, _ = sjson.Set(childBody, "lCpuSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosMacIpg.IsNull() {
+			childBody, _ = sjson.Set(childBody, "macIpgVal", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosMulticastQosGroup3Traffic.IsNull() {
+			childBody, _ = sjson.Set(childBody, "mcQosGroup3Traffic", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropDynamicQueueLimit.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ndDynamicQlimit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropResumeOffset.IsNull() {
+			childBody, _ = sjson.Set(childBody, "ndResumeOffset", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropPgGreenThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "nodropPgGreenThresh", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropPgRedThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "nodropPgRedThresh", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropPgSize.IsNull() {
+			childBody, _ = sjson.Set(childBody, "nodropPgSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropPgSizeFx.IsNull() {
+			childBody, _ = sjson.Set(childBody, "nodropPgSizeFx", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropPgYellowThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "nodropPgYellowThresh", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropPoolSize.IsNull() {
+			childBody, _ = sjson.Set(childBody, "nodropPoolSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropQueueGreenThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "nodropQueueGreenThresh", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropQueueGreenThresholdFx.IsNull() {
+			childBody, _ = sjson.Set(childBody, "nodropQueueGreenThreshFx", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNodropQueueYellowThreshold.IsNull() {
+			childBody, _ = sjson.Set(childBody, "nodropQueueYellowThresh", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosNsBufferProfile.IsNull() {
+			childBody, _ = sjson.Set(childBody, "nsBufferProfile", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosOutputQueueDropsType.IsNull() {
+			childBody, _ = sjson.Set(childBody, "oqDropsType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosPfcMulticastDrop.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pfcMcDrop", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosPfcStatic.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pfcStatic", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosPgHeadroomReserve.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pgHdrmReserve", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosPgMinValue.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pgMinValue", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosPgNoMin.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pgNoMin", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosPgShare.IsNull() {
+			childBody, _ = sjson.Set(childBody, "pgShare", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosQueueNoisePercent.IsNull() {
+			childBody, _ = sjson.Set(childBody, "qNoisePercent", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosAfdProfile.IsNull() {
+			childBody, _ = sjson.Set(childBody, "qosAfdNSBuffProfile", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.QosSpanSize.IsNull() {
+			childBody, _ = sjson.Set(childBody, "spanSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".platformQos"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
@@ -4790,6 +5476,206 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 		if !state.PfcWatchdogShutdownMultiplier.IsNull() && config.PfcWatchdogShutdownMultiplier.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformPriorFlowCtrlWd")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"shutdownMultiplier", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBufferPeakMonitorCounter0Class0.IsNull() && config.QosBufferPeakMonitorCounter0Class0.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bufPeakMonitorCnt0Class0", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBufferPeakMonitorCounter0Class1.IsNull() && config.QosBufferPeakMonitorCounter0Class1.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bufPeakMonitorCnt0Class1", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBufferPeakMonitorCounter0Class2.IsNull() && config.QosBufferPeakMonitorCounter0Class2.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bufPeakMonitorCnt0Class2", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBufferPeakMonitorCounter0Class3.IsNull() && config.QosBufferPeakMonitorCounter0Class3.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bufPeakMonitorCnt0Class3", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBufferPeakMonitorCounter0Class4.IsNull() && config.QosBufferPeakMonitorCounter0Class4.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bufPeakMonitorCnt0Class4", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBufferPeakMonitorCounter0Class5.IsNull() && config.QosBufferPeakMonitorCounter0Class5.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bufPeakMonitorCnt0Class5", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBufferPeakMonitorCounter0Class6.IsNull() && config.QosBufferPeakMonitorCounter0Class6.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bufPeakMonitorCnt0Class6", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBufferPeakMonitorCounter0Class7.IsNull() && config.QosBufferPeakMonitorCounter0Class7.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bufPeakMonitorCnt0Class7", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBurstDetectFallThresholdUnit.IsNull() && config.QosBurstDetectFallThresholdUnit.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstDetectFallThreshUnit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBurstDetectFallThreshold.IsNull() && config.QosBurstDetectFallThreshold.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstDetectFallThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBurstDetectMaxRecords.IsNull() && config.QosBurstDetectMaxRecords.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstDetectMaxRecords", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBurstDetectRiseThresholdUnit.IsNull() && config.QosBurstDetectRiseThresholdUnit.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstDetectRiseThreshUnit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosBurstDetectRiseThreshold.IsNull() && config.QosBurstDetectRiseThreshold.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstDetectRiseThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosClassifyNsOnly.IsNull() && config.QosClassifyNsOnly.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"classify", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosCpuSize.IsNull() && config.QosCpuSize.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"cpuSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosDppAgePeriod.IsNull() && config.QosDppAgePeriod.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dppAgePeriod", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosDppMaxPackets.IsNull() && config.QosDppMaxPackets.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dppMaxNumPkts", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosDropPoolSize.IsNull() && config.QosDropPoolSize.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dropPoolSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosEoqStatsClass.IsNull() && config.QosEoqStatsClass.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"eoqStatsClass", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosEtrapAgePeriod.IsNull() && config.QosEtrapAgePeriod.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"etrapAgePeriod", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosEtrapBandwidthThreshold.IsNull() && config.QosEtrapBandwidthThreshold.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"etrapBandwidthThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosEtrapByteCount.IsNull() && config.QosEtrapByteCount.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"etrapByteCount", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosHeadroomSize.IsNull() && config.QosHeadroomSize.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"headroomSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosInputBufferPeak.IsNull() && config.QosInputBufferPeak.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"inputBufferPeak", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosIncludeIpg.IsNull() && config.QosIncludeIpg.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ipg", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosLcpuSize.IsNull() && config.QosLcpuSize.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lCpuSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosMacIpg.IsNull() && config.QosMacIpg.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"macIpgVal", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosMulticastQosGroup3Traffic.IsNull() && config.QosMulticastQosGroup3Traffic.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mcQosGroup3Traffic", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropDynamicQueueLimit.IsNull() && config.QosNodropDynamicQueueLimit.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ndDynamicQlimit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropResumeOffset.IsNull() && config.QosNodropResumeOffset.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ndResumeOffset", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropPgGreenThreshold.IsNull() && config.QosNodropPgGreenThreshold.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"nodropPgGreenThresh", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropPgRedThreshold.IsNull() && config.QosNodropPgRedThreshold.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"nodropPgRedThresh", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropPgSize.IsNull() && config.QosNodropPgSize.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"nodropPgSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropPgSizeFx.IsNull() && config.QosNodropPgSizeFx.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"nodropPgSizeFx", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropPgYellowThreshold.IsNull() && config.QosNodropPgYellowThreshold.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"nodropPgYellowThresh", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropPoolSize.IsNull() && config.QosNodropPoolSize.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"nodropPoolSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropQueueGreenThreshold.IsNull() && config.QosNodropQueueGreenThreshold.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"nodropQueueGreenThresh", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropQueueGreenThresholdFx.IsNull() && config.QosNodropQueueGreenThresholdFx.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"nodropQueueGreenThreshFx", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNodropQueueYellowThreshold.IsNull() && config.QosNodropQueueYellowThreshold.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"nodropQueueYellowThresh", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosNsBufferProfile.IsNull() && config.QosNsBufferProfile.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"nsBufferProfile", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosOutputQueueDropsType.IsNull() && config.QosOutputQueueDropsType.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"oqDropsType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosPfcMulticastDrop.IsNull() && config.QosPfcMulticastDrop.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pfcMcDrop", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosPfcStatic.IsNull() && config.QosPfcStatic.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pfcStatic", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosPgHeadroomReserve.IsNull() && config.QosPgHeadroomReserve.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pgHdrmReserve", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosPgMinValue.IsNull() && config.QosPgMinValue.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pgMinValue", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosPgNoMin.IsNull() && config.QosPgNoMin.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pgNoMin", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosPgShare.IsNull() && config.QosPgShare.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pgShare", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosQueueNoisePercent.IsNull() && config.QosQueueNoisePercent.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"qNoisePercent", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosAfdProfile.IsNull() && config.QosAfdProfile.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"qosAfdNSBuffProfile", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.QosSpanSize.IsNull() && config.QosSpanSize.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "platformQos")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"spanSize", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.TcamTemplates {
 			if configChild, ok := config.TcamTemplates[key]; ok {

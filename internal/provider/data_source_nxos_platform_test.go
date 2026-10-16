@@ -44,6 +44,24 @@ func TestAccDataSourceNxosPlatform(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_fixed_restore_multiplier", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_interval", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_shutdown_multiplier", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_burst_detect_fall_threshold_unit", "percentage"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_burst_detect_fall_threshold", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_burst_detect_rise_threshold_unit", "percentage"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_burst_detect_rise_threshold", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_classify_ns_only", "Enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_cpu_size", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_drop_pool_size", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_headroom_size", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_include_ipg", "Enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_lcpu_size", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_nodrop_dynamic_queue_limit", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_nodrop_resume_offset", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_nodrop_pool_size", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pfc_static", "Enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_headroom_reserve", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_min_value", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_no_min", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_share", "Disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "tcam_templates.TPL1.reference_template", "l3"))
 	if os.Getenv("PLATFORM_FRETTA") != "" {
 	}
@@ -127,6 +145,24 @@ func testAccDataSourceNxosPlatformConfig() string {
 	config += `	pfc_watchdog_fixed_restore_multiplier = 50` + "\n"
 	config += `	pfc_watchdog_interval = 200` + "\n"
 	config += `	pfc_watchdog_shutdown_multiplier = 5` + "\n"
+	config += `	qos_burst_detect_fall_threshold_unit = "percentage"` + "\n"
+	config += `	qos_burst_detect_fall_threshold = 40` + "\n"
+	config += `	qos_burst_detect_rise_threshold_unit = "percentage"` + "\n"
+	config += `	qos_burst_detect_rise_threshold = 60` + "\n"
+	config += `	qos_classify_ns_only = "Enabled"` + "\n"
+	config += `	qos_cpu_size = 300` + "\n"
+	config += `	qos_drop_pool_size = 10` + "\n"
+	config += `	qos_headroom_size = 10` + "\n"
+	config += `	qos_include_ipg = "Enabled"` + "\n"
+	config += `	qos_lcpu_size = 300` + "\n"
+	config += `	qos_nodrop_dynamic_queue_limit = 10` + "\n"
+	config += `	qos_nodrop_resume_offset = 10` + "\n"
+	config += `	qos_nodrop_pool_size = 10` + "\n"
+	config += `	qos_pfc_static = "Enabled"` + "\n"
+	config += `	qos_pg_headroom_reserve = 50` + "\n"
+	config += `	qos_pg_min_value = 5` + "\n"
+	config += `	qos_pg_no_min = false` + "\n"
+	config += `	qos_pg_share = "Disabled"` + "\n"
 	config += `	tcam_templates = {` + "\n"
 	config += `		"TPL1" = {` + "\n"
 	config += `			reference_template = "l3"` + "\n"

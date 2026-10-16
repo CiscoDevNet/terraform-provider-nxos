@@ -2011,6 +2011,429 @@ child_classes:
         min_int: 1
         max_int: 40
         example: 5
+  - class_name: platformQos
+    doc_path: System/platform%3AQos/
+    rn: qos
+    type: single
+    tf_name: qos
+    no_delete: true
+    description: 'Global hardware QoS configuration, including lossless buffer tuning, AFD and ETRAP settings.'
+    attributes:
+      - nxos_name: bufPeakMonitorCnt0Class0
+        tf_name: qos_buffer_peak_monitor_counter0_class0
+        type: String
+        description: 'Used to configure/unconfigure buffer peak monitor for counter 0 class 0.'
+        enum_values:
+          - unconfigure
+          - configure
+        example: unconfigure
+        exclude_test: true
+      - nxos_name: bufPeakMonitorCnt0Class1
+        tf_name: qos_buffer_peak_monitor_counter0_class1
+        type: String
+        description: 'Used to configure/unconfigure buffer peak monitor for counter 0 class 1.'
+        enum_values:
+          - unconfigure
+          - configure
+        example: unconfigure
+        exclude_test: true
+      - nxos_name: bufPeakMonitorCnt0Class2
+        tf_name: qos_buffer_peak_monitor_counter0_class2
+        type: String
+        description: 'Used to configure/unconfigure buffer peak monitor for counter 0 class 2.'
+        enum_values:
+          - unconfigure
+          - configure
+        example: unconfigure
+        exclude_test: true
+      - nxos_name: bufPeakMonitorCnt0Class3
+        tf_name: qos_buffer_peak_monitor_counter0_class3
+        type: String
+        description: 'Used to configure/unconfigure buffer peak monitor for counter 0 class 3.'
+        enum_values:
+          - unconfigure
+          - configure
+        example: unconfigure
+        exclude_test: true
+      - nxos_name: bufPeakMonitorCnt0Class4
+        tf_name: qos_buffer_peak_monitor_counter0_class4
+        type: String
+        description: 'Used to configure/unconfigure buffer peak monitor for counter 0 class 4.'
+        enum_values:
+          - unconfigure
+          - configure
+        example: unconfigure
+        exclude_test: true
+      - nxos_name: bufPeakMonitorCnt0Class5
+        tf_name: qos_buffer_peak_monitor_counter0_class5
+        type: String
+        description: 'Used to configure/unconfigure buffer peak monitor for counter 0 class 5.'
+        enum_values:
+          - unconfigure
+          - configure
+        example: unconfigure
+        exclude_test: true
+      - nxos_name: bufPeakMonitorCnt0Class6
+        tf_name: qos_buffer_peak_monitor_counter0_class6
+        type: String
+        description: 'Used to configure/unconfigure buffer peak monitor for counter 0 class 6.'
+        enum_values:
+          - unconfigure
+          - configure
+        example: unconfigure
+        exclude_test: true
+      - nxos_name: bufPeakMonitorCnt0Class7
+        tf_name: qos_buffer_peak_monitor_counter0_class7
+        type: String
+        description: 'Used to configure/unconfigure buffer peak monitor for counter 0 class 7.'
+        enum_values:
+          - unconfigure
+          - configure
+        example: unconfigure
+        exclude_test: true
+      - nxos_name: burstDetectFallThreshUnit
+        tf_name: qos_burst_detect_fall_threshold_unit
+        type: String
+        description: 'Units for fall-threshold value.'
+        enum_values:
+          - bytes
+          - percentage
+        example: percentage
+      - nxos_name: burstDetectFallThreshold
+        tf_name: qos_burst_detect_fall_threshold
+        type: Int64
+        description: 'Threshold bytes to stop monitoring burst.'
+        min_int: 0
+        max_int: 13319072
+        example: 40
+      - nxos_name: burstDetectMaxRecords
+        tf_name: qos_burst_detect_max_records
+        type: Int64
+        description: 'Configure the max number of burst records to monitor.'
+        min_int: 200
+        max_int: 2000
+        example: 500
+        exclude_test: true
+      - nxos_name: burstDetectRiseThreshUnit
+        tf_name: qos_burst_detect_rise_threshold_unit
+        type: String
+        description: 'Units for rise-threshold value.'
+        enum_values:
+          - bytes
+          - percentage
+        example: percentage
+      - nxos_name: burstDetectRiseThreshold
+        tf_name: qos_burst_detect_rise_threshold
+        type: Int64
+        description: 'Threshold bytes to start monitoring burst.'
+        min_int: 0
+        max_int: 13319072
+        example: 60
+      - nxos_name: classify
+        tf_name: qos_classify_ns_only
+        type: String
+        description: 'Qos classification.'
+        enum_values:
+          - Disabled
+          - Enabled
+        example: Enabled
+      - nxos_name: cpuSize
+        tf_name: qos_cpu_size
+        type: Int64
+        description: 'CPU Pool Group threshold.'
+        min_int: 0
+        max_int: 1500
+        example: 300
+      - nxos_name: dppAgePeriod
+        tf_name: qos_dpp_age_period
+        type: Int64
+        description: 'To configure DPP aging period in microseconds.'
+        min_int: 5000
+        max_int: 1000000
+        example: 10000
+        exclude_test: true
+      - nxos_name: dppMaxNumPkts
+        tf_name: qos_dpp_max_packets
+        type: Int64
+        description: 'To configure the max number of packets to prioritize.'
+        min_int: 1
+        max_int: 1023
+        example: 100
+        exclude_test: true
+      - nxos_name: dropPoolSize
+        tf_name: qos_drop_pool_size
+        type: Int64
+        description: 'Drop pool size in megabytes.'
+        min_int: 1
+        max_int: 256
+        example: 10
+      - nxos_name: eoqStatsClass
+        tf_name: qos_eoq_stats_class
+        type: String
+        description: 'Qos eoq Stats Class Qos Group.'
+        enum_values:
+          - "0"
+          - "1"
+          - "2"
+          - "3"
+          - all
+        example: "2"
+        exclude_test: true
+      - nxos_name: etrapAgePeriod
+        tf_name: qos_etrap_age_period
+        type: Int64
+        description: 'To configure ETRAP aging period in microseconds.'
+        min_int: 1
+        max_int: 1000000
+        example: 100
+        exclude_test: true
+      - nxos_name: etrapBandwidthThreshold
+        tf_name: qos_etrap_bandwidth_threshold
+        type: Int64
+        description: 'To configure ETRAP aging period in bytes.'
+        min_int: 1
+        max_int: 1073741824
+        example: 1000
+        exclude_test: true
+      - nxos_name: etrapByteCount
+        tf_name: qos_etrap_byte_count
+        type: Int64
+        description: 'To configure number of bytes to become elephant flow.'
+        min_int: 1
+        max_int: 1048575
+        example: 2000
+        exclude_test: true
+      - nxos_name: headroomSize
+        tf_name: qos_headroom_size
+        type: Int64
+        description: 'Headroom size in megabytes.'
+        min_int: 1
+        max_int: 256
+        example: 10
+      - nxos_name: inputBufferPeak
+        tf_name: qos_input_buffer_peak
+        type: String
+        description: 'peak counter type.'
+        enum_values:
+          - port
+          - class1
+          - class2
+          - class3
+          - class4
+          - class5
+          - class6
+          - class7
+        example: class1
+        exclude_test: true
+      - nxos_name: ipg
+        tf_name: qos_include_ipg
+        type: String
+        description: 'Include IPG in shape/police.'
+        enum_values:
+          - Disabled
+          - Enabled
+        example: Enabled
+      - nxos_name: lCpuSize
+        tf_name: qos_lcpu_size
+        type: Int64
+        description: 'LCPU Pool Group threshold.'
+        min_int: 0
+        max_int: 10000
+        example: 300
+      - nxos_name: macIpgVal
+        tf_name: qos_mac_ipg
+        type: Int64
+        description: 'To configure MAC IPG Value in bytes.'
+        min_int: 12
+        max_int: 63
+        example: 20
+        exclude_test: true
+      - nxos_name: mcQosGroup3Traffic
+        tf_name: qos_multicast_qos_group3_traffic
+        type: String
+        description: 'Qos-group to which to divert qos-group-3 Multicast traffic.'
+        enum_values:
+          - "0"
+          - "1"
+          - "2"
+          - "3"
+        example: "1"
+        exclude_test: true
+      - nxos_name: ndDynamicQlimit
+        tf_name: qos_nodrop_dynamic_queue_limit
+        type: Int64
+        description: 'Configure q-limit factor.'
+        min_int: 0
+        max_int: 4294967295
+        example: 10
+      - nxos_name: ndResumeOffset
+        tf_name: qos_nodrop_resume_offset
+        type: Int64
+        description: 'Configure resume offset.'
+        min_int: 0
+        max_int: 4294967295
+        example: 10
+      - nxos_name: nodropPgGreenThresh
+        tf_name: qos_nodrop_pg_green_threshold
+        type: Int64
+        description: 'Configure No-drop PG green threshold.'
+        min_int: 0
+        max_int: 4294967295
+        example: 1000
+        exclude_test: true
+      - nxos_name: nodropPgRedThresh
+        tf_name: qos_nodrop_pg_red_threshold
+        type: Int64
+        description: 'Configure No-drop PG red threshold.'
+        min_int: 0
+        max_int: 4294967295
+        example: 1000
+        exclude_test: true
+      - nxos_name: nodropPgSize
+        tf_name: qos_nodrop_pg_size
+        type: Int64
+        description: 'Configure No-drop Pool Group size.'
+        min_int: 0
+        max_int: 4294967295
+        example: 39000
+        exclude_test: true
+      - nxos_name: nodropPgSizeFx
+        tf_name: qos_nodrop_pg_size_fx
+        type: Int64
+        description: 'Configure No-drop Pool Group size for FX platforms.'
+        min_int: 0
+        max_int: 4294967295
+        example: 39000
+        exclude_test: true
+      - nxos_name: nodropPgYellowThresh
+        tf_name: qos_nodrop_pg_yellow_threshold
+        type: Int64
+        description: 'Configure No-drop PG yellow threshold.'
+        min_int: 0
+        max_int: 4294967295
+        example: 1000
+        exclude_test: true
+      - nxos_name: nodropPoolSize
+        tf_name: qos_nodrop_pool_size
+        type: Int64
+        description: 'No-drop pool size in megabytes.'
+        min_int: 1
+        max_int: 256
+        example: 10
+      - nxos_name: nodropQueueGreenThresh
+        tf_name: qos_nodrop_queue_green_threshold
+        type: Int64
+        description: 'No-drop PG''s Queue green threshold.'
+        min_int: 0
+        max_int: 4294967295
+        example: 1000
+        exclude_test: true
+      - nxos_name: nodropQueueGreenThreshFx
+        tf_name: qos_nodrop_queue_green_threshold_fx
+        type: Int64
+        description: 'No-drop PG''s Queue green threshold for FX platforms.'
+        min_int: 0
+        max_int: 4294967295
+        example: 1000
+        exclude_test: true
+      - nxos_name: nodropQueueYellowThresh
+        tf_name: qos_nodrop_queue_yellow_threshold
+        type: Int64
+        description: 'No-drop PG''s Queue yellow threshold.'
+        min_int: 0
+        max_int: 4294967295
+        example: 1000
+        exclude_test: true
+      - nxos_name: nsBufferProfile
+        tf_name: qos_ns_buffer_profile
+        type: String
+        description: 'Qos NS Buffer Profile.'
+        enum_values:
+          - mesh
+          - burst
+          - ultra-burst
+        example: mesh
+        exclude_test: true
+      - nxos_name: oqDropsType
+        tf_name: qos_output_queue_drops_type
+        type: String
+        description: 'Type of per output queue drops.'
+        enum_values:
+          - occupancy
+          - aqm
+          - both
+        example: aqm
+        exclude_test: true
+      - nxos_name: pfcMcDrop
+        tf_name: qos_pfc_multicast_drop
+        type: String
+        description: 'Drop mcast/bcast traffic on no-drop configured class.'
+        enum_values:
+          - Disabled
+          - Enabled
+        example: Enabled
+        exclude_test: true
+      - nxos_name: pfcStatic
+        tf_name: qos_pfc_static
+        type: String
+        description: 'Configure pfc static.'
+        enum_values:
+          - Disabled
+          - Enabled
+        example: Enabled
+      - nxos_name: pgHdrmReserve
+        tf_name: qos_pg_headroom_reserve
+        type: Int64
+        description: 'Percent of Hdrm to reserve.'
+        min_int: 20
+        max_int: 100
+        example: 50
+      - nxos_name: pgMinValue
+        tf_name: qos_pg_min_value
+        type: Int64
+        description: 'PG Min Value.'
+        min_int: 0
+        max_int: 32
+        example: 5
+      - nxos_name: pgNoMin
+        tf_name: qos_pg_no_min
+        type: Bool
+        description: 'PG no-min.'
+        example: false
+      - nxos_name: pgShare
+        tf_name: qos_pg_share
+        type: String
+        description: 'PG Shared Buffer Usage.'
+        enum_values:
+          - Disabled
+          - Enabled
+        example: Disabled
+      - nxos_name: qNoisePercent
+        tf_name: qos_queue_noise_percent
+        type: Int64
+        description: 'To configure queue noise threshold in percentage.'
+        min_int: 0
+        max_int: 100
+        example: 30
+        exclude_test: true
+      - nxos_name: qosAfdNSBuffProfile
+        tf_name: qos_afd_profile
+        type: String
+        description: 'To configure approximate fair dropping profile.'
+        enum_values:
+          - mesh
+          - burst
+          - ultra-burst
+        example: mesh
+        exclude_test: true
+      - nxos_name: spanSize
+        tf_name: qos_span_size
+        type: Int64
+        description: 'Span Pool Group size.'
+        min_int: 0
+        max_int: 10000
+        example: 100
+        exclude_test: true
   - class_name: platformTcamTemplate
     doc_path: System/platform%3ATcamTemplate/
     rn: template-[%s]

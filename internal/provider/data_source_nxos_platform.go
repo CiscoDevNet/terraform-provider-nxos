@@ -56,7 +56,7 @@ func (d *PlatformDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3AQos/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -991,6 +991,206 @@ func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				MarkdownDescription: "PFC WD Shutdown multiplier.",
 				Computed:            true,
 			},
+			"qos_buffer_peak_monitor_counter0_class0": schema.StringAttribute{
+				MarkdownDescription: "Used to configure/unconfigure buffer peak monitor for counter 0 class 0.",
+				Computed:            true,
+			},
+			"qos_buffer_peak_monitor_counter0_class1": schema.StringAttribute{
+				MarkdownDescription: "Used to configure/unconfigure buffer peak monitor for counter 0 class 1.",
+				Computed:            true,
+			},
+			"qos_buffer_peak_monitor_counter0_class2": schema.StringAttribute{
+				MarkdownDescription: "Used to configure/unconfigure buffer peak monitor for counter 0 class 2.",
+				Computed:            true,
+			},
+			"qos_buffer_peak_monitor_counter0_class3": schema.StringAttribute{
+				MarkdownDescription: "Used to configure/unconfigure buffer peak monitor for counter 0 class 3.",
+				Computed:            true,
+			},
+			"qos_buffer_peak_monitor_counter0_class4": schema.StringAttribute{
+				MarkdownDescription: "Used to configure/unconfigure buffer peak monitor for counter 0 class 4.",
+				Computed:            true,
+			},
+			"qos_buffer_peak_monitor_counter0_class5": schema.StringAttribute{
+				MarkdownDescription: "Used to configure/unconfigure buffer peak monitor for counter 0 class 5.",
+				Computed:            true,
+			},
+			"qos_buffer_peak_monitor_counter0_class6": schema.StringAttribute{
+				MarkdownDescription: "Used to configure/unconfigure buffer peak monitor for counter 0 class 6.",
+				Computed:            true,
+			},
+			"qos_buffer_peak_monitor_counter0_class7": schema.StringAttribute{
+				MarkdownDescription: "Used to configure/unconfigure buffer peak monitor for counter 0 class 7.",
+				Computed:            true,
+			},
+			"qos_burst_detect_fall_threshold_unit": schema.StringAttribute{
+				MarkdownDescription: "Units for fall-threshold value.",
+				Computed:            true,
+			},
+			"qos_burst_detect_fall_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Threshold bytes to stop monitoring burst.",
+				Computed:            true,
+			},
+			"qos_burst_detect_max_records": schema.Int64Attribute{
+				MarkdownDescription: "Configure the max number of burst records to monitor.",
+				Computed:            true,
+			},
+			"qos_burst_detect_rise_threshold_unit": schema.StringAttribute{
+				MarkdownDescription: "Units for rise-threshold value.",
+				Computed:            true,
+			},
+			"qos_burst_detect_rise_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Threshold bytes to start monitoring burst.",
+				Computed:            true,
+			},
+			"qos_classify_ns_only": schema.StringAttribute{
+				MarkdownDescription: "Qos classification.",
+				Computed:            true,
+			},
+			"qos_cpu_size": schema.Int64Attribute{
+				MarkdownDescription: "CPU Pool Group threshold.",
+				Computed:            true,
+			},
+			"qos_dpp_age_period": schema.Int64Attribute{
+				MarkdownDescription: "To configure DPP aging period in microseconds.",
+				Computed:            true,
+			},
+			"qos_dpp_max_packets": schema.Int64Attribute{
+				MarkdownDescription: "To configure the max number of packets to prioritize.",
+				Computed:            true,
+			},
+			"qos_drop_pool_size": schema.Int64Attribute{
+				MarkdownDescription: "Drop pool size in megabytes.",
+				Computed:            true,
+			},
+			"qos_eoq_stats_class": schema.StringAttribute{
+				MarkdownDescription: "Qos eoq Stats Class Qos Group.",
+				Computed:            true,
+			},
+			"qos_etrap_age_period": schema.Int64Attribute{
+				MarkdownDescription: "To configure ETRAP aging period in microseconds.",
+				Computed:            true,
+			},
+			"qos_etrap_bandwidth_threshold": schema.Int64Attribute{
+				MarkdownDescription: "To configure ETRAP aging period in bytes.",
+				Computed:            true,
+			},
+			"qos_etrap_byte_count": schema.Int64Attribute{
+				MarkdownDescription: "To configure number of bytes to become elephant flow.",
+				Computed:            true,
+			},
+			"qos_headroom_size": schema.Int64Attribute{
+				MarkdownDescription: "Headroom size in megabytes.",
+				Computed:            true,
+			},
+			"qos_input_buffer_peak": schema.StringAttribute{
+				MarkdownDescription: "peak counter type.",
+				Computed:            true,
+			},
+			"qos_include_ipg": schema.StringAttribute{
+				MarkdownDescription: "Include IPG in shape/police.",
+				Computed:            true,
+			},
+			"qos_lcpu_size": schema.Int64Attribute{
+				MarkdownDescription: "LCPU Pool Group threshold.",
+				Computed:            true,
+			},
+			"qos_mac_ipg": schema.Int64Attribute{
+				MarkdownDescription: "To configure MAC IPG Value in bytes.",
+				Computed:            true,
+			},
+			"qos_multicast_qos_group3_traffic": schema.StringAttribute{
+				MarkdownDescription: "Qos-group to which to divert qos-group-3 Multicast traffic.",
+				Computed:            true,
+			},
+			"qos_nodrop_dynamic_queue_limit": schema.Int64Attribute{
+				MarkdownDescription: "Configure q-limit factor.",
+				Computed:            true,
+			},
+			"qos_nodrop_resume_offset": schema.Int64Attribute{
+				MarkdownDescription: "Configure resume offset.",
+				Computed:            true,
+			},
+			"qos_nodrop_pg_green_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Configure No-drop PG green threshold.",
+				Computed:            true,
+			},
+			"qos_nodrop_pg_red_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Configure No-drop PG red threshold.",
+				Computed:            true,
+			},
+			"qos_nodrop_pg_size": schema.Int64Attribute{
+				MarkdownDescription: "Configure No-drop Pool Group size.",
+				Computed:            true,
+			},
+			"qos_nodrop_pg_size_fx": schema.Int64Attribute{
+				MarkdownDescription: "Configure No-drop Pool Group size for FX platforms.",
+				Computed:            true,
+			},
+			"qos_nodrop_pg_yellow_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Configure No-drop PG yellow threshold.",
+				Computed:            true,
+			},
+			"qos_nodrop_pool_size": schema.Int64Attribute{
+				MarkdownDescription: "No-drop pool size in megabytes.",
+				Computed:            true,
+			},
+			"qos_nodrop_queue_green_threshold": schema.Int64Attribute{
+				MarkdownDescription: "No-drop PG's Queue green threshold.",
+				Computed:            true,
+			},
+			"qos_nodrop_queue_green_threshold_fx": schema.Int64Attribute{
+				MarkdownDescription: "No-drop PG's Queue green threshold for FX platforms.",
+				Computed:            true,
+			},
+			"qos_nodrop_queue_yellow_threshold": schema.Int64Attribute{
+				MarkdownDescription: "No-drop PG's Queue yellow threshold.",
+				Computed:            true,
+			},
+			"qos_ns_buffer_profile": schema.StringAttribute{
+				MarkdownDescription: "Qos NS Buffer Profile.",
+				Computed:            true,
+			},
+			"qos_output_queue_drops_type": schema.StringAttribute{
+				MarkdownDescription: "Type of per output queue drops.",
+				Computed:            true,
+			},
+			"qos_pfc_multicast_drop": schema.StringAttribute{
+				MarkdownDescription: "Drop mcast/bcast traffic on no-drop configured class.",
+				Computed:            true,
+			},
+			"qos_pfc_static": schema.StringAttribute{
+				MarkdownDescription: "Configure pfc static.",
+				Computed:            true,
+			},
+			"qos_pg_headroom_reserve": schema.Int64Attribute{
+				MarkdownDescription: "Percent of Hdrm to reserve.",
+				Computed:            true,
+			},
+			"qos_pg_min_value": schema.Int64Attribute{
+				MarkdownDescription: "PG Min Value.",
+				Computed:            true,
+			},
+			"qos_pg_no_min": schema.BoolAttribute{
+				MarkdownDescription: "PG no-min.",
+				Computed:            true,
+			},
+			"qos_pg_share": schema.StringAttribute{
+				MarkdownDescription: "PG Shared Buffer Usage.",
+				Computed:            true,
+			},
+			"qos_queue_noise_percent": schema.Int64Attribute{
+				MarkdownDescription: "To configure queue noise threshold in percentage.",
+				Computed:            true,
+			},
+			"qos_afd_profile": schema.StringAttribute{
+				MarkdownDescription: "To configure approximate fair dropping profile.",
+				Computed:            true,
+			},
+			"qos_span_size": schema.Int64Attribute{
+				MarkdownDescription: "Span Pool Group size.",
+				Computed:            true,
+			},
 			"tcam_templates": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("User-defined TCAM template configuration.\n  - Map key: `name` - Name of the user-defined tcam template.").String,
 				Computed:            true,
@@ -1114,7 +1314,7 @@ func (d *PlatformDataSource) Read(ctx context.Context, req datasource.ReadReques
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.
   API Documentation
-  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/platformPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/platformTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/platformUdfTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/platformUdfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/platformUdf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdf/
+  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/platformPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/platformQos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AQos/platformTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/platformUdfTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/platformUdfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/platformUdf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdf/
 ---
 
 # nxos_platform (Data Source)
@@ -22,6 +22,7 @@ This data source can read the platform configuration on NX-OS devices, including
 - [platformEntityExtended](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/)
 - [platformLoadBalance](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/)
 - [platformPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/)
+- [platformQos](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AQos/)
 - [platformTcamTemplate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/)
 - [platformUdfTcamTemplate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/)
 - [platformUdfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/)
@@ -150,7 +151,57 @@ data "nxos_platform" "example" {
 - `profile_mode` (String) Hardware profile mode for platform entity.
 - `profile_tuple` (String) Profile tuple for platform entity.
 - `pstat_configuration` (String) pstat enable.
+- `qos_afd_profile` (String) To configure approximate fair dropping profile.
+- `qos_buffer_peak_monitor_counter0_class0` (String) Used to configure/unconfigure buffer peak monitor for counter 0 class 0.
+- `qos_buffer_peak_monitor_counter0_class1` (String) Used to configure/unconfigure buffer peak monitor for counter 0 class 1.
+- `qos_buffer_peak_monitor_counter0_class2` (String) Used to configure/unconfigure buffer peak monitor for counter 0 class 2.
+- `qos_buffer_peak_monitor_counter0_class3` (String) Used to configure/unconfigure buffer peak monitor for counter 0 class 3.
+- `qos_buffer_peak_monitor_counter0_class4` (String) Used to configure/unconfigure buffer peak monitor for counter 0 class 4.
+- `qos_buffer_peak_monitor_counter0_class5` (String) Used to configure/unconfigure buffer peak monitor for counter 0 class 5.
+- `qos_buffer_peak_monitor_counter0_class6` (String) Used to configure/unconfigure buffer peak monitor for counter 0 class 6.
+- `qos_buffer_peak_monitor_counter0_class7` (String) Used to configure/unconfigure buffer peak monitor for counter 0 class 7.
+- `qos_burst_detect_fall_threshold` (Number) Threshold bytes to stop monitoring burst.
+- `qos_burst_detect_fall_threshold_unit` (String) Units for fall-threshold value.
+- `qos_burst_detect_max_records` (Number) Configure the max number of burst records to monitor.
+- `qos_burst_detect_rise_threshold` (Number) Threshold bytes to start monitoring burst.
+- `qos_burst_detect_rise_threshold_unit` (String) Units for rise-threshold value.
+- `qos_classify_ns_only` (String) Qos classification.
+- `qos_cpu_size` (Number) CPU Pool Group threshold.
+- `qos_dpp_age_period` (Number) To configure DPP aging period in microseconds.
+- `qos_dpp_max_packets` (Number) To configure the max number of packets to prioritize.
+- `qos_drop_pool_size` (Number) Drop pool size in megabytes.
+- `qos_eoq_stats_class` (String) Qos eoq Stats Class Qos Group.
+- `qos_etrap_age_period` (Number) To configure ETRAP aging period in microseconds.
+- `qos_etrap_bandwidth_threshold` (Number) To configure ETRAP aging period in bytes.
+- `qos_etrap_byte_count` (Number) To configure number of bytes to become elephant flow.
+- `qos_headroom_size` (Number) Headroom size in megabytes.
+- `qos_include_ipg` (String) Include IPG in shape/police.
+- `qos_input_buffer_peak` (String) peak counter type.
+- `qos_lcpu_size` (Number) LCPU Pool Group threshold.
+- `qos_mac_ipg` (Number) To configure MAC IPG Value in bytes.
 - `qos_min_buffer` (String) qos min-buffer qos-group.
+- `qos_multicast_qos_group3_traffic` (String) Qos-group to which to divert qos-group-3 Multicast traffic.
+- `qos_nodrop_dynamic_queue_limit` (Number) Configure q-limit factor.
+- `qos_nodrop_pg_green_threshold` (Number) Configure No-drop PG green threshold.
+- `qos_nodrop_pg_red_threshold` (Number) Configure No-drop PG red threshold.
+- `qos_nodrop_pg_size` (Number) Configure No-drop Pool Group size.
+- `qos_nodrop_pg_size_fx` (Number) Configure No-drop Pool Group size for FX platforms.
+- `qos_nodrop_pg_yellow_threshold` (Number) Configure No-drop PG yellow threshold.
+- `qos_nodrop_pool_size` (Number) No-drop pool size in megabytes.
+- `qos_nodrop_queue_green_threshold` (Number) No-drop PG's Queue green threshold.
+- `qos_nodrop_queue_green_threshold_fx` (Number) No-drop PG's Queue green threshold for FX platforms.
+- `qos_nodrop_queue_yellow_threshold` (Number) No-drop PG's Queue yellow threshold.
+- `qos_nodrop_resume_offset` (Number) Configure resume offset.
+- `qos_ns_buffer_profile` (String) Qos NS Buffer Profile.
+- `qos_output_queue_drops_type` (String) Type of per output queue drops.
+- `qos_pfc_multicast_drop` (String) Drop mcast/bcast traffic on no-drop configured class.
+- `qos_pfc_static` (String) Configure pfc static.
+- `qos_pg_headroom_reserve` (Number) Percent of Hdrm to reserve.
+- `qos_pg_min_value` (Number) PG Min Value.
+- `qos_pg_no_min` (Boolean) PG no-min.
+- `qos_pg_share` (String) PG Shared Buffer Usage.
+- `qos_queue_noise_percent` (Number) To configure queue noise threshold in percentage.
+- `qos_span_size` (Number) Span Pool Group size.
 - `routing_mode` (String) Routing mode.
 - `service_template_name` (String) Name of the user-defined service template.
 - `svi_and_si_flex_stats` (String) Used to enable/disable hardware profile sviandsi flex-stats.

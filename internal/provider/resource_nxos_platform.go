@@ -63,7 +63,7 @@ func (r *PlatformResource) Metadata(ctx context.Context, req resource.MetadataRe
 func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3AQos/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1616,6 +1616,353 @@ func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaReques
 					int64validator.Between(1, 40),
 				},
 			},
+			"qos_buffer_peak_monitor_counter0_class0": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure/unconfigure buffer peak monitor for counter 0 class 0.").AddStringEnumDescription("unconfigure", "configure").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unconfigure", "configure"),
+				},
+			},
+			"qos_buffer_peak_monitor_counter0_class1": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure/unconfigure buffer peak monitor for counter 0 class 1.").AddStringEnumDescription("unconfigure", "configure").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unconfigure", "configure"),
+				},
+			},
+			"qos_buffer_peak_monitor_counter0_class2": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure/unconfigure buffer peak monitor for counter 0 class 2.").AddStringEnumDescription("unconfigure", "configure").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unconfigure", "configure"),
+				},
+			},
+			"qos_buffer_peak_monitor_counter0_class3": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure/unconfigure buffer peak monitor for counter 0 class 3.").AddStringEnumDescription("unconfigure", "configure").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unconfigure", "configure"),
+				},
+			},
+			"qos_buffer_peak_monitor_counter0_class4": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure/unconfigure buffer peak monitor for counter 0 class 4.").AddStringEnumDescription("unconfigure", "configure").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unconfigure", "configure"),
+				},
+			},
+			"qos_buffer_peak_monitor_counter0_class5": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure/unconfigure buffer peak monitor for counter 0 class 5.").AddStringEnumDescription("unconfigure", "configure").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unconfigure", "configure"),
+				},
+			},
+			"qos_buffer_peak_monitor_counter0_class6": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure/unconfigure buffer peak monitor for counter 0 class 6.").AddStringEnumDescription("unconfigure", "configure").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unconfigure", "configure"),
+				},
+			},
+			"qos_buffer_peak_monitor_counter0_class7": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Used to configure/unconfigure buffer peak monitor for counter 0 class 7.").AddStringEnumDescription("unconfigure", "configure").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unconfigure", "configure"),
+				},
+			},
+			"qos_burst_detect_fall_threshold_unit": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Units for fall-threshold value.").AddStringEnumDescription("bytes", "percentage").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("bytes", "percentage"),
+				},
+			},
+			"qos_burst_detect_fall_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Threshold bytes to stop monitoring burst.").AddIntegerRangeDescription(0, 13319072).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 13319072),
+				},
+			},
+			"qos_burst_detect_max_records": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure the max number of burst records to monitor.").AddIntegerRangeDescription(200, 2000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(200, 2000),
+				},
+			},
+			"qos_burst_detect_rise_threshold_unit": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Units for rise-threshold value.").AddStringEnumDescription("bytes", "percentage").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("bytes", "percentage"),
+				},
+			},
+			"qos_burst_detect_rise_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Threshold bytes to start monitoring burst.").AddIntegerRangeDescription(0, 13319072).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 13319072),
+				},
+			},
+			"qos_classify_ns_only": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Qos classification.").AddStringEnumDescription("Disabled", "Enabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("Disabled", "Enabled"),
+				},
+			},
+			"qos_cpu_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("CPU Pool Group threshold.").AddIntegerRangeDescription(0, 1500).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 1500),
+				},
+			},
+			"qos_dpp_age_period": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To configure DPP aging period in microseconds.").AddIntegerRangeDescription(5000, 1000000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5000, 1000000),
+				},
+			},
+			"qos_dpp_max_packets": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To configure the max number of packets to prioritize.").AddIntegerRangeDescription(1, 1023).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1023),
+				},
+			},
+			"qos_drop_pool_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Drop pool size in megabytes.").AddIntegerRangeDescription(1, 256).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 256),
+				},
+			},
+			"qos_eoq_stats_class": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Qos eoq Stats Class Qos Group.").AddStringEnumDescription("0", "1", "2", "3", "all").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("0", "1", "2", "3", "all"),
+				},
+			},
+			"qos_etrap_age_period": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To configure ETRAP aging period in microseconds.").AddIntegerRangeDescription(1, 1000000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1000000),
+				},
+			},
+			"qos_etrap_bandwidth_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To configure ETRAP aging period in bytes.").AddIntegerRangeDescription(1, 1073741824).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1073741824),
+				},
+			},
+			"qos_etrap_byte_count": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To configure number of bytes to become elephant flow.").AddIntegerRangeDescription(1, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1048575),
+				},
+			},
+			"qos_headroom_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Headroom size in megabytes.").AddIntegerRangeDescription(1, 256).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 256),
+				},
+			},
+			"qos_input_buffer_peak": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("peak counter type.").AddStringEnumDescription("port", "class1", "class2", "class3", "class4", "class5", "class6", "class7").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("port", "class1", "class2", "class3", "class4", "class5", "class6", "class7"),
+				},
+			},
+			"qos_include_ipg": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include IPG in shape/police.").AddStringEnumDescription("Disabled", "Enabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("Disabled", "Enabled"),
+				},
+			},
+			"qos_lcpu_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LCPU Pool Group threshold.").AddIntegerRangeDescription(0, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 10000),
+				},
+			},
+			"qos_mac_ipg": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To configure MAC IPG Value in bytes.").AddIntegerRangeDescription(12, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(12, 63),
+				},
+			},
+			"qos_multicast_qos_group3_traffic": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Qos-group to which to divert qos-group-3 Multicast traffic.").AddStringEnumDescription("0", "1", "2", "3").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("0", "1", "2", "3"),
+				},
+			},
+			"qos_nodrop_dynamic_queue_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure q-limit factor.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"qos_nodrop_resume_offset": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure resume offset.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"qos_nodrop_pg_green_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure No-drop PG green threshold.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"qos_nodrop_pg_red_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure No-drop PG red threshold.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"qos_nodrop_pg_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure No-drop Pool Group size.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"qos_nodrop_pg_size_fx": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure No-drop Pool Group size for FX platforms.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"qos_nodrop_pg_yellow_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure No-drop PG yellow threshold.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"qos_nodrop_pool_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("No-drop pool size in megabytes.").AddIntegerRangeDescription(1, 256).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 256),
+				},
+			},
+			"qos_nodrop_queue_green_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("No-drop PG's Queue green threshold.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"qos_nodrop_queue_green_threshold_fx": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("No-drop PG's Queue green threshold for FX platforms.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"qos_nodrop_queue_yellow_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("No-drop PG's Queue yellow threshold.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"qos_ns_buffer_profile": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Qos NS Buffer Profile.").AddStringEnumDescription("mesh", "burst", "ultra-burst").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("mesh", "burst", "ultra-burst"),
+				},
+			},
+			"qos_output_queue_drops_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Type of per output queue drops.").AddStringEnumDescription("occupancy", "aqm", "both").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("occupancy", "aqm", "both"),
+				},
+			},
+			"qos_pfc_multicast_drop": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Drop mcast/bcast traffic on no-drop configured class.").AddStringEnumDescription("Disabled", "Enabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("Disabled", "Enabled"),
+				},
+			},
+			"qos_pfc_static": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure pfc static.").AddStringEnumDescription("Disabled", "Enabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("Disabled", "Enabled"),
+				},
+			},
+			"qos_pg_headroom_reserve": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Percent of Hdrm to reserve.").AddIntegerRangeDescription(20, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(20, 100),
+				},
+			},
+			"qos_pg_min_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PG Min Value.").AddIntegerRangeDescription(0, 32).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 32),
+				},
+			},
+			"qos_pg_no_min": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PG no-min.").String,
+				Optional:            true,
+			},
+			"qos_pg_share": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PG Shared Buffer Usage.").AddStringEnumDescription("Disabled", "Enabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("Disabled", "Enabled"),
+				},
+			},
+			"qos_queue_noise_percent": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To configure queue noise threshold in percentage.").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
+			"qos_afd_profile": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To configure approximate fair dropping profile.").AddStringEnumDescription("mesh", "burst", "ultra-burst").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("mesh", "burst", "ultra-burst"),
+				},
+			},
+			"qos_span_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Span Pool Group size.").AddIntegerRangeDescription(0, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 10000),
+				},
+			},
 			"tcam_templates": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("User-defined TCAM template configuration.\n  - Map key: `name` - Name of the user-defined tcam template.").String,
 				Optional:            true,
@@ -1870,7 +2217,7 @@ func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

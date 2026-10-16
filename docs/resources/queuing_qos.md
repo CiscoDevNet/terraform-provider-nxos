@@ -5,7 +5,7 @@ subcategory: "Quality of Service"
 description: |-
   This resource can manage the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.
   API Documentation
-  ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Queuing/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
+  ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Queuing/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/ipqosRandomDetect https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:RandomDetect/ipqosAfd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Afd/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_queuing_qos (Resource)
@@ -20,6 +20,8 @@ This resource can manage the queuing QoS configuration on NX-OS devices, includi
 - [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/)
 - [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/)
 - [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/)
+- [ipqosRandomDetect](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:RandomDetect/)
+- [ipqosAfd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Afd/)
 - [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/)
 - [ipqosEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/)
 - [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/)
@@ -34,7 +36,16 @@ resource "nxos_queuing_qos" "example" {
       match_type = "match-any"
       match_class_maps = {
         "c-out-q1" = {
-          priority = 3
+          priority           = 3
+          cap_average        = false
+          drop_availability  = 7
+          random_detect_ecn  = true
+          max_threshold      = 3000
+          max_threshold_unit = "kbytes"
+          min_threshold      = 150
+          min_threshold_unit = "kbytes"
+          optimization       = "mesh"
+          weight             = 5
         }
       }
     }
@@ -74,12 +85,33 @@ Optional:
 
 Optional:
 
+- `afd_ecn` (Boolean) Approximate Fair Discard ECN flag.
+- `cap_average` (Boolean) cap average.
+- `drop_availability` (Number) drop availability range.
+  - Range: `0`-`100`
+- `max_threshold` (Number) max threshold.
+  - Range: `0`-`52428800`
+- `max_threshold_unit` (String) max threshold.
+  - Choices: `none`, `packets`, `bytes`, `kbytes`, `mbytes`
+- `min_threshold` (Number) min threshold.
+  - Range: `0`-`52428800`
+- `min_threshold_unit` (String) min threshold.
+  - Choices: `none`, `packets`, `bytes`, `kbytes`, `mbytes`
 - `next_class_map` (String) Insert before the given class-map.
+- `optimization` (String) random optimization type.
+  - Choices: `burst`, `mesh`, `unknown`
 - `previous_class_map` (String) Insert after the given class-map.
 - `priority` (Number) Optional priority level.
   - Range: `1`-`8`
+- `queue_desired` (Number) Approximate Fair Discard value.
+  - Range: `1`-`52428800`
+- `queue_desired_unit` (String) Units for Approximate Fair Discard value.
+  - Choices: `none`, `bytes`, `kbytes`, `mbytes`
+- `random_detect_ecn` (Boolean) ecn flag.
 - `remaining_bandwidth` (Number) Remaining bandwidth.
   - Range: `0`-`100`
+- `weight` (Number) weight range.
+  - Range: `0`-`15`
 
 ## Import
 

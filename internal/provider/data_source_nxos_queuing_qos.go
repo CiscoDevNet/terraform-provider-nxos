@@ -56,7 +56,7 @@ func (d *QueuingQoSDataSource) Metadata(_ context.Context, req datasource.Metada
 func (d *QueuingQoSDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.").AddApiDocumentation("ipqosQueuing", "Qos/ipqos:Queuing/", []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, []string{"Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.").AddApiDocumentation("ipqosQueuing", "Qos/ipqos:Queuing/", []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, []string{"Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/", "Qos/ipqos:RandomDetect/", "Qos/ipqos:Afd/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -95,6 +95,54 @@ func (d *QueuingQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 									},
 									"remaining_bandwidth": schema.Int64Attribute{
 										MarkdownDescription: "Remaining bandwidth.",
+										Computed:            true,
+									},
+									"cap_average": schema.BoolAttribute{
+										MarkdownDescription: "cap average.",
+										Computed:            true,
+									},
+									"drop_availability": schema.Int64Attribute{
+										MarkdownDescription: "drop availability range.",
+										Computed:            true,
+									},
+									"random_detect_ecn": schema.BoolAttribute{
+										MarkdownDescription: "ecn flag.",
+										Computed:            true,
+									},
+									"max_threshold": schema.Int64Attribute{
+										MarkdownDescription: "max threshold.",
+										Computed:            true,
+									},
+									"max_threshold_unit": schema.StringAttribute{
+										MarkdownDescription: "max threshold.",
+										Computed:            true,
+									},
+									"min_threshold": schema.Int64Attribute{
+										MarkdownDescription: "min threshold.",
+										Computed:            true,
+									},
+									"min_threshold_unit": schema.StringAttribute{
+										MarkdownDescription: "min threshold.",
+										Computed:            true,
+									},
+									"optimization": schema.StringAttribute{
+										MarkdownDescription: "random optimization type.",
+										Computed:            true,
+									},
+									"weight": schema.Int64Attribute{
+										MarkdownDescription: "weight range.",
+										Computed:            true,
+									},
+									"afd_ecn": schema.BoolAttribute{
+										MarkdownDescription: "Approximate Fair Discard ECN flag.",
+										Computed:            true,
+									},
+									"queue_desired_unit": schema.StringAttribute{
+										MarkdownDescription: "Units for Approximate Fair Discard value.",
+										Computed:            true,
+									},
+									"queue_desired": schema.Int64Attribute{
+										MarkdownDescription: "Approximate Fair Discard value.",
 										Computed:            true,
 									},
 								},
@@ -143,7 +191,7 @@ func (d *QueuingQoSDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, QueuingQoSSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, QueuingQoSSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

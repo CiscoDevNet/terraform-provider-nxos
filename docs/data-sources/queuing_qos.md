@@ -5,7 +5,7 @@ subcategory: "Quality of Service"
 description: |-
   This data source can read the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.
   API Documentation
-  ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Queuing/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
+  ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Queuing/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/ipqosRandomDetect https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:RandomDetect/ipqosAfd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Afd/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_queuing_qos (Data Source)
@@ -20,6 +20,8 @@ This data source can read the queuing QoS configuration on NX-OS devices, includ
 - [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:MatchCMap/)
 - [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Priority/)
 - [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:SetRemBW/)
+- [ipqosRandomDetect](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:RandomDetect/)
+- [ipqosAfd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Afd/)
 - [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:ServPol/)
 - [ipqosEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:Egress/)
 - [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:System/)
@@ -61,7 +63,19 @@ Read-Only:
 
 Read-Only:
 
+- `afd_ecn` (Boolean) Approximate Fair Discard ECN flag.
+- `cap_average` (Boolean) cap average.
+- `drop_availability` (Number) drop availability range.
+- `max_threshold` (Number) max threshold.
+- `max_threshold_unit` (String) max threshold.
+- `min_threshold` (Number) min threshold.
+- `min_threshold_unit` (String) min threshold.
 - `next_class_map` (String) Insert before the given class-map.
+- `optimization` (String) random optimization type.
 - `previous_class_map` (String) Insert after the given class-map.
 - `priority` (Number) Optional priority level.
+- `queue_desired` (Number) Approximate Fair Discard value.
+- `queue_desired_unit` (String) Units for Approximate Fair Discard value.
+- `random_detect_ecn` (Boolean) ecn flag.
 - `remaining_bandwidth` (Number) Remaining bandwidth.
+- `weight` (Number) weight range.

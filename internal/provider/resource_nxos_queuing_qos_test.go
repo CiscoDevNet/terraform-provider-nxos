@@ -37,6 +37,15 @@ func TestAccNxosQueuingQoS(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_type", "match-any"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.priority", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.cap_average", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.drop_availability", "7"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.random_detect_ecn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.max_threshold", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.max_threshold_unit", "kbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.min_threshold", "150"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.min_threshold_unit", "kbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.optimization", "mesh"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.weight", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "system_out_policy_map_name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_map_statistics", "false"))
 	var tfVersion *goversion.Version
@@ -188,6 +197,15 @@ func testAccNxosQueuingQoSConfig_all() string {
 	config += `			match_class_maps = {` + "\n"
 	config += `				"c-out-q1" = {` + "\n"
 	config += `					priority = 3` + "\n"
+	config += `					cap_average = false` + "\n"
+	config += `					drop_availability = 7` + "\n"
+	config += `					random_detect_ecn = true` + "\n"
+	config += `					max_threshold = 3000` + "\n"
+	config += `					max_threshold_unit = "kbytes"` + "\n"
+	config += `					min_threshold = 150` + "\n"
+	config += `					min_threshold_unit = "kbytes"` + "\n"
+	config += `					optimization = "mesh"` + "\n"
+	config += `					weight = 5` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

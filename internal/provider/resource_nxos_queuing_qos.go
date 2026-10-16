@@ -63,7 +63,7 @@ func (r *QueuingQoSResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.").AddApiDocumentation("ipqosQueuing", "Qos/ipqos:Queuing/", []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, []string{"Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.").AddApiDocumentation("ipqosQueuing", "Qos/ipqos:Queuing/", []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, []string{"Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/", "Qos/ipqos:RandomDetect/", "Qos/ipqos:Afd/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -114,6 +114,81 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(0, 100),
+										},
+									},
+									"cap_average": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("cap average.").String,
+										Optional:            true,
+									},
+									"drop_availability": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("drop availability range.").AddIntegerRangeDescription(0, 100).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 100),
+										},
+									},
+									"random_detect_ecn": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ecn flag.").String,
+										Optional:            true,
+									},
+									"max_threshold": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("max threshold.").AddIntegerRangeDescription(0, 52428800).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 52428800),
+										},
+									},
+									"max_threshold_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("max threshold.").AddStringEnumDescription("none", "packets", "bytes", "kbytes", "mbytes").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "packets", "bytes", "kbytes", "mbytes"),
+										},
+									},
+									"min_threshold": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("min threshold.").AddIntegerRangeDescription(0, 52428800).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 52428800),
+										},
+									},
+									"min_threshold_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("min threshold.").AddStringEnumDescription("none", "packets", "bytes", "kbytes", "mbytes").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "packets", "bytes", "kbytes", "mbytes"),
+										},
+									},
+									"optimization": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("random optimization type.").AddStringEnumDescription("burst", "mesh", "unknown").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("burst", "mesh", "unknown"),
+										},
+									},
+									"weight": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("weight range.").AddIntegerRangeDescription(0, 15).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 15),
+										},
+									},
+									"afd_ecn": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Approximate Fair Discard ECN flag.").String,
+										Optional:            true,
+									},
+									"queue_desired_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Units for Approximate Fair Discard value.").AddStringEnumDescription("none", "bytes", "kbytes", "mbytes").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "bytes", "kbytes", "mbytes"),
+										},
+									},
+									"queue_desired": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Approximate Fair Discard value.").AddIntegerRangeDescription(1, 52428800).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 52428800),
 										},
 									},
 								},
@@ -281,7 +356,7 @@ func (r *QueuingQoSResource) Read(ctx context.Context, req resource.ReadRequest,
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, QueuingQoSSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, QueuingQoSSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

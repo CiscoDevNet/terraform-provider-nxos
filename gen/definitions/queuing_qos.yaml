@@ -92,6 +92,112 @@ child_classes:
                     max_int: 100
                     example: 10
                     exclude_test: true
+              - class_name: ipqosRandomDetect
+                doc_path: Qos/ipqos:RandomDetect/
+                rn: RandDet
+                type: single
+                tf_name: random_detect
+                description: 'WRED/ECN random detect configuration.'
+                attributes:
+                  - nxos_name: capAverage
+                    tf_name: cap_average
+                    type: Bool
+                    description: 'cap average.'
+                    example: false
+                  - nxos_name: dropAvail
+                    tf_name: drop_availability
+                    type: Int64
+                    description: 'drop availability range.'
+                    min_int: 0
+                    max_int: 100
+                    example: 7
+                  - nxos_name: ecn
+                    tf_name: random_detect_ecn
+                    type: Bool
+                    description: 'ecn flag.'
+                    example: true
+                  - nxos_name: maxThreshold
+                    tf_name: max_threshold
+                    type: Int64
+                    description: 'max threshold.'
+                    min_int: 0
+                    max_int: 52428800
+                    example: 3000
+                  - nxos_name: maxThresholdUnit
+                    tf_name: max_threshold_unit
+                    type: String
+                    description: 'max threshold.'
+                    enum_values:
+                      - none
+                      - packets
+                      - bytes
+                      - kbytes
+                      - mbytes
+                    example: kbytes
+                  - nxos_name: minThreshold
+                    tf_name: min_threshold
+                    type: Int64
+                    description: 'min threshold.'
+                    min_int: 0
+                    max_int: 52428800
+                    example: 150
+                  - nxos_name: minThresholdUnit
+                    tf_name: min_threshold_unit
+                    type: String
+                    description: 'min threshold.'
+                    enum_values:
+                      - none
+                      - packets
+                      - bytes
+                      - kbytes
+                      - mbytes
+                    example: kbytes
+                  - nxos_name: optimization
+                    tf_name: optimization
+                    type: String
+                    description: 'random optimization type.'
+                    enum_values:
+                      - burst
+                      - mesh
+                      - unknown
+                    example: mesh
+                  - nxos_name: weight
+                    tf_name: weight
+                    type: Int64
+                    description: 'weight range.'
+                    min_int: 0
+                    max_int: 15
+                    example: 5
+              - class_name: ipqosAfd
+                doc_path: Qos/ipqos:Afd/
+                rn: afd
+                type: single
+                tf_name: afd
+                description: 'Approximate Fair Discard (AFD) configuration.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: ecn
+                    tf_name: afd_ecn
+                    type: Bool
+                    description: 'Approximate Fair Discard ECN flag.'
+                    example: true
+                  - nxos_name: queueDesiredUnit
+                    tf_name: queue_desired_unit
+                    type: String
+                    description: 'Units for Approximate Fair Discard value.'
+                    enum_values:
+                      - none
+                      - bytes
+                      - kbytes
+                      - mbytes
+                    example: kbytes
+                  - nxos_name: queueDesiredVal
+                    tf_name: queue_desired
+                    type: Int64
+                    description: 'Approximate Fair Discard value.'
+                    min_int: 1
+                    max_int: 52428800
+                    example: 150
   - class_name: ipqosServPol
     doc_path: Qos/ipqos:ServPol/
     rn: policy

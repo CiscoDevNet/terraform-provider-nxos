@@ -55,6 +55,18 @@ type QueuingQoSPolicyMapsMatchClassMaps struct {
 	PreviousClassMap   types.String `tfsdk:"previous_class_map"`
 	Priority           types.Int64  `tfsdk:"priority"`
 	RemainingBandwidth types.Int64  `tfsdk:"remaining_bandwidth"`
+	CapAverage         types.Bool   `tfsdk:"cap_average"`
+	DropAvailability   types.Int64  `tfsdk:"drop_availability"`
+	RandomDetectEcn    types.Bool   `tfsdk:"random_detect_ecn"`
+	MaxThreshold       types.Int64  `tfsdk:"max_threshold"`
+	MaxThresholdUnit   types.String `tfsdk:"max_threshold_unit"`
+	MinThreshold       types.Int64  `tfsdk:"min_threshold"`
+	MinThresholdUnit   types.String `tfsdk:"min_threshold_unit"`
+	Optimization       types.String `tfsdk:"optimization"`
+	Weight             types.Int64  `tfsdk:"weight"`
+	AfdEcn             types.Bool   `tfsdk:"afd_ecn"`
+	QueueDesiredUnit   types.String `tfsdk:"queue_desired_unit"`
+	QueueDesired       types.Int64  `tfsdk:"queue_desired"`
 }
 
 type QueuingQoSIdentity struct {
@@ -166,6 +178,50 @@ func (data QueuingQoS) toBody(config QueuingQoS) nxos.Body {
 						}
 						if attrs != "{}" {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosSetRemBW.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.CapAverage.IsUnknown() && !child.CapAverage.IsNull() && !configChild.CapAverage.IsNull() {
+							attrs, _ = sjson.Set(attrs, "capAverage", strconv.FormatBool(child.CapAverage.ValueBool()))
+						}
+						if !child.DropAvailability.IsUnknown() && !child.DropAvailability.IsNull() && !configChild.DropAvailability.IsNull() {
+							attrs, _ = sjson.Set(attrs, "dropAvail", strconv.FormatInt(child.DropAvailability.ValueInt64(), 10))
+						}
+						if !child.RandomDetectEcn.IsUnknown() && !child.RandomDetectEcn.IsNull() && !configChild.RandomDetectEcn.IsNull() {
+							attrs, _ = sjson.Set(attrs, "ecn", strconv.FormatBool(child.RandomDetectEcn.ValueBool()))
+						}
+						if !child.MaxThreshold.IsUnknown() && !child.MaxThreshold.IsNull() && !configChild.MaxThreshold.IsNull() {
+							attrs, _ = sjson.Set(attrs, "maxThreshold", strconv.FormatInt(child.MaxThreshold.ValueInt64(), 10))
+						}
+						if !child.MaxThresholdUnit.IsUnknown() && !child.MaxThresholdUnit.IsNull() && !configChild.MaxThresholdUnit.IsNull() {
+							attrs, _ = sjson.Set(attrs, "maxThresholdUnit", child.MaxThresholdUnit.ValueString())
+						}
+						if !child.MinThreshold.IsUnknown() && !child.MinThreshold.IsNull() && !configChild.MinThreshold.IsNull() {
+							attrs, _ = sjson.Set(attrs, "minThreshold", strconv.FormatInt(child.MinThreshold.ValueInt64(), 10))
+						}
+						if !child.MinThresholdUnit.IsUnknown() && !child.MinThresholdUnit.IsNull() && !configChild.MinThresholdUnit.IsNull() {
+							attrs, _ = sjson.Set(attrs, "minThresholdUnit", child.MinThresholdUnit.ValueString())
+						}
+						if !child.Optimization.IsUnknown() && !child.Optimization.IsNull() && !configChild.Optimization.IsNull() {
+							attrs, _ = sjson.Set(attrs, "optimization", child.Optimization.ValueString())
+						}
+						if !child.Weight.IsUnknown() && !child.Weight.IsNull() && !configChild.Weight.IsNull() {
+							attrs, _ = sjson.Set(attrs, "weight", strconv.FormatInt(child.Weight.ValueInt64(), 10))
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosRandomDetect.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.AfdEcn.IsUnknown() && !child.AfdEcn.IsNull() && !configChild.AfdEcn.IsNull() {
+							attrs, _ = sjson.Set(attrs, "ecn", strconv.FormatBool(child.AfdEcn.ValueBool()))
+						}
+						if !child.QueueDesiredUnit.IsUnknown() && !child.QueueDesiredUnit.IsNull() && !configChild.QueueDesiredUnit.IsNull() {
+							attrs, _ = sjson.Set(attrs, "queueDesiredUnit", child.QueueDesiredUnit.ValueString())
+						}
+						if !child.QueueDesired.IsUnknown() && !child.QueueDesired.IsNull() && !configChild.QueueDesired.IsNull() {
+							attrs, _ = sjson.Set(attrs, "queueDesiredVal", strconv.FormatInt(child.QueueDesired.ValueInt64(), 10))
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosAfd.attributes", attrs)
 						}
 					}
 				}
@@ -300,6 +356,44 @@ func (data *QueuingQoS) fromBody(res gjson.Result) {
 														},
 													)
 													nestedChildipqosMatchCMap.RemainingBandwidth = types.Int64Value(ripqosSetRemBW.Get("ipqosSetRemBW.attributes.val").Int())
+												}
+												{
+													var ripqosRandomDetect gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("ipqosRandomDetect.attributes.rn").String()
+															if rnValue == "RandDet" {
+																ripqosRandomDetect = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildipqosMatchCMap.CapAverage = types.BoolValue(helpers.ParseNxosBoolean(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.capAverage").String()))
+													nestedChildipqosMatchCMap.DropAvailability = types.Int64Value(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.dropAvail").Int())
+													nestedChildipqosMatchCMap.RandomDetectEcn = types.BoolValue(helpers.ParseNxosBoolean(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.ecn").String()))
+													nestedChildipqosMatchCMap.MaxThreshold = types.Int64Value(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.maxThreshold").Int())
+													nestedChildipqosMatchCMap.MaxThresholdUnit = types.StringValue(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.maxThresholdUnit").String())
+													nestedChildipqosMatchCMap.MinThreshold = types.Int64Value(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.minThreshold").Int())
+													nestedChildipqosMatchCMap.MinThresholdUnit = types.StringValue(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.minThresholdUnit").String())
+													nestedChildipqosMatchCMap.Optimization = types.StringValue(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.optimization").String())
+													nestedChildipqosMatchCMap.Weight = types.Int64Value(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.weight").Int())
+												}
+												{
+													var ripqosAfd gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("ipqosAfd.attributes.rn").String()
+															if rnValue == "afd" {
+																ripqosAfd = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildipqosMatchCMap.AfdEcn = types.BoolValue(helpers.ParseNxosBoolean(ripqosAfd.Get("ipqosAfd.attributes.ecn").String()))
+													nestedChildipqosMatchCMap.QueueDesiredUnit = types.StringValue(ripqosAfd.Get("ipqosAfd.attributes.queueDesiredUnit").String())
+													nestedChildipqosMatchCMap.QueueDesired = types.Int64Value(ripqosAfd.Get("ipqosAfd.attributes.queueDesiredVal").Int())
 												}
 												if child.MatchClassMaps == nil {
 													child.MatchClassMaps = make(map[string]QueuingQoSPolicyMapsMatchClassMaps)
@@ -476,6 +570,92 @@ func (data *QueuingQoS) updateFromBody(res gjson.Result) {
 					ncItem.RemainingBandwidth = types.Int64Value(ripqosSetRemBW.Get("ipqosSetRemBW.attributes.val").Int())
 				} else {
 					ncItem.RemainingBandwidth = types.Int64Null()
+				}
+			}
+			{
+				var ripqosRandomDetect gjson.Result
+				ripqosMatchCMap.Get("ipqosMatchCMap.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ipqosRandomDetect.attributes.rn").String()
+						if rnValue == "RandDet" {
+							ripqosRandomDetect = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.CapAverage.IsNull() {
+					ncItem.CapAverage = types.BoolValue(helpers.ParseNxosBoolean(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.capAverage").String()))
+				} else {
+					ncItem.CapAverage = types.BoolNull()
+				}
+				if !ncItem.DropAvailability.IsNull() {
+					ncItem.DropAvailability = types.Int64Value(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.dropAvail").Int())
+				} else {
+					ncItem.DropAvailability = types.Int64Null()
+				}
+				if !ncItem.RandomDetectEcn.IsNull() {
+					ncItem.RandomDetectEcn = types.BoolValue(helpers.ParseNxosBoolean(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.ecn").String()))
+				} else {
+					ncItem.RandomDetectEcn = types.BoolNull()
+				}
+				if !ncItem.MaxThreshold.IsNull() {
+					ncItem.MaxThreshold = types.Int64Value(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.maxThreshold").Int())
+				} else {
+					ncItem.MaxThreshold = types.Int64Null()
+				}
+				if !ncItem.MaxThresholdUnit.IsNull() {
+					ncItem.MaxThresholdUnit = types.StringValue(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.maxThresholdUnit").String())
+				} else {
+					ncItem.MaxThresholdUnit = types.StringNull()
+				}
+				if !ncItem.MinThreshold.IsNull() {
+					ncItem.MinThreshold = types.Int64Value(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.minThreshold").Int())
+				} else {
+					ncItem.MinThreshold = types.Int64Null()
+				}
+				if !ncItem.MinThresholdUnit.IsNull() {
+					ncItem.MinThresholdUnit = types.StringValue(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.minThresholdUnit").String())
+				} else {
+					ncItem.MinThresholdUnit = types.StringNull()
+				}
+				if !ncItem.Optimization.IsNull() {
+					ncItem.Optimization = types.StringValue(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.optimization").String())
+				} else {
+					ncItem.Optimization = types.StringNull()
+				}
+				if !ncItem.Weight.IsNull() {
+					ncItem.Weight = types.Int64Value(ripqosRandomDetect.Get("ipqosRandomDetect.attributes.weight").Int())
+				} else {
+					ncItem.Weight = types.Int64Null()
+				}
+			}
+			{
+				var ripqosAfd gjson.Result
+				ripqosMatchCMap.Get("ipqosMatchCMap.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("ipqosAfd.attributes.rn").String()
+						if rnValue == "afd" {
+							ripqosAfd = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.AfdEcn.IsNull() {
+					ncItem.AfdEcn = types.BoolValue(helpers.ParseNxosBoolean(ripqosAfd.Get("ipqosAfd.attributes.ecn").String()))
+				} else {
+					ncItem.AfdEcn = types.BoolNull()
+				}
+				if !ncItem.QueueDesiredUnit.IsNull() {
+					ncItem.QueueDesiredUnit = types.StringValue(ripqosAfd.Get("ipqosAfd.attributes.queueDesiredUnit").String())
+				} else {
+					ncItem.QueueDesiredUnit = types.StringNull()
+				}
+				if !ncItem.QueueDesired.IsNull() {
+					ncItem.QueueDesired = types.Int64Value(ripqosAfd.Get("ipqosAfd.attributes.queueDesiredVal").Int())
+				} else {
+					ncItem.QueueDesired = types.Int64Null()
 				}
 			}
 			item.MatchClassMaps[nc] = ncItem
@@ -737,6 +917,54 @@ func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS, 
 										if !stateChild.RemainingBandwidth.IsNull() && configChild.RemainingBandwidth.IsNull() {
 											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetRemBW")
 											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.CapAverage.IsNull() && configChild.CapAverage.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"capAverage", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.DropAvailability.IsNull() && configChild.DropAvailability.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dropAvail", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.RandomDetectEcn.IsNull() && configChild.RandomDetectEcn.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ecn", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.MaxThreshold.IsNull() && configChild.MaxThreshold.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxThreshold", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.MaxThresholdUnit.IsNull() && configChild.MaxThresholdUnit.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxThresholdUnit", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.MinThreshold.IsNull() && configChild.MinThreshold.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minThreshold", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.MinThresholdUnit.IsNull() && configChild.MinThresholdUnit.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minThresholdUnit", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Optimization.IsNull() && configChild.Optimization.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"optimization", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Weight.IsNull() && configChild.Weight.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"weight", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.AfdEcn.IsNull() && configChild.AfdEcn.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosAfd")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ecn", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.QueueDesiredUnit.IsNull() && configChild.QueueDesiredUnit.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosAfd")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queueDesiredUnit", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.QueueDesired.IsNull() && configChild.QueueDesired.IsNull() {
+											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosAfd")
+											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queueDesiredVal", "DME_UNSET_PROPERTY_MARKER")
 										}
 									}
 								}

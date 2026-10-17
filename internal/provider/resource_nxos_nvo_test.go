@@ -44,6 +44,7 @@ func TestAccNxosNVO(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "evpn_multisite_border_gateway_site_id", "65535"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "evpn_multisite_border_gateway_split_horizon_per_site", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "evpn_multisite_border_gateway_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "advertise_evpn_multicast_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.advertise_virtual_mac", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.hold_down_time", "60"))
@@ -157,6 +158,7 @@ func testAccNxosNVOConfig_all() string {
 	config += `	evpn_multisite_border_gateway_site_id = 65535` + "\n"
 	config += `	evpn_multisite_border_gateway_split_horizon_per_site = "enable"` + "\n"
 	config += `	evpn_multisite_border_gateway_state = "enabled"` + "\n"
+	config += `	advertise_evpn_multicast_state = "enabled"` + "\n"
 	config += `	nve_interfaces = {` + "\n"
 	config += `		"1" = {` + "\n"
 	config += `			admin_state = "enabled"` + "\n"

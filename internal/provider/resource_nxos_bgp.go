@@ -157,6 +157,13 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					int64validator.Between(60, 4294967295),
 				},
 			},
+			"mvpn_vri_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ID to generate VRI with VNI:ID format.").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
 			"nexthop_suppress_default_resolution": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress use of default route for nexthop address resolution.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,

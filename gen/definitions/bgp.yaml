@@ -114,6 +114,13 @@ child_classes:
         max_int: 4294967295
         example: 60
         exclude_test: true
+      - nxos_name: mvpnVriId
+        tf_name: mvpn_vri_id
+        type: Int64
+        description: 'ID to generate VRI with VNI:ID format.'
+        min_int: 1
+        max_int: 65535
+        example: 100
       - nxos_name: nhSupprDefRes
         tf_name: nexthop_suppress_default_resolution
         type: String

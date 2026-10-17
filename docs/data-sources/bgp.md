@@ -79,6 +79,7 @@ data "nxos_bgp" "example" {
 - `isolate` (String) Isolate router from BGP perspective.
 - `isolate_route_map` (String) Isolate Route Map Configuration.
 - `med_dampening_interval` (Number) Setting med dampening interval.
+- `mvpn_vri_id` (Number) ID to generate VRI with VNI:ID format.
 - `nexthop_suppress_default_resolution` (String) Suppress use of default route for nexthop address resolution.
 - `rd_dual` (String) Generate Secondary Route Distinguisher for vxlan multisite border gateway.
 - `rd_dual_id` (Number) ID to generate Secondary RD with ID:VNI format.

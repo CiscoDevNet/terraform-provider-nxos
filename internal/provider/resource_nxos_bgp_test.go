@@ -46,6 +46,7 @@ func TestAccNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "enhanced_error_handling", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "flush_routes", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "isolate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "mvpn_vri_id", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "nexthop_suppress_default_resolution", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "rd_dual", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.router_id", "1.1.1.1"))
@@ -383,6 +384,7 @@ func testAccNxosBGPConfig_all(includeWriteOnly bool) string {
 	config += `	enhanced_error_handling = false` + "\n"
 	config += `	flush_routes = "disabled"` + "\n"
 	config += `	isolate = "disabled"` + "\n"
+	config += `	mvpn_vri_id = 100` + "\n"
 	config += `	nexthop_suppress_default_resolution = "disabled"` + "\n"
 	config += `	rd_dual = "enabled"` + "\n"
 	config += `	vrfs = {` + "\n"

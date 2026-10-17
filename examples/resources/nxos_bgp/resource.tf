@@ -10,6 +10,7 @@ resource "nxos_bgp" "example" {
   enhanced_error_handling                  = false
   flush_routes                             = "disabled"
   isolate                                  = "disabled"
+  mvpn_vri_id                              = 100
   nexthop_suppress_default_resolution      = "disabled"
   rd_dual                                  = "enabled"
   vrfs = {

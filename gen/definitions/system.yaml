@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, and PTP ttag settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, and NGMVPN (Tenant Routed Multicast) settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, and NGMVPN (Tenant Routed Multicast) settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -3154,6 +3154,81 @@ child_classes:
             type: String
             description: 'Secondary VLANS of the PVLAN domain.'
             example: '101-102'
+  - class_name: ngmvpnEntity
+    doc_path: Routing%20and%20Forwarding/ngmvpn:Entity/
+    rn: ngmvpn
+    type: single
+    no_delete: true
+    tf_name: ngmvpn
+    description: 'NGMVPN (Next Generation Multicast VPN) configuration, used for Tenant Routed Multicast (TRM).'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: ngmvpn_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+    child_classes:
+      - class_name: ngmvpnInst
+        doc_path: Routing%20and%20Forwarding/ngmvpn:Inst/
+        rn: inst
+        type: single
+        no_delete: true
+        tf_name: ngmvpn_instance
+        description: 'NGMVPN instance.'
+        attributes:
+          - nxos_name: adminSt
+            tf_name: ngmvpn_instance_admin_state
+            type: String
+            description: 'The administrative state of the object or policy.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: ctrl
+            tf_name: ngmvpn_control
+            type: String
+            description: 'The control state.'
+            enum_values:
+              - stateful-ha
+            example: stateful-ha
+          - nxos_name: overlayDistributedDr
+            tf_name: ngmvpn_overlay_distributed_dr
+            type: Bool
+            description: 'Overlay Distributed DR flag.'
+            example: true
+            exclude_test: true
+          - nxos_name: overlaySptOnly
+            tf_name: ngmvpn_overlay_spt_only
+            type: Bool
+            description: 'Overlay SPT only flag.'
+            example: false
+        child_classes:
+          - class_name: ngmvpnDom
+            doc_path: Routing%20and%20Forwarding/ngmvpn:Dom/
+            rn: dom-%s
+            type: list
+            tf_name: ngmvpn_vrfs
+            description: 'VRF related information for NGMVPN.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'The name of the object.'
+                example: VRF1
+              - nxos_name: mdtV4Vxlan
+                tf_name: mdt_v4_vxlan
+                type: Bool
+                description: 'L3VNI NGMVPN MDT VXLAN support.'
+                example: false
+              - nxos_name: mdtV6Vxlan
+                tf_name: mdt_v6_vxlan
+                type: Bool
+                description: 'L3VNI NGMVPN MDT VXLAN support.'
+                example: false
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld
@@ -3209,3 +3284,11 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
+  - dn: sys/fm/ngmvpn
+    class_name: fmNgmvpn
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/inst-VRF1
+    class_name: l3Inst
+    no_delete: true

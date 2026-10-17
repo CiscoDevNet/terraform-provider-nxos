@@ -82,6 +82,20 @@ child_classes:
         enum_values:
           - enabled
         example: enabled
+  - class_name: nvoEvpnMulticast
+    doc_path: Network%20Virtualization/nvo:EvpnMulticast/
+    rn: evpnmulticast
+    type: single
+    tf_name: advertise_evpn_multicast
+    description: 'Enabler for Advertise EVPN Multicast.'
+    attributes:
+      - nxos_name: state
+        tf_name: advertise_evpn_multicast_state
+        type: String
+        description: 'Advertise EVPN Multicast State.'
+        enum_values:
+          - enabled
+        example: enabled
   - class_name: nvoEp
     doc_path: Network%20Virtualization/nvo:Ep/
     rn: epId-%v

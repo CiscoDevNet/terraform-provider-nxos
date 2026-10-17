@@ -8,6 +8,7 @@ resource "nxos_nvo" "example" {
   evpn_multisite_border_gateway_site_id                = 65535
   evpn_multisite_border_gateway_split_horizon_per_site = "enable"
   evpn_multisite_border_gateway_state                  = "enabled"
+  advertise_evpn_multicast_state                       = "enabled"
   nve_interfaces = {
     "1" = {
       admin_state                        = "enabled"

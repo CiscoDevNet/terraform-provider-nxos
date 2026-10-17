@@ -63,6 +63,7 @@ resource "nxos_bgp" "example" {
   enhanced_error_handling                  = false
   flush_routes                             = "disabled"
   isolate                                  = "disabled"
+  mvpn_vri_id                              = 100
   nexthop_suppress_default_resolution      = "disabled"
   rd_dual                                  = "enabled"
   vrfs = {
@@ -429,6 +430,8 @@ resource "nxos_bgp" "example" {
 - `isolate_route_map` (String) Isolate Route Map Configuration.
 - `med_dampening_interval` (Number) Setting med dampening interval.
   - Range: `60`-`4294967295`
+- `mvpn_vri_id` (Number) ID to generate VRI with VNI:ID format.
+  - Range: `1`-`65535`
 - `nexthop_suppress_default_resolution` (String) Suppress use of default route for nexthop address resolution.
   - Choices: `enabled`, `disabled`
 - `rd_dual` (String) Generate Secondary Route Distinguisher for vxlan multisite border gateway.

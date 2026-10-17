@@ -364,4 +364,14 @@ resource "nxos_system" "example" {
       secondary_vlans = "101-102"
     }
   }
+  ngmvpn_admin_state          = "enabled"
+  ngmvpn_instance_admin_state = "enabled"
+  ngmvpn_control              = "stateful-ha"
+  ngmvpn_overlay_spt_only     = false
+  ngmvpn_vrfs = {
+    "VRF1" = {
+      mdt_v4_vxlan = false
+      mdt_v6_vxlan = false
+    }
+  }
 }

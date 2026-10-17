@@ -274,6 +274,12 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_interfaces.eth1/9.trunk_secondary_associations.vlan-100.secondary_vlan", "vlan-101"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_svis.vlan100.secondary_vlans", "101-102"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_overlay_spt_only", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_vrfs.VRF1.mdt_v4_vxlan", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_vrfs.VRF1.mdt_v6_vxlan", "false"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -372,6 +378,20 @@ resource "nxos_dme" "PreReq9" {
   content = {
       adminSt = "enabled"
   }
+}
+
+resource "nxos_dme" "PreReq10" {
+  dn = "sys/fm/ngmvpn"
+  class_name = "fmNgmvpn"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq11" {
+  dn = "sys/inst-VRF1"
+  class_name = "l3Inst"
+  delete = false
 }
 
 `
@@ -754,7 +774,17 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `			secondary_vlans = "101-102"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, ]` + "\n"
+	config += `	ngmvpn_admin_state = "enabled"` + "\n"
+	config += `	ngmvpn_instance_admin_state = "enabled"` + "\n"
+	config += `	ngmvpn_control = "stateful-ha"` + "\n"
+	config += `	ngmvpn_overlay_spt_only = false` + "\n"
+	config += `	ngmvpn_vrfs = {` + "\n"
+	config += `		"VRF1" = {` + "\n"
+	config += `			mdt_v4_vxlan = false` + "\n"
+	config += `			mdt_v6_vxlan = false` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

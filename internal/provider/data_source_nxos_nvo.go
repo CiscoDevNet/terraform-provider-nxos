@@ -56,7 +56,7 @@ func (d *NVODataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.").AddApiDocumentation("nvoEps", "Network%20Virtualization/nvo:Eps/", []string{"nvoEvpnMultisiteBordergw", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:EvpnMultisiteBordergw/", "Network%20Virtualization/nvo:Ep/", "Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.").AddApiDocumentation("nvoEps", "Network%20Virtualization/nvo:Eps/", []string{"nvoEvpnMultisiteBordergw", "nvoEvpnMulticast", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:EvpnMultisiteBordergw/", "Network%20Virtualization/nvo:EvpnMulticast/", "Network%20Virtualization/nvo:Ep/", "Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -101,6 +101,10 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"evpn_multisite_border_gateway_state": schema.StringAttribute{
 				MarkdownDescription: "Configures the state of EVPN Multisite Border-gateway.",
+				Computed:            true,
+			},
+			"advertise_evpn_multicast_state": schema.StringAttribute{
+				MarkdownDescription: "Advertise EVPN Multicast State.",
 				Computed:            true,
 			},
 			"nve_interfaces": schema.MapNestedAttribute{
@@ -267,7 +271,7 @@ func (d *NVODataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"nvoEvpnMultisiteBordergw", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, NVOSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"nvoEvpnMultisiteBordergw", "nvoEvpnMulticast", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, NVOSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

@@ -55,6 +55,7 @@ type BGP struct {
 	Isolate                             types.String       `tfsdk:"isolate"`
 	IsolateRouteMap                     types.String       `tfsdk:"isolate_route_map"`
 	MedDampeningInterval                types.Int64        `tfsdk:"med_dampening_interval"`
+	MvpnVriId                           types.Int64        `tfsdk:"mvpn_vri_id"`
 	NexthopSuppressDefaultResolution    types.String       `tfsdk:"nexthop_suppress_default_resolution"`
 	RdDual                              types.String       `tfsdk:"rd_dual"`
 	RdDualId                            types.Int64        `tfsdk:"rd_dual_id"`
@@ -614,6 +615,9 @@ func (data BGP) toBody(config BGP) nxos.Body {
 		}
 		if !data.MedDampeningInterval.IsUnknown() && !data.MedDampeningInterval.IsNull() && !config.MedDampeningInterval.IsNull() {
 			attrs, _ = sjson.Set(attrs, "medDampIntvl", strconv.FormatInt(data.MedDampeningInterval.ValueInt64(), 10))
+		}
+		if !data.MvpnVriId.IsUnknown() && !data.MvpnVriId.IsNull() && !config.MvpnVriId.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mvpnVriId", strconv.FormatInt(data.MvpnVriId.ValueInt64(), 10))
 		}
 		if !data.NexthopSuppressDefaultResolution.IsUnknown() && !data.NexthopSuppressDefaultResolution.IsNull() && !config.NexthopSuppressDefaultResolution.IsNull() {
 			attrs, _ = sjson.Set(attrs, "nhSupprDefRes", data.NexthopSuppressDefaultResolution.ValueString())
@@ -1772,6 +1776,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 		data.Isolate = types.StringValue(rbgpInst.Get("bgpInst.attributes.isolate").String())
 		data.IsolateRouteMap = types.StringValue(rbgpInst.Get("bgpInst.attributes.isolateRtMap").String())
 		data.MedDampeningInterval = types.Int64Value(rbgpInst.Get("bgpInst.attributes.medDampIntvl").Int())
+		data.MvpnVriId = types.Int64Value(rbgpInst.Get("bgpInst.attributes.mvpnVriId").Int())
 		data.NexthopSuppressDefaultResolution = types.StringValue(rbgpInst.Get("bgpInst.attributes.nhSupprDefRes").String())
 		data.RdDual = types.StringValue(rbgpInst.Get("bgpInst.attributes.rdDual").String())
 		data.RdDualId = types.Int64Value(rbgpInst.Get("bgpInst.attributes.rdDualId").Int())
@@ -2647,6 +2652,11 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 		data.MedDampeningInterval = types.Int64Value(rbgpInst.Get("bgpInst.attributes.medDampIntvl").Int())
 	} else {
 		data.MedDampeningInterval = types.Int64Null()
+	}
+	if !data.MvpnVriId.IsNull() {
+		data.MvpnVriId = types.Int64Value(rbgpInst.Get("bgpInst.attributes.mvpnVriId").Int())
+	} else {
+		data.MvpnVriId = types.Int64Null()
 	}
 	if !data.NexthopSuppressDefaultResolution.IsNull() {
 		data.NexthopSuppressDefaultResolution = types.StringValue(rbgpInst.Get("bgpInst.attributes.nhSupprDefRes").String())
@@ -4942,6 +4952,10 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP, im
 		if !state.MedDampeningInterval.IsNull() && config.MedDampeningInterval.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "bgpInst")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"medDampIntvl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.MvpnVriId.IsNull() && config.MvpnVriId.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "bgpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mvpnVriId", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !state.NexthopSuppressDefaultResolution.IsNull() && config.NexthopSuppressDefaultResolution.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "bgpInst")

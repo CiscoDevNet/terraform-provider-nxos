@@ -5,7 +5,7 @@ subcategory: "Overlay"
 description: |-
   This resource can manage the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.
   API Documentation
-  nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Eps/nvoEvpnMultisiteBordergw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:IngRepl/
+  nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Eps/nvoEvpnMultisiteBordergw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/nvoEvpnMulticast https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMulticast/nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:IngRepl/
 ---
 
 # nxos_nvo (Resource)
@@ -16,6 +16,7 @@ This resource can manage the NVO (Network Virtualization Overlay) configuration 
 
 - [nvoEps](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Eps/)
 - [nvoEvpnMultisiteBordergw](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/)
+- [nvoEvpnMulticast](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMulticast/)
 - [nvoEp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Ep/)
 - [nvoNws](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nws/)
 - [nvoNw](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nw/)
@@ -34,6 +35,7 @@ resource "nxos_nvo" "example" {
   evpn_multisite_border_gateway_site_id                = 65535
   evpn_multisite_border_gateway_split_horizon_per_site = "enable"
   evpn_multisite_border_gateway_state                  = "enabled"
+  advertise_evpn_multicast_state                       = "enabled"
   nve_interfaces = {
     "1" = {
       admin_state                        = "enabled"
@@ -76,6 +78,8 @@ resource "nxos_nvo" "example" {
 
 ### Optional
 
+- `advertise_evpn_multicast_state` (String) Advertise EVPN Multicast State.
+  - Choices: `enabled`
 - `device` (String) A device name from the provider configuration.
 - `evpn_multisite_border_gateway_dci_advertise_pip` (String) Enables/disables advertise PIP towards DCI in EVPN Multisite Border-gateway setup.
   - Choices: `disable`, `enable`

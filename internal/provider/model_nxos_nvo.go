@@ -49,6 +49,7 @@ type NVO struct {
 	EvpnMultisiteBorderGatewaySiteId              types.Int64                 `tfsdk:"evpn_multisite_border_gateway_site_id"`
 	EvpnMultisiteBorderGatewaySplitHorizonPerSite types.String                `tfsdk:"evpn_multisite_border_gateway_split_horizon_per_site"`
 	EvpnMultisiteBorderGatewayState               types.String                `tfsdk:"evpn_multisite_border_gateway_state"`
+	AdvertiseEvpnMulticastState                   types.String                `tfsdk:"advertise_evpn_multicast_state"`
 	NveInterfaces                                 map[string]NVONveInterfaces `tfsdk:"nve_interfaces"`
 }
 
@@ -173,6 +174,13 @@ func (data NVO) toBody(config NVO) nxos.Body {
 	}
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.nvoEvpnMultisiteBordergw.attributes", attrs)
+	}
+	attrs = "{}"
+	if !data.AdvertiseEvpnMulticastState.IsUnknown() && !data.AdvertiseEvpnMulticastState.IsNull() && !config.AdvertiseEvpnMulticastState.IsNull() {
+		attrs, _ = sjson.Set(attrs, "state", data.AdvertiseEvpnMulticastState.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nvoEvpnMulticast.attributes", attrs)
 	}
 	for key, child := range data.NveInterfaces {
 		configChild, configChildOk := config.NveInterfaces[key]
@@ -338,6 +346,20 @@ func (data *NVO) fromBody(res gjson.Result) {
 		data.EvpnMultisiteBorderGatewaySplitHorizonPerSite = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.splitHorizonPerSite").String())
 		data.EvpnMultisiteBorderGatewayState = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.state").String())
 	}
+	{
+		var rnvoEvpnMulticast gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("nvoEvpnMulticast.attributes.rn").String()
+				if rnValue == "evpnmulticast" {
+					rnvoEvpnMulticast = v
+					return false
+				}
+				return true
+			},
+		)
+		data.AdvertiseEvpnMulticastState = types.StringValue(rnvoEvpnMulticast.Get("nvoEvpnMulticast.attributes.state").String())
+	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -491,6 +513,22 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 		data.EvpnMultisiteBorderGatewayState = types.StringValue(rnvoEvpnMultisiteBordergw.Get("nvoEvpnMultisiteBordergw.attributes.state").String())
 	} else {
 		data.EvpnMultisiteBorderGatewayState = types.StringNull()
+	}
+	var rnvoEvpnMulticast gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("nvoEvpnMulticast.attributes.rn").String()
+			if rnValue == "evpnmulticast" {
+				rnvoEvpnMulticast = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.AdvertiseEvpnMulticastState.IsNull() {
+		data.AdvertiseEvpnMulticastState = types.StringValue(rnvoEvpnMulticast.Get("nvoEvpnMulticast.attributes.state").String())
+	} else {
+		data.AdvertiseEvpnMulticastState = types.StringNull()
 	}
 	for key, item := range data.NveInterfaces {
 		var rnvoEp gjson.Result
@@ -722,6 +760,12 @@ func (data NVO) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMultisiteBordergw.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMulticast.attributes.rn", "evpnmulticast")
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMulticast.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 	for key, child := range data.NveInterfaces {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEp.attributes.rn", child.getRn(key))
@@ -826,6 +870,10 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 		}
 		if !state.EvpnMultisiteBorderGatewayState.IsNull() && config.EvpnMultisiteBorderGatewayState.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.AdvertiseEvpnMulticastState.IsNull() && config.AdvertiseEvpnMulticastState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMulticast")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.NveInterfaces {

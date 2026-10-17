@@ -123,6 +123,10 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Setting med dampening interval.",
 				Computed:            true,
 			},
+			"mvpn_vri_id": schema.Int64Attribute{
+				MarkdownDescription: "ID to generate VRI with VNI:ID format.",
+				Computed:            true,
+			},
 			"nexthop_suppress_default_resolution": schema.StringAttribute{
 				MarkdownDescription: "Suppress use of default route for nexthop address resolution.",
 				Computed:            true,

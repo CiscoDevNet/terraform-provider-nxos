@@ -247,6 +247,12 @@ type System struct {
 	Pvlans                                        map[string]SystemPvlans                       `tfsdk:"pvlans"`
 	PvlanInterfaces                               map[string]SystemPvlanInterfaces              `tfsdk:"pvlan_interfaces"`
 	PvlanSvis                                     map[string]SystemPvlanSvis                    `tfsdk:"pvlan_svis"`
+	NgmvpnAdminState                              types.String                                  `tfsdk:"ngmvpn_admin_state"`
+	NgmvpnInstanceAdminState                      types.String                                  `tfsdk:"ngmvpn_instance_admin_state"`
+	NgmvpnControl                                 types.String                                  `tfsdk:"ngmvpn_control"`
+	NgmvpnOverlayDistributedDr                    types.Bool                                    `tfsdk:"ngmvpn_overlay_distributed_dr"`
+	NgmvpnOverlaySptOnly                          types.Bool                                    `tfsdk:"ngmvpn_overlay_spt_only"`
+	NgmvpnVrfs                                    map[string]SystemNgmvpnVrfs                   `tfsdk:"ngmvpn_vrfs"`
 }
 
 type SystemErrdisableEvents struct {
@@ -473,6 +479,11 @@ type SystemPvlanSvis struct {
 	SecondaryVlans types.String `tfsdk:"secondary_vlans"`
 }
 
+type SystemNgmvpnVrfs struct {
+	MdtV4Vxlan types.Bool `tfsdk:"mdt_v4_vxlan"`
+	MdtV6Vxlan types.Bool `tfsdk:"mdt_v6_vxlan"`
+}
+
 type SystemIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -638,6 +649,10 @@ func (data SystemPvlanInterfacesTrunkSecondaryAssociations) getRn(key string) st
 
 func (data SystemPvlanSvis) getRn(key string) string {
 	return fmt.Sprintf("svi-[%s]", key)
+}
+
+func (data SystemNgmvpnVrfs) getRn(key string) string {
+	return fmt.Sprintf("dom-%s", key)
 }
 
 func (data System) getClassName() string {
@@ -2725,6 +2740,67 @@ func (data System) toBody(config System) nxos.Body {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
+	{
+		attrs = "{}"
+		if !data.NgmvpnAdminState.IsUnknown() && !data.NgmvpnAdminState.IsNull() && !config.NgmvpnAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.NgmvpnAdminState.ValueString())
+		}
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "ngmvpnEntity.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "ngmvpnEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		{
+			attrs = "{}"
+			if !data.NgmvpnInstanceAdminState.IsUnknown() && !data.NgmvpnInstanceAdminState.IsNull() && !config.NgmvpnInstanceAdminState.IsNull() {
+				attrs, _ = sjson.Set(attrs, "adminSt", data.NgmvpnInstanceAdminState.ValueString())
+			}
+			if !data.NgmvpnControl.IsUnknown() && !data.NgmvpnControl.IsNull() && !config.NgmvpnControl.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ctrl", data.NgmvpnControl.ValueString())
+			}
+			if !data.NgmvpnOverlayDistributedDr.IsUnknown() && !data.NgmvpnOverlayDistributedDr.IsNull() && !config.NgmvpnOverlayDistributedDr.IsNull() {
+				attrs, _ = sjson.Set(attrs, "overlayDistributedDr", strconv.FormatBool(data.NgmvpnOverlayDistributedDr.ValueBool()))
+			}
+			if !data.NgmvpnOverlaySptOnly.IsUnknown() && !data.NgmvpnOverlaySptOnly.IsNull() && !config.NgmvpnOverlaySptOnly.IsNull() {
+				attrs, _ = sjson.Set(attrs, "overlaySptOnly", strconv.FormatBool(data.NgmvpnOverlaySptOnly.ValueBool()))
+			}
+			childBody := ""
+			childBody, _ = sjson.SetRaw(childBody, "ngmvpnInst.attributes", attrs)
+			parentAttrs := attrs
+			parentPath := nestedChildrenPath
+			nestedChildrenPath := "ngmvpnInst.children"
+			_ = nestedChildrenPath
+			prevBody := body
+			body = childBody
+			for key, child := range data.NgmvpnVrfs {
+				configChild, configChildOk := config.NgmvpnVrfs[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "name", key)
+				if configChildOk && !child.MdtV4Vxlan.IsUnknown() && !child.MdtV4Vxlan.IsNull() && !configChild.MdtV4Vxlan.IsNull() {
+					attrs, _ = sjson.Set(attrs, "mdtV4Vxlan", strconv.FormatBool(child.MdtV4Vxlan.ValueBool()))
+				}
+				if configChildOk && !child.MdtV6Vxlan.IsUnknown() && !child.MdtV6Vxlan.IsNull() && !configChild.MdtV6Vxlan.IsNull() {
+					attrs, _ = sjson.Set(attrs, "mdtV6Vxlan", strconv.FormatBool(child.MdtV6Vxlan.ValueBool()))
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ngmvpnDom.attributes", attrs)
+			}
+			childBody = body
+			body = prevBody
+			if parentAttrs != "{}" || gjson.Get(childBody, "ngmvpnInst.children").Exists() {
+				body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "ngmvpnEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -4555,6 +4631,57 @@ func (data *System) fromBody(res gjson.Result) {
 				return true
 			},
 		)
+	}
+	{
+		var rngmvpnEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("ngmvpnEntity.attributes.rn").String()
+				if rnValue == "ngmvpn" {
+					rngmvpnEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.NgmvpnAdminState = types.StringValue(rngmvpnEntity.Get("ngmvpnEntity.attributes.adminSt").String())
+		{
+			var rngmvpnInst gjson.Result
+			rngmvpnEntity.Get("ngmvpnEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("ngmvpnInst.attributes.rn").String()
+					if rnValue == "inst" {
+						rngmvpnInst = v
+						return false
+					}
+					return true
+				},
+			)
+			data.NgmvpnInstanceAdminState = types.StringValue(rngmvpnInst.Get("ngmvpnInst.attributes.adminSt").String())
+			data.NgmvpnControl = types.StringValue(rngmvpnInst.Get("ngmvpnInst.attributes.ctrl").String())
+			data.NgmvpnOverlayDistributedDr = types.BoolValue(helpers.ParseNxosBoolean(rngmvpnInst.Get("ngmvpnInst.attributes.overlayDistributedDr").String()))
+			data.NgmvpnOverlaySptOnly = types.BoolValue(helpers.ParseNxosBoolean(rngmvpnInst.Get("ngmvpnInst.attributes.overlaySptOnly").String()))
+			rngmvpnInst.Get("ngmvpnInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "ngmvpnDom" {
+								var child SystemNgmvpnVrfs
+								child.MdtV4Vxlan = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mdtV4Vxlan").String()))
+								child.MdtV6Vxlan = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mdtV6Vxlan").String()))
+								mapKey := value.Get("attributes.name").String()
+								if data.NgmvpnVrfs == nil {
+									data.NgmvpnVrfs = make(map[string]SystemNgmvpnVrfs)
+								}
+								data.NgmvpnVrfs[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
+		}
 	}
 }
 
@@ -7479,6 +7606,82 @@ func (data *System) updateFromBody(res gjson.Result) {
 		}
 		data.PvlanSvis[key] = item
 	}
+	var rngmvpnEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("ngmvpnEntity.attributes.rn").String()
+			if rnValue == "ngmvpn" {
+				rngmvpnEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.NgmvpnAdminState.IsNull() {
+		data.NgmvpnAdminState = types.StringValue(rngmvpnEntity.Get("ngmvpnEntity.attributes.adminSt").String())
+	} else {
+		data.NgmvpnAdminState = types.StringNull()
+	}
+	{
+		var rngmvpnInst gjson.Result
+		rngmvpnEntity.Get("ngmvpnEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("ngmvpnInst.attributes.rn").String()
+				if rnValue == "inst" {
+					rngmvpnInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.NgmvpnInstanceAdminState.IsNull() {
+			data.NgmvpnInstanceAdminState = types.StringValue(rngmvpnInst.Get("ngmvpnInst.attributes.adminSt").String())
+		} else {
+			data.NgmvpnInstanceAdminState = types.StringNull()
+		}
+		if !data.NgmvpnControl.IsNull() {
+			data.NgmvpnControl = types.StringValue(rngmvpnInst.Get("ngmvpnInst.attributes.ctrl").String())
+		} else {
+			data.NgmvpnControl = types.StringNull()
+		}
+		if !data.NgmvpnOverlayDistributedDr.IsNull() {
+			data.NgmvpnOverlayDistributedDr = types.BoolValue(helpers.ParseNxosBoolean(rngmvpnInst.Get("ngmvpnInst.attributes.overlayDistributedDr").String()))
+		} else {
+			data.NgmvpnOverlayDistributedDr = types.BoolNull()
+		}
+		if !data.NgmvpnOverlaySptOnly.IsNull() {
+			data.NgmvpnOverlaySptOnly = types.BoolValue(helpers.ParseNxosBoolean(rngmvpnInst.Get("ngmvpnInst.attributes.overlaySptOnly").String()))
+		} else {
+			data.NgmvpnOverlaySptOnly = types.BoolNull()
+		}
+		for key, item := range data.NgmvpnVrfs {
+			var rngmvpnDom gjson.Result
+			rngmvpnInst.Get("ngmvpnInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ngmvpnDom.attributes.name").String() == key {
+						rngmvpnDom = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rngmvpnDom.Exists() {
+				delete(data.NgmvpnVrfs, key)
+				continue
+			}
+			if !item.MdtV4Vxlan.IsNull() {
+				item.MdtV4Vxlan = types.BoolValue(helpers.ParseNxosBoolean(rngmvpnDom.Get("ngmvpnDom.attributes.mdtV4Vxlan").String()))
+			} else {
+				item.MdtV4Vxlan = types.BoolNull()
+			}
+			if !item.MdtV6Vxlan.IsNull() {
+				item.MdtV6Vxlan = types.BoolValue(helpers.ParseNxosBoolean(rngmvpnDom.Get("ngmvpnDom.attributes.mdtV6Vxlan").String()))
+			} else {
+				item.MdtV6Vxlan = types.BoolNull()
+			}
+			data.NgmvpnVrfs[key] = item
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -8900,6 +9103,64 @@ func (data System) toDeleteBody() nxos.Body {
 			_ = nestedChildrenPath
 		}
 	}
+	{
+		childBody := ""
+		if !data.NgmvpnAdminState.IsNull() {
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".ngmvpnEntity"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.NgmvpnInstanceAdminState.IsNull() {
+				childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.NgmvpnControl.IsNull() {
+				childBody, _ = sjson.Set(childBody, "ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.NgmvpnOverlayDistributedDr.IsNull() {
+				childBody, _ = sjson.Set(childBody, "overlayDistributedDr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.NgmvpnOverlaySptOnly.IsNull() {
+				childBody, _ = sjson.Set(childBody, "overlaySptOnly", "DME_UNSET_PROPERTY_MARKER")
+			}
+			hasNestedChildren := false
+			if len(data.NgmvpnVrfs) > 0 {
+				hasNestedChildren = true
+			}
+			if childBody != "" || hasNestedChildren {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ngmvpnInst"
+				if childBody == "" {
+					childBody = "{}"
+				}
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				nestedChildrenPath := childBodyPath + ".children"
+				_ = nestedChildrenPath
+				for key, child := range data.NgmvpnVrfs {
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ngmvpnDom.attributes.rn", child.getRn(key))
+					deleteBody, _ = sjson.Set(deleteBody, "ngmvpnDom.attributes.status", "deleted")
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+				}
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -9428,6 +9689,16 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				deleteBody, _ = sjson.Set(deleteBody, "pvlanSvi.attributes.rn", stateChild.getRn(stateKey))
 				deleteBody, _ = sjson.Set(deleteBody, "pvlanSvi.attributes.status", "deleted")
 				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "pvlanPrivateVlan") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.NgmvpnVrfs {
+			if _, found := data.NgmvpnVrfs[stateKey]; !found {
+				stateChild := state.NgmvpnVrfs[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ngmvpnDom.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "ngmvpnDom.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ngmvpnEntity")+".children", "ngmvpnInst") + ".children"
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
@@ -10979,6 +11250,44 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 					if mv.Get("pvlanSvi.attributes.if").String() == key {
 						if !stateChild.SecondaryVlans.IsNull() && configChild.SecondaryVlans.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pvlanPrivateVlan")+".children"+"."+strconv.Itoa(mi)+".pvlanSvi.attributes."+"secondaryVlans", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		if !state.NgmvpnAdminState.IsNull() && config.NgmvpnAdminState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ngmvpnEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NgmvpnInstanceAdminState.IsNull() && config.NgmvpnInstanceAdminState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ngmvpnEntity")+".children", "ngmvpnInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NgmvpnControl.IsNull() && config.NgmvpnControl.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ngmvpnEntity")+".children", "ngmvpnInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NgmvpnOverlayDistributedDr.IsNull() && config.NgmvpnOverlayDistributedDr.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ngmvpnEntity")+".children", "ngmvpnInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"overlayDistributedDr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NgmvpnOverlaySptOnly.IsNull() && config.NgmvpnOverlaySptOnly.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ngmvpnEntity")+".children", "ngmvpnInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"overlaySptOnly", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.NgmvpnVrfs {
+			if configChild, ok := config.NgmvpnVrfs[key]; ok {
+				stateChild := state.NgmvpnVrfs[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ngmvpnEntity")+".children", "ngmvpnInst")+".children").Array() {
+					if mv.Get("ngmvpnDom.attributes.name").String() == key {
+						if !stateChild.MdtV4Vxlan.IsNull() && configChild.MdtV4Vxlan.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ngmvpnEntity")+".children", "ngmvpnInst")+".children"+"."+strconv.Itoa(mi)+".ngmvpnDom.attributes."+"mdtV4Vxlan", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.MdtV6Vxlan.IsNull() && configChild.MdtV6Vxlan.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ngmvpnEntity")+".children", "ngmvpnInst")+".children"+"."+strconv.Itoa(mi)+".ngmvpnDom.attributes."+"mdtV6Vxlan", "DME_UNSET_PROPERTY_MARKER")
 						}
 						break
 					}

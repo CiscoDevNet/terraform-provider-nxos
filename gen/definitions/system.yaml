@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, and L2RIB duplicate MAC detection settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, and L2RIB duplicate MAC detection settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, and NGOAM (VXLAN OAM) install ACL and loop detection settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, and NGOAM (VXLAN OAM) install ACL and loop detection settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -3277,6 +3277,53 @@ child_classes:
                 min_int: 0
                 max_int: 1800
                 example: 60
+  - class_name: ngoamEntity
+    doc_path: Network%20Virtualization/ngoam:Entity/
+    rn: ngoam
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ngoamInstallAcl
+        doc_path: Network%20Virtualization/ngoam:InstallAcl/
+        rn: installacl
+        type: single
+        tf_name: ngoam_install_acl
+        description: 'NGOAM install ACL configuration.'
+        attributes:
+          - nxos_name: enabled
+            tf_name: ngoam_install_acl
+            type: Bool
+            description: 'install acl enabled.'
+            example: true
+      - class_name: ngoamLoopDetection
+        doc_path: Network%20Virtualization/ngoam:LoopDetection/
+        rn: loopdetection
+        type: single
+        tf_name: ngoam_loop_detection
+        description: 'NGOAM loop detection configuration.'
+        attributes:
+          - nxos_name: enable
+            tf_name: ngoam_loop_detection
+            type: Bool
+            description: 'enable/disable loop detection feature.'
+            example: true
+            exclude_test: true
+          - nxos_name: periodicProbeInterval
+            tf_name: ngoam_loop_detection_periodic_probe_interval
+            type: Int64
+            description: 'Loop detection periodic probe interval value.'
+            min_int: 60
+            max_int: 3600
+            example: 120
+            exclude_test: true
+          - nxos_name: portRecoveryInterval
+            tf_name: ngoam_loop_detection_port_recovery_interval
+            type: Int64
+            description: 'loop detection port recovery interval value.'
+            min_int: 300
+            max_int: 3600
+            example: 900
+            exclude_test: true
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld
@@ -3334,6 +3381,11 @@ test_prerequisites:
         value: enabled
   - dn: sys/fm/ngmvpn
     class_name: fmNgmvpn
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/ngoam
+    class_name: fmNgoam
     attributes:
       - name: adminSt
         value: enabled

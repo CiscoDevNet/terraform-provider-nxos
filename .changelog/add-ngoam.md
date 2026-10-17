@@ -1,0 +1,1 @@
+- Add NGOAM (VXLAN OAM) configuration (`ngoam_install_acl` and `ngoam_loop_detection_*` attributes) to `nxos_system` resource and data source

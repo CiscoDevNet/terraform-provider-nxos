@@ -303,6 +303,7 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "l2rib_duplicate_mac_detection_moves", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "l2rib_duplicate_mac_recovery_retry_count", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "l2rib_duplicate_mac_recovery_timeout", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ngoam_install_acl", "true"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	resource.Test(t, resource.TestCase{
@@ -439,6 +440,14 @@ resource "nxos_dme" "PreReq10" {
 }
 
 resource "nxos_dme" "PreReq11" {
+  dn = "sys/fm/ngoam"
+  class_name = "fmNgoam"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq12" {
   dn = "sys/inst-VRF1"
   class_name = "l3Inst"
   delete = false
@@ -451,7 +460,7 @@ resource "nxos_dme" "PreReq11" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSystemConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -848,7 +857,8 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config += `	l2rib_duplicate_mac_detection_moves = 10` + "\n"
 	config += `	l2rib_duplicate_mac_recovery_retry_count = 5` + "\n"
 	config += `	l2rib_duplicate_mac_recovery_timeout = 60` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, ]` + "\n"
+	config += `	ngoam_install_acl = true` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

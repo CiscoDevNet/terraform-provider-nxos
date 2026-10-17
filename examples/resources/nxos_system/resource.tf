@@ -378,4 +378,5 @@ resource "nxos_system" "example" {
   l2rib_duplicate_mac_detection_moves      = 10
   l2rib_duplicate_mac_recovery_retry_count = 5
   l2rib_duplicate_mac_recovery_timeout     = 60
+  ngoam_install_acl                        = true
 }

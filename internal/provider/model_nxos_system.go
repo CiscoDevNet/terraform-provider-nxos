@@ -257,6 +257,10 @@ type System struct {
 	L2ribDuplicateMacDetectionMoves               types.Int64                                   `tfsdk:"l2rib_duplicate_mac_detection_moves"`
 	L2ribDuplicateMacRecoveryRetryCount           types.Int64                                   `tfsdk:"l2rib_duplicate_mac_recovery_retry_count"`
 	L2ribDuplicateMacRecoveryTimeout              types.Int64                                   `tfsdk:"l2rib_duplicate_mac_recovery_timeout"`
+	NgoamInstallAcl                               types.Bool                                    `tfsdk:"ngoam_install_acl"`
+	NgoamLoopDetection                            types.Bool                                    `tfsdk:"ngoam_loop_detection"`
+	NgoamLoopDetectionPeriodicProbeInterval       types.Int64                                   `tfsdk:"ngoam_loop_detection_periodic_probe_interval"`
+	NgoamLoopDetectionPortRecoveryInterval        types.Int64                                   `tfsdk:"ngoam_loop_detection_port_recovery_interval"`
 }
 
 type SystemErrdisableEvents struct {
@@ -2853,6 +2857,42 @@ func (data System) toBody(config System) nxos.Body {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
+	{
+		attrs = "{}"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "ngoamEntity.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "ngoamEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		attrs = "{}"
+		if !data.NgoamInstallAcl.IsUnknown() && !data.NgoamInstallAcl.IsNull() && !config.NgoamInstallAcl.IsNull() {
+			attrs, _ = sjson.Set(attrs, "enabled", strconv.FormatBool(data.NgoamInstallAcl.ValueBool()))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ngoamInstallAcl.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.NgoamLoopDetection.IsUnknown() && !data.NgoamLoopDetection.IsNull() && !config.NgoamLoopDetection.IsNull() {
+			attrs, _ = sjson.Set(attrs, "enable", strconv.FormatBool(data.NgoamLoopDetection.ValueBool()))
+		}
+		if !data.NgoamLoopDetectionPeriodicProbeInterval.IsUnknown() && !data.NgoamLoopDetectionPeriodicProbeInterval.IsNull() && !config.NgoamLoopDetectionPeriodicProbeInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "periodicProbeInterval", strconv.FormatInt(data.NgoamLoopDetectionPeriodicProbeInterval.ValueInt64(), 10))
+		}
+		if !data.NgoamLoopDetectionPortRecoveryInterval.IsUnknown() && !data.NgoamLoopDetectionPortRecoveryInterval.IsNull() && !config.NgoamLoopDetectionPortRecoveryInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "portRecoveryInterval", strconv.FormatInt(data.NgoamLoopDetectionPortRecoveryInterval.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ngoamLoopDetection.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "ngoamEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -4776,6 +4816,49 @@ func (data *System) fromBody(res gjson.Result) {
 				data.L2ribDuplicateMacRecoveryRetryCount = types.Int64Value(rl2ribEvpnMACmob.Get("l2ribEvpnMACmob.attributes.drRetryCnt").Int())
 				data.L2ribDuplicateMacRecoveryTimeout = types.Int64Value(rl2ribEvpnMACmob.Get("l2ribEvpnMACmob.attributes.drTimeout").Int())
 			}
+		}
+	}
+	{
+		var rngoamEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("ngoamEntity.attributes.rn").String()
+				if rnValue == "ngoam" {
+					rngoamEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rngoamInstallAcl gjson.Result
+			rngoamEntity.Get("ngoamEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("ngoamInstallAcl.attributes.rn").String()
+					if rnValue == "installacl" {
+						rngoamInstallAcl = v
+						return false
+					}
+					return true
+				},
+			)
+			data.NgoamInstallAcl = types.BoolValue(helpers.ParseNxosBoolean(rngoamInstallAcl.Get("ngoamInstallAcl.attributes.enabled").String()))
+		}
+		{
+			var rngoamLoopDetection gjson.Result
+			rngoamEntity.Get("ngoamEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("ngoamLoopDetection.attributes.rn").String()
+					if rnValue == "loopdetection" {
+						rngoamLoopDetection = v
+						return false
+					}
+					return true
+				},
+			)
+			data.NgoamLoopDetection = types.BoolValue(helpers.ParseNxosBoolean(rngoamLoopDetection.Get("ngoamLoopDetection.attributes.enable").String()))
+			data.NgoamLoopDetectionPeriodicProbeInterval = types.Int64Value(rngoamLoopDetection.Get("ngoamLoopDetection.attributes.periodicProbeInterval").Int())
+			data.NgoamLoopDetectionPortRecoveryInterval = types.Int64Value(rngoamLoopDetection.Get("ngoamLoopDetection.attributes.portRecoveryInterval").Int())
 		}
 	}
 }
@@ -7834,6 +7917,63 @@ func (data *System) updateFromBody(res gjson.Result) {
 			}
 		}
 	}
+	var rngoamEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("ngoamEntity.attributes.rn").String()
+			if rnValue == "ngoam" {
+				rngoamEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rngoamInstallAcl gjson.Result
+		rngoamEntity.Get("ngoamEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("ngoamInstallAcl.attributes.rn").String()
+				if rnValue == "installacl" {
+					rngoamInstallAcl = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.NgoamInstallAcl.IsNull() {
+			data.NgoamInstallAcl = types.BoolValue(helpers.ParseNxosBoolean(rngoamInstallAcl.Get("ngoamInstallAcl.attributes.enabled").String()))
+		} else {
+			data.NgoamInstallAcl = types.BoolNull()
+		}
+	}
+	{
+		var rngoamLoopDetection gjson.Result
+		rngoamEntity.Get("ngoamEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("ngoamLoopDetection.attributes.rn").String()
+				if rnValue == "loopdetection" {
+					rngoamLoopDetection = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.NgoamLoopDetection.IsNull() {
+			data.NgoamLoopDetection = types.BoolValue(helpers.ParseNxosBoolean(rngoamLoopDetection.Get("ngoamLoopDetection.attributes.enable").String()))
+		} else {
+			data.NgoamLoopDetection = types.BoolNull()
+		}
+		if !data.NgoamLoopDetectionPeriodicProbeInterval.IsNull() {
+			data.NgoamLoopDetectionPeriodicProbeInterval = types.Int64Value(rngoamLoopDetection.Get("ngoamLoopDetection.attributes.periodicProbeInterval").Int())
+		} else {
+			data.NgoamLoopDetectionPeriodicProbeInterval = types.Int64Null()
+		}
+		if !data.NgoamLoopDetectionPortRecoveryInterval.IsNull() {
+			data.NgoamLoopDetectionPortRecoveryInterval = types.Int64Value(rngoamLoopDetection.Get("ngoamLoopDetection.attributes.portRecoveryInterval").Int())
+		} else {
+			data.NgoamLoopDetectionPortRecoveryInterval = types.Int64Null()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -9370,6 +9510,34 @@ func (data System) toDeleteBody() nxos.Body {
 			body, _ = sjson.Delete(body, entryPath)
 			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
 				body, _ = sjson.Delete(body, siblingsPath)
+			}
+		}
+	}
+	{
+		childBody := ""
+		hasNestedChildren := false
+		hasNestedChildren = true
+		hasNestedChildren = true
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ngoamEntity"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ngoamInstallAcl.attributes.rn", "installacl")
+				deleteBody, _ = sjson.Set(deleteBody, "ngoamInstallAcl.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "ngoamLoopDetection.attributes.rn", "loopdetection")
+				deleteBody, _ = sjson.Set(deleteBody, "ngoamLoopDetection.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
 		}
 	}
@@ -11521,6 +11689,22 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		if !state.L2ribDuplicateMacRecoveryTimeout.IsNull() && config.L2ribDuplicateMacRecoveryTimeout.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "l2ribEntity")+".children", "l2ribInst")+".children", "l2ribEvpnMACmob")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"drTimeout", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NgoamInstallAcl.IsNull() && config.NgoamInstallAcl.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ngoamEntity")+".children", "ngoamInstallAcl")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"enabled", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NgoamLoopDetection.IsNull() && config.NgoamLoopDetection.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ngoamEntity")+".children", "ngoamLoopDetection")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"enable", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NgoamLoopDetectionPeriodicProbeInterval.IsNull() && config.NgoamLoopDetectionPeriodicProbeInterval.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ngoamEntity")+".children", "ngoamLoopDetection")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"periodicProbeInterval", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.NgoamLoopDetectionPortRecoveryInterval.IsNull() && config.NgoamLoopDetectionPortRecoveryInterval.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ngoamEntity")+".children", "ngoamLoopDetection")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"portRecoveryInterval", "DME_UNSET_PROPERTY_MARKER")
 		}
 	}
 

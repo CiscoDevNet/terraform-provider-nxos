@@ -1,0 +1,494 @@
+---
+name: IGMP
+class_name: igmpEntity
+dn: sys/igmp
+ds_description: This data source can read the IGMP (Internet Group Management Protocol) configuration on NX-OS devices, including instance settings, per-VRF SSM translations and interface configurations (version, query timers, report policies, state limits, join groups and static OIFs).
+res_description: This resource can manage the IGMP (Internet Group Management Protocol) configuration on NX-OS devices, including instance settings, per-VRF SSM translations and interface configurations (version, query timers, report policies, state limits, join groups and static OIFs).
+doc_path: Layer%203/igmp:Entity/
+doc_category: Multicast
+no_delete: true
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy. Some NX-OS versions (e.g. 10.6.4) reject modifying this attribute, in which case it should not be configured.'
+    enum_values:
+      - enabled
+      - disabled
+    exclude_test: true
+    example: enabled
+child_classes:
+  - class_name: igmpInst
+    doc_path: Layer%203/igmp:Inst/
+    rn: inst
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: anyQueryDest
+        tf_name: any_query_destination
+        type: Bool
+        description: 'Allow any destination-IP for General Queries.'
+        example: true
+      - nxos_name: bootupDelay
+        tf_name: bootup_delay
+        type: Int64
+        min_int: 0
+        max_int: 65535
+        description: 'Bootup Route Add Delay.'
+        example: 10
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+      - nxos_name: flushRoute
+        tf_name: flush_routes
+        type: Bool
+        description: 'Flush Routes on Restart.'
+        example: true
+      - nxos_name: heavyTemplate
+        tf_name: heavy_template
+        type: Bool
+        description: 'Enabling/Disabling IGMP Heavy Template.'
+        example: true
+      - nxos_name: instCtrl
+        tf_name: instance_control
+        type: String
+        description: 'Inst Controls.'
+        enum_values:
+          - flush-on-restart
+          - rtr-alert
+          - any-query-dest
+        example: rtr-alert
+      - nxos_name: rtrAlert
+        tf_name: enforce_router_alert
+        type: Bool
+        description: 'Enforce Router Alert.'
+        example: true
+      - nxos_name: spoofCheck
+        tf_name: spoof_check
+        type: Bool
+        description: 'Enable spoof check for IGMP.'
+        example: false
+      - nxos_name: strictQuerElect
+        tf_name: strict_querier_election
+        type: Bool
+        description: 'Consider subnet check for L3 igmp querier election.'
+        example: true
+      - nxos_name: syslogThreshold
+        tf_name: syslog_threshold
+        type: Int64
+        min_int: 1
+        max_int: 100
+        description: 'IGMP table syslog threshold percentage.'
+        example: 80
+    child_classes:
+      - class_name: igmpDom
+        doc_path: Layer%203/igmp:Dom/
+        rn: dom-%s
+        type: list
+        tf_name: vrfs
+        description: 'List of IGMP VRF configurations.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'VRF name.'
+            example: default
+        child_classes:
+          - class_name: igmpSSMXlate
+            doc_path: Layer%203/igmp:SSMXlate/
+            rn: ssmxlate-src-[%[2]s]-grp-[%[1]s]
+            type: list
+            tf_name: ssm_translations
+            description: 'List of IGMP SSM translations.'
+            attributes:
+              - nxos_name: grpPfx
+                tf_name: group_prefix
+                type: String
+                id: true
+                description: 'Group prefix.'
+                example: 232.1.1.0/24
+              - nxos_name: srcAddr
+                tf_name: source_address
+                type: String
+                id: true
+                description: 'Source address.'
+                example: 10.3.3.3/32
+          - class_name: igmpIf
+            doc_path: Layer%203/igmp:If/
+            rn: if-[%s]
+            type: list
+            tf_name: interfaces
+            description: 'List of IGMP interface configurations.'
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                example: eth1/10
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'The administrative state of the object or policy.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: allowv3Asm
+                tf_name: allow_v3_asm
+                type: Bool
+                description: 'Allow v3 ASM.'
+                example: false
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description.'
+                example: My description
+              - nxos_name: grpTimeout
+                tf_name: group_timeout
+                type: Int64
+                min_int: 3
+                max_int: 65535
+                description: 'Group Membership Timeout.'
+                example: 300
+              - nxos_name: ifCtrl
+                tf_name: control
+                type: String
+                description: 'Controls.'
+                enum_values:
+                  - rep-ll
+                  - fast-leave
+                  - allow-v3-asm
+                example: fast-leave
+              - nxos_name: immediateLeave
+                tf_name: immediate_leave
+                type: Bool
+                description: 'Fast leave.'
+                example: true
+              - nxos_name: name
+                tf_name: name
+                type: String
+                description: 'The name of the object.'
+                example: igmp-if
+              - nxos_name: reportLl
+                tf_name: report_link_local_groups
+                type: Bool
+                description: 'Report link local.'
+                example: true
+              - nxos_name: suppressv3Gsq
+                tf_name: suppress_v3_gsq
+                type: Bool
+                description: 'Suppress v3 GSQ.'
+                example: true
+              - nxos_name: ver
+                tf_name: version
+                type: String
+                description: 'Version.'
+                enum_values:
+                  - unspecified
+                  - v2
+                  - v3
+                example: v3
+            child_classes:
+              - class_name: igmpQuerierP
+                doc_path: Layer%203/igmp:QuerierP/
+                rn: querierp
+                type: single
+                tf_name: querier
+                description: 'IGMP querier configuration.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: querier_address
+                    type: String
+                    description: 'Address.'
+                    example: 10.1.1.1
+                  - nxos_name: descr
+                    tf_name: querier_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My querier description
+                  - nxos_name: lastMbrCnt
+                    tf_name: last_member_query_count
+                    type: Int64
+                    min_int: 1
+                    max_int: 5
+                    description: 'Last Member Query Count.'
+                    example: 3
+                  - nxos_name: lastMbrRespTime
+                    tf_name: last_member_query_response_time
+                    type: Int64
+                    min_int: 1
+                    max_int: 25
+                    description: 'Last Member Response Time.'
+                    example: 5
+                  - nxos_name: name
+                    tf_name: querier_name
+                    type: String
+                    description: 'Object name.'
+                    example: querier
+                  - nxos_name: querierTimeout
+                    tf_name: querier_timeout
+                    type: Int64
+                    min_int: 1
+                    max_int: 65535
+                    description: 'Querier Timeout.'
+                    example: 300
+                  - nxos_name: queryIntvl
+                    tf_name: query_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 18000
+                    description: 'Query Interval.'
+                    example: 100
+                  - nxos_name: robustFac
+                    tf_name: robustness_variable
+                    type: Int64
+                    min_int: 1
+                    max_int: 7
+                    description: 'Robustness Factor.'
+                    example: 3
+                  - nxos_name: rspIntvl
+                    tf_name: query_max_response_time
+                    type: Int64
+                    min_int: 1
+                    max_int: 8387
+                    description: 'Response Interval of Querier.'
+                    example: 20
+                  - nxos_name: startQueryCnt
+                    tf_name: startup_query_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 10
+                    description: 'Startup Query Count.'
+                    example: 4
+                  - nxos_name: startQueryIntvl
+                    tf_name: startup_query_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 18000
+                    description: 'Startup Query Interval.'
+                    example: 40
+                  - nxos_name: ver
+                    tf_name: querier_version
+                    type: String
+                    description: 'Version.'
+                    enum_values:
+                      - unspecified
+                    example: unspecified
+              - class_name: igmpRepP
+                doc_path: Layer%203/igmp:RepP/
+                rn: reppol
+                type: single
+                tf_name: report_policy
+                description: 'IGMP report policy (`ip igmp report-policy` or `ip igmp access-group`).'
+                attributes:
+                  - nxos_name: pfxList
+                    tf_name: report_policy_prefix_list
+                    type: String
+                    description: 'Prefix List.'
+                    example: REPORT_PFX
+                    exclude_test: true
+                  - nxos_name: rtMap
+                    tf_name: report_policy_route_map
+                    type: String
+                    description: 'Route Map.'
+                    example: REPORT_POLICY
+                  - nxos_name: useAccessGrpCommand
+                    tf_name: report_policy_access_group
+                    type: Bool
+                    description: 'Flag to use access-group.'
+                    example: true
+              - class_name: igmpResP
+                doc_path: Layer%203/igmp:ResP/
+                rn: limit
+                type: single
+                tf_name: state_limit
+                description: 'IGMP state limit configuration.'
+                attributes:
+                  - nxos_name: descr
+                    tf_name: state_limit_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My state limit description
+                  - nxos_name: max
+                    tf_name: state_limit_maximum
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Maximum Multicast Entries.'
+                    example: 100
+                  - nxos_name: name
+                    tf_name: state_limit_name
+                    type: String
+                    description: 'Object name.'
+                    example: state-limit
+                  - nxos_name: rsvd
+                    tf_name: state_limit_reserved
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Reserved Multicast Entries.'
+                    example: 50
+                  - nxos_name: rtMap
+                    tf_name: state_limit_reserved_route_map
+                    type: String
+                    description: 'Reserved Entries Route Map.'
+                    example: RESERVED_RM
+              - class_name: igmpStRepP
+                doc_path: Layer%203/igmp:StRepP/
+                rn: streppol-%s
+                type: list
+                tf_name: static_report_policies
+                # Route map based joins cannot be combined with individual join groups / static OIFs (`join_types`) on the same interface
+                exclude_test: true
+                description: 'List of IGMP static report policies (`ip igmp static-oif route-map` or `ip igmp join-group route-map`).'
+                attributes:
+                  - nxos_name: joinType
+                    tf_name: join_type
+                    type: String
+                    id: true
+                    description: 'Join Type of Groups. `0` for static OIF (`ip igmp static-oif`), `1` for join group (`ip igmp join-group`).'
+                    enum_values:
+                      - '0'
+                      - '1'
+                    example: '1'
+                  - nxos_name: pfxList
+                    tf_name: prefix_list
+                    type: String
+                    description: 'Prefix List.'
+                    example: JOIN_PFX
+                    exclude_test: true
+                  - nxos_name: rtMap
+                    tf_name: route_map
+                    type: String
+                    description: 'Route Map.'
+                    example: JOIN_POLICY
+                  - nxos_name: useAccessGrpCommand
+                    tf_name: access_group
+                    type: Bool
+                    description: 'Flag to use access-group.'
+                    example: false
+              - class_name: igmpJoinType
+                doc_path: Layer%203/igmp:JoinType/
+                rn: jointype-%s
+                type: list
+                tf_name: join_types
+                description: 'List of IGMP join types (`ip igmp static-oif` or `ip igmp join-group`).'
+                attributes:
+                  - nxos_name: type
+                    tf_name: type
+                    type: String
+                    id: true
+                    description: 'Join Type of the Groups. Supported Types Include Static or Join. `0` for static OIF (`ip igmp static-oif`), `1` for join group (`ip igmp join-group`).'
+                    enum_values:
+                      - '0'
+                      - '1'
+                    example: '1'
+                child_classes:
+                  - class_name: igmpVersion
+                    doc_path: Layer%203/igmp:Version/
+                    rn: ver-%s
+                    type: list
+                    tf_name: versions
+                    description: 'List of IGMP group versions.'
+                    attributes:
+                      - nxos_name: version
+                        tf_name: version
+                        type: String
+                        id: true
+                        description: 'IGMP Group Version.'
+                        enum_values:
+                          - unspecified
+                          - '2'
+                          - '3'
+                        example: '3'
+                    child_classes:
+                      - class_name: igmpGroup
+                        doc_path: Layer%203/igmp:Group/
+                        rn: group-[%s]
+                        type: list
+                        tf_name: groups
+                        description: 'List of IGMP groups.'
+                        attributes:
+                          - nxos_name: grp
+                            tf_name: group
+                            type: String
+                            id: true
+                            description: 'Route IP Address for Choosing Groups.'
+                            example: 239.1.1.2
+                          - nxos_name: useStaticOif
+                            tf_name: use_static_oif
+                            type: Bool
+                            description: 'Indicates if Static Outgoing Interace is Being Used.'
+                            example: false
+                        child_classes:
+                          - class_name: igmpSource
+                            doc_path: Layer%203/igmp:Source/
+                            rn: source-[%s]
+                            type: list
+                            tf_name: sources
+                            description: 'List of IGMP sources.'
+                            attributes:
+                              - nxos_name: src
+                                tf_name: source
+                                type: String
+                                id: true
+                                description: 'IGMP Source IP Address.'
+                                example: 10.1.1.1
+                              - nxos_name: useStaticOif
+                                tf_name: use_static_oif
+                                type: Bool
+                                description: 'Indicates if Static Outgoing Interface is being used.'
+                                example: false
+test_prerequisites:
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: id
+        value: eth1/10
+      - name: layer
+        value: Layer3
+  - dn: sys/intf/phys-[eth1/11]
+    class_name: l1PhysIf
+    attributes:
+      - name: id
+        value: eth1/11
+      - name: layer
+        value: Layer3
+# Route map based joins and static OIFs, which cannot be combined with individual join groups / static OIFs on the same interface
+additional_tests:
+  - |-
+    resource "nxos_igmp" "test" {
+      vrfs = {
+        "default" = {
+          interfaces = {
+            "eth1/11" = {
+              static_report_policies = {
+                "0" = {
+                  route_map    = "STATIC_OIF_POLICY"
+                  access_group = false
+                }
+                "1" = {
+                  route_map    = "JOIN_POLICY"
+                  access_group = false
+                }
+              }
+            }
+          }
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }

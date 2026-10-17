@@ -77,6 +77,30 @@ child_classes:
         description: 'Register until stops.'
         example: false
     child_classes:
+      - class_name: pimGl
+        doc_path: Layer%203/pim:Gl/
+        rn: gl
+        type: single
+        attributes:
+          - nxos_name: isolate
+            tf_name: isolate
+            type: Bool
+            description: 'Isolate this router flag.'
+            example: true
+          - nxos_name: logLevel
+            tf_name: log_level
+            type: Int64
+            min_int: 0
+            max_int: 7
+            description: 'Sets syslog filter level for PIM.'
+            example: 3
+          - nxos_name: logLvl
+            tf_name: syslog_level
+            type: Int64
+            min_int: 0
+            max_int: 7
+            description: 'Syslog filter level.'
+            example: 3
       - class_name: pimDom
         doc_path: Layer%203/pim:Dom/
         rn: dom-%s

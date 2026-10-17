@@ -42,6 +42,9 @@ func TestAccNxosPIM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "extra_net", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "join_prune_delay", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "register_stop", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "isolate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "log_level", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "syslog_level", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.default.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.default.bfd", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.default.auto_enable", "false"))
@@ -171,6 +174,9 @@ func testAccNxosPIMConfig_all() string {
 	config += `	extra_net = false` + "\n"
 	config += `	join_prune_delay = 200` + "\n"
 	config += `	register_stop = false` + "\n"
+	config += `	isolate = true` + "\n"
+	config += `	log_level = 3` + "\n"
+	config += `	syslog_level = 3` + "\n"
 	config += `	vrfs = {` + "\n"
 	config += `		"default" = {` + "\n"
 	config += `			admin_state = "enabled"` + "\n"

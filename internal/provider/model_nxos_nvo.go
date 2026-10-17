@@ -38,26 +38,31 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type NVO struct {
-	Device                                        types.String                `tfsdk:"device"`
-	Dn                                            types.String                `tfsdk:"id"`
-	VxlanUdpPort                                  types.Int64                 `tfsdk:"vxlan_udp_port"`
-	VxlanUdpSourcePortMode                        types.String                `tfsdk:"vxlan_udp_source_port_mode"`
-	EvpnMultisiteBorderGatewayDciAdvertisePip     types.String                `tfsdk:"evpn_multisite_border_gateway_dci_advertise_pip"`
-	EvpnMultisiteBorderGatewayDelayRestoreTime    types.Int64                 `tfsdk:"evpn_multisite_border_gateway_delay_restore_time"`
-	EvpnMultisiteBorderGatewayDfElectionTime      types.String                `tfsdk:"evpn_multisite_border_gateway_df_election_time"`
-	EvpnMultisiteBorderGatewayFabricAdvertisePip  types.String                `tfsdk:"evpn_multisite_border_gateway_fabric_advertise_pip"`
-	EvpnMultisiteBorderGatewaySiteId              types.Int64                 `tfsdk:"evpn_multisite_border_gateway_site_id"`
-	EvpnMultisiteBorderGatewaySplitHorizonPerSite types.String                `tfsdk:"evpn_multisite_border_gateway_split_horizon_per_site"`
-	EvpnMultisiteBorderGatewayState               types.String                `tfsdk:"evpn_multisite_border_gateway_state"`
-	AdvertiseEvpnMulticastState                   types.String                `tfsdk:"advertise_evpn_multicast_state"`
-	EvpnMultihomingDelayRestoreTime               types.Int64                 `tfsdk:"evpn_multihoming_delay_restore_time"`
-	EvpnMultihomingDfElectionMode                 types.String                `tfsdk:"evpn_multihoming_df_election_mode"`
-	EvpnMultihomingDfElectionTime                 types.String                `tfsdk:"evpn_multihoming_df_election_time"`
-	EvpnMultihomingEadEviRoute                    types.Bool                  `tfsdk:"evpn_multihoming_ead_evi_route"`
-	EvpnMultihomingSystemMac                      types.String                `tfsdk:"evpn_multihoming_system_mac"`
-	EvpnMultihomingFrrAnycastSourceIp             types.String                `tfsdk:"evpn_multihoming_frr_anycast_source_ip"`
-	EvpnMultihomingState                          types.String                `tfsdk:"evpn_multihoming_state"`
-	NveInterfaces                                 map[string]NVONveInterfaces `tfsdk:"nve_interfaces"`
+	Device                                        types.String                    `tfsdk:"device"`
+	Dn                                            types.String                    `tfsdk:"id"`
+	VxlanUdpPort                                  types.Int64                     `tfsdk:"vxlan_udp_port"`
+	VxlanUdpSourcePortMode                        types.String                    `tfsdk:"vxlan_udp_source_port_mode"`
+	EvpnMultisiteBorderGatewayDciAdvertisePip     types.String                    `tfsdk:"evpn_multisite_border_gateway_dci_advertise_pip"`
+	EvpnMultisiteBorderGatewayDelayRestoreTime    types.Int64                     `tfsdk:"evpn_multisite_border_gateway_delay_restore_time"`
+	EvpnMultisiteBorderGatewayDfElectionTime      types.String                    `tfsdk:"evpn_multisite_border_gateway_df_election_time"`
+	EvpnMultisiteBorderGatewayFabricAdvertisePip  types.String                    `tfsdk:"evpn_multisite_border_gateway_fabric_advertise_pip"`
+	EvpnMultisiteBorderGatewaySiteId              types.Int64                     `tfsdk:"evpn_multisite_border_gateway_site_id"`
+	EvpnMultisiteBorderGatewaySplitHorizonPerSite types.String                    `tfsdk:"evpn_multisite_border_gateway_split_horizon_per_site"`
+	EvpnMultisiteBorderGatewayState               types.String                    `tfsdk:"evpn_multisite_border_gateway_state"`
+	AdvertiseEvpnMulticastState                   types.String                    `tfsdk:"advertise_evpn_multicast_state"`
+	EvpnMultihomingDelayRestoreTime               types.Int64                     `tfsdk:"evpn_multihoming_delay_restore_time"`
+	EvpnMultihomingDfElectionMode                 types.String                    `tfsdk:"evpn_multihoming_df_election_mode"`
+	EvpnMultihomingDfElectionTime                 types.String                    `tfsdk:"evpn_multihoming_df_election_time"`
+	EvpnMultihomingEadEviRoute                    types.Bool                      `tfsdk:"evpn_multihoming_ead_evi_route"`
+	EvpnMultihomingSystemMac                      types.String                    `tfsdk:"evpn_multihoming_system_mac"`
+	EvpnMultihomingFrrAnycastSourceIp             types.String                    `tfsdk:"evpn_multihoming_frr_anycast_source_ip"`
+	EvpnMultihomingState                          types.String                    `tfsdk:"evpn_multihoming_state"`
+	EvpnStormControls                             map[string]NVOEvpnStormControls `tfsdk:"evpn_storm_controls"`
+	NveInterfaces                                 map[string]NVONveInterfaces     `tfsdk:"nve_interfaces"`
+}
+
+type NVOEvpnStormControls struct {
+	Level types.String `tfsdk:"level"`
 }
 
 type NVONveInterfaces struct {
@@ -132,6 +137,10 @@ var NVOMinVersions = map[string]helpers.MinVersion{
 
 func (data NVO) getDn() string {
 	return "sys/eps"
+}
+
+func (data NVOEvpnStormControls) getRn(key string) string {
+	return fmt.Sprintf("stormcontrol-%s", key)
 }
 
 func (data NVONveInterfaces) getRn(key string) string {
@@ -217,6 +226,17 @@ func (data NVO) toBody(config NVO) nxos.Body {
 	}
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.nvoEvpnEsiMultiHoming.attributes", attrs)
+	}
+	for key, child := range data.EvpnStormControls {
+		configChild, configChildOk := config.EvpnStormControls[key]
+		_ = configChild
+		_ = configChildOk
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "name", key)
+		if configChildOk && !child.Level.IsUnknown() && !child.Level.IsNull() && !configChild.Level.IsNull() {
+			attrs, _ = sjson.Set(attrs, "floatlevel", child.Level.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nvoEvpnStormControl.attributes", attrs)
 	}
 	for key, child := range data.NveInterfaces {
 		configChild, configChildOk := config.NveInterfaces[key]
@@ -416,6 +436,25 @@ func (data *NVO) fromBody(res gjson.Result) {
 		data.EvpnMultihomingFrrAnycastSourceIp = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.frrAnycastSrcIp").String())
 		data.EvpnMultihomingState = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.state").String())
 	}
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "nvoEvpnStormControl" {
+						var child NVOEvpnStormControls
+						child.Level = types.StringValue(value.Get("attributes.floatlevel").String())
+						mapKey := value.Get("attributes.name").String()
+						if data.EvpnStormControls == nil {
+							data.EvpnStormControls = make(map[string]NVOEvpnStormControls)
+						}
+						data.EvpnStormControls[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -631,6 +670,28 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 		data.EvpnMultihomingState = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.state").String())
 	} else {
 		data.EvpnMultihomingState = types.StringNull()
+	}
+	for key, item := range data.EvpnStormControls {
+		var rnvoEvpnStormControl gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("nvoEvpnStormControl.attributes.name").String() == key {
+					rnvoEvpnStormControl = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rnvoEvpnStormControl.Exists() {
+			delete(data.EvpnStormControls, key)
+			continue
+		}
+		if !item.Level.IsNull() {
+			item.Level = types.StringValue(rnvoEvpnStormControl.Get("nvoEvpnStormControl.attributes.floatlevel").String())
+		} else {
+			item.Level = types.StringNull()
+		}
+		data.EvpnStormControls[key] = item
 	}
 	for key, item := range data.NveInterfaces {
 		var rnvoEp gjson.Result
@@ -874,6 +935,12 @@ func (data NVO) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnEsiMultiHoming.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
+	for key, child := range data.EvpnStormControls {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnStormControl.attributes.rn", child.getRn(key))
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnStormControl.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 	for key, child := range data.NveInterfaces {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEp.attributes.rn", child.getRn(key))
@@ -889,6 +956,16 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	if !importing {
+		for stateKey := range state.EvpnStormControls {
+			if _, found := data.EvpnStormControls[stateKey]; !found {
+				stateChild := state.EvpnStormControls[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnStormControl.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnStormControl.attributes.status", "deleted")
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
 		for stateKey := range state.NveInterfaces {
 			if _, found := data.NveInterfaces[stateKey]; !found {
 				stateChild := state.NveInterfaces[stateKey]
@@ -1011,6 +1088,21 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 		if !state.EvpnMultihomingState.IsNull() && config.EvpnMultihomingState.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.EvpnStormControls {
+			if configChild, ok := config.EvpnStormControls[key]; ok {
+				stateChild := state.EvpnStormControls[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("nvoEvpnStormControl.attributes.name").String() == key {
+						if !stateChild.Level.IsNull() && configChild.Level.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".nvoEvpnStormControl.attributes."+"floatlevel", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
 		}
 		for key := range state.NveInterfaces {
 			if configChild, ok := config.NveInterfaces[key]; ok {

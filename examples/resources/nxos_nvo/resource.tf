@@ -9,6 +9,11 @@ resource "nxos_nvo" "example" {
   evpn_multisite_border_gateway_split_horizon_per_site = "enable"
   evpn_multisite_border_gateway_state                  = "enabled"
   advertise_evpn_multicast_state                       = "enabled"
+  evpn_storm_controls = {
+    "bcast" = {
+      level = "10.500000"
+    }
+  }
   nve_interfaces = {
     "1" = {
       admin_state                        = "enabled"

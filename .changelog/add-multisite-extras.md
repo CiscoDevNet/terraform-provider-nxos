@@ -1,0 +1,2 @@
+- Add EVPN Multisite storm control configuration (`evpn_storm_controls`) to `nxos_nvo` resource and data source
+- Add global PIM configuration (`isolate`, `log_level` and `syslog_level` attributes) to `nxos_pim` resource and data source

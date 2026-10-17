@@ -5,7 +5,7 @@ subcategory: "Overlay"
 description: |-
   This resource can manage the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.
   API Documentation
-  nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Eps/nvoEvpnMultisiteBordergw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/nvoEvpnMulticast https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMulticast/nvoEvpnEsiMultiHoming https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnEsiMultiHoming/nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:IngRepl/
+  nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Eps/nvoEvpnMultisiteBordergw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/nvoEvpnMulticast https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMulticast/nvoEvpnEsiMultiHoming https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnEsiMultiHoming/nvoEvpnStormControl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnStormControl/nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:IngRepl/
 ---
 
 # nxos_nvo (Resource)
@@ -18,6 +18,7 @@ This resource can manage the NVO (Network Virtualization Overlay) configuration 
 - [nvoEvpnMultisiteBordergw](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/)
 - [nvoEvpnMulticast](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMulticast/)
 - [nvoEvpnEsiMultiHoming](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnEsiMultiHoming/)
+- [nvoEvpnStormControl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnStormControl/)
 - [nvoEp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Ep/)
 - [nvoNws](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nws/)
 - [nvoNw](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nw/)
@@ -37,6 +38,11 @@ resource "nxos_nvo" "example" {
   evpn_multisite_border_gateway_split_horizon_per_site = "enable"
   evpn_multisite_border_gateway_state                  = "enabled"
   advertise_evpn_multicast_state                       = "enabled"
+  evpn_storm_controls = {
+    "bcast" = {
+      level = "10.500000"
+    }
+  }
   nve_interfaces = {
     "1" = {
       admin_state                        = "enabled"
@@ -112,6 +118,9 @@ resource "nxos_nvo" "example" {
   - Choices: `disable`, `enable`
 - `evpn_multisite_border_gateway_state` (String) Configures the state of EVPN Multisite Border-gateway.
   - Choices: `enabled`
+- `evpn_storm_controls` (Attributes Map) EVPN Multisite storm control configuration.
+  - Map key: `name` - Broadcast or Multicast or Unicast Name.
+  - Key choices: `unknown`, `ucast`, `bcast`, `mcast` (see [below for nested schema](#nestedatt--evpn_storm_controls))
 - `nve_interfaces` (Attributes Map) NVE interface configuration.
   - Map key: `id` - Network Virtualization Overlay Endpoint (NVE) ID. (see [below for nested schema](#nestedatt--nve_interfaces))
 - `vxlan_udp_port` (Number) VxLAN UDP Port. Allowed value range is 1024-65535.
@@ -122,6 +131,14 @@ resource "nxos_nvo" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--evpn_storm_controls"></a>
+### Nested Schema for `evpn_storm_controls`
+
+Optional:
+
+- `level` (String) Storm Suppression float Level.
+
 
 <a id="nestedatt--nve_interfaces"></a>
 ### Nested Schema for `nve_interfaces`

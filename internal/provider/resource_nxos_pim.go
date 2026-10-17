@@ -63,7 +63,7 @@ func (r *PIMResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.").AddApiDocumentation("pimEntity", "Layer%203/pim:Entity/", []string{"pimInst", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, []string{"Layer%203/pim:Inst/", "Layer%203/pim:Dom/", "Layer%203/pim:If/", "Layer%203/pim:SSMPatP/", "Layer%203/pim:SSMRangeP/", "Layer%203/pim:StaticRPP/", "Layer%203/pim:StaticRP/", "Layer%203/pim:RPGrpList/", "Layer%203/pim:AcastRPFuncP/", "Layer%203/pim:AcastRPPeer/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.").AddApiDocumentation("pimEntity", "Layer%203/pim:Entity/", []string{"pimInst", "pimGl", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, []string{"Layer%203/pim:Inst/", "Layer%203/pim:Gl/", "Layer%203/pim:Dom/", "Layer%203/pim:If/", "Layer%203/pim:SSMPatP/", "Layer%203/pim:SSMRangeP/", "Layer%203/pim:StaticRPP/", "Layer%203/pim:StaticRP/", "Layer%203/pim:RPGrpList/", "Layer%203/pim:AcastRPFuncP/", "Layer%203/pim:AcastRPPeer/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -130,6 +130,24 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 			"register_stop": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Register until stops.").String,
 				Optional:            true,
+			},
+			"isolate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Isolate this router flag.").String,
+				Optional:            true,
+			},
+			"log_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Sets syslog filter level for PIM.").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"syslog_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Syslog filter level.").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
 			},
 			"vrfs": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("List of PIM VRF configurations.\n  - Map key: `name` - VRF name.").String,
@@ -530,7 +548,7 @@ func (r *PIMResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"pimInst", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, PIMSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"pimInst", "pimGl", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, PIMSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

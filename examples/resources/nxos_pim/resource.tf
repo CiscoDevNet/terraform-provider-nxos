@@ -6,6 +6,9 @@ resource "nxos_pim" "example" {
   extra_net            = false
   join_prune_delay     = 200
   register_stop        = false
+  isolate              = true
+  log_level            = 3
+  syslog_level         = 3
   vrfs = {
     "default" = {
       admin_state          = "enabled"

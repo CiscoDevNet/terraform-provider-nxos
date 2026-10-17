@@ -5,7 +5,7 @@ subcategory: "Multicast"
 description: |-
   This resource can manage the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.
   API Documentation
-  pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Entity/pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Inst/pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Dom/pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:If/pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMPatP/pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMRangeP/pimStaticRPP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRPP/pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRP/pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpList/pimAcastRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPFuncP/pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPPeer/
+  pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Entity/pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Inst/pimGl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Gl/pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Dom/pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:If/pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMPatP/pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMRangeP/pimStaticRPP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRPP/pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRP/pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpList/pimAcastRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPFuncP/pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPPeer/
 ---
 
 # nxos_pim (Resource)
@@ -16,6 +16,7 @@ This resource can manage the PIM (Protocol Independent Multicast) configuration 
 
 - [pimEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Entity/)
 - [pimInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Inst/)
+- [pimGl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Gl/)
 - [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Dom/)
 - [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:If/)
 - [pimSSMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMPatP/)
@@ -37,6 +38,9 @@ resource "nxos_pim" "example" {
   extra_net            = false
   join_prune_delay     = 200
   register_stop        = false
+  isolate              = true
+  log_level            = 3
+  syslog_level         = 3
   vrfs = {
     "default" = {
       admin_state          = "enabled"
@@ -112,13 +116,18 @@ resource "nxos_pim" "example" {
 - `extra_net` (Boolean) Extranet RPF Lookup.
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `isolate` (Boolean) Isolate this router flag.
 - `join_prune_delay` (Number) Inter Packet Delay.
   - Range: `1`-`1000`
+- `log_level` (Number) Sets syslog filter level for PIM.
+  - Range: `0`-`7`
 - `null_register_delay` (Number) Null Register Inter Batch Delay.
   - Range: `1`-`50000`
 - `null_register_number_of_routes` (Number) Null Register Number of Routes.
   - Range: `1`-`32000`
 - `register_stop` (Boolean) Register until stops.
+- `syslog_level` (Number) Syslog filter level.
+  - Range: `0`-`7`
 - `vrfs` (Attributes Map) List of PIM VRF configurations.
   - Map key: `name` - VRF name. (see [below for nested schema](#nestedatt--vrfs))
 

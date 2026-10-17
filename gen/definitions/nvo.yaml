@@ -148,6 +148,29 @@ child_classes:
           - disabled
           - enabled
         example: enabled
+  - class_name: nvoEvpnStormControl
+    doc_path: Network%20Virtualization/nvo:EvpnStormControl/
+    rn: stormcontrol-%s
+    type: list
+    tf_name: evpn_storm_controls
+    description: 'EVPN Multisite storm control configuration.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Broadcast or Multicast or Unicast Name.'
+        enum_values:
+          - unknown
+          - ucast
+          - bcast
+          - mcast
+        example: bcast
+      - nxos_name: floatlevel
+        tf_name: level
+        type: String
+        description: 'Storm Suppression float Level.'
+        example: '10.500000'
   - class_name: nvoEp
     doc_path: Network%20Virtualization/nvo:Ep/
     rn: epId-%v

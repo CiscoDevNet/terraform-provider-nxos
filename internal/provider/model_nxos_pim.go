@@ -50,6 +50,9 @@ type PIM struct {
 	NullRegisterDelay          types.Int64        `tfsdk:"null_register_delay"`
 	NullRegisterNumberOfRoutes types.Int64        `tfsdk:"null_register_number_of_routes"`
 	RegisterStop               types.Bool         `tfsdk:"register_stop"`
+	Isolate                    types.Bool         `tfsdk:"isolate"`
+	LogLevel                   types.Int64        `tfsdk:"log_level"`
+	SyslogLevel                types.Int64        `tfsdk:"syslog_level"`
 	Vrfs                       map[string]PIMVrfs `tfsdk:"vrfs"`
 }
 
@@ -221,6 +224,19 @@ func (data PIM) toBody(config PIM) nxos.Body {
 		_ = nestedChildrenPath
 		prevBody := body
 		body = childBody
+		attrs = "{}"
+		if !data.Isolate.IsUnknown() && !data.Isolate.IsNull() && !config.Isolate.IsNull() {
+			attrs, _ = sjson.Set(attrs, "isolate", strconv.FormatBool(data.Isolate.ValueBool()))
+		}
+		if !data.LogLevel.IsUnknown() && !data.LogLevel.IsNull() && !config.LogLevel.IsNull() {
+			attrs, _ = sjson.Set(attrs, "logLevel", strconv.FormatInt(data.LogLevel.ValueInt64(), 10))
+		}
+		if !data.SyslogLevel.IsUnknown() && !data.SyslogLevel.IsNull() && !config.SyslogLevel.IsNull() {
+			attrs, _ = sjson.Set(attrs, "logLvl", strconv.FormatInt(data.SyslogLevel.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimGl.attributes", attrs)
+		}
 		for key, child := range data.Vrfs {
 			configChild, configChildOk := config.Vrfs[key]
 			_ = configChild
@@ -493,6 +509,22 @@ func (data *PIM) fromBody(res gjson.Result) {
 		data.NullRegisterDelay = types.Int64Value(rpimInst.Get("pimInst.attributes.nrDelay").Int())
 		data.NullRegisterNumberOfRoutes = types.Int64Value(rpimInst.Get("pimInst.attributes.nrNumRt").Int())
 		data.RegisterStop = types.BoolValue(helpers.ParseNxosBoolean(rpimInst.Get("pimInst.attributes.regStop").String()))
+		{
+			var rpimGl gjson.Result
+			rpimInst.Get("pimInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("pimGl.attributes.rn").String()
+					if rnValue == "gl" {
+						rpimGl = v
+						return false
+					}
+					return true
+				},
+			)
+			data.Isolate = types.BoolValue(helpers.ParseNxosBoolean(rpimGl.Get("pimGl.attributes.isolate").String()))
+			data.LogLevel = types.Int64Value(rpimGl.Get("pimGl.attributes.logLevel").Int())
+			data.SyslogLevel = types.Int64Value(rpimGl.Get("pimGl.attributes.logLvl").Int())
+		}
 		rpimInst.Get("pimInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -742,6 +774,34 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 		data.RegisterStop = types.BoolValue(helpers.ParseNxosBoolean(rpimInst.Get("pimInst.attributes.regStop").String()))
 	} else {
 		data.RegisterStop = types.BoolNull()
+	}
+	{
+		var rpimGl gjson.Result
+		rpimInst.Get("pimInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("pimGl.attributes.rn").String()
+				if rnValue == "gl" {
+					rpimGl = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Isolate.IsNull() {
+			data.Isolate = types.BoolValue(helpers.ParseNxosBoolean(rpimGl.Get("pimGl.attributes.isolate").String()))
+		} else {
+			data.Isolate = types.BoolNull()
+		}
+		if !data.LogLevel.IsNull() {
+			data.LogLevel = types.Int64Value(rpimGl.Get("pimGl.attributes.logLevel").Int())
+		} else {
+			data.LogLevel = types.Int64Null()
+		}
+		if !data.SyslogLevel.IsNull() {
+			data.SyslogLevel = types.Int64Value(rpimGl.Get("pimGl.attributes.logLvl").Int())
+		} else {
+			data.SyslogLevel = types.Int64Null()
+		}
 	}
 	for key, item := range data.Vrfs {
 		var rpimDom gjson.Result
@@ -1148,6 +1208,7 @@ func (data PIM) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "regStop", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
+		hasNestedChildren = true
 		if len(data.Vrfs) > 0 {
 			hasNestedChildren = true
 		}
@@ -1160,6 +1221,12 @@ func (data PIM) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pimGl.attributes.rn", "gl")
+				deleteBody, _ = sjson.Set(deleteBody, "pimGl.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 			for key, child := range data.Vrfs {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "pimDom.attributes.rn", child.getRn(key))
@@ -1317,6 +1384,18 @@ func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM, im
 		if !state.RegisterStop.IsNull() && config.RegisterStop.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"regStop", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.Isolate.IsNull() && config.Isolate.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")+".children", "pimGl")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"isolate", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LogLevel.IsNull() && config.LogLevel.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")+".children", "pimGl")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"logLevel", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.SyslogLevel.IsNull() && config.SyslogLevel.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")+".children", "pimGl")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"logLvl", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.Vrfs {
 			if configChild, ok := config.Vrfs[key]; ok {

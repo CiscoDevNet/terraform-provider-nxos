@@ -63,7 +63,7 @@ func (r *NVOResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.").AddApiDocumentation("nvoEps", "Network%20Virtualization/nvo:Eps/", []string{"nvoEvpnMultisiteBordergw", "nvoEvpnMulticast", "nvoEvpnEsiMultiHoming", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:EvpnMultisiteBordergw/", "Network%20Virtualization/nvo:EvpnMulticast/", "Network%20Virtualization/nvo:EvpnEsiMultiHoming/", "Network%20Virtualization/nvo:Ep/", "Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.").AddApiDocumentation("nvoEps", "Network%20Virtualization/nvo:Eps/", []string{"nvoEvpnMultisiteBordergw", "nvoEvpnMulticast", "nvoEvpnEsiMultiHoming", "nvoEvpnStormControl", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:EvpnMultisiteBordergw/", "Network%20Virtualization/nvo:EvpnMulticast/", "Network%20Virtualization/nvo:EvpnEsiMultiHoming/", "Network%20Virtualization/nvo:EvpnStormControl/", "Network%20Virtualization/nvo:Ep/", "Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -179,6 +179,18 @@ func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disabled", "enabled"),
+				},
+			},
+			"evpn_storm_controls": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("EVPN Multisite storm control configuration.\n  - Map key: `name` - Broadcast or Multicast or Unicast Name.\n  - Key choices: `unknown`, `ucast`, `bcast`, `mcast`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Storm Suppression float Level.").String,
+							Optional:            true,
+						},
+					},
 				},
 			},
 			"nve_interfaces": schema.MapNestedAttribute{
@@ -494,7 +506,7 @@ func (r *NVOResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"nvoEvpnMultisiteBordergw", "nvoEvpnMulticast", "nvoEvpnEsiMultiHoming", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, NVOSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"nvoEvpnMultisiteBordergw", "nvoEvpnMulticast", "nvoEvpnEsiMultiHoming", "nvoEvpnStormControl", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, NVOSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

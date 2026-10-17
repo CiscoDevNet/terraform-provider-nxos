@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, and NGMVPN (Tenant Routed Multicast) settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, and NGMVPN (Tenant Routed Multicast) settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, and L2RIB duplicate MAC detection settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, and L2RIB duplicate MAC detection settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -3229,6 +3229,54 @@ child_classes:
                 type: Bool
                 description: 'L3VNI NGMVPN MDT VXLAN support.'
                 example: false
+  - class_name: l2ribEntity
+    doc_path: Routing%20and%20Forwarding/l2rib:Entity/
+    rn: l2rib
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: l2ribInst
+        doc_path: Routing%20and%20Forwarding/l2rib:Inst/
+        rn: inst
+        type: single
+        no_delete: true
+        child_classes:
+          - class_name: l2ribEvpnMACmob
+            doc_path: Routing%20and%20Forwarding/l2rib:EvpnMACmob/
+            rn: evpn
+            type: single
+            no_delete: true
+            tf_name: l2rib_evpn_mac_mobility
+            description: 'L2RIB EVPN MAC mobility configuration, including duplicate MAC detection and recovery settings.'
+            attributes:
+              - nxos_name: ddDuration
+                tf_name: l2rib_duplicate_mac_detection_duration
+                type: Int64
+                description: 'Dup Detect MAC duration secs (def:180).'
+                min_int: 2
+                max_int: 36000
+                example: 300
+              - nxos_name: ddMoves
+                tf_name: l2rib_duplicate_mac_detection_moves
+                type: Int64
+                description: 'Dup Detect MAC num-moves (def:5).'
+                min_int: 1
+                max_int: 1000
+                example: 10
+              - nxos_name: drRetryCnt
+                tf_name: l2rib_duplicate_mac_recovery_retry_count
+                type: Int64
+                description: 'Dup MAC Recover retry cnt (def:3).'
+                min_int: 0
+                max_int: 3000
+                example: 5
+              - nxos_name: drTimeout
+                tf_name: l2rib_duplicate_mac_recovery_timeout
+                type: Int64
+                description: 'Dup MAC Recover timeout secs (def:30).'
+                min_int: 0
+                max_int: 1800
+                example: 60
 test_prerequisites:
   - dn: sys/fm/udld
     class_name: fmUdld

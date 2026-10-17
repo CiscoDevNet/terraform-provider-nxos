@@ -37,6 +37,12 @@ func TestAccDataSourceNxosHMM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "administrative_distance", "150"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "limit_vlan_mac", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "evpn_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "evpn_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "duplicate_host_detection_moves", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "duplicate_host_detection_seconds", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "duplicate_host_recovery_count", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "duplicate_host_recovery_timeout", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "interfaces.vlan10.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "interfaces.vlan10.mode", "anycastGW"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "interfaces.vlan10.description", "My Description"))
@@ -105,6 +111,12 @@ func testAccDataSourceNxosHMMConfig() string {
 	config += `	administrative_distance = 150` + "\n"
 	config += `	control = "stateful-ha"` + "\n"
 	config += `	limit_vlan_mac = 100` + "\n"
+	config += `	evpn_admin_state = "enabled"` + "\n"
+	config += `	evpn_control = "stateful-ha"` + "\n"
+	config += `	duplicate_host_detection_moves = 10` + "\n"
+	config += `	duplicate_host_detection_seconds = 300` + "\n"
+	config += `	duplicate_host_recovery_count = 10` + "\n"
+	config += `	duplicate_host_recovery_timeout = 60` + "\n"
 	config += `	interfaces = {` + "\n"
 	config += `		"vlan10" = {` + "\n"
 	config += `			admin_state = "enabled"` + "\n"

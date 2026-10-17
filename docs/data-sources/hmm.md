@@ -3,19 +3,20 @@
 page_title: "nxos_hmm Data Source - terraform-provider-nxos"
 subcategory: "Overlay"
 description: |-
-  This data source can read the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
+  This data source can read the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC, duplicate host detection and fabric forwarding interface settings.
   API Documentation
-  hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:Entity/hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdInst/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdIf/
+  hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:Entity/hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdInst/hmmFwdEvpn https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdEvpn/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdIf/
 ---
 
 # nxos_hmm (Data Source)
 
-This data source can read the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
+This data source can read the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC, duplicate host detection and fabric forwarding interface settings.
 
 ### API Documentation
 
 - [hmmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:Entity/)
 - [hmmFwdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdInst/)
+- [hmmFwdEvpn](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdEvpn/)
 - [hmmFwdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdIf/)
 
 ## Example Usage
@@ -38,6 +39,12 @@ data "nxos_hmm" "example" {
 - `administrative_distance` (Number) Set the administrative distance for HMM.
 - `anycast_mac` (String) Anycast Gateway MAC address.
 - `control` (String) The control state.
+- `duplicate_host_detection_moves` (Number) User Setting to mark a host as duplicate if it does ddHmmoves number of moves.
+- `duplicate_host_detection_seconds` (Number) User Setting to mark a host as duplicate if it does ddHmmoves moves in ddHnsecs seconds.
+- `duplicate_host_recovery_count` (Number) Number of times (dhrcount) to periodically check if a Duplicate marked Host is no longer duplicate.
+- `duplicate_host_recovery_timeout` (Number) User Setting to periodically (dhrtimeout seconds) check if a Duplicate marked Host is no longer duplicate.
+- `evpn_admin_state` (String) The administrative state of the object or policy.
+- `evpn_control` (String) The control state.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
 - `interfaces` (Attributes Map) List of HMM Fabric Forwarding interfaces.

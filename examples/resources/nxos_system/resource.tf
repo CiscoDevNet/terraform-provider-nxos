@@ -374,4 +374,8 @@ resource "nxos_system" "example" {
       mdt_v6_vxlan = false
     }
   }
+  l2rib_duplicate_mac_detection_duration   = 300
+  l2rib_duplicate_mac_detection_moves      = 10
+  l2rib_duplicate_mac_recovery_retry_count = 5
+  l2rib_duplicate_mac_recovery_timeout     = 60
 }

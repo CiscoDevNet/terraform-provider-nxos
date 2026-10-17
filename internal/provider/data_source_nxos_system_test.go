@@ -280,6 +280,10 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_overlay_spt_only", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_vrfs.VRF1.mdt_v4_vxlan", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_vrfs.VRF1.mdt_v6_vxlan", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "l2rib_duplicate_mac_detection_duration", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "l2rib_duplicate_mac_detection_moves", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "l2rib_duplicate_mac_recovery_retry_count", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "l2rib_duplicate_mac_recovery_timeout", "60"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -784,6 +788,10 @@ func testAccDataSourceNxosSystemConfig() string {
 	config += `			mdt_v6_vxlan = false` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	l2rib_duplicate_mac_detection_duration = 300` + "\n"
+	config += `	l2rib_duplicate_mac_detection_moves = 10` + "\n"
+	config += `	l2rib_duplicate_mac_recovery_retry_count = 5` + "\n"
+	config += `	l2rib_duplicate_mac_recovery_timeout = 60` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, ]` + "\n"
 	config += `}` + "\n"
 

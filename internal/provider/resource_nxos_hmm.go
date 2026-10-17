@@ -63,7 +63,7 @@ func (r *HMMResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *HMMResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.").AddApiDocumentation("hmmEntity", "Host%20Mobility/hmm:Entity/", []string{"hmmFwdInst", "hmmFwdIf"}, []string{"Host%20Mobility/hmm:FwdInst/", "Host%20Mobility/hmm:FwdIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC, duplicate host detection and fabric forwarding interface settings.").AddApiDocumentation("hmmEntity", "Host%20Mobility/hmm:Entity/", []string{"hmmFwdInst", "hmmFwdEvpn", "hmmFwdIf"}, []string{"Host%20Mobility/hmm:FwdInst/", "Host%20Mobility/hmm:FwdEvpn/", "Host%20Mobility/hmm:FwdIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -118,6 +118,45 @@ func (r *HMMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"evpn_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"evpn_control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				Optional:            true,
+			},
+			"duplicate_host_detection_moves": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("User Setting to mark a host as duplicate if it does ddHmmoves number of moves.").AddIntegerRangeDescription(1, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1000),
+				},
+			},
+			"duplicate_host_detection_seconds": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("User Setting to mark a host as duplicate if it does ddHmmoves moves in ddHnsecs seconds.").AddIntegerRangeDescription(2, 36000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 36000),
+				},
+			},
+			"duplicate_host_recovery_count": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of times (dhrcount) to periodically check if a Duplicate marked Host is no longer duplicate.").AddIntegerRangeDescription(1, 3000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 3000),
+				},
+			},
+			"duplicate_host_recovery_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("User Setting to periodically (dhrtimeout seconds) check if a Duplicate marked Host is no longer duplicate.").AddIntegerRangeDescription(30, 36000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 36000),
 				},
 			},
 			"interfaces": schema.MapNestedAttribute{
@@ -301,7 +340,7 @@ func (r *HMMResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"hmmFwdInst", "hmmFwdIf"}, HMMSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"hmmFwdInst", "hmmFwdEvpn", "hmmFwdIf"}, HMMSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

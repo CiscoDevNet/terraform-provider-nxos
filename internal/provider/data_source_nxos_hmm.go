@@ -56,7 +56,7 @@ func (d *HMMDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *HMMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.").AddApiDocumentation("hmmEntity", "Host%20Mobility/hmm:Entity/", []string{"hmmFwdInst", "hmmFwdIf"}, []string{"Host%20Mobility/hmm:FwdInst/", "Host%20Mobility/hmm:FwdIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC, duplicate host detection and fabric forwarding interface settings.").AddApiDocumentation("hmmEntity", "Host%20Mobility/hmm:Entity/", []string{"hmmFwdInst", "hmmFwdEvpn", "hmmFwdIf"}, []string{"Host%20Mobility/hmm:FwdInst/", "Host%20Mobility/hmm:FwdEvpn/", "Host%20Mobility/hmm:FwdIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -93,6 +93,30 @@ func (d *HMMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"selective_host_probe": schema.StringAttribute{
 				MarkdownDescription: "When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id.",
+				Computed:            true,
+			},
+			"evpn_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"evpn_control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
+			"duplicate_host_detection_moves": schema.Int64Attribute{
+				MarkdownDescription: "User Setting to mark a host as duplicate if it does ddHmmoves number of moves.",
+				Computed:            true,
+			},
+			"duplicate_host_detection_seconds": schema.Int64Attribute{
+				MarkdownDescription: "User Setting to mark a host as duplicate if it does ddHmmoves moves in ddHnsecs seconds.",
+				Computed:            true,
+			},
+			"duplicate_host_recovery_count": schema.Int64Attribute{
+				MarkdownDescription: "Number of times (dhrcount) to periodically check if a Duplicate marked Host is no longer duplicate.",
+				Computed:            true,
+			},
+			"duplicate_host_recovery_timeout": schema.Int64Attribute{
+				MarkdownDescription: "User Setting to periodically (dhrtimeout seconds) check if a Duplicate marked Host is no longer duplicate.",
 				Computed:            true,
 			},
 			"interfaces": schema.MapNestedAttribute{
@@ -151,7 +175,7 @@ func (d *HMMDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"hmmFwdInst", "hmmFwdIf"}, HMMSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"hmmFwdInst", "hmmFwdEvpn", "hmmFwdIf"}, HMMSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

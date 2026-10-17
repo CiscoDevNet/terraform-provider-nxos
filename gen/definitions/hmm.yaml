@@ -2,8 +2,8 @@
 name: HMM
 class_name: hmmEntity
 dn: sys/hmm
-ds_description: This data source can read the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
-res_description: This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
+ds_description: This data source can read the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC, duplicate host detection and fabric forwarding interface settings.
+res_description: This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC, duplicate host detection and fabric forwarding interface settings.
 doc_path: Host%20Mobility/hmm:Entity/
 doc_category: Overlay
 attributes:
@@ -66,6 +66,57 @@ child_classes:
         example: "yes"
         exclude_test: true
     child_classes:
+      - class_name: hmmFwdEvpn
+        rn: evpn
+        type: single
+        tf_name: evpn
+        description: 'HMM Fabric Forwarding EVPN instance, including duplicate host detection and recovery settings.'
+        doc_path: Host%20Mobility/hmm:FwdEvpn/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: evpn_admin_state
+            type: String
+            description: "The administrative state of the object or policy."
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: ctrl
+            tf_name: evpn_control
+            type: String
+            description: "The control state."
+            allow_non_enum_values: true
+            enum_values:
+              - stateful-ha
+            example: stateful-ha
+          - nxos_name: ddHmmoves
+            tf_name: duplicate_host_detection_moves
+            type: Int64
+            min_int: 1
+            max_int: 1000
+            description: "User Setting to mark a host as duplicate if it does ddHmmoves number of moves."
+            example: 10
+          - nxos_name: ddHnsecs
+            tf_name: duplicate_host_detection_seconds
+            type: Int64
+            min_int: 2
+            max_int: 36000
+            description: "User Setting to mark a host as duplicate if it does ddHmmoves moves in ddHnsecs seconds."
+            example: 300
+          - nxos_name: dhrcount
+            tf_name: duplicate_host_recovery_count
+            type: Int64
+            min_int: 1
+            max_int: 3000
+            description: "Number of times (dhrcount) to periodically check if a Duplicate marked Host is no longer duplicate."
+            example: 10
+          - nxos_name: dhrtimeout
+            tf_name: duplicate_host_recovery_timeout
+            type: Int64
+            min_int: 30
+            max_int: 36000
+            description: "User Setting to periodically (dhrtimeout seconds) check if a Duplicate marked Host is no longer duplicate."
+            example: 60
       - class_name: hmmFwdIf
         rn: if-[%s]
         type: list

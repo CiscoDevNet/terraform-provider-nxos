@@ -38,16 +38,22 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type HMM struct {
-	Device                 types.String             `tfsdk:"device"`
-	Dn                     types.String             `tfsdk:"id"`
-	AdminState             types.String             `tfsdk:"admin_state"`
-	InstanceAdminState     types.String             `tfsdk:"instance_admin_state"`
-	AnycastMac             types.String             `tfsdk:"anycast_mac"`
-	AdministrativeDistance types.Int64              `tfsdk:"administrative_distance"`
-	Control                types.String             `tfsdk:"control"`
-	LimitVlanMac           types.Int64              `tfsdk:"limit_vlan_mac"`
-	SelectiveHostProbe     types.String             `tfsdk:"selective_host_probe"`
-	Interfaces             map[string]HMMInterfaces `tfsdk:"interfaces"`
+	Device                        types.String             `tfsdk:"device"`
+	Dn                            types.String             `tfsdk:"id"`
+	AdminState                    types.String             `tfsdk:"admin_state"`
+	InstanceAdminState            types.String             `tfsdk:"instance_admin_state"`
+	AnycastMac                    types.String             `tfsdk:"anycast_mac"`
+	AdministrativeDistance        types.Int64              `tfsdk:"administrative_distance"`
+	Control                       types.String             `tfsdk:"control"`
+	LimitVlanMac                  types.Int64              `tfsdk:"limit_vlan_mac"`
+	SelectiveHostProbe            types.String             `tfsdk:"selective_host_probe"`
+	EvpnAdminState                types.String             `tfsdk:"evpn_admin_state"`
+	EvpnControl                   types.String             `tfsdk:"evpn_control"`
+	DuplicateHostDetectionMoves   types.Int64              `tfsdk:"duplicate_host_detection_moves"`
+	DuplicateHostDetectionSeconds types.Int64              `tfsdk:"duplicate_host_detection_seconds"`
+	DuplicateHostRecoveryCount    types.Int64              `tfsdk:"duplicate_host_recovery_count"`
+	DuplicateHostRecoveryTimeout  types.Int64              `tfsdk:"duplicate_host_recovery_timeout"`
+	Interfaces                    map[string]HMMInterfaces `tfsdk:"interfaces"`
 }
 
 type HMMInterfaces struct {
@@ -141,6 +147,28 @@ func (data HMM) toBody(config HMM) nxos.Body {
 		_ = nestedChildrenPath
 		prevBody := body
 		body = childBody
+		attrs = "{}"
+		if !data.EvpnAdminState.IsUnknown() && !data.EvpnAdminState.IsNull() && !config.EvpnAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.EvpnAdminState.ValueString())
+		}
+		if !data.EvpnControl.IsUnknown() && !data.EvpnControl.IsNull() && !config.EvpnControl.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.EvpnControl.ValueString())
+		}
+		if !data.DuplicateHostDetectionMoves.IsUnknown() && !data.DuplicateHostDetectionMoves.IsNull() && !config.DuplicateHostDetectionMoves.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ddHmmoves", strconv.FormatInt(data.DuplicateHostDetectionMoves.ValueInt64(), 10))
+		}
+		if !data.DuplicateHostDetectionSeconds.IsUnknown() && !data.DuplicateHostDetectionSeconds.IsNull() && !config.DuplicateHostDetectionSeconds.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ddHnsecs", strconv.FormatInt(data.DuplicateHostDetectionSeconds.ValueInt64(), 10))
+		}
+		if !data.DuplicateHostRecoveryCount.IsUnknown() && !data.DuplicateHostRecoveryCount.IsNull() && !config.DuplicateHostRecoveryCount.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dhrcount", strconv.FormatInt(data.DuplicateHostRecoveryCount.ValueInt64(), 10))
+		}
+		if !data.DuplicateHostRecoveryTimeout.IsUnknown() && !data.DuplicateHostRecoveryTimeout.IsNull() && !config.DuplicateHostRecoveryTimeout.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dhrtimeout", strconv.FormatInt(data.DuplicateHostRecoveryTimeout.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.hmmFwdEvpn.attributes", attrs)
+		}
 		for key, child := range data.Interfaces {
 			configChild, configChildOk := config.Interfaces[key]
 			_ = configChild
@@ -195,6 +223,25 @@ func (data *HMM) fromBody(res gjson.Result) {
 		data.Control = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.ctrl").String())
 		data.LimitVlanMac = types.Int64Value(rhmmFwdInst.Get("hmmFwdInst.attributes.limitVlanMac").Int())
 		data.SelectiveHostProbe = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.selHostProbe").String())
+		{
+			var rhmmFwdEvpn gjson.Result
+			rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("hmmFwdEvpn.attributes.rn").String()
+					if rnValue == "evpn" {
+						rhmmFwdEvpn = v
+						return false
+					}
+					return true
+				},
+			)
+			data.EvpnAdminState = types.StringValue(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.adminSt").String())
+			data.EvpnControl = types.StringValue(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.ctrl").String())
+			data.DuplicateHostDetectionMoves = types.Int64Value(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.ddHmmoves").Int())
+			data.DuplicateHostDetectionSeconds = types.Int64Value(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.ddHnsecs").Int())
+			data.DuplicateHostRecoveryCount = types.Int64Value(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.dhrcount").Int())
+			data.DuplicateHostRecoveryTimeout = types.Int64Value(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.dhrtimeout").Int())
+		}
 		rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -270,6 +317,49 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 		data.SelectiveHostProbe = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.selHostProbe").String())
 	} else {
 		data.SelectiveHostProbe = types.StringNull()
+	}
+	{
+		var rhmmFwdEvpn gjson.Result
+		rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("hmmFwdEvpn.attributes.rn").String()
+				if rnValue == "evpn" {
+					rhmmFwdEvpn = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.EvpnAdminState.IsNull() {
+			data.EvpnAdminState = types.StringValue(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.adminSt").String())
+		} else {
+			data.EvpnAdminState = types.StringNull()
+		}
+		if !data.EvpnControl.IsNull() {
+			data.EvpnControl = types.StringValue(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.ctrl").String())
+		} else {
+			data.EvpnControl = types.StringNull()
+		}
+		if !data.DuplicateHostDetectionMoves.IsNull() {
+			data.DuplicateHostDetectionMoves = types.Int64Value(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.ddHmmoves").Int())
+		} else {
+			data.DuplicateHostDetectionMoves = types.Int64Null()
+		}
+		if !data.DuplicateHostDetectionSeconds.IsNull() {
+			data.DuplicateHostDetectionSeconds = types.Int64Value(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.ddHnsecs").Int())
+		} else {
+			data.DuplicateHostDetectionSeconds = types.Int64Null()
+		}
+		if !data.DuplicateHostRecoveryCount.IsNull() {
+			data.DuplicateHostRecoveryCount = types.Int64Value(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.dhrcount").Int())
+		} else {
+			data.DuplicateHostRecoveryCount = types.Int64Null()
+		}
+		if !data.DuplicateHostRecoveryTimeout.IsNull() {
+			data.DuplicateHostRecoveryTimeout = types.Int64Value(rhmmFwdEvpn.Get("hmmFwdEvpn.attributes.dhrtimeout").Int())
+		} else {
+			data.DuplicateHostRecoveryTimeout = types.Int64Null()
+		}
 	}
 	for key, item := range data.Interfaces {
 		var rhmmFwdIf gjson.Result
@@ -367,6 +457,30 @@ func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM, config HMM, im
 		if !state.SelectiveHostProbe.IsNull() && config.SelectiveHostProbe.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"selHostProbe", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnAdminState.IsNull() && config.EvpnAdminState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnControl.IsNull() && config.EvpnControl.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DuplicateHostDetectionMoves.IsNull() && config.DuplicateHostDetectionMoves.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ddHmmoves", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DuplicateHostDetectionSeconds.IsNull() && config.DuplicateHostDetectionSeconds.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ddHnsecs", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DuplicateHostRecoveryCount.IsNull() && config.DuplicateHostRecoveryCount.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dhrcount", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.DuplicateHostRecoveryTimeout.IsNull() && config.DuplicateHostRecoveryTimeout.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dhrtimeout", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.Interfaces {
 			if configChild, ok := config.Interfaces[key]; ok {

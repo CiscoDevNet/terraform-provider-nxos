@@ -3,31 +3,38 @@
 page_title: "nxos_hmm Resource - terraform-provider-nxos"
 subcategory: "Overlay"
 description: |-
-  This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
+  This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC, duplicate host detection and fabric forwarding interface settings.
   API Documentation
-  hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:Entity/hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdInst/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdIf/
+  hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:Entity/hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdInst/hmmFwdEvpn https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdEvpn/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdIf/
 ---
 
 # nxos_hmm (Resource)
 
-This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
+This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC, duplicate host detection and fabric forwarding interface settings.
 
 ### API Documentation
 
 - [hmmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:Entity/)
 - [hmmFwdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdInst/)
+- [hmmFwdEvpn](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdEvpn/)
 - [hmmFwdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Host%20Mobility/hmm:FwdIf/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_hmm" "example" {
-  admin_state             = "enabled"
-  instance_admin_state    = "enabled"
-  anycast_mac             = "20:20:00:00:10:10"
-  administrative_distance = 150
-  control                 = "stateful-ha"
-  limit_vlan_mac          = 100
+  admin_state                      = "enabled"
+  instance_admin_state             = "enabled"
+  anycast_mac                      = "20:20:00:00:10:10"
+  administrative_distance          = 150
+  control                          = "stateful-ha"
+  limit_vlan_mac                   = 100
+  evpn_admin_state                 = "enabled"
+  evpn_control                     = "stateful-ha"
+  duplicate_host_detection_moves   = 10
+  duplicate_host_detection_seconds = 300
+  duplicate_host_recovery_count    = 10
+  duplicate_host_recovery_timeout  = 60
   interfaces = {
     "vlan10" = {
       admin_state = "enabled"
@@ -51,6 +58,18 @@ resource "nxos_hmm" "example" {
 - `control` (String) The control state.
   - Choices: `stateful-ha`
 - `device` (String) A device name from the provider configuration.
+- `duplicate_host_detection_moves` (Number) User Setting to mark a host as duplicate if it does ddHmmoves number of moves.
+  - Range: `1`-`1000`
+- `duplicate_host_detection_seconds` (Number) User Setting to mark a host as duplicate if it does ddHmmoves moves in ddHnsecs seconds.
+  - Range: `2`-`36000`
+- `duplicate_host_recovery_count` (Number) Number of times (dhrcount) to periodically check if a Duplicate marked Host is no longer duplicate.
+  - Range: `1`-`3000`
+- `duplicate_host_recovery_timeout` (Number) User Setting to periodically (dhrtimeout seconds) check if a Duplicate marked Host is no longer duplicate.
+  - Range: `30`-`36000`
+- `evpn_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `evpn_control` (String) The control state.
+  - Choices: `stateful-ha`
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `interfaces` (Attributes Map) List of HMM Fabric Forwarding interfaces.

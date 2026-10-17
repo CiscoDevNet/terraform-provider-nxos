@@ -253,6 +253,10 @@ type System struct {
 	NgmvpnOverlayDistributedDr                    types.Bool                                    `tfsdk:"ngmvpn_overlay_distributed_dr"`
 	NgmvpnOverlaySptOnly                          types.Bool                                    `tfsdk:"ngmvpn_overlay_spt_only"`
 	NgmvpnVrfs                                    map[string]SystemNgmvpnVrfs                   `tfsdk:"ngmvpn_vrfs"`
+	L2ribDuplicateMacDetectionDuration            types.Int64                                   `tfsdk:"l2rib_duplicate_mac_detection_duration"`
+	L2ribDuplicateMacDetectionMoves               types.Int64                                   `tfsdk:"l2rib_duplicate_mac_detection_moves"`
+	L2ribDuplicateMacRecoveryRetryCount           types.Int64                                   `tfsdk:"l2rib_duplicate_mac_recovery_retry_count"`
+	L2ribDuplicateMacRecoveryTimeout              types.Int64                                   `tfsdk:"l2rib_duplicate_mac_recovery_timeout"`
 }
 
 type SystemErrdisableEvents struct {
@@ -2801,6 +2805,54 @@ func (data System) toBody(config System) nxos.Body {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
+	{
+		attrs = "{}"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "l2ribEntity.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "l2ribEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		{
+			attrs = "{}"
+			childBody := ""
+			childBody, _ = sjson.SetRaw(childBody, "l2ribInst.attributes", attrs)
+			parentAttrs := attrs
+			parentPath := nestedChildrenPath
+			nestedChildrenPath := "l2ribInst.children"
+			_ = nestedChildrenPath
+			prevBody := body
+			body = childBody
+			attrs = "{}"
+			if !data.L2ribDuplicateMacDetectionDuration.IsUnknown() && !data.L2ribDuplicateMacDetectionDuration.IsNull() && !config.L2ribDuplicateMacDetectionDuration.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ddDuration", strconv.FormatInt(data.L2ribDuplicateMacDetectionDuration.ValueInt64(), 10))
+			}
+			if !data.L2ribDuplicateMacDetectionMoves.IsUnknown() && !data.L2ribDuplicateMacDetectionMoves.IsNull() && !config.L2ribDuplicateMacDetectionMoves.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ddMoves", strconv.FormatInt(data.L2ribDuplicateMacDetectionMoves.ValueInt64(), 10))
+			}
+			if !data.L2ribDuplicateMacRecoveryRetryCount.IsUnknown() && !data.L2ribDuplicateMacRecoveryRetryCount.IsNull() && !config.L2ribDuplicateMacRecoveryRetryCount.IsNull() {
+				attrs, _ = sjson.Set(attrs, "drRetryCnt", strconv.FormatInt(data.L2ribDuplicateMacRecoveryRetryCount.ValueInt64(), 10))
+			}
+			if !data.L2ribDuplicateMacRecoveryTimeout.IsUnknown() && !data.L2ribDuplicateMacRecoveryTimeout.IsNull() && !config.L2ribDuplicateMacRecoveryTimeout.IsNull() {
+				attrs, _ = sjson.Set(attrs, "drTimeout", strconv.FormatInt(data.L2ribDuplicateMacRecoveryTimeout.ValueInt64(), 10))
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.l2ribEvpnMACmob.attributes", attrs)
+			}
+			childBody = body
+			body = prevBody
+			if parentAttrs != "{}" || gjson.Get(childBody, "l2ribInst.children").Exists() {
+				body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+			}
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "l2ribEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -4681,6 +4733,49 @@ func (data *System) fromBody(res gjson.Result) {
 					return true
 				},
 			)
+		}
+	}
+	{
+		var rl2ribEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("l2ribEntity.attributes.rn").String()
+				if rnValue == "l2rib" {
+					rl2ribEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rl2ribInst gjson.Result
+			rl2ribEntity.Get("l2ribEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("l2ribInst.attributes.rn").String()
+					if rnValue == "inst" {
+						rl2ribInst = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var rl2ribEvpnMACmob gjson.Result
+				rl2ribInst.Get("l2ribInst.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("l2ribEvpnMACmob.attributes.rn").String()
+						if rnValue == "evpn" {
+							rl2ribEvpnMACmob = v
+							return false
+						}
+						return true
+					},
+				)
+				data.L2ribDuplicateMacDetectionDuration = types.Int64Value(rl2ribEvpnMACmob.Get("l2ribEvpnMACmob.attributes.ddDuration").Int())
+				data.L2ribDuplicateMacDetectionMoves = types.Int64Value(rl2ribEvpnMACmob.Get("l2ribEvpnMACmob.attributes.ddMoves").Int())
+				data.L2ribDuplicateMacRecoveryRetryCount = types.Int64Value(rl2ribEvpnMACmob.Get("l2ribEvpnMACmob.attributes.drRetryCnt").Int())
+				data.L2ribDuplicateMacRecoveryTimeout = types.Int64Value(rl2ribEvpnMACmob.Get("l2ribEvpnMACmob.attributes.drTimeout").Int())
+			}
 		}
 	}
 }
@@ -7682,6 +7777,63 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.NgmvpnVrfs[key] = item
 		}
 	}
+	var rl2ribEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("l2ribEntity.attributes.rn").String()
+			if rnValue == "l2rib" {
+				rl2ribEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	{
+		var rl2ribInst gjson.Result
+		rl2ribEntity.Get("l2ribEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("l2ribInst.attributes.rn").String()
+				if rnValue == "inst" {
+					rl2ribInst = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rl2ribEvpnMACmob gjson.Result
+			rl2ribInst.Get("l2ribInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("l2ribEvpnMACmob.attributes.rn").String()
+					if rnValue == "evpn" {
+						rl2ribEvpnMACmob = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.L2ribDuplicateMacDetectionDuration.IsNull() {
+				data.L2ribDuplicateMacDetectionDuration = types.Int64Value(rl2ribEvpnMACmob.Get("l2ribEvpnMACmob.attributes.ddDuration").Int())
+			} else {
+				data.L2ribDuplicateMacDetectionDuration = types.Int64Null()
+			}
+			if !data.L2ribDuplicateMacDetectionMoves.IsNull() {
+				data.L2ribDuplicateMacDetectionMoves = types.Int64Value(rl2ribEvpnMACmob.Get("l2ribEvpnMACmob.attributes.ddMoves").Int())
+			} else {
+				data.L2ribDuplicateMacDetectionMoves = types.Int64Null()
+			}
+			if !data.L2ribDuplicateMacRecoveryRetryCount.IsNull() {
+				data.L2ribDuplicateMacRecoveryRetryCount = types.Int64Value(rl2ribEvpnMACmob.Get("l2ribEvpnMACmob.attributes.drRetryCnt").Int())
+			} else {
+				data.L2ribDuplicateMacRecoveryRetryCount = types.Int64Null()
+			}
+			if !data.L2ribDuplicateMacRecoveryTimeout.IsNull() {
+				data.L2ribDuplicateMacRecoveryTimeout = types.Int64Value(rl2ribEvpnMACmob.Get("l2ribEvpnMACmob.attributes.drTimeout").Int())
+			} else {
+				data.L2ribDuplicateMacRecoveryTimeout = types.Int64Null()
+			}
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -9151,6 +9303,66 @@ func (data System) toDeleteBody() nxos.Body {
 					deleteBody, _ = sjson.Set(deleteBody, "ngmvpnDom.attributes.rn", child.getRn(key))
 					deleteBody, _ = sjson.Set(deleteBody, "ngmvpnDom.attributes.status", "deleted")
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+				}
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
+			}
+		}
+	}
+	{
+		childBody := ""
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".l2ribEntity"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			hasAttributes := childBody != ""
+			siblingsPath := nestedChildrenPath
+			childIndex := len(gjson.Get(body, siblingsPath).Array())
+			entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+			childBodyPath := entryPath + ".l2ribInst"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				childBody := ""
+				if !data.L2ribDuplicateMacDetectionDuration.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ddDuration", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.L2ribDuplicateMacDetectionMoves.IsNull() {
+					childBody, _ = sjson.Set(childBody, "ddMoves", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.L2ribDuplicateMacRecoveryRetryCount.IsNull() {
+					childBody, _ = sjson.Set(childBody, "drRetryCnt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !data.L2ribDuplicateMacRecoveryTimeout.IsNull() {
+					childBody, _ = sjson.Set(childBody, "drTimeout", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if childBody != "" {
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".l2ribEvpnMACmob"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+				}
+			}
+			if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, entryPath)
+				if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+					body, _ = sjson.Delete(body, siblingsPath)
 				}
 			}
 		}
@@ -11293,6 +11505,22 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 					}
 				}
 			}
+		}
+		if !state.L2ribDuplicateMacDetectionDuration.IsNull() && config.L2ribDuplicateMacDetectionDuration.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "l2ribEntity")+".children", "l2ribInst")+".children", "l2ribEvpnMACmob")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ddDuration", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.L2ribDuplicateMacDetectionMoves.IsNull() && config.L2ribDuplicateMacDetectionMoves.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "l2ribEntity")+".children", "l2ribInst")+".children", "l2ribEvpnMACmob")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ddMoves", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.L2ribDuplicateMacRecoveryRetryCount.IsNull() && config.L2ribDuplicateMacRecoveryRetryCount.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "l2ribEntity")+".children", "l2ribInst")+".children", "l2ribEvpnMACmob")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"drRetryCnt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.L2ribDuplicateMacRecoveryTimeout.IsNull() && config.L2ribDuplicateMacRecoveryTimeout.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "l2ribEntity")+".children", "l2ribInst")+".children", "l2ribEvpnMACmob")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"drTimeout", "DME_UNSET_PROPERTY_MARKER")
 		}
 	}
 

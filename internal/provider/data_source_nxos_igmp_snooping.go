@@ -56,7 +56,7 @@ func (d *IGMPSnoopingDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *IGMPSnoopingDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global IGMP snooping configuration on NX-OS devices, including admin state, instance controls, domain controls (querier, optimized multicast flood, routing), VXLAN snooping, and NVE static router port settings.").AddApiDocumentation("igmpsnoopEntity", "Layer%203/igmpsnoop:Entity/", []string{"igmpsnoopInst", "igmpsnoopDom", "igmpsnoopGl", "igmpsnoopGVlan"}, []string{"Layer%203/igmpsnoop:Inst/", "Layer%203/igmpsnoop:Dom/", "Layer%203/igmpsnoop:Gl/", "Layer%203/igmpsnoop:GVlan/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global IGMP snooping configuration on NX-OS devices, including admin state, instance controls, domain controls (querier, optimized multicast flood, routing), VXLAN snooping, and NVE static router port settings.").AddApiDocumentation("igmpsnoopEntity", "Layer%203/igmpsnoop:Entity/", []string{"igmpsnoopInst", "igmpsnoopDom", "igmpsnoopGl", "igmpsnoopGVlan", "igmpsnoopVlan", "igmpsnoopIgmpsnBase", "igmpsnoopQuerierP", "igmpsnoopGTimers", "igmpsnoopProxy", "igmpsnoopACtrl", "igmpsnoopMRouter", "igmpsnoopTgtIf", "igmpsnoopStMcGrp", "igmpsnoopTgtIf", "igmpsnoopMcSrc", "igmpsnoopTgtIf", "igmpsnoopIntf"}, []string{"Layer%203/igmpsnoop:Inst/", "Layer%203/igmpsnoop:Dom/", "Layer%203/igmpsnoop:Gl/", "Layer%203/igmpsnoop:GVlan/", "Layer%203/igmpsnoop:Vlan/", "Layer%203/igmpsnoop:IgmpsnBase/", "Layer%203/igmpsnoop:QuerierP/", "Layer%203/igmpsnoop:GTimers/", "Layer%203/igmpsnoop:Proxy/", "Layer%203/igmpsnoop:ACtrl/", "Layer%203/igmpsnoop:MRouter/", "Layer%203/igmpsnoop:TgtIf/", "Layer%203/igmpsnoop:StMcGrp/", "Layer%203/igmpsnoop:TgtIf/", "Layer%203/igmpsnoop:McSrc/", "Layer%203/igmpsnoop:TgtIf/", "Layer%203/igmpsnoop:Intf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -99,6 +99,191 @@ func (d *IGMPSnoopingDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Drop unknown multicast traffic on VXLAN VLAN range (e.g. 1-3967).",
 				Computed:            true,
 			},
+			"vlans": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of per-VLAN IGMP snooping configurations (`vlan configuration <id>`).\n  - Map key: `vlan_id` - Vlan ID for IGMP Snooping Configuration. Example: `vlan100`.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"report_flood_all_interfaces": schema.BoolAttribute{
+							MarkdownDescription: "Enable Report-Flood on all Active Interfaces of VLAN.",
+							Computed:            true,
+						},
+						"explicit_tracking": schema.BoolAttribute{
+							MarkdownDescription: "Configures Explicit Host for a VLAN.",
+							Computed:            true,
+						},
+						"igmp_snooping": schema.BoolAttribute{
+							MarkdownDescription: "Enable/Disable IGMP Snooping.",
+							Computed:            true,
+						},
+						"igmp_source_ip_proxy": schema.BoolAttribute{
+							MarkdownDescription: "Enable/Disable IGMP Src IP Proxy.",
+							Computed:            true,
+						},
+						"link_local_groups_suppression": schema.BoolAttribute{
+							MarkdownDescription: "Link Local Group Suppression.",
+							Computed:            true,
+						},
+						"lookup_mac": schema.BoolAttribute{
+							MarkdownDescription: "Indicates if Layer-2 Multicast Lookup Mac is Enabled.",
+							Computed:            true,
+						},
+						"query_flood": schema.BoolAttribute{
+							MarkdownDescription: "VLAN IGMP Query Flood.",
+							Computed:            true,
+						},
+						"report_suppression": schema.BoolAttribute{
+							MarkdownDescription: "IGMPv1/v2 report Suppression for VLAN.",
+							Computed:            true,
+						},
+						"v3_report_suppression": schema.BoolAttribute{
+							MarkdownDescription: "IGMPv3 Report Suppression and Proxy Reporting.",
+							Computed:            true,
+						},
+						"querier_address": schema.StringAttribute{
+							MarkdownDescription: "Address.",
+							Computed:            true,
+						},
+						"querier_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"last_member_query_interval": schema.Int64Attribute{
+							MarkdownDescription: "Last Member Query Interval.",
+							Computed:            true,
+						},
+						"querier_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"query_interval": schema.Int64Attribute{
+							MarkdownDescription: "Query Interval.",
+							Computed:            true,
+						},
+						"robustness_variable": schema.Int64Attribute{
+							MarkdownDescription: "Robustness Factor.",
+							Computed:            true,
+						},
+						"query_max_response_time": schema.Int64Attribute{
+							MarkdownDescription: "Response Interval of Querier.",
+							Computed:            true,
+						},
+						"startup_query_count": schema.Int64Attribute{
+							MarkdownDescription: "Startup Query Count.",
+							Computed:            true,
+						},
+						"startup_query_interval": schema.Int64Attribute{
+							MarkdownDescription: "Startup Query Interval.",
+							Computed:            true,
+						},
+						"querier_timeout": schema.Int64Attribute{
+							MarkdownDescription: "Configures Querier Timeout.",
+							Computed:            true,
+						},
+						"version": schema.StringAttribute{
+							MarkdownDescription: "Version.",
+							Computed:            true,
+						},
+						"fast_leave": schema.BoolAttribute{
+							MarkdownDescription: "Indicates if Fastleave is Enabled.",
+							Computed:            true,
+						},
+						"group_timeout": schema.Int64Attribute{
+							MarkdownDescription: "Group Membership Timeout.",
+							Computed:            true,
+						},
+						"max_general_query_miss": schema.Int64Attribute{
+							MarkdownDescription: "Maximum General Query Miss Count.",
+							Computed:            true,
+						},
+						"proxy_leave_use_group_address": schema.BoolAttribute{
+							MarkdownDescription: "Use Group IP Address for Proxy-Leave.",
+							Computed:            true,
+						},
+						"proxy_max_response_time": schema.Int64Attribute{
+							MarkdownDescription: "Configures MRT for Switch's Proxy General-Queries.",
+							Computed:            true,
+						},
+						"access_group_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"access_group_direction": schema.StringAttribute{
+							MarkdownDescription: "Direction.",
+							Computed:            true,
+						},
+						"access_group_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"access_group_route_map": schema.StringAttribute{
+							MarkdownDescription: "Route Map.",
+							Computed:            true,
+						},
+						"mrouter_interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of static multicast router interfaces (`ip igmp snooping mrouter interface`).\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"static_groups": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of static multicast groups (`ip igmp snooping static-group`).\n  - Map key: `group_address` - Multicast Group IP Address.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: "The name of the object.",
+										Computed:            true,
+									},
+									"interfaces": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of static group outgoing interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{},
+										},
+									},
+									"sources": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of static group sources.\n  - Map key: `source_address` - Multicast Source IP Address.").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"interfaces": schema.MapNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("List of static group source outgoing interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"report_flood_interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of IGMP snooping interface configurations (`ip igmp snooping report-flood interface`).\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description.",
+										Computed:            true,
+									},
+									"name": schema.StringAttribute{
+										MarkdownDescription: "The name of the object.",
+										Computed:            true,
+									},
+									"report_flood": schema.BoolAttribute{
+										MarkdownDescription: "Indicates if Report Flood is Enabled on the Interface.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -131,7 +316,7 @@ func (d *IGMPSnoopingDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"igmpsnoopInst", "igmpsnoopDom", "igmpsnoopGl", "igmpsnoopGVlan"}, IGMPSnoopingSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"igmpsnoopInst", "igmpsnoopDom", "igmpsnoopGl", "igmpsnoopGVlan", "igmpsnoopVlan", "igmpsnoopIgmpsnBase", "igmpsnoopQuerierP", "igmpsnoopGTimers", "igmpsnoopProxy", "igmpsnoopACtrl", "igmpsnoopMRouter", "igmpsnoopTgtIf", "igmpsnoopStMcGrp", "igmpsnoopTgtIf", "igmpsnoopMcSrc", "igmpsnoopTgtIf", "igmpsnoopIntf"}, IGMPSnoopingSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

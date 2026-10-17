@@ -38,12 +38,45 @@ func TestAccDataSourceNxosIGMPSnooping(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "global_vlan_vxlan", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "global_vlan_disable_nve_static_router_port", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "global_vlan_vxlan_umc_drop_vlan", "100-200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_all_interfaces", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.explicit_tracking", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.igmp_snooping", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.igmp_source_ip_proxy", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.link_local_groups_suppression", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.lookup_mac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.query_flood", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.report_suppression", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.v3_report_suppression", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.querier_address", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.querier_description", "My querier description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.last_member_query_interval", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.querier_name", "querier"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.query_interval", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.robustness_variable", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.query_max_response_time", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.startup_query_count", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.startup_query_interval", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.querier_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.version", "v3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.fast_leave", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.group_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.max_general_query_miss", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.proxy_leave_use_group_address", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.proxy_max_response_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.access_group_description", "My access group description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.access_group_direction", "in"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.access_group_name", "access-group"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.access_group_route_map", "RM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.static_groups.239.1.1.1.name", "group1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_interfaces.eth1/12.description", "My description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_interfaces.eth1/12.name", "report-flood"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_interfaces.eth1/12.report_flood", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIGMPSnoopingConfig(),
+				Config: testAccDataSourceNxosIGMPSnoopingPrerequisitesConfig + testAccDataSourceNxosIGMPSnoopingConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -53,6 +86,16 @@ func TestAccDataSourceNxosIGMPSnooping(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosIGMPSnoopingPrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/bd/vlanconfig-[vlan-3901]"
+  class_name = "l2VlanConfig"
+  content = {
+      accEncap = "vlan-3901"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -66,6 +109,68 @@ func testAccDataSourceNxosIGMPSnoopingConfig() string {
 	config += `	global_vlan_vxlan = true` + "\n"
 	config += `	global_vlan_disable_nve_static_router_port = false` + "\n"
 	config += `	global_vlan_vxlan_umc_drop_vlan = "100-200"` + "\n"
+	config += `	vlans = {` + "\n"
+	config += `		"vlan3901" = {` + "\n"
+	config += `			report_flood_all_interfaces = true` + "\n"
+	config += `			explicit_tracking = false` + "\n"
+	config += `			igmp_snooping = false` + "\n"
+	config += `			igmp_source_ip_proxy = false` + "\n"
+	config += `			link_local_groups_suppression = false` + "\n"
+	config += `			lookup_mac = true` + "\n"
+	config += `			query_flood = false` + "\n"
+	config += `			report_suppression = false` + "\n"
+	config += `			v3_report_suppression = true` + "\n"
+	config += `			querier_address = "10.1.1.1"` + "\n"
+	config += `			querier_description = "My querier description"` + "\n"
+	config += `			last_member_query_interval = 2` + "\n"
+	config += `			querier_name = "querier"` + "\n"
+	config += `			query_interval = 200` + "\n"
+	config += `			robustness_variable = 3` + "\n"
+	config += `			query_max_response_time = 20` + "\n"
+	config += `			startup_query_count = 3` + "\n"
+	config += `			startup_query_interval = 40` + "\n"
+	config += `			querier_timeout = 300` + "\n"
+	config += `			version = "v3"` + "\n"
+	config += `			fast_leave = true` + "\n"
+	config += `			group_timeout = 300` + "\n"
+	config += `			max_general_query_miss = 4` + "\n"
+	config += `			proxy_leave_use_group_address = true` + "\n"
+	config += `			proxy_max_response_time = 10` + "\n"
+	config += `			access_group_description = "My access group description"` + "\n"
+	config += `			access_group_direction = "in"` + "\n"
+	config += `			access_group_name = "access-group"` + "\n"
+	config += `			access_group_route_map = "RM1"` + "\n"
+	config += `			mrouter_interfaces = {` + "\n"
+	config += `				"eth1/10" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			static_groups = {` + "\n"
+	config += `				"239.1.1.1" = {` + "\n"
+	config += `					name = "group1"` + "\n"
+	config += `					interfaces = {` + "\n"
+	config += `						"eth1/11" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					sources = {` + "\n"
+	config += `						"10.1.1.5" = {` + "\n"
+	config += `							interfaces = {` + "\n"
+	config += `								"eth1/11" = {` + "\n"
+	config += `								}` + "\n"
+	config += `							}` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			report_flood_interfaces = {` + "\n"
+	config += `				"eth1/12" = {` + "\n"
+	config += `					description = "My description"` + "\n"
+	config += `					name = "report-flood"` + "\n"
+	config += `					report_flood = true` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

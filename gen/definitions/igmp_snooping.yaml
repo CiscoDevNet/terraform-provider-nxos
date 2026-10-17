@@ -92,3 +92,331 @@ child_classes:
                     type: String
                     description: 'Drop unknown multicast traffic on VXLAN VLAN range (e.g. 1-3967).'
                     example: '100-200'
+          - class_name: igmpsnoopVlan
+            doc_path: Layer%203/igmpsnoop:Vlan/
+            rn: vlan-[%s]
+            type: list
+            tf_name: vlans
+            description: 'List of per-VLAN IGMP snooping configurations (`vlan configuration <id>`).'
+            attributes:
+              - nxos_name: vlanid
+                tf_name: vlan_id
+                type: String
+                id: true
+                description: 'Vlan ID for IGMP Snooping Configuration. Example: `vlan100`.'
+                example: vlan3901
+              - nxos_name: rprtFldAllIntf
+                tf_name: report_flood_all_interfaces
+                type: Bool
+                description: 'Enable Report-Flood on all Active Interfaces of VLAN.'
+                example: true
+            child_classes:
+              - class_name: igmpsnoopIgmpsnBase
+                doc_path: Layer%203/igmpsnoop:IgmpsnBase/
+                rn: igmpsnbase
+                type: single
+                description: 'IGMP snooping parameters of the VLAN.'
+                attributes:
+                  - nxos_name: expTracking
+                    tf_name: explicit_tracking
+                    type: Bool
+                    description: 'Configures Explicit Host for a VLAN.'
+                    example: false
+                  - nxos_name: igmpSnoop
+                    tf_name: igmp_snooping
+                    type: Bool
+                    description: 'Enable/Disable IGMP Snooping.'
+                    example: false
+                  - nxos_name: igmpSrcIpProxy
+                    tf_name: igmp_source_ip_proxy
+                    type: Bool
+                    description: 'Enable/Disable IGMP Src IP Proxy.'
+                    example: false
+                  - nxos_name: llGrpSuppr
+                    tf_name: link_local_groups_suppression
+                    type: Bool
+                    description: 'Link Local Group Suppression.'
+                    example: false
+                  - nxos_name: lookupMac
+                    tf_name: lookup_mac
+                    type: Bool
+                    description: 'Indicates if Layer-2 Multicast Lookup Mac is Enabled.'
+                    example: true
+                  - nxos_name: queryFlood
+                    tf_name: query_flood
+                    type: Bool
+                    description: 'VLAN IGMP Query Flood.'
+                    example: false
+                  - nxos_name: reportSuppr
+                    tf_name: report_suppression
+                    type: Bool
+                    description: 'IGMPv1/v2 report Suppression for VLAN.'
+                    example: false
+                  - nxos_name: v3ReportSuppr
+                    tf_name: v3_report_suppression
+                    type: Bool
+                    description: 'IGMPv3 Report Suppression and Proxy Reporting.'
+                    example: true
+              - class_name: igmpsnoopQuerierP
+                doc_path: Layer%203/igmpsnoop:QuerierP/
+                rn: querierp
+                type: single
+                tf_name: querier
+                description: 'IGMP snooping querier configuration of the VLAN.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: querier_address
+                    type: String
+                    description: 'Address.'
+                    example: 10.1.1.1
+                  - nxos_name: descr
+                    tf_name: querier_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My querier description
+                  - nxos_name: lastMbrIntvl
+                    tf_name: last_member_query_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 25
+                    description: 'Last Member Query Interval.'
+                    example: 2
+                  - nxos_name: name
+                    tf_name: querier_name
+                    type: String
+                    description: 'Object name.'
+                    example: querier
+                  - nxos_name: queryIntvl
+                    tf_name: query_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 18000
+                    description: 'Query Interval.'
+                    example: 200
+                  - nxos_name: robustFac
+                    tf_name: robustness_variable
+                    type: Int64
+                    min_int: 1
+                    max_int: 7
+                    description: 'Robustness Factor.'
+                    example: 3
+                  - nxos_name: rspIntvl
+                    tf_name: query_max_response_time
+                    type: Int64
+                    min_int: 1
+                    max_int: 25
+                    description: 'Response Interval of Querier.'
+                    example: 20
+                  - nxos_name: startQueryCnt
+                    tf_name: startup_query_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 10
+                    description: 'Startup Query Count.'
+                    example: 3
+                  - nxos_name: startQueryIntvl
+                    tf_name: startup_query_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 18000
+                    description: 'Startup Query Interval.'
+                    example: 40
+                  - nxos_name: timeout
+                    tf_name: querier_timeout
+                    type: Int64
+                    min_int: 1
+                    max_int: 65535
+                    description: 'Configures Querier Timeout.'
+                    example: 300
+                  - nxos_name: ver
+                    tf_name: version
+                    type: String
+                    description: 'Version.'
+                    enum_values:
+                      - unspecified
+                      - v2
+                      - v3
+                    example: v3
+              - class_name: igmpsnoopGTimers
+                doc_path: Layer%203/igmpsnoop:GTimers/
+                rn: gTimers
+                type: single
+                description: 'IGMP snooping timers of the VLAN.'
+                attributes:
+                  - nxos_name: fastLeave
+                    tf_name: fast_leave
+                    type: Bool
+                    description: 'Indicates if Fastleave is Enabled.'
+                    example: true
+                  - nxos_name: grpTimeout
+                    tf_name: group_timeout
+                    type: Int64
+                    min_int: 0
+                    max_int: 65535
+                    description: 'Group Membership Timeout.'
+                    example: 300
+                  - nxos_name: maxGqMiss
+                    tf_name: max_general_query_miss
+                    type: Int64
+                    min_int: 3
+                    max_int: 5
+                    description: 'Maximum General Query Miss Count.'
+                    example: 4
+                  - nxos_name: useGrpAddr
+                    tf_name: proxy_leave_use_group_address
+                    type: Bool
+                    description: 'Use Group IP Address for Proxy-Leave.'
+                    example: true
+              - class_name: igmpsnoopProxy
+                doc_path: Layer%203/igmpsnoop:Proxy/
+                rn: proxy
+                type: single
+                description: 'IGMP snooping proxy configuration of the VLAN.'
+                attributes:
+                  - nxos_name: maxRespTime
+                    tf_name: proxy_max_response_time
+                    type: Int64
+                    min_int: 0
+                    max_int: 25
+                    description: 'Configures MRT for Switch''s Proxy General-Queries.'
+                    example: 10
+              - class_name: igmpsnoopACtrl
+                doc_path: Layer%203/igmpsnoop:ACtrl/
+                rn: actrl
+                type: single
+                description: 'IGMP snooping access control policy (`ip igmp snooping access-group`) of the VLAN.'
+                attributes:
+                  - nxos_name: descr
+                    tf_name: access_group_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My access group description
+                  - nxos_name: direction
+                    tf_name: access_group_direction
+                    type: String
+                    description: 'Direction.'
+                    enum_values:
+                      - in
+                      - out
+                    example: in
+                  - nxos_name: name
+                    tf_name: access_group_name
+                    type: String
+                    description: 'Object name.'
+                    example: access-group
+                  - nxos_name: rtMap
+                    tf_name: access_group_route_map
+                    type: String
+                    description: 'Route Map.'
+                    example: RM1
+              - class_name: igmpsnoopMRouter
+                doc_path: Layer%203/igmpsnoop:MRouter/
+                rn: mrouter
+                type: single
+                child_classes:
+                  - class_name: igmpsnoopTgtIf
+                    doc_path: Layer%203/igmpsnoop:TgtIf/
+                    rn: if-[%s]
+                    type: list
+                    tf_name: mrouter_interfaces
+                    description: 'List of static multicast router interfaces (`ip igmp snooping mrouter interface`).'
+                    attributes:
+                      - nxos_name: id
+                        tf_name: interface_id
+                        type: String
+                        id: true
+                        description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                        example: eth1/10
+              - class_name: igmpsnoopStMcGrp
+                doc_path: Layer%203/igmpsnoop:StMcGrp/
+                rn: mcgrp-[%s]
+                type: list
+                tf_name: static_groups
+                description: 'List of static multicast groups (`ip igmp snooping static-group`).'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: group_address
+                    type: String
+                    id: true
+                    description: 'Multicast Group IP Address.'
+                    example: 239.1.1.1
+                  - nxos_name: name
+                    tf_name: name
+                    type: String
+                    description: 'The name of the object.'
+                    example: group1
+                child_classes:
+                  - class_name: igmpsnoopTgtIf
+                    doc_path: Layer%203/igmpsnoop:TgtIf/
+                    rn: if-[%s]
+                    type: list
+                    tf_name: interfaces
+                    description: 'List of static group outgoing interfaces.'
+                    attributes:
+                      - nxos_name: id
+                        tf_name: interface_id
+                        type: String
+                        id: true
+                        description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                        example: eth1/11
+                  - class_name: igmpsnoopMcSrc
+                    doc_path: Layer%203/igmpsnoop:McSrc/
+                    rn: src-[%s]
+                    type: list
+                    tf_name: sources
+                    description: 'List of static group sources.'
+                    attributes:
+                      - nxos_name: id
+                        tf_name: source_address
+                        type: String
+                        id: true
+                        description: 'Multicast Source IP Address.'
+                        example: 10.1.1.5
+                    child_classes:
+                      - class_name: igmpsnoopTgtIf
+                        doc_path: Layer%203/igmpsnoop:TgtIf/
+                        rn: if-[%s]
+                        type: list
+                        tf_name: interfaces
+                        description: 'List of static group source outgoing interfaces.'
+                        attributes:
+                          - nxos_name: id
+                            tf_name: interface_id
+                            type: String
+                            id: true
+                            description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                            example: eth1/11
+              - class_name: igmpsnoopIntf
+                doc_path: Layer%203/igmpsnoop:Intf/
+                rn: intf-[%s]
+                type: list
+                tf_name: report_flood_interfaces
+                description: 'List of IGMP snooping interface configurations (`ip igmp snooping report-flood interface`).'
+                attributes:
+                  - nxos_name: id
+                    tf_name: interface_id
+                    type: String
+                    id: true
+                    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                    example: eth1/12
+                  - nxos_name: descr
+                    tf_name: description
+                    type: String
+                    description: 'Description.'
+                    example: My description
+                  - nxos_name: name
+                    tf_name: name
+                    type: String
+                    description: 'The name of the object.'
+                    example: report-flood
+                  - nxos_name: reportFlood
+                    tf_name: report_flood
+                    type: Bool
+                    description: 'Indicates if Report Flood is Enabled on the Interface.'
+                    example: true
+test_prerequisites:
+  - dn: sys/bd/vlanconfig-[vlan-3901]
+    class_name: l2VlanConfig
+    attributes:
+      - name: accEncap
+        value: vlan-3901

@@ -5,7 +5,7 @@ subcategory: "Multicast"
 description: |-
   This data source can read the global IGMP snooping configuration on NX-OS devices, including admin state, instance controls, domain controls (querier, optimized multicast flood, routing), VXLAN snooping, and NVE static router port settings.
   API Documentation
-  igmpsnoopEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Entity/igmpsnoopInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Inst/igmpsnoopDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Dom/igmpsnoopGl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Gl/igmpsnoopGVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:GVlan/
+  igmpsnoopEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Entity/igmpsnoopInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Inst/igmpsnoopDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Dom/igmpsnoopGl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Gl/igmpsnoopGVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:GVlan/igmpsnoopVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Vlan/igmpsnoopIgmpsnBase https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:IgmpsnBase/igmpsnoopQuerierP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:QuerierP/igmpsnoopGTimers https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:GTimers/igmpsnoopProxy https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Proxy/igmpsnoopACtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:ACtrl/igmpsnoopMRouter https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:MRouter/igmpsnoopTgtIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:TgtIf/igmpsnoopStMcGrp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:StMcGrp/igmpsnoopTgtIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:TgtIf/igmpsnoopMcSrc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:McSrc/igmpsnoopTgtIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:TgtIf/igmpsnoopIntf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Intf/
 ---
 
 # nxos_igmp_snooping (Data Source)
@@ -19,6 +19,19 @@ This data source can read the global IGMP snooping configuration on NX-OS device
 - [igmpsnoopDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Dom/)
 - [igmpsnoopGl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Gl/)
 - [igmpsnoopGVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:GVlan/)
+- [igmpsnoopVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Vlan/)
+- [igmpsnoopIgmpsnBase](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:IgmpsnBase/)
+- [igmpsnoopQuerierP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:QuerierP/)
+- [igmpsnoopGTimers](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:GTimers/)
+- [igmpsnoopProxy](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Proxy/)
+- [igmpsnoopACtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:ACtrl/)
+- [igmpsnoopMRouter](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:MRouter/)
+- [igmpsnoopTgtIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:TgtIf/)
+- [igmpsnoopStMcGrp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:StMcGrp/)
+- [igmpsnoopTgtIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:TgtIf/)
+- [igmpsnoopMcSrc](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:McSrc/)
+- [igmpsnoopTgtIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:TgtIf/)
+- [igmpsnoopIntf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/igmpsnoop:Intf/)
 
 ## Example Usage
 
@@ -45,3 +58,86 @@ data "nxos_igmp_snooping" "example" {
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the IGMP snooping instance.
 - `instance_control` (String) IGMP snooping instance control flags.
+- `vlans` (Attributes Map) List of per-VLAN IGMP snooping configurations (`vlan configuration <id>`).
+  - Map key: `vlan_id` - Vlan ID for IGMP Snooping Configuration. Example: `vlan100`. (see [below for nested schema](#nestedatt--vlans))
+
+<a id="nestedatt--vlans"></a>
+### Nested Schema for `vlans`
+
+Read-Only:
+
+- `access_group_description` (String) Description of the specified attribute.
+- `access_group_direction` (String) Direction.
+- `access_group_name` (String) Object name.
+- `access_group_route_map` (String) Route Map.
+- `explicit_tracking` (Boolean) Configures Explicit Host for a VLAN.
+- `fast_leave` (Boolean) Indicates if Fastleave is Enabled.
+- `group_timeout` (Number) Group Membership Timeout.
+- `igmp_snooping` (Boolean) Enable/Disable IGMP Snooping.
+- `igmp_source_ip_proxy` (Boolean) Enable/Disable IGMP Src IP Proxy.
+- `last_member_query_interval` (Number) Last Member Query Interval.
+- `link_local_groups_suppression` (Boolean) Link Local Group Suppression.
+- `lookup_mac` (Boolean) Indicates if Layer-2 Multicast Lookup Mac is Enabled.
+- `max_general_query_miss` (Number) Maximum General Query Miss Count.
+- `mrouter_interfaces` (Attributes Map) List of static multicast router interfaces (`ip igmp snooping mrouter interface`).
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--vlans--mrouter_interfaces))
+- `proxy_leave_use_group_address` (Boolean) Use Group IP Address for Proxy-Leave.
+- `proxy_max_response_time` (Number) Configures MRT for Switch's Proxy General-Queries.
+- `querier_address` (String) Address.
+- `querier_description` (String) Description of the specified attribute.
+- `querier_name` (String) Object name.
+- `querier_timeout` (Number) Configures Querier Timeout.
+- `query_flood` (Boolean) VLAN IGMP Query Flood.
+- `query_interval` (Number) Query Interval.
+- `query_max_response_time` (Number) Response Interval of Querier.
+- `report_flood_all_interfaces` (Boolean) Enable Report-Flood on all Active Interfaces of VLAN.
+- `report_flood_interfaces` (Attributes Map) List of IGMP snooping interface configurations (`ip igmp snooping report-flood interface`).
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--vlans--report_flood_interfaces))
+- `report_suppression` (Boolean) IGMPv1/v2 report Suppression for VLAN.
+- `robustness_variable` (Number) Robustness Factor.
+- `startup_query_count` (Number) Startup Query Count.
+- `startup_query_interval` (Number) Startup Query Interval.
+- `static_groups` (Attributes Map) List of static multicast groups (`ip igmp snooping static-group`).
+  - Map key: `group_address` - Multicast Group IP Address. (see [below for nested schema](#nestedatt--vlans--static_groups))
+- `v3_report_suppression` (Boolean) IGMPv3 Report Suppression and Proxy Reporting.
+- `version` (String) Version.
+
+<a id="nestedatt--vlans--mrouter_interfaces"></a>
+### Nested Schema for `vlans.mrouter_interfaces`
+
+
+<a id="nestedatt--vlans--report_flood_interfaces"></a>
+### Nested Schema for `vlans.report_flood_interfaces`
+
+Read-Only:
+
+- `description` (String) Description.
+- `name` (String) The name of the object.
+- `report_flood` (Boolean) Indicates if Report Flood is Enabled on the Interface.
+
+
+<a id="nestedatt--vlans--static_groups"></a>
+### Nested Schema for `vlans.static_groups`
+
+Read-Only:
+
+- `interfaces` (Attributes Map) List of static group outgoing interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--vlans--static_groups--interfaces))
+- `name` (String) The name of the object.
+- `sources` (Attributes Map) List of static group sources.
+  - Map key: `source_address` - Multicast Source IP Address. (see [below for nested schema](#nestedatt--vlans--static_groups--sources))
+
+<a id="nestedatt--vlans--static_groups--interfaces"></a>
+### Nested Schema for `vlans.static_groups.interfaces`
+
+
+<a id="nestedatt--vlans--static_groups--sources"></a>
+### Nested Schema for `vlans.static_groups.sources`
+
+Read-Only:
+
+- `interfaces` (Attributes Map) List of static group source outgoing interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--vlans--static_groups--sources--interfaces))
+
+<a id="nestedatt--vlans--static_groups--sources--interfaces"></a>
+### Nested Schema for `vlans.static_groups.sources.interfaces`

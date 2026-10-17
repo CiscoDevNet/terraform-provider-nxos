@@ -23,6 +23,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -37,16 +38,77 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type IGMPSnooping struct {
-	Device                               types.String `tfsdk:"device"`
-	Dn                                   types.String `tfsdk:"id"`
-	AdminState                           types.String `tfsdk:"admin_state"`
-	InstanceAdminState                   types.String `tfsdk:"instance_admin_state"`
-	InstanceControl                      types.String `tfsdk:"instance_control"`
-	DomainControl                        types.String `tfsdk:"domain_control"`
-	DomainName                           types.String `tfsdk:"domain_name"`
-	GlobalVlanVxlan                      types.Bool   `tfsdk:"global_vlan_vxlan"`
-	GlobalVlanDisableNveStaticRouterPort types.Bool   `tfsdk:"global_vlan_disable_nve_static_router_port"`
-	GlobalVlanVxlanUmcDropVlan           types.String `tfsdk:"global_vlan_vxlan_umc_drop_vlan"`
+	Device                               types.String                 `tfsdk:"device"`
+	Dn                                   types.String                 `tfsdk:"id"`
+	AdminState                           types.String                 `tfsdk:"admin_state"`
+	InstanceAdminState                   types.String                 `tfsdk:"instance_admin_state"`
+	InstanceControl                      types.String                 `tfsdk:"instance_control"`
+	DomainControl                        types.String                 `tfsdk:"domain_control"`
+	DomainName                           types.String                 `tfsdk:"domain_name"`
+	GlobalVlanVxlan                      types.Bool                   `tfsdk:"global_vlan_vxlan"`
+	GlobalVlanDisableNveStaticRouterPort types.Bool                   `tfsdk:"global_vlan_disable_nve_static_router_port"`
+	GlobalVlanVxlanUmcDropVlan           types.String                 `tfsdk:"global_vlan_vxlan_umc_drop_vlan"`
+	Vlans                                map[string]IGMPSnoopingVlans `tfsdk:"vlans"`
+}
+
+type IGMPSnoopingVlans struct {
+	ReportFloodAllInterfaces   types.Bool                                        `tfsdk:"report_flood_all_interfaces"`
+	ExplicitTracking           types.Bool                                        `tfsdk:"explicit_tracking"`
+	IgmpSnooping               types.Bool                                        `tfsdk:"igmp_snooping"`
+	IgmpSourceIpProxy          types.Bool                                        `tfsdk:"igmp_source_ip_proxy"`
+	LinkLocalGroupsSuppression types.Bool                                        `tfsdk:"link_local_groups_suppression"`
+	LookupMac                  types.Bool                                        `tfsdk:"lookup_mac"`
+	QueryFlood                 types.Bool                                        `tfsdk:"query_flood"`
+	ReportSuppression          types.Bool                                        `tfsdk:"report_suppression"`
+	V3ReportSuppression        types.Bool                                        `tfsdk:"v3_report_suppression"`
+	QuerierAddress             types.String                                      `tfsdk:"querier_address"`
+	QuerierDescription         types.String                                      `tfsdk:"querier_description"`
+	LastMemberQueryInterval    types.Int64                                       `tfsdk:"last_member_query_interval"`
+	QuerierName                types.String                                      `tfsdk:"querier_name"`
+	QueryInterval              types.Int64                                       `tfsdk:"query_interval"`
+	RobustnessVariable         types.Int64                                       `tfsdk:"robustness_variable"`
+	QueryMaxResponseTime       types.Int64                                       `tfsdk:"query_max_response_time"`
+	StartupQueryCount          types.Int64                                       `tfsdk:"startup_query_count"`
+	StartupQueryInterval       types.Int64                                       `tfsdk:"startup_query_interval"`
+	QuerierTimeout             types.Int64                                       `tfsdk:"querier_timeout"`
+	Version                    types.String                                      `tfsdk:"version"`
+	FastLeave                  types.Bool                                        `tfsdk:"fast_leave"`
+	GroupTimeout               types.Int64                                       `tfsdk:"group_timeout"`
+	MaxGeneralQueryMiss        types.Int64                                       `tfsdk:"max_general_query_miss"`
+	ProxyLeaveUseGroupAddress  types.Bool                                        `tfsdk:"proxy_leave_use_group_address"`
+	ProxyMaxResponseTime       types.Int64                                       `tfsdk:"proxy_max_response_time"`
+	AccessGroupDescription     types.String                                      `tfsdk:"access_group_description"`
+	AccessGroupDirection       types.String                                      `tfsdk:"access_group_direction"`
+	AccessGroupName            types.String                                      `tfsdk:"access_group_name"`
+	AccessGroupRouteMap        types.String                                      `tfsdk:"access_group_route_map"`
+	MrouterInterfaces          map[string]IGMPSnoopingVlansMrouterInterfaces     `tfsdk:"mrouter_interfaces"`
+	StaticGroups               map[string]IGMPSnoopingVlansStaticGroups          `tfsdk:"static_groups"`
+	ReportFloodInterfaces      map[string]IGMPSnoopingVlansReportFloodInterfaces `tfsdk:"report_flood_interfaces"`
+}
+
+type IGMPSnoopingVlansMrouterInterfaces struct {
+}
+
+type IGMPSnoopingVlansStaticGroups struct {
+	Name       types.String                                       `tfsdk:"name"`
+	Interfaces map[string]IGMPSnoopingVlansStaticGroupsInterfaces `tfsdk:"interfaces"`
+	Sources    map[string]IGMPSnoopingVlansStaticGroupsSources    `tfsdk:"sources"`
+}
+
+type IGMPSnoopingVlansStaticGroupsInterfaces struct {
+}
+
+type IGMPSnoopingVlansStaticGroupsSources struct {
+	Interfaces map[string]IGMPSnoopingVlansStaticGroupsSourcesInterfaces `tfsdk:"interfaces"`
+}
+
+type IGMPSnoopingVlansStaticGroupsSourcesInterfaces struct {
+}
+
+type IGMPSnoopingVlansReportFloodInterfaces struct {
+	Description types.String `tfsdk:"description"`
+	Name        types.String `tfsdk:"name"`
+	ReportFlood types.Bool   `tfsdk:"report_flood"`
 }
 
 type IGMPSnoopingIdentity struct {
@@ -81,6 +143,34 @@ var IGMPSnoopingMinVersions = map[string]helpers.MinVersion{}
 
 func (data IGMPSnooping) getDn() string {
 	return "sys/igmpsnoop"
+}
+
+func (data IGMPSnoopingVlans) getRn(key string) string {
+	return fmt.Sprintf("vlan-[%s]", key)
+}
+
+func (data IGMPSnoopingVlansMrouterInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data IGMPSnoopingVlansStaticGroups) getRn(key string) string {
+	return fmt.Sprintf("mcgrp-[%s]", key)
+}
+
+func (data IGMPSnoopingVlansStaticGroupsInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data IGMPSnoopingVlansStaticGroupsSources) getRn(key string) string {
+	return fmt.Sprintf("src-[%s]", key)
+}
+
+func (data IGMPSnoopingVlansStaticGroupsSourcesInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data IGMPSnoopingVlansReportFloodInterfaces) getRn(key string) string {
+	return fmt.Sprintf("intf-[%s]", key)
 }
 
 func (data IGMPSnooping) getClassName() string {
@@ -158,6 +248,212 @@ func (data IGMPSnooping) toBody(config IGMPSnooping) nxos.Body {
 				body = prevBody
 				if parentAttrs != "{}" || gjson.Get(childBody, "igmpsnoopGl.children").Exists() {
 					body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+				}
+			}
+			for key, child := range data.Vlans {
+				configChild, configChildOk := config.Vlans[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "vlanid", key)
+				if configChildOk && !child.ReportFloodAllInterfaces.IsUnknown() && !child.ReportFloodAllInterfaces.IsNull() && !configChild.ReportFloodAllInterfaces.IsNull() {
+					attrs, _ = sjson.Set(attrs, "rprtFldAllIntf", strconv.FormatBool(child.ReportFloodAllInterfaces.ValueBool()))
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopVlan.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".igmpsnoopVlan.children"
+					_ = nestedChildrenPath
+					attrs = "{}"
+					if !child.ExplicitTracking.IsUnknown() && !child.ExplicitTracking.IsNull() && !configChild.ExplicitTracking.IsNull() {
+						attrs, _ = sjson.Set(attrs, "expTracking", strconv.FormatBool(child.ExplicitTracking.ValueBool()))
+					}
+					if !child.IgmpSnooping.IsUnknown() && !child.IgmpSnooping.IsNull() && !configChild.IgmpSnooping.IsNull() {
+						attrs, _ = sjson.Set(attrs, "igmpSnoop", strconv.FormatBool(child.IgmpSnooping.ValueBool()))
+					}
+					if !child.IgmpSourceIpProxy.IsUnknown() && !child.IgmpSourceIpProxy.IsNull() && !configChild.IgmpSourceIpProxy.IsNull() {
+						attrs, _ = sjson.Set(attrs, "igmpSrcIpProxy", strconv.FormatBool(child.IgmpSourceIpProxy.ValueBool()))
+					}
+					if !child.LinkLocalGroupsSuppression.IsUnknown() && !child.LinkLocalGroupsSuppression.IsNull() && !configChild.LinkLocalGroupsSuppression.IsNull() {
+						attrs, _ = sjson.Set(attrs, "llGrpSuppr", strconv.FormatBool(child.LinkLocalGroupsSuppression.ValueBool()))
+					}
+					if !child.LookupMac.IsUnknown() && !child.LookupMac.IsNull() && !configChild.LookupMac.IsNull() {
+						attrs, _ = sjson.Set(attrs, "lookupMac", strconv.FormatBool(child.LookupMac.ValueBool()))
+					}
+					if !child.QueryFlood.IsUnknown() && !child.QueryFlood.IsNull() && !configChild.QueryFlood.IsNull() {
+						attrs, _ = sjson.Set(attrs, "queryFlood", strconv.FormatBool(child.QueryFlood.ValueBool()))
+					}
+					if !child.ReportSuppression.IsUnknown() && !child.ReportSuppression.IsNull() && !configChild.ReportSuppression.IsNull() {
+						attrs, _ = sjson.Set(attrs, "reportSuppr", strconv.FormatBool(child.ReportSuppression.ValueBool()))
+					}
+					if !child.V3ReportSuppression.IsUnknown() && !child.V3ReportSuppression.IsNull() && !configChild.V3ReportSuppression.IsNull() {
+						attrs, _ = sjson.Set(attrs, "v3ReportSuppr", strconv.FormatBool(child.V3ReportSuppression.ValueBool()))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopIgmpsnBase.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.QuerierAddress.IsUnknown() && !child.QuerierAddress.IsNull() && !configChild.QuerierAddress.IsNull() {
+						attrs, _ = sjson.Set(attrs, "addr", child.QuerierAddress.ValueString())
+					}
+					if !child.QuerierDescription.IsUnknown() && !child.QuerierDescription.IsNull() && !configChild.QuerierDescription.IsNull() {
+						attrs, _ = sjson.Set(attrs, "descr", child.QuerierDescription.ValueString())
+					}
+					if !child.LastMemberQueryInterval.IsUnknown() && !child.LastMemberQueryInterval.IsNull() && !configChild.LastMemberQueryInterval.IsNull() {
+						attrs, _ = sjson.Set(attrs, "lastMbrIntvl", strconv.FormatInt(child.LastMemberQueryInterval.ValueInt64(), 10))
+					}
+					if !child.QuerierName.IsUnknown() && !child.QuerierName.IsNull() && !configChild.QuerierName.IsNull() {
+						attrs, _ = sjson.Set(attrs, "name", child.QuerierName.ValueString())
+					}
+					if !child.QueryInterval.IsUnknown() && !child.QueryInterval.IsNull() && !configChild.QueryInterval.IsNull() {
+						attrs, _ = sjson.Set(attrs, "queryIntvl", strconv.FormatInt(child.QueryInterval.ValueInt64(), 10))
+					}
+					if !child.RobustnessVariable.IsUnknown() && !child.RobustnessVariable.IsNull() && !configChild.RobustnessVariable.IsNull() {
+						attrs, _ = sjson.Set(attrs, "robustFac", strconv.FormatInt(child.RobustnessVariable.ValueInt64(), 10))
+					}
+					if !child.QueryMaxResponseTime.IsUnknown() && !child.QueryMaxResponseTime.IsNull() && !configChild.QueryMaxResponseTime.IsNull() {
+						attrs, _ = sjson.Set(attrs, "rspIntvl", strconv.FormatInt(child.QueryMaxResponseTime.ValueInt64(), 10))
+					}
+					if !child.StartupQueryCount.IsUnknown() && !child.StartupQueryCount.IsNull() && !configChild.StartupQueryCount.IsNull() {
+						attrs, _ = sjson.Set(attrs, "startQueryCnt", strconv.FormatInt(child.StartupQueryCount.ValueInt64(), 10))
+					}
+					if !child.StartupQueryInterval.IsUnknown() && !child.StartupQueryInterval.IsNull() && !configChild.StartupQueryInterval.IsNull() {
+						attrs, _ = sjson.Set(attrs, "startQueryIntvl", strconv.FormatInt(child.StartupQueryInterval.ValueInt64(), 10))
+					}
+					if !child.QuerierTimeout.IsUnknown() && !child.QuerierTimeout.IsNull() && !configChild.QuerierTimeout.IsNull() {
+						attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(child.QuerierTimeout.ValueInt64(), 10))
+					}
+					if !child.Version.IsUnknown() && !child.Version.IsNull() && !configChild.Version.IsNull() {
+						attrs, _ = sjson.Set(attrs, "ver", child.Version.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopQuerierP.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.FastLeave.IsUnknown() && !child.FastLeave.IsNull() && !configChild.FastLeave.IsNull() {
+						attrs, _ = sjson.Set(attrs, "fastLeave", strconv.FormatBool(child.FastLeave.ValueBool()))
+					}
+					if !child.GroupTimeout.IsUnknown() && !child.GroupTimeout.IsNull() && !configChild.GroupTimeout.IsNull() {
+						attrs, _ = sjson.Set(attrs, "grpTimeout", strconv.FormatInt(child.GroupTimeout.ValueInt64(), 10))
+					}
+					if !child.MaxGeneralQueryMiss.IsUnknown() && !child.MaxGeneralQueryMiss.IsNull() && !configChild.MaxGeneralQueryMiss.IsNull() {
+						attrs, _ = sjson.Set(attrs, "maxGqMiss", strconv.FormatInt(child.MaxGeneralQueryMiss.ValueInt64(), 10))
+					}
+					if !child.ProxyLeaveUseGroupAddress.IsUnknown() && !child.ProxyLeaveUseGroupAddress.IsNull() && !configChild.ProxyLeaveUseGroupAddress.IsNull() {
+						attrs, _ = sjson.Set(attrs, "useGrpAddr", strconv.FormatBool(child.ProxyLeaveUseGroupAddress.ValueBool()))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopGTimers.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.ProxyMaxResponseTime.IsUnknown() && !child.ProxyMaxResponseTime.IsNull() && !configChild.ProxyMaxResponseTime.IsNull() {
+						attrs, _ = sjson.Set(attrs, "maxRespTime", strconv.FormatInt(child.ProxyMaxResponseTime.ValueInt64(), 10))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopProxy.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.AccessGroupDescription.IsUnknown() && !child.AccessGroupDescription.IsNull() && !configChild.AccessGroupDescription.IsNull() {
+						attrs, _ = sjson.Set(attrs, "descr", child.AccessGroupDescription.ValueString())
+					}
+					if !child.AccessGroupDirection.IsUnknown() && !child.AccessGroupDirection.IsNull() && !configChild.AccessGroupDirection.IsNull() {
+						attrs, _ = sjson.Set(attrs, "direction", child.AccessGroupDirection.ValueString())
+					}
+					if !child.AccessGroupName.IsUnknown() && !child.AccessGroupName.IsNull() && !configChild.AccessGroupName.IsNull() {
+						attrs, _ = sjson.Set(attrs, "name", child.AccessGroupName.ValueString())
+					}
+					if !child.AccessGroupRouteMap.IsUnknown() && !child.AccessGroupRouteMap.IsNull() && !configChild.AccessGroupRouteMap.IsNull() {
+						attrs, _ = sjson.Set(attrs, "rtMap", child.AccessGroupRouteMap.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopACtrl.attributes", attrs)
+					}
+					{
+						attrs = "{}"
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "igmpsnoopMRouter.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "igmpsnoopMRouter.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
+						for key := range child.MrouterInterfaces {
+							configChild, configChildOk := configChild.MrouterInterfaces[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "id", key)
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopTgtIf.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "igmpsnoopMRouter.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
+					}
+					for key, child := range child.StaticGroups {
+						configChild, configChildOk := configChild.StaticGroups[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "addr", key)
+						if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
+							attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopStMcGrp.attributes", attrs)
+						{
+							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".igmpsnoopStMcGrp.children"
+							_ = nestedChildrenPath
+							for key := range child.Interfaces {
+								configChild, configChildOk := configChild.Interfaces[key]
+								_ = configChild
+								_ = configChildOk
+								attrs = "{}"
+								attrs, _ = sjson.Set(attrs, "id", key)
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopTgtIf.attributes", attrs)
+							}
+							for key, child := range child.Sources {
+								configChild, configChildOk := configChild.Sources[key]
+								_ = configChild
+								_ = configChildOk
+								attrs = "{}"
+								attrs, _ = sjson.Set(attrs, "id", key)
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopMcSrc.attributes", attrs)
+								{
+									nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+									nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".igmpsnoopMcSrc.children"
+									_ = nestedChildrenPath
+									for key := range child.Interfaces {
+										configChild, configChildOk := configChild.Interfaces[key]
+										_ = configChild
+										_ = configChildOk
+										attrs = "{}"
+										attrs, _ = sjson.Set(attrs, "id", key)
+										body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopTgtIf.attributes", attrs)
+									}
+								}
+							}
+						}
+					}
+					for key, child := range child.ReportFloodInterfaces {
+						configChild, configChildOk := configChild.ReportFloodInterfaces[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "id", key)
+						if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+							attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+						}
+						if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
+							attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+						}
+						if configChildOk && !child.ReportFlood.IsUnknown() && !child.ReportFlood.IsNull() && !configChild.ReportFlood.IsNull() {
+							attrs, _ = sjson.Set(attrs, "reportFlood", strconv.FormatBool(child.ReportFlood.ValueBool()))
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.igmpsnoopIntf.attributes", attrs)
+					}
 				}
 			}
 			childBody = body
@@ -239,6 +535,243 @@ func (data *IGMPSnooping) fromBody(res gjson.Result) {
 					data.GlobalVlanVxlanUmcDropVlan = types.StringValue(rigmpsnoopGVlan.Get("igmpsnoopGVlan.attributes.vxlanUmcDropVlan").String())
 				}
 			}
+			rigmpsnoopDom.Get("igmpsnoopDom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "igmpsnoopVlan" {
+								var child IGMPSnoopingVlans
+								child.ReportFloodAllInterfaces = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.rprtFldAllIntf").String()))
+								mapKey := value.Get("attributes.vlanid").String()
+								{
+									var rigmpsnoopIgmpsnBase gjson.Result
+									value.Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("igmpsnoopIgmpsnBase.attributes.rn").String()
+											if rnValue == "igmpsnbase" {
+												rigmpsnoopIgmpsnBase = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.ExplicitTracking = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.expTracking").String()))
+									child.IgmpSnooping = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.igmpSnoop").String()))
+									child.IgmpSourceIpProxy = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.igmpSrcIpProxy").String()))
+									child.LinkLocalGroupsSuppression = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.llGrpSuppr").String()))
+									child.LookupMac = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.lookupMac").String()))
+									child.QueryFlood = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.queryFlood").String()))
+									child.ReportSuppression = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.reportSuppr").String()))
+									child.V3ReportSuppression = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.v3ReportSuppr").String()))
+								}
+								{
+									var rigmpsnoopQuerierP gjson.Result
+									value.Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("igmpsnoopQuerierP.attributes.rn").String()
+											if rnValue == "querierp" {
+												rigmpsnoopQuerierP = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.QuerierAddress = types.StringValue(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.addr").String())
+									child.QuerierDescription = types.StringValue(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.descr").String())
+									child.LastMemberQueryInterval = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.lastMbrIntvl").Int())
+									child.QuerierName = types.StringValue(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.name").String())
+									child.QueryInterval = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.queryIntvl").Int())
+									child.RobustnessVariable = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.robustFac").Int())
+									child.QueryMaxResponseTime = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.rspIntvl").Int())
+									child.StartupQueryCount = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.startQueryCnt").Int())
+									child.StartupQueryInterval = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.startQueryIntvl").Int())
+									child.QuerierTimeout = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.timeout").Int())
+									child.Version = types.StringValue(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.ver").String())
+								}
+								{
+									var rigmpsnoopGTimers gjson.Result
+									value.Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("igmpsnoopGTimers.attributes.rn").String()
+											if rnValue == "gTimers" {
+												rigmpsnoopGTimers = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.FastLeave = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopGTimers.Get("igmpsnoopGTimers.attributes.fastLeave").String()))
+									child.GroupTimeout = types.Int64Value(rigmpsnoopGTimers.Get("igmpsnoopGTimers.attributes.grpTimeout").Int())
+									child.MaxGeneralQueryMiss = types.Int64Value(rigmpsnoopGTimers.Get("igmpsnoopGTimers.attributes.maxGqMiss").Int())
+									child.ProxyLeaveUseGroupAddress = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopGTimers.Get("igmpsnoopGTimers.attributes.useGrpAddr").String()))
+								}
+								{
+									var rigmpsnoopProxy gjson.Result
+									value.Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("igmpsnoopProxy.attributes.rn").String()
+											if rnValue == "proxy" {
+												rigmpsnoopProxy = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.ProxyMaxResponseTime = types.Int64Value(rigmpsnoopProxy.Get("igmpsnoopProxy.attributes.maxRespTime").Int())
+								}
+								{
+									var rigmpsnoopACtrl gjson.Result
+									value.Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("igmpsnoopACtrl.attributes.rn").String()
+											if rnValue == "actrl" {
+												rigmpsnoopACtrl = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.AccessGroupDescription = types.StringValue(rigmpsnoopACtrl.Get("igmpsnoopACtrl.attributes.descr").String())
+									child.AccessGroupDirection = types.StringValue(rigmpsnoopACtrl.Get("igmpsnoopACtrl.attributes.direction").String())
+									child.AccessGroupName = types.StringValue(rigmpsnoopACtrl.Get("igmpsnoopACtrl.attributes.name").String())
+									child.AccessGroupRouteMap = types.StringValue(rigmpsnoopACtrl.Get("igmpsnoopACtrl.attributes.rtMap").String())
+								}
+								{
+									var rigmpsnoopMRouter gjson.Result
+									value.Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											rnValue := nestedV.Get("igmpsnoopMRouter.attributes.rn").String()
+											if rnValue == "mrouter" {
+												rigmpsnoopMRouter = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									rigmpsnoopMRouter.Get("igmpsnoopMRouter").Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											nestedV.ForEach(
+												func(nestedClassname, nestedValue gjson.Result) bool {
+													if nestedClassname.String() == "igmpsnoopTgtIf" {
+														var nestedChildigmpsnoopTgtIf IGMPSnoopingVlansMrouterInterfaces
+														nestedMapKey := nestedValue.Get("attributes.id").String()
+														if child.MrouterInterfaces == nil {
+															child.MrouterInterfaces = make(map[string]IGMPSnoopingVlansMrouterInterfaces)
+														}
+														child.MrouterInterfaces[nestedMapKey] = nestedChildigmpsnoopTgtIf
+													}
+													return true
+												},
+											)
+											return true
+										},
+									)
+								}
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "igmpsnoopStMcGrp" {
+													var nestedChildigmpsnoopStMcGrp IGMPSnoopingVlansStaticGroups
+													nestedChildigmpsnoopStMcGrp.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+													nestedMapKey := nestedValue.Get("attributes.addr").String()
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															nestedV.ForEach(
+																func(nestedClassname, nestedValue gjson.Result) bool {
+																	if nestedClassname.String() == "igmpsnoopTgtIf" {
+																		var nestedChildigmpsnoopTgtIf IGMPSnoopingVlansStaticGroupsInterfaces
+																		nestedMapKey := nestedValue.Get("attributes.id").String()
+																		if nestedChildigmpsnoopStMcGrp.Interfaces == nil {
+																			nestedChildigmpsnoopStMcGrp.Interfaces = make(map[string]IGMPSnoopingVlansStaticGroupsInterfaces)
+																		}
+																		nestedChildigmpsnoopStMcGrp.Interfaces[nestedMapKey] = nestedChildigmpsnoopTgtIf
+																	}
+																	return true
+																},
+															)
+															return true
+														},
+													)
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															nestedV.ForEach(
+																func(nestedClassname, nestedValue gjson.Result) bool {
+																	if nestedClassname.String() == "igmpsnoopMcSrc" {
+																		var nestedChildigmpsnoopMcSrc IGMPSnoopingVlansStaticGroupsSources
+																		nestedMapKey := nestedValue.Get("attributes.id").String()
+																		nestedValue.Get("children").ForEach(
+																			func(_, nestedV gjson.Result) bool {
+																				nestedV.ForEach(
+																					func(nestedClassname, nestedValue gjson.Result) bool {
+																						if nestedClassname.String() == "igmpsnoopTgtIf" {
+																							var nestedChildigmpsnoopTgtIf IGMPSnoopingVlansStaticGroupsSourcesInterfaces
+																							nestedMapKey := nestedValue.Get("attributes.id").String()
+																							if nestedChildigmpsnoopMcSrc.Interfaces == nil {
+																								nestedChildigmpsnoopMcSrc.Interfaces = make(map[string]IGMPSnoopingVlansStaticGroupsSourcesInterfaces)
+																							}
+																							nestedChildigmpsnoopMcSrc.Interfaces[nestedMapKey] = nestedChildigmpsnoopTgtIf
+																						}
+																						return true
+																					},
+																				)
+																				return true
+																			},
+																		)
+																		if nestedChildigmpsnoopStMcGrp.Sources == nil {
+																			nestedChildigmpsnoopStMcGrp.Sources = make(map[string]IGMPSnoopingVlansStaticGroupsSources)
+																		}
+																		nestedChildigmpsnoopStMcGrp.Sources[nestedMapKey] = nestedChildigmpsnoopMcSrc
+																	}
+																	return true
+																},
+															)
+															return true
+														},
+													)
+													if child.StaticGroups == nil {
+														child.StaticGroups = make(map[string]IGMPSnoopingVlansStaticGroups)
+													}
+													child.StaticGroups[nestedMapKey] = nestedChildigmpsnoopStMcGrp
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "igmpsnoopIntf" {
+													var nestedChildigmpsnoopIntf IGMPSnoopingVlansReportFloodInterfaces
+													nestedChildigmpsnoopIntf.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+													nestedChildigmpsnoopIntf.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+													nestedChildigmpsnoopIntf.ReportFlood = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.reportFlood").String()))
+													nestedMapKey := nestedValue.Get("attributes.id").String()
+													if child.ReportFloodInterfaces == nil {
+														child.ReportFloodInterfaces = make(map[string]IGMPSnoopingVlansReportFloodInterfaces)
+													}
+													child.ReportFloodInterfaces[nestedMapKey] = nestedChildigmpsnoopIntf
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								if data.Vlans == nil {
+									data.Vlans = make(map[string]IGMPSnoopingVlans)
+								}
+								data.Vlans[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
 		}
 	}
 }
@@ -337,6 +870,374 @@ func (data *IGMPSnooping) updateFromBody(res gjson.Result) {
 				}
 			}
 		}
+		for key, item := range data.Vlans {
+			var rigmpsnoopVlan gjson.Result
+			rigmpsnoopDom.Get("igmpsnoopDom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("igmpsnoopVlan.attributes.vlanid").String() == key {
+						rigmpsnoopVlan = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rigmpsnoopVlan.Exists() {
+				delete(data.Vlans, key)
+				continue
+			}
+			if !item.ReportFloodAllInterfaces.IsNull() {
+				item.ReportFloodAllInterfaces = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopVlan.Get("igmpsnoopVlan.attributes.rprtFldAllIntf").String()))
+			} else {
+				item.ReportFloodAllInterfaces = types.BoolNull()
+			}
+			{
+				var rigmpsnoopIgmpsnBase gjson.Result
+				rigmpsnoopVlan.Get("igmpsnoopVlan.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("igmpsnoopIgmpsnBase.attributes.rn").String()
+						if rnValue == "igmpsnbase" {
+							rigmpsnoopIgmpsnBase = v
+							return false
+						}
+						return true
+					},
+				)
+				if !item.ExplicitTracking.IsNull() {
+					item.ExplicitTracking = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.expTracking").String()))
+				} else {
+					item.ExplicitTracking = types.BoolNull()
+				}
+				if !item.IgmpSnooping.IsNull() {
+					item.IgmpSnooping = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.igmpSnoop").String()))
+				} else {
+					item.IgmpSnooping = types.BoolNull()
+				}
+				if !item.IgmpSourceIpProxy.IsNull() {
+					item.IgmpSourceIpProxy = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.igmpSrcIpProxy").String()))
+				} else {
+					item.IgmpSourceIpProxy = types.BoolNull()
+				}
+				if !item.LinkLocalGroupsSuppression.IsNull() {
+					item.LinkLocalGroupsSuppression = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.llGrpSuppr").String()))
+				} else {
+					item.LinkLocalGroupsSuppression = types.BoolNull()
+				}
+				if !item.LookupMac.IsNull() {
+					item.LookupMac = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.lookupMac").String()))
+				} else {
+					item.LookupMac = types.BoolNull()
+				}
+				if !item.QueryFlood.IsNull() {
+					item.QueryFlood = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.queryFlood").String()))
+				} else {
+					item.QueryFlood = types.BoolNull()
+				}
+				if !item.ReportSuppression.IsNull() {
+					item.ReportSuppression = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.reportSuppr").String()))
+				} else {
+					item.ReportSuppression = types.BoolNull()
+				}
+				if !item.V3ReportSuppression.IsNull() {
+					item.V3ReportSuppression = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIgmpsnBase.Get("igmpsnoopIgmpsnBase.attributes.v3ReportSuppr").String()))
+				} else {
+					item.V3ReportSuppression = types.BoolNull()
+				}
+			}
+			{
+				var rigmpsnoopQuerierP gjson.Result
+				rigmpsnoopVlan.Get("igmpsnoopVlan.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("igmpsnoopQuerierP.attributes.rn").String()
+						if rnValue == "querierp" {
+							rigmpsnoopQuerierP = v
+							return false
+						}
+						return true
+					},
+				)
+				if !item.QuerierAddress.IsNull() {
+					item.QuerierAddress = types.StringValue(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.addr").String())
+				} else {
+					item.QuerierAddress = types.StringNull()
+				}
+				if !item.QuerierDescription.IsNull() {
+					item.QuerierDescription = types.StringValue(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.descr").String())
+				} else {
+					item.QuerierDescription = types.StringNull()
+				}
+				if !item.LastMemberQueryInterval.IsNull() {
+					item.LastMemberQueryInterval = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.lastMbrIntvl").Int())
+				} else {
+					item.LastMemberQueryInterval = types.Int64Null()
+				}
+				if !item.QuerierName.IsNull() {
+					item.QuerierName = types.StringValue(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.name").String())
+				} else {
+					item.QuerierName = types.StringNull()
+				}
+				if !item.QueryInterval.IsNull() {
+					item.QueryInterval = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.queryIntvl").Int())
+				} else {
+					item.QueryInterval = types.Int64Null()
+				}
+				if !item.RobustnessVariable.IsNull() {
+					item.RobustnessVariable = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.robustFac").Int())
+				} else {
+					item.RobustnessVariable = types.Int64Null()
+				}
+				if !item.QueryMaxResponseTime.IsNull() {
+					item.QueryMaxResponseTime = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.rspIntvl").Int())
+				} else {
+					item.QueryMaxResponseTime = types.Int64Null()
+				}
+				if !item.StartupQueryCount.IsNull() {
+					item.StartupQueryCount = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.startQueryCnt").Int())
+				} else {
+					item.StartupQueryCount = types.Int64Null()
+				}
+				if !item.StartupQueryInterval.IsNull() {
+					item.StartupQueryInterval = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.startQueryIntvl").Int())
+				} else {
+					item.StartupQueryInterval = types.Int64Null()
+				}
+				if !item.QuerierTimeout.IsNull() {
+					item.QuerierTimeout = types.Int64Value(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.timeout").Int())
+				} else {
+					item.QuerierTimeout = types.Int64Null()
+				}
+				if !item.Version.IsNull() {
+					item.Version = types.StringValue(rigmpsnoopQuerierP.Get("igmpsnoopQuerierP.attributes.ver").String())
+				} else {
+					item.Version = types.StringNull()
+				}
+			}
+			{
+				var rigmpsnoopGTimers gjson.Result
+				rigmpsnoopVlan.Get("igmpsnoopVlan.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("igmpsnoopGTimers.attributes.rn").String()
+						if rnValue == "gTimers" {
+							rigmpsnoopGTimers = v
+							return false
+						}
+						return true
+					},
+				)
+				if !item.FastLeave.IsNull() {
+					item.FastLeave = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopGTimers.Get("igmpsnoopGTimers.attributes.fastLeave").String()))
+				} else {
+					item.FastLeave = types.BoolNull()
+				}
+				if !item.GroupTimeout.IsNull() {
+					item.GroupTimeout = types.Int64Value(rigmpsnoopGTimers.Get("igmpsnoopGTimers.attributes.grpTimeout").Int())
+				} else {
+					item.GroupTimeout = types.Int64Null()
+				}
+				if !item.MaxGeneralQueryMiss.IsNull() {
+					item.MaxGeneralQueryMiss = types.Int64Value(rigmpsnoopGTimers.Get("igmpsnoopGTimers.attributes.maxGqMiss").Int())
+				} else {
+					item.MaxGeneralQueryMiss = types.Int64Null()
+				}
+				if !item.ProxyLeaveUseGroupAddress.IsNull() {
+					item.ProxyLeaveUseGroupAddress = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopGTimers.Get("igmpsnoopGTimers.attributes.useGrpAddr").String()))
+				} else {
+					item.ProxyLeaveUseGroupAddress = types.BoolNull()
+				}
+			}
+			{
+				var rigmpsnoopProxy gjson.Result
+				rigmpsnoopVlan.Get("igmpsnoopVlan.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("igmpsnoopProxy.attributes.rn").String()
+						if rnValue == "proxy" {
+							rigmpsnoopProxy = v
+							return false
+						}
+						return true
+					},
+				)
+				if !item.ProxyMaxResponseTime.IsNull() {
+					item.ProxyMaxResponseTime = types.Int64Value(rigmpsnoopProxy.Get("igmpsnoopProxy.attributes.maxRespTime").Int())
+				} else {
+					item.ProxyMaxResponseTime = types.Int64Null()
+				}
+			}
+			{
+				var rigmpsnoopACtrl gjson.Result
+				rigmpsnoopVlan.Get("igmpsnoopVlan.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("igmpsnoopACtrl.attributes.rn").String()
+						if rnValue == "actrl" {
+							rigmpsnoopACtrl = v
+							return false
+						}
+						return true
+					},
+				)
+				if !item.AccessGroupDescription.IsNull() {
+					item.AccessGroupDescription = types.StringValue(rigmpsnoopACtrl.Get("igmpsnoopACtrl.attributes.descr").String())
+				} else {
+					item.AccessGroupDescription = types.StringNull()
+				}
+				if !item.AccessGroupDirection.IsNull() {
+					item.AccessGroupDirection = types.StringValue(rigmpsnoopACtrl.Get("igmpsnoopACtrl.attributes.direction").String())
+				} else {
+					item.AccessGroupDirection = types.StringNull()
+				}
+				if !item.AccessGroupName.IsNull() {
+					item.AccessGroupName = types.StringValue(rigmpsnoopACtrl.Get("igmpsnoopACtrl.attributes.name").String())
+				} else {
+					item.AccessGroupName = types.StringNull()
+				}
+				if !item.AccessGroupRouteMap.IsNull() {
+					item.AccessGroupRouteMap = types.StringValue(rigmpsnoopACtrl.Get("igmpsnoopACtrl.attributes.rtMap").String())
+				} else {
+					item.AccessGroupRouteMap = types.StringNull()
+				}
+			}
+			{
+				var rigmpsnoopMRouter gjson.Result
+				rigmpsnoopVlan.Get("igmpsnoopVlan.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("igmpsnoopMRouter.attributes.rn").String()
+						if rnValue == "mrouter" {
+							rigmpsnoopMRouter = v
+							return false
+						}
+						return true
+					},
+				)
+				for nc := range item.MrouterInterfaces {
+					ncItem := item.MrouterInterfaces[nc]
+					var rigmpsnoopTgtIf gjson.Result
+					rigmpsnoopMRouter.Get("igmpsnoopMRouter.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("igmpsnoopTgtIf.attributes.id").String() == nc {
+								rigmpsnoopTgtIf = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rigmpsnoopTgtIf.Exists() {
+						delete(item.MrouterInterfaces, nc)
+						continue
+					}
+					item.MrouterInterfaces[nc] = ncItem
+				}
+			}
+			for nc := range item.StaticGroups {
+				ncItem := item.StaticGroups[nc]
+				var rigmpsnoopStMcGrp gjson.Result
+				rigmpsnoopVlan.Get("igmpsnoopVlan.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("igmpsnoopStMcGrp.attributes.addr").String() == nc {
+							rigmpsnoopStMcGrp = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rigmpsnoopStMcGrp.Exists() {
+					delete(item.StaticGroups, nc)
+					continue
+				}
+				if !ncItem.Name.IsNull() {
+					ncItem.Name = types.StringValue(rigmpsnoopStMcGrp.Get("igmpsnoopStMcGrp.attributes.name").String())
+				} else {
+					ncItem.Name = types.StringNull()
+				}
+				for nc_ := range ncItem.Interfaces {
+					nc_Item := ncItem.Interfaces[nc_]
+					var rigmpsnoopTgtIf gjson.Result
+					rigmpsnoopStMcGrp.Get("igmpsnoopStMcGrp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("igmpsnoopTgtIf.attributes.id").String() == nc_ {
+								rigmpsnoopTgtIf = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rigmpsnoopTgtIf.Exists() {
+						delete(ncItem.Interfaces, nc_)
+						continue
+					}
+					ncItem.Interfaces[nc_] = nc_Item
+				}
+				for nc_ := range ncItem.Sources {
+					nc_Item := ncItem.Sources[nc_]
+					var rigmpsnoopMcSrc gjson.Result
+					rigmpsnoopStMcGrp.Get("igmpsnoopStMcGrp.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("igmpsnoopMcSrc.attributes.id").String() == nc_ {
+								rigmpsnoopMcSrc = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rigmpsnoopMcSrc.Exists() {
+						delete(ncItem.Sources, nc_)
+						continue
+					}
+					for nc__ := range nc_Item.Interfaces {
+						nc__Item := nc_Item.Interfaces[nc__]
+						var rigmpsnoopTgtIf gjson.Result
+						rigmpsnoopMcSrc.Get("igmpsnoopMcSrc.children").ForEach(
+							func(_, v gjson.Result) bool {
+								if v.Get("igmpsnoopTgtIf.attributes.id").String() == nc__ {
+									rigmpsnoopTgtIf = v
+									return false
+								}
+								return true
+							},
+						)
+						if !rigmpsnoopTgtIf.Exists() {
+							delete(nc_Item.Interfaces, nc__)
+							continue
+						}
+						nc_Item.Interfaces[nc__] = nc__Item
+					}
+					ncItem.Sources[nc_] = nc_Item
+				}
+				item.StaticGroups[nc] = ncItem
+			}
+			for nc := range item.ReportFloodInterfaces {
+				ncItem := item.ReportFloodInterfaces[nc]
+				var rigmpsnoopIntf gjson.Result
+				rigmpsnoopVlan.Get("igmpsnoopVlan.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("igmpsnoopIntf.attributes.id").String() == nc {
+							rigmpsnoopIntf = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rigmpsnoopIntf.Exists() {
+					delete(item.ReportFloodInterfaces, nc)
+					continue
+				}
+				if !ncItem.Description.IsNull() {
+					ncItem.Description = types.StringValue(rigmpsnoopIntf.Get("igmpsnoopIntf.attributes.descr").String())
+				} else {
+					ncItem.Description = types.StringNull()
+				}
+				if !ncItem.Name.IsNull() {
+					ncItem.Name = types.StringValue(rigmpsnoopIntf.Get("igmpsnoopIntf.attributes.name").String())
+				} else {
+					ncItem.Name = types.StringNull()
+				}
+				if !ncItem.ReportFlood.IsNull() {
+					ncItem.ReportFlood = types.BoolValue(helpers.ParseNxosBoolean(rigmpsnoopIntf.Get("igmpsnoopIntf.attributes.reportFlood").String()))
+				} else {
+					ncItem.ReportFlood = types.BoolNull()
+				}
+				item.ReportFloodInterfaces[nc] = ncItem
+			}
+			data.Vlans[key] = item
+		}
 	}
 }
 
@@ -389,6 +1290,122 @@ func (data IGMPSnooping) toBodyWithDeletes(ctx context.Context, state IGMPSnoopi
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
 	if !importing {
+		for stateKey := range state.Vlans {
+			if _, found := data.Vlans[stateKey]; !found {
+				stateChild := state.Vlans[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopVlan.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopVlan.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.Vlans {
+			if _, found := data.Vlans[di]; !found {
+				continue
+			}
+			stateItemdi := state.Vlans[di]
+			planItemdi := data.Vlans[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom")+".children").Array() {
+				if mv.Get("igmpsnoopVlan.attributes.vlanid").String() == di {
+					matchBodyPathdi = helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom") + ".children" + "." + strconv.Itoa(mi) + ".igmpsnoopVlan.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateKey := range stateItemdi.MrouterInterfaces {
+				if _, found := planItemdi.MrouterInterfaces[stateKey]; !found {
+					stateChild := stateItemdi.MrouterInterfaces[stateKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopTgtIf.attributes.rn", stateChild.getRn(stateKey))
+					deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopTgtIf.attributes.status", "deleted")
+					deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi, "igmpsnoopMRouter") + ".children"
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.StaticGroups {
+				if _, found := planItemdi.StaticGroups[stateChildKey]; !found {
+					stateChild := stateItemdi.StaticGroups[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopStMcGrp.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopStMcGrp.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for di_ := range stateItemdi.StaticGroups {
+				if _, found := planItemdi.StaticGroups[di_]; !found {
+					continue
+				}
+				stateItemdi_ := stateItemdi.StaticGroups[di_]
+				planItemdi_ := planItemdi.StaticGroups[di_]
+				matchBodyPathdi_ := ""
+				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+					if mv.Get("igmpsnoopStMcGrp.attributes.addr").String() == di_ {
+						matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".igmpsnoopStMcGrp.children"
+						break
+					}
+				}
+				if matchBodyPathdi_ == "" {
+					continue
+				}
+				for stateChildKey := range stateItemdi_.Interfaces {
+					if _, found := planItemdi_.Interfaces[stateChildKey]; !found {
+						stateChild := stateItemdi_.Interfaces[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopTgtIf.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopTgtIf.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for stateChildKey := range stateItemdi_.Sources {
+					if _, found := planItemdi_.Sources[stateChildKey]; !found {
+						stateChild := stateItemdi_.Sources[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopMcSrc.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopMcSrc.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for di__ := range stateItemdi_.Sources {
+					if _, found := planItemdi_.Sources[di__]; !found {
+						continue
+					}
+					stateItemdi__ := stateItemdi_.Sources[di__]
+					planItemdi__ := planItemdi_.Sources[di__]
+					matchBodyPathdi__ := ""
+					for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+						if mv.Get("igmpsnoopMcSrc.attributes.id").String() == di__ {
+							matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".igmpsnoopMcSrc.children"
+							break
+						}
+					}
+					if matchBodyPathdi__ == "" {
+						continue
+					}
+					for stateChildKey := range stateItemdi__.Interfaces {
+						if _, found := planItemdi__.Interfaces[stateChildKey]; !found {
+							stateChild := stateItemdi__.Interfaces[stateChildKey]
+							deleteBody := ""
+							deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopTgtIf.attributes.rn", stateChild.getRn(stateChildKey))
+							deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopTgtIf.attributes.status", "deleted")
+							body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
+						}
+					}
+				}
+			}
+			for stateChildKey := range stateItemdi.ReportFloodInterfaces {
+				if _, found := planItemdi.ReportFloodInterfaces[stateChildKey]; !found {
+					stateChild := stateItemdi.ReportFloodInterfaces[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopIntf.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopIntf.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+		}
 	}
 
 	if !importing {
@@ -424,6 +1441,230 @@ func (data IGMPSnooping) toBodyWithDeletes(ctx context.Context, state IGMPSnoopi
 		if !state.GlobalVlanVxlanUmcDropVlan.IsNull() && config.GlobalVlanVxlanUmcDropVlan.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom")+".children", "igmpsnoopGl")+".children", "igmpsnoopGVlan")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"vxlanUmcDropVlan", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.Vlans {
+			if configChild, ok := config.Vlans[key]; ok {
+				stateChild := state.Vlans[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom")+".children").Array() {
+					if mv.Get("igmpsnoopVlan.attributes.vlanid").String() == key {
+						if !stateChild.ReportFloodAllInterfaces.IsNull() && configChild.ReportFloodAllInterfaces.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom")+".children"+"."+strconv.Itoa(mi)+".igmpsnoopVlan.attributes."+"rprtFldAllIntf", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom")+".children").Array() {
+						if mv.Get("igmpsnoopVlan.attributes.vlanid").String() == key {
+							listChildPath = helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "igmpsnoopInst")+".children", "igmpsnoopDom") + ".children" + "." + strconv.Itoa(mi) + ".igmpsnoopVlan.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						if !stateChild.ExplicitTracking.IsNull() && configChild.ExplicitTracking.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopIgmpsnBase")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"expTracking", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.IgmpSnooping.IsNull() && configChild.IgmpSnooping.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopIgmpsnBase")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"igmpSnoop", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.IgmpSourceIpProxy.IsNull() && configChild.IgmpSourceIpProxy.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopIgmpsnBase")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"igmpSrcIpProxy", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.LinkLocalGroupsSuppression.IsNull() && configChild.LinkLocalGroupsSuppression.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopIgmpsnBase")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"llGrpSuppr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.LookupMac.IsNull() && configChild.LookupMac.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopIgmpsnBase")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lookupMac", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QueryFlood.IsNull() && configChild.QueryFlood.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopIgmpsnBase")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queryFlood", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ReportSuppression.IsNull() && configChild.ReportSuppression.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopIgmpsnBase")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"reportSuppr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.V3ReportSuppression.IsNull() && configChild.V3ReportSuppression.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopIgmpsnBase")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v3ReportSuppr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QuerierAddress.IsNull() && configChild.QuerierAddress.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"addr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QuerierDescription.IsNull() && configChild.QuerierDescription.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.LastMemberQueryInterval.IsNull() && configChild.LastMemberQueryInterval.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lastMbrIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QuerierName.IsNull() && configChild.QuerierName.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QueryInterval.IsNull() && configChild.QueryInterval.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queryIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.RobustnessVariable.IsNull() && configChild.RobustnessVariable.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"robustFac", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QueryMaxResponseTime.IsNull() && configChild.QueryMaxResponseTime.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rspIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StartupQueryCount.IsNull() && configChild.StartupQueryCount.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startQueryCnt", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.StartupQueryInterval.IsNull() && configChild.StartupQueryInterval.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startQueryIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.QuerierTimeout.IsNull() && configChild.QuerierTimeout.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Version.IsNull() && configChild.Version.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopQuerierP")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ver", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.FastLeave.IsNull() && configChild.FastLeave.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopGTimers")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fastLeave", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.GroupTimeout.IsNull() && configChild.GroupTimeout.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopGTimers")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grpTimeout", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.MaxGeneralQueryMiss.IsNull() && configChild.MaxGeneralQueryMiss.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopGTimers")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxGqMiss", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ProxyLeaveUseGroupAddress.IsNull() && configChild.ProxyLeaveUseGroupAddress.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopGTimers")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useGrpAddr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.ProxyMaxResponseTime.IsNull() && configChild.ProxyMaxResponseTime.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopProxy")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxRespTime", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.AccessGroupDescription.IsNull() && configChild.AccessGroupDescription.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopACtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.AccessGroupDirection.IsNull() && configChild.AccessGroupDirection.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopACtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"direction", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.AccessGroupName.IsNull() && configChild.AccessGroupName.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopACtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.AccessGroupRouteMap.IsNull() && configChild.AccessGroupRouteMap.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "igmpsnoopACtrl")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						for key := range stateChild.MrouterInterfaces {
+							if configChild, ok := configChild.MrouterInterfaces[key]; ok {
+								stateChild := stateChild.MrouterInterfaces[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.StaticGroups {
+							if configChild, ok := configChild.StaticGroups[key]; ok {
+								stateChild := stateChild.StaticGroups[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("igmpsnoopStMcGrp.attributes.addr").String() == key {
+										if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".igmpsnoopStMcGrp.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+								{
+									listChildPath_ := ""
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("igmpsnoopStMcGrp.attributes.addr").String() == key {
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".igmpsnoopStMcGrp.children"
+											break
+										}
+									}
+									if listChildPath_ != "" {
+										for key := range stateChild.Interfaces {
+											if configChild, ok := configChild.Interfaces[key]; ok {
+												stateChild := stateChild.Interfaces[key]
+												_ = stateChild
+												_ = configChild
+											}
+										}
+										for key := range stateChild.Sources {
+											if configChild, ok := configChild.Sources[key]; ok {
+												stateChild := stateChild.Sources[key]
+												_ = stateChild
+												_ = configChild
+												{
+													listChildPath__ := ""
+													for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+														if mv.Get("igmpsnoopMcSrc.attributes.id").String() == key {
+															listChildPath__ = listChildPath_ + "." + strconv.Itoa(mi) + ".igmpsnoopMcSrc.children"
+															break
+														}
+													}
+													if listChildPath__ != "" {
+														for key := range stateChild.Interfaces {
+															if configChild, ok := configChild.Interfaces[key]; ok {
+																stateChild := stateChild.Interfaces[key]
+																_ = stateChild
+																_ = configChild
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						for key := range stateChild.ReportFloodInterfaces {
+							if configChild, ok := configChild.ReportFloodInterfaces[key]; ok {
+								stateChild := stateChild.ReportFloodInterfaces[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("igmpsnoopIntf.attributes.id").String() == key {
+										if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".igmpsnoopIntf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".igmpsnoopIntf.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.ReportFlood.IsNull() && configChild.ReportFlood.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".igmpsnoopIntf.attributes."+"reportFlood", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 

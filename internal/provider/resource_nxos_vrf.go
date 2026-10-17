@@ -63,7 +63,7 @@ func (r *VRFResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage VRF configurations on NX-OS devices, including route distinguisher, address families, and route target configurations.").AddApiDocumentation("topSystem", "", []string{"l3Inst", "rtctrlDom", "rtctrlDomAf", "rtctrlAfCtrl", "rtctrlRttP", "rtctrlMapP", "rtctrlRttEntry"}, []string{"Layer%203/l3:Inst/", "Routing%20and%20Forwarding/rtctrl:Dom/", "Routing%20and%20Forwarding/rtctrl:DomAf/", "Routing%20and%20Forwarding/rtctrl:AfCtrl/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:MapP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage VRF configurations on NX-OS devices, including route distinguisher, address families, and route target configurations.").AddApiDocumentation("topSystem", "", []string{"l3Inst", "rtctrlDom", "rtctrlDomAf", "rtctrlAfCtrl", "rtctrlRttP", "rtctrlMapP", "rtctrlDomDefMapP", "rtctrlRttEntry"}, []string{"Layer%203/l3:Inst/", "Routing%20and%20Forwarding/rtctrl:Dom/", "Routing%20and%20Forwarding/rtctrl:DomAf/", "Routing%20and%20Forwarding/rtctrl:AfCtrl/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:MapP/", "Routing%20and%20Forwarding/rtctrl:DomDefMapP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -148,6 +148,25 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 																Optional:            true,
 															},
 															"route_map": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+																Optional:            true,
+															},
+															"advertise_vpn": schema.BoolAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Allow leaked routes to be advertised to VPN.").String,
+																Optional:            true,
+															},
+															"allow_vpn": schema.BoolAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Allow VPN to be considered for route leaking.").String,
+																Optional:            true,
+															},
+															"default_vrf_prefix_limit": schema.Int64Attribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Default Vrf Prefix Limit.").AddIntegerRangeDescription(0, 2147483647).String,
+																Optional:            true,
+																Validators: []validator.Int64{
+																	int64validator.Between(0, 2147483647),
+																},
+															},
+															"default_vrf_route_map": schema.StringAttribute{
 																MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
 																Optional:            true,
 															},
@@ -321,7 +340,7 @@ func (r *VRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"l3Inst", "rtctrlDom", "rtctrlDomAf", "rtctrlAfCtrl", "rtctrlRttP", "rtctrlMapP", "rtctrlRttEntry"}, VRFSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"l3Inst", "rtctrlDom", "rtctrlDomAf", "rtctrlAfCtrl", "rtctrlRttP", "rtctrlMapP", "rtctrlDomDefMapP", "rtctrlRttEntry"}, VRFSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

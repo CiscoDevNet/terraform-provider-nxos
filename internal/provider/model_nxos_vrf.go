@@ -65,10 +65,14 @@ type VRFVrfsAddressFamiliesRouteTargetAddressFamilies struct {
 }
 
 type VRFVrfsAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirections struct {
-	Name         types.String                                                                                 `tfsdk:"name"`
-	Description  types.String                                                                                 `tfsdk:"description"`
-	RouteMap     types.String                                                                                 `tfsdk:"route_map"`
-	RouteTargets map[string]VRFVrfsAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirectionsRouteTargets `tfsdk:"route_targets"`
+	Name                  types.String                                                                                 `tfsdk:"name"`
+	Description           types.String                                                                                 `tfsdk:"description"`
+	RouteMap              types.String                                                                                 `tfsdk:"route_map"`
+	AdvertiseVpn          types.Bool                                                                                   `tfsdk:"advertise_vpn"`
+	AllowVpn              types.Bool                                                                                   `tfsdk:"allow_vpn"`
+	DefaultVrfPrefixLimit types.Int64                                                                                  `tfsdk:"default_vrf_prefix_limit"`
+	DefaultVrfRouteMap    types.String                                                                                 `tfsdk:"default_vrf_route_map"`
+	RouteTargets          map[string]VRFVrfsAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirectionsRouteTargets `tfsdk:"route_targets"`
 }
 
 type VRFVrfsAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirectionsRouteTargets struct {
@@ -236,6 +240,22 @@ func (data VRF) toBody(config VRF) nxos.Body {
 										if attrs != "{}" {
 											body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlMapP.attributes", attrs)
 										}
+										attrs = "{}"
+										if !child.AdvertiseVpn.IsUnknown() && !child.AdvertiseVpn.IsNull() && !configChild.AdvertiseVpn.IsNull() {
+											attrs, _ = sjson.Set(attrs, "advtVpn", strconv.FormatBool(child.AdvertiseVpn.ValueBool()))
+										}
+										if !child.AllowVpn.IsUnknown() && !child.AllowVpn.IsNull() && !configChild.AllowVpn.IsNull() {
+											attrs, _ = sjson.Set(attrs, "allowVpn", strconv.FormatBool(child.AllowVpn.ValueBool()))
+										}
+										if !child.DefaultVrfPrefixLimit.IsUnknown() && !child.DefaultVrfPrefixLimit.IsNull() && !configChild.DefaultVrfPrefixLimit.IsNull() {
+											attrs, _ = sjson.Set(attrs, "pfxLimit", strconv.FormatInt(child.DefaultVrfPrefixLimit.ValueInt64(), 10))
+										}
+										if !child.DefaultVrfRouteMap.IsUnknown() && !child.DefaultVrfRouteMap.IsNull() && !configChild.DefaultVrfRouteMap.IsNull() {
+											attrs, _ = sjson.Set(attrs, "rtMap", child.DefaultVrfRouteMap.ValueString())
+										}
+										if attrs != "{}" {
+											body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlDomDefMapP.attributes", attrs)
+										}
 										for key := range child.RouteTargets {
 											configChild, configChildOk := configChild.RouteTargets[key]
 											_ = configChild
@@ -331,6 +351,23 @@ func (data *VRF) fromBody(res gjson.Result) {
 																							nestedChildrtctrlRttP.Name = types.StringValue(rrtctrlMapP.Get("rtctrlMapP.attributes.name").String())
 																							nestedChildrtctrlRttP.Description = types.StringValue(rrtctrlMapP.Get("rtctrlMapP.attributes.descr").String())
 																							nestedChildrtctrlRttP.RouteMap = types.StringValue(rrtctrlMapP.Get("rtctrlMapP.attributes.rtMap").String())
+																						}
+																						{
+																							var rrtctrlDomDefMapP gjson.Result
+																							nestedValue.Get("children").ForEach(
+																								func(_, nestedV gjson.Result) bool {
+																									rnValue := nestedV.Get("rtctrlDomDefMapP.attributes.rn").String()
+																									if rnValue == "rtctrldefmap" {
+																										rrtctrlDomDefMapP = nestedV
+																										return false
+																									}
+																									return true
+																								},
+																							)
+																							nestedChildrtctrlRttP.AdvertiseVpn = types.BoolValue(helpers.ParseNxosBoolean(rrtctrlDomDefMapP.Get("rtctrlDomDefMapP.attributes.advtVpn").String()))
+																							nestedChildrtctrlRttP.AllowVpn = types.BoolValue(helpers.ParseNxosBoolean(rrtctrlDomDefMapP.Get("rtctrlDomDefMapP.attributes.allowVpn").String()))
+																							nestedChildrtctrlRttP.DefaultVrfPrefixLimit = types.Int64Value(rrtctrlDomDefMapP.Get("rtctrlDomDefMapP.attributes.pfxLimit").Int())
+																							nestedChildrtctrlRttP.DefaultVrfRouteMap = types.StringValue(rrtctrlDomDefMapP.Get("rtctrlDomDefMapP.attributes.rtMap").String())
 																						}
 																						nestedValue.Get("children").ForEach(
 																							func(_, nestedV gjson.Result) bool {
@@ -548,6 +585,39 @@ func (data *VRF) updateFromBody(res gjson.Result) {
 								nc__Item.RouteMap = types.StringValue(rrtctrlMapP.Get("rtctrlMapP.attributes.rtMap").String())
 							} else {
 								nc__Item.RouteMap = types.StringNull()
+							}
+						}
+						{
+							var rrtctrlDomDefMapP gjson.Result
+							rrtctrlRttP.Get("rtctrlRttP.children").ForEach(
+								func(_, v gjson.Result) bool {
+									rnValue := v.Get("rtctrlDomDefMapP.attributes.rn").String()
+									if rnValue == "rtctrldefmap" {
+										rrtctrlDomDefMapP = v
+										return false
+									}
+									return true
+								},
+							)
+							if !nc__Item.AdvertiseVpn.IsNull() {
+								nc__Item.AdvertiseVpn = types.BoolValue(helpers.ParseNxosBoolean(rrtctrlDomDefMapP.Get("rtctrlDomDefMapP.attributes.advtVpn").String()))
+							} else {
+								nc__Item.AdvertiseVpn = types.BoolNull()
+							}
+							if !nc__Item.AllowVpn.IsNull() {
+								nc__Item.AllowVpn = types.BoolValue(helpers.ParseNxosBoolean(rrtctrlDomDefMapP.Get("rtctrlDomDefMapP.attributes.allowVpn").String()))
+							} else {
+								nc__Item.AllowVpn = types.BoolNull()
+							}
+							if !nc__Item.DefaultVrfPrefixLimit.IsNull() {
+								nc__Item.DefaultVrfPrefixLimit = types.Int64Value(rrtctrlDomDefMapP.Get("rtctrlDomDefMapP.attributes.pfxLimit").Int())
+							} else {
+								nc__Item.DefaultVrfPrefixLimit = types.Int64Null()
+							}
+							if !nc__Item.DefaultVrfRouteMap.IsNull() {
+								nc__Item.DefaultVrfRouteMap = types.StringValue(rrtctrlDomDefMapP.Get("rtctrlDomDefMapP.attributes.rtMap").String())
+							} else {
+								nc__Item.DefaultVrfRouteMap = types.StringNull()
 							}
 						}
 						for nc___ := range nc__Item.RouteTargets {
@@ -824,6 +894,22 @@ func (data VRF) toBodyWithDeletes(ctx context.Context, state VRF, config VRF, im
 																		}
 																		if !stateChild.RouteMap.IsNull() && configChild.RouteMap.IsNull() {
 																			unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath___, "rtctrlMapP")
+																			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		if !stateChild.AdvertiseVpn.IsNull() && configChild.AdvertiseVpn.IsNull() {
+																			unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath___, "rtctrlDomDefMapP")
+																			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"advtVpn", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		if !stateChild.AllowVpn.IsNull() && configChild.AllowVpn.IsNull() {
+																			unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath___, "rtctrlDomDefMapP")
+																			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"allowVpn", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		if !stateChild.DefaultVrfPrefixLimit.IsNull() && configChild.DefaultVrfPrefixLimit.IsNull() {
+																			unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath___, "rtctrlDomDefMapP")
+																			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pfxLimit", "DME_UNSET_PROPERTY_MARKER")
+																		}
+																		if !stateChild.DefaultVrfRouteMap.IsNull() && configChild.DefaultVrfRouteMap.IsNull() {
+																			unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath___, "rtctrlDomDefMapP")
 																			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
 																		}
 																		for key := range stateChild.RouteTargets {

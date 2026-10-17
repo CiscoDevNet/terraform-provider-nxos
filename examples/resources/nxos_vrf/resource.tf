@@ -14,7 +14,11 @@ resource "nxos_vrf" "example" {
             "ipv4-ucast" = {
               route_target_directions = {
                 "import" = {
-                  route_map = "ABC"
+                  route_map                = "ABC"
+                  advertise_vpn            = true
+                  allow_vpn                = false
+                  default_vrf_prefix_limit = 1000
+                  default_vrf_route_map    = "DEF-RM"
                   route_targets = {
                     "route-target:as2-nn2:2:2" = {}
                   }

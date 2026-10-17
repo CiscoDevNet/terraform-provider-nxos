@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This data source can read VRF configurations on NX-OS devices, including route distinguisher, address families, and route target configurations.
   API Documentation
-  l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/l3:Inst/rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:Dom/rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:DomAf/rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlMapP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:MapP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
+  l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/l3:Inst/rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:Dom/rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:DomAf/rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlMapP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:MapP/rtctrlDomDefMapP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:DomDefMapP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
 ---
 
 # nxos_vrf (Data Source)
@@ -20,6 +20,7 @@ This data source can read VRF configurations on NX-OS devices, including route d
 - [rtctrlAfCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/)
 - [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
 - [rtctrlMapP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:MapP/)
+- [rtctrlDomDefMapP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:DomDefMapP/)
 - [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
 
 ## Example Usage
@@ -83,6 +84,10 @@ Read-Only:
 
 Read-Only:
 
+- `advertise_vpn` (Boolean) Allow leaked routes to be advertised to VPN.
+- `allow_vpn` (Boolean) Allow VPN to be considered for route leaking.
+- `default_vrf_prefix_limit` (Number) Default Vrf Prefix Limit.
+- `default_vrf_route_map` (String) Route Map.
 - `description` (String) Description of the specified attribute.
 - `name` (String) Object name.
 - `route_map` (String) Route Map.

@@ -182,6 +182,35 @@ child_classes:
                             type: String
                             description: 'Route Map.'
                             example: ABC
+                      - class_name: rtctrlDomDefMapP
+                        doc_path: Routing%20and%20Forwarding/rtctrl:DomDefMapP/
+                        rn: rtctrldefmap
+                        type: single
+                        tf_name: default_vrf
+                        description: 'Route Control Map Policy for the default VRF.'
+                        attributes:
+                          - nxos_name: advtVpn
+                            tf_name: advertise_vpn
+                            type: Bool
+                            description: 'Allow leaked routes to be advertised to VPN.'
+                            example: true
+                          - nxos_name: allowVpn
+                            tf_name: allow_vpn
+                            type: Bool
+                            description: 'Allow VPN to be considered for route leaking.'
+                            example: false
+                          - nxos_name: pfxLimit
+                            tf_name: default_vrf_prefix_limit
+                            type: Int64
+                            min_int: 0
+                            max_int: 2147483647
+                            description: 'Default Vrf Prefix Limit.'
+                            example: 1000
+                          - nxos_name: rtMap
+                            tf_name: default_vrf_route_map
+                            type: String
+                            description: 'Route Map.'
+                            example: DEF-RM
                       - class_name: rtctrlRttEntry
                         doc_path: Routing%20and%20Forwarding/rtctrl:RttEntry/
                         rn: ent-[%s]

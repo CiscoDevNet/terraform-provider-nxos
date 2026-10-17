@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage VRF configurations on NX-OS devices, including route distinguisher, address families, and route target configurations.
   API Documentation
-  l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/l3:Inst/rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:Dom/rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:DomAf/rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlMapP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:MapP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
+  l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/l3:Inst/rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:Dom/rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:DomAf/rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlMapP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:MapP/rtctrlDomDefMapP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:DomDefMapP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
 ---
 
 # nxos_vrf (Resource)
@@ -20,6 +20,7 @@ This resource can manage VRF configurations on NX-OS devices, including route di
 - [rtctrlAfCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/)
 - [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
 - [rtctrlMapP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:MapP/)
+- [rtctrlDomDefMapP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:DomDefMapP/)
 - [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
 
 ## Example Usage
@@ -41,7 +42,11 @@ resource "nxos_vrf" "example" {
             "ipv4-ucast" = {
               route_target_directions = {
                 "import" = {
-                  route_map = "ABC"
+                  route_map                = "ABC"
+                  advertise_vpn            = true
+                  allow_vpn                = false
+                  default_vrf_prefix_limit = 1000
+                  default_vrf_route_map    = "DEF-RM"
                   route_targets = {
                     "route-target:as2-nn2:2:2" = {}
                   }
@@ -112,6 +117,11 @@ Optional:
 
 Optional:
 
+- `advertise_vpn` (Boolean) Allow leaked routes to be advertised to VPN.
+- `allow_vpn` (Boolean) Allow VPN to be considered for route leaking.
+- `default_vrf_prefix_limit` (Number) Default Vrf Prefix Limit.
+  - Range: `0`-`2147483647`
+- `default_vrf_route_map` (String) Route Map.
 - `description` (String) Description of the specified attribute.
 - `name` (String) Object name.
 - `route_map` (String) Route Map.

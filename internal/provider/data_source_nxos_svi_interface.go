@@ -56,7 +56,7 @@ func (d *SVIInterfaceDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.").AddApiDocumentation("interfaceEntity", "", []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking"}, []string{"Interfaces/svi:If/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "Network%20Virtualization/nvo:MultisiteIfTracking/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.").AddApiDocumentation("interfaceEntity", "", []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking", "nvoEsiMhCoreTracking"}, []string{"Interfaces/svi:If/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Network%20Virtualization/nvo:EsiMhCoreTracking/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -144,6 +144,10 @@ func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Configure EVPN multisite tracking for DCI/Fabric interface.",
 							Computed:            true,
 						},
+						"evpn_multihoming_core_tracking": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enabled/Disabled state of Core Tracking.").AddMinimumVersionDescription("10.6(1)").String,
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -179,7 +183,7 @@ func (d *SVIInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking"}, SVIInterfaceSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking", "nvoEsiMhCoreTracking"}, SVIInterfaceSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

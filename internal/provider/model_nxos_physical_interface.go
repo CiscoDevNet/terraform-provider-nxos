@@ -108,6 +108,7 @@ type PhysicalInterfacePhysicalInterfaces struct {
 	LoadIntervalCounter2                           types.Int64                                                         `tfsdk:"load_interval_counter_2"`
 	LoadIntervalCounter3                           types.Int64                                                         `tfsdk:"load_interval_counter_3"`
 	MultisiteInterfaceTracking                     types.String                                                        `tfsdk:"multisite_interface_tracking"`
+	EvpnMultihomingCoreTracking                    types.String                                                        `tfsdk:"evpn_multihoming_core_tracking"`
 	PriorityFlowControlMode                        types.String                                                        `tfsdk:"priority_flow_control_mode"`
 	PriorityFlowControlSendTlv                     types.Bool                                                          `tfsdk:"priority_flow_control_send_tlv"`
 	PriorityFlowControlWatchdogDisableAction       types.Bool                                                          `tfsdk:"priority_flow_control_watchdog_disable_action"`
@@ -189,10 +190,13 @@ func (data *PhysicalInterface) fromIdentity(ctx context.Context, identity *Physi
 }
 
 // PhysicalInterfaceSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
-var PhysicalInterfaceSubtreeClassMinVersions = map[string]string{}
+var PhysicalInterfaceSubtreeClassMinVersions = map[string]string{
+	"nvoEsiMhCoreTracking": "10.6(1)",
+}
 
 // PhysicalInterfaceMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var PhysicalInterfaceMinVersions = map[string]helpers.MinVersion{
+	"nvoEsiMhCoreTracking":           {Version: "10.6(1)", Path: "physical_interfaces.evpn_multihoming_core_tracking"},
 	"l1VlanTranslateEntry.direction": {Version: "10.6(3)", Path: "physical_interfaces.vlan_mappings.rx_only"},
 }
 
@@ -453,6 +457,13 @@ func (data PhysicalInterface) toBody(config PhysicalInterface) nxos.Body {
 			}
 			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoMultisiteIfTracking.attributes", attrs)
+			}
+			attrs = "{}"
+			if !child.EvpnMultihomingCoreTracking.IsUnknown() && !child.EvpnMultihomingCoreTracking.IsNull() && !configChild.EvpnMultihomingCoreTracking.IsNull() {
+				attrs, _ = sjson.Set(attrs, "coretracking", child.EvpnMultihomingCoreTracking.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoEsiMhCoreTracking.attributes", attrs)
 			}
 			attrs = "{}"
 			if !child.PriorityFlowControlMode.IsUnknown() && !child.PriorityFlowControlMode.IsNull() && !configChild.PriorityFlowControlMode.IsNull() {
@@ -813,6 +824,20 @@ func (data *PhysicalInterface) fromBody(res gjson.Result) {
 								},
 							)
 							child.MultisiteInterfaceTracking = types.StringValue(rnvoMultisiteIfTracking.Get("nvoMultisiteIfTracking.attributes.tracking").String())
+						}
+						{
+							var rnvoEsiMhCoreTracking gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("nvoEsiMhCoreTracking.attributes.rn").String()
+									if rnValue == "esimhcoretracking" {
+										rnvoEsiMhCoreTracking = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.EvpnMultihomingCoreTracking = types.StringValue(rnvoEsiMhCoreTracking.Get("nvoEsiMhCoreTracking.attributes.coretracking").String())
 						}
 						{
 							var ripqosPriorFlowCtrl gjson.Result
@@ -1384,6 +1409,24 @@ func (data *PhysicalInterface) updateFromBody(res gjson.Result) {
 			}
 		}
 		{
+			var rnvoEsiMhCoreTracking gjson.Result
+			rl1PhysIf.Get("l1PhysIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("nvoEsiMhCoreTracking.attributes.rn").String()
+					if rnValue == "esimhcoretracking" {
+						rnvoEsiMhCoreTracking = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.EvpnMultihomingCoreTracking.IsNull() {
+				item.EvpnMultihomingCoreTracking = types.StringValue(rnvoEsiMhCoreTracking.Get("nvoEsiMhCoreTracking.attributes.coretracking").String())
+			} else {
+				item.EvpnMultihomingCoreTracking = types.StringNull()
+			}
+		}
+		{
 			var ripqosPriorFlowCtrl gjson.Result
 			rl1PhysIf.Get("l1PhysIf.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -1845,6 +1888,9 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 		if !child.MultisiteInterfaceTracking.IsNull() {
 			itemBody, _ = sjson.Set(itemBody, "l1PhysIf.children.-1.nvoMultisiteIfTracking.attributes", map[string]interface{}{"rn": "multisiteiftracking", "status": "deleted"})
 		}
+		if !child.EvpnMultihomingCoreTracking.IsNull() {
+			itemBody, _ = sjson.Set(itemBody, "l1PhysIf.children.-1.nvoEsiMhCoreTracking.attributes", map[string]interface{}{"rn": "esimhcoretracking", "status": "deleted"})
+		}
 		if !child.PriorityFlowControlMode.IsNull() || !child.PriorityFlowControlSendTlv.IsNull() {
 			itemBody, _ = sjson.Set(itemBody, "l1PhysIf.children.-1.ipqosPriorFlowCtrl.attributes", map[string]interface{}{"rn": "priorflowctrl", "status": "deleted"})
 		}
@@ -2069,6 +2115,9 @@ func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state Physi
 				}
 				if !stateChild.MultisiteInterfaceTracking.IsNull() {
 					deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.children.-1.nvoMultisiteIfTracking.attributes", map[string]interface{}{"rn": "multisiteiftracking", "status": "deleted"})
+				}
+				if !stateChild.EvpnMultihomingCoreTracking.IsNull() {
+					deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.children.-1.nvoEsiMhCoreTracking.attributes", map[string]interface{}{"rn": "esimhcoretracking", "status": "deleted"})
 				}
 				if !stateChild.PriorityFlowControlMode.IsNull() || !stateChild.PriorityFlowControlSendTlv.IsNull() {
 					deleteBody, _ = sjson.Set(deleteBody, "l1PhysIf.children.-1.ipqosPriorFlowCtrl.attributes", map[string]interface{}{"rn": "priorflowctrl", "status": "deleted"})
@@ -2466,6 +2515,10 @@ func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state Physi
 						if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EvpnMultihomingCoreTracking.IsNull() && configChild.EvpnMultihomingCoreTracking.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEsiMhCoreTracking")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"coretracking", "DME_UNSET_PROPERTY_MARKER")
 						}
 						if !stateChild.PriorityFlowControlMode.IsNull() && configChild.PriorityFlowControlMode.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrl")

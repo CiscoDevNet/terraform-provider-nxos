@@ -151,6 +151,23 @@ child_classes:
               - dci
               - fabric
             example: dci
+      - class_name: nvoEsiMhCoreTracking
+        doc_path: Network%20Virtualization/nvo:EsiMhCoreTracking/
+        rn: esimhcoretracking
+        type: single
+        tf_name: evpn_multihoming_core_tracking
+        description: 'Tracking for Multihoming core.'
+        min_version: '10.6(1)'
+        exclude_test: true
+        attributes:
+          - nxos_name: coretracking
+            tf_name: evpn_multihoming_core_tracking
+            type: String
+            description: 'Enabled/Disabled state of Core Tracking.'
+            enum_values:
+              - disabled
+              - enabled
+            example: enabled
 test_prerequisites:
   - dn: sys/fm/ifvlan
     class_name: fmInterfaceVlan

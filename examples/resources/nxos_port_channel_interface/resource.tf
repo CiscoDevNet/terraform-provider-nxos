@@ -42,6 +42,8 @@ resource "nxos_port_channel_interface" "example" {
       load_interval_counter_1                = 60
       load_interval_counter_2                = 120
       load_interval_counter_3                = 45
+      ethernet_segment_type                  = "native"
+      ethernet_segment_identifier            = "0011.2233.4455.6677.8899"
       priority_flow_control_mode             = "on"
       priority_flow_control_send_tlv         = true
       vlan_mapping_enable                    = true

@@ -96,6 +96,58 @@ child_classes:
         enum_values:
           - enabled
         example: enabled
+  - class_name: nvoEvpnEsiMultiHoming
+    doc_path: Network%20Virtualization/nvo:EvpnEsiMultiHoming/
+    rn: multihoming
+    type: single
+    tf_name: evpn_multihoming
+    description: 'Configuration of EVPN Multihoming.'
+    min_version: '10.6(1)'
+    exclude_test: true
+    attributes:
+      - nxos_name: delayRestoreTime
+        tf_name: evpn_multihoming_delay_restore_time
+        type: Int64
+        description: 'Ethernet segment delay restore time in seconds.'
+        min_int: 30
+        max_int: 1000
+        example: 60
+      - nxos_name: dfElectionMode
+        tf_name: evpn_multihoming_df_election_mode
+        type: String
+        description: 'DF election mode for all Ethernet segments.'
+        enum_values:
+          - perFlow
+          - modulo
+        example: modulo
+      - nxos_name: dfElectionTime
+        tf_name: evpn_multihoming_df_election_time
+        type: String
+        description: 'DF election time for EVPN multihoming. Only one fractional digit supported.'
+        example: '2.000000'
+      - nxos_name: eadEviRoute
+        tf_name: evpn_multihoming_ead_evi_route
+        type: Bool
+        description: 'Advertise EAD/EVI route for ESI.'
+        example: true
+      - nxos_name: esiSysMac
+        tf_name: evpn_multihoming_system_mac
+        type: String
+        description: 'Global system MAC address to be used by Ethernet segments configured under port-channels.'
+        example: 00:00:11:11:22:22
+      - nxos_name: frrAnycastSrcIp
+        tf_name: evpn_multihoming_frr_anycast_source_ip
+        type: String
+        description: 'Fast reroute anycast source IP address.'
+        example: 1.2.3.4
+      - nxos_name: state
+        tf_name: evpn_multihoming_state
+        type: String
+        description: 'Configures the state of EVPN MultiHoming.'
+        enum_values:
+          - disabled
+          - enabled
+        example: enabled
   - class_name: nvoEp
     doc_path: Network%20Virtualization/nvo:Ep/
     rn: epId-%v

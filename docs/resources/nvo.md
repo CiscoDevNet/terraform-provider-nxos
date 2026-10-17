@@ -5,7 +5,7 @@ subcategory: "Overlay"
 description: |-
   This resource can manage the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.
   API Documentation
-  nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Eps/nvoEvpnMultisiteBordergw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/nvoEvpnMulticast https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMulticast/nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:IngRepl/
+  nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Eps/nvoEvpnMultisiteBordergw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/nvoEvpnMulticast https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMulticast/nvoEvpnEsiMultiHoming https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnEsiMultiHoming/nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:IngRepl/
 ---
 
 # nxos_nvo (Resource)
@@ -17,6 +17,7 @@ This resource can manage the NVO (Network Virtualization Overlay) configuration 
 - [nvoEps](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Eps/)
 - [nvoEvpnMultisiteBordergw](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMultisiteBordergw/)
 - [nvoEvpnMulticast](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnMulticast/)
+- [nvoEvpnEsiMultiHoming](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EvpnEsiMultiHoming/)
 - [nvoEp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Ep/)
 - [nvoNws](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nws/)
 - [nvoNw](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:Nw/)
@@ -81,6 +82,23 @@ resource "nxos_nvo" "example" {
 - `advertise_evpn_multicast_state` (String) Advertise EVPN Multicast State.
   - Choices: `enabled`
 - `device` (String) A device name from the provider configuration.
+- `evpn_multihoming_delay_restore_time` (Number) Ethernet segment delay restore time in seconds.
+  - Range: `30`-`1000`
+  - Minimum NX-OS version: `10.6(1)`
+- `evpn_multihoming_df_election_mode` (String) DF election mode for all Ethernet segments.
+  - Choices: `perFlow`, `modulo`
+  - Minimum NX-OS version: `10.6(1)`
+- `evpn_multihoming_df_election_time` (String) DF election time for EVPN multihoming. Only one fractional digit supported.
+  - Minimum NX-OS version: `10.6(1)`
+- `evpn_multihoming_ead_evi_route` (Boolean) Advertise EAD/EVI route for ESI.
+  - Minimum NX-OS version: `10.6(1)`
+- `evpn_multihoming_frr_anycast_source_ip` (String) Fast reroute anycast source IP address.
+  - Minimum NX-OS version: `10.6(1)`
+- `evpn_multihoming_state` (String) Configures the state of EVPN MultiHoming.
+  - Choices: `disabled`, `enabled`
+  - Minimum NX-OS version: `10.6(1)`
+- `evpn_multihoming_system_mac` (String) Global system MAC address to be used by Ethernet segments configured under port-channels.
+  - Minimum NX-OS version: `10.6(1)`
 - `evpn_multisite_border_gateway_dci_advertise_pip` (String) Enables/disables advertise PIP towards DCI in EVPN Multisite Border-gateway setup.
   - Choices: `disable`, `enable`
 - `evpn_multisite_border_gateway_delay_restore_time` (Number) Delay-Restore Time.

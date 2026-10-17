@@ -80,6 +80,8 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.load_interval_counter_1", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.load_interval_counter_2", "120"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.load_interval_counter_3", "45"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.ethernet_segment_type", "native"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.ethernet_segment_identifier", "0011.2233.4455.6677.8899"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.priority_flow_control_mode", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.priority_flow_control_send_tlv", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mapping_enable", "true"))
@@ -204,6 +206,8 @@ func testAccNxosPortChannelInterfaceConfig_all() string {
 	config += `			load_interval_counter_1 = 60` + "\n"
 	config += `			load_interval_counter_2 = 120` + "\n"
 	config += `			load_interval_counter_3 = 45` + "\n"
+	config += `			ethernet_segment_type = "native"` + "\n"
+	config += `			ethernet_segment_identifier = "0011.2233.4455.6677.8899"` + "\n"
 	config += `			priority_flow_control_mode = "on"` + "\n"
 	config += `			priority_flow_control_send_tlv = true` + "\n"
 	config += `			vlan_mapping_enable = true` + "\n"

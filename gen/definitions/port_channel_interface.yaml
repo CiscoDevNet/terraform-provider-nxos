@@ -481,6 +481,78 @@ child_classes:
               - dci
               - fabric
             example: dci
+      - class_name: nvoEtherSeg
+        doc_path: Network%20Virtualization/nvo:EtherSeg/
+        rn: ethernetsegment
+        type: single
+        tf_name: ethernet_segment
+        description: 'Ethernet Segment for Port Channel.'
+        attributes:
+          - nxos_name: esType
+            tf_name: ethernet_segment_type
+            type: String
+            description: 'Ethernet Segment Type.'
+            enum_values:
+              - invalid
+              - vpc
+              - native
+            example: native
+          - nxos_name: esi
+            tf_name: ethernet_segment_identifier
+            type: String
+            description: 'ESI configured on port-channel.'
+            example: 0011.2233.4455.6677.8899
+          - nxos_name: localIdentifier
+            tf_name: ethernet_segment_local_identifier
+            type: Int64
+            description: 'Local Identifier for Ethernet Segment.'
+            min_int: 0
+            max_int: 16777215
+            example: 100
+            exclude_test: true
+          - nxos_name: localIdentifierInherit
+            tf_name: ethernet_segment_local_identifier_inherit
+            type: Bool
+            description: 'Derive local identifier from ESI port-channel ID.'
+            example: true
+            exclude_test: true
+          - nxos_name: sysMac
+            tf_name: ethernet_segment_system_mac
+            type: String
+            description: 'System MAC for Ethernet Segment.'
+            example: 00:00:11:11:22:22
+            exclude_test: true
+          - nxos_name: sysMacInherit
+            tf_name: ethernet_segment_system_mac_inherit
+            type: Bool
+            description: 'Use globally configured System MAC for Ethernet Segment.'
+            example: true
+            exclude_test: true
+          - nxos_name: tag
+            tf_name: ethernet_segment_tag
+            type: Int64
+            description: 'Tag asscoiated with Ethernet Segment.'
+            min_int: 0
+            max_int: 65535
+            example: 100
+            exclude_test: true
+      - class_name: nvoEsiMhCoreTracking
+        doc_path: Network%20Virtualization/nvo:EsiMhCoreTracking/
+        rn: esimhcoretracking
+        type: single
+        tf_name: evpn_multihoming_core_tracking
+        description: 'Tracking for Multihoming core.'
+        min_version: '10.6(1)'
+        exclude_test: true
+        attributes:
+          - nxos_name: coretracking
+            tf_name: evpn_multihoming_core_tracking
+            type: String
+            description: 'Enabled/Disabled state of Core Tracking.'
+            enum_values:
+              - disabled
+              - enabled
+            example: enabled
       - class_name: ipqosPriorFlowCtrl
         rn: priorflowctrl
         type: single

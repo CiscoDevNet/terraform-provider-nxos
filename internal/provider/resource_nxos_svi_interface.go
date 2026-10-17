@@ -63,7 +63,7 @@ func (r *SVIInterfaceResource) Metadata(ctx context.Context, req resource.Metada
 func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.").AddApiDocumentation("interfaceEntity", "", []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking"}, []string{"Interfaces/svi:If/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "Network%20Virtualization/nvo:MultisiteIfTracking/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.").AddApiDocumentation("interfaceEntity", "", []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking", "nvoEsiMhCoreTracking"}, []string{"Interfaces/svi:If/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Network%20Virtualization/nvo:EsiMhCoreTracking/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -185,6 +185,13 @@ func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("unknown", "dci", "fabric"),
+							},
+						},
+						"evpn_multihoming_core_tracking": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enabled/Disabled state of Core Tracking.").AddStringEnumDescription("disabled", "enabled").AddMinimumVersionDescription("10.6(1)").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disabled", "enabled"),
 							},
 						},
 					},
@@ -341,7 +348,7 @@ func (r *SVIInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking"}, SVIInterfaceSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking", "nvoEsiMhCoreTracking"}, SVIInterfaceSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

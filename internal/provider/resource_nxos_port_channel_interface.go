@@ -63,7 +63,7 @@ func (r *PortChannelInterfaceResource) Metadata(ctx context.Context, req resourc
 func (r *PortChannelInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcSelectiveQinqTable", "pcSelectiveQinq", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:LoadP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "Interfaces/pc:VlanMapping/", "Interfaces/pc:SelectiveQinqTable/", "Interfaces/pc:SelectiveQinq/", "Interfaces/pc:VlanTranslateTable/", "Interfaces/pc:VlanTranslateEntry/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "nvoEtherSeg", "nvoEsiMhCoreTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcSelectiveQinqTable", "pcSelectiveQinq", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, []string{"Interfaces/pc:AggrIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:LoadP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Network%20Virtualization/nvo:EtherSeg/", "Network%20Virtualization/nvo:EsiMhCoreTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "Interfaces/pc:VlanMapping/", "Interfaces/pc:SelectiveQinqTable/", "Interfaces/pc:SelectiveQinq/", "Interfaces/pc:VlanTranslateTable/", "Interfaces/pc:VlanTranslateEntry/", "Interfaces/pc:AggrIfExtended/", "Interfaces/pc:RsMbrIfs/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -407,6 +407,50 @@ func (r *PortChannelInterfaceResource) Schema(ctx context.Context, req resource.
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("unknown", "dci", "fabric"),
+							},
+						},
+						"ethernet_segment_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet Segment Type.").AddStringEnumDescription("invalid", "vpc", "native").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("invalid", "vpc", "native"),
+							},
+						},
+						"ethernet_segment_identifier": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ESI configured on port-channel.").String,
+							Optional:            true,
+						},
+						"ethernet_segment_local_identifier": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Local Identifier for Ethernet Segment.").AddIntegerRangeDescription(0, 16777215).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 16777215),
+							},
+						},
+						"ethernet_segment_local_identifier_inherit": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Derive local identifier from ESI port-channel ID.").String,
+							Optional:            true,
+						},
+						"ethernet_segment_system_mac": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("System MAC for Ethernet Segment.").String,
+							Optional:            true,
+						},
+						"ethernet_segment_system_mac_inherit": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use globally configured System MAC for Ethernet Segment.").String,
+							Optional:            true,
+						},
+						"ethernet_segment_tag": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Tag asscoiated with Ethernet Segment.").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"evpn_multihoming_core_tracking": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enabled/Disabled state of Core Tracking.").AddStringEnumDescription("disabled", "enabled").AddMinimumVersionDescription("10.6(1)").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disabled", "enabled"),
 							},
 						},
 						"priority_flow_control_mode": schema.StringAttribute{
@@ -858,7 +902,7 @@ func (r *PortChannelInterfaceResource) Read(ctx context.Context, req resource.Re
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcSelectiveQinqTable", "pcSelectiveQinq", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, PortChannelInterfaceSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "nvoEtherSeg", "nvoEsiMhCoreTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcSelectiveQinqTable", "pcSelectiveQinq", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, PortChannelInterfaceSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

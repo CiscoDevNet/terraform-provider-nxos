@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
   API Documentation
-  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/l1LoadP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1VlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanMapping/l1SelectiveQinqTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:SelectiveQinqTable/l1SelectiveQinq https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:SelectiveQinq/l1VlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateTable/l1VlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateEntry/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIfExtended/
+  l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/l1LoadP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/nvoEsiMhCoreTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EsiMhCoreTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/l1VlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanMapping/l1SelectiveQinqTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:SelectiveQinqTable/l1SelectiveQinq https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:SelectiveQinq/l1VlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateTable/l1VlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanTranslateEntry/l1PhysIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:PhysIfExtended/
 ---
 
 # nxos_physical_interface (Resource)
@@ -19,6 +19,7 @@ This resource can manage physical interfaces on NX-OS devices, including setting
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/)
 - [l1LoadP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/)
 - [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
+- [nvoEsiMhCoreTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EsiMhCoreTracking/)
 - [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/)
 - [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
 - [l1VlanMapping](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:VlanMapping/)
@@ -169,6 +170,9 @@ Optional:
   - Choices: `auto`, `full`, `half`
 - `equalization_delay` (Number) Administrative port equalization delay time.
   - Range: `0`-`31`
+- `evpn_multihoming_core_tracking` (String) Enabled/Disabled state of Core Tracking.
+  - Choices: `disabled`, `enabled`
+  - Minimum NX-OS version: `10.6(1)`
 - `extended_description` (String) Description.
 - `fec_mode` (String) FEC Mode.
   - Choices: `fc-fec`, `rs-fec`, `fec-off`, `auto`, `rs-ieee`, `rs-cons16`, `kp-fec`

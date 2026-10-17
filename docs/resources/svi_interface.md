@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This resource can manage SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.
   API Documentation
-  sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/svi:If/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/
+  sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/svi:If/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/nvoEsiMhCoreTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EsiMhCoreTracking/
 ---
 
 # nxos_svi_interface (Resource)
@@ -17,6 +17,7 @@ This resource can manage SVI (Switch Virtual Interface) configurations on NX-OS 
 - [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/svi:If/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
+- [nvoEsiMhCoreTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EsiMhCoreTracking/)
 
 ## Example Usage
 
@@ -73,6 +74,9 @@ Optional:
 - `delay` (Number) Specifies the administrative port delay.
   - Range: `1`-`16777215`
 - `description` (String) Tunnel Description.
+- `evpn_multihoming_core_tracking` (String) Enabled/Disabled state of Core Tracking.
+  - Choices: `disabled`, `enabled`
+  - Minimum NX-OS version: `10.6(1)`
 - `inband_management` (Boolean) An in-band management interface configuration.
 - `load_interval_counter_1` (Number) Load-averaging Interval 1.
   - Range: `60`-`600`

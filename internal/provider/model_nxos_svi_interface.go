@@ -44,24 +44,25 @@ type SVIInterface struct {
 }
 
 type SVIInterfaceSviInterfaces struct {
-	AdminState                 types.String `tfsdk:"admin_state"`
-	Autostate                  types.Bool   `tfsdk:"autostate"`
-	Bandwidth                  types.Int64  `tfsdk:"bandwidth"`
-	CarrierDelay               types.Int64  `tfsdk:"carrier_delay"`
-	Delay                      types.Int64  `tfsdk:"delay"`
-	Description                types.String `tfsdk:"description"`
-	InbandManagement           types.Bool   `tfsdk:"inband_management"`
-	LoadIntervalCounter1       types.Int64  `tfsdk:"load_interval_counter_1"`
-	LoadIntervalCounter2       types.Int64  `tfsdk:"load_interval_counter_2"`
-	LoadIntervalCounter3       types.Int64  `tfsdk:"load_interval_counter_3"`
-	MacAddress                 types.String `tfsdk:"mac_address"`
-	Medium                     types.String `tfsdk:"medium"`
-	Mtu                        types.Int64  `tfsdk:"mtu"`
-	MtuInherit                 types.Bool   `tfsdk:"mtu_inherit"`
-	SnmpTrapLinkStatus         types.Bool   `tfsdk:"snmp_trap_link_status"`
-	VlanId                     types.Int64  `tfsdk:"vlan_id"`
-	VrfDn                      types.String `tfsdk:"vrf_dn"`
-	MultisiteInterfaceTracking types.String `tfsdk:"multisite_interface_tracking"`
+	AdminState                  types.String `tfsdk:"admin_state"`
+	Autostate                   types.Bool   `tfsdk:"autostate"`
+	Bandwidth                   types.Int64  `tfsdk:"bandwidth"`
+	CarrierDelay                types.Int64  `tfsdk:"carrier_delay"`
+	Delay                       types.Int64  `tfsdk:"delay"`
+	Description                 types.String `tfsdk:"description"`
+	InbandManagement            types.Bool   `tfsdk:"inband_management"`
+	LoadIntervalCounter1        types.Int64  `tfsdk:"load_interval_counter_1"`
+	LoadIntervalCounter2        types.Int64  `tfsdk:"load_interval_counter_2"`
+	LoadIntervalCounter3        types.Int64  `tfsdk:"load_interval_counter_3"`
+	MacAddress                  types.String `tfsdk:"mac_address"`
+	Medium                      types.String `tfsdk:"medium"`
+	Mtu                         types.Int64  `tfsdk:"mtu"`
+	MtuInherit                  types.Bool   `tfsdk:"mtu_inherit"`
+	SnmpTrapLinkStatus          types.Bool   `tfsdk:"snmp_trap_link_status"`
+	VlanId                      types.Int64  `tfsdk:"vlan_id"`
+	VrfDn                       types.String `tfsdk:"vrf_dn"`
+	MultisiteInterfaceTracking  types.String `tfsdk:"multisite_interface_tracking"`
+	EvpnMultihomingCoreTracking types.String `tfsdk:"evpn_multihoming_core_tracking"`
 }
 
 type SVIInterfaceIdentity struct {
@@ -85,10 +86,14 @@ func (data *SVIInterface) fromIdentity(ctx context.Context, identity *SVIInterfa
 }
 
 // SVIInterfaceSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
-var SVIInterfaceSubtreeClassMinVersions = map[string]string{}
+var SVIInterfaceSubtreeClassMinVersions = map[string]string{
+	"nvoEsiMhCoreTracking": "10.6(1)",
+}
 
 // SVIInterfaceMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
-var SVIInterfaceMinVersions = map[string]helpers.MinVersion{}
+var SVIInterfaceMinVersions = map[string]helpers.MinVersion{
+	"nvoEsiMhCoreTracking": {Version: "10.6(1)", Path: "svi_interfaces.evpn_multihoming_core_tracking"},
+}
 
 // End of section. //template:end types
 
@@ -188,6 +193,13 @@ func (data SVIInterface) toBody(config SVIInterface) nxos.Body {
 			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoMultisiteIfTracking.attributes", attrs)
 			}
+			attrs = "{}"
+			if !child.EvpnMultihomingCoreTracking.IsUnknown() && !child.EvpnMultihomingCoreTracking.IsNull() && !configChild.EvpnMultihomingCoreTracking.IsNull() {
+				attrs, _ = sjson.Set(attrs, "coretracking", child.EvpnMultihomingCoreTracking.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoEsiMhCoreTracking.attributes", attrs)
+			}
 		}
 	}
 
@@ -249,6 +261,20 @@ func (data *SVIInterface) fromBody(res gjson.Result) {
 								},
 							)
 							child.MultisiteInterfaceTracking = types.StringValue(rnvoMultisiteIfTracking.Get("nvoMultisiteIfTracking.attributes.tracking").String())
+						}
+						{
+							var rnvoEsiMhCoreTracking gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("nvoEsiMhCoreTracking.attributes.rn").String()
+									if rnValue == "esimhcoretracking" {
+										rnvoEsiMhCoreTracking = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.EvpnMultihomingCoreTracking = types.StringValue(rnvoEsiMhCoreTracking.Get("nvoEsiMhCoreTracking.attributes.coretracking").String())
 						}
 						if data.SviInterfaces == nil {
 							data.SviInterfaces = make(map[string]SVIInterfaceSviInterfaces)
@@ -399,6 +425,24 @@ func (data *SVIInterface) updateFromBody(res gjson.Result) {
 				item.MultisiteInterfaceTracking = types.StringNull()
 			}
 		}
+		{
+			var rnvoEsiMhCoreTracking gjson.Result
+			rsviIf.Get("sviIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("nvoEsiMhCoreTracking.attributes.rn").String()
+					if rnValue == "esimhcoretracking" {
+						rnvoEsiMhCoreTracking = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.EvpnMultihomingCoreTracking.IsNull() {
+				item.EvpnMultihomingCoreTracking = types.StringValue(rnvoEsiMhCoreTracking.Get("nvoEsiMhCoreTracking.attributes.coretracking").String())
+			} else {
+				item.EvpnMultihomingCoreTracking = types.StringNull()
+			}
+		}
 		data.SviInterfaces[key] = item
 	}
 }
@@ -532,6 +576,10 @@ func (data SVIInterface) toBodyWithDeletes(ctx context.Context, state SVIInterfa
 						if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EvpnMultihomingCoreTracking.IsNull() && configChild.EvpnMultihomingCoreTracking.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEsiMhCoreTracking")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"coretracking", "DME_UNSET_PROPERTY_MARKER")
 						}
 					}
 				}

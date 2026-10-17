@@ -50,6 +50,13 @@ type NVO struct {
 	EvpnMultisiteBorderGatewaySplitHorizonPerSite types.String                `tfsdk:"evpn_multisite_border_gateway_split_horizon_per_site"`
 	EvpnMultisiteBorderGatewayState               types.String                `tfsdk:"evpn_multisite_border_gateway_state"`
 	AdvertiseEvpnMulticastState                   types.String                `tfsdk:"advertise_evpn_multicast_state"`
+	EvpnMultihomingDelayRestoreTime               types.Int64                 `tfsdk:"evpn_multihoming_delay_restore_time"`
+	EvpnMultihomingDfElectionMode                 types.String                `tfsdk:"evpn_multihoming_df_election_mode"`
+	EvpnMultihomingDfElectionTime                 types.String                `tfsdk:"evpn_multihoming_df_election_time"`
+	EvpnMultihomingEadEviRoute                    types.Bool                  `tfsdk:"evpn_multihoming_ead_evi_route"`
+	EvpnMultihomingSystemMac                      types.String                `tfsdk:"evpn_multihoming_system_mac"`
+	EvpnMultihomingFrrAnycastSourceIp             types.String                `tfsdk:"evpn_multihoming_frr_anycast_source_ip"`
+	EvpnMultihomingState                          types.String                `tfsdk:"evpn_multihoming_state"`
 	NveInterfaces                                 map[string]NVONveInterfaces `tfsdk:"nve_interfaces"`
 }
 
@@ -110,10 +117,14 @@ func (data *NVO) fromIdentity(ctx context.Context, identity *NVOIdentity) {
 }
 
 // NVOSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
-var NVOSubtreeClassMinVersions = map[string]string{}
+var NVOSubtreeClassMinVersions = map[string]string{
+	"nvoEvpnEsiMultiHoming": "10.6(1)",
+}
 
 // NVOMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
-var NVOMinVersions = map[string]helpers.MinVersion{}
+var NVOMinVersions = map[string]helpers.MinVersion{
+	"nvoEvpnEsiMultiHoming": {Version: "10.6(1)", Path: "evpn_multihoming_delay_restore_time/evpn_multihoming_df_election_mode/evpn_multihoming_df_election_time/evpn_multihoming_ead_evi_route/evpn_multihoming_system_mac/evpn_multihoming_frr_anycast_source_ip/evpn_multihoming_state"},
+}
 
 // End of section. //template:end types
 
@@ -181,6 +192,31 @@ func (data NVO) toBody(config NVO) nxos.Body {
 	}
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.nvoEvpnMulticast.attributes", attrs)
+	}
+	attrs = "{}"
+	if !data.EvpnMultihomingDelayRestoreTime.IsUnknown() && !data.EvpnMultihomingDelayRestoreTime.IsNull() && !config.EvpnMultihomingDelayRestoreTime.IsNull() {
+		attrs, _ = sjson.Set(attrs, "delayRestoreTime", strconv.FormatInt(data.EvpnMultihomingDelayRestoreTime.ValueInt64(), 10))
+	}
+	if !data.EvpnMultihomingDfElectionMode.IsUnknown() && !data.EvpnMultihomingDfElectionMode.IsNull() && !config.EvpnMultihomingDfElectionMode.IsNull() {
+		attrs, _ = sjson.Set(attrs, "dfElectionMode", data.EvpnMultihomingDfElectionMode.ValueString())
+	}
+	if !data.EvpnMultihomingDfElectionTime.IsUnknown() && !data.EvpnMultihomingDfElectionTime.IsNull() && !config.EvpnMultihomingDfElectionTime.IsNull() {
+		attrs, _ = sjson.Set(attrs, "dfElectionTime", data.EvpnMultihomingDfElectionTime.ValueString())
+	}
+	if !data.EvpnMultihomingEadEviRoute.IsUnknown() && !data.EvpnMultihomingEadEviRoute.IsNull() && !config.EvpnMultihomingEadEviRoute.IsNull() {
+		attrs, _ = sjson.Set(attrs, "eadEviRoute", strconv.FormatBool(data.EvpnMultihomingEadEviRoute.ValueBool()))
+	}
+	if !data.EvpnMultihomingSystemMac.IsUnknown() && !data.EvpnMultihomingSystemMac.IsNull() && !config.EvpnMultihomingSystemMac.IsNull() {
+		attrs, _ = sjson.Set(attrs, "esiSysMac", data.EvpnMultihomingSystemMac.ValueString())
+	}
+	if !data.EvpnMultihomingFrrAnycastSourceIp.IsUnknown() && !data.EvpnMultihomingFrrAnycastSourceIp.IsNull() && !config.EvpnMultihomingFrrAnycastSourceIp.IsNull() {
+		attrs, _ = sjson.Set(attrs, "frrAnycastSrcIp", data.EvpnMultihomingFrrAnycastSourceIp.ValueString())
+	}
+	if !data.EvpnMultihomingState.IsUnknown() && !data.EvpnMultihomingState.IsNull() && !config.EvpnMultihomingState.IsNull() {
+		attrs, _ = sjson.Set(attrs, "state", data.EvpnMultihomingState.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nvoEvpnEsiMultiHoming.attributes", attrs)
 	}
 	for key, child := range data.NveInterfaces {
 		configChild, configChildOk := config.NveInterfaces[key]
@@ -360,6 +396,26 @@ func (data *NVO) fromBody(res gjson.Result) {
 		)
 		data.AdvertiseEvpnMulticastState = types.StringValue(rnvoEvpnMulticast.Get("nvoEvpnMulticast.attributes.state").String())
 	}
+	{
+		var rnvoEvpnEsiMultiHoming gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("nvoEvpnEsiMultiHoming.attributes.rn").String()
+				if rnValue == "multihoming" {
+					rnvoEvpnEsiMultiHoming = v
+					return false
+				}
+				return true
+			},
+		)
+		data.EvpnMultihomingDelayRestoreTime = types.Int64Value(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.delayRestoreTime").Int())
+		data.EvpnMultihomingDfElectionMode = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.dfElectionMode").String())
+		data.EvpnMultihomingDfElectionTime = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.dfElectionTime").String())
+		data.EvpnMultihomingEadEviRoute = types.BoolValue(helpers.ParseNxosBoolean(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.eadEviRoute").String()))
+		data.EvpnMultihomingSystemMac = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.esiSysMac").String())
+		data.EvpnMultihomingFrrAnycastSourceIp = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.frrAnycastSrcIp").String())
+		data.EvpnMultihomingState = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.state").String())
+	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -529,6 +585,52 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 		data.AdvertiseEvpnMulticastState = types.StringValue(rnvoEvpnMulticast.Get("nvoEvpnMulticast.attributes.state").String())
 	} else {
 		data.AdvertiseEvpnMulticastState = types.StringNull()
+	}
+	var rnvoEvpnEsiMultiHoming gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("nvoEvpnEsiMultiHoming.attributes.rn").String()
+			if rnValue == "multihoming" {
+				rnvoEvpnEsiMultiHoming = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.EvpnMultihomingDelayRestoreTime.IsNull() {
+		data.EvpnMultihomingDelayRestoreTime = types.Int64Value(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.delayRestoreTime").Int())
+	} else {
+		data.EvpnMultihomingDelayRestoreTime = types.Int64Null()
+	}
+	if !data.EvpnMultihomingDfElectionMode.IsNull() {
+		data.EvpnMultihomingDfElectionMode = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.dfElectionMode").String())
+	} else {
+		data.EvpnMultihomingDfElectionMode = types.StringNull()
+	}
+	if !data.EvpnMultihomingDfElectionTime.IsNull() {
+		data.EvpnMultihomingDfElectionTime = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.dfElectionTime").String())
+	} else {
+		data.EvpnMultihomingDfElectionTime = types.StringNull()
+	}
+	if !data.EvpnMultihomingEadEviRoute.IsNull() {
+		data.EvpnMultihomingEadEviRoute = types.BoolValue(helpers.ParseNxosBoolean(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.eadEviRoute").String()))
+	} else {
+		data.EvpnMultihomingEadEviRoute = types.BoolNull()
+	}
+	if !data.EvpnMultihomingSystemMac.IsNull() {
+		data.EvpnMultihomingSystemMac = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.esiSysMac").String())
+	} else {
+		data.EvpnMultihomingSystemMac = types.StringNull()
+	}
+	if !data.EvpnMultihomingFrrAnycastSourceIp.IsNull() {
+		data.EvpnMultihomingFrrAnycastSourceIp = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.frrAnycastSrcIp").String())
+	} else {
+		data.EvpnMultihomingFrrAnycastSourceIp = types.StringNull()
+	}
+	if !data.EvpnMultihomingState.IsNull() {
+		data.EvpnMultihomingState = types.StringValue(rnvoEvpnEsiMultiHoming.Get("nvoEvpnEsiMultiHoming.attributes.state").String())
+	} else {
+		data.EvpnMultihomingState = types.StringNull()
 	}
 	for key, item := range data.NveInterfaces {
 		var rnvoEp gjson.Result
@@ -766,6 +868,12 @@ func (data NVO) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMulticast.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnEsiMultiHoming.attributes.rn", "multihoming")
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnEsiMultiHoming.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 	for key, child := range data.NveInterfaces {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEp.attributes.rn", child.getRn(key))
@@ -874,6 +982,34 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 		}
 		if !state.AdvertiseEvpnMulticastState.IsNull() && config.AdvertiseEvpnMulticastState.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMulticast")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultihomingDelayRestoreTime.IsNull() && config.EvpnMultihomingDelayRestoreTime.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreTime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultihomingDfElectionMode.IsNull() && config.EvpnMultihomingDfElectionMode.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dfElectionMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultihomingDfElectionTime.IsNull() && config.EvpnMultihomingDfElectionTime.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dfElectionTime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultihomingEadEviRoute.IsNull() && config.EvpnMultihomingEadEviRoute.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"eadEviRoute", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultihomingSystemMac.IsNull() && config.EvpnMultihomingSystemMac.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"esiSysMac", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultihomingFrrAnycastSourceIp.IsNull() && config.EvpnMultihomingFrrAnycastSourceIp.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frrAnycastSrcIp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.EvpnMultihomingState.IsNull() && config.EvpnMultihomingState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.NveInterfaces {

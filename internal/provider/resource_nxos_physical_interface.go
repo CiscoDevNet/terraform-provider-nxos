@@ -63,7 +63,7 @@ func (r *PhysicalInterfaceResource) Metadata(ctx context.Context, req resource.M
 func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1SelectiveQinqTable", "l1SelectiveQinq", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:LoadP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:VlanMapping/", "System/l1:SelectiveQinqTable/", "System/l1:SelectiveQinq/", "System/l1:VlanTranslateTable/", "System/l1:VlanTranslateEntry/", "System/l1:PhysIfExtended/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage physical interfaces on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.").AddApiDocumentation("interfaceEntity", "", []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "nvoEsiMhCoreTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1SelectiveQinqTable", "l1SelectiveQinq", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, []string{"System/l1:PhysIf/", "Routing%20and%20Forwarding/nw:RtVrfMbr/", "System/l1:StormCtrlP/", "System/l1:LoadP/", "Network%20Virtualization/nvo:MultisiteIfTracking/", "Network%20Virtualization/nvo:EsiMhCoreTracking/", "Qos/ipqos:PriorFlowCtrl/", "Qos/ipqos:PriorFlowCtrlWd/", "System/l1:VlanMapping/", "System/l1:SelectiveQinqTable/", "System/l1:SelectiveQinq/", "System/l1:VlanTranslateTable/", "System/l1:VlanTranslateEntry/", "System/l1:PhysIfExtended/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -500,6 +500,13 @@ func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.Sch
 								stringvalidator.OneOf("unknown", "dci", "fabric"),
 							},
 						},
+						"evpn_multihoming_core_tracking": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enabled/Disabled state of Core Tracking.").AddStringEnumDescription("disabled", "enabled").AddMinimumVersionDescription("10.6(1)").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disabled", "enabled"),
+							},
+						},
 						"priority_flow_control_mode": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Priority-flow-control mode on/off/auto.").AddStringEnumDescription("auto", "on", "off").String,
 							Optional:            true,
@@ -930,7 +937,7 @@ func (r *PhysicalInterfaceResource) Read(ctx context.Context, req resource.ReadR
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1SelectiveQinqTable", "l1SelectiveQinq", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
+		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "nvoEsiMhCoreTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1SelectiveQinqTable", "l1SelectiveQinq", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return

@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of port-channel interfaces on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
   API Documentation
-  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/l1LoadP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/pcVlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanMapping/pcSelectiveQinqTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:SelectiveQinqTable/pcSelectiveQinq https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:SelectiveQinq/pcVlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateTable/pcVlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateEntry/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:RsMbrIfs/
+  pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIf/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/l1StormCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/l1LoadP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/nvoEtherSeg https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EtherSeg/nvoEsiMhCoreTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EsiMhCoreTracking/ipqosPriorFlowCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/ipqosPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/pcVlanMapping https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanMapping/pcSelectiveQinqTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:SelectiveQinqTable/pcSelectiveQinq https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:SelectiveQinq/pcVlanTranslateTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateTable/pcVlanTranslateEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanTranslateEntry/pcAggrIfExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:AggrIfExtended/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Data Source)
@@ -19,6 +19,8 @@ This data source can read the configuration of port-channel interfaces on NX-OS 
 - [l1StormCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:StormCtrlP/)
 - [l1LoadP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/l1:LoadP/)
 - [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
+- [nvoEtherSeg](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EtherSeg/)
+- [nvoEsiMhCoreTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EsiMhCoreTracking/)
 - [ipqosPriorFlowCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrl/)
 - [ipqosPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos:PriorFlowCtrlWd/)
 - [pcVlanMapping](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/pc:VlanMapping/)
@@ -71,6 +73,15 @@ Read-Only:
 - `dot1q_ether_type` (Number) The administrative port Dot1q ether-type. Dot1q Ether Type configures the TPID value in the VLAN tag field for packets received and sent by the interface.
 - `duplex` (String) Duplex.
 - `equalization_delay` (Number) Administrative port equalization delay time.
+- `ethernet_segment_identifier` (String) ESI configured on port-channel.
+- `ethernet_segment_local_identifier` (Number) Local Identifier for Ethernet Segment.
+- `ethernet_segment_local_identifier_inherit` (Boolean) Derive local identifier from ESI port-channel ID.
+- `ethernet_segment_system_mac` (String) System MAC for Ethernet Segment.
+- `ethernet_segment_system_mac_inherit` (Boolean) Use globally configured System MAC for Ethernet Segment.
+- `ethernet_segment_tag` (Number) Tag asscoiated with Ethernet Segment.
+- `ethernet_segment_type` (String) Ethernet Segment Type.
+- `evpn_multihoming_core_tracking` (String) Enabled/Disabled state of Core Tracking.
+  - Minimum NX-OS version: `10.6(1)`
 - `extended_description` (String) Description.
 - `flow_control_receive` (Boolean) Disable/enable rx flowcontrol block on interface.
 - `flow_control_send` (Boolean) Disable/enable tx flowcontrol block on interface.

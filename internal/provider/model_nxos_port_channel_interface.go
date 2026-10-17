@@ -95,6 +95,14 @@ type PortChannelInterfacePortChannelInterfaces struct {
 	LoadIntervalCounter2                           types.Int64                                                               `tfsdk:"load_interval_counter_2"`
 	LoadIntervalCounter3                           types.Int64                                                               `tfsdk:"load_interval_counter_3"`
 	MultisiteInterfaceTracking                     types.String                                                              `tfsdk:"multisite_interface_tracking"`
+	EthernetSegmentType                            types.String                                                              `tfsdk:"ethernet_segment_type"`
+	EthernetSegmentIdentifier                      types.String                                                              `tfsdk:"ethernet_segment_identifier"`
+	EthernetSegmentLocalIdentifier                 types.Int64                                                               `tfsdk:"ethernet_segment_local_identifier"`
+	EthernetSegmentLocalIdentifierInherit          types.Bool                                                                `tfsdk:"ethernet_segment_local_identifier_inherit"`
+	EthernetSegmentSystemMac                       types.String                                                              `tfsdk:"ethernet_segment_system_mac"`
+	EthernetSegmentSystemMacInherit                types.Bool                                                                `tfsdk:"ethernet_segment_system_mac_inherit"`
+	EthernetSegmentTag                             types.Int64                                                               `tfsdk:"ethernet_segment_tag"`
+	EvpnMultihomingCoreTracking                    types.String                                                              `tfsdk:"evpn_multihoming_core_tracking"`
 	PriorityFlowControlMode                        types.String                                                              `tfsdk:"priority_flow_control_mode"`
 	PriorityFlowControlSendTlv                     types.Bool                                                                `tfsdk:"priority_flow_control_send_tlv"`
 	PriorityFlowControlWatchdogDisableAction       types.Bool                                                                `tfsdk:"priority_flow_control_watchdog_disable_action"`
@@ -182,10 +190,13 @@ func (data *PortChannelInterface) fromIdentity(ctx context.Context, identity *Po
 }
 
 // PortChannelInterfaceSubtreeClassMinVersions maps child classes to their minimum NX-OS version.
-var PortChannelInterfaceSubtreeClassMinVersions = map[string]string{}
+var PortChannelInterfaceSubtreeClassMinVersions = map[string]string{
+	"nvoEsiMhCoreTracking": "10.6(1)",
+}
 
 // PortChannelInterfaceMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var PortChannelInterfaceMinVersions = map[string]helpers.MinVersion{
+	"nvoEsiMhCoreTracking":           {Version: "10.6(1)", Path: "port_channel_interfaces.evpn_multihoming_core_tracking"},
 	"pcVlanTranslateEntry.direction": {Version: "10.6(3)", Path: "port_channel_interfaces.vlan_mappings.rx_only"},
 }
 
@@ -411,6 +422,38 @@ func (data PortChannelInterface) toBody(config PortChannelInterface) nxos.Body {
 			}
 			if attrs != "{}" {
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoMultisiteIfTracking.attributes", attrs)
+			}
+			attrs = "{}"
+			if !child.EthernetSegmentType.IsUnknown() && !child.EthernetSegmentType.IsNull() && !configChild.EthernetSegmentType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "esType", child.EthernetSegmentType.ValueString())
+			}
+			if !child.EthernetSegmentIdentifier.IsUnknown() && !child.EthernetSegmentIdentifier.IsNull() && !configChild.EthernetSegmentIdentifier.IsNull() {
+				attrs, _ = sjson.Set(attrs, "esi", child.EthernetSegmentIdentifier.ValueString())
+			}
+			if !child.EthernetSegmentLocalIdentifier.IsUnknown() && !child.EthernetSegmentLocalIdentifier.IsNull() && !configChild.EthernetSegmentLocalIdentifier.IsNull() {
+				attrs, _ = sjson.Set(attrs, "localIdentifier", strconv.FormatInt(child.EthernetSegmentLocalIdentifier.ValueInt64(), 10))
+			}
+			if !child.EthernetSegmentLocalIdentifierInherit.IsUnknown() && !child.EthernetSegmentLocalIdentifierInherit.IsNull() && !configChild.EthernetSegmentLocalIdentifierInherit.IsNull() {
+				attrs, _ = sjson.Set(attrs, "localIdentifierInherit", strconv.FormatBool(child.EthernetSegmentLocalIdentifierInherit.ValueBool()))
+			}
+			if !child.EthernetSegmentSystemMac.IsUnknown() && !child.EthernetSegmentSystemMac.IsNull() && !configChild.EthernetSegmentSystemMac.IsNull() {
+				attrs, _ = sjson.Set(attrs, "sysMac", child.EthernetSegmentSystemMac.ValueString())
+			}
+			if !child.EthernetSegmentSystemMacInherit.IsUnknown() && !child.EthernetSegmentSystemMacInherit.IsNull() && !configChild.EthernetSegmentSystemMacInherit.IsNull() {
+				attrs, _ = sjson.Set(attrs, "sysMacInherit", strconv.FormatBool(child.EthernetSegmentSystemMacInherit.ValueBool()))
+			}
+			if !child.EthernetSegmentTag.IsUnknown() && !child.EthernetSegmentTag.IsNull() && !configChild.EthernetSegmentTag.IsNull() {
+				attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.EthernetSegmentTag.ValueInt64(), 10))
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoEtherSeg.attributes", attrs)
+			}
+			attrs = "{}"
+			if !child.EvpnMultihomingCoreTracking.IsUnknown() && !child.EvpnMultihomingCoreTracking.IsNull() && !configChild.EvpnMultihomingCoreTracking.IsNull() {
+				attrs, _ = sjson.Set(attrs, "coretracking", child.EvpnMultihomingCoreTracking.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoEsiMhCoreTracking.attributes", attrs)
 			}
 			attrs = "{}"
 			if !child.PriorityFlowControlMode.IsUnknown() && !child.PriorityFlowControlMode.IsNull() && !configChild.PriorityFlowControlMode.IsNull() {
@@ -772,6 +815,40 @@ func (data *PortChannelInterface) fromBody(res gjson.Result) {
 								},
 							)
 							child.MultisiteInterfaceTracking = types.StringValue(rnvoMultisiteIfTracking.Get("nvoMultisiteIfTracking.attributes.tracking").String())
+						}
+						{
+							var rnvoEtherSeg gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("nvoEtherSeg.attributes.rn").String()
+									if rnValue == "ethernetsegment" {
+										rnvoEtherSeg = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.EthernetSegmentType = types.StringValue(rnvoEtherSeg.Get("nvoEtherSeg.attributes.esType").String())
+							child.EthernetSegmentIdentifier = types.StringValue(rnvoEtherSeg.Get("nvoEtherSeg.attributes.esi").String())
+							child.EthernetSegmentLocalIdentifier = types.Int64Value(rnvoEtherSeg.Get("nvoEtherSeg.attributes.localIdentifier").Int())
+							child.EthernetSegmentLocalIdentifierInherit = types.BoolValue(helpers.ParseNxosBoolean(rnvoEtherSeg.Get("nvoEtherSeg.attributes.localIdentifierInherit").String()))
+							child.EthernetSegmentSystemMac = types.StringValue(rnvoEtherSeg.Get("nvoEtherSeg.attributes.sysMac").String())
+							child.EthernetSegmentSystemMacInherit = types.BoolValue(helpers.ParseNxosBoolean(rnvoEtherSeg.Get("nvoEtherSeg.attributes.sysMacInherit").String()))
+							child.EthernetSegmentTag = types.Int64Value(rnvoEtherSeg.Get("nvoEtherSeg.attributes.tag").Int())
+						}
+						{
+							var rnvoEsiMhCoreTracking gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("nvoEsiMhCoreTracking.attributes.rn").String()
+									if rnValue == "esimhcoretracking" {
+										rnvoEsiMhCoreTracking = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.EvpnMultihomingCoreTracking = types.StringValue(rnvoEsiMhCoreTracking.Get("nvoEsiMhCoreTracking.attributes.coretracking").String())
 						}
 						{
 							var ripqosPriorFlowCtrl gjson.Result
@@ -1295,6 +1372,72 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 				item.MultisiteInterfaceTracking = types.StringValue(rnvoMultisiteIfTracking.Get("nvoMultisiteIfTracking.attributes.tracking").String())
 			} else {
 				item.MultisiteInterfaceTracking = types.StringNull()
+			}
+		}
+		{
+			var rnvoEtherSeg gjson.Result
+			rpcAggrIf.Get("pcAggrIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("nvoEtherSeg.attributes.rn").String()
+					if rnValue == "ethernetsegment" {
+						rnvoEtherSeg = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.EthernetSegmentType.IsNull() {
+				item.EthernetSegmentType = types.StringValue(rnvoEtherSeg.Get("nvoEtherSeg.attributes.esType").String())
+			} else {
+				item.EthernetSegmentType = types.StringNull()
+			}
+			if !item.EthernetSegmentIdentifier.IsNull() {
+				item.EthernetSegmentIdentifier = types.StringValue(rnvoEtherSeg.Get("nvoEtherSeg.attributes.esi").String())
+			} else {
+				item.EthernetSegmentIdentifier = types.StringNull()
+			}
+			if !item.EthernetSegmentLocalIdentifier.IsNull() {
+				item.EthernetSegmentLocalIdentifier = types.Int64Value(rnvoEtherSeg.Get("nvoEtherSeg.attributes.localIdentifier").Int())
+			} else {
+				item.EthernetSegmentLocalIdentifier = types.Int64Null()
+			}
+			if !item.EthernetSegmentLocalIdentifierInherit.IsNull() {
+				item.EthernetSegmentLocalIdentifierInherit = types.BoolValue(helpers.ParseNxosBoolean(rnvoEtherSeg.Get("nvoEtherSeg.attributes.localIdentifierInherit").String()))
+			} else {
+				item.EthernetSegmentLocalIdentifierInherit = types.BoolNull()
+			}
+			if !item.EthernetSegmentSystemMac.IsNull() {
+				item.EthernetSegmentSystemMac = types.StringValue(rnvoEtherSeg.Get("nvoEtherSeg.attributes.sysMac").String())
+			} else {
+				item.EthernetSegmentSystemMac = types.StringNull()
+			}
+			if !item.EthernetSegmentSystemMacInherit.IsNull() {
+				item.EthernetSegmentSystemMacInherit = types.BoolValue(helpers.ParseNxosBoolean(rnvoEtherSeg.Get("nvoEtherSeg.attributes.sysMacInherit").String()))
+			} else {
+				item.EthernetSegmentSystemMacInherit = types.BoolNull()
+			}
+			if !item.EthernetSegmentTag.IsNull() {
+				item.EthernetSegmentTag = types.Int64Value(rnvoEtherSeg.Get("nvoEtherSeg.attributes.tag").Int())
+			} else {
+				item.EthernetSegmentTag = types.Int64Null()
+			}
+		}
+		{
+			var rnvoEsiMhCoreTracking gjson.Result
+			rpcAggrIf.Get("pcAggrIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("nvoEsiMhCoreTracking.attributes.rn").String()
+					if rnValue == "esimhcoretracking" {
+						rnvoEsiMhCoreTracking = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.EvpnMultihomingCoreTracking.IsNull() {
+				item.EvpnMultihomingCoreTracking = types.StringValue(rnvoEsiMhCoreTracking.Get("nvoEsiMhCoreTracking.attributes.coretracking").String())
+			} else {
+				item.EvpnMultihomingCoreTracking = types.StringNull()
 			}
 		}
 		{
@@ -1960,6 +2103,38 @@ func (data PortChannelInterface) toBodyWithDeletes(ctx context.Context, state Po
 						if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EthernetSegmentType.IsNull() && configChild.EthernetSegmentType.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEtherSeg")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"esType", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EthernetSegmentIdentifier.IsNull() && configChild.EthernetSegmentIdentifier.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEtherSeg")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"esi", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EthernetSegmentLocalIdentifier.IsNull() && configChild.EthernetSegmentLocalIdentifier.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEtherSeg")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"localIdentifier", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EthernetSegmentLocalIdentifierInherit.IsNull() && configChild.EthernetSegmentLocalIdentifierInherit.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEtherSeg")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"localIdentifierInherit", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EthernetSegmentSystemMac.IsNull() && configChild.EthernetSegmentSystemMac.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEtherSeg")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sysMac", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EthernetSegmentSystemMacInherit.IsNull() && configChild.EthernetSegmentSystemMacInherit.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEtherSeg")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sysMacInherit", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EthernetSegmentTag.IsNull() && configChild.EthernetSegmentTag.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEtherSeg")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tag", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EvpnMultihomingCoreTracking.IsNull() && configChild.EvpnMultihomingCoreTracking.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEsiMhCoreTracking")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"coretracking", "DME_UNSET_PROPERTY_MARKER")
 						}
 						if !stateChild.PriorityFlowControlMode.IsNull() && configChild.PriorityFlowControlMode.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrl")

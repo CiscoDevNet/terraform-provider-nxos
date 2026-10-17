@@ -5,7 +5,7 @@ subcategory: "Interface"
 description: |-
   This data source can read SVI (Switch Virtual Interface) configurations on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.
   API Documentation
-  sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/svi:If/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/
+  sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/svi:If/nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/nvoMultisiteIfTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/nvoEsiMhCoreTracking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EsiMhCoreTracking/
 ---
 
 # nxos_svi_interface (Data Source)
@@ -17,6 +17,7 @@ This data source can read SVI (Switch Virtual Interface) configurations on NX-OS
 - [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/svi:If/)
 - [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 - [nvoMultisiteIfTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:MultisiteIfTracking/)
+- [nvoEsiMhCoreTracking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/nvo:EsiMhCoreTracking/)
 
 ## Example Usage
 
@@ -49,6 +50,8 @@ Read-Only:
 - `carrier_delay` (Number) The hold period for which carrier transition, such as L2 interfacing going down, is ignored.
 - `delay` (Number) Specifies the administrative port delay.
 - `description` (String) Tunnel Description.
+- `evpn_multihoming_core_tracking` (String) Enabled/Disabled state of Core Tracking.
+  - Minimum NX-OS version: `10.6(1)`
 - `inband_management` (Boolean) An in-band management interface configuration.
 - `load_interval_counter_1` (Number) Load-averaging Interval 1.
 - `load_interval_counter_2` (Number) Load-averaging Interval 2.

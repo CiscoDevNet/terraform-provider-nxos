@@ -15,6 +15,7 @@ resource "nxos_feature" "example" {
   lacp                 = "enabled"
   lldp                 = "enabled"
   macsec               = "enabled"
+  msdp                 = "enabled"
   netflow              = "enabled"
   ngmvpn               = "enabled"
   ngoam                = "enabled"

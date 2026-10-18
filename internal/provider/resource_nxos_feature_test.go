@@ -63,6 +63,7 @@ func TestAccFeatureResource(t *testing.T) {
 	if os.Getenv("FEATURE_MACSEC") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "macsec", "enabled"))
 	}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "msdp", "enabled"))
 	if os.Getenv("FEATURE_NETFLOW") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "netflow", "enabled"))
 	}
@@ -117,6 +118,7 @@ func TestAccFeatureResource(t *testing.T) {
 	if os.Getenv("FEATURE_MACSEC") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "macsec", "enabled"))
 	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "msdp", "enabled"))
 	if os.Getenv("FEATURE_NETFLOW") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "netflow", "enabled"))
 	}
@@ -251,6 +253,7 @@ func testAccFeatureResourceConfig_all() string {
 	if os.Getenv("FEATURE_MACSEC") != "" {
 		config += `	macsec = "enabled"` + "\n"
 	}
+	config += `	msdp = "enabled"` + "\n"
 	if os.Getenv("FEATURE_NETFLOW") != "" {
 		config += `	netflow = "enabled"` + "\n"
 	}

@@ -258,6 +258,21 @@ child_classes:
               - disabled
             example: enabled
             test_tags: [FEATURE_MACSEC]
+      - class_name: fmMsdp
+        rn: msdp
+        type: single
+        no_delete: true
+        description: 'MSDP feature configuration.'
+        doc_path: Feature%20Management/fm:Msdp/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: msdp
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmNetflow
         rn: netflow
         type: single

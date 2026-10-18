@@ -1,0 +1,325 @@
+---
+name: MSDP
+class_name: msdpEntity
+dn: sys/msdp
+ds_description: This data source can read the MSDP (Multicast Source Discovery Protocol) configuration on NX-OS devices, including per-VRF settings, peers, mesh groups, SA policies, group limits and redistribution.
+res_description: This resource can manage the MSDP (Multicast Source Discovery Protocol) configuration on NX-OS devices, including per-VRF settings, peers, mesh groups, SA policies, group limits and redistribution.
+doc_path: Discovery%20Protocols/msdp:Entity/
+doc_category: Multicast
+no_delete: true
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+child_classes:
+  - class_name: msdpInst
+    doc_path: Discovery%20Protocols/msdp:Inst/
+    rn: inst
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: ctrl
+        tf_name: instance_control
+        type: String
+        description: 'The control state.'
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+    child_classes:
+      - class_name: msdpDom
+        doc_path: Discovery%20Protocols/msdp:Dom/
+        rn: dom-%s
+        type: list
+        tf_name: vrfs
+        description: 'List of MSDP VRF configurations.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'VRF name.'
+            example: default
+          - nxos_name: ctrl
+            tf_name: control
+            type: String
+            description: 'Flush routes.'
+            enum_values:
+              - flush-routes
+            example: flush-routes
+          - nxos_name: origIf
+            tf_name: originator_interface
+            type: String
+            description: 'Originator Interface identifying IP address in RP field of Source-Active message. Supported interfaces include Ethernet-like, port/channel, loopback and vlan interfaces.'
+            example: lo0
+          - nxos_name: reConnIntvl
+            tf_name: reconnect_interval
+            type: Int64
+            min_int: 1
+            max_int: 60
+            description: 'Reconnect Interval.'
+            example: 20
+          - nxos_name: srcActiveMsgIntvl
+            tf_name: source_active_interval
+            type: Int64
+            min_int: 60
+            max_int: 65535
+            description: 'Source Active message Interval.'
+            example: 100
+        child_classes:
+          - class_name: msdpPeer
+            doc_path: Discovery%20Protocols/msdp:Peer/
+            rn: peer-[%s]
+            type: list
+            tf_name: peers
+            description: 'List of MSDP peers.'
+            attributes:
+              - nxos_name: addr
+                tf_name: address
+                type: String
+                id: true
+                description: 'IP address of MSDP Peer.'
+                example: 10.1.1.2
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'Administrative state enabled/disabled.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: asn
+                tf_name: remote_as
+                type: String
+                description: 'Autonomous System Number.'
+                example: '65001'
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: My MSDP peer
+              - nxos_name: kaIntvl
+                tf_name: keepalive_interval
+                type: Int64
+                min_int: 1
+                max_int: 60
+                description: 'Keepalive interval, how often you send keepalives.'
+                example: 30
+              - nxos_name: kaTimeout
+                tf_name: keepalive_timeout
+                type: Int64
+                min_int: 1
+                max_int: 90
+                description: 'Keepalive Timeout.'
+                example: 60
+              - nxos_name: name
+                tf_name: name
+                type: String
+                description: 'The name of the object.'
+                example: peer1
+              - nxos_name: srcActiveMsgLimit
+                tf_name: source_active_limit
+                type: Int64
+                min_int: 0
+                max_int: 4294967295
+                description: 'Source Active msg Limit.'
+                example: 1000
+              - nxos_name: srcIf
+                tf_name: source_interface
+                type: String
+                description: 'Source Interface. Supported interfaces include Ethernet-like, port/channel, loopback and vlan interfaces.'
+                example: lo0
+            child_classes:
+              - class_name: msdpAuthP
+                doc_path: Discovery%20Protocols/msdp:AuthP/
+                rn: auth
+                type: single
+                tf_name: authentication
+                description: 'MSDP peer authentication configuration.'
+                attributes:
+                  - nxos_name: descr
+                    tf_name: authentication_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My authentication description
+                  - nxos_name: key
+                    tf_name: authentication_key
+                    type: String
+                    write_only: true
+                    sensitive: true
+                    description: 'Authentication key.'
+                    example: secret_key
+                  - nxos_name: keychain
+                    tf_name: authentication_keychain
+                    type: String
+                    description: 'Name of the Keychain Used For Authentication.'
+                    example: KC1
+                  - nxos_name: name
+                    tf_name: authentication_name
+                    type: String
+                    description: 'Object name.'
+                    example: auth1
+                  - nxos_name: type
+                    tf_name: authentication_type
+                    type: String
+                    description: 'Authentication type.'
+                    enum_values:
+                      - none
+                      - md5
+                    example: md5
+              - class_name: msdpMeshGrp
+                doc_path: Discovery%20Protocols/msdp:MeshGrp/
+                rn: meshgrp
+                type: single
+                tf_name: mesh_group
+                description: 'MSDP mesh group membership configuration.'
+                attributes:
+                  - nxos_name: descr
+                    tf_name: mesh_group_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My mesh group description
+                  - nxos_name: grpName
+                    tf_name: mesh_group_name
+                    type: String
+                    description: 'Mesh Group Name.'
+                    example: MESH1
+                  - nxos_name: name
+                    tf_name: mesh_group_policy_name
+                    type: String
+                    description: 'Object name.'
+                    example: mesh1
+              - class_name: msdpRtCtrlP
+                doc_path: Discovery%20Protocols/msdp:RtCtrlP/
+                rn: rtctrl-%s
+                type: list
+                tf_name: sa_policies
+                description: 'List of MSDP Source Active route control policies.'
+                attributes:
+                  - nxos_name: direction
+                    tf_name: direction
+                    type: String
+                    id: true
+                    description: 'Direction.'
+                    enum_values:
+                      - in
+                      - out
+                    example: in
+                  - nxos_name: descr
+                    tf_name: description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My SA policy
+                  - nxos_name: name
+                    tf_name: name
+                    type: String
+                    description: 'Object name.'
+                    example: sa-policy
+                  - nxos_name: pfxList
+                    tf_name: prefix_list
+                    type: String
+                    description: 'Prefix list to control the distribution.'
+                    example: SA_PFX
+                    # Cannot be combined with `route_map`
+                    exclude_test: true
+                  - nxos_name: rtMap
+                    tf_name: route_map
+                    type: String
+                    description: 'Route Map.'
+                    example: SA_POLICY
+          - class_name: msdpMaxGrpP
+            doc_path: Discovery%20Protocols/msdp:MaxGrpP/
+            rn: maxgrp-[%s]
+            type: list
+            tf_name: group_limits
+            description: 'List of MSDP group limits per source prefix.'
+            attributes:
+              - nxos_name: srcPfx
+                tf_name: source_prefix
+                type: String
+                id: true
+                description: 'Source prefix.'
+                example: 10.0.0.0/8
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: My group limit
+              - nxos_name: maxGrp
+                tf_name: maximum_groups
+                type: Int64
+                min_int: 0
+                max_int: 4294967295
+                description: 'Max Group count.'
+                example: 100
+              - nxos_name: name
+                tf_name: name
+                type: String
+                description: 'Object name.'
+                example: group-limit
+          - class_name: msdpInterLeakP
+            doc_path: Discovery%20Protocols/msdp:InterLeakP/
+            rn: interleakp
+            type: single
+            tf_name: redistribution
+            description: 'MSDP redistribution policy configuration.'
+            attributes:
+              - nxos_name: descr
+                tf_name: redistribution_description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: My redistribution
+              - nxos_name: name
+                tf_name: redistribution_name
+                type: String
+                description: 'Object name.'
+                example: redist
+              - nxos_name: pfxList
+                tf_name: redistribution_prefix_list
+                type: String
+                description: 'pfxlist name.'
+                example: REDIST_PFX
+                # Cannot be combined with `redistribution_route_map`
+                exclude_test: true
+              - nxos_name: rtMap
+                tf_name: redistribution_route_map
+                type: String
+                description: 'The name of the default route leak policy route map. This route map name is used to control distribution.'
+                example: REDIST
+              - nxos_name: scope
+                tf_name: redistribution_scope
+                type: String
+                description: 'The domain applicable to the capability.'
+                enum_values:
+                  - intra
+                  - inter
+                  - defrt
+                example: inter
+              - nxos_name: srcLeak
+                tf_name: redistribution_source
+                type: String
+                description: 'Source of route leak distribution.'
+                enum_values:
+                  - none
+                  - pflist
+                  - rtmap
+                example: rtmap
+test_prerequisites:
+  - dn: sys/fm/msdp
+    class_name: fmMsdp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

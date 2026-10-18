@@ -1,0 +1,2 @@
+- Add `nxos_msdp` resource and data source
+- Add `msdp` attribute to `nxos_feature` resource and data source

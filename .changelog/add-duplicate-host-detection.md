@@ -1,2 +1,0 @@
-- Add HMM fabric forwarding EVPN configuration (`evpn_*` and `duplicate_host_*` attributes), including duplicate host IP address detection and recovery settings, to `nxos_hmm` resource and data source
-- Add L2RIB duplicate MAC detection and recovery configuration (`l2rib_duplicate_mac_*` attributes) to `nxos_system` resource and data source

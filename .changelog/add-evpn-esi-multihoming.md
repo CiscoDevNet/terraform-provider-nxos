@@ -1,3 +1,0 @@
-- Add global EVPN ESI multihoming configuration (`evpn_multihoming_*` attributes) to `nxos_nvo` resource and data source
-- Add Ethernet segment configuration (`ethernet_segment_*` attributes) to `port_channel_interfaces` of `nxos_port_channel_interface` resource and data source
-- Add `evpn_multihoming_core_tracking` attribute to `nxos_physical_interface`, `nxos_port_channel_interface` and `nxos_svi_interface` resources and data sources

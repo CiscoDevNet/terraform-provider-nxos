@@ -1,1 +1,0 @@
-- Add per-VLAN IGMP snooping configuration (`vlans`), including querier, timers, fast-leave, explicit tracking, report suppression, mrouter interfaces, static groups, access group and report flood settings, to `nxos_igmp_snooping` resource and data source

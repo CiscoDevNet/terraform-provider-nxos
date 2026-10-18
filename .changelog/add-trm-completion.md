@@ -1,3 +1,0 @@
-- Add NGMVPN (Tenant Routed Multicast) configuration (`ngmvpn_*` attributes), including overlay settings and per-VRF MDT VXLAN settings (`ngmvpn_vrfs`), to `nxos_system` resource and data source
-- Add `mvpn_vri_id` attribute to `nxos_bgp` resource and data source
-- Add `advertise_evpn_multicast_state` attribute to `nxos_nvo` resource and data source

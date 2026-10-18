@@ -1,1 +1,0 @@
-- Add `nxos_igmp` resource and data source

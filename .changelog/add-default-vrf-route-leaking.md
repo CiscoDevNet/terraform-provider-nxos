@@ -1,1 +1,0 @@
-- Add default VRF route leaking configuration (`default_vrf_route_map`, `default_vrf_prefix_limit`, `allow_vpn` and `advertise_vpn` attributes) to `route_target_directions` of `nxos_vrf` resource and data source

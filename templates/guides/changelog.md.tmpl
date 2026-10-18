@@ -7,6 +7,31 @@ description: |-
 
 # Changelog
 
+## 0.20.0
+
+- Add default VRF route leaking configuration (`default_vrf_route_map`, `default_vrf_prefix_limit`, `allow_vpn` and `advertise_vpn` attributes) to `route_target_directions` of `nxos_vrf` resource and data source
+- Add `deletion_policy` provider option and resource attribute to control what happens on the device when objects are removed: `delete` (default, deletes the managed object including unmanaged configuration below it on destroy), `reset` (deletes the objects created by the resource and resets the managed attributes of objects that already existed) or `retain` (leaves the device unchanged on destroy)
+- With the `delete` deletion policy, single child objects are deleted on update once none of their attributes and children are configured anymore unless the device holds list entries below them that are not managed by the resource, instead of only resetting their attributes
+- Add HMM fabric forwarding EVPN configuration (`evpn_*` and `duplicate_host_*` attributes), including duplicate host IP address detection and recovery settings, to `nxos_hmm` resource and data source
+- Add L2RIB duplicate MAC detection and recovery configuration (`l2rib_duplicate_mac_*` attributes) to `nxos_system` resource and data source
+- Add global EVPN ESI multihoming configuration (`evpn_multihoming_*` attributes) to `nxos_nvo` resource and data source
+- Add Ethernet segment configuration (`ethernet_segment_*` attributes) to `port_channel_interfaces` of `nxos_port_channel_interface` resource and data source
+- Add `evpn_multihoming_core_tracking` attribute to `nxos_physical_interface`, `nxos_port_channel_interface` and `nxos_svi_interface` resources and data sources
+- Add per-VLAN IGMP snooping configuration (`vlans`), including querier, timers, fast-leave, explicit tracking, report suppression, mrouter interfaces, static groups, access group and report flood settings, to `nxos_igmp_snooping` resource and data source
+- Add `nxos_igmp` resource and data source
+- Add `nxos_msdp` resource and data source
+- Add `msdp` attribute to `nxos_feature` resource and data source
+- Add EVPN Multisite storm control configuration (`evpn_storm_controls`) to `nxos_nvo` resource and data source
+- Add global PIM configuration (`isolate`, `log_level` and `syslog_level` attributes) to `nxos_pim` resource and data source
+- Add NGOAM (VXLAN OAM) configuration (`ngoam_install_acl` and `ngoam_loop_detection_*` attributes) to `nxos_system` resource and data source
+- Add PIM hello configuration (`hello_interval`, `hello_authentication_type`, `hello_authentication_key`, etc.) to `interfaces` of `nxos_pim` resource and data source
+- Add PIM static RP route-map and prefix-list group ranges (`group_ranges`) to `static_rps` of `nxos_pim` resource and data source
+- Add PIM ASM configuration (`pre_build_spt`, shared tree (`spt-threshold infinity`), (S,G) expiry timer and register policy (`register-source`)) to `vrfs` of `nxos_pim` resource and data source
+- Add PIM BSR and Auto-RP configuration (candidate BSR, candidate RP, mapping agent and filter policies) to `vrfs` of `nxos_pim` resource and data source
+- Add NGMVPN (Tenant Routed Multicast) configuration (`ngmvpn_*` attributes), including overlay settings and per-VRF MDT VXLAN settings (`ngmvpn_vrfs`), to `nxos_system` resource and data source
+- Add `mvpn_vri_id` attribute to `nxos_bgp` resource and data source
+- Add `advertise_evpn_multicast_state` attribute to `nxos_nvo` resource and data source
+
 ## 0.19.0
 
 - Add CoS, precedence, QoS group, ACL and outer (tunnel) DSCP match criteria, as well as negated DSCP, CoS and precedence match criteria, to `class_maps` of `nxos_default_qos` resource and data source

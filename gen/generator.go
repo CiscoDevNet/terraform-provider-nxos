@@ -158,6 +158,7 @@ type YamlConfigChildClass struct {
 	KeepOnDestroy     bool                   `yaml:"keep_on_destroy"`
 	StatusReplace     bool                   `yaml:"status_replace"`
 	AutoDeleteOnEmpty bool                   `yaml:"auto_delete_on_empty"`
+	DeleteWhenEmpty   bool                   `yaml:"delete_when_empty"`
 	SeparateRequest   bool                   `yaml:"separate_request"`
 	ExcludeTest       bool                   `yaml:"exclude_test"`
 	TestTags          []string               `yaml:"test_tags"`
@@ -417,6 +418,7 @@ var functions = template.FuncMap{
 	"hasNonIdAttrs":             HasNonIdAttrs,
 	"needsPlanItem":             NeedsPlanItem,
 	"hasAutoDeleteOnEmpty":      HasAutoDeleteOnEmpty,
+	"singleEmptyExpr":           SingleEmptyExpr,
 	"separateRequestClasses":    SeparateRequestClasses,
 	"separateRequestAttributes": SeparateRequestAttributes,
 	"hasSeparateRequest":        HasSeparateRequest,
@@ -479,6 +481,29 @@ func HasAutoDeleteOnEmpty(children []YamlConfigChildClass) bool {
 		}
 	}
 	return false
+}
+
+// SingleEmptyExpr returns a Go expression that is true if none of the attributes of the single
+// child class c, including those of its nested child classes, are set in the model variable v.
+func SingleEmptyExpr(v string, c YamlConfigChildClass) string {
+	var conds []string
+	for _, a := range c.Attributes {
+		if a.Value != "" {
+			continue
+		}
+		conds = append(conds, fmt.Sprintf("%s.%s.IsNull()", v, ToGoName(a.TfName)))
+	}
+	for _, cc := range c.ChildClasses {
+		if cc.Type == "list" {
+			conds = append(conds, fmt.Sprintf("len(%s.%s) == 0", v, ToGoName(cc.TfName)))
+		} else {
+			conds = append(conds, SingleEmptyExpr(v, cc))
+		}
+	}
+	if len(conds) == 0 {
+		return "true"
+	}
+	return "(" + strings.Join(conds, " && ") + ")"
 }
 
 // SeparateRequestClasses recursively collects the class names of all child classes with separate_request set.

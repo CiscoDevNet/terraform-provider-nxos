@@ -5,7 +5,7 @@ subcategory: "Multicast"
 description: |-
   This data source can read the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.
   API Documentation
-  pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Entity/pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Inst/pimGl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Gl/pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Dom/pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:If/pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMPatP/pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMRangeP/pimStaticRPP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRPP/pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRP/pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpList/pimAcastRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPFuncP/pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPPeer/
+  pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Entity/pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Inst/pimGl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Gl/pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Dom/pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:If/pimHelloTrP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:HelloTrP/pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMPatP/pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMRangeP/pimStaticRPP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRPP/pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRP/pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpList/pimRPGrpRange https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/pimAcastRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPFuncP/pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPPeer/pimASMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:ASMPatP/pimSharedRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SharedRangeP/pimSGRangeExpP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SGRangeExpP/pimRegTrP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RegTrP/pimBSRP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRP/pimBSRFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRFuncP/pimRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFuncP/pimRPGrpRange https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/pimBSRFilterP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRFilterP/pimRPFilterP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFilterP/pimAutoRPP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AutoRPP/pimMAFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:MAFuncP/pimRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFuncP/pimRPGrpRange https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/pimMAFilterP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:MAFilterP/pimRPFilterP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFilterP/
 ---
 
 # nxos_pim (Data Source)
@@ -19,13 +19,31 @@ This data source can read the PIM (Protocol Independent Multicast) configuration
 - [pimGl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Gl/)
 - [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Dom/)
 - [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:If/)
+- [pimHelloTrP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:HelloTrP/)
 - [pimSSMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMPatP/)
 - [pimSSMRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMRangeP/)
 - [pimStaticRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRPP/)
 - [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRP/)
 - [pimRPGrpList](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpList/)
+- [pimRPGrpRange](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/)
 - [pimAcastRPFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPFuncP/)
 - [pimAcastRPPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPPeer/)
+- [pimASMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:ASMPatP/)
+- [pimSharedRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SharedRangeP/)
+- [pimSGRangeExpP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SGRangeExpP/)
+- [pimRegTrP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RegTrP/)
+- [pimBSRP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRP/)
+- [pimBSRFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRFuncP/)
+- [pimRPFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFuncP/)
+- [pimRPGrpRange](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/)
+- [pimBSRFilterP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRFilterP/)
+- [pimRPFilterP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFilterP/)
+- [pimAutoRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AutoRPP/)
+- [pimMAFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:MAFuncP/)
+- [pimRPFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFuncP/)
+- [pimRPGrpRange](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/)
+- [pimMAFilterP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:MAFilterP/)
+- [pimRPFilterP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFilterP/)
 
 ## Example Usage
 
@@ -73,8 +91,64 @@ Read-Only:
   - Key component `address`: Address.
   - Key component `rp_set_address`: IP Address of node performing the function. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
 - `anycast_rp_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `asm_policy_control` (String) Controls.
+- `asm_policy_description` (String) Description of the specified attribute.
+- `asm_policy_name` (String) Object name.
+- `asm_policy_prefix_list` (String) Prefix List.
+- `asm_policy_route_map` (String) Route Map.
 - `auto_enable` (Boolean) Auto Enable.
+- `auto_rp_control` (String) Control.
+- `auto_rp_description` (String) Description of the specified attribute.
+- `auto_rp_mapping_agent_description` (String) Description of the specified attribute.
+- `auto_rp_mapping_agent_name` (String) Object name.
+- `auto_rp_mapping_agent_policy_description` (String) Description of the specified attribute.
+- `auto_rp_mapping_agent_policy_name` (String) Object name.
+- `auto_rp_mapping_agent_policy_route_map` (String) Route Map.
+- `auto_rp_mapping_agent_scope` (Number) Scope.
+- `auto_rp_mapping_agent_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `auto_rp_mapping_agent_use_send_rp_discovery_command` (Boolean) Flag to use send-rp-discovery.
+- `auto_rp_name` (String) Object name.
+- `auto_rp_rp_candidate_address` (String) AutoRP Cand RP Address.
+- `auto_rp_rp_candidate_description` (String) Description of the specified attribute.
+- `auto_rp_rp_candidate_group_ranges` (Attributes Map) List of PIM RP candidate group range configurations.
+  - Map key: `bidir` - BiDir Groups.
+  - Key choices: `no`, `yes` (see [below for nested schema](#nestedatt--vrfs--auto_rp_rp_candidate_group_ranges))
+- `auto_rp_rp_candidate_interval` (Number) Interval.
+- `auto_rp_rp_candidate_name` (String) Object name.
+- `auto_rp_rp_candidate_policy_description` (String) Description of the specified attribute.
+- `auto_rp_rp_candidate_policy_name` (String) Object name.
+- `auto_rp_rp_candidate_policy_route_map` (String) Route Map.
+- `auto_rp_rp_candidate_priority` (Number) Priority.
+- `auto_rp_rp_candidate_scope` (Number) Scope.
+- `auto_rp_rp_candidate_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `auto_rp_rp_candidate_use_send_rp_announce_command` (Boolean) Flag to use send-rp-announce.
 - `bfd` (Boolean) BFD.
+- `bsr_candidate_description` (String) Description of the specified attribute.
+- `bsr_candidate_hash_length` (Number) Hash Mask Len.
+- `bsr_candidate_interval` (Number) Interval.
+- `bsr_candidate_name` (String) Object name.
+- `bsr_candidate_priority` (Number) Priority.
+- `bsr_candidate_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `bsr_control` (String) Control.
+- `bsr_description` (String) Description of the specified attribute.
+- `bsr_name` (String) Object name.
+- `bsr_policy_description` (String) Description of the specified attribute.
+- `bsr_policy_name` (String) Object name.
+- `bsr_policy_route_map` (String) Route Map.
+- `bsr_rp_candidate_address` (String) AutoRP Cand RP Address.
+- `bsr_rp_candidate_description` (String) Description of the specified attribute.
+- `bsr_rp_candidate_group_ranges` (Attributes Map) List of PIM RP candidate group range configurations.
+  - Map key: `bidir` - BiDir Groups.
+  - Key choices: `no`, `yes` (see [below for nested schema](#nestedatt--vrfs--bsr_rp_candidate_group_ranges))
+- `bsr_rp_candidate_interval` (Number) Interval.
+- `bsr_rp_candidate_name` (String) Object name.
+- `bsr_rp_candidate_policy_description` (String) Description of the specified attribute.
+- `bsr_rp_candidate_policy_name` (String) Object name.
+- `bsr_rp_candidate_policy_route_map` (String) Route Map.
+- `bsr_rp_candidate_priority` (Number) Priority.
+- `bsr_rp_candidate_scope` (Number) Scope.
+- `bsr_rp_candidate_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `bsr_rp_candidate_use_send_rp_announce_command` (Boolean) Flag to use send-rp-announce.
 - `control` (String) Domain Controls.
 - `flush_routes` (Boolean) Flush Routes.
 - `interfaces` (Attributes Map) List of PIM interface configurations.
@@ -82,8 +156,34 @@ Read-Only:
 - `join_prune_delay` (Number) Join-Prune message inter-packet delay.
 - `log_neighbor_changes` (Boolean) Log Neighbhor changes.
 - `mtu` (Number) Maximum Transmission Unit.
+- `pre_build_spt` (Boolean) Pre-Build-SPT.
+- `pre_build_spt_force` (Boolean) force pre-build-spt.
+- `register_policy_description` (String) Description of the specified attribute.
+- `register_policy_max_rate` (Number) Maximum Rate.
+- `register_policy_name` (String) Object name.
+- `register_policy_prefix_list` (String) Register Message Prefix List.
+- `register_policy_route_map` (String) Register Message Route Map.
 - `register_rate_limit` (Number) Register rate limit for data packets per second.
+- `register_source_address` (String) Source Address.
+- `register_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `rfc_strict` (Boolean) Do not process joins from unknown neighbors.
+- `sg_expiry_timer` (Number) (S,G) Entry Expiry Timer.
+- `sg_expiry_timer_group_list_1` (String) Group List.
+- `sg_expiry_timer_group_list_2` (String) Group List.
+- `sg_expiry_timer_group_list_3` (String) Group List.
+- `sg_expiry_timer_group_list_4` (String) Group List.
+- `sg_expiry_timer_prefix_list` (String) Prefix List.
+- `sg_expiry_timer_route_map` (String) Route Map.
+- `sg_expiry_timer_sparse` (Boolean) (S,G) Entry Expiry Timer configured with sparse mode.
+- `sg_expiry_timer_ssm_none` (Boolean) SSM None.
+- `shared_tree_group_list_1` (String) Group List.
+- `shared_tree_group_list_2` (String) Group List.
+- `shared_tree_group_list_3` (String) Group List.
+- `shared_tree_group_list_4` (String) Group List.
+- `shared_tree_prefix_list` (String) Prefix List.
+- `shared_tree_route_map` (String) Route Map.
+- `shared_tree_ssm_none` (Boolean) SSM None.
+- `shared_tree_use_spt_threshold_command` (Boolean) Flag to use spt-threashold command.
 - `spt_switch_graceful` (Boolean) Graceful switch to SPT.
 - `ssm_policy_description` (String) Description of the specified attribute.
 - `ssm_policy_name` (String) Policy name.
@@ -103,6 +203,36 @@ Read-Only:
 ### Nested Schema for `vrfs.anycast_rp_peers`
 
 
+<a id="nestedatt--vrfs--auto_rp_rp_candidate_group_ranges"></a>
+### Nested Schema for `vrfs.auto_rp_rp_candidate_group_ranges`
+
+Read-Only:
+
+- `group_list_1` (String) Group List.
+- `group_list_2` (String) Group List.
+- `group_list_3` (String) Group List.
+- `group_list_4` (String) Group List.
+- `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
+- `prefix_list` (String) Prefix List.
+- `route_map` (String) Route Map.
+- `ssm_none` (Boolean) SSM None.
+
+
+<a id="nestedatt--vrfs--bsr_rp_candidate_group_ranges"></a>
+### Nested Schema for `vrfs.bsr_rp_candidate_group_ranges`
+
+Read-Only:
+
+- `group_list_1` (String) Group List.
+- `group_list_2` (String) Group List.
+- `group_list_3` (String) Group List.
+- `group_list_4` (String) Group List.
+- `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
+- `prefix_list` (String) Prefix List.
+- `route_map` (String) Route Map.
+- `ssm_none` (Boolean) SSM None.
+
+
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
 
@@ -116,6 +246,14 @@ Read-Only:
 - `description` (String) Description.
 - `dr_delay` (Number) Designated Router Delay value.
 - `dr_priority` (Number) Designated Router Priority level.
+- `hello_authentication_key` (String, Sensitive) Authentication Key.
+- `hello_authentication_key_wo` (String) The write-only value of the attribute.
+- `hello_authentication_key_wo_version` (Number) The write-only version of the attribute.
+- `hello_authentication_keychain` (String) Name of the Keychain Used For Authentication.
+- `hello_authentication_type` (String) Authentication Type.
+- `hello_description` (String) Description of the specified attribute.
+- `hello_interval` (Number) Hello Interval.
+- `hello_name` (String) Object name.
 - `join_prune_route_map` (String) Join Prune Policy name.
 - `name` (String) The name of the object.
 - `neighbor_prefix_list` (String) Neighbor prefix-list Policy.
@@ -133,6 +271,9 @@ Read-Only:
 
 - `group_lists` (Attributes Map) List of PIM Static RP group list configurations.
   - Map key: `address` - Group List address information. (see [below for nested schema](#nestedatt--vrfs--static_rps--group_lists))
+- `group_ranges` (Attributes Map) List of PIM Static RP group range configurations.
+  - Map key: `bidir` - BiDir Groups.
+  - Key choices: `no`, `yes` (see [below for nested schema](#nestedatt--vrfs--static_rps--group_ranges))
 
 <a id="nestedatt--vrfs--static_rps--group_lists"></a>
 ### Nested Schema for `vrfs.static_rps.group_lists`
@@ -141,3 +282,18 @@ Read-Only:
 
 - `bidir` (Boolean) Flag to treat Group Ranges as BiDir.
 - `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
+
+
+<a id="nestedatt--vrfs--static_rps--group_ranges"></a>
+### Nested Schema for `vrfs.static_rps.group_ranges`
+
+Read-Only:
+
+- `group_list_1` (String) Group List.
+- `group_list_2` (String) Group List.
+- `group_list_3` (String) Group List.
+- `group_list_4` (String) Group List.
+- `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
+- `prefix_list` (String) Prefix List.
+- `route_map` (String) Route Map.
+- `ssm_none` (Boolean) SSM None.

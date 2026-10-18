@@ -1299,6 +1299,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 		{{- range .Children}}
 		{{- if eq .Type "list"}}
 		{{- if $deferEmptied}}
+		{
 		// NX-OS removes the parent once its last child is deleted, so a request that
 		// deletes all existing children and adds new ones fails. Defer those deletes.
 		deferChildDeletes{{$indexVar}} := false
@@ -1327,6 +1328,9 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPath{{$indexVar}}+".-1", deleteBody)
 			}
 		}
+		{{- if $deferEmptied}}
+		}
+		{{- end}}
 		{{- if .ChildClasses}}
 		{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "stateItem%s.%s" $indexVar (toGoName .TfName)) "PlanListExpr" (printf "planItem%s.%s" $indexVar (toGoName .TfName)) "ParentBodyPath" (printf "matchBodyPath%s" $indexVar) "IdAttributes" .Attributes "ClassName" .ClassName "DeferEmptied" .AutoDeleteOnEmpty "IndexVar" (printf "%s_" $indexVar))}}
 		{{- end}}
@@ -1409,6 +1413,13 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- range .Children}}
 {{- $childClassName := .ClassName}}
 {{- if eq .Type "single"}}
+{{- if .DeleteWhenEmpty}}
+	if !{{singleEmptyExpr $stateVar .}} && {{singleEmptyExpr $configVar .}} {
+		deletePath := helpers.EnsureChildPath(&body.Str, {{$ensurePathExpr}}, "{{$childClassName}}")
+		body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+		body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+	} else {
+{{- end}}
 {{- range .Attributes}}
 {{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
 	if !{{$stateVar}}.{{toGoName .TfName}}.IsNull() && {{$configVar}}.{{toGoName .TfName}}.IsNull() {
@@ -1419,6 +1430,9 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- end}}
 {{- if .ChildClasses}}
 {{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" $stateVar "ConfigVar" $configVar "BodyPathExpr" (printf "helpers.FindChildPath(body.Str, %s, \"%s\")+\".children\"" $bodyPathExpr $childClassName) "EnsurePathExpr" (printf "helpers.EnsureChildPath(&body.Str, %s, \"%s\")+\".children\"" $ensurePathExpr $childClassName) "Level" $level)}}
+{{- end}}
+{{- if .DeleteWhenEmpty}}
+	}
 {{- end}}
 {{- else if eq .Type "list"}}
 	for key := range {{$stateVar}}.{{toGoName .TfName}} {

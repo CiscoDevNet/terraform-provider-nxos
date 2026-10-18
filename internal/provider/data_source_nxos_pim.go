@@ -56,7 +56,7 @@ func (d *PIMDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.").AddApiDocumentation("pimEntity", "Layer%203/pim:Entity/", []string{"pimInst", "pimGl", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, []string{"Layer%203/pim:Inst/", "Layer%203/pim:Gl/", "Layer%203/pim:Dom/", "Layer%203/pim:If/", "Layer%203/pim:SSMPatP/", "Layer%203/pim:SSMRangeP/", "Layer%203/pim:StaticRPP/", "Layer%203/pim:StaticRP/", "Layer%203/pim:RPGrpList/", "Layer%203/pim:AcastRPFuncP/", "Layer%203/pim:AcastRPPeer/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.").AddApiDocumentation("pimEntity", "Layer%203/pim:Entity/", []string{"pimInst", "pimGl", "pimDom", "pimIf", "pimHelloTrP", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimRPGrpRange", "pimAcastRPFuncP", "pimAcastRPPeer", "pimASMPatP", "pimSharedRangeP", "pimSGRangeExpP", "pimRegTrP", "pimBSRP", "pimBSRFuncP", "pimRPFuncP", "pimRPGrpRange", "pimBSRFilterP", "pimRPFilterP", "pimAutoRPP", "pimMAFuncP", "pimRPFuncP", "pimRPGrpRange", "pimMAFilterP", "pimRPFilterP"}, []string{"Layer%203/pim:Inst/", "Layer%203/pim:Gl/", "Layer%203/pim:Dom/", "Layer%203/pim:If/", "Layer%203/pim:HelloTrP/", "Layer%203/pim:SSMPatP/", "Layer%203/pim:SSMRangeP/", "Layer%203/pim:StaticRPP/", "Layer%203/pim:StaticRP/", "Layer%203/pim:RPGrpList/", "Layer%203/pim:RPGrpRange/", "Layer%203/pim:AcastRPFuncP/", "Layer%203/pim:AcastRPPeer/", "Layer%203/pim:ASMPatP/", "Layer%203/pim:SharedRangeP/", "Layer%203/pim:SGRangeExpP/", "Layer%203/pim:RegTrP/", "Layer%203/pim:BSRP/", "Layer%203/pim:BSRFuncP/", "Layer%203/pim:RPFuncP/", "Layer%203/pim:RPGrpRange/", "Layer%203/pim:BSRFilterP/", "Layer%203/pim:RPFilterP/", "Layer%203/pim:AutoRPP/", "Layer%203/pim:MAFuncP/", "Layer%203/pim:RPFuncP/", "Layer%203/pim:RPGrpRange/", "Layer%203/pim:MAFilterP/", "Layer%203/pim:RPFilterP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -233,6 +233,39 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "Do not process joins from unknown neighbors on this interface.",
 										Computed:            true,
 									},
+									"hello_authentication_key": schema.StringAttribute{
+										MarkdownDescription: "Authentication Key.",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"hello_authentication_key_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										Computed:            true,
+									},
+									"hello_authentication_key_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Computed:            true,
+									},
+									"hello_authentication_type": schema.StringAttribute{
+										MarkdownDescription: "Authentication Type.",
+										Computed:            true,
+									},
+									"hello_description": schema.StringAttribute{
+										MarkdownDescription: "Description of the specified attribute.",
+										Computed:            true,
+									},
+									"hello_interval": schema.Int64Attribute{
+										MarkdownDescription: "Hello Interval.",
+										Computed:            true,
+									},
+									"hello_authentication_keychain": schema.StringAttribute{
+										MarkdownDescription: "Name of the Keychain Used For Authentication.",
+										Computed:            true,
+									},
+									"hello_name": schema.StringAttribute{
+										MarkdownDescription: "Object name.",
+										Computed:            true,
+									},
 								},
 							},
 						},
@@ -301,6 +334,46 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 											},
 										},
 									},
+									"group_ranges": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of PIM Static RP group range configurations.\n  - Map key: `bidir` - BiDir Groups.\n  - Key choices: `no`, `yes`").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_list_1": schema.StringAttribute{
+													MarkdownDescription: "Group List.",
+													Computed:            true,
+												},
+												"group_list_2": schema.StringAttribute{
+													MarkdownDescription: "Group List.",
+													Computed:            true,
+												},
+												"group_list_3": schema.StringAttribute{
+													MarkdownDescription: "Group List.",
+													Computed:            true,
+												},
+												"group_list_4": schema.StringAttribute{
+													MarkdownDescription: "Group List.",
+													Computed:            true,
+												},
+												"override": schema.BoolAttribute{
+													MarkdownDescription: "Flag to override RP preference to use Static over Dynamic RP.",
+													Computed:            true,
+												},
+												"prefix_list": schema.StringAttribute{
+													MarkdownDescription: "Prefix List.",
+													Computed:            true,
+												},
+												"route_map": schema.StringAttribute{
+													MarkdownDescription: "Route Map.",
+													Computed:            true,
+												},
+												"ssm_none": schema.BoolAttribute{
+													MarkdownDescription: "SSM None.",
+													Computed:            true,
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -326,6 +399,390 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{},
 							},
+						},
+						"asm_policy_control": schema.StringAttribute{
+							MarkdownDescription: "Controls.",
+							Computed:            true,
+						},
+						"asm_policy_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"pre_build_spt_force": schema.BoolAttribute{
+							MarkdownDescription: "force pre-build-spt.",
+							Computed:            true,
+						},
+						"asm_policy_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"asm_policy_prefix_list": schema.StringAttribute{
+							MarkdownDescription: "Prefix List.",
+							Computed:            true,
+						},
+						"pre_build_spt": schema.BoolAttribute{
+							MarkdownDescription: "Pre-Build-SPT.",
+							Computed:            true,
+						},
+						"asm_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: "Route Map.",
+							Computed:            true,
+						},
+						"shared_tree_group_list_1": schema.StringAttribute{
+							MarkdownDescription: "Group List.",
+							Computed:            true,
+						},
+						"shared_tree_group_list_2": schema.StringAttribute{
+							MarkdownDescription: "Group List.",
+							Computed:            true,
+						},
+						"shared_tree_group_list_3": schema.StringAttribute{
+							MarkdownDescription: "Group List.",
+							Computed:            true,
+						},
+						"shared_tree_group_list_4": schema.StringAttribute{
+							MarkdownDescription: "Group List.",
+							Computed:            true,
+						},
+						"shared_tree_prefix_list": schema.StringAttribute{
+							MarkdownDescription: "Prefix List.",
+							Computed:            true,
+						},
+						"shared_tree_route_map": schema.StringAttribute{
+							MarkdownDescription: "Route Map.",
+							Computed:            true,
+						},
+						"shared_tree_ssm_none": schema.BoolAttribute{
+							MarkdownDescription: "SSM None.",
+							Computed:            true,
+						},
+						"shared_tree_use_spt_threshold_command": schema.BoolAttribute{
+							MarkdownDescription: "Flag to use spt-threashold command.",
+							Computed:            true,
+						},
+						"sg_expiry_timer_group_list_1": schema.StringAttribute{
+							MarkdownDescription: "Group List.",
+							Computed:            true,
+						},
+						"sg_expiry_timer_group_list_2": schema.StringAttribute{
+							MarkdownDescription: "Group List.",
+							Computed:            true,
+						},
+						"sg_expiry_timer_group_list_3": schema.StringAttribute{
+							MarkdownDescription: "Group List.",
+							Computed:            true,
+						},
+						"sg_expiry_timer_group_list_4": schema.StringAttribute{
+							MarkdownDescription: "Group List.",
+							Computed:            true,
+						},
+						"sg_expiry_timer_prefix_list": schema.StringAttribute{
+							MarkdownDescription: "Prefix List.",
+							Computed:            true,
+						},
+						"sg_expiry_timer_route_map": schema.StringAttribute{
+							MarkdownDescription: "Route Map.",
+							Computed:            true,
+						},
+						"sg_expiry_timer": schema.Int64Attribute{
+							MarkdownDescription: "(S,G) Entry Expiry Timer.",
+							Computed:            true,
+						},
+						"sg_expiry_timer_sparse": schema.BoolAttribute{
+							MarkdownDescription: "(S,G) Entry Expiry Timer configured with sparse mode.",
+							Computed:            true,
+						},
+						"sg_expiry_timer_ssm_none": schema.BoolAttribute{
+							MarkdownDescription: "SSM None.",
+							Computed:            true,
+						},
+						"register_source_address": schema.StringAttribute{
+							MarkdownDescription: "Source Address.",
+							Computed:            true,
+						},
+						"register_policy_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"register_policy_max_rate": schema.Int64Attribute{
+							MarkdownDescription: "Maximum Rate.",
+							Computed:            true,
+						},
+						"register_policy_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"register_policy_prefix_list": schema.StringAttribute{
+							MarkdownDescription: "Register Message Prefix List.",
+							Computed:            true,
+						},
+						"register_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: "Register Message Route Map.",
+							Computed:            true,
+						},
+						"register_source_interface": schema.StringAttribute{
+							MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"bsr_control": schema.StringAttribute{
+							MarkdownDescription: "Control.",
+							Computed:            true,
+						},
+						"bsr_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"bsr_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"bsr_candidate_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"bsr_candidate_hash_length": schema.Int64Attribute{
+							MarkdownDescription: "Hash Mask Len.",
+							Computed:            true,
+						},
+						"bsr_candidate_interval": schema.Int64Attribute{
+							MarkdownDescription: "Interval.",
+							Computed:            true,
+						},
+						"bsr_candidate_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"bsr_candidate_priority": schema.Int64Attribute{
+							MarkdownDescription: "Priority.",
+							Computed:            true,
+						},
+						"bsr_candidate_source_interface": schema.StringAttribute{
+							MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_address": schema.StringAttribute{
+							MarkdownDescription: "AutoRP Cand RP Address.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_interval": schema.Int64Attribute{
+							MarkdownDescription: "Interval.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_priority": schema.Int64Attribute{
+							MarkdownDescription: "Priority.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_scope": schema.Int64Attribute{
+							MarkdownDescription: "Scope.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_source_interface": schema.StringAttribute{
+							MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_use_send_rp_announce_command": schema.BoolAttribute{
+							MarkdownDescription: "Flag to use send-rp-announce.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_group_ranges": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of PIM RP candidate group range configurations.\n  - Map key: `bidir` - BiDir Groups.\n  - Key choices: `no`, `yes`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_list_1": schema.StringAttribute{
+										MarkdownDescription: "Group List.",
+										Computed:            true,
+									},
+									"group_list_2": schema.StringAttribute{
+										MarkdownDescription: "Group List.",
+										Computed:            true,
+									},
+									"group_list_3": schema.StringAttribute{
+										MarkdownDescription: "Group List.",
+										Computed:            true,
+									},
+									"group_list_4": schema.StringAttribute{
+										MarkdownDescription: "Group List.",
+										Computed:            true,
+									},
+									"override": schema.BoolAttribute{
+										MarkdownDescription: "Flag to override RP preference to use Static over Dynamic RP.",
+										Computed:            true,
+									},
+									"prefix_list": schema.StringAttribute{
+										MarkdownDescription: "Prefix List.",
+										Computed:            true,
+									},
+									"route_map": schema.StringAttribute{
+										MarkdownDescription: "Route Map.",
+										Computed:            true,
+									},
+									"ssm_none": schema.BoolAttribute{
+										MarkdownDescription: "SSM None.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"bsr_policy_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"bsr_policy_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"bsr_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: "Route Map.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_policy_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_policy_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"bsr_rp_candidate_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: "Route Map.",
+							Computed:            true,
+						},
+						"auto_rp_control": schema.StringAttribute{
+							MarkdownDescription: "Control.",
+							Computed:            true,
+						},
+						"auto_rp_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"auto_rp_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"auto_rp_mapping_agent_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"auto_rp_mapping_agent_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"auto_rp_mapping_agent_scope": schema.Int64Attribute{
+							MarkdownDescription: "Scope.",
+							Computed:            true,
+						},
+						"auto_rp_mapping_agent_source_interface": schema.StringAttribute{
+							MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"auto_rp_mapping_agent_use_send_rp_discovery_command": schema.BoolAttribute{
+							MarkdownDescription: "Flag to use send-rp-discovery.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_address": schema.StringAttribute{
+							MarkdownDescription: "AutoRP Cand RP Address.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_interval": schema.Int64Attribute{
+							MarkdownDescription: "Interval.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_priority": schema.Int64Attribute{
+							MarkdownDescription: "Priority.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_scope": schema.Int64Attribute{
+							MarkdownDescription: "Scope.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_source_interface": schema.StringAttribute{
+							MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_use_send_rp_announce_command": schema.BoolAttribute{
+							MarkdownDescription: "Flag to use send-rp-announce.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_group_ranges": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of PIM RP candidate group range configurations.\n  - Map key: `bidir` - BiDir Groups.\n  - Key choices: `no`, `yes`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_list_1": schema.StringAttribute{
+										MarkdownDescription: "Group List.",
+										Computed:            true,
+									},
+									"group_list_2": schema.StringAttribute{
+										MarkdownDescription: "Group List.",
+										Computed:            true,
+									},
+									"group_list_3": schema.StringAttribute{
+										MarkdownDescription: "Group List.",
+										Computed:            true,
+									},
+									"group_list_4": schema.StringAttribute{
+										MarkdownDescription: "Group List.",
+										Computed:            true,
+									},
+									"override": schema.BoolAttribute{
+										MarkdownDescription: "Flag to override RP preference to use Static over Dynamic RP.",
+										Computed:            true,
+									},
+									"prefix_list": schema.StringAttribute{
+										MarkdownDescription: "Prefix List.",
+										Computed:            true,
+									},
+									"route_map": schema.StringAttribute{
+										MarkdownDescription: "Route Map.",
+										Computed:            true,
+									},
+									"ssm_none": schema.BoolAttribute{
+										MarkdownDescription: "SSM None.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"auto_rp_mapping_agent_policy_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"auto_rp_mapping_agent_policy_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"auto_rp_mapping_agent_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: "Route Map.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_policy_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_policy_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"auto_rp_rp_candidate_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: "Route Map.",
+							Computed:            true,
 						},
 					},
 				},
@@ -362,7 +819,7 @@ func (d *PIMDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"pimInst", "pimGl", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, PIMSubtreeClassMinVersions)
+	res, err := device.GetSubtree(ctx, config.getDn(), []string{"pimInst", "pimGl", "pimDom", "pimIf", "pimHelloTrP", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimRPGrpRange", "pimAcastRPFuncP", "pimAcastRPPeer", "pimASMPatP", "pimSharedRangeP", "pimSGRangeExpP", "pimRegTrP", "pimBSRP", "pimBSRFuncP", "pimRPFuncP", "pimRPGrpRange", "pimBSRFilterP", "pimRPFilterP", "pimAutoRPP", "pimMAFuncP", "pimRPFuncP", "pimRPGrpRange", "pimMAFilterP", "pimRPFilterP"}, PIMSubtreeClassMinVersions)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

@@ -5,7 +5,7 @@ subcategory: "Multicast"
 description: |-
   This resource can manage the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.
   API Documentation
-  pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Entity/pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Inst/pimGl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Gl/pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Dom/pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:If/pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMPatP/pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMRangeP/pimStaticRPP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRPP/pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRP/pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpList/pimAcastRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPFuncP/pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPPeer/
+  pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Entity/pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Inst/pimGl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Gl/pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Dom/pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:If/pimHelloTrP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:HelloTrP/pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMPatP/pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMRangeP/pimStaticRPP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRPP/pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRP/pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpList/pimRPGrpRange https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/pimAcastRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPFuncP/pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPPeer/pimASMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:ASMPatP/pimSharedRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SharedRangeP/pimSGRangeExpP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SGRangeExpP/pimRegTrP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RegTrP/pimBSRP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRP/pimBSRFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRFuncP/pimRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFuncP/pimRPGrpRange https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/pimBSRFilterP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRFilterP/pimRPFilterP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFilterP/pimAutoRPP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AutoRPP/pimMAFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:MAFuncP/pimRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFuncP/pimRPGrpRange https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/pimMAFilterP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:MAFilterP/pimRPFilterP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFilterP/
 ---
 
 # nxos_pim (Resource)
@@ -19,13 +19,31 @@ This resource can manage the PIM (Protocol Independent Multicast) configuration 
 - [pimGl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Gl/)
 - [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:Dom/)
 - [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:If/)
+- [pimHelloTrP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:HelloTrP/)
 - [pimSSMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMPatP/)
 - [pimSSMRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SSMRangeP/)
 - [pimStaticRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRPP/)
 - [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:StaticRP/)
 - [pimRPGrpList](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpList/)
+- [pimRPGrpRange](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/)
 - [pimAcastRPFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPFuncP/)
 - [pimAcastRPPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AcastRPPeer/)
+- [pimASMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:ASMPatP/)
+- [pimSharedRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SharedRangeP/)
+- [pimSGRangeExpP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:SGRangeExpP/)
+- [pimRegTrP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RegTrP/)
+- [pimBSRP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRP/)
+- [pimBSRFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRFuncP/)
+- [pimRPFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFuncP/)
+- [pimRPGrpRange](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/)
+- [pimBSRFilterP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:BSRFilterP/)
+- [pimRPFilterP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFilterP/)
+- [pimAutoRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:AutoRPP/)
+- [pimMAFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:MAFuncP/)
+- [pimRPFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFuncP/)
+- [pimRPGrpRange](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPGrpRange/)
+- [pimMAFilterP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:MAFilterP/)
+- [pimRPFilterP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/pim:RPFilterP/)
 
 ## Example Usage
 
@@ -56,21 +74,26 @@ resource "nxos_pim" "example" {
       spt_switch_graceful  = false
       interfaces = {
         "eth1/10" = {
-          admin_state          = "enabled"
-          bfd                  = "enabled"
-          dr_priority          = 10
-          passive              = false
-          sparse_mode          = true
-          border               = false
-          border_router        = false
-          control              = "border"
-          description          = "MyDescription"
-          dr_delay             = 5
-          join_prune_route_map = "JP_POLICY"
-          name                 = "pim-if"
-          neighbor_route_map   = "NEIGH_POLICY"
-          pfm_sd_boundary      = 0
-          rfc_strict           = false
+          admin_state               = "enabled"
+          bfd                       = "enabled"
+          dr_priority               = 10
+          passive                   = false
+          sparse_mode               = true
+          border                    = false
+          border_router             = false
+          control                   = "border"
+          description               = "MyDescription"
+          dr_delay                  = 5
+          join_prune_route_map      = "JP_POLICY"
+          name                      = "pim-if"
+          neighbor_route_map        = "NEIGH_POLICY"
+          pfm_sd_boundary           = 0
+          rfc_strict                = false
+          hello_authentication_key  = "cisco123"
+          hello_authentication_type = "ah-md5"
+          hello_description         = "My hello policy"
+          hello_interval            = 5000
+          hello_name                = "hello"
         }
       }
       ssm_policy_name              = "SSM"
@@ -97,6 +120,75 @@ resource "nxos_pim" "example" {
       anycast_rp_peers = {
         "10.1.1.1/32;20.1.1.1/32" = {}
       }
+      asm_policy_description                = "My ASM policy"
+      pre_build_spt_force                   = false
+      asm_policy_name                       = "asm"
+      pre_build_spt                         = true
+      shared_tree_route_map                 = "SHARED_MAP"
+      shared_tree_ssm_none                  = false
+      shared_tree_use_spt_threshold_command = true
+      sg_expiry_timer                       = 300
+      sg_expiry_timer_sparse                = false
+      sg_expiry_timer_ssm_none              = false
+      register_policy_description           = "My register policy"
+      register_policy_max_rate              = 1000
+      register_policy_name                  = "register"
+      register_policy_route_map             = "REG_MAP"
+      register_source_interface             = "eth1/10"
+      bsr_control                           = "forward,listen"
+      bsr_description                       = "My BSR policy"
+      bsr_name                              = "bsr"
+      bsr_candidate_description             = "My BSR candidate"
+      bsr_candidate_hash_length             = 30
+      bsr_candidate_interval                = 30
+      bsr_candidate_name                    = "bsr-candidate"
+      bsr_candidate_priority                = 10
+      bsr_candidate_source_interface        = "eth1/10"
+      bsr_rp_candidate_description          = "My RP candidate"
+      bsr_rp_candidate_interval             = 30
+      bsr_rp_candidate_name                 = "rp-candidate"
+      bsr_rp_candidate_priority             = 10
+      bsr_rp_candidate_source_interface     = "eth1/10"
+      bsr_rp_candidate_group_ranges = {
+        "no" = {
+          group_list_1 = "239.0.0.0/8"
+          override     = false
+          ssm_none     = false
+        }
+      }
+      bsr_policy_description                              = "My policy"
+      bsr_policy_name                                     = "policy"
+      bsr_policy_route_map                                = "BSR_POLICY"
+      bsr_rp_candidate_policy_description                 = "My policy"
+      bsr_rp_candidate_policy_name                        = "policy"
+      bsr_rp_candidate_policy_route_map                   = "BSR_RP_POLICY"
+      auto_rp_control                                     = "forward,listen"
+      auto_rp_description                                 = "My Auto-RP policy"
+      auto_rp_name                                        = "auto-rp"
+      auto_rp_mapping_agent_description                   = "My mapping agent"
+      auto_rp_mapping_agent_name                          = "mapping-agent"
+      auto_rp_mapping_agent_scope                         = 16
+      auto_rp_mapping_agent_source_interface              = "eth1/10"
+      auto_rp_mapping_agent_use_send_rp_discovery_command = false
+      auto_rp_rp_candidate_description                    = "My RP candidate"
+      auto_rp_rp_candidate_interval                       = 30
+      auto_rp_rp_candidate_name                           = "rp-candidate"
+      auto_rp_rp_candidate_scope                          = 16
+      auto_rp_rp_candidate_source_interface               = "eth1/10"
+      auto_rp_rp_candidate_use_send_rp_announce_command   = false
+      auto_rp_rp_candidate_group_ranges = {
+        "no" = {
+          group_list_1 = "239.0.0.0/8"
+          override     = false
+          ssm_none     = false
+        }
+      }
+      auto_rp_mapping_agent_policy_description = "My policy"
+      auto_rp_mapping_agent_policy_name        = "policy"
+      auto_rp_mapping_agent_policy_route_map   = "MA_POLICY"
+      auto_rp_rp_candidate_policy_description  = "My policy"
+      auto_rp_rp_candidate_policy_name         = "policy"
+      auto_rp_rp_candidate_policy_route_map    = "AUTO_RP_POLICY"
     }
   }
 }
@@ -150,8 +242,77 @@ Optional:
   - Key component `address`: Address.
   - Key component `rp_set_address`: IP Address of node performing the function. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
 - `anycast_rp_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `asm_policy_control` (String) Controls.
+  - Choices: `pre-build-spt`
+- `asm_policy_description` (String) Description of the specified attribute.
+- `asm_policy_name` (String) Object name.
+- `asm_policy_prefix_list` (String) Prefix List.
+- `asm_policy_route_map` (String) Route Map.
 - `auto_enable` (Boolean) Auto Enable.
+- `auto_rp_control` (String) Control.
+  - Choices: `listen`, `forward`
+- `auto_rp_description` (String) Description of the specified attribute.
+- `auto_rp_mapping_agent_description` (String) Description of the specified attribute.
+- `auto_rp_mapping_agent_name` (String) Object name.
+- `auto_rp_mapping_agent_policy_description` (String) Description of the specified attribute.
+- `auto_rp_mapping_agent_policy_name` (String) Object name.
+- `auto_rp_mapping_agent_policy_route_map` (String) Route Map.
+- `auto_rp_mapping_agent_scope` (Number) Scope.
+  - Range: `1`-`255`
+- `auto_rp_mapping_agent_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `auto_rp_mapping_agent_use_send_rp_discovery_command` (Boolean) Flag to use send-rp-discovery.
+- `auto_rp_name` (String) Object name.
+- `auto_rp_rp_candidate_address` (String) AutoRP Cand RP Address.
+- `auto_rp_rp_candidate_description` (String) Description of the specified attribute.
+- `auto_rp_rp_candidate_group_ranges` (Attributes Map) List of PIM RP candidate group range configurations.
+  - Map key: `bidir` - BiDir Groups.
+  - Key choices: `no`, `yes` (see [below for nested schema](#nestedatt--vrfs--auto_rp_rp_candidate_group_ranges))
+- `auto_rp_rp_candidate_interval` (Number) Interval.
+  - Range: `1`-`65535`
+- `auto_rp_rp_candidate_name` (String) Object name.
+- `auto_rp_rp_candidate_policy_description` (String) Description of the specified attribute.
+- `auto_rp_rp_candidate_policy_name` (String) Object name.
+- `auto_rp_rp_candidate_policy_route_map` (String) Route Map.
+- `auto_rp_rp_candidate_priority` (Number) Priority.
+  - Range: `0`-`255`
+- `auto_rp_rp_candidate_scope` (Number) Scope.
+  - Range: `1`-`255`
+- `auto_rp_rp_candidate_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `auto_rp_rp_candidate_use_send_rp_announce_command` (Boolean) Flag to use send-rp-announce.
 - `bfd` (Boolean) BFD.
+- `bsr_candidate_description` (String) Description of the specified attribute.
+- `bsr_candidate_hash_length` (Number) Hash Mask Len.
+  - Range: `0`-`65535`
+- `bsr_candidate_interval` (Number) Interval.
+  - Range: `1`-`65535`
+- `bsr_candidate_name` (String) Object name.
+- `bsr_candidate_priority` (Number) Priority.
+  - Range: `1`-`255`
+- `bsr_candidate_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `bsr_control` (String) Control.
+  - Choices: `listen`, `forward`
+- `bsr_description` (String) Description of the specified attribute.
+- `bsr_name` (String) Object name.
+- `bsr_policy_description` (String) Description of the specified attribute.
+- `bsr_policy_name` (String) Object name.
+- `bsr_policy_route_map` (String) Route Map.
+- `bsr_rp_candidate_address` (String) AutoRP Cand RP Address.
+- `bsr_rp_candidate_description` (String) Description of the specified attribute.
+- `bsr_rp_candidate_group_ranges` (Attributes Map) List of PIM RP candidate group range configurations.
+  - Map key: `bidir` - BiDir Groups.
+  - Key choices: `no`, `yes` (see [below for nested schema](#nestedatt--vrfs--bsr_rp_candidate_group_ranges))
+- `bsr_rp_candidate_interval` (Number) Interval.
+  - Range: `1`-`65535`
+- `bsr_rp_candidate_name` (String) Object name.
+- `bsr_rp_candidate_policy_description` (String) Description of the specified attribute.
+- `bsr_rp_candidate_policy_name` (String) Object name.
+- `bsr_rp_candidate_policy_route_map` (String) Route Map.
+- `bsr_rp_candidate_priority` (Number) Priority.
+  - Range: `0`-`255`
+- `bsr_rp_candidate_scope` (Number) Scope.
+  - Range: `1`-`255`
+- `bsr_rp_candidate_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `bsr_rp_candidate_use_send_rp_announce_command` (Boolean) Flag to use send-rp-announce.
 - `control` (String) Domain Controls.
   - Choices: `flush-on-restart`
 - `flush_routes` (Boolean) Flush Routes.
@@ -162,9 +323,37 @@ Optional:
 - `log_neighbor_changes` (Boolean) Log Neighbhor changes.
 - `mtu` (Number) Maximum Transmission Unit.
   - Range: `1500`-`65536`
+- `pre_build_spt` (Boolean) Pre-Build-SPT.
+- `pre_build_spt_force` (Boolean) force pre-build-spt.
+- `register_policy_description` (String) Description of the specified attribute.
+- `register_policy_max_rate` (Number) Maximum Rate.
+  - Range: `0`-`65535`
+- `register_policy_name` (String) Object name.
+- `register_policy_prefix_list` (String) Register Message Prefix List.
+- `register_policy_route_map` (String) Register Message Route Map.
 - `register_rate_limit` (Number) Register rate limit for data packets per second.
   - Range: `0`-`65535`
+- `register_source_address` (String) Source Address.
+- `register_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `rfc_strict` (Boolean) Do not process joins from unknown neighbors.
+- `sg_expiry_timer` (Number) (S,G) Entry Expiry Timer.
+  - Range: `180`-`604801`
+- `sg_expiry_timer_group_list_1` (String) Group List.
+- `sg_expiry_timer_group_list_2` (String) Group List.
+- `sg_expiry_timer_group_list_3` (String) Group List.
+- `sg_expiry_timer_group_list_4` (String) Group List.
+- `sg_expiry_timer_prefix_list` (String) Prefix List.
+- `sg_expiry_timer_route_map` (String) Route Map.
+- `sg_expiry_timer_sparse` (Boolean) (S,G) Entry Expiry Timer configured with sparse mode.
+- `sg_expiry_timer_ssm_none` (Boolean) SSM None.
+- `shared_tree_group_list_1` (String) Group List.
+- `shared_tree_group_list_2` (String) Group List.
+- `shared_tree_group_list_3` (String) Group List.
+- `shared_tree_group_list_4` (String) Group List.
+- `shared_tree_prefix_list` (String) Prefix List.
+- `shared_tree_route_map` (String) Route Map.
+- `shared_tree_ssm_none` (Boolean) SSM None.
+- `shared_tree_use_spt_threshold_command` (Boolean) Flag to use spt-threashold command.
 - `spt_switch_graceful` (Boolean) Graceful switch to SPT.
 - `ssm_policy_description` (String) Description of the specified attribute.
 - `ssm_policy_name` (String) Policy name.
@@ -182,6 +371,36 @@ Optional:
 
 <a id="nestedatt--vrfs--anycast_rp_peers"></a>
 ### Nested Schema for `vrfs.anycast_rp_peers`
+
+
+<a id="nestedatt--vrfs--auto_rp_rp_candidate_group_ranges"></a>
+### Nested Schema for `vrfs.auto_rp_rp_candidate_group_ranges`
+
+Optional:
+
+- `group_list_1` (String) Group List.
+- `group_list_2` (String) Group List.
+- `group_list_3` (String) Group List.
+- `group_list_4` (String) Group List.
+- `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
+- `prefix_list` (String) Prefix List.
+- `route_map` (String) Route Map.
+- `ssm_none` (Boolean) SSM None.
+
+
+<a id="nestedatt--vrfs--bsr_rp_candidate_group_ranges"></a>
+### Nested Schema for `vrfs.bsr_rp_candidate_group_ranges`
+
+Optional:
+
+- `group_list_1` (String) Group List.
+- `group_list_2` (String) Group List.
+- `group_list_3` (String) Group List.
+- `group_list_4` (String) Group List.
+- `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
+- `prefix_list` (String) Prefix List.
+- `route_map` (String) Route Map.
+- `ssm_none` (Boolean) SSM None.
 
 
 <a id="nestedatt--vrfs--interfaces"></a>
@@ -202,6 +421,16 @@ Optional:
   - Range: `1`-`65535`
 - `dr_priority` (Number) Designated Router Priority level.
   - Range: `1`-`4294967295`
+- `hello_authentication_key` (String, Sensitive) Authentication Key.
+- `hello_authentication_key_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
+- `hello_authentication_key_wo_version` (Number) The write-only version of the attribute.
+- `hello_authentication_keychain` (String) Name of the Keychain Used For Authentication.
+- `hello_authentication_type` (String) Authentication Type.
+  - Choices: `none`, `ah-md5`
+- `hello_description` (String) Description of the specified attribute.
+- `hello_interval` (Number) Hello Interval.
+  - Range: `1`-`18724286`
+- `hello_name` (String) Object name.
 - `join_prune_route_map` (String) Join Prune Policy name.
 - `name` (String) The name of the object.
 - `neighbor_prefix_list` (String) Neighbor prefix-list Policy.
@@ -220,6 +449,9 @@ Optional:
 
 - `group_lists` (Attributes Map) List of PIM Static RP group list configurations.
   - Map key: `address` - Group List address information. (see [below for nested schema](#nestedatt--vrfs--static_rps--group_lists))
+- `group_ranges` (Attributes Map) List of PIM Static RP group range configurations.
+  - Map key: `bidir` - BiDir Groups.
+  - Key choices: `no`, `yes` (see [below for nested schema](#nestedatt--vrfs--static_rps--group_ranges))
 
 <a id="nestedatt--vrfs--static_rps--group_lists"></a>
 ### Nested Schema for `vrfs.static_rps.group_lists`
@@ -228,6 +460,21 @@ Optional:
 
 - `bidir` (Boolean) Flag to treat Group Ranges as BiDir.
 - `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
+
+
+<a id="nestedatt--vrfs--static_rps--group_ranges"></a>
+### Nested Schema for `vrfs.static_rps.group_ranges`
+
+Optional:
+
+- `group_list_1` (String) Group List.
+- `group_list_2` (String) Group List.
+- `group_list_3` (String) Group List.
+- `group_list_4` (String) Group List.
+- `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
+- `prefix_list` (String) Prefix List.
+- `route_map` (String) Route Map.
+- `ssm_none` (Boolean) SSM None.
 
 ## Import
 

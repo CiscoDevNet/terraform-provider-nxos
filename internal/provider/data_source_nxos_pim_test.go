@@ -67,6 +67,10 @@ func TestAccDataSourceNxosPIM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.neighbor_route_map", "NEIGH_POLICY"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.pfm_sd_boundary", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.rfc_strict", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.hello_authentication_type", "ah-md5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.hello_description", "My hello policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.hello_interval", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.hello_name", "hello"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_policy_name", "SSM"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_policy_description", "SSM_Policy"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_range_group_list_1", "232.0.0.0/8"))
@@ -80,6 +84,67 @@ func TestAccDataSourceNxosPIM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_source_interface", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_description", "Anycast_RP"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_name", "anycast-rp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.asm_policy_description", "My ASM policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.pre_build_spt_force", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.asm_policy_name", "asm"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.pre_build_spt", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.shared_tree_route_map", "SHARED_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.shared_tree_ssm_none", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.shared_tree_use_spt_threshold_command", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.sg_expiry_timer", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.sg_expiry_timer_sparse", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.sg_expiry_timer_ssm_none", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.register_policy_description", "My register policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.register_policy_max_rate", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.register_policy_name", "register"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.register_policy_route_map", "REG_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.register_source_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_control", "forward,listen"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_description", "My BSR policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_name", "bsr"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_candidate_description", "My BSR candidate"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_candidate_hash_length", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_candidate_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_candidate_name", "bsr-candidate"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_candidate_priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_candidate_source_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_description", "My RP candidate"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_name", "rp-candidate"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_source_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_group_ranges.no.group_list_1", "239.0.0.0/8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_group_ranges.no.override", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_group_ranges.no.ssm_none", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_policy_description", "My policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_policy_name", "policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_policy_route_map", "BSR_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_policy_description", "My policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_policy_name", "policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bsr_rp_candidate_policy_route_map", "BSR_RP_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_control", "forward,listen"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_description", "My Auto-RP policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_name", "auto-rp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_mapping_agent_description", "My mapping agent"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_mapping_agent_name", "mapping-agent"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_mapping_agent_scope", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_mapping_agent_source_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_mapping_agent_use_send_rp_discovery_command", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_description", "My RP candidate"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_name", "rp-candidate"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_scope", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_source_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_use_send_rp_announce_command", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_group_ranges.no.group_list_1", "239.0.0.0/8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_group_ranges.no.override", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_group_ranges.no.ssm_none", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_mapping_agent_policy_description", "My policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_mapping_agent_policy_name", "policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_mapping_agent_policy_route_map", "MA_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_policy_description", "My policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_policy_name", "policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_rp_rp_candidate_policy_route_map", "AUTO_RP_POLICY"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -161,6 +226,11 @@ func testAccDataSourceNxosPIMConfig() string {
 	config += `					neighbor_route_map = "NEIGH_POLICY"` + "\n"
 	config += `					pfm_sd_boundary = 0` + "\n"
 	config += `					rfc_strict = false` + "\n"
+	config += `					hello_authentication_key = "cisco123"` + "\n"
+	config += `					hello_authentication_type = "ah-md5"` + "\n"
+	config += `					hello_description = "My hello policy"` + "\n"
+	config += `					hello_interval = 5000` + "\n"
+	config += `					hello_name = "hello"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `			ssm_policy_name = "SSM"` + "\n"
@@ -188,6 +258,75 @@ func testAccDataSourceNxosPIMConfig() string {
 	config += `				"10.1.1.1/32;20.1.1.1/32" = {` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
+	config += `			asm_policy_description = "My ASM policy"` + "\n"
+	config += `			pre_build_spt_force = false` + "\n"
+	config += `			asm_policy_name = "asm"` + "\n"
+	config += `			pre_build_spt = true` + "\n"
+	config += `			shared_tree_route_map = "SHARED_MAP"` + "\n"
+	config += `			shared_tree_ssm_none = false` + "\n"
+	config += `			shared_tree_use_spt_threshold_command = true` + "\n"
+	config += `			sg_expiry_timer = 300` + "\n"
+	config += `			sg_expiry_timer_sparse = false` + "\n"
+	config += `			sg_expiry_timer_ssm_none = false` + "\n"
+	config += `			register_policy_description = "My register policy"` + "\n"
+	config += `			register_policy_max_rate = 1000` + "\n"
+	config += `			register_policy_name = "register"` + "\n"
+	config += `			register_policy_route_map = "REG_MAP"` + "\n"
+	config += `			register_source_interface = "eth1/10"` + "\n"
+	config += `			bsr_control = "forward,listen"` + "\n"
+	config += `			bsr_description = "My BSR policy"` + "\n"
+	config += `			bsr_name = "bsr"` + "\n"
+	config += `			bsr_candidate_description = "My BSR candidate"` + "\n"
+	config += `			bsr_candidate_hash_length = 30` + "\n"
+	config += `			bsr_candidate_interval = 30` + "\n"
+	config += `			bsr_candidate_name = "bsr-candidate"` + "\n"
+	config += `			bsr_candidate_priority = 10` + "\n"
+	config += `			bsr_candidate_source_interface = "eth1/10"` + "\n"
+	config += `			bsr_rp_candidate_description = "My RP candidate"` + "\n"
+	config += `			bsr_rp_candidate_interval = 30` + "\n"
+	config += `			bsr_rp_candidate_name = "rp-candidate"` + "\n"
+	config += `			bsr_rp_candidate_priority = 10` + "\n"
+	config += `			bsr_rp_candidate_source_interface = "eth1/10"` + "\n"
+	config += `			bsr_rp_candidate_group_ranges = {` + "\n"
+	config += `				"no" = {` + "\n"
+	config += `					group_list_1 = "239.0.0.0/8"` + "\n"
+	config += `					override = false` + "\n"
+	config += `					ssm_none = false` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			bsr_policy_description = "My policy"` + "\n"
+	config += `			bsr_policy_name = "policy"` + "\n"
+	config += `			bsr_policy_route_map = "BSR_POLICY"` + "\n"
+	config += `			bsr_rp_candidate_policy_description = "My policy"` + "\n"
+	config += `			bsr_rp_candidate_policy_name = "policy"` + "\n"
+	config += `			bsr_rp_candidate_policy_route_map = "BSR_RP_POLICY"` + "\n"
+	config += `			auto_rp_control = "forward,listen"` + "\n"
+	config += `			auto_rp_description = "My Auto-RP policy"` + "\n"
+	config += `			auto_rp_name = "auto-rp"` + "\n"
+	config += `			auto_rp_mapping_agent_description = "My mapping agent"` + "\n"
+	config += `			auto_rp_mapping_agent_name = "mapping-agent"` + "\n"
+	config += `			auto_rp_mapping_agent_scope = 16` + "\n"
+	config += `			auto_rp_mapping_agent_source_interface = "eth1/10"` + "\n"
+	config += `			auto_rp_mapping_agent_use_send_rp_discovery_command = false` + "\n"
+	config += `			auto_rp_rp_candidate_description = "My RP candidate"` + "\n"
+	config += `			auto_rp_rp_candidate_interval = 30` + "\n"
+	config += `			auto_rp_rp_candidate_name = "rp-candidate"` + "\n"
+	config += `			auto_rp_rp_candidate_scope = 16` + "\n"
+	config += `			auto_rp_rp_candidate_source_interface = "eth1/10"` + "\n"
+	config += `			auto_rp_rp_candidate_use_send_rp_announce_command = false` + "\n"
+	config += `			auto_rp_rp_candidate_group_ranges = {` + "\n"
+	config += `				"no" = {` + "\n"
+	config += `					group_list_1 = "239.0.0.0/8"` + "\n"
+	config += `					override = false` + "\n"
+	config += `					ssm_none = false` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			auto_rp_mapping_agent_policy_description = "My policy"` + "\n"
+	config += `			auto_rp_mapping_agent_policy_name = "policy"` + "\n"
+	config += `			auto_rp_mapping_agent_policy_route_map = "MA_POLICY"` + "\n"
+	config += `			auto_rp_rp_candidate_policy_description = "My policy"` + "\n"
+	config += `			auto_rp_rp_candidate_policy_name = "policy"` + "\n"
+	config += `			auto_rp_rp_candidate_policy_route_map = "AUTO_RP_POLICY"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"

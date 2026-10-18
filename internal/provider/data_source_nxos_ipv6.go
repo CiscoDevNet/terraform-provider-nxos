@@ -263,7 +263,8 @@ func (d *IPv6DataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipv6Inst", "ipv6Dom", "ipv6Route", "ipv6Nexthop", "ipv6If", "ipv6Addr"}, IPv6SubtreeClassMinVersions)
+
+	res, err := getIPv6Tree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

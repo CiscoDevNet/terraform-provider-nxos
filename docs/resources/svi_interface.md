@@ -51,6 +51,8 @@ resource "nxos_svi_interface" "example" {
 
 ### Optional
 
+- `deletion_policy` (String) What happens on the device when objects managed by the resource are removed. `delete` deletes the object on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by the resource on destroy, resets the managed attributes of the objects that already existed and leaves configuration not managed by Terraform in place. `retain` leaves the device unchanged on destroy and only removes the resource from the state. Overrides the `deletion_policy` of the provider, which defaults to `delete`. See the [Deletion Policy](../guides/deletion_policy) guide for details.
+  - Choices: `delete`, `reset`, `retain`
 - `device` (String) A device name from the provider configuration.
 - `svi_interfaces` (Attributes Map) List of SVI interfaces.
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `vlan100`. (see [below for nested schema](#nestedatt--svi_interfaces))

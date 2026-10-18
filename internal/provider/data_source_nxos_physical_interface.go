@@ -583,7 +583,8 @@ func (d *PhysicalInterfaceDataSource) Read(ctx context.Context, req datasource.R
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "nvoEsiMhCoreTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1SelectiveQinqTable", "l1SelectiveQinq", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
+
+	res, err := getPhysicalInterfaceTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

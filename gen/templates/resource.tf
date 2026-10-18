@@ -17,6 +17,13 @@
 {{- if and (not (hasNonIdAttrs .Attributes)) (not .TfChildClasses)}}
 {{$indent}}{{.TfName}} = {
 {{$indent}}  "{{$mapKey}}" = {}
+{{- range exampleEntries .}}
+{{$indent}}  "{{.Key}}" = {
+{{- range .Attributes}}
+{{$indent}}    {{.TfName}} = {{.Hcl}}
+{{- end}}
+{{$indent}}  }
+{{- end}}
 {{$indent}}}
 {{- else}}
 {{$indent}}{{.TfName}} = {
@@ -30,6 +37,13 @@
 {{- template "renderChildren" (makeMap "Children" .TfChildClasses "Indent" (printf "%s    " $indent)) -}}
 {{- end}}
 {{$indent}}  }
+{{- range exampleEntries .}}
+{{$indent}}  "{{.Key}}" = {
+{{- range .Attributes}}
+{{$indent}}    {{.TfName}} = {{.Hcl}}
+{{- end}}
+{{$indent}}  }
+{{- end}}
 {{$indent}}}
 {{- end}}
 {{- end -}}

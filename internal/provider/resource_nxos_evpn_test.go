@@ -33,44 +33,76 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosEVPN(t *testing.T) {
+// TestAccEVPNResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccEVPNResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.vxlan-123456.route_distinguisher", "rd:unknown:0:0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.vxlan-123456.table_map", "ROUTE_MAP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.vxlan-123456.table_map_filter", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_evpn.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_evpn.test", "vnis.vxlan-123456.route_distinguisher", "rd:unknown:0:0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_evpn.test", "vnis.vxlan-123456.table_map", "ROUTE_MAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_evpn.test", "vnis.vxlan-123456.table_map_filter", "false"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccEVPNResourcePrerequisitesConfig + testAccEVPNResourceConfig_minimum(),
+		},
+		{
+			Config: testAccEVPNResourcePrerequisitesConfig + testAccEVPNResourceConfig_all() + testAccEVPNResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_evpn.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccEVPNResourceImportStateIdFunc("nxos_evpn.test"),
+		},
+		{
+			ResourceName:       "nxos_evpn.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccEVPNResourcePrerequisitesConfig + testAccEVPNResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccEVPNResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccEVPNResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_evpn.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccEVPNResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccEVPNResourcePrerequisitesConfig + testAccEVPNResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosEVPNPrerequisitesConfig + testAccNxosEVPNConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_evpn.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosEVPNImportStateIdFunc("nxos_evpn.test"),
-			},
-			{
-				ResourceName:       "nxos_evpn.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccEVPNResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -80,7 +112,7 @@ func nxosEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosEVPNPrerequisitesConfig = `
+const testAccEVPNResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/nvo"
   class_name = "fmNvo"
@@ -105,7 +137,7 @@ resource "nxos_dme" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosEVPNConfig_minimum() string {
+func testAccEVPNResourceConfig_minimum() string {
 	config := `resource "nxos_evpn" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
@@ -115,7 +147,7 @@ func testAccNxosEVPNConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosEVPNConfig_all() string {
+func testAccEVPNResourceConfig_all() string {
 	config := `resource "nxos_evpn" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	vnis = {` + "\n"
@@ -136,6 +168,14 @@ func testAccNxosEVPNConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccEVPNResourceConfig_dataSource() string {
+	return `
+data "nxos_evpn" "test" {
+	depends_on = [nxos_evpn.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

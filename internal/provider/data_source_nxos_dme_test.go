@@ -23,13 +23,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceNxosDme(t *testing.T) {
+func TestAccDmeDataSource(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDmeConfigInterface,
+				Config: testAccDmeDataSourceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_dme.int", "class_name", "l1PhysIf"),
 					resource.TestCheckResourceAttr("data.nxos_dme.int", "content.id", "eth1/1"),
@@ -39,7 +39,7 @@ func TestAccDataSourceNxosDme(t *testing.T) {
 	})
 }
 
-const testAccDataSourceNxosDmeConfigInterface = `
+const testAccDmeDataSourceConfig = `
 data "nxos_dme" "int" {
   dn = "sys/intf/phys-[eth1/1]"
 }

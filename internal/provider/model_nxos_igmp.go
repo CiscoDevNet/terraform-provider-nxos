@@ -148,6 +148,14 @@ var IGMPSubtreeClassMinVersions = map[string]string{}
 // IGMPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var IGMPMinVersions = map[string]helpers.MinVersion{}
 
+// IGMPListClasses holds the list child classes of the resource.
+var IGMPListClasses = map[string]bool{"igmpDom": true, "igmpSSMXlate": true, "igmpIf": true, "igmpStRepP": true, "igmpJoinType": true, "igmpVersion": true, "igmpGroup": true, "igmpSource": true}
+
+// getIGMPTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getIGMPTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"igmpInst", "igmpDom", "igmpSSMXlate", "igmpIf", "igmpQuerierP", "igmpRepP", "igmpResP", "igmpStRepP", "igmpJoinType", "igmpVersion", "igmpGroup", "igmpSource"}, IGMPSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -1226,7 +1234,384 @@ func (data IGMP) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data IGMP) toBodyWithDeletes(ctx context.Context, state IGMP, config IGMP, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data IGMP) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.InstanceAdminState.IsNull() && data.AnyQueryDestination.IsNull() && data.BootupDelay.IsNull() && data.Control.IsNull() && data.FlushRoutes.IsNull() && data.HeavyTemplate.IsNull() && data.InstanceControl.IsNull() && data.EnforceRouterAlert.IsNull() && data.SpoofCheck.IsNull() && data.StrictQuerierElection.IsNull() && data.SyslogThreshold.IsNull() && len(data.Vrfs) == 0) {
+		igmpInstDn := dn + "/" + "inst"
+		dns[igmpInstDn] = true
+		for key, child := range data.Vrfs {
+			igmpDomDn := igmpInstDn + "/" + child.getRn(key)
+			dns[igmpDomDn] = true
+			for key_, child_ := range child.SsmTranslations {
+				keyParts := strings.SplitN(key_, ";", 2)
+				_ = keyParts
+				igmpSSMXlateDn_ := igmpDomDn + "/" + child_.getRn(key_)
+				dns[igmpSSMXlateDn_] = true
+			}
+			for key_, child_ := range child.Interfaces {
+				igmpIfDn_ := igmpDomDn + "/" + child_.getRn(key_)
+				dns[igmpIfDn_] = true
+				if !(child_.QuerierAddress.IsNull() && child_.QuerierDescription.IsNull() && child_.LastMemberQueryCount.IsNull() && child_.LastMemberQueryResponseTime.IsNull() && child_.QuerierName.IsNull() && child_.QuerierTimeout.IsNull() && child_.QueryInterval.IsNull() && child_.RobustnessVariable.IsNull() && child_.QueryMaxResponseTime.IsNull() && child_.StartupQueryCount.IsNull() && child_.StartupQueryInterval.IsNull() && child_.QuerierVersion.IsNull()) {
+					igmpQuerierPDn__ := igmpIfDn_ + "/" + "querierp"
+					dns[igmpQuerierPDn__] = true
+				}
+				if !(child_.ReportPolicyPrefixList.IsNull() && child_.ReportPolicyRouteMap.IsNull() && child_.ReportPolicyAccessGroup.IsNull()) {
+					igmpRepPDn__ := igmpIfDn_ + "/" + "reppol"
+					dns[igmpRepPDn__] = true
+				}
+				if !(child_.StateLimitDescription.IsNull() && child_.StateLimitMaximum.IsNull() && child_.StateLimitName.IsNull() && child_.StateLimitReserved.IsNull() && child_.StateLimitReservedRouteMap.IsNull()) {
+					igmpResPDn__ := igmpIfDn_ + "/" + "limit"
+					dns[igmpResPDn__] = true
+				}
+				for key__, child__ := range child_.StaticReportPolicies {
+					igmpStRepPDn__ := igmpIfDn_ + "/" + child__.getRn(key__)
+					dns[igmpStRepPDn__] = true
+				}
+				for key__, child__ := range child_.JoinTypes {
+					igmpJoinTypeDn__ := igmpIfDn_ + "/" + child__.getRn(key__)
+					dns[igmpJoinTypeDn__] = true
+					for key___, child___ := range child__.Versions {
+						igmpVersionDn___ := igmpJoinTypeDn__ + "/" + child___.getRn(key___)
+						dns[igmpVersionDn___] = true
+						for key____, child____ := range child___.Groups {
+							igmpGroupDn____ := igmpVersionDn___ + "/" + child____.getRn(key____)
+							dns[igmpGroupDn____] = true
+							for key_____, child_____ := range child____.Sources {
+								igmpSourceDn_____ := igmpGroupDn____ + "/" + child_____.getRn(key_____)
+								dns[igmpSourceDn_____] = true
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data IGMP) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "igmpEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "igmpEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.InstanceAdminState.IsNull() && data.AnyQueryDestination.IsNull() && data.BootupDelay.IsNull() && data.Control.IsNull() && data.FlushRoutes.IsNull() && data.HeavyTemplate.IsNull() && data.InstanceControl.IsNull() && data.EnforceRouterAlert.IsNull() && data.SpoofCheck.IsNull() && data.StrictQuerierElection.IsNull() && data.SyslogThreshold.IsNull() && len(data.Vrfs) == 0) {
+		igmpInstRn := "inst"
+		igmpInstDn := dn + "/" + igmpInstRn
+		_ = igmpInstDn
+		{
+			igmpInstBody := ""
+			if !data.InstanceAdminState.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AnyQueryDestination.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.anyQueryDest", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.BootupDelay.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.bootupDelay", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Control.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.FlushRoutes.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.flushRoute", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.HeavyTemplate.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.heavyTemplate", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.InstanceControl.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.instCtrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EnforceRouterAlert.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.rtrAlert", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SpoofCheck.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.spoofCheck", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.StrictQuerierElection.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.strictQuerElect", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SyslogThreshold.IsNull() {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.syslogThreshold", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key, child := range data.Vrfs {
+				_ = child
+				igmpDomRn := child.getRn(key)
+				igmpDomDn := igmpInstDn + "/" + igmpDomRn
+				_ = igmpDomDn
+				if !existed(igmpDomDn) {
+					igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.children.-1.igmpDom.attributes", map[string]interface{}{"rn": igmpDomRn, "status": "deleted"})
+					continue
+				}
+				igmpDomBody := ""
+				igmpDomBody, _ = sjson.Set(igmpDomBody, "igmpDom.attributes.rn", igmpDomRn)
+				for key_, child_ := range child.SsmTranslations {
+					_ = child_
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					igmpSSMXlateRn_ := child_.getRn(key_)
+					igmpSSMXlateDn_ := igmpDomDn + "/" + igmpSSMXlateRn_
+					_ = igmpSSMXlateDn_
+					if !existed(igmpSSMXlateDn_) {
+						igmpDomBody, _ = sjson.Set(igmpDomBody, "igmpDom.children.-1.igmpSSMXlate.attributes", map[string]interface{}{"rn": igmpSSMXlateRn_, "status": "deleted"})
+						continue
+					}
+					igmpSSMXlateBody_ := ""
+					igmpSSMXlateBody_, _ = sjson.Set(igmpSSMXlateBody_, "igmpSSMXlate.attributes.rn", igmpSSMXlateRn_)
+					igmpDomBody, _ = sjson.SetRaw(igmpDomBody, "igmpDom.children.-1", igmpSSMXlateBody_)
+				}
+				for key_, child_ := range child.Interfaces {
+					_ = child_
+					igmpIfRn_ := child_.getRn(key_)
+					igmpIfDn_ := igmpDomDn + "/" + igmpIfRn_
+					_ = igmpIfDn_
+					if !existed(igmpIfDn_) {
+						igmpDomBody, _ = sjson.Set(igmpDomBody, "igmpDom.children.-1.igmpIf.attributes", map[string]interface{}{"rn": igmpIfRn_, "status": "deleted"})
+						continue
+					}
+					igmpIfBody_ := ""
+					igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.rn", igmpIfRn_)
+					if !child_.AdminState.IsNull() {
+						igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.AllowV3Asm.IsNull() {
+						igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.allowv3Asm", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Description.IsNull() {
+						igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.GroupTimeout.IsNull() {
+						igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.grpTimeout", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Control.IsNull() {
+						igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.ifCtrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.ImmediateLeave.IsNull() {
+						igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.immediateLeave", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Name.IsNull() {
+						igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.ReportLinkLocalGroups.IsNull() {
+						igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.reportLl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SuppressV3Gsq.IsNull() {
+						igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.suppressv3Gsq", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Version.IsNull() {
+						igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.attributes.ver", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(child_.QuerierAddress.IsNull() && child_.QuerierDescription.IsNull() && child_.LastMemberQueryCount.IsNull() && child_.LastMemberQueryResponseTime.IsNull() && child_.QuerierName.IsNull() && child_.QuerierTimeout.IsNull() && child_.QueryInterval.IsNull() && child_.RobustnessVariable.IsNull() && child_.QueryMaxResponseTime.IsNull() && child_.StartupQueryCount.IsNull() && child_.StartupQueryInterval.IsNull() && child_.QuerierVersion.IsNull()) {
+						igmpQuerierPRn__ := "querierp"
+						igmpQuerierPDn__ := igmpIfDn_ + "/" + igmpQuerierPRn__
+						_ = igmpQuerierPDn__
+						if !existed(igmpQuerierPDn__) {
+							igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.children.-1.igmpQuerierP.attributes", map[string]interface{}{"rn": igmpQuerierPRn__, "status": "deleted"})
+						} else {
+							igmpQuerierPBody__ := ""
+							if !child_.QuerierAddress.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.addr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.QuerierDescription.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.LastMemberQueryCount.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.lastMbrCnt", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.LastMemberQueryResponseTime.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.lastMbrRespTime", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.QuerierName.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.QuerierTimeout.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.querierTimeout", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.QueryInterval.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.queryIntvl", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.RobustnessVariable.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.robustFac", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.QueryMaxResponseTime.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.rspIntvl", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.StartupQueryCount.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.startQueryCnt", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.StartupQueryInterval.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.startQueryIntvl", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.QuerierVersion.IsNull() {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.ver", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if igmpQuerierPBody__ != "" {
+								igmpQuerierPBody__, _ = sjson.Set(igmpQuerierPBody__, "igmpQuerierP.attributes.rn", igmpQuerierPRn__)
+								igmpIfBody_, _ = sjson.SetRaw(igmpIfBody_, "igmpIf.children.-1", igmpQuerierPBody__)
+							}
+						}
+					}
+					if !(child_.ReportPolicyPrefixList.IsNull() && child_.ReportPolicyRouteMap.IsNull() && child_.ReportPolicyAccessGroup.IsNull()) {
+						igmpRepPRn__ := "reppol"
+						igmpRepPDn__ := igmpIfDn_ + "/" + igmpRepPRn__
+						_ = igmpRepPDn__
+						if !existed(igmpRepPDn__) {
+							igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.children.-1.igmpRepP.attributes", map[string]interface{}{"rn": igmpRepPRn__, "status": "deleted"})
+						} else {
+							igmpRepPBody__ := ""
+							if !child_.ReportPolicyPrefixList.IsNull() {
+								igmpRepPBody__, _ = sjson.Set(igmpRepPBody__, "igmpRepP.attributes.pfxList", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ReportPolicyRouteMap.IsNull() {
+								igmpRepPBody__, _ = sjson.Set(igmpRepPBody__, "igmpRepP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ReportPolicyAccessGroup.IsNull() {
+								igmpRepPBody__, _ = sjson.Set(igmpRepPBody__, "igmpRepP.attributes.useAccessGrpCommand", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if igmpRepPBody__ != "" {
+								igmpRepPBody__, _ = sjson.Set(igmpRepPBody__, "igmpRepP.attributes.rn", igmpRepPRn__)
+								igmpIfBody_, _ = sjson.SetRaw(igmpIfBody_, "igmpIf.children.-1", igmpRepPBody__)
+							}
+						}
+					}
+					if !(child_.StateLimitDescription.IsNull() && child_.StateLimitMaximum.IsNull() && child_.StateLimitName.IsNull() && child_.StateLimitReserved.IsNull() && child_.StateLimitReservedRouteMap.IsNull()) {
+						igmpResPRn__ := "limit"
+						igmpResPDn__ := igmpIfDn_ + "/" + igmpResPRn__
+						_ = igmpResPDn__
+						if !existed(igmpResPDn__) {
+							igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.children.-1.igmpResP.attributes", map[string]interface{}{"rn": igmpResPRn__, "status": "deleted"})
+						} else {
+							igmpResPBody__ := ""
+							if !child_.StateLimitDescription.IsNull() {
+								igmpResPBody__, _ = sjson.Set(igmpResPBody__, "igmpResP.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.StateLimitMaximum.IsNull() {
+								igmpResPBody__, _ = sjson.Set(igmpResPBody__, "igmpResP.attributes.max", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.StateLimitName.IsNull() {
+								igmpResPBody__, _ = sjson.Set(igmpResPBody__, "igmpResP.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.StateLimitReserved.IsNull() {
+								igmpResPBody__, _ = sjson.Set(igmpResPBody__, "igmpResP.attributes.rsvd", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.StateLimitReservedRouteMap.IsNull() {
+								igmpResPBody__, _ = sjson.Set(igmpResPBody__, "igmpResP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if igmpResPBody__ != "" {
+								igmpResPBody__, _ = sjson.Set(igmpResPBody__, "igmpResP.attributes.rn", igmpResPRn__)
+								igmpIfBody_, _ = sjson.SetRaw(igmpIfBody_, "igmpIf.children.-1", igmpResPBody__)
+							}
+						}
+					}
+					for key__, child__ := range child_.StaticReportPolicies {
+						_ = child__
+						igmpStRepPRn__ := child__.getRn(key__)
+						igmpStRepPDn__ := igmpIfDn_ + "/" + igmpStRepPRn__
+						_ = igmpStRepPDn__
+						if !existed(igmpStRepPDn__) {
+							igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.children.-1.igmpStRepP.attributes", map[string]interface{}{"rn": igmpStRepPRn__, "status": "deleted"})
+							continue
+						}
+						igmpStRepPBody__ := ""
+						igmpStRepPBody__, _ = sjson.Set(igmpStRepPBody__, "igmpStRepP.attributes.rn", igmpStRepPRn__)
+						if !child__.PrefixList.IsNull() {
+							igmpStRepPBody__, _ = sjson.Set(igmpStRepPBody__, "igmpStRepP.attributes.pfxList", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.RouteMap.IsNull() {
+							igmpStRepPBody__, _ = sjson.Set(igmpStRepPBody__, "igmpStRepP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AccessGroup.IsNull() {
+							igmpStRepPBody__, _ = sjson.Set(igmpStRepPBody__, "igmpStRepP.attributes.useAccessGrpCommand", "DME_UNSET_PROPERTY_MARKER")
+						}
+						igmpIfBody_, _ = sjson.SetRaw(igmpIfBody_, "igmpIf.children.-1", igmpStRepPBody__)
+					}
+					for key__, child__ := range child_.JoinTypes {
+						_ = child__
+						igmpJoinTypeRn__ := child__.getRn(key__)
+						igmpJoinTypeDn__ := igmpIfDn_ + "/" + igmpJoinTypeRn__
+						_ = igmpJoinTypeDn__
+						if !existed(igmpJoinTypeDn__) {
+							igmpIfBody_, _ = sjson.Set(igmpIfBody_, "igmpIf.children.-1.igmpJoinType.attributes", map[string]interface{}{"rn": igmpJoinTypeRn__, "status": "deleted"})
+							continue
+						}
+						igmpJoinTypeBody__ := ""
+						igmpJoinTypeBody__, _ = sjson.Set(igmpJoinTypeBody__, "igmpJoinType.attributes.rn", igmpJoinTypeRn__)
+						for key___, child___ := range child__.Versions {
+							_ = child___
+							igmpVersionRn___ := child___.getRn(key___)
+							igmpVersionDn___ := igmpJoinTypeDn__ + "/" + igmpVersionRn___
+							_ = igmpVersionDn___
+							if !existed(igmpVersionDn___) {
+								igmpJoinTypeBody__, _ = sjson.Set(igmpJoinTypeBody__, "igmpJoinType.children.-1.igmpVersion.attributes", map[string]interface{}{"rn": igmpVersionRn___, "status": "deleted"})
+								continue
+							}
+							igmpVersionBody___ := ""
+							igmpVersionBody___, _ = sjson.Set(igmpVersionBody___, "igmpVersion.attributes.rn", igmpVersionRn___)
+							for key____, child____ := range child___.Groups {
+								_ = child____
+								igmpGroupRn____ := child____.getRn(key____)
+								igmpGroupDn____ := igmpVersionDn___ + "/" + igmpGroupRn____
+								_ = igmpGroupDn____
+								if !existed(igmpGroupDn____) {
+									igmpVersionBody___, _ = sjson.Set(igmpVersionBody___, "igmpVersion.children.-1.igmpGroup.attributes", map[string]interface{}{"rn": igmpGroupRn____, "status": "deleted"})
+									continue
+								}
+								igmpGroupBody____ := ""
+								igmpGroupBody____, _ = sjson.Set(igmpGroupBody____, "igmpGroup.attributes.rn", igmpGroupRn____)
+								if !child____.UseStaticOif.IsNull() {
+									igmpGroupBody____, _ = sjson.Set(igmpGroupBody____, "igmpGroup.attributes.useStaticOif", "DME_UNSET_PROPERTY_MARKER")
+								}
+								for key_____, child_____ := range child____.Sources {
+									_ = child_____
+									igmpSourceRn_____ := child_____.getRn(key_____)
+									igmpSourceDn_____ := igmpGroupDn____ + "/" + igmpSourceRn_____
+									_ = igmpSourceDn_____
+									if !existed(igmpSourceDn_____) {
+										igmpGroupBody____, _ = sjson.Set(igmpGroupBody____, "igmpGroup.children.-1.igmpSource.attributes", map[string]interface{}{"rn": igmpSourceRn_____, "status": "deleted"})
+										continue
+									}
+									igmpSourceBody_____ := ""
+									igmpSourceBody_____, _ = sjson.Set(igmpSourceBody_____, "igmpSource.attributes.rn", igmpSourceRn_____)
+									if !child_____.UseStaticOif.IsNull() {
+										igmpSourceBody_____, _ = sjson.Set(igmpSourceBody_____, "igmpSource.attributes.useStaticOif", "DME_UNSET_PROPERTY_MARKER")
+									}
+									igmpGroupBody____, _ = sjson.SetRaw(igmpGroupBody____, "igmpGroup.children.-1", igmpSourceBody_____)
+								}
+								igmpVersionBody___, _ = sjson.SetRaw(igmpVersionBody___, "igmpVersion.children.-1", igmpGroupBody____)
+							}
+							igmpJoinTypeBody__, _ = sjson.SetRaw(igmpJoinTypeBody__, "igmpJoinType.children.-1", igmpVersionBody___)
+						}
+						igmpIfBody_, _ = sjson.SetRaw(igmpIfBody_, "igmpIf.children.-1", igmpJoinTypeBody__)
+					}
+					igmpDomBody, _ = sjson.SetRaw(igmpDomBody, "igmpDom.children.-1", igmpIfBody_)
+				}
+				igmpInstBody, _ = sjson.SetRaw(igmpInstBody, "igmpInst.children.-1", igmpDomBody)
+			}
+			if igmpInstBody != "" {
+				igmpInstBody, _ = sjson.Set(igmpInstBody, "igmpInst.attributes.rn", igmpInstRn)
+				body, _ = sjson.SetRaw(body, "igmpEntity.children.-1", igmpInstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data IGMP) toBodyWithDeletes(ctx context.Context, state IGMP, config IGMP, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1446,6 +1831,8 @@ func (data IGMP) toBodyWithDeletes(ctx context.Context, state IGMP, config IGMP,
 				stateChild := state.Vrfs[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "igmpInst")+".children").Array() {
@@ -1467,6 +1854,8 @@ func (data IGMP) toBodyWithDeletes(ctx context.Context, state IGMP, config IGMP,
 								stateChild := stateChild.Interfaces[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("igmpIf.attributes.id").String() == key {
 										if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -1511,85 +1900,103 @@ func (data IGMP) toBodyWithDeletes(ctx context.Context, state IGMP, config IGMP,
 										}
 									}
 									if listChildPath_ != "" {
-										if !stateChild.QuerierAddress.IsNull() && configChild.QuerierAddress.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"addr", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.QuerierAddress.IsNull() && stateChild.QuerierDescription.IsNull() && stateChild.LastMemberQueryCount.IsNull() && stateChild.LastMemberQueryResponseTime.IsNull() && stateChild.QuerierName.IsNull() && stateChild.QuerierTimeout.IsNull() && stateChild.QueryInterval.IsNull() && stateChild.RobustnessVariable.IsNull() && stateChild.QueryMaxResponseTime.IsNull() && stateChild.StartupQueryCount.IsNull() && stateChild.StartupQueryInterval.IsNull() && stateChild.QuerierVersion.IsNull()) && (configChild.QuerierAddress.IsNull() && configChild.QuerierDescription.IsNull() && configChild.LastMemberQueryCount.IsNull() && configChild.LastMemberQueryResponseTime.IsNull() && configChild.QuerierName.IsNull() && configChild.QuerierTimeout.IsNull() && configChild.QueryInterval.IsNull() && configChild.RobustnessVariable.IsNull() && configChild.QueryMaxResponseTime.IsNull() && configChild.StartupQueryCount.IsNull() && configChild.StartupQueryInterval.IsNull() && configChild.QuerierVersion.IsNull()) && deleteEmptied(listChildDn_+"/querierp") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.QuerierAddress.IsNull() && configChild.QuerierAddress.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"addr", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.QuerierDescription.IsNull() && configChild.QuerierDescription.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.LastMemberQueryCount.IsNull() && configChild.LastMemberQueryCount.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lastMbrCnt", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.LastMemberQueryResponseTime.IsNull() && configChild.LastMemberQueryResponseTime.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lastMbrRespTime", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.QuerierName.IsNull() && configChild.QuerierName.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.QuerierTimeout.IsNull() && configChild.QuerierTimeout.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"querierTimeout", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.QueryInterval.IsNull() && configChild.QueryInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queryIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.RobustnessVariable.IsNull() && configChild.RobustnessVariable.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"robustFac", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.QueryMaxResponseTime.IsNull() && configChild.QueryMaxResponseTime.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rspIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.StartupQueryCount.IsNull() && configChild.StartupQueryCount.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startQueryCnt", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.StartupQueryInterval.IsNull() && configChild.StartupQueryInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startQueryIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.QuerierVersion.IsNull() && configChild.QuerierVersion.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ver", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.QuerierDescription.IsNull() && configChild.QuerierDescription.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.ReportPolicyPrefixList.IsNull() && stateChild.ReportPolicyRouteMap.IsNull() && stateChild.ReportPolicyAccessGroup.IsNull()) && (configChild.ReportPolicyPrefixList.IsNull() && configChild.ReportPolicyRouteMap.IsNull() && configChild.ReportPolicyAccessGroup.IsNull()) && deleteEmptied(listChildDn_+"/reppol") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpRepP")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.ReportPolicyPrefixList.IsNull() && configChild.ReportPolicyPrefixList.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpRepP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pfxList", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ReportPolicyRouteMap.IsNull() && configChild.ReportPolicyRouteMap.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpRepP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ReportPolicyAccessGroup.IsNull() && configChild.ReportPolicyAccessGroup.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpRepP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useAccessGrpCommand", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.LastMemberQueryCount.IsNull() && configChild.LastMemberQueryCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lastMbrCnt", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.LastMemberQueryResponseTime.IsNull() && configChild.LastMemberQueryResponseTime.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lastMbrRespTime", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.QuerierName.IsNull() && configChild.QuerierName.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.QuerierTimeout.IsNull() && configChild.QuerierTimeout.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"querierTimeout", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.QueryInterval.IsNull() && configChild.QueryInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queryIntvl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.RobustnessVariable.IsNull() && configChild.RobustnessVariable.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"robustFac", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.QueryMaxResponseTime.IsNull() && configChild.QueryMaxResponseTime.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rspIntvl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StartupQueryCount.IsNull() && configChild.StartupQueryCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startQueryCnt", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StartupQueryInterval.IsNull() && configChild.StartupQueryInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startQueryIntvl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.QuerierVersion.IsNull() && configChild.QuerierVersion.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpQuerierP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ver", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReportPolicyPrefixList.IsNull() && configChild.ReportPolicyPrefixList.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpRepP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pfxList", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReportPolicyRouteMap.IsNull() && configChild.ReportPolicyRouteMap.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpRepP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReportPolicyAccessGroup.IsNull() && configChild.ReportPolicyAccessGroup.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpRepP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useAccessGrpCommand", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StateLimitDescription.IsNull() && configChild.StateLimitDescription.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StateLimitMaximum.IsNull() && configChild.StateLimitMaximum.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"max", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StateLimitName.IsNull() && configChild.StateLimitName.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StateLimitReserved.IsNull() && configChild.StateLimitReserved.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rsvd", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StateLimitReservedRouteMap.IsNull() && configChild.StateLimitReservedRouteMap.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.StateLimitDescription.IsNull() && stateChild.StateLimitMaximum.IsNull() && stateChild.StateLimitName.IsNull() && stateChild.StateLimitReserved.IsNull() && stateChild.StateLimitReservedRouteMap.IsNull()) && (configChild.StateLimitDescription.IsNull() && configChild.StateLimitMaximum.IsNull() && configChild.StateLimitName.IsNull() && configChild.StateLimitReserved.IsNull() && configChild.StateLimitReservedRouteMap.IsNull()) && deleteEmptied(listChildDn_+"/limit") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.StateLimitDescription.IsNull() && configChild.StateLimitDescription.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.StateLimitMaximum.IsNull() && configChild.StateLimitMaximum.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"max", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.StateLimitName.IsNull() && configChild.StateLimitName.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.StateLimitReserved.IsNull() && configChild.StateLimitReserved.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rsvd", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.StateLimitReservedRouteMap.IsNull() && configChild.StateLimitReservedRouteMap.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "igmpResP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
 										for key := range stateChild.StaticReportPolicies {
 											if configChild, ok := configChild.StaticReportPolicies[key]; ok {
@@ -1617,6 +2024,8 @@ func (data IGMP) toBodyWithDeletes(ctx context.Context, state IGMP, config IGMP,
 												stateChild := stateChild.JoinTypes[key]
 												_ = stateChild
 												_ = configChild
+												listChildDn__ := listChildDn_ + "/" + stateChild.getRn(key)
+												_ = listChildDn__
 												{
 													listChildPath__ := ""
 													for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
@@ -1631,6 +2040,8 @@ func (data IGMP) toBodyWithDeletes(ctx context.Context, state IGMP, config IGMP,
 																stateChild := stateChild.Versions[key]
 																_ = stateChild
 																_ = configChild
+																listChildDn___ := listChildDn__ + "/" + stateChild.getRn(key)
+																_ = listChildDn___
 																{
 																	listChildPath___ := ""
 																	for mi, mv := range gjson.Get(body.Str, listChildPath__).Array() {
@@ -1645,6 +2056,8 @@ func (data IGMP) toBodyWithDeletes(ctx context.Context, state IGMP, config IGMP,
 																				stateChild := stateChild.Groups[key]
 																				_ = stateChild
 																				_ = configChild
+																				listChildDn____ := listChildDn___ + "/" + stateChild.getRn(key)
+																				_ = listChildDn____
 																				for mi, mv := range gjson.Get(body.Str, listChildPath___).Array() {
 																					if mv.Get("igmpGroup.attributes.grp").String() == key {
 																						if !stateChild.UseStaticOif.IsNull() && configChild.UseStaticOif.IsNull() {

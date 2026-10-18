@@ -103,6 +103,14 @@ var LoggingSubtreeClassMinVersions = map[string]string{}
 // LoggingMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var LoggingMinVersions = map[string]helpers.MinVersion{}
 
+// LoggingListClasses holds the list child classes of the resource.
+var LoggingListClasses = map[string]bool{"loggingFacility": true, "syslogRemoteDest": true}
+
+// getLoggingTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getLoggingTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"loggingLogging", "loggingLogLevel", "loggingFacility", "syslogSyslog", "syslogFile", "syslogRemoteDest", "syslogSourceInterface", "syslogTimeStamp", "syslogTermMonitor", "syslogConsole", "syslogOriginid"}, LoggingSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -897,7 +905,300 @@ func (data Logging) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging, config Logging, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data Logging) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.All.IsNull() && data.Level.IsNull() && len(data.Facilities) == 0) {
+		loggingLoggingDn := dn + "/" + "logging"
+		dns[loggingLoggingDn] = true
+		if !(data.All.IsNull() && data.Level.IsNull() && len(data.Facilities) == 0) {
+			loggingLogLevelDn := loggingLoggingDn + "/" + "loglevel"
+			dns[loggingLogLevelDn] = true
+			for key, child := range data.Facilities {
+				loggingFacilityDn := loggingLogLevelDn + "/" + child.getRn(key)
+				dns[loggingFacilityDn] = true
+			}
+		}
+	}
+	if !((data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) && len(data.RemoteDestinations) == 0 && (data.SourceInterfaceAdminState.IsNull() && data.SourceInterfaceName.IsNull()) && (data.TimestampFormat.IsNull()) && (data.MonitorAdminState.IsNull() && data.MonitorSeverity.IsNull()) && (data.ConsoleAdminState.IsNull() && data.ConsoleSeverity.IsNull()) && (data.OriginIdType.IsNull() && data.OriginIdValue.IsNull())) {
+		syslogSyslogDn := dn + "/" + "syslog"
+		dns[syslogSyslogDn] = true
+		if !(data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) {
+			syslogFileDn := syslogSyslogDn + "/" + "file"
+			dns[syslogFileDn] = true
+		}
+		for key, child := range data.RemoteDestinations {
+			syslogRemoteDestDn := syslogSyslogDn + "/" + child.getRn(key)
+			dns[syslogRemoteDestDn] = true
+		}
+		if !(data.SourceInterfaceAdminState.IsNull() && data.SourceInterfaceName.IsNull()) {
+			syslogSourceInterfaceDn := syslogSyslogDn + "/" + "source"
+			dns[syslogSourceInterfaceDn] = true
+		}
+		if !(data.TimestampFormat.IsNull()) {
+			syslogTimeStampDn := syslogSyslogDn + "/" + "timestamp"
+			dns[syslogTimeStampDn] = true
+		}
+		if !(data.MonitorAdminState.IsNull() && data.MonitorSeverity.IsNull()) {
+			syslogTermMonitorDn := syslogSyslogDn + "/" + "monitor"
+			dns[syslogTermMonitorDn] = true
+		}
+		if !(data.ConsoleAdminState.IsNull() && data.ConsoleSeverity.IsNull()) {
+			syslogConsoleDn := syslogSyslogDn + "/" + "console"
+			dns[syslogConsoleDn] = true
+		}
+		if !(data.OriginIdType.IsNull() && data.OriginIdValue.IsNull()) {
+			syslogOriginidDn := syslogSyslogDn + "/" + "originid"
+			dns[syslogOriginidDn] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data Logging) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "topSystem.attributes", map[string]interface{}{})
+	}
+	if !(data.All.IsNull() && data.Level.IsNull() && len(data.Facilities) == 0) {
+		loggingLoggingRn := "logging"
+		loggingLoggingDn := dn + "/" + loggingLoggingRn
+		_ = loggingLoggingDn
+		{
+			loggingLoggingBody := ""
+			if !(data.All.IsNull() && data.Level.IsNull() && len(data.Facilities) == 0) {
+				loggingLogLevelRn := "loglevel"
+				loggingLogLevelDn := loggingLoggingDn + "/" + loggingLogLevelRn
+				_ = loggingLogLevelDn
+				{
+					loggingLogLevelBody := ""
+					if !data.All.IsNull() {
+						loggingLogLevelBody, _ = sjson.Set(loggingLogLevelBody, "loggingLogLevel.attributes.all", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.Level.IsNull() {
+						loggingLogLevelBody, _ = sjson.Set(loggingLogLevelBody, "loggingLogLevel.attributes.severityLevel", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key, child := range data.Facilities {
+						_ = child
+						loggingFacilityRn := child.getRn(key)
+						loggingFacilityDn := loggingLogLevelDn + "/" + loggingFacilityRn
+						_ = loggingFacilityDn
+						loggingFacilityBody := ""
+						loggingFacilityBody, _ = sjson.Set(loggingFacilityBody, "loggingFacility.attributes.rn", loggingFacilityRn)
+						if !child.Level.IsNull() {
+							loggingFacilityBody, _ = sjson.Set(loggingFacilityBody, "loggingFacility.attributes.severityLevel", "DME_UNSET_PROPERTY_MARKER")
+						}
+						loggingLogLevelBody, _ = sjson.SetRaw(loggingLogLevelBody, "loggingLogLevel.children.-1", loggingFacilityBody)
+					}
+					if loggingLogLevelBody != "" {
+						loggingLogLevelBody, _ = sjson.Set(loggingLogLevelBody, "loggingLogLevel.attributes.rn", loggingLogLevelRn)
+						loggingLoggingBody, _ = sjson.SetRaw(loggingLoggingBody, "loggingLogging.children.-1", loggingLogLevelBody)
+					}
+				}
+			}
+			if loggingLoggingBody != "" {
+				loggingLoggingBody, _ = sjson.Set(loggingLoggingBody, "loggingLogging.attributes.rn", loggingLoggingRn)
+				body, _ = sjson.SetRaw(body, "topSystem.children.-1", loggingLoggingBody)
+			}
+		}
+	}
+	if !((data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) && len(data.RemoteDestinations) == 0 && (data.SourceInterfaceAdminState.IsNull() && data.SourceInterfaceName.IsNull()) && (data.TimestampFormat.IsNull()) && (data.MonitorAdminState.IsNull() && data.MonitorSeverity.IsNull()) && (data.ConsoleAdminState.IsNull() && data.ConsoleSeverity.IsNull()) && (data.OriginIdType.IsNull() && data.OriginIdValue.IsNull())) {
+		syslogSyslogRn := "syslog"
+		syslogSyslogDn := dn + "/" + syslogSyslogRn
+		_ = syslogSyslogDn
+		{
+			syslogSyslogBody := ""
+			if !(data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) {
+				syslogFileRn := "file"
+				syslogFileDn := syslogSyslogDn + "/" + syslogFileRn
+				_ = syslogFileDn
+				if !existed(syslogFileDn) {
+					syslogSyslogBody, _ = sjson.Set(syslogSyslogBody, "syslogSyslog.children.-1.syslogFile.attributes", map[string]interface{}{"rn": syslogFileRn, "status": "deleted"})
+				} else {
+					syslogFileBody := ""
+					if !data.FileAdminState.IsNull() {
+						syslogFileBody, _ = sjson.Set(syslogFileBody, "syslogFile.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.FileDescription.IsNull() {
+						syslogFileBody, _ = sjson.Set(syslogFileBody, "syslogFile.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.FileName.IsNull() {
+						syslogFileBody, _ = sjson.Set(syslogFileBody, "syslogFile.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.FilePersistentThreshold.IsNull() {
+						syslogFileBody, _ = sjson.Set(syslogFileBody, "syslogFile.attributes.persistentThreshold", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.FileSeverity.IsNull() {
+						syslogFileBody, _ = sjson.Set(syslogFileBody, "syslogFile.attributes.severity", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.FileSize.IsNull() {
+						syslogFileBody, _ = sjson.Set(syslogFileBody, "syslogFile.attributes.size", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if syslogFileBody != "" {
+						syslogFileBody, _ = sjson.Set(syslogFileBody, "syslogFile.attributes.rn", syslogFileRn)
+						syslogSyslogBody, _ = sjson.SetRaw(syslogSyslogBody, "syslogSyslog.children.-1", syslogFileBody)
+					}
+				}
+			}
+			for key, child := range data.RemoteDestinations {
+				_ = child
+				syslogRemoteDestRn := child.getRn(key)
+				syslogRemoteDestDn := syslogSyslogDn + "/" + syslogRemoteDestRn
+				_ = syslogRemoteDestDn
+				if !existed(syslogRemoteDestDn) {
+					syslogSyslogBody, _ = sjson.Set(syslogSyslogBody, "syslogSyslog.children.-1.syslogRemoteDest.attributes", map[string]interface{}{"rn": syslogRemoteDestRn, "status": "deleted"})
+					continue
+				}
+				syslogRemoteDestBody := ""
+				syslogRemoteDestBody, _ = sjson.Set(syslogRemoteDestBody, "syslogRemoteDest.attributes.rn", syslogRemoteDestRn)
+				if !child.AdminState.IsNull() {
+					syslogRemoteDestBody, _ = sjson.Set(syslogRemoteDestBody, "syslogRemoteDest.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					syslogRemoteDestBody, _ = sjson.Set(syslogRemoteDestBody, "syslogRemoteDest.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Name.IsNull() {
+					syslogRemoteDestBody, _ = sjson.Set(syslogRemoteDestBody, "syslogRemoteDest.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Port.IsNull() {
+					syslogRemoteDestBody, _ = sjson.Set(syslogRemoteDestBody, "syslogRemoteDest.attributes.port", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Transport.IsNull() {
+					syslogRemoteDestBody, _ = sjson.Set(syslogRemoteDestBody, "syslogRemoteDest.attributes.transport", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.TrustpointClientIdentity.IsNull() {
+					syslogRemoteDestBody, _ = sjson.Set(syslogRemoteDestBody, "syslogRemoteDest.attributes.trustpointClientIdentity", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.VrfName.IsNull() {
+					syslogRemoteDestBody, _ = sjson.Set(syslogRemoteDestBody, "syslogRemoteDest.attributes.vrfName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Severity.IsNull() {
+					syslogRemoteDestBody, _ = sjson.Set(syslogRemoteDestBody, "syslogRemoteDest.attributes.severity", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ForwardingFacility.IsNull() {
+					syslogRemoteDestBody, _ = sjson.Set(syslogRemoteDestBody, "syslogRemoteDest.attributes.forwardingFacility", "DME_UNSET_PROPERTY_MARKER")
+				}
+				syslogSyslogBody, _ = sjson.SetRaw(syslogSyslogBody, "syslogSyslog.children.-1", syslogRemoteDestBody)
+			}
+			if !(data.SourceInterfaceAdminState.IsNull() && data.SourceInterfaceName.IsNull()) {
+				syslogSourceInterfaceRn := "source"
+				syslogSourceInterfaceDn := syslogSyslogDn + "/" + syslogSourceInterfaceRn
+				_ = syslogSourceInterfaceDn
+				if !existed(syslogSourceInterfaceDn) {
+					syslogSyslogBody, _ = sjson.Set(syslogSyslogBody, "syslogSyslog.children.-1.syslogSourceInterface.attributes", map[string]interface{}{"rn": syslogSourceInterfaceRn, "status": "deleted"})
+				} else {
+					syslogSourceInterfaceBody := ""
+					if !data.SourceInterfaceAdminState.IsNull() {
+						syslogSourceInterfaceBody, _ = sjson.Set(syslogSourceInterfaceBody, "syslogSourceInterface.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SourceInterfaceName.IsNull() {
+						syslogSourceInterfaceBody, _ = sjson.Set(syslogSourceInterfaceBody, "syslogSourceInterface.attributes.ifName", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if syslogSourceInterfaceBody != "" {
+						syslogSourceInterfaceBody, _ = sjson.Set(syslogSourceInterfaceBody, "syslogSourceInterface.attributes.rn", syslogSourceInterfaceRn)
+						syslogSyslogBody, _ = sjson.SetRaw(syslogSyslogBody, "syslogSyslog.children.-1", syslogSourceInterfaceBody)
+					}
+				}
+			}
+			if !(data.TimestampFormat.IsNull()) {
+				syslogTimeStampRn := "timestamp"
+				syslogTimeStampDn := syslogSyslogDn + "/" + syslogTimeStampRn
+				_ = syslogTimeStampDn
+				if !existed(syslogTimeStampDn) {
+					syslogSyslogBody, _ = sjson.Set(syslogSyslogBody, "syslogSyslog.children.-1.syslogTimeStamp.attributes", map[string]interface{}{"rn": syslogTimeStampRn, "status": "deleted"})
+				} else {
+					syslogTimeStampBody := ""
+					if !data.TimestampFormat.IsNull() {
+						syslogTimeStampBody, _ = sjson.Set(syslogTimeStampBody, "syslogTimeStamp.attributes.format", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if syslogTimeStampBody != "" {
+						syslogTimeStampBody, _ = sjson.Set(syslogTimeStampBody, "syslogTimeStamp.attributes.rn", syslogTimeStampRn)
+						syslogSyslogBody, _ = sjson.SetRaw(syslogSyslogBody, "syslogSyslog.children.-1", syslogTimeStampBody)
+					}
+				}
+			}
+			if !(data.MonitorAdminState.IsNull() && data.MonitorSeverity.IsNull()) {
+				syslogTermMonitorRn := "monitor"
+				syslogTermMonitorDn := syslogSyslogDn + "/" + syslogTermMonitorRn
+				_ = syslogTermMonitorDn
+				if !existed(syslogTermMonitorDn) {
+					syslogSyslogBody, _ = sjson.Set(syslogSyslogBody, "syslogSyslog.children.-1.syslogTermMonitor.attributes", map[string]interface{}{"rn": syslogTermMonitorRn, "status": "deleted"})
+				} else {
+					syslogTermMonitorBody := ""
+					if !data.MonitorAdminState.IsNull() {
+						syslogTermMonitorBody, _ = sjson.Set(syslogTermMonitorBody, "syslogTermMonitor.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.MonitorSeverity.IsNull() {
+						syslogTermMonitorBody, _ = sjson.Set(syslogTermMonitorBody, "syslogTermMonitor.attributes.severity", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if syslogTermMonitorBody != "" {
+						syslogTermMonitorBody, _ = sjson.Set(syslogTermMonitorBody, "syslogTermMonitor.attributes.rn", syslogTermMonitorRn)
+						syslogSyslogBody, _ = sjson.SetRaw(syslogSyslogBody, "syslogSyslog.children.-1", syslogTermMonitorBody)
+					}
+				}
+			}
+			if !(data.ConsoleAdminState.IsNull() && data.ConsoleSeverity.IsNull()) {
+				syslogConsoleRn := "console"
+				syslogConsoleDn := syslogSyslogDn + "/" + syslogConsoleRn
+				_ = syslogConsoleDn
+				if !existed(syslogConsoleDn) {
+					syslogSyslogBody, _ = sjson.Set(syslogSyslogBody, "syslogSyslog.children.-1.syslogConsole.attributes", map[string]interface{}{"rn": syslogConsoleRn, "status": "deleted"})
+				} else {
+					syslogConsoleBody := ""
+					if !data.ConsoleAdminState.IsNull() {
+						syslogConsoleBody, _ = sjson.Set(syslogConsoleBody, "syslogConsole.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleSeverity.IsNull() {
+						syslogConsoleBody, _ = sjson.Set(syslogConsoleBody, "syslogConsole.attributes.severity", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if syslogConsoleBody != "" {
+						syslogConsoleBody, _ = sjson.Set(syslogConsoleBody, "syslogConsole.attributes.rn", syslogConsoleRn)
+						syslogSyslogBody, _ = sjson.SetRaw(syslogSyslogBody, "syslogSyslog.children.-1", syslogConsoleBody)
+					}
+				}
+			}
+			if !(data.OriginIdType.IsNull() && data.OriginIdValue.IsNull()) {
+				syslogOriginidRn := "originid"
+				syslogOriginidDn := syslogSyslogDn + "/" + syslogOriginidRn
+				_ = syslogOriginidDn
+				if !existed(syslogOriginidDn) {
+					syslogSyslogBody, _ = sjson.Set(syslogSyslogBody, "syslogSyslog.children.-1.syslogOriginid.attributes", map[string]interface{}{"rn": syslogOriginidRn, "status": "deleted"})
+				} else {
+					syslogOriginidBody := ""
+					if !data.OriginIdType.IsNull() {
+						syslogOriginidBody, _ = sjson.Set(syslogOriginidBody, "syslogOriginid.attributes.idtype", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.OriginIdValue.IsNull() {
+						syslogOriginidBody, _ = sjson.Set(syslogOriginidBody, "syslogOriginid.attributes.idvalue", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if syslogOriginidBody != "" {
+						syslogOriginidBody, _ = sjson.Set(syslogOriginidBody, "syslogOriginid.attributes.rn", syslogOriginidRn)
+						syslogSyslogBody, _ = sjson.SetRaw(syslogSyslogBody, "syslogSyslog.children.-1", syslogOriginidBody)
+					}
+				}
+			}
+			if syslogSyslogBody != "" {
+				syslogSyslogBody, _ = sjson.Set(syslogSyslogBody, "syslogSyslog.attributes.rn", syslogSyslogRn)
+				body, _ = sjson.SetRaw(body, "topSystem.children.-1", syslogSyslogBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging, config Logging, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -942,29 +1243,35 @@ func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging, config
 				}
 			}
 		}
-		if !state.FileAdminState.IsNull() && config.FileAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.FileDescription.IsNull() && config.FileDescription.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.FileName.IsNull() && config.FileName.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.FilePersistentThreshold.IsNull() && config.FilePersistentThreshold.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"persistentThreshold", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.FileSeverity.IsNull() && config.FileSeverity.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"severity", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.FileSize.IsNull() && config.FileSize.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"size", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.FileAdminState.IsNull() && state.FileDescription.IsNull() && state.FileName.IsNull() && state.FilePersistentThreshold.IsNull() && state.FileSeverity.IsNull() && state.FileSize.IsNull()) && (config.FileAdminState.IsNull() && config.FileDescription.IsNull() && config.FileName.IsNull() && config.FilePersistentThreshold.IsNull() && config.FileSeverity.IsNull() && config.FileSize.IsNull()) && deleteEmptied(data.getDn()+"/syslog"+"/file") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.FileAdminState.IsNull() && config.FileAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.FileDescription.IsNull() && config.FileDescription.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.FileName.IsNull() && config.FileName.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.FilePersistentThreshold.IsNull() && config.FilePersistentThreshold.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"persistentThreshold", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.FileSeverity.IsNull() && config.FileSeverity.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"severity", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.FileSize.IsNull() && config.FileSize.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogFile")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"size", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.RemoteDestinations {
 			if configChild, ok := config.RemoteDestinations[key]; ok {
@@ -1005,41 +1312,71 @@ func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging, config
 				}
 			}
 		}
-		if !state.SourceInterfaceAdminState.IsNull() && config.SourceInterfaceAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogSourceInterface")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.SourceInterfaceAdminState.IsNull() && state.SourceInterfaceName.IsNull()) && (config.SourceInterfaceAdminState.IsNull() && config.SourceInterfaceName.IsNull()) && deleteEmptied(data.getDn()+"/syslog"+"/source") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogSourceInterface")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.SourceInterfaceAdminState.IsNull() && config.SourceInterfaceAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogSourceInterface")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.SourceInterfaceName.IsNull() && config.SourceInterfaceName.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogSourceInterface")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ifName", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
-		if !state.SourceInterfaceName.IsNull() && config.SourceInterfaceName.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogSourceInterface")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ifName", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.TimestampFormat.IsNull()) && (config.TimestampFormat.IsNull()) && deleteEmptied(data.getDn()+"/syslog"+"/timestamp") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogTimeStamp")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.TimestampFormat.IsNull() && config.TimestampFormat.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogTimeStamp")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"format", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
-		if !state.TimestampFormat.IsNull() && config.TimestampFormat.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogTimeStamp")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"format", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.MonitorAdminState.IsNull() && state.MonitorSeverity.IsNull()) && (config.MonitorAdminState.IsNull() && config.MonitorSeverity.IsNull()) && deleteEmptied(data.getDn()+"/syslog"+"/monitor") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogTermMonitor")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.MonitorAdminState.IsNull() && config.MonitorAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogTermMonitor")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.MonitorSeverity.IsNull() && config.MonitorSeverity.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogTermMonitor")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"severity", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
-		if !state.MonitorAdminState.IsNull() && config.MonitorAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogTermMonitor")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.ConsoleAdminState.IsNull() && state.ConsoleSeverity.IsNull()) && (config.ConsoleAdminState.IsNull() && config.ConsoleSeverity.IsNull()) && deleteEmptied(data.getDn()+"/syslog"+"/console") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogConsole")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.ConsoleAdminState.IsNull() && config.ConsoleAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogConsole")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.ConsoleSeverity.IsNull() && config.ConsoleSeverity.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogConsole")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"severity", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
-		if !state.MonitorSeverity.IsNull() && config.MonitorSeverity.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogTermMonitor")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"severity", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.ConsoleAdminState.IsNull() && config.ConsoleAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogConsole")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.ConsoleSeverity.IsNull() && config.ConsoleSeverity.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogConsole")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"severity", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.OriginIdType.IsNull() && config.OriginIdType.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogOriginid")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"idtype", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.OriginIdValue.IsNull() && config.OriginIdValue.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogOriginid")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"idvalue", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.OriginIdType.IsNull() && state.OriginIdValue.IsNull()) && (config.OriginIdType.IsNull() && config.OriginIdValue.IsNull()) && deleteEmptied(data.getDn()+"/syslog"+"/originid") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogOriginid")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.OriginIdType.IsNull() && config.OriginIdType.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogOriginid")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"idtype", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.OriginIdValue.IsNull() && config.OriginIdValue.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogOriginid")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"idvalue", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 	}
 

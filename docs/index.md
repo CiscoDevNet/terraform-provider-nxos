@@ -29,6 +29,7 @@ The following guides are available to help you get started with the NXOS provide
 - **[Manage Multiple Devices](guides/manage_multiple_devices)** - Learn how to manage multiple NX-OS devices using provider aliases or the single-provider approach with device-level management control
 - **[Selective Deploy](guides/selective_deploy)** - Deploy configurations to a subset of devices while keeping others in a "frozen" state for staged rollouts and maintenance scenarios
 - **[Importing Resources](guides/importing_resources)** - Import existing device configurations into Terraform state management
+- **[Deletion Policy](guides/deletion_policy)** - Control whether destroying a resource deletes, resets or retains the configuration on the device
 - **[Supported Objects](guides/supported_objects)** - View the complete list of supported NX-OS DME objects
 - **[Changelog](guides/changelog)** - Review version history and breaking changes
 
@@ -47,6 +48,7 @@ provider "nxos" {
 
 ### Optional
 
+- `deletion_policy` (String) The default deletion policy of all resources, which can be overwritten by the `deletion_policy` attribute of a resource. `delete` deletes the objects managed by a resource on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by a resource on destroy and resets the managed attributes of the objects that already existed. `retain` leaves the device unchanged on destroy. See the [Deletion Policy](guides/deletion_policy) guide for details. This can also be set as the NXOS_DELETION_POLICY environment variable. Defaults to `delete`.
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
 - `insecure` (Boolean) Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.
 - `password` (String, Sensitive) Password for the NX-OS device account. This can also be set as the NXOS_PASSWORD environment variable.

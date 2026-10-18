@@ -111,6 +111,14 @@ var TelemetrySubtreeClassMinVersions = map[string]string{}
 // TelemetryMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var TelemetryMinVersions = map[string]helpers.MinVersion{}
 
+// TelemetryListClasses holds the list child classes of the resource.
+var TelemetryListClasses = map[string]bool{"telemetryDestGroup": true, "telemetryDest": true, "telemetrySensorGroup": true, "telemetrySensorPath": true, "telemetrySubscription": true, "telemetryRsSensorGroupRel": true, "telemetryRsDestGroupRel": true}
+
+// getTelemetryTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getTelemetryTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestGroup", "telemetryDest", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, TelemetrySubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -746,7 +754,234 @@ func (data Telemetry) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, config Telemetry, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data Telemetry) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.DestinationProfileAdminState.IsNull() && (data.DestinationProfileVrf.IsNull())) {
+		telemetryDestProfileDn := dn + "/" + "destprof"
+		dns[telemetryDestProfileDn] = true
+		if !(data.DestinationProfileVrf.IsNull()) {
+			telemetryDestOptVrfDn := telemetryDestProfileDn + "/" + "vrf"
+			dns[telemetryDestOptVrfDn] = true
+		}
+	}
+	for key, child := range data.DestinationGroups {
+		telemetryDestGroupDn := dn + "/" + child.getRn(key)
+		dns[telemetryDestGroupDn] = true
+		for key_, child_ := range child.Destinations {
+			keyParts := strings.SplitN(key_, ";", 2)
+			_ = keyParts
+			telemetryDestDn_ := telemetryDestGroupDn + "/" + child_.getRn(key_)
+			dns[telemetryDestDn_] = true
+		}
+	}
+	for key, child := range data.SensorGroups {
+		telemetrySensorGroupDn := dn + "/" + child.getRn(key)
+		dns[telemetrySensorGroupDn] = true
+		for key_, child_ := range child.SensorPaths {
+			telemetrySensorPathDn_ := telemetrySensorGroupDn + "/" + child_.getRn(key_)
+			dns[telemetrySensorPathDn_] = true
+		}
+	}
+	for key, child := range data.Subscriptions {
+		telemetrySubscriptionDn := dn + "/" + child.getRn(key)
+		dns[telemetrySubscriptionDn] = true
+		for key_, child_ := range child.SensorGroupRelationships {
+			telemetryRsSensorGroupRelDn_ := telemetrySubscriptionDn + "/" + child_.getRn(key_)
+			dns[telemetryRsSensorGroupRelDn_] = true
+		}
+		for key_, child_ := range child.DestinationGroupRelationships {
+			telemetryRsDestGroupRelDn_ := telemetrySubscriptionDn + "/" + child_.getRn(key_)
+			dns[telemetryRsDestGroupRelDn_] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data Telemetry) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "telemetryEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.BatchDmeEvents.IsNull() {
+		body, _ = sjson.Set(body, "telemetryEntity.attributes.batchDmeEvt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MergeSubscriptions.IsNull() {
+		body, _ = sjson.Set(body, "telemetryEntity.attributes.mergeSubs", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "telemetryEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.DestinationProfileAdminState.IsNull() && (data.DestinationProfileVrf.IsNull())) {
+		telemetryDestProfileRn := "destprof"
+		telemetryDestProfileDn := dn + "/" + telemetryDestProfileRn
+		_ = telemetryDestProfileDn
+		if !existed(telemetryDestProfileDn) {
+			body, _ = sjson.Set(body, "telemetryEntity.children.-1.telemetryDestProfile.attributes", map[string]interface{}{"rn": telemetryDestProfileRn, "status": "deleted"})
+		} else {
+			telemetryDestProfileBody := ""
+			if !data.DestinationProfileAdminState.IsNull() {
+				telemetryDestProfileBody, _ = sjson.Set(telemetryDestProfileBody, "telemetryDestProfile.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.DestinationProfileVrf.IsNull()) {
+				telemetryDestOptVrfRn := "vrf"
+				telemetryDestOptVrfDn := telemetryDestProfileDn + "/" + telemetryDestOptVrfRn
+				_ = telemetryDestOptVrfDn
+				if !existed(telemetryDestOptVrfDn) {
+					telemetryDestProfileBody, _ = sjson.Set(telemetryDestProfileBody, "telemetryDestProfile.children.-1.telemetryDestOptVrf.attributes", map[string]interface{}{"rn": telemetryDestOptVrfRn, "status": "deleted"})
+				} else {
+					telemetryDestOptVrfBody := ""
+					if !data.DestinationProfileVrf.IsNull() {
+						telemetryDestOptVrfBody, _ = sjson.Set(telemetryDestOptVrfBody, "telemetryDestOptVrf.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if telemetryDestOptVrfBody != "" {
+						telemetryDestOptVrfBody, _ = sjson.Set(telemetryDestOptVrfBody, "telemetryDestOptVrf.attributes.rn", telemetryDestOptVrfRn)
+						telemetryDestProfileBody, _ = sjson.SetRaw(telemetryDestProfileBody, "telemetryDestProfile.children.-1", telemetryDestOptVrfBody)
+					}
+				}
+			}
+			if telemetryDestProfileBody != "" {
+				telemetryDestProfileBody, _ = sjson.Set(telemetryDestProfileBody, "telemetryDestProfile.attributes.rn", telemetryDestProfileRn)
+				body, _ = sjson.SetRaw(body, "telemetryEntity.children.-1", telemetryDestProfileBody)
+			}
+		}
+	}
+	for key, child := range data.DestinationGroups {
+		_ = child
+		telemetryDestGroupRn := child.getRn(key)
+		telemetryDestGroupDn := dn + "/" + telemetryDestGroupRn
+		_ = telemetryDestGroupDn
+		if !existed(telemetryDestGroupDn) {
+			body, _ = sjson.Set(body, "telemetryEntity.children.-1.telemetryDestGroup.attributes", map[string]interface{}{"rn": telemetryDestGroupRn, "status": "deleted"})
+			continue
+		}
+		telemetryDestGroupBody := ""
+		telemetryDestGroupBody, _ = sjson.Set(telemetryDestGroupBody, "telemetryDestGroup.attributes.rn", telemetryDestGroupRn)
+		for key_, child_ := range child.Destinations {
+			_ = child_
+			keyParts := strings.SplitN(key_, ";", 2)
+			_ = keyParts
+			telemetryDestRn_ := child_.getRn(key_)
+			telemetryDestDn_ := telemetryDestGroupDn + "/" + telemetryDestRn_
+			_ = telemetryDestDn_
+			if !existed(telemetryDestDn_) {
+				telemetryDestGroupBody, _ = sjson.Set(telemetryDestGroupBody, "telemetryDestGroup.children.-1.telemetryDest.attributes", map[string]interface{}{"rn": telemetryDestRn_, "status": "deleted"})
+				continue
+			}
+			telemetryDestBody_ := ""
+			telemetryDestBody_, _ = sjson.Set(telemetryDestBody_, "telemetryDest.attributes.rn", telemetryDestRn_)
+			if !child_.Encoding.IsNull() {
+				telemetryDestBody_, _ = sjson.Set(telemetryDestBody_, "telemetryDest.attributes.enc", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.NodeId.IsNull() {
+				telemetryDestBody_, _ = sjson.Set(telemetryDestBody_, "telemetryDest.attributes.nodeid", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Protocol.IsNull() {
+				telemetryDestBody_, _ = sjson.Set(telemetryDestBody_, "telemetryDest.attributes.proto", "DME_UNSET_PROPERTY_MARKER")
+			}
+			telemetryDestGroupBody, _ = sjson.SetRaw(telemetryDestGroupBody, "telemetryDestGroup.children.-1", telemetryDestBody_)
+		}
+		body, _ = sjson.SetRaw(body, "telemetryEntity.children.-1", telemetryDestGroupBody)
+	}
+	for key, child := range data.SensorGroups {
+		_ = child
+		telemetrySensorGroupRn := child.getRn(key)
+		telemetrySensorGroupDn := dn + "/" + telemetrySensorGroupRn
+		_ = telemetrySensorGroupDn
+		if !existed(telemetrySensorGroupDn) {
+			body, _ = sjson.Set(body, "telemetryEntity.children.-1.telemetrySensorGroup.attributes", map[string]interface{}{"rn": telemetrySensorGroupRn, "status": "deleted"})
+			continue
+		}
+		telemetrySensorGroupBody := ""
+		telemetrySensorGroupBody, _ = sjson.Set(telemetrySensorGroupBody, "telemetrySensorGroup.attributes.rn", telemetrySensorGroupRn)
+		if !child.DataSource.IsNull() {
+			telemetrySensorGroupBody, _ = sjson.Set(telemetrySensorGroupBody, "telemetrySensorGroup.attributes.dataSrc", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.SensorPaths {
+			_ = child_
+			telemetrySensorPathRn_ := child_.getRn(key_)
+			telemetrySensorPathDn_ := telemetrySensorGroupDn + "/" + telemetrySensorPathRn_
+			_ = telemetrySensorPathDn_
+			if !existed(telemetrySensorPathDn_) {
+				telemetrySensorGroupBody, _ = sjson.Set(telemetrySensorGroupBody, "telemetrySensorGroup.children.-1.telemetrySensorPath.attributes", map[string]interface{}{"rn": telemetrySensorPathRn_, "status": "deleted"})
+				continue
+			}
+			telemetrySensorPathBody_ := ""
+			telemetrySensorPathBody_, _ = sjson.Set(telemetrySensorPathBody_, "telemetrySensorPath.attributes.rn", telemetrySensorPathRn_)
+			if !child_.Alias.IsNull() {
+				telemetrySensorPathBody_, _ = sjson.Set(telemetrySensorPathBody_, "telemetrySensorPath.attributes.alias", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Depth.IsNull() {
+				telemetrySensorPathBody_, _ = sjson.Set(telemetrySensorPathBody_, "telemetrySensorPath.attributes.depth", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.FilterCondition.IsNull() {
+				telemetrySensorPathBody_, _ = sjson.Set(telemetrySensorPathBody_, "telemetrySensorPath.attributes.filterCondition", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.QueryCondition.IsNull() {
+				telemetrySensorPathBody_, _ = sjson.Set(telemetrySensorPathBody_, "telemetrySensorPath.attributes.queryCondition", "DME_UNSET_PROPERTY_MARKER")
+			}
+			telemetrySensorGroupBody, _ = sjson.SetRaw(telemetrySensorGroupBody, "telemetrySensorGroup.children.-1", telemetrySensorPathBody_)
+		}
+		body, _ = sjson.SetRaw(body, "telemetryEntity.children.-1", telemetrySensorGroupBody)
+	}
+	for key, child := range data.Subscriptions {
+		_ = child
+		telemetrySubscriptionRn := child.getRn(key)
+		telemetrySubscriptionDn := dn + "/" + telemetrySubscriptionRn
+		_ = telemetrySubscriptionDn
+		if !existed(telemetrySubscriptionDn) {
+			body, _ = sjson.Set(body, "telemetryEntity.children.-1.telemetrySubscription.attributes", map[string]interface{}{"rn": telemetrySubscriptionRn, "status": "deleted"})
+			continue
+		}
+		telemetrySubscriptionBody := ""
+		telemetrySubscriptionBody, _ = sjson.Set(telemetrySubscriptionBody, "telemetrySubscription.attributes.rn", telemetrySubscriptionRn)
+		for key_, child_ := range child.SensorGroupRelationships {
+			_ = child_
+			telemetryRsSensorGroupRelRn_ := child_.getRn(key_)
+			telemetryRsSensorGroupRelDn_ := telemetrySubscriptionDn + "/" + telemetryRsSensorGroupRelRn_
+			_ = telemetryRsSensorGroupRelDn_
+			if !existed(telemetryRsSensorGroupRelDn_) {
+				telemetrySubscriptionBody, _ = sjson.Set(telemetrySubscriptionBody, "telemetrySubscription.children.-1.telemetryRsSensorGroupRel.attributes", map[string]interface{}{"rn": telemetryRsSensorGroupRelRn_, "status": "deleted"})
+				continue
+			}
+			telemetryRsSensorGroupRelBody_ := ""
+			telemetryRsSensorGroupRelBody_, _ = sjson.Set(telemetryRsSensorGroupRelBody_, "telemetryRsSensorGroupRel.attributes.rn", telemetryRsSensorGroupRelRn_)
+			if !child_.SampleInterval.IsNull() {
+				telemetryRsSensorGroupRelBody_, _ = sjson.Set(telemetryRsSensorGroupRelBody_, "telemetryRsSensorGroupRel.attributes.sampleIntvl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			telemetrySubscriptionBody, _ = sjson.SetRaw(telemetrySubscriptionBody, "telemetrySubscription.children.-1", telemetryRsSensorGroupRelBody_)
+		}
+		for key_, child_ := range child.DestinationGroupRelationships {
+			_ = child_
+			telemetryRsDestGroupRelRn_ := child_.getRn(key_)
+			telemetryRsDestGroupRelDn_ := telemetrySubscriptionDn + "/" + telemetryRsDestGroupRelRn_
+			_ = telemetryRsDestGroupRelDn_
+			if !existed(telemetryRsDestGroupRelDn_) {
+				telemetrySubscriptionBody, _ = sjson.Set(telemetrySubscriptionBody, "telemetrySubscription.children.-1.telemetryRsDestGroupRel.attributes", map[string]interface{}{"rn": telemetryRsDestGroupRelRn_, "status": "deleted"})
+				continue
+			}
+			telemetryRsDestGroupRelBody_ := ""
+			telemetryRsDestGroupRelBody_, _ = sjson.Set(telemetryRsDestGroupRelBody_, "telemetryRsDestGroupRel.attributes.rn", telemetryRsDestGroupRelRn_)
+			telemetrySubscriptionBody, _ = sjson.SetRaw(telemetrySubscriptionBody, "telemetrySubscription.children.-1", telemetryRsDestGroupRelBody_)
+		}
+		body, _ = sjson.SetRaw(body, "telemetryEntity.children.-1", telemetrySubscriptionBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, config Telemetry, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -882,19 +1117,33 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 		}
 	}
 	if !importing {
-		if !state.DestinationProfileAdminState.IsNull() && config.DestinationProfileAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.DestinationProfileVrf.IsNull() && config.DestinationProfileVrf.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptVrf")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.DestinationProfileAdminState.IsNull() && (state.DestinationProfileVrf.IsNull())) && (config.DestinationProfileAdminState.IsNull() && (config.DestinationProfileVrf.IsNull())) && deleteEmptied(data.getDn()+"/destprof") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.DestinationProfileAdminState.IsNull() && config.DestinationProfileAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if deleteEmptied != nil && !(state.DestinationProfileVrf.IsNull()) && (config.DestinationProfileVrf.IsNull()) && deleteEmptied(data.getDn()+"/destprof"+"/vrf") {
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptVrf")
+				body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+			} else {
+				if !state.DestinationProfileVrf.IsNull() && config.DestinationProfileVrf.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptVrf")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+				}
+			}
 		}
 		for key := range state.DestinationGroups {
 			if configChild, ok := config.DestinationGroups[key]; ok {
 				stateChild := state.DestinationGroups[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
@@ -936,6 +1185,8 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 				stateChild := state.SensorGroups[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("telemetrySensorGroup.attributes.id").String() == key {
 						if !stateChild.DataSource.IsNull() && configChild.DataSource.IsNull() {
@@ -986,6 +1237,8 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 				stateChild := state.Subscriptions[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {

@@ -33,45 +33,78 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosNetworkQoS(t *testing.T) {
+// TestAccNetworkQoSResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccNetworkQoSResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_network_qos.test", "class_maps.Voice.match_type", "match-any"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_network_qos.test", "policy_maps.PM1.match_type", "match-any"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_network_qos.test", "policy_maps.PM1.match_class_maps.Voice.mtu_value", "9216"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_network_qos.test", "system_in_policy_map_name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_network_qos.test", "policy_map_statistics", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_network_qos.test", "class_maps.Voice.match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_network_qos.test", "policy_maps.PM1.match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_network_qos.test", "policy_maps.PM1.match_class_maps.Voice.mtu_value", "9216"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_network_qos.test", "system_in_policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_network_qos.test", "policy_map_statistics", "false"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccNetworkQoSResourceConfig_minimum(),
+		},
+		{
+			Config: testAccNetworkQoSResourceConfig_all() + testAccNetworkQoSResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_network_qos.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccNetworkQoSResourceImportStateIdFunc("nxos_network_qos.test"),
+		},
+		{
+			ResourceName:       "nxos_network_qos.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccNetworkQoSResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccNetworkQoSResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_network_qos.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccNetworkQoSResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosNetworkQoSConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_network_qos.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosNetworkQoSImportStateIdFunc("nxos_network_qos.test"),
-			},
-			{
-				ResourceName:       "nxos_network_qos.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosNetworkQoSImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccNetworkQoSResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -85,7 +118,7 @@ func nxosNetworkQoSImportStateIdFunc(resourceName string) resource.ImportStateId
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosNetworkQoSConfig_minimum() string {
+func testAccNetworkQoSResourceConfig_minimum() string {
 	config := `resource "nxos_network_qos" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
@@ -94,7 +127,7 @@ func testAccNxosNetworkQoSConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosNetworkQoSConfig_all() string {
+func testAccNetworkQoSResourceConfig_all() string {
 	config := `resource "nxos_network_qos" "test" {` + "\n"
 	config += `	class_maps = {` + "\n"
 	config += `		"Voice" = {` + "\n"
@@ -115,6 +148,14 @@ func testAccNxosNetworkQoSConfig_all() string {
 	config += `	policy_map_statistics = false` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccNetworkQoSResourceConfig_dataSource() string {
+	return `
+data "nxos_network_qos" "test" {
+	depends_on = [nxos_network_qos.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

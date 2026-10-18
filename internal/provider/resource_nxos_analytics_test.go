@@ -34,7 +34,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosAnalytics(t *testing.T) {
+// TestAccAnalyticsResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccAnalyticsResource(t *testing.T) {
 	if os.Getenv("ANALYTICS") == "" {
 		t.Skip("skipping test, set environment variable ANALYTICS")
 	}
@@ -111,38 +115,134 @@ func TestAccNxosAnalytics(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.profile_attachment_target_dn", "sys/analytics/inst-[analytics]/prof-[PROFILE1]"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.events_attachment_target_dn", "sys/analytics/inst-[analytics]/events-[EVENTS1]"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_analytics.test", "instances.analytics.forward_instance_targets.1.policy_attachment_target_dn", "sys/analytics/inst-[analytics]/policy-[POLICY1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collect_tunnel_header", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.enable_analytics_submode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.geneve_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.timeout", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.profiles.PROFILE1.burst_interval_shift", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.profiles.PROFILE1.collect_interval", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.profiles.PROFILE1.description", "My profile"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.profiles.PROFILE1.ip_packet_id_shift", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.profiles.PROFILE1.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.profiles.PROFILE1.sequence_number_guess_threshold_high", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.profiles.PROFILE1.sequence_number_guess_threshold_low", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.profiles.PROFILE1.source_port", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.acl_drops", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.black_hole", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.buffer_drops", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.description", "My events"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.event_export_max", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.forward_drops", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.group_drop_events", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.group_latency_events", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.group_packet_events", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.ip_dont_fragment", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.latency_threshold", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.latency_threshold_unit", "milli-sec"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.receive_window_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.tos", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.tos_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.ttl_match_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.events.EVENTS1.ttl_match_value", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.policies.POLICY1.description", "My policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.policies.POLICY1.match_acls.ACL1.acl_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.policies.POLICY1.match_acls.ACL1.filter_type", "ipv6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.policies.POLICY1.match_acls.ACL1.description", "My match ACL"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.records.RECORD1.collect", "count-bytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.records.RECORD1.description", "My record"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.records.RECORD1.match", "src-ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.description", "My collector"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.dscp", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.destination_address", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.destination_port", "5640"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.event_destination_port", "5695"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.inband_interface", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.source_address", "10.1.1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.v9", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.version", "v9"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.collectors.COLLECTOR1.vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.description", "My monitor"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.record_target_dn", "sys/analytics/inst-analytics/recordp-RECORD1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.collector_buckets.1.description", "My bucket"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.collector_buckets.1.hash_high", "4294967295"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.monitors.MONITOR1.collector_buckets.1.hash_low", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_description", "My traffic analytics"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_interface_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_name", "TA1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_service_database_size", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_troubleshoot_export_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.traffic_analytics_udp_port_list", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.default_policy", "deny"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.collector_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.direction", "out"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.filter_type", "ipv6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.instance_name", "Ethernet1/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.switch_latency", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.system_exporter_id", "201"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.traffic_analytics_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.monitor_attachment_target_dn", "sys/analytics/inst-[analytics]/monitor-[MONITOR1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.profile_attachment_target_dn", "sys/analytics/inst-[analytics]/prof-[PROFILE1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.events_attachment_target_dn", "sys/analytics/inst-[analytics]/events-[EVENTS1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_analytics.test", "instances.analytics.forward_instance_targets.1.policy_attachment_target_dn", "sys/analytics/inst-[analytics]/policy-[POLICY1]"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccAnalyticsResourcePrerequisitesConfig + testAccAnalyticsResourceConfig_minimum(),
+		},
+		{
+			Config: testAccAnalyticsResourcePrerequisitesConfig + testAccAnalyticsResourceConfig_all() + testAccAnalyticsResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_analytics.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccAnalyticsResourceImportStateIdFunc("nxos_analytics.test"),
+		},
+		{
+			ResourceName:       "nxos_analytics.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccAnalyticsResourcePrerequisitesConfig + testAccAnalyticsResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccAnalyticsResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccAnalyticsResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_analytics.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccAnalyticsResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccAnalyticsResourcePrerequisitesConfig + testAccAnalyticsResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosAnalyticsPrerequisitesConfig + testAccNxosAnalyticsConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_analytics.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosAnalyticsImportStateIdFunc("nxos_analytics.test"),
-			},
-			{
-				ResourceName:       "nxos_analytics.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosAnalyticsImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccAnalyticsResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -152,7 +252,7 @@ func nxosAnalyticsImportStateIdFunc(resourceName string) resource.ImportStateIdF
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosAnalyticsPrerequisitesConfig = `
+const testAccAnalyticsResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/analytics"
   class_name = "fmAnalytics"
@@ -167,7 +267,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosAnalyticsConfig_minimum() string {
+func testAccAnalyticsResourceConfig_minimum() string {
 	config := `resource "nxos_analytics" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -177,7 +277,7 @@ func testAccNxosAnalyticsConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosAnalyticsConfig_all() string {
+func testAccAnalyticsResourceConfig_all() string {
 	config := `resource "nxos_analytics" "test" {` + "\n"
 	config += `	instances = {` + "\n"
 	config += `		"analytics" = {` + "\n"
@@ -298,6 +398,14 @@ func testAccNxosAnalyticsConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccAnalyticsResourceConfig_dataSource() string {
+	return `
+data "nxos_analytics" "test" {
+	depends_on = [nxos_analytics.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

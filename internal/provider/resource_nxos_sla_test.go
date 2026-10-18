@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosSLA(t *testing.T) {
+// TestAccSLAResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccSLAResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_sla.test", "sender_logging_level", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_sla.test", "sender_logging_traps", "true"))
@@ -82,38 +86,106 @@ func TestAccNxosSLA(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_sla.test", "twamp_server_inactivity_timer", "600"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_sla.test", "twamp_server_logging_level", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_sla.test", "twamp_server_port", "5862"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "sender_logging_traps", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_buckets_kept", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_destination_ip", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_distributions_of_statistics_kept", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_enhanced_buckets", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_enhanced_interval", "900"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_filter", "All"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_frequency", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_hours_of_statistics_kept", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_tos", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_lives_kept", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_owner", "OWNER1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_request_data_size", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_source_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_statistics_distribution_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_tag", "TAG1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_threshold", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_timeout", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_verify_data", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.icmp_echo_vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.reactions.rtt.lower_threshold", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.reactions.rtt.reaction_type", "trapAndTrigger"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.reactions.rtt.threshold_count_x", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.reactions.rtt.threshold_count_y", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.reactions.rtt.threshold_type", "xOfy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.reactions.rtt.upper_threshold", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.schedule_age_out", "86400"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.schedule_life", "7200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.schedule_recurring", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.schedule_start_probe", "At"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "probes.1.schedule_start_time", "10:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "group_schedules.1.age_out", "3600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "group_schedules.1.frequency", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "group_schedules.1.life", "7200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "group_schedules.1.probe_list", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "group_schedules.1.schedule_period", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "group_schedules.1.start_probe", "After"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "group_schedules.1.start_time", "01:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "responder_admin_state", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "twamp_responder_admin_state", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "twamp_responder_timeout", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "twamp_server_admin_state", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "twamp_server_inactivity_timer", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_sla.test", "twamp_server_port", "5862"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccSLAResourcePrerequisitesConfig + testAccSLAResourceConfig_minimum(),
+		},
+		{
+			Config: testAccSLAResourcePrerequisitesConfig + testAccSLAResourceConfig_all() + testAccSLAResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_sla.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccSLAResourceImportStateIdFunc("nxos_sla.test"),
+		},
+		{
+			ResourceName:       "nxos_sla.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccSLAResourcePrerequisitesConfig + testAccSLAResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccSLAResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccSLAResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_sla.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccSLAResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccSLAResourcePrerequisitesConfig + testAccSLAResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosSLAPrerequisitesConfig + testAccNxosSLAConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_sla.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosSLAImportStateIdFunc("nxos_sla.test"),
-			},
-			{
-				ResourceName:       "nxos_sla.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosSLAImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccSLAResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -123,7 +195,7 @@ func nxosSLAImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosSLAPrerequisitesConfig = `
+const testAccSLAResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/slasender"
   class_name = "fmSlaSender"
@@ -215,7 +287,7 @@ resource "nxos_dme" "PreReq7" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosSLAConfig_minimum() string {
+func testAccSLAResourceConfig_minimum() string {
 	config := `resource "nxos_sla" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, ]` + "\n"
 	config += `}` + "\n"
@@ -225,7 +297,7 @@ func testAccNxosSLAConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosSLAConfig_all() string {
+func testAccSLAResourceConfig_all() string {
 	config := `resource "nxos_sla" "test" {` + "\n"
 	config += `	sender_logging_level = 5` + "\n"
 	config += `	sender_logging_traps = true` + "\n"
@@ -297,6 +369,14 @@ func testAccNxosSLAConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccSLAResourceConfig_dataSource() string {
+	return `
+data "nxos_sla" "test" {
+	depends_on = [nxos_sla.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

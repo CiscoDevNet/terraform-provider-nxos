@@ -119,6 +119,14 @@ var NetflowSubtreeClassMinVersions = map[string]string{}
 // NetflowMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var NetflowMinVersions = map[string]helpers.MinVersion{}
 
+// NetflowListClasses holds the list child classes of the resource.
+var NetflowListClasses = map[string]bool{"flowExporter": true, "flowRecord": true, "flowMonitor": true, "flowExporterBucket": true, "flowHwProfile": true, "flowClassMap": true, "flowMatchAcl": true}
+
+// getNetflowTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getNetflowTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"flowExporter", "flowRecord", "flowMonitor", "flowRsRecord", "flowExporterBucket", "flowRsExporter1", "flowRsExporter2", "flowHwProfile", "flowClassMap", "flowMatchAcl"}, NetflowSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -845,7 +853,275 @@ func (data Netflow) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config Netflow, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data Netflow) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Exporters {
+		flowExporterDn := dn + "/" + child.getRn(key)
+		dns[flowExporterDn] = true
+	}
+	for key, child := range data.Records {
+		flowRecordDn := dn + "/" + child.getRn(key)
+		dns[flowRecordDn] = true
+	}
+	for key, child := range data.Monitors {
+		flowMonitorDn := dn + "/" + child.getRn(key)
+		dns[flowMonitorDn] = true
+		if !(child.RecordTargetDn.IsNull()) {
+			flowRsRecordDn_ := flowMonitorDn + "/" + "rtrecord"
+			dns[flowRsRecordDn_] = true
+		}
+		for key_, child_ := range child.ExporterBuckets {
+			flowExporterBucketDn_ := flowMonitorDn + "/" + child_.getRn(key_)
+			dns[flowExporterBucketDn_] = true
+			if !(child_.Exporter1TargetDn.IsNull()) {
+				flowRsExporter1Dn__ := flowExporterBucketDn_ + "/" + "rtexporter1"
+				dns[flowRsExporter1Dn__] = true
+			}
+			if !(child_.Exporter2TargetDn.IsNull()) {
+				flowRsExporter2Dn__ := flowExporterBucketDn_ + "/" + "rtexporter2"
+				dns[flowRsExporter2Dn__] = true
+			}
+		}
+	}
+	for key, child := range data.HardwareProfiles {
+		flowHwProfileDn := dn + "/" + child.getRn(key)
+		dns[flowHwProfileDn] = true
+	}
+	for key, child := range data.ClassMaps {
+		flowClassMapDn := dn + "/" + child.getRn(key)
+		dns[flowClassMapDn] = true
+		for key_, child_ := range child.MatchAcls {
+			flowMatchAclDn_ := flowClassMapDn + "/" + child_.getRn(key_)
+			dns[flowMatchAclDn_] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data Netflow) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "flowEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Exporters {
+		_ = child
+		flowExporterRn := child.getRn(key)
+		flowExporterDn := dn + "/" + flowExporterRn
+		_ = flowExporterDn
+		if !existed(flowExporterDn) {
+			body, _ = sjson.Set(body, "flowEntity.children.-1.flowExporter.attributes", map[string]interface{}{"rn": flowExporterRn, "status": "deleted"})
+			continue
+		}
+		flowExporterBody := ""
+		flowExporterBody, _ = sjson.Set(flowExporterBody, "flowExporter.attributes.rn", flowExporterRn)
+		if !child.Description.IsNull() {
+			flowExporterBody, _ = sjson.Set(flowExporterBody, "flowExporter.attributes.description", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DestinationIp.IsNull() {
+			flowExporterBody, _ = sjson.Set(flowExporterBody, "flowExporter.attributes.destinationIp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DestinationPort.IsNull() {
+			flowExporterBody, _ = sjson.Set(flowExporterBody, "flowExporter.attributes.destinationPort", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Dscp.IsNull() {
+			flowExporterBody, _ = sjson.Set(flowExporterBody, "flowExporter.attributes.dscp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SourceInterface.IsNull() {
+			flowExporterBody, _ = sjson.Set(flowExporterBody, "flowExporter.attributes.sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Version.IsNull() {
+			flowExporterBody, _ = sjson.Set(flowExporterBody, "flowExporter.attributes.version", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.VrfName.IsNull() {
+			flowExporterBody, _ = sjson.Set(flowExporterBody, "flowExporter.attributes.vrfName", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "flowEntity.children.-1", flowExporterBody)
+	}
+	for key, child := range data.Records {
+		_ = child
+		flowRecordRn := child.getRn(key)
+		flowRecordDn := dn + "/" + flowRecordRn
+		_ = flowRecordDn
+		if !existed(flowRecordDn) {
+			body, _ = sjson.Set(body, "flowEntity.children.-1.flowRecord.attributes", map[string]interface{}{"rn": flowRecordRn, "status": "deleted"})
+			continue
+		}
+		flowRecordBody := ""
+		flowRecordBody, _ = sjson.Set(flowRecordBody, "flowRecord.attributes.rn", flowRecordRn)
+		if !child.Description.IsNull() {
+			flowRecordBody, _ = sjson.Set(flowRecordBody, "flowRecord.attributes.description", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.CollectParameters.IsNull() {
+			flowRecordBody, _ = sjson.Set(flowRecordBody, "flowRecord.attributes.collectParams", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MatchParameters.IsNull() {
+			flowRecordBody, _ = sjson.Set(flowRecordBody, "flowRecord.attributes.matchParams", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "flowEntity.children.-1", flowRecordBody)
+	}
+	for key, child := range data.Monitors {
+		_ = child
+		flowMonitorRn := child.getRn(key)
+		flowMonitorDn := dn + "/" + flowMonitorRn
+		_ = flowMonitorDn
+		if !existed(flowMonitorDn) {
+			body, _ = sjson.Set(body, "flowEntity.children.-1.flowMonitor.attributes", map[string]interface{}{"rn": flowMonitorRn, "status": "deleted"})
+			continue
+		}
+		flowMonitorBody := ""
+		flowMonitorBody, _ = sjson.Set(flowMonitorBody, "flowMonitor.attributes.rn", flowMonitorRn)
+		if !child.Description.IsNull() {
+			flowMonitorBody, _ = sjson.Set(flowMonitorBody, "flowMonitor.attributes.description", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !(child.RecordTargetDn.IsNull()) {
+			flowRsRecordRn_ := "rtrecord"
+			flowRsRecordDn_ := flowMonitorDn + "/" + flowRsRecordRn_
+			_ = flowRsRecordDn_
+			if !existed(flowRsRecordDn_) {
+				flowMonitorBody, _ = sjson.Set(flowMonitorBody, "flowMonitor.children.-1.flowRsRecord.attributes", map[string]interface{}{"rn": flowRsRecordRn_, "status": "deleted"})
+			} else {
+				flowRsRecordBody_ := ""
+				if !child.RecordTargetDn.IsNull() {
+					flowRsRecordBody_, _ = sjson.Set(flowRsRecordBody_, "flowRsRecord.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if flowRsRecordBody_ != "" {
+					flowRsRecordBody_, _ = sjson.Set(flowRsRecordBody_, "flowRsRecord.attributes.rn", flowRsRecordRn_)
+					flowMonitorBody, _ = sjson.SetRaw(flowMonitorBody, "flowMonitor.children.-1", flowRsRecordBody_)
+				}
+			}
+		}
+		for key_, child_ := range child.ExporterBuckets {
+			_ = child_
+			flowExporterBucketRn_ := child_.getRn(key_)
+			flowExporterBucketDn_ := flowMonitorDn + "/" + flowExporterBucketRn_
+			_ = flowExporterBucketDn_
+			if !existed(flowExporterBucketDn_) {
+				flowMonitorBody, _ = sjson.Set(flowMonitorBody, "flowMonitor.children.-1.flowExporterBucket.attributes", map[string]interface{}{"rn": flowExporterBucketRn_, "status": "deleted"})
+				continue
+			}
+			flowExporterBucketBody_ := ""
+			flowExporterBucketBody_, _ = sjson.Set(flowExporterBucketBody_, "flowExporterBucket.attributes.rn", flowExporterBucketRn_)
+			if !child_.Description.IsNull() {
+				flowExporterBucketBody_, _ = sjson.Set(flowExporterBucketBody_, "flowExporterBucket.attributes.description", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.HashHigh.IsNull() {
+				flowExporterBucketBody_, _ = sjson.Set(flowExporterBucketBody_, "flowExporterBucket.attributes.hashHi", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.HashLow.IsNull() {
+				flowExporterBucketBody_, _ = sjson.Set(flowExporterBucketBody_, "flowExporterBucket.attributes.hashLo", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(child_.Exporter1TargetDn.IsNull()) {
+				flowRsExporter1Rn__ := "rtexporter1"
+				flowRsExporter1Dn__ := flowExporterBucketDn_ + "/" + flowRsExporter1Rn__
+				_ = flowRsExporter1Dn__
+				if !existed(flowRsExporter1Dn__) {
+					flowExporterBucketBody_, _ = sjson.Set(flowExporterBucketBody_, "flowExporterBucket.children.-1.flowRsExporter1.attributes", map[string]interface{}{"rn": flowRsExporter1Rn__, "status": "deleted"})
+				} else {
+					flowRsExporter1Body__ := ""
+					if !child_.Exporter1TargetDn.IsNull() {
+						flowRsExporter1Body__, _ = sjson.Set(flowRsExporter1Body__, "flowRsExporter1.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if flowRsExporter1Body__ != "" {
+						flowRsExporter1Body__, _ = sjson.Set(flowRsExporter1Body__, "flowRsExporter1.attributes.rn", flowRsExporter1Rn__)
+						flowExporterBucketBody_, _ = sjson.SetRaw(flowExporterBucketBody_, "flowExporterBucket.children.-1", flowRsExporter1Body__)
+					}
+				}
+			}
+			if !(child_.Exporter2TargetDn.IsNull()) {
+				flowRsExporter2Rn__ := "rtexporter2"
+				flowRsExporter2Dn__ := flowExporterBucketDn_ + "/" + flowRsExporter2Rn__
+				_ = flowRsExporter2Dn__
+				if !existed(flowRsExporter2Dn__) {
+					flowExporterBucketBody_, _ = sjson.Set(flowExporterBucketBody_, "flowExporterBucket.children.-1.flowRsExporter2.attributes", map[string]interface{}{"rn": flowRsExporter2Rn__, "status": "deleted"})
+				} else {
+					flowRsExporter2Body__ := ""
+					if !child_.Exporter2TargetDn.IsNull() {
+						flowRsExporter2Body__, _ = sjson.Set(flowRsExporter2Body__, "flowRsExporter2.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if flowRsExporter2Body__ != "" {
+						flowRsExporter2Body__, _ = sjson.Set(flowRsExporter2Body__, "flowRsExporter2.attributes.rn", flowRsExporter2Rn__)
+						flowExporterBucketBody_, _ = sjson.SetRaw(flowExporterBucketBody_, "flowExporterBucket.children.-1", flowRsExporter2Body__)
+					}
+				}
+			}
+			flowMonitorBody, _ = sjson.SetRaw(flowMonitorBody, "flowMonitor.children.-1", flowExporterBucketBody_)
+		}
+		body, _ = sjson.SetRaw(body, "flowEntity.children.-1", flowMonitorBody)
+	}
+	for key, child := range data.HardwareProfiles {
+		_ = child
+		flowHwProfileRn := child.getRn(key)
+		flowHwProfileDn := dn + "/" + flowHwProfileRn
+		_ = flowHwProfileDn
+		if !existed(flowHwProfileDn) {
+			body, _ = sjson.Set(body, "flowEntity.children.-1.flowHwProfile.attributes", map[string]interface{}{"rn": flowHwProfileRn, "status": "deleted"})
+			continue
+		}
+		flowHwProfileBody := ""
+		flowHwProfileBody, _ = sjson.Set(flowHwProfileBody, "flowHwProfile.attributes.rn", flowHwProfileRn)
+		if !child.Description.IsNull() {
+			flowHwProfileBody, _ = sjson.Set(flowHwProfileBody, "flowHwProfile.attributes.description", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.BurstIntervalShift.IsNull() {
+			flowHwProfileBody, _ = sjson.Set(flowHwProfileBody, "flowHwProfile.attributes.burstIntervalShift", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ExportInterval.IsNull() {
+			flowHwProfileBody, _ = sjson.Set(flowHwProfileBody, "flowHwProfile.attributes.exportInterval", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.IpPacketIdShift.IsNull() {
+			flowHwProfileBody, _ = sjson.Set(flowHwProfileBody, "flowHwProfile.attributes.ipPacketIdShift", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Mtu.IsNull() {
+			flowHwProfileBody, _ = sjson.Set(flowHwProfileBody, "flowHwProfile.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SourcePort.IsNull() {
+			flowHwProfileBody, _ = sjson.Set(flowHwProfileBody, "flowHwProfile.attributes.sourcePort", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "flowEntity.children.-1", flowHwProfileBody)
+	}
+	for key, child := range data.ClassMaps {
+		_ = child
+		flowClassMapRn := child.getRn(key)
+		flowClassMapDn := dn + "/" + flowClassMapRn
+		_ = flowClassMapDn
+		if !existed(flowClassMapDn) {
+			body, _ = sjson.Set(body, "flowEntity.children.-1.flowClassMap.attributes", map[string]interface{}{"rn": flowClassMapRn, "status": "deleted"})
+			continue
+		}
+		flowClassMapBody := ""
+		flowClassMapBody, _ = sjson.Set(flowClassMapBody, "flowClassMap.attributes.rn", flowClassMapRn)
+		for key_, child_ := range child.MatchAcls {
+			_ = child_
+			flowMatchAclRn_ := child_.getRn(key_)
+			flowMatchAclDn_ := flowClassMapDn + "/" + flowMatchAclRn_
+			_ = flowMatchAclDn_
+			if !existed(flowMatchAclDn_) {
+				flowClassMapBody, _ = sjson.Set(flowClassMapBody, "flowClassMap.children.-1.flowMatchAcl.attributes", map[string]interface{}{"rn": flowMatchAclRn_, "status": "deleted"})
+				continue
+			}
+			flowMatchAclBody_ := ""
+			flowMatchAclBody_, _ = sjson.Set(flowMatchAclBody_, "flowMatchAcl.attributes.rn", flowMatchAclRn_)
+			flowClassMapBody, _ = sjson.SetRaw(flowClassMapBody, "flowClassMap.children.-1", flowMatchAclBody_)
+		}
+		body, _ = sjson.SetRaw(body, "flowEntity.children.-1", flowClassMapBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config Netflow, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1031,6 +1307,8 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 				stateChild := state.Monitors[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("flowMonitor.attributes.name").String() == key {
 						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
@@ -1048,15 +1326,23 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.RecordTargetDn.IsNull() && configChild.RecordTargetDn.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "flowRsRecord")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.RecordTargetDn.IsNull()) && (configChild.RecordTargetDn.IsNull()) && deleteEmptied(listChildDn+"/rtrecord") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "flowRsRecord")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.RecordTargetDn.IsNull() && configChild.RecordTargetDn.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "flowRsRecord")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 						for key := range stateChild.ExporterBuckets {
 							if configChild, ok := configChild.ExporterBuckets[key]; ok {
 								stateChild := stateChild.ExporterBuckets[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("flowExporterBucket.attributes.id").String() == key {
 										if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
@@ -1080,13 +1366,25 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 										}
 									}
 									if listChildPath_ != "" {
-										if !stateChild.Exporter1TargetDn.IsNull() && configChild.Exporter1TargetDn.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "flowRsExporter1")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.Exporter1TargetDn.IsNull()) && (configChild.Exporter1TargetDn.IsNull()) && deleteEmptied(listChildDn_+"/rtexporter1") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "flowRsExporter1")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.Exporter1TargetDn.IsNull() && configChild.Exporter1TargetDn.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "flowRsExporter1")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.Exporter2TargetDn.IsNull() && configChild.Exporter2TargetDn.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "flowRsExporter2")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.Exporter2TargetDn.IsNull()) && (configChild.Exporter2TargetDn.IsNull()) && deleteEmptied(listChildDn_+"/rtexporter2") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "flowRsExporter2")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.Exporter2TargetDn.IsNull() && configChild.Exporter2TargetDn.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "flowRsExporter2")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
 									}
 								}
@@ -1131,6 +1429,8 @@ func (data Netflow) toBodyWithDeletes(ctx context.Context, state Netflow, config
 				stateChild := state.ClassMaps[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {

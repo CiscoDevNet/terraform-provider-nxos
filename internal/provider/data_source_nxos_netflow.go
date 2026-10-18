@@ -246,7 +246,8 @@ func (d *NetflowDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"flowExporter", "flowRecord", "flowMonitor", "flowRsRecord", "flowExporterBucket", "flowRsExporter1", "flowRsExporter2", "flowHwProfile", "flowClassMap", "flowMatchAcl"}, NetflowSubtreeClassMinVersions)
+
+	res, err := getNetflowTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

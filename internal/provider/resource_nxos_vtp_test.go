@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosVTP(t *testing.T) {
+// TestAccVTPResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccVTPResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vtp.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vtp.test", "instance_admin_state", "enabled"))
@@ -43,39 +47,70 @@ func TestAccNxosVTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vtp.test", "password", "secret_password"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vtp.test", "version", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vtp.test", "interfaces.eth1/9.admin_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vtp.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vtp.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vtp.test", "domain", "DOMAIN1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vtp.test", "file_path", "bootflash:/vtp.dat"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vtp.test", "mode", "server"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vtp.test", "version", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vtp.test", "interfaces.eth1/9.admin_state", "disabled"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccVTPResourcePrerequisitesConfig + testAccVTPResourceConfig_minimum(),
+		},
+		{
+			Config: testAccVTPResourcePrerequisitesConfig + testAccVTPResourceConfig_all(includeWriteOnly) + testAccVTPResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_vtp.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccVTPResourceImportStateIdFunc("nxos_vtp.test"),
+		},
+		{
+			ResourceName:       "nxos_vtp.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccVTPResourcePrerequisitesConfig + testAccVTPResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccVTPResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccVTPResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_vtp.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccVTPResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccVTPResourcePrerequisitesConfig + testAccVTPResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosVTPPrerequisitesConfig + testAccNxosVTPConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_vtp.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosVTPImportStateIdFunc("nxos_vtp.test"),
-			},
-			{
-				ResourceName:       "nxos_vtp.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosVTPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccVTPResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -85,7 +120,7 @@ func nxosVTPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosVTPPrerequisitesConfig = `
+const testAccVTPResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/vtp"
   class_name = "fmVtp"
@@ -108,7 +143,7 @@ resource "nxos_dme" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosVTPConfig_minimum() string {
+func testAccVTPResourceConfig_minimum() string {
 	config := `resource "nxos_vtp" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
@@ -118,7 +153,7 @@ func testAccNxosVTPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosVTPConfig_all(includeWriteOnly bool) string {
+func testAccVTPResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_vtp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
@@ -141,6 +176,14 @@ func testAccNxosVTPConfig_all(includeWriteOnly bool) string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccVTPResourceConfig_dataSource() string {
+	return `
+data "nxos_vtp" "test" {
+	depends_on = [nxos_vtp.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

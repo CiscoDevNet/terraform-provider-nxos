@@ -33,13 +33,16 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosBFD(t *testing.T) {
+// TestAccBFDResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccBFDResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "instance_control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "echo_interface", "lo10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "hardware_offload", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "slow_interval", "3000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "startup_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "detect_multiplier", "5"))
@@ -57,39 +60,83 @@ func TestAccNxosBFD(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "interfaces.vlan10.authentication_key", "secret_key"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "interfaces.vlan10.authentication_key_id", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bfd.test", "interfaces.vlan10.authentication_type", "sha1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "instance_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "echo_interface", "lo10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "slow_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "startup_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "detect_multiplier", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "echo_receive_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "min_receive_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "min_transmit_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.echo_admin_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.start_timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.detect_multiplier", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.echo_receive_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.min_receive_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.min_transmit_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.authentication_interop", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.authentication_key_id", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bfd.test", "interfaces.vlan10.authentication_type", "sha1"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccBFDResourcePrerequisitesConfig + testAccBFDResourceConfig_minimum(),
+		},
+		{
+			Config: testAccBFDResourcePrerequisitesConfig + testAccBFDResourceConfig_all(includeWriteOnly) + testAccBFDResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_bfd.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccBFDResourceImportStateIdFunc("nxos_bfd.test"),
+		},
+		{
+			ResourceName:       "nxos_bfd.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccBFDResourcePrerequisitesConfig + testAccBFDResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccBFDResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccBFDResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_bfd.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccBFDResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccBFDResourcePrerequisitesConfig + testAccBFDResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosBFDPrerequisitesConfig + testAccNxosBFDConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_bfd.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosBFDImportStateIdFunc("nxos_bfd.test"),
-			},
-			{
-				ResourceName:       "nxos_bfd.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosBFDImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccBFDResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -99,7 +146,7 @@ func nxosBFDImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosBFDPrerequisitesConfig = `
+const testAccBFDResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/bfd"
   class_name = "fmBfd"
@@ -142,7 +189,7 @@ resource "nxos_dme" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosBFDConfig_minimum() string {
+func testAccBFDResourceConfig_minimum() string {
 	config := `resource "nxos_bfd" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
@@ -152,13 +199,12 @@ func testAccNxosBFDConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosBFDConfig_all(includeWriteOnly bool) string {
+func testAccBFDResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_bfd" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
 	config += `	instance_control = "stateful-ha"` + "\n"
 	config += `	echo_interface = "lo10"` + "\n"
-	config += `	hardware_offload = "enable"` + "\n"
 	config += `	slow_interval = 3000` + "\n"
 	config += `	startup_interval = 10` + "\n"
 	config += `	detect_multiplier = 5` + "\n"
@@ -189,6 +235,14 @@ func testAccNxosBFDConfig_all(includeWriteOnly bool) string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccBFDResourceConfig_dataSource() string {
+	return `
+data "nxos_bfd" "test" {
+	depends_on = [nxos_bfd.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

@@ -170,11 +170,7 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 		return
 	}
 
-	{{- if .ChildClasses}}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{ {{- range $i, $c := allChildClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} }, {{camelCase .Name}}SubtreeClassMinVersions)
-	{{- else}}
-	res, err := device.Client.GetDn(config.getDn(), nxos.Query("rsp-subtree", "no"))
-	{{- end}}
+	res, err := get{{camelCase .Name}}Tree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

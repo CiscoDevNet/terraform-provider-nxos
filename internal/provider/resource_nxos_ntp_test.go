@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosNTP(t *testing.T) {
+// TestAccNTPResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccNTPResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "allow_control", "enabled"))
@@ -63,39 +67,88 @@ func TestAccNxosNTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_query_only", "QueryOnlyAcl"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_serve", "ServeAcl"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "access_group_serve_only", "ServeOnlyAcl"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "allow_control", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "allow_private", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "logging", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "logging_level", "error"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "master", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "master_stratum", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "passive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "rate_limit", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.type", "server"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.key_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.min_poll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.max_poll", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "servers.1.2.3.4.preferred", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.authentication_type", "md5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.name", "KEY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_keys.10.trusted", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "access_group_match_all", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "access_group_peer", "PeerAcl"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "access_group_query_only", "QueryOnlyAcl"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "access_group_serve", "ServeAcl"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "access_group_serve_only", "ServeOnlyAcl"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccNTPResourceConfig_minimum(),
+		},
+		{
+			Config: testAccNTPResourceConfig_all(includeWriteOnly) + testAccNTPResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_ntp.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccNTPResourceImportStateIdFunc("nxos_ntp.test"),
+		},
+		{
+			ResourceName:       "nxos_ntp.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccNTPResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccNTPResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_ntp.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccNTPResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosNTPConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_ntp.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosNTPImportStateIdFunc("nxos_ntp.test"),
-			},
-			{
-				ResourceName:       "nxos_ntp.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosNTPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccNTPResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -109,7 +162,7 @@ func nxosNTPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosNTPConfig_minimum() string {
+func testAccNTPResourceConfig_minimum() string {
 	config := `resource "nxos_ntp" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
@@ -118,7 +171,7 @@ func testAccNxosNTPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosNTPConfig_all(includeWriteOnly bool) string {
+func testAccNTPResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_ntp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	allow_control = "enabled"` + "\n"
@@ -164,6 +217,14 @@ func testAccNxosNTPConfig_all(includeWriteOnly bool) string {
 	config += `	access_group_serve_only = "ServeOnlyAcl"` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccNTPResourceConfig_dataSource() string {
+	return `
+data "nxos_ntp" "test" {
+	depends_on = [nxos_ntp.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

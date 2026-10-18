@@ -95,6 +95,14 @@ var MACsecSubtreeClassMinVersions = map[string]string{}
 // MACsecMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var MACsecMinVersions = map[string]helpers.MinVersion{}
 
+// MACsecListClasses holds the list child classes of the resource.
+var MACsecListClasses = map[string]bool{"macsecPolicy": true, "macsecIf": true}
+
+// getMACsecTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getMACsecTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"macsecInst", "macsecPolicy", "macsecIf"}, MACsecSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -488,7 +496,140 @@ func (data MACsec) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data MACsec) toBodyWithDeletes(ctx context.Context, state MACsec, config MACsec, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data MACsec) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.Shutdown.IsNull() && len(data.Policies) == 0 && len(data.Interfaces) == 0) {
+		macsecInstDn := dn + "/" + "inst"
+		dns[macsecInstDn] = true
+		for key, child := range data.Policies {
+			macsecPolicyDn := macsecInstDn + "/" + child.getRn(key)
+			dns[macsecPolicyDn] = true
+		}
+		for key, child := range data.Interfaces {
+			macsecIfDn := macsecInstDn + "/" + child.getRn(key)
+			dns[macsecIfDn] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data MACsec) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "macsecEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.Shutdown.IsNull() && len(data.Policies) == 0 && len(data.Interfaces) == 0) {
+		macsecInstRn := "inst"
+		macsecInstDn := dn + "/" + macsecInstRn
+		_ = macsecInstDn
+		{
+			macsecInstBody := ""
+			if !data.Shutdown.IsNull() {
+				macsecInstBody, _ = sjson.Set(macsecInstBody, "macsecInst.attributes.macsecShutdown", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key, child := range data.Policies {
+				_ = child
+				macsecPolicyRn := child.getRn(key)
+				macsecPolicyDn := macsecInstDn + "/" + macsecPolicyRn
+				_ = macsecPolicyDn
+				if !existed(macsecPolicyDn) {
+					macsecInstBody, _ = sjson.Set(macsecInstBody, "macsecInst.children.-1.macsecPolicy.attributes", map[string]interface{}{"rn": macsecPolicyRn, "status": "deleted"})
+					continue
+				}
+				macsecPolicyBody := ""
+				macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.rn", macsecPolicyRn)
+				if !child.AllowedPeerCipherSuite1.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.allowedPeerCipherSuite1", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.AllowedPeerCipherSuite2.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.allowedPeerCipherSuite2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.AllowedPeerCipherSuite3.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.allowedPeerCipherSuite3", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.AllowedPeerCipherSuite4.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.allowedPeerCipherSuite4", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.CipherSuite.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.cipherSuite", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ConfidentialityOffset.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.confOffset", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.CryptoPolicyName.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.cryptoPolicyName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.IncludeIcvIndicator.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.includeIcvParam", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.IncludeSci.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.includeSci", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.KeyServerPriority.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.keySvrPrio", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.LldpBypass.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.lldpBypass", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ReplayWindow.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.replayWindow", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SakExpiryTime.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.sakExpiryTime", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SecurityPolicy.IsNull() {
+					macsecPolicyBody, _ = sjson.Set(macsecPolicyBody, "macsecPolicy.attributes.secPolicy", "DME_UNSET_PROPERTY_MARKER")
+				}
+				macsecInstBody, _ = sjson.SetRaw(macsecInstBody, "macsecInst.children.-1", macsecPolicyBody)
+			}
+			for key, child := range data.Interfaces {
+				_ = child
+				macsecIfRn := child.getRn(key)
+				macsecIfDn := macsecInstDn + "/" + macsecIfRn
+				_ = macsecIfDn
+				if !existed(macsecIfDn) {
+					macsecInstBody, _ = sjson.Set(macsecInstBody, "macsecInst.children.-1.macsecIf.attributes", map[string]interface{}{"rn": macsecIfRn, "status": "deleted"})
+					continue
+				}
+				macsecIfBody := ""
+				macsecIfBody, _ = sjson.Set(macsecIfBody, "macsecIf.attributes.rn", macsecIfRn)
+				if !child.FallbackKeychainName.IsNull() {
+					macsecIfBody, _ = sjson.Set(macsecIfBody, "macsecIf.attributes.fallbackKeychainName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.KeychainName.IsNull() {
+					macsecIfBody, _ = sjson.Set(macsecIfBody, "macsecIf.attributes.keychainName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.KeychainPki.IsNull() {
+					macsecIfBody, _ = sjson.Set(macsecIfBody, "macsecIf.attributes.keychainPkiEnabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PolicyName.IsNull() {
+					macsecIfBody, _ = sjson.Set(macsecIfBody, "macsecIf.attributes.policyName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				macsecInstBody, _ = sjson.SetRaw(macsecInstBody, "macsecInst.children.-1", macsecIfBody)
+			}
+			if macsecInstBody != "" {
+				macsecInstBody, _ = sjson.Set(macsecInstBody, "macsecInst.attributes.rn", macsecInstRn)
+				body, _ = sjson.SetRaw(body, "macsecEntity.children.-1", macsecInstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data MACsec) toBodyWithDeletes(ctx context.Context, state MACsec, config MACsec, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath

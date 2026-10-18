@@ -620,7 +620,8 @@ func (d *ISISDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"isisInst", "isisDom", "isisDomAf", "isisInterLeakP", "isisRtSum", "isisDistribute", "isisDomLvl", "isisSpfComp", "isisLspGen", "isisGr", "isisOverload", "isisInternalIf"}, ISISSubtreeClassMinVersions)
+
+	res, err := getISISTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

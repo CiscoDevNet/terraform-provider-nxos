@@ -471,7 +471,8 @@ func (d *EIGRPDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"eigrpInst", "eigrpDom", "eigrpDomAf", "eigrpAuthP", "eigrpDefMetric", "eigrpGr", "eigrpMetricWt", "eigrpDefRtLeakP", "eigrpInterLeakP", "eigrpLeakCtrlP", "eigrpRibLeakP", "eigrpStubP", "eigrpIf", "eigrpIfAf", "eigrpAuthP", "eigrpRtCtrlP", "eigrpRtMetricAlterP", "eigrpRtSum"}, EIGRPSubtreeClassMinVersions)
+
+	res, err := getEIGRPTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

@@ -260,6 +260,14 @@ var AccessListSubtreeClassMinVersions = map[string]string{}
 // AccessListMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var AccessListMinVersions = map[string]helpers.MinVersion{}
 
+// AccessListListClasses holds the list child classes of the resource.
+var AccessListListClasses = map[string]bool{"ipv4aclACL": true, "ipv4aclACE": true, "ipv4aclAddrGroup": true, "ipv4aclAddrMember": true, "aclIf": true, "ipv6aclACL": true, "ipv6aclACE": true, "ipv6aclAddrGroup": true, "ipv6aclAddrMember": true, "aclPortGroup": true, "aclPortMember": true}
+
+// getAccessListTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getAccessListTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "ipv4aclAddrGroup", "ipv4aclAddrMember", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "ipv6aclAF", "ipv6aclACL", "ipv6aclACE", "ipv6aclAddrGroup", "ipv6aclAddrMember", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "aclPortGroup", "aclPortMember"}, AccessListSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -3074,7 +3082,1035 @@ func (data AccessList) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, config AccessList, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data AccessList) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(len(data.AccessLists) == 0 && len(data.Ipv4AddressObjectGroups) == 0 && ((len(data.IngressInterfaces) == 0 && (data.IngressVtyAccessListName.IsNull())) && (len(data.EgressInterfaces) == 0 && (data.EgressVtyAccessListName.IsNull())))) {
+		ipv4aclAFDn := dn + "/" + "ipv4"
+		dns[ipv4aclAFDn] = true
+		for key, child := range data.AccessLists {
+			ipv4aclACLDn := ipv4aclAFDn + "/" + child.getRn(key)
+			dns[ipv4aclACLDn] = true
+			for key_, child_ := range child.Entries {
+				ipv4aclACEDn_ := ipv4aclACLDn + "/" + child_.getRn(key_)
+				dns[ipv4aclACEDn_] = true
+			}
+		}
+		for key, child := range data.Ipv4AddressObjectGroups {
+			ipv4aclAddrGroupDn := ipv4aclAFDn + "/" + child.getRn(key)
+			dns[ipv4aclAddrGroupDn] = true
+			for key_, child_ := range child.Members {
+				ipv4aclAddrMemberDn_ := ipv4aclAddrGroupDn + "/" + child_.getRn(key_)
+				dns[ipv4aclAddrMemberDn_] = true
+			}
+		}
+		if !((len(data.IngressInterfaces) == 0 && (data.IngressVtyAccessListName.IsNull())) && (len(data.EgressInterfaces) == 0 && (data.EgressVtyAccessListName.IsNull()))) {
+			aclPolicyDn := ipv4aclAFDn + "/" + "policy"
+			dns[aclPolicyDn] = true
+			if !(len(data.IngressInterfaces) == 0 && (data.IngressVtyAccessListName.IsNull())) {
+				aclIngressDn := aclPolicyDn + "/" + "ingress"
+				dns[aclIngressDn] = true
+				for key, child := range data.IngressInterfaces {
+					aclIfDn := aclIngressDn + "/" + child.getRn(key)
+					dns[aclIfDn] = true
+					if !(child.AccessListName.IsNull()) {
+						aclInstDn_ := aclIfDn + "/" + "acl"
+						dns[aclInstDn_] = true
+					}
+				}
+				if !(data.IngressVtyAccessListName.IsNull()) {
+					aclVtyDn := aclIngressDn + "/" + "vty"
+					dns[aclVtyDn] = true
+					if !(data.IngressVtyAccessListName.IsNull()) {
+						aclInstDn := aclVtyDn + "/" + "acl"
+						dns[aclInstDn] = true
+					}
+				}
+			}
+			if !(len(data.EgressInterfaces) == 0 && (data.EgressVtyAccessListName.IsNull())) {
+				aclEgressDn := aclPolicyDn + "/" + "egress"
+				dns[aclEgressDn] = true
+				for key, child := range data.EgressInterfaces {
+					aclIfDn := aclEgressDn + "/" + child.getRn(key)
+					dns[aclIfDn] = true
+					if !(child.AccessListName.IsNull()) {
+						aclInstDn_ := aclIfDn + "/" + "acl"
+						dns[aclInstDn_] = true
+					}
+				}
+				if !(data.EgressVtyAccessListName.IsNull()) {
+					aclVtyDn := aclEgressDn + "/" + "vty"
+					dns[aclVtyDn] = true
+					if !(data.EgressVtyAccessListName.IsNull()) {
+						aclInstDn := aclVtyDn + "/" + "acl"
+						dns[aclInstDn] = true
+					}
+				}
+			}
+		}
+	}
+	if !(len(data.Ipv6AccessLists) == 0 && len(data.Ipv6AddressObjectGroups) == 0 && ((len(data.Ipv6IngressInterfaces) == 0 && (data.Ipv6IngressVtyAccessListName.IsNull())) && (len(data.Ipv6EgressInterfaces) == 0 && (data.Ipv6EgressVtyAccessListName.IsNull())))) {
+		ipv6aclAFDn := dn + "/" + "ipv6"
+		dns[ipv6aclAFDn] = true
+		for key, child := range data.Ipv6AccessLists {
+			ipv6aclACLDn := ipv6aclAFDn + "/" + child.getRn(key)
+			dns[ipv6aclACLDn] = true
+			for key_, child_ := range child.Entries {
+				ipv6aclACEDn_ := ipv6aclACLDn + "/" + child_.getRn(key_)
+				dns[ipv6aclACEDn_] = true
+			}
+		}
+		for key, child := range data.Ipv6AddressObjectGroups {
+			ipv6aclAddrGroupDn := ipv6aclAFDn + "/" + child.getRn(key)
+			dns[ipv6aclAddrGroupDn] = true
+			for key_, child_ := range child.Members {
+				ipv6aclAddrMemberDn_ := ipv6aclAddrGroupDn + "/" + child_.getRn(key_)
+				dns[ipv6aclAddrMemberDn_] = true
+			}
+		}
+		if !((len(data.Ipv6IngressInterfaces) == 0 && (data.Ipv6IngressVtyAccessListName.IsNull())) && (len(data.Ipv6EgressInterfaces) == 0 && (data.Ipv6EgressVtyAccessListName.IsNull()))) {
+			aclPolicyDn := ipv6aclAFDn + "/" + "policy"
+			dns[aclPolicyDn] = true
+			if !(len(data.Ipv6IngressInterfaces) == 0 && (data.Ipv6IngressVtyAccessListName.IsNull())) {
+				aclIngressDn := aclPolicyDn + "/" + "ingress"
+				dns[aclIngressDn] = true
+				for key, child := range data.Ipv6IngressInterfaces {
+					aclIfDn := aclIngressDn + "/" + child.getRn(key)
+					dns[aclIfDn] = true
+					if !(child.AccessListName.IsNull()) {
+						aclInstDn_ := aclIfDn + "/" + "acl"
+						dns[aclInstDn_] = true
+					}
+				}
+				if !(data.Ipv6IngressVtyAccessListName.IsNull()) {
+					aclVtyDn := aclIngressDn + "/" + "vty"
+					dns[aclVtyDn] = true
+					if !(data.Ipv6IngressVtyAccessListName.IsNull()) {
+						aclInstDn := aclVtyDn + "/" + "acl"
+						dns[aclInstDn] = true
+					}
+				}
+			}
+			if !(len(data.Ipv6EgressInterfaces) == 0 && (data.Ipv6EgressVtyAccessListName.IsNull())) {
+				aclEgressDn := aclPolicyDn + "/" + "egress"
+				dns[aclEgressDn] = true
+				for key, child := range data.Ipv6EgressInterfaces {
+					aclIfDn := aclEgressDn + "/" + child.getRn(key)
+					dns[aclIfDn] = true
+					if !(child.AccessListName.IsNull()) {
+						aclInstDn_ := aclIfDn + "/" + "acl"
+						dns[aclInstDn_] = true
+					}
+				}
+				if !(data.Ipv6EgressVtyAccessListName.IsNull()) {
+					aclVtyDn := aclEgressDn + "/" + "vty"
+					dns[aclVtyDn] = true
+					if !(data.Ipv6EgressVtyAccessListName.IsNull()) {
+						aclInstDn := aclVtyDn + "/" + "acl"
+						dns[aclInstDn] = true
+					}
+				}
+			}
+		}
+	}
+	for key, child := range data.PortObjectGroups {
+		aclPortGroupDn := dn + "/" + child.getRn(key)
+		dns[aclPortGroupDn] = true
+		for key_, child_ := range child.Members {
+			aclPortMemberDn_ := aclPortGroupDn + "/" + child_.getRn(key_)
+			dns[aclPortMemberDn_] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data AccessList) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "aclEntity.attributes", map[string]interface{}{})
+	}
+	if !(len(data.AccessLists) == 0 && len(data.Ipv4AddressObjectGroups) == 0 && ((len(data.IngressInterfaces) == 0 && (data.IngressVtyAccessListName.IsNull())) && (len(data.EgressInterfaces) == 0 && (data.EgressVtyAccessListName.IsNull())))) {
+		ipv4aclAFRn := "ipv4"
+		ipv4aclAFDn := dn + "/" + ipv4aclAFRn
+		_ = ipv4aclAFDn
+		{
+			ipv4aclAFBody := ""
+			for key, child := range data.AccessLists {
+				_ = child
+				ipv4aclACLRn := child.getRn(key)
+				ipv4aclACLDn := ipv4aclAFDn + "/" + ipv4aclACLRn
+				_ = ipv4aclACLDn
+				if !existed(ipv4aclACLDn) {
+					ipv4aclAFBody, _ = sjson.Set(ipv4aclAFBody, "ipv4aclAF.children.-1.ipv4aclACL.attributes", map[string]interface{}{"rn": ipv4aclACLRn, "status": "deleted"})
+					continue
+				}
+				ipv4aclACLBody := ""
+				ipv4aclACLBody, _ = sjson.Set(ipv4aclACLBody, "ipv4aclACL.attributes.rn", ipv4aclACLRn)
+				if !child.Fragments.IsNull() {
+					ipv4aclACLBody, _ = sjson.Set(ipv4aclACLBody, "ipv4aclACL.attributes.fragments", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.IgnoreRoutable.IsNull() {
+					ipv4aclACLBody, _ = sjson.Set(ipv4aclACLBody, "ipv4aclACL.attributes.ignRoutable", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PerAceStatistics.IsNull() {
+					ipv4aclACLBody, _ = sjson.Set(ipv4aclACLBody, "ipv4aclACL.attributes.perACEStatistics", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.UdfPresent.IsNull() {
+					ipv4aclACLBody, _ = sjson.Set(ipv4aclACLBody, "ipv4aclACL.attributes.udfPresent", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.Entries {
+					_ = child_
+					ipv4aclACERn_ := child_.getRn(key_)
+					ipv4aclACEDn_ := ipv4aclACLDn + "/" + ipv4aclACERn_
+					_ = ipv4aclACEDn_
+					if !existed(ipv4aclACEDn_) {
+						ipv4aclACLBody, _ = sjson.Set(ipv4aclACLBody, "ipv4aclACL.children.-1.ipv4aclACE.attributes", map[string]interface{}{"rn": ipv4aclACERn_, "status": "deleted"})
+						continue
+					}
+					ipv4aclACEBody_ := ""
+					ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.rn", ipv4aclACERn_)
+					if !child_.Ack.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.ack", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Action.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.action", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Dscp.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dscp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationAddressGroup.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dstAddrGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPort1.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dstPort1", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPort2.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dstPort2", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPortGroup.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dstPortGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPortMask.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dstPortMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPortOperator.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dstPortOp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPrefix.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dstPrefix", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPrefixLength.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dstPrefixLength", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPrefixMask.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dstPrefixMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Established.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.est", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Fin.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.fin", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Fragment.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.fragment", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.HttpOptionType.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.httpOption", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.IcmpCode.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.icmpCode", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.IcmpType.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.icmpType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Log.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.logging", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PacketLength1.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.pktLen1", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PacketLength2.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.pktLen2", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PacketLengthOperator.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.pktLenOp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Precedence.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.precedence", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Protocol.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.protocol", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.ProtocolMask.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.protocolMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Psh.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.psh", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Redirect.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.redirect", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Remark.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.remark", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Rev.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.rev", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Rst.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.rst", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourceAddressGroup.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.srcAddrGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePort1.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.srcPort1", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePort2.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.srcPort2", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePortGroup.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.srcPortGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePortMask.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.srcPortMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePortOperator.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.srcPortOp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePrefix.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.srcPrefix", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePrefixLength.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.srcPrefixLength", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePrefixMask.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.srcPrefixMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Syn.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.syn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TimeRange.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.timeRange", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Ttl.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.ttl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Urg.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.urg", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Vlan.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.vlan", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Vni.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.vni", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.CaptureSession.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.captureSession", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DscpMask.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.dscpMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.IcmpString.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.icmpStr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.IgmpType.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.igmpType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LoadShare.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.loadShare", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PriorityAll.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.priorityAll", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.RedirectAll.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.redirect_all", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TcpFlagsMask.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.tcpFlagsMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TcpOptionLength.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.tcpOptionLength", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TelemetryPath.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.telemetryPath", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TelemetryQueue.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.telemetryQueue", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TypeOfService.IsNull() {
+						ipv4aclACEBody_, _ = sjson.Set(ipv4aclACEBody_, "ipv4aclACE.attributes.tos", "DME_UNSET_PROPERTY_MARKER")
+					}
+					ipv4aclACLBody, _ = sjson.SetRaw(ipv4aclACLBody, "ipv4aclACL.children.-1", ipv4aclACEBody_)
+				}
+				ipv4aclAFBody, _ = sjson.SetRaw(ipv4aclAFBody, "ipv4aclAF.children.-1", ipv4aclACLBody)
+			}
+			for key, child := range data.Ipv4AddressObjectGroups {
+				_ = child
+				ipv4aclAddrGroupRn := child.getRn(key)
+				ipv4aclAddrGroupDn := ipv4aclAFDn + "/" + ipv4aclAddrGroupRn
+				_ = ipv4aclAddrGroupDn
+				if !existed(ipv4aclAddrGroupDn) {
+					ipv4aclAFBody, _ = sjson.Set(ipv4aclAFBody, "ipv4aclAF.children.-1.ipv4aclAddrGroup.attributes", map[string]interface{}{"rn": ipv4aclAddrGroupRn, "status": "deleted"})
+					continue
+				}
+				ipv4aclAddrGroupBody := ""
+				ipv4aclAddrGroupBody, _ = sjson.Set(ipv4aclAddrGroupBody, "ipv4aclAddrGroup.attributes.rn", ipv4aclAddrGroupRn)
+				for key_, child_ := range child.Members {
+					_ = child_
+					ipv4aclAddrMemberRn_ := child_.getRn(key_)
+					ipv4aclAddrMemberDn_ := ipv4aclAddrGroupDn + "/" + ipv4aclAddrMemberRn_
+					_ = ipv4aclAddrMemberDn_
+					if !existed(ipv4aclAddrMemberDn_) {
+						ipv4aclAddrGroupBody, _ = sjson.Set(ipv4aclAddrGroupBody, "ipv4aclAddrGroup.children.-1.ipv4aclAddrMember.attributes", map[string]interface{}{"rn": ipv4aclAddrMemberRn_, "status": "deleted"})
+						continue
+					}
+					ipv4aclAddrMemberBody_ := ""
+					ipv4aclAddrMemberBody_, _ = sjson.Set(ipv4aclAddrMemberBody_, "ipv4aclAddrMember.attributes.rn", ipv4aclAddrMemberRn_)
+					if !child_.Prefix.IsNull() {
+						ipv4aclAddrMemberBody_, _ = sjson.Set(ipv4aclAddrMemberBody_, "ipv4aclAddrMember.attributes.prefix", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PrefixLength.IsNull() {
+						ipv4aclAddrMemberBody_, _ = sjson.Set(ipv4aclAddrMemberBody_, "ipv4aclAddrMember.attributes.prefixLength", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PrefixMask.IsNull() {
+						ipv4aclAddrMemberBody_, _ = sjson.Set(ipv4aclAddrMemberBody_, "ipv4aclAddrMember.attributes.prefixMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					ipv4aclAddrGroupBody, _ = sjson.SetRaw(ipv4aclAddrGroupBody, "ipv4aclAddrGroup.children.-1", ipv4aclAddrMemberBody_)
+				}
+				ipv4aclAFBody, _ = sjson.SetRaw(ipv4aclAFBody, "ipv4aclAF.children.-1", ipv4aclAddrGroupBody)
+			}
+			if !((len(data.IngressInterfaces) == 0 && (data.IngressVtyAccessListName.IsNull())) && (len(data.EgressInterfaces) == 0 && (data.EgressVtyAccessListName.IsNull()))) {
+				aclPolicyRn := "policy"
+				aclPolicyDn := ipv4aclAFDn + "/" + aclPolicyRn
+				_ = aclPolicyDn
+				if !existed(aclPolicyDn) {
+					ipv4aclAFBody, _ = sjson.Set(ipv4aclAFBody, "ipv4aclAF.children.-1.aclPolicy.attributes", map[string]interface{}{"rn": aclPolicyRn, "status": "deleted"})
+				} else {
+					aclPolicyBody := ""
+					if !(len(data.IngressInterfaces) == 0 && (data.IngressVtyAccessListName.IsNull())) {
+						aclIngressRn := "ingress"
+						aclIngressDn := aclPolicyDn + "/" + aclIngressRn
+						_ = aclIngressDn
+						if !existed(aclIngressDn) {
+							aclPolicyBody, _ = sjson.Set(aclPolicyBody, "aclPolicy.children.-1.aclIngress.attributes", map[string]interface{}{"rn": aclIngressRn, "status": "deleted"})
+						} else {
+							aclIngressBody := ""
+							for key, child := range data.IngressInterfaces {
+								_ = child
+								aclIfRn := child.getRn(key)
+								aclIfDn := aclIngressDn + "/" + aclIfRn
+								_ = aclIfDn
+								if !existed(aclIfDn) {
+									aclIngressBody, _ = sjson.Set(aclIngressBody, "aclIngress.children.-1.aclIf.attributes", map[string]interface{}{"rn": aclIfRn, "status": "deleted"})
+									continue
+								}
+								aclIfBody := ""
+								aclIfBody, _ = sjson.Set(aclIfBody, "aclIf.attributes.rn", aclIfRn)
+								if !(child.AccessListName.IsNull()) {
+									aclInstRn_ := "acl"
+									aclInstDn_ := aclIfDn + "/" + aclInstRn_
+									_ = aclInstDn_
+									if !existed(aclInstDn_) {
+										aclIfBody, _ = sjson.Set(aclIfBody, "aclIf.children.-1.aclInst.attributes", map[string]interface{}{"rn": aclInstRn_, "status": "deleted"})
+									} else {
+										aclInstBody_ := ""
+										if !child.AccessListName.IsNull() {
+											aclInstBody_, _ = sjson.Set(aclInstBody_, "aclInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if aclInstBody_ != "" {
+											aclInstBody_, _ = sjson.Set(aclInstBody_, "aclInst.attributes.rn", aclInstRn_)
+											aclIfBody, _ = sjson.SetRaw(aclIfBody, "aclIf.children.-1", aclInstBody_)
+										}
+									}
+								}
+								aclIngressBody, _ = sjson.SetRaw(aclIngressBody, "aclIngress.children.-1", aclIfBody)
+							}
+							if !(data.IngressVtyAccessListName.IsNull()) {
+								aclVtyRn := "vty"
+								aclVtyDn := aclIngressDn + "/" + aclVtyRn
+								_ = aclVtyDn
+								if !existed(aclVtyDn) {
+									aclIngressBody, _ = sjson.Set(aclIngressBody, "aclIngress.children.-1.aclVty.attributes", map[string]interface{}{"rn": aclVtyRn, "status": "deleted"})
+								} else {
+									aclVtyBody := ""
+									if !(data.IngressVtyAccessListName.IsNull()) {
+										aclInstRn := "acl"
+										aclInstDn := aclVtyDn + "/" + aclInstRn
+										_ = aclInstDn
+										if !existed(aclInstDn) {
+											aclVtyBody, _ = sjson.Set(aclVtyBody, "aclVty.children.-1.aclInst.attributes", map[string]interface{}{"rn": aclInstRn, "status": "deleted"})
+										} else {
+											aclInstBody := ""
+											if !data.IngressVtyAccessListName.IsNull() {
+												aclInstBody, _ = sjson.Set(aclInstBody, "aclInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if aclInstBody != "" {
+												aclInstBody, _ = sjson.Set(aclInstBody, "aclInst.attributes.rn", aclInstRn)
+												aclVtyBody, _ = sjson.SetRaw(aclVtyBody, "aclVty.children.-1", aclInstBody)
+											}
+										}
+									}
+									if aclVtyBody != "" {
+										aclVtyBody, _ = sjson.Set(aclVtyBody, "aclVty.attributes.rn", aclVtyRn)
+										aclIngressBody, _ = sjson.SetRaw(aclIngressBody, "aclIngress.children.-1", aclVtyBody)
+									}
+								}
+							}
+							if aclIngressBody != "" {
+								aclIngressBody, _ = sjson.Set(aclIngressBody, "aclIngress.attributes.rn", aclIngressRn)
+								aclPolicyBody, _ = sjson.SetRaw(aclPolicyBody, "aclPolicy.children.-1", aclIngressBody)
+							}
+						}
+					}
+					if !(len(data.EgressInterfaces) == 0 && (data.EgressVtyAccessListName.IsNull())) {
+						aclEgressRn := "egress"
+						aclEgressDn := aclPolicyDn + "/" + aclEgressRn
+						_ = aclEgressDn
+						if !existed(aclEgressDn) {
+							aclPolicyBody, _ = sjson.Set(aclPolicyBody, "aclPolicy.children.-1.aclEgress.attributes", map[string]interface{}{"rn": aclEgressRn, "status": "deleted"})
+						} else {
+							aclEgressBody := ""
+							for key, child := range data.EgressInterfaces {
+								_ = child
+								aclIfRn := child.getRn(key)
+								aclIfDn := aclEgressDn + "/" + aclIfRn
+								_ = aclIfDn
+								if !existed(aclIfDn) {
+									aclEgressBody, _ = sjson.Set(aclEgressBody, "aclEgress.children.-1.aclIf.attributes", map[string]interface{}{"rn": aclIfRn, "status": "deleted"})
+									continue
+								}
+								aclIfBody := ""
+								aclIfBody, _ = sjson.Set(aclIfBody, "aclIf.attributes.rn", aclIfRn)
+								if !(child.AccessListName.IsNull()) {
+									aclInstRn_ := "acl"
+									aclInstDn_ := aclIfDn + "/" + aclInstRn_
+									_ = aclInstDn_
+									if !existed(aclInstDn_) {
+										aclIfBody, _ = sjson.Set(aclIfBody, "aclIf.children.-1.aclInst.attributes", map[string]interface{}{"rn": aclInstRn_, "status": "deleted"})
+									} else {
+										aclInstBody_ := ""
+										if !child.AccessListName.IsNull() {
+											aclInstBody_, _ = sjson.Set(aclInstBody_, "aclInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if aclInstBody_ != "" {
+											aclInstBody_, _ = sjson.Set(aclInstBody_, "aclInst.attributes.rn", aclInstRn_)
+											aclIfBody, _ = sjson.SetRaw(aclIfBody, "aclIf.children.-1", aclInstBody_)
+										}
+									}
+								}
+								aclEgressBody, _ = sjson.SetRaw(aclEgressBody, "aclEgress.children.-1", aclIfBody)
+							}
+							if !(data.EgressVtyAccessListName.IsNull()) {
+								aclVtyRn := "vty"
+								aclVtyDn := aclEgressDn + "/" + aclVtyRn
+								_ = aclVtyDn
+								if !existed(aclVtyDn) {
+									aclEgressBody, _ = sjson.Set(aclEgressBody, "aclEgress.children.-1.aclVty.attributes", map[string]interface{}{"rn": aclVtyRn, "status": "deleted"})
+								} else {
+									aclVtyBody := ""
+									if !(data.EgressVtyAccessListName.IsNull()) {
+										aclInstRn := "acl"
+										aclInstDn := aclVtyDn + "/" + aclInstRn
+										_ = aclInstDn
+										if !existed(aclInstDn) {
+											aclVtyBody, _ = sjson.Set(aclVtyBody, "aclVty.children.-1.aclInst.attributes", map[string]interface{}{"rn": aclInstRn, "status": "deleted"})
+										} else {
+											aclInstBody := ""
+											if !data.EgressVtyAccessListName.IsNull() {
+												aclInstBody, _ = sjson.Set(aclInstBody, "aclInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if aclInstBody != "" {
+												aclInstBody, _ = sjson.Set(aclInstBody, "aclInst.attributes.rn", aclInstRn)
+												aclVtyBody, _ = sjson.SetRaw(aclVtyBody, "aclVty.children.-1", aclInstBody)
+											}
+										}
+									}
+									if aclVtyBody != "" {
+										aclVtyBody, _ = sjson.Set(aclVtyBody, "aclVty.attributes.rn", aclVtyRn)
+										aclEgressBody, _ = sjson.SetRaw(aclEgressBody, "aclEgress.children.-1", aclVtyBody)
+									}
+								}
+							}
+							if aclEgressBody != "" {
+								aclEgressBody, _ = sjson.Set(aclEgressBody, "aclEgress.attributes.rn", aclEgressRn)
+								aclPolicyBody, _ = sjson.SetRaw(aclPolicyBody, "aclPolicy.children.-1", aclEgressBody)
+							}
+						}
+					}
+					if aclPolicyBody != "" {
+						aclPolicyBody, _ = sjson.Set(aclPolicyBody, "aclPolicy.attributes.rn", aclPolicyRn)
+						ipv4aclAFBody, _ = sjson.SetRaw(ipv4aclAFBody, "ipv4aclAF.children.-1", aclPolicyBody)
+					}
+				}
+			}
+			if ipv4aclAFBody != "" {
+				ipv4aclAFBody, _ = sjson.Set(ipv4aclAFBody, "ipv4aclAF.attributes.rn", ipv4aclAFRn)
+				body, _ = sjson.SetRaw(body, "aclEntity.children.-1", ipv4aclAFBody)
+			}
+		}
+	}
+	if !(len(data.Ipv6AccessLists) == 0 && len(data.Ipv6AddressObjectGroups) == 0 && ((len(data.Ipv6IngressInterfaces) == 0 && (data.Ipv6IngressVtyAccessListName.IsNull())) && (len(data.Ipv6EgressInterfaces) == 0 && (data.Ipv6EgressVtyAccessListName.IsNull())))) {
+		ipv6aclAFRn := "ipv6"
+		ipv6aclAFDn := dn + "/" + ipv6aclAFRn
+		_ = ipv6aclAFDn
+		{
+			ipv6aclAFBody := ""
+			for key, child := range data.Ipv6AccessLists {
+				_ = child
+				ipv6aclACLRn := child.getRn(key)
+				ipv6aclACLDn := ipv6aclAFDn + "/" + ipv6aclACLRn
+				_ = ipv6aclACLDn
+				if !existed(ipv6aclACLDn) {
+					ipv6aclAFBody, _ = sjson.Set(ipv6aclAFBody, "ipv6aclAF.children.-1.ipv6aclACL.attributes", map[string]interface{}{"rn": ipv6aclACLRn, "status": "deleted"})
+					continue
+				}
+				ipv6aclACLBody := ""
+				ipv6aclACLBody, _ = sjson.Set(ipv6aclACLBody, "ipv6aclACL.attributes.rn", ipv6aclACLRn)
+				if !child.ExtensionHeader.IsNull() {
+					ipv6aclACLBody, _ = sjson.Set(ipv6aclACLBody, "ipv6aclACL.attributes.extnHdr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Fragments.IsNull() {
+					ipv6aclACLBody, _ = sjson.Set(ipv6aclACLBody, "ipv6aclACL.attributes.fragments", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.IgnoreRoutable.IsNull() {
+					ipv6aclACLBody, _ = sjson.Set(ipv6aclACLBody, "ipv6aclACL.attributes.ignRoutable", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PerAceStatistics.IsNull() {
+					ipv6aclACLBody, _ = sjson.Set(ipv6aclACLBody, "ipv6aclACL.attributes.perACEStatistics", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.Entries {
+					_ = child_
+					ipv6aclACERn_ := child_.getRn(key_)
+					ipv6aclACEDn_ := ipv6aclACLDn + "/" + ipv6aclACERn_
+					_ = ipv6aclACEDn_
+					if !existed(ipv6aclACEDn_) {
+						ipv6aclACLBody, _ = sjson.Set(ipv6aclACLBody, "ipv6aclACL.children.-1.ipv6aclACE.attributes", map[string]interface{}{"rn": ipv6aclACERn_, "status": "deleted"})
+						continue
+					}
+					ipv6aclACEBody_ := ""
+					ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.rn", ipv6aclACERn_)
+					if !child_.Ack.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.ack", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Action.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.action", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Dscp.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dscp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationAddressGroup.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dstAddrGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPort1.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dstPort1", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPort2.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dstPort2", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPortGroup.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dstPortGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPortMask.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dstPortMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPortOperator.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dstPortOp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPrefix.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dstPrefix", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPrefixLength.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dstPrefixLength", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPrefixMask.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dstPrefixMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Established.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.est", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Fin.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.fin", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.FlowLabel.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.flowLabel", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Fragment.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.fragment", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.HttpOptionType.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.httpOption", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.IcmpCode.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.icmpCode", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.IcmpType.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.icmpType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Log.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.logging", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PacketLength1.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.pktLen1", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PacketLength2.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.pktLen2", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PacketLengthOperator.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.pktLenOp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Protocol.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.protocol", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.ProtocolMask.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.protocolMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Psh.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.psh", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Redirect.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.redirect", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Remark.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.remark", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Rev.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.rev", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Rst.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.rst", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourceAddressGroup.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.srcAddrGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePort1.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.srcPort1", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePort2.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.srcPort2", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePortGroup.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.srcPortGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePortMask.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.srcPortMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePortOperator.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.srcPortOp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePrefix.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.srcPrefix", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePrefixLength.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.srcPrefixLength", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePrefixMask.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.srcPrefixMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Syn.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.syn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TimeRange.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.timeRange", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Urg.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.urg", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Vlan.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.vlan", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Vni.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.vni", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.CaptureSession.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.captureSession", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DscpMask.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.dscpMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.IcmpString.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.icmpStr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LoadShare.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.loadShare", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PriorityAll.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.priorityAll", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.RedirectAll.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.redirect_all", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TcpFlagsMask.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.tcpFlagsMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TcpOptionLength.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.tcpOptionLength", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TelemetryPath.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.telemetryPath", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TelemetryQueue.IsNull() {
+						ipv6aclACEBody_, _ = sjson.Set(ipv6aclACEBody_, "ipv6aclACE.attributes.telemetryQueue", "DME_UNSET_PROPERTY_MARKER")
+					}
+					ipv6aclACLBody, _ = sjson.SetRaw(ipv6aclACLBody, "ipv6aclACL.children.-1", ipv6aclACEBody_)
+				}
+				ipv6aclAFBody, _ = sjson.SetRaw(ipv6aclAFBody, "ipv6aclAF.children.-1", ipv6aclACLBody)
+			}
+			for key, child := range data.Ipv6AddressObjectGroups {
+				_ = child
+				ipv6aclAddrGroupRn := child.getRn(key)
+				ipv6aclAddrGroupDn := ipv6aclAFDn + "/" + ipv6aclAddrGroupRn
+				_ = ipv6aclAddrGroupDn
+				if !existed(ipv6aclAddrGroupDn) {
+					ipv6aclAFBody, _ = sjson.Set(ipv6aclAFBody, "ipv6aclAF.children.-1.ipv6aclAddrGroup.attributes", map[string]interface{}{"rn": ipv6aclAddrGroupRn, "status": "deleted"})
+					continue
+				}
+				ipv6aclAddrGroupBody := ""
+				ipv6aclAddrGroupBody, _ = sjson.Set(ipv6aclAddrGroupBody, "ipv6aclAddrGroup.attributes.rn", ipv6aclAddrGroupRn)
+				for key_, child_ := range child.Members {
+					_ = child_
+					ipv6aclAddrMemberRn_ := child_.getRn(key_)
+					ipv6aclAddrMemberDn_ := ipv6aclAddrGroupDn + "/" + ipv6aclAddrMemberRn_
+					_ = ipv6aclAddrMemberDn_
+					if !existed(ipv6aclAddrMemberDn_) {
+						ipv6aclAddrGroupBody, _ = sjson.Set(ipv6aclAddrGroupBody, "ipv6aclAddrGroup.children.-1.ipv6aclAddrMember.attributes", map[string]interface{}{"rn": ipv6aclAddrMemberRn_, "status": "deleted"})
+						continue
+					}
+					ipv6aclAddrMemberBody_ := ""
+					ipv6aclAddrMemberBody_, _ = sjson.Set(ipv6aclAddrMemberBody_, "ipv6aclAddrMember.attributes.rn", ipv6aclAddrMemberRn_)
+					if !child_.Prefix.IsNull() {
+						ipv6aclAddrMemberBody_, _ = sjson.Set(ipv6aclAddrMemberBody_, "ipv6aclAddrMember.attributes.prefix", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PrefixLength.IsNull() {
+						ipv6aclAddrMemberBody_, _ = sjson.Set(ipv6aclAddrMemberBody_, "ipv6aclAddrMember.attributes.prefixLength", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PrefixMask.IsNull() {
+						ipv6aclAddrMemberBody_, _ = sjson.Set(ipv6aclAddrMemberBody_, "ipv6aclAddrMember.attributes.prefixMask", "DME_UNSET_PROPERTY_MARKER")
+					}
+					ipv6aclAddrGroupBody, _ = sjson.SetRaw(ipv6aclAddrGroupBody, "ipv6aclAddrGroup.children.-1", ipv6aclAddrMemberBody_)
+				}
+				ipv6aclAFBody, _ = sjson.SetRaw(ipv6aclAFBody, "ipv6aclAF.children.-1", ipv6aclAddrGroupBody)
+			}
+			if !((len(data.Ipv6IngressInterfaces) == 0 && (data.Ipv6IngressVtyAccessListName.IsNull())) && (len(data.Ipv6EgressInterfaces) == 0 && (data.Ipv6EgressVtyAccessListName.IsNull()))) {
+				aclPolicyRn := "policy"
+				aclPolicyDn := ipv6aclAFDn + "/" + aclPolicyRn
+				_ = aclPolicyDn
+				if !existed(aclPolicyDn) {
+					ipv6aclAFBody, _ = sjson.Set(ipv6aclAFBody, "ipv6aclAF.children.-1.aclPolicy.attributes", map[string]interface{}{"rn": aclPolicyRn, "status": "deleted"})
+				} else {
+					aclPolicyBody := ""
+					if !(len(data.Ipv6IngressInterfaces) == 0 && (data.Ipv6IngressVtyAccessListName.IsNull())) {
+						aclIngressRn := "ingress"
+						aclIngressDn := aclPolicyDn + "/" + aclIngressRn
+						_ = aclIngressDn
+						if !existed(aclIngressDn) {
+							aclPolicyBody, _ = sjson.Set(aclPolicyBody, "aclPolicy.children.-1.aclIngress.attributes", map[string]interface{}{"rn": aclIngressRn, "status": "deleted"})
+						} else {
+							aclIngressBody := ""
+							for key, child := range data.Ipv6IngressInterfaces {
+								_ = child
+								aclIfRn := child.getRn(key)
+								aclIfDn := aclIngressDn + "/" + aclIfRn
+								_ = aclIfDn
+								if !existed(aclIfDn) {
+									aclIngressBody, _ = sjson.Set(aclIngressBody, "aclIngress.children.-1.aclIf.attributes", map[string]interface{}{"rn": aclIfRn, "status": "deleted"})
+									continue
+								}
+								aclIfBody := ""
+								aclIfBody, _ = sjson.Set(aclIfBody, "aclIf.attributes.rn", aclIfRn)
+								if !(child.AccessListName.IsNull()) {
+									aclInstRn_ := "acl"
+									aclInstDn_ := aclIfDn + "/" + aclInstRn_
+									_ = aclInstDn_
+									if !existed(aclInstDn_) {
+										aclIfBody, _ = sjson.Set(aclIfBody, "aclIf.children.-1.aclInst.attributes", map[string]interface{}{"rn": aclInstRn_, "status": "deleted"})
+									} else {
+										aclInstBody_ := ""
+										if !child.AccessListName.IsNull() {
+											aclInstBody_, _ = sjson.Set(aclInstBody_, "aclInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if aclInstBody_ != "" {
+											aclInstBody_, _ = sjson.Set(aclInstBody_, "aclInst.attributes.rn", aclInstRn_)
+											aclIfBody, _ = sjson.SetRaw(aclIfBody, "aclIf.children.-1", aclInstBody_)
+										}
+									}
+								}
+								aclIngressBody, _ = sjson.SetRaw(aclIngressBody, "aclIngress.children.-1", aclIfBody)
+							}
+							if !(data.Ipv6IngressVtyAccessListName.IsNull()) {
+								aclVtyRn := "vty"
+								aclVtyDn := aclIngressDn + "/" + aclVtyRn
+								_ = aclVtyDn
+								if !existed(aclVtyDn) {
+									aclIngressBody, _ = sjson.Set(aclIngressBody, "aclIngress.children.-1.aclVty.attributes", map[string]interface{}{"rn": aclVtyRn, "status": "deleted"})
+								} else {
+									aclVtyBody := ""
+									if !(data.Ipv6IngressVtyAccessListName.IsNull()) {
+										aclInstRn := "acl"
+										aclInstDn := aclVtyDn + "/" + aclInstRn
+										_ = aclInstDn
+										if !existed(aclInstDn) {
+											aclVtyBody, _ = sjson.Set(aclVtyBody, "aclVty.children.-1.aclInst.attributes", map[string]interface{}{"rn": aclInstRn, "status": "deleted"})
+										} else {
+											aclInstBody := ""
+											if !data.Ipv6IngressVtyAccessListName.IsNull() {
+												aclInstBody, _ = sjson.Set(aclInstBody, "aclInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if aclInstBody != "" {
+												aclInstBody, _ = sjson.Set(aclInstBody, "aclInst.attributes.rn", aclInstRn)
+												aclVtyBody, _ = sjson.SetRaw(aclVtyBody, "aclVty.children.-1", aclInstBody)
+											}
+										}
+									}
+									if aclVtyBody != "" {
+										aclVtyBody, _ = sjson.Set(aclVtyBody, "aclVty.attributes.rn", aclVtyRn)
+										aclIngressBody, _ = sjson.SetRaw(aclIngressBody, "aclIngress.children.-1", aclVtyBody)
+									}
+								}
+							}
+							if aclIngressBody != "" {
+								aclIngressBody, _ = sjson.Set(aclIngressBody, "aclIngress.attributes.rn", aclIngressRn)
+								aclPolicyBody, _ = sjson.SetRaw(aclPolicyBody, "aclPolicy.children.-1", aclIngressBody)
+							}
+						}
+					}
+					if !(len(data.Ipv6EgressInterfaces) == 0 && (data.Ipv6EgressVtyAccessListName.IsNull())) {
+						aclEgressRn := "egress"
+						aclEgressDn := aclPolicyDn + "/" + aclEgressRn
+						_ = aclEgressDn
+						if !existed(aclEgressDn) {
+							aclPolicyBody, _ = sjson.Set(aclPolicyBody, "aclPolicy.children.-1.aclEgress.attributes", map[string]interface{}{"rn": aclEgressRn, "status": "deleted"})
+						} else {
+							aclEgressBody := ""
+							for key, child := range data.Ipv6EgressInterfaces {
+								_ = child
+								aclIfRn := child.getRn(key)
+								aclIfDn := aclEgressDn + "/" + aclIfRn
+								_ = aclIfDn
+								if !existed(aclIfDn) {
+									aclEgressBody, _ = sjson.Set(aclEgressBody, "aclEgress.children.-1.aclIf.attributes", map[string]interface{}{"rn": aclIfRn, "status": "deleted"})
+									continue
+								}
+								aclIfBody := ""
+								aclIfBody, _ = sjson.Set(aclIfBody, "aclIf.attributes.rn", aclIfRn)
+								if !(child.AccessListName.IsNull()) {
+									aclInstRn_ := "acl"
+									aclInstDn_ := aclIfDn + "/" + aclInstRn_
+									_ = aclInstDn_
+									if !existed(aclInstDn_) {
+										aclIfBody, _ = sjson.Set(aclIfBody, "aclIf.children.-1.aclInst.attributes", map[string]interface{}{"rn": aclInstRn_, "status": "deleted"})
+									} else {
+										aclInstBody_ := ""
+										if !child.AccessListName.IsNull() {
+											aclInstBody_, _ = sjson.Set(aclInstBody_, "aclInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if aclInstBody_ != "" {
+											aclInstBody_, _ = sjson.Set(aclInstBody_, "aclInst.attributes.rn", aclInstRn_)
+											aclIfBody, _ = sjson.SetRaw(aclIfBody, "aclIf.children.-1", aclInstBody_)
+										}
+									}
+								}
+								aclEgressBody, _ = sjson.SetRaw(aclEgressBody, "aclEgress.children.-1", aclIfBody)
+							}
+							if !(data.Ipv6EgressVtyAccessListName.IsNull()) {
+								aclVtyRn := "vty"
+								aclVtyDn := aclEgressDn + "/" + aclVtyRn
+								_ = aclVtyDn
+								if !existed(aclVtyDn) {
+									aclEgressBody, _ = sjson.Set(aclEgressBody, "aclEgress.children.-1.aclVty.attributes", map[string]interface{}{"rn": aclVtyRn, "status": "deleted"})
+								} else {
+									aclVtyBody := ""
+									if !(data.Ipv6EgressVtyAccessListName.IsNull()) {
+										aclInstRn := "acl"
+										aclInstDn := aclVtyDn + "/" + aclInstRn
+										_ = aclInstDn
+										if !existed(aclInstDn) {
+											aclVtyBody, _ = sjson.Set(aclVtyBody, "aclVty.children.-1.aclInst.attributes", map[string]interface{}{"rn": aclInstRn, "status": "deleted"})
+										} else {
+											aclInstBody := ""
+											if !data.Ipv6EgressVtyAccessListName.IsNull() {
+												aclInstBody, _ = sjson.Set(aclInstBody, "aclInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if aclInstBody != "" {
+												aclInstBody, _ = sjson.Set(aclInstBody, "aclInst.attributes.rn", aclInstRn)
+												aclVtyBody, _ = sjson.SetRaw(aclVtyBody, "aclVty.children.-1", aclInstBody)
+											}
+										}
+									}
+									if aclVtyBody != "" {
+										aclVtyBody, _ = sjson.Set(aclVtyBody, "aclVty.attributes.rn", aclVtyRn)
+										aclEgressBody, _ = sjson.SetRaw(aclEgressBody, "aclEgress.children.-1", aclVtyBody)
+									}
+								}
+							}
+							if aclEgressBody != "" {
+								aclEgressBody, _ = sjson.Set(aclEgressBody, "aclEgress.attributes.rn", aclEgressRn)
+								aclPolicyBody, _ = sjson.SetRaw(aclPolicyBody, "aclPolicy.children.-1", aclEgressBody)
+							}
+						}
+					}
+					if aclPolicyBody != "" {
+						aclPolicyBody, _ = sjson.Set(aclPolicyBody, "aclPolicy.attributes.rn", aclPolicyRn)
+						ipv6aclAFBody, _ = sjson.SetRaw(ipv6aclAFBody, "ipv6aclAF.children.-1", aclPolicyBody)
+					}
+				}
+			}
+			if ipv6aclAFBody != "" {
+				ipv6aclAFBody, _ = sjson.Set(ipv6aclAFBody, "ipv6aclAF.attributes.rn", ipv6aclAFRn)
+				body, _ = sjson.SetRaw(body, "aclEntity.children.-1", ipv6aclAFBody)
+			}
+		}
+	}
+	for key, child := range data.PortObjectGroups {
+		_ = child
+		aclPortGroupRn := child.getRn(key)
+		aclPortGroupDn := dn + "/" + aclPortGroupRn
+		_ = aclPortGroupDn
+		if !existed(aclPortGroupDn) {
+			body, _ = sjson.Set(body, "aclEntity.children.-1.aclPortGroup.attributes", map[string]interface{}{"rn": aclPortGroupRn, "status": "deleted"})
+			continue
+		}
+		aclPortGroupBody := ""
+		aclPortGroupBody, _ = sjson.Set(aclPortGroupBody, "aclPortGroup.attributes.rn", aclPortGroupRn)
+		for key_, child_ := range child.Members {
+			_ = child_
+			aclPortMemberRn_ := child_.getRn(key_)
+			aclPortMemberDn_ := aclPortGroupDn + "/" + aclPortMemberRn_
+			_ = aclPortMemberDn_
+			if !existed(aclPortMemberDn_) {
+				aclPortGroupBody, _ = sjson.Set(aclPortGroupBody, "aclPortGroup.children.-1.aclPortMember.attributes", map[string]interface{}{"rn": aclPortMemberRn_, "status": "deleted"})
+				continue
+			}
+			aclPortMemberBody_ := ""
+			aclPortMemberBody_, _ = sjson.Set(aclPortMemberBody_, "aclPortMember.attributes.rn", aclPortMemberRn_)
+			if !child_.PortOperator.IsNull() {
+				aclPortMemberBody_, _ = sjson.Set(aclPortMemberBody_, "aclPortMember.attributes.portOp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Port1.IsNull() {
+				aclPortMemberBody_, _ = sjson.Set(aclPortMemberBody_, "aclPortMember.attributes.port1", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Port2.IsNull() {
+				aclPortMemberBody_, _ = sjson.Set(aclPortMemberBody_, "aclPortMember.attributes.port2", "DME_UNSET_PROPERTY_MARKER")
+			}
+			aclPortGroupBody, _ = sjson.SetRaw(aclPortGroupBody, "aclPortGroup.children.-1", aclPortMemberBody_)
+		}
+		body, _ = sjson.SetRaw(body, "aclEntity.children.-1", aclPortGroupBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, config AccessList, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -3369,6 +4405,8 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 				stateChild := state.AccessLists[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/ipv4" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipv4aclAF")+".children").Array() {
 					if mv.Get("ipv4aclACL.attributes.name").String() == key {
 						if !stateChild.Fragments.IsNull() && configChild.Fragments.IsNull() {
@@ -3587,6 +4625,8 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 				stateChild := state.Ipv4AddressObjectGroups[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/ipv4" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipv4aclAF")+".children").Array() {
@@ -3626,6 +4666,8 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 				stateChild := state.IngressInterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/ipv4" + "/policy" + "/ingress" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipv4aclAF")+".children", "aclPolicy")+".children", "aclIngress")+".children").Array() {
@@ -3635,23 +4677,37 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.AccessListName.IsNull() && configChild.AccessListName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.AccessListName.IsNull()) && (configChild.AccessListName.IsNull()) && deleteEmptied(listChildDn+"/acl") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.AccessListName.IsNull() && configChild.AccessListName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}
 			}
 		}
-		if !state.IngressVtyAccessListName.IsNull() && config.IngressVtyAccessListName.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4aclAF")+".children", "aclPolicy")+".children", "aclIngress")+".children", "aclVty")+".children", "aclInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.IngressVtyAccessListName.IsNull()) && (config.IngressVtyAccessListName.IsNull()) && deleteEmptied(data.getDn()+"/ipv4"+"/policy"+"/ingress"+"/vty"+"/acl") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4aclAF")+".children", "aclPolicy")+".children", "aclIngress")+".children", "aclVty")+".children", "aclInst")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.IngressVtyAccessListName.IsNull() && config.IngressVtyAccessListName.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4aclAF")+".children", "aclPolicy")+".children", "aclIngress")+".children", "aclVty")+".children", "aclInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.EgressInterfaces {
 			if configChild, ok := config.EgressInterfaces[key]; ok {
 				stateChild := state.EgressInterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/ipv4" + "/policy" + "/egress" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipv4aclAF")+".children", "aclPolicy")+".children", "aclEgress")+".children").Array() {
@@ -3661,23 +4717,37 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.AccessListName.IsNull() && configChild.AccessListName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.AccessListName.IsNull()) && (configChild.AccessListName.IsNull()) && deleteEmptied(listChildDn+"/acl") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.AccessListName.IsNull() && configChild.AccessListName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}
 			}
 		}
-		if !state.EgressVtyAccessListName.IsNull() && config.EgressVtyAccessListName.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4aclAF")+".children", "aclPolicy")+".children", "aclEgress")+".children", "aclVty")+".children", "aclInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.EgressVtyAccessListName.IsNull()) && (config.EgressVtyAccessListName.IsNull()) && deleteEmptied(data.getDn()+"/ipv4"+"/policy"+"/egress"+"/vty"+"/acl") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4aclAF")+".children", "aclPolicy")+".children", "aclEgress")+".children", "aclVty")+".children", "aclInst")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.EgressVtyAccessListName.IsNull() && config.EgressVtyAccessListName.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4aclAF")+".children", "aclPolicy")+".children", "aclEgress")+".children", "aclVty")+".children", "aclInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.Ipv6AccessLists {
 			if configChild, ok := config.Ipv6AccessLists[key]; ok {
 				stateChild := state.Ipv6AccessLists[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/ipv6" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipv6aclAF")+".children").Array() {
 					if mv.Get("ipv6aclACL.attributes.name").String() == key {
 						if !stateChild.ExtensionHeader.IsNull() && configChild.ExtensionHeader.IsNull() {
@@ -3887,6 +4957,8 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 				stateChild := state.Ipv6AddressObjectGroups[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/ipv6" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipv6aclAF")+".children").Array() {
@@ -3926,6 +4998,8 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 				stateChild := state.Ipv6IngressInterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/ipv6" + "/policy" + "/ingress" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipv6aclAF")+".children", "aclPolicy")+".children", "aclIngress")+".children").Array() {
@@ -3935,23 +5009,37 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.AccessListName.IsNull() && configChild.AccessListName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.AccessListName.IsNull()) && (configChild.AccessListName.IsNull()) && deleteEmptied(listChildDn+"/acl") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.AccessListName.IsNull() && configChild.AccessListName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}
 			}
 		}
-		if !state.Ipv6IngressVtyAccessListName.IsNull() && config.Ipv6IngressVtyAccessListName.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv6aclAF")+".children", "aclPolicy")+".children", "aclIngress")+".children", "aclVty")+".children", "aclInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.Ipv6IngressVtyAccessListName.IsNull()) && (config.Ipv6IngressVtyAccessListName.IsNull()) && deleteEmptied(data.getDn()+"/ipv6"+"/policy"+"/ingress"+"/vty"+"/acl") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv6aclAF")+".children", "aclPolicy")+".children", "aclIngress")+".children", "aclVty")+".children", "aclInst")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.Ipv6IngressVtyAccessListName.IsNull() && config.Ipv6IngressVtyAccessListName.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv6aclAF")+".children", "aclPolicy")+".children", "aclIngress")+".children", "aclVty")+".children", "aclInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.Ipv6EgressInterfaces {
 			if configChild, ok := config.Ipv6EgressInterfaces[key]; ok {
 				stateChild := state.Ipv6EgressInterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/ipv6" + "/policy" + "/egress" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipv6aclAF")+".children", "aclPolicy")+".children", "aclEgress")+".children").Array() {
@@ -3961,23 +5049,37 @@ func (data AccessList) toBodyWithDeletes(ctx context.Context, state AccessList, 
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.AccessListName.IsNull() && configChild.AccessListName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.AccessListName.IsNull()) && (configChild.AccessListName.IsNull()) && deleteEmptied(listChildDn+"/acl") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.AccessListName.IsNull() && configChild.AccessListName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aclInst")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}
 			}
 		}
-		if !state.Ipv6EgressVtyAccessListName.IsNull() && config.Ipv6EgressVtyAccessListName.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv6aclAF")+".children", "aclPolicy")+".children", "aclEgress")+".children", "aclVty")+".children", "aclInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.Ipv6EgressVtyAccessListName.IsNull()) && (config.Ipv6EgressVtyAccessListName.IsNull()) && deleteEmptied(data.getDn()+"/ipv6"+"/policy"+"/egress"+"/vty"+"/acl") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv6aclAF")+".children", "aclPolicy")+".children", "aclEgress")+".children", "aclVty")+".children", "aclInst")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.Ipv6EgressVtyAccessListName.IsNull() && config.Ipv6EgressVtyAccessListName.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv6aclAF")+".children", "aclPolicy")+".children", "aclEgress")+".children", "aclVty")+".children", "aclInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.PortObjectGroups {
 			if configChild, ok := config.PortObjectGroups[key]; ok {
 				stateChild := state.PortObjectGroups[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {

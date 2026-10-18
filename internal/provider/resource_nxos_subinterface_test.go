@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosSubinterface(t *testing.T) {
+// TestAccSubinterfaceResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccSubinterfaceResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "subinterfaces.eth1/10.124.admin_state", "down"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "subinterfaces.eth1/10.124.bandwidth", "1000"))
@@ -48,38 +52,75 @@ func TestAccNxosSubinterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "subinterfaces.eth1/10.124.router_mac_ipv6_extract", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "subinterfaces.eth1/10.124.snmp_trap", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "subinterfaces.eth1/10.124.vrf_dn", "sys/inst-VRF123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.encap", "vlan-124"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.medium", "broadcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.mtu_inherit", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.router_mac", "AA:BB:CC:DD:EE:FF"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.router_mac_ipv6_extract", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.snmp_trap", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "subinterfaces.eth1/10.124.vrf_dn", "sys/inst-VRF123"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccSubinterfaceResourcePrerequisitesConfig + testAccSubinterfaceResourceConfig_minimum(),
+		},
+		{
+			Config: testAccSubinterfaceResourcePrerequisitesConfig + testAccSubinterfaceResourceConfig_all() + testAccSubinterfaceResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_subinterface.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccSubinterfaceResourceImportStateIdFunc("nxos_subinterface.test"),
+		},
+		{
+			ResourceName:       "nxos_subinterface.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccSubinterfaceResourcePrerequisitesConfig + testAccSubinterfaceResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccSubinterfaceResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccSubinterfaceResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_subinterface.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccSubinterfaceResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccSubinterfaceResourcePrerequisitesConfig + testAccSubinterfaceResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosSubinterfacePrerequisitesConfig + testAccNxosSubinterfaceConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_subinterface.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosSubinterfaceImportStateIdFunc("nxos_subinterface.test"),
-			},
-			{
-				ResourceName:       "nxos_subinterface.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosSubinterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccSubinterfaceResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -89,7 +130,7 @@ func nxosSubinterfaceImportStateIdFunc(resourceName string) resource.ImportState
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosSubinterfacePrerequisitesConfig = `
+const testAccSubinterfaceResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
@@ -104,7 +145,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosSubinterfaceConfig_minimum() string {
+func testAccSubinterfaceResourceConfig_minimum() string {
 	config := `resource "nxos_subinterface" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -114,7 +155,7 @@ func testAccNxosSubinterfaceConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosSubinterfaceConfig_all() string {
+func testAccSubinterfaceResourceConfig_all() string {
 	config := `resource "nxos_subinterface" "test" {` + "\n"
 	config += `	subinterfaces = {` + "\n"
 	config += `		"eth1/10.124" = {` + "\n"
@@ -136,6 +177,14 @@ func testAccNxosSubinterfaceConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccSubinterfaceResourceConfig_dataSource() string {
+	return `
+data "nxos_subinterface" "test" {
+	depends_on = [nxos_subinterface.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

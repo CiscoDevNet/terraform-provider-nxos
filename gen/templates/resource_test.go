@@ -76,6 +76,11 @@ import (
 {{- end}}
 {{- end}}
 {{- end}}
+{{- range $entry := exampleEntries .}}
+{{- range .Attributes}}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$prefix}}{{$list}}.{{$entry.Key}}.{{.TfName}}", "{{.Value}}"))
+{{- end}}
+{{- end}}
 {{- if .TfChildClasses}}
 {{- template "resourceTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "Prefix" (printf "%s%s.%s." $prefix $list $mapKey))}}
 {{- end}}
@@ -87,8 +92,93 @@ import (
 {{- end}}
 {{- /* ==================== end resourceTestChecksTemplate ==================== */}}
 
+{{- /* ==================== dsTestChecksTemplate ====================
+       Recursively emits test check calls for data source TfChildClasses.
+       Context: map with "Name" (string), "Children" ([]TfChildClass), "PathPrefix" (string),
+                "InList" (bool) - true when inside a list parent (skips TestTags checks for single children).
+       - single (not in list): emit TestCheckResourceAttr for each attr (with TestTags), recurse
+       - single (in list):     emit TestCheckResourceAttr for each attr (without TestTags), recurse
+       - list:                 emit TestCheckResourceAttr with map key paths, recurse with InList=true
+       ========================================================= */}}
+{{- define "dsTestChecksTemplate"}}
+{{- $name := .Name}}
+{{- $pathPrefix := .PathPrefix}}
+{{- $inList := .InList}}
+{{- range (testChildClasses .Children)}}
+{{- $list := .TfName}}
+{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
+{{- end}}
+{{- if eq .Type "single"}}
+{{- if $inList}}
+{{- range .Attributes}}
+{{- if and (not .ExcludeTest) (not .WriteOnly)}}
+{{- if .MinVersion}}
+	if {{testCond nil .MinVersion}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{.TfName}}", "{{.Example}}"))
+	}
+{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{.TfName}}", "{{.Example}}"))
+{{- end}}
+{{- end}}
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix "InList" true)}}
+{{- end}}
+{{- else}}
+{{- range .Attributes}}
+{{- if and (not .ExcludeTest) (not .WriteOnly)}}
+{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{.TfName}}", "{{.Example}}"))
+	}
+{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{.TfName}}", "{{.Example}}"))
+{{- end}}
+{{- end}}
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix "InList" false)}}
+{{- end}}
+{{- end}}
+{{- else if eq .Type "list"}}
+{{- $mapKey := mapKeyExample .Attributes}}
+{{- range .Attributes}}
+{{- if and (not .ExcludeTest) (not .WriteOnly) (not .Id)}}
+{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{$list}}.{{$mapKey}}.{{.TfName}}", "{{.Example}}"))
+	}
+{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{$list}}.{{$mapKey}}.{{.TfName}}", "{{.Example}}"))
+{{- end}}
+{{- end}}
+{{- end}}
+{{- range $entry := exampleEntries .}}
+{{- range .Attributes}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{$list}}.{{$entry.Key}}.{{.TfName}}", "{{.Value}}"))
+{{- end}}
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" (printf "%s%s.%s." $pathPrefix $list $mapKey) "InList" true)}}
+{{- end}}
+{{- end}}
+{{- if testCond .TestTags .MinVersion}}
+	}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end dsTestChecksTemplate ==================== */}}
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxos{{camelCase .Name}}(t *testing.T) {
+{{- $sensitive := or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .TfChildClasses)}}
+{{- $prereq := ""}}
+{{- if .TestPrerequisites}}{{$prereq = printf "testAcc%sResourcePrerequisitesConfig+" (camelCase .Name)}}{{end}}
+// TestAcc{{camelCase .Name}}Resource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAcc{{camelCase .Name}}Resource(t *testing.T) {
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} && {{end}}os.Getenv("{{$e}}") == ""{{end}} {
         t.Skip("skipping test, set environment variable {{range $i, $e := .TestTags}}{{if $i}} or {{end}}{{$e}}{{end}}")
@@ -108,52 +198,84 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- template "resourceTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "Prefix" "")}}
+	{{- range  .Attributes}}
+	{{- if and (not .WriteOnly) (not .ExcludeTest)}}
+	{{- if testCond .TestTags .MinVersion}}
+	if {{testCond .TestTags .MinVersion}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
+	}
+	{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" "" "InList" false)}}
 	var tfVersion *goversion.Version
-	{{- if or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .TfChildClasses)}}
+	{{- if $sensitive}}
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	{{- end}}
+	steps := []resource.TestStep{
+		{
+			Config: {{$prereq}}testAcc{{camelCase .Name}}ResourceConfig_minimum(),
+		},
+		{
+			Config: {{$prereq}}testAcc{{camelCase .Name}}ResourceConfig_all({{if $sensitive}}includeWriteOnly{{end}}) + testAcc{{camelCase .Name}}ResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:  "nxos_{{snakeCase $name}}.test",
+			ImportState:   true,
+			ImportStateIdFunc: testAcc{{camelCase .Name}}ResourceImportStateIdFunc("nxos_{{snakeCase $name}}.test"),
+		},
+		{{- if not (hasWriteOnly .Attributes)}}
+		{
+			ResourceName:       "nxos_{{snakeCase $name}}.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{{- end}}
+		{{- range $i, $e := .AdditionalTests}}
+		{
+			Config: {{$prereq}}testAcc{{camelCase $.Name}}ResourceConfigAdditional{{$i}},
+		},
+		{{- end}}
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: {{$prereq}}testAcc{{camelCase .Name}}ResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: {{$prereq}}testAccWithDeletionPolicy(testAcc{{camelCase .Name}}ResourceConfig_all({{if $sensitive}}includeWriteOnly{{end}}), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: {{if .TestPrerequisites}}testAcc{{camelCase .Name}}ResourcePrerequisitesConfig{{else}}testAccNoResourcesConfig{{end}},
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: {{$prereq}}testAcc{{camelCase .Name}}ResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				{{- if or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .TfChildClasses)}}
-				Config: {{if .TestPrerequisites}}testAccNxos{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccNxos{{camelCase .Name}}Config_all(includeWriteOnly),
-				{{- else}}
-				Config: {{if .TestPrerequisites}}testAccNxos{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccNxos{{camelCase .Name}}Config_all(),
-				{{- end}}
-				Check: resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "nxos_{{snakeCase $name}}.test",
-				ImportState:   true,
-				ImportStateIdFunc: nxos{{camelCase .Name}}ImportStateIdFunc("nxos_{{snakeCase $name}}.test"),
-			},
-			{{- if not (hasWriteOnly .Attributes)}}
-			{
-				ResourceName:       "nxos_{{snakeCase $name}}.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-			{{- end}}
-			{{- range $i, $e := .AdditionalTests}}
-			{
-				Config: {{if $.TestPrerequisites}}testAccNxos{{camelCase $.Name}}PrerequisitesConfig+{{end}}testAccNxos{{camelCase $.Name}}ConfigAdditional{{$i}},
-			},
-			{{- end}}
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxos{{camelCase .Name}}ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAcc{{camelCase .Name}}ResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		{{- if importAttributes .}}
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -171,7 +293,7 @@ func nxos{{camelCase .Name}}ImportStateIdFunc(resourceName string) resource.Impo
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 {{- if .TestPrerequisites}}
-const testAccNxos{{camelCase .Name}}PrerequisitesConfig = `
+const testAcc{{camelCase .Name}}ResourcePrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
 resource "nxos_dme" "PreReq{{$index}}" {
   dn = "{{.Dn}}"
@@ -213,8 +335,29 @@ resource "nxos_dme" "PreReq{{$index}}" {
 
 // End of section. //template:end testPrerequisites
 
+{{- /* ==================== testMinimumChildrenTemplate ====================
+       Recursively emits HCL config lines for the mandatory attributes of single child classes, which are
+       flattened into the resource and therefore required. List child classes are optional.
+       Context: map with "Children" ([]TfChildClass)
+       ========================================================= */}}
+{{- define "testMinimumChildrenTemplate"}}
+{{- range (testChildClasses .Children)}}
+{{- if eq .Type "single"}}
+{{- range .Attributes}}
+{{- if .Mandatory}}
+	config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+{{- end}}
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "testMinimumChildrenTemplate" (makeMap "Children" .TfChildClasses)}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end testMinimumChildrenTemplate ==================== */}}
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxos{{camelCase .Name}}Config_minimum() string {
+func testAcc{{camelCase .Name}}ResourceConfig_minimum() string {
 	config := `resource "nxos_{{snakeCase $name}}" "test" {` + "\n"
 	{{- range  .Attributes}}
 	{{- if or .Id .Mandatory}}
@@ -227,6 +370,7 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- template "testMinimumChildrenTemplate" (makeMap "Children" .TfChildClasses)}}
 	{{- if .TestPrerequisites}}
 	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_dme.PreReq{{$index}}, {{end}}]` + "\n"
 	{{- end}}
@@ -315,6 +459,13 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- template "testConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" (printf "%s\t\t" $indent))}}
 {{- end}}
 	config += `{{$indent}}	}` + "\n"
+{{- range exampleEntries .}}
+	config += `{{$indent}}	"{{.Key}}" = {` + "\n"
+{{- range .Attributes}}
+	config += `{{$indent}}		{{.TfName}} = {{.Hcl}}` + "\n"
+{{- end}}
+	config += `{{$indent}}	}` + "\n"
+{{- end}}
 	config += `{{$indent}}}` + "\n"
 {{- end}}
 {{- end}}
@@ -327,9 +478,9 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 {{- if or (hasSensitiveAttr .Attributes) (hasSensitiveAttrRecursive .TfChildClasses)}}
-func testAccNxos{{camelCase .Name}}Config_all(includeWriteOnly bool) string {
+func testAcc{{camelCase .Name}}ResourceConfig_all(includeWriteOnly bool) string {
 {{- else}}
-func testAccNxos{{camelCase .Name}}Config_all() string {
+func testAcc{{camelCase .Name}}ResourceConfig_all() string {
 {{- end}}
 	config := `resource "nxos_{{snakeCase $name}}" "test" {` + "\n"
 	{{- range  .Attributes}}
@@ -367,7 +518,42 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 	return config
 }
 
-{{range $i, $e := .AdditionalTests}}const testAccNxos{{camelCase $.Name}}ConfigAdditional{{$i}} = `
+{{- /* ==================== dsConfigIdAttrsTemplate ====================
+       Recursively emits Id/ReferenceOnly attributes for single-type children
+       in the data source HCL block.
+       Context: map with "Children" ([]TfChildClass)
+       ========================================================= */}}
+{{- define "dsConfigIdAttrsTemplate"}}
+{{- range (testChildClasses .Children)}}
+{{- if eq .Type "single"}}
+{{- range .Attributes}}
+{{- if .Id}}
+	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}
+{{- end}}
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "dsConfigIdAttrsTemplate" (makeMap "Children" .TfChildClasses)}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end dsConfigIdAttrsTemplate ==================== */}}
+
+func testAcc{{camelCase .Name}}ResourceConfig_dataSource() string {
+	return `
+data "nxos_{{snakeCase .Name}}" "test" {
+{{- range  .Attributes}}
+{{- if .Id}}
+	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}
+{{- end}}
+{{- end}}
+{{- template "dsConfigIdAttrsTemplate" (makeMap "Children" .TfChildClasses)}}
+	depends_on = [nxos_{{snakeCase .Name}}.test]
+}
+`
+}
+
+{{range $i, $e := .AdditionalTests}}const testAcc{{camelCase $.Name}}ResourceConfigAdditional{{$i}} = `
 {{$e}}
 `
 

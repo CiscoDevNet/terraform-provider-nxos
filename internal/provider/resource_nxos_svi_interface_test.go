@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosSVIInterface(t *testing.T) {
+// TestAccSVIInterfaceResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccSVIInterfaceResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "svi_interfaces.vlan293.admin_state", "down"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "svi_interfaces.vlan293.autostate", "false"))
@@ -51,38 +55,78 @@ func TestAccNxosSVIInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "svi_interfaces.vlan293.mtu_inherit", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "svi_interfaces.vlan293.snmp_trap_link_status", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "svi_interfaces.vlan293.vrf_dn", "sys/inst-VRF123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.autostate", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.carrier_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.inband_management", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.load_interval_counter_1", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.load_interval_counter_2", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.load_interval_counter_3", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.mac_address", "00:25:B5:00:00:01"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.medium", "bcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.mtu", "9216"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.mtu_inherit", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.snmp_trap_link_status", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "svi_interfaces.vlan293.vrf_dn", "sys/inst-VRF123"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccSVIInterfaceResourcePrerequisitesConfig + testAccSVIInterfaceResourceConfig_minimum(),
+		},
+		{
+			Config: testAccSVIInterfaceResourcePrerequisitesConfig + testAccSVIInterfaceResourceConfig_all() + testAccSVIInterfaceResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_svi_interface.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccSVIInterfaceResourceImportStateIdFunc("nxos_svi_interface.test"),
+		},
+		{
+			ResourceName:       "nxos_svi_interface.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccSVIInterfaceResourcePrerequisitesConfig + testAccSVIInterfaceResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccSVIInterfaceResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccSVIInterfaceResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_svi_interface.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccSVIInterfaceResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccSVIInterfaceResourcePrerequisitesConfig + testAccSVIInterfaceResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosSVIInterfacePrerequisitesConfig + testAccNxosSVIInterfaceConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_svi_interface.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosSVIInterfaceImportStateIdFunc("nxos_svi_interface.test"),
-			},
-			{
-				ResourceName:       "nxos_svi_interface.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosSVIInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccSVIInterfaceResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -92,7 +136,7 @@ func nxosSVIInterfaceImportStateIdFunc(resourceName string) resource.ImportState
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosSVIInterfacePrerequisitesConfig = `
+const testAccSVIInterfaceResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/ifvlan"
   class_name = "fmInterfaceVlan"
@@ -107,7 +151,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosSVIInterfaceConfig_minimum() string {
+func testAccSVIInterfaceResourceConfig_minimum() string {
 	config := `resource "nxos_svi_interface" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -117,7 +161,7 @@ func testAccNxosSVIInterfaceConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosSVIInterfaceConfig_all() string {
+func testAccSVIInterfaceResourceConfig_all() string {
 	config := `resource "nxos_svi_interface" "test" {` + "\n"
 	config += `	svi_interfaces = {` + "\n"
 	config += `		"vlan293" = {` + "\n"
@@ -142,6 +186,14 @@ func testAccNxosSVIInterfaceConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccSVIInterfaceResourceConfig_dataSource() string {
+	return `
+data "nxos_svi_interface" "test" {
+	depends_on = [nxos_svi_interface.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

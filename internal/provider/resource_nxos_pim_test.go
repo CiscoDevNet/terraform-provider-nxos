@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosPIM(t *testing.T) {
+// TestAccPIMResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccPIMResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "instance_admin_state", "enabled"))
@@ -84,44 +88,117 @@ func TestAccNxosPIM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.default.anycast_rp_source_interface", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.default.anycast_rp_description", "Anycast_RP"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.default.anycast_rp_name", "anycast-rp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "evpn_border_leaf", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "extra_net", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "join_prune_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "register_stop", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "isolate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "log_level", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "syslog_level", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.bfd", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.auto_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.control", "flush-on-restart"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.flush_routes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.join_prune_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.log_neighbor_changes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.mtu", "1600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.register_rate_limit", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.rfc_strict", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.spt_switch_graceful", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.dr_priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.passive", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.sparse_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.border", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.border_router", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.control", "border"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.description", "MyDescription"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.dr_delay", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.join_prune_route_map", "JP_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.name", "pim-if"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.neighbor_route_map", "NEIGH_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.pfm_sd_boundary", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.interfaces.eth1/10.rfc_strict", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_policy_name", "SSM"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_policy_description", "SSM_Policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_range_group_list_1", "232.0.0.0/8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_range_group_list_2", "233.0.0.0/8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.ssm_range_none", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rp_policy_name", "RP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rp_policy_description", "Static_RP_Policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rps.1.2.3.4.group_lists.225.0.0.0/24.bidir", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.static_rps.1.2.3.4.group_lists.225.0.0.0/24.override", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_local_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_source_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_description", "Anycast_RP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.default.anycast_rp_name", "anycast-rp"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccPIMResourcePrerequisitesConfig + testAccPIMResourceConfig_minimum(),
+		},
+		{
+			Config: testAccPIMResourcePrerequisitesConfig + testAccPIMResourceConfig_all() + testAccPIMResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_pim.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccPIMResourceImportStateIdFunc("nxos_pim.test"),
+		},
+		{
+			ResourceName:       "nxos_pim.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			Config: testAccPIMResourcePrerequisitesConfig + testAccPIMResourceConfigAdditional0,
+		},
+		{
+			Config: testAccPIMResourcePrerequisitesConfig + testAccPIMResourceConfigAdditional1,
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccPIMResourcePrerequisitesConfig + testAccPIMResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccPIMResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccPIMResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_pim.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccPIMResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccPIMResourcePrerequisitesConfig + testAccPIMResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosPIMPrerequisitesConfig + testAccNxosPIMConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_pim.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosPIMImportStateIdFunc("nxos_pim.test"),
-			},
-			{
-				ResourceName:       "nxos_pim.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-			{
-				Config: testAccNxosPIMPrerequisitesConfig + testAccNxosPIMConfigAdditional0,
-			},
-			{
-				Config: testAccNxosPIMPrerequisitesConfig + testAccNxosPIMConfigAdditional1,
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosPIMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccPIMResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -131,7 +208,7 @@ func nxosPIMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosPIMPrerequisitesConfig = `
+const testAccPIMResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
@@ -155,7 +232,7 @@ resource "nxos_dme" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosPIMConfig_minimum() string {
+func testAccPIMResourceConfig_minimum() string {
 	config := `resource "nxos_pim" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
@@ -165,7 +242,7 @@ func testAccNxosPIMConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosPIMConfig_all() string {
+func testAccPIMResourceConfig_all() string {
 	config := `resource "nxos_pim" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
@@ -241,7 +318,15 @@ func testAccNxosPIMConfig_all() string {
 	return config
 }
 
-const testAccNxosPIMConfigAdditional0 = `
+func testAccPIMResourceConfig_dataSource() string {
+	return `
+data "nxos_pim" "test" {
+	depends_on = [nxos_pim.test]
+}
+`
+}
+
+const testAccPIMResourceConfigAdditional0 = `
 resource "nxos_pim" "test" {
   vrfs = {
     "default" = {
@@ -261,7 +346,7 @@ resource "nxos_pim" "test" {
 }
 `
 
-const testAccNxosPIMConfigAdditional1 = `
+const testAccPIMResourceConfigAdditional1 = `
 resource "nxos_pim" "test" {
   vrfs = {
     "default" = {

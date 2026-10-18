@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosEIGRP(t *testing.T) {
+// TestAccEIGRPResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccEIGRPResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_eigrp.test", "instances.EIGRP1.flush_routes", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_eigrp.test", "instances.EIGRP1.isolate", "true"))
@@ -108,38 +112,135 @@ func TestAccNxosEIGRP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.offset_lists.in.offset", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.summary_addresses.10.10.0.0/16.route_map", "RM_SUMMARY"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.summary_addresses.10.10.0.0/16.distance", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.flush_routes", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.isolate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.asn", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.router_id", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.internal_distance", "91"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.external_distance", "171"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.maximum_paths", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.active_interval_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.active_interval", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.metric_style", "wide"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.rib_scale", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.maximum_hops", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.log_adjacency_changes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.log_neighbor_warnings_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.log_neighbor_warnings_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.passive_interface_default", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.suppress_fib_pending", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.bfd", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.authentication_mode", "md5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.authentication_key_chain", "KEYCHAIN1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.default_metric_bandwidth", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.default_metric_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.default_metric_reliability", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.default_metric_load", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.default_metric_mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.graceful_restart", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.graceful_restart_route_hold_interval", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.graceful_restart_convergence_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.graceful_restart_signal_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.graceful_restart_await_redistribution_protocol_convergence", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.metric_weights_type_of_service", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.metric_weights_k1", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.metric_weights_k2", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.metric_weights_k3", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.metric_weights_k4", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.metric_weights_k5", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.metric_weights_k6", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.default_information_originate_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.default_information_originate_route_map", "RM_DEFAULT"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.redistributions.bgp;none;65001.route_map", "RM_REDIST"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.redistribute_maximum_prefix_control", "withdraw"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.redistribute_maximum_prefix", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.redistribute_maximum_prefix_threshold", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.redistribute_maximum_prefix_retries", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.redistribute_maximum_prefix_duration", "400"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.table_map_route_map", "RM_TABLE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.table_map_always", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.stub_direct", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.stub_static", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.stub_summary", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.stub_external", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.stub_receive_only", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.address_families.ipv4-ucast.stub_leak_map", "RM_STUB"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.hello_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.hold_time", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.bandwidth", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.bandwidth_percent", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.delay_unit", "tens-of-micro"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.mtu", "1400"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.next_hop_self", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.split_horizon", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.passive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.authentication_mode", "md5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.authentication_key_chain", "KEYCHAIN1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.distribute_lists.in.route_map", "RM_DIST"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.offset_lists.in.route_map", "RM_OFFSET"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.offset_lists.in.offset", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.summary_addresses.10.10.0.0/16.route_map", "RM_SUMMARY"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_eigrp.test", "instances.EIGRP1.vrfs.default.interfaces.eth1/10.address_families.ipv4-ucast.summary_addresses.10.10.0.0/16.distance", "10"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccEIGRPResourcePrerequisitesConfig + testAccEIGRPResourceConfig_minimum(),
+		},
+		{
+			Config: testAccEIGRPResourcePrerequisitesConfig + testAccEIGRPResourceConfig_all() + testAccEIGRPResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_eigrp.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccEIGRPResourceImportStateIdFunc("nxos_eigrp.test"),
+		},
+		{
+			ResourceName:       "nxos_eigrp.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccEIGRPResourcePrerequisitesConfig + testAccEIGRPResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccEIGRPResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccEIGRPResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_eigrp.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccEIGRPResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccEIGRPResourcePrerequisitesConfig + testAccEIGRPResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosEIGRPPrerequisitesConfig + testAccNxosEIGRPConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_eigrp.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosEIGRPImportStateIdFunc("nxos_eigrp.test"),
-			},
-			{
-				ResourceName:       "nxos_eigrp.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosEIGRPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccEIGRPResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -149,7 +250,7 @@ func nxosEIGRPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc 
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosEIGRPPrerequisitesConfig = `
+const testAccEIGRPResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/eigrp"
   class_name = "fmEigrp"
@@ -183,7 +284,7 @@ resource "nxos_dme" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosEIGRPConfig_minimum() string {
+func testAccEIGRPResourceConfig_minimum() string {
 	config := `resource "nxos_eigrp" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
@@ -193,7 +294,7 @@ func testAccNxosEIGRPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosEIGRPConfig_all() string {
+func testAccEIGRPResourceConfig_all() string {
 	config := `resource "nxos_eigrp" "test" {` + "\n"
 	config += `	instances = {` + "\n"
 	config += `		"EIGRP1" = {` + "\n"
@@ -307,6 +408,14 @@ func testAccNxosEIGRPConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccEIGRPResourceConfig_dataSource() string {
+	return `
+data "nxos_eigrp" "test" {
+	depends_on = [nxos_eigrp.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosDHCP(t *testing.T) {
+// TestAccDHCPResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccDHCPResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "ipv6_relay_information_option_vpn", "true"))
@@ -77,38 +81,104 @@ func TestAccNxosDHCP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_addresses.VRF1;ff02::1:2;eth1/11.counter", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.source_interface", "lo1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_source_interface", "lo1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "ipv6_relay_information_option_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "ipv6_relay_option_type_cisco", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_information_option", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_information_option_trust", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_information_option_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_information_trust_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_sub_option_circuit_id_customized", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_sub_option_circuit_id_format_string", "%p"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_sub_option_type_cisco", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "smart_relay_global", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "snooping", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "snooping_information_option", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "snooping_verify_mac_address", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "dai_log_buffer_entries", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "dai_validate_destination", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "dai_validate_ip", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "dai_validate_source", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "ipv6_relay_option79", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "packet_strict_validation", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_dai", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_information_option_server_id_override", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_sub_option_format_non_tlv", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_v4_over_v6", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_v6_iapd_route_add", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "snoop_sub_option_circuit_id_format_string", "%p"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "snooping_sub_option_format_non_tlv", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "v4_relay", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "v6_relay", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "v6_smart_relay_global", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "source_interface", "lo1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "ipv6_source_interface_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "ipv6_source_interface", "lo1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.information_trusted", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.smart_relay", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.subnet_broadcast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.options", "relay-info"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.v6_smart_relay", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.addresses.VRF1;1.1.1.1.counter", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_addresses.VRF1;ff02::1:2;eth1/11.counter", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.source_interface", "lo1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_source_interface", "lo1"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccDHCPResourcePrerequisitesConfig + testAccDHCPResourceConfig_minimum(),
+		},
+		{
+			Config: testAccDHCPResourcePrerequisitesConfig + testAccDHCPResourceConfig_all() + testAccDHCPResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_dhcp.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccDHCPResourceImportStateIdFunc("nxos_dhcp.test"),
+		},
+		{
+			ResourceName:       "nxos_dhcp.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccDHCPResourcePrerequisitesConfig + testAccDHCPResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccDHCPResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccDHCPResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_dhcp.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccDHCPResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccDHCPResourcePrerequisitesConfig + testAccDHCPResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosDHCPPrerequisitesConfig + testAccNxosDHCPConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_dhcp.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosDHCPImportStateIdFunc("nxos_dhcp.test"),
-			},
-			{
-				ResourceName:       "nxos_dhcp.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosDHCPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccDHCPResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -118,7 +188,7 @@ func nxosDHCPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosDHCPPrerequisitesConfig = `
+const testAccDHCPResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/dhcp"
   class_name = "fmDhcp"
@@ -149,7 +219,7 @@ resource "nxos_dme" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosDHCPConfig_minimum() string {
+func testAccDHCPResourceConfig_minimum() string {
 	config := `resource "nxos_dhcp" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
@@ -159,7 +229,7 @@ func testAccNxosDHCPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosDHCPConfig_all() string {
+func testAccDHCPResourceConfig_all() string {
 	config := `resource "nxos_dhcp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	ipv6_relay_information_option_vpn = true` + "\n"
@@ -218,6 +288,14 @@ func testAccNxosDHCPConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccDHCPResourceConfig_dataSource() string {
+	return `
+data "nxos_dhcp" "test" {
+	depends_on = [nxos_dhcp.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

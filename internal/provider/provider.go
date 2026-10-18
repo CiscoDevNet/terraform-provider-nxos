@@ -22,7 +22,7 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin provider
 import (
 	"context"
-
+	"fmt"
 	"os"
 	"slices"
 	"strconv"
@@ -30,6 +30,7 @@ import (
 	"sync"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -57,6 +58,7 @@ type NxosProviderModel struct {
 	URL             types.String              `tfsdk:"url"`
 	Insecure        types.Bool                `tfsdk:"insecure"`
 	Retries         types.Int64               `tfsdk:"retries"`
+	DeletionPolicy  types.String              `tfsdk:"deletion_policy"`
 	SelectedDevices types.List                `tfsdk:"selected_devices"`
 	Devices         []NxosProviderModelDevice `tfsdk:"devices"`
 }
@@ -72,6 +74,8 @@ type NxosProviderModelDevice struct {
 // NxosProviderData describes the data maintained by the provider.
 type NxosProviderData struct {
 	Devices map[string]*NxosProviderDataDevice
+	// DeletionPolicy is the deletion policy of resources that do not set one themselves
+	DeletionPolicy string
 }
 
 type NxosProviderDataDevice struct {
@@ -112,6 +116,13 @@ func (p *NxosProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9),
+				},
+			},
+			"deletion_policy": schema.StringAttribute{
+				MarkdownDescription: "The default deletion policy of all resources, which can be overwritten by the `deletion_policy` attribute of a resource. `delete` deletes the objects managed by a resource on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by a resource on destroy and resets the managed attributes of the objects that already existed. `retain` leaves the device unchanged on destroy. See the [Deletion Policy](guides/deletion_policy) guide for details. This can also be set as the NXOS_DELETION_POLICY environment variable. Defaults to `delete`.",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("delete", "reset", "retain"),
 				},
 			},
 			"selected_devices": schema.ListAttribute{
@@ -304,7 +315,31 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		retries = config.Retries.ValueInt64()
 	}
 
-	data := NxosProviderData{}
+	if config.DeletionPolicy.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as deletion_policy",
+		)
+		return
+	}
+
+	deletionPolicy := config.DeletionPolicy.ValueString()
+	if config.DeletionPolicy.IsNull() {
+		deletionPolicy = os.Getenv("NXOS_DELETION_POLICY")
+	}
+	switch deletionPolicy {
+	case "":
+		deletionPolicy = "delete"
+	case "delete", "reset", "retain":
+	default:
+		resp.Diagnostics.AddError(
+			"Invalid deletion policy",
+			fmt.Sprintf("NXOS_DELETION_POLICY must be one of `delete`, `reset` or `retain`, got: %q", deletionPolicy),
+		)
+		return
+	}
+
+	data := NxosProviderData{DeletionPolicy: deletionPolicy}
 	data.Devices = make(map[string]*NxosProviderDataDevice)
 
 	c, err := nxos.NewClient(url, username, password, insecure, nxos.MaxRetries(int(retries)))

@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosHSRP(t *testing.T) {
+// TestAccHSRPResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccHSRPResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "instance_admin_state", "enabled"))
@@ -65,39 +69,93 @@ func TestAccNxosHSRP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_sync", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.priority", "110"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.tracked_objects.10.decrement_priority", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "extended_hold_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "extended_hold_interval_configuration", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.bfd", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.bia_scope", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.control", "bia"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.delay_minimum", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.description", "My HSRP interface"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.mac_refresh_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.mac_refresh_interval_configuration", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.name", "myHsrpIf"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.reload_delay", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.version", "v2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.authentication_type", "simple"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.control", "preempt"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.forwarding_lower_threshold", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.hello_interval", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.hold_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.ip_address", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.ip_obtain_mode", "admin"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.name", "myHsrpGroup"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_minimum", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_reload", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.preempt_delay_sync", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.priority", "110"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hsrp.test", "interfaces.vlan10.groups.1;ipv4.tracked_objects.10.decrement_priority", "20"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccHSRPResourcePrerequisitesConfig + testAccHSRPResourceConfig_minimum(),
+		},
+		{
+			Config: testAccHSRPResourcePrerequisitesConfig + testAccHSRPResourceConfig_all(includeWriteOnly) + testAccHSRPResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_hsrp.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccHSRPResourceImportStateIdFunc("nxos_hsrp.test"),
+		},
+		{
+			ResourceName:       "nxos_hsrp.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccHSRPResourcePrerequisitesConfig + testAccHSRPResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccHSRPResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccHSRPResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_hsrp.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccHSRPResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccHSRPResourcePrerequisitesConfig + testAccHSRPResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosHSRPPrerequisitesConfig + testAccNxosHSRPConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_hsrp.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosHSRPImportStateIdFunc("nxos_hsrp.test"),
-			},
-			{
-				ResourceName:       "nxos_hsrp.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosHSRPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccHSRPResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -107,7 +165,7 @@ func nxosHSRPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosHSRPPrerequisitesConfig = `
+const testAccHSRPResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/hsrp"
   class_name = "fmHsrp"
@@ -169,7 +227,7 @@ resource "nxos_dme" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosHSRPConfig_minimum() string {
+func testAccHSRPResourceConfig_minimum() string {
 	config := `resource "nxos_hsrp" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
 	config += `}` + "\n"
@@ -179,7 +237,7 @@ func testAccNxosHSRPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosHSRPConfig_all(includeWriteOnly bool) string {
+func testAccHSRPResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_hsrp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
@@ -226,6 +284,14 @@ func testAccNxosHSRPConfig_all(includeWriteOnly bool) string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccHSRPResourceConfig_dataSource() string {
+	return `
+data "nxos_hsrp" "test" {
+	depends_on = [nxos_hsrp.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

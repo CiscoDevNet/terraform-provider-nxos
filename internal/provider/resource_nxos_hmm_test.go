@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosHMM(t *testing.T) {
+// TestAccHMMResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccHMMResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "instance_admin_state", "enabled"))
@@ -50,38 +54,77 @@ func TestAccNxosHMM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.vlan10.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.vlan10.mode", "anycastGW"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.vlan10.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "anycast_mac", "20:20:00:00:10:10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "administrative_distance", "150"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "limit_vlan_mac", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "evpn_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "evpn_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "duplicate_host_detection_moves", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "duplicate_host_detection_seconds", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "duplicate_host_recovery_count", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "duplicate_host_recovery_timeout", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "interfaces.vlan10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "interfaces.vlan10.mode", "anycastGW"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "interfaces.vlan10.description", "My Description"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccHMMResourcePrerequisitesConfig + testAccHMMResourceConfig_minimum(),
+		},
+		{
+			Config: testAccHMMResourcePrerequisitesConfig + testAccHMMResourceConfig_all() + testAccHMMResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_hmm.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccHMMResourceImportStateIdFunc("nxos_hmm.test"),
+		},
+		{
+			ResourceName:       "nxos_hmm.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccHMMResourcePrerequisitesConfig + testAccHMMResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccHMMResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccHMMResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_hmm.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccHMMResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccHMMResourcePrerequisitesConfig + testAccHMMResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosHMMPrerequisitesConfig + testAccNxosHMMConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_hmm.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosHMMImportStateIdFunc("nxos_hmm.test"),
-			},
-			{
-				ResourceName:       "nxos_hmm.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosHMMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccHMMResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -91,7 +134,7 @@ func nxosHMMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosHMMPrerequisitesConfig = `
+const testAccHMMResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/ifvlan"
   class_name = "fmInterfaceVlan"
@@ -133,7 +176,7 @@ resource "nxos_dme" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosHMMConfig_minimum() string {
+func testAccHMMResourceConfig_minimum() string {
 	config := `resource "nxos_hmm" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
@@ -143,7 +186,7 @@ func testAccNxosHMMConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosHMMConfig_all() string {
+func testAccHMMResourceConfig_all() string {
 	config := `resource "nxos_hmm" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
@@ -167,6 +210,14 @@ func testAccNxosHMMConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccHMMResourceConfig_dataSource() string {
+	return `
+data "nxos_hmm" "test" {
+	depends_on = [nxos_hmm.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

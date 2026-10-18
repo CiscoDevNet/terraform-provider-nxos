@@ -120,6 +120,14 @@ var IPv6SubtreeClassMinVersions = map[string]string{}
 // IPv6MinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var IPv6MinVersions = map[string]helpers.MinVersion{}
 
+// IPv6ListClasses holds the list child classes of the resource.
+var IPv6ListClasses = map[string]bool{"ipv6Dom": true, "ipv6Route": true, "ipv6Nexthop": true, "ipv6If": true, "ipv6Addr": true}
+
+// getIPv6Tree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getIPv6Tree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"ipv6Inst", "ipv6Dom", "ipv6Route", "ipv6Nexthop", "ipv6If", "ipv6Addr"}, IPv6SubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -797,7 +805,231 @@ func (data IPv6) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data IPv6) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.AccessListMatchLocal.IsNull() && data.AdminState.IsNull() && data.Control.IsNull() && data.DropNdFragments.IsNull() && data.QueuePackets.IsNull() && data.StaticNeighborOutsideSubnet.IsNull() && data.SwitchPackets.IsNull() && len(data.Vrfs) == 0) {
+		ipv6InstDn := dn + "/" + "inst"
+		dns[ipv6InstDn] = true
+		for key, child := range data.Vrfs {
+			ipv6DomDn := ipv6InstDn + "/" + child.getRn(key)
+			dns[ipv6DomDn] = true
+			for key_, child_ := range child.StaticRoutes {
+				ipv6RouteDn_ := ipv6DomDn + "/" + child_.getRn(key_)
+				dns[ipv6RouteDn_] = true
+				for key__, child__ := range child_.NextHops {
+					keyParts := strings.SplitN(key__, ";", 3)
+					_ = keyParts
+					ipv6NexthopDn__ := ipv6RouteDn_ + "/" + child__.getRn(key__)
+					dns[ipv6NexthopDn__] = true
+				}
+			}
+			for key_, child_ := range child.Interfaces {
+				ipv6IfDn_ := ipv6DomDn + "/" + child_.getRn(key_)
+				dns[ipv6IfDn_] = true
+				for key__, child__ := range child_.Addresses {
+					ipv6AddrDn__ := ipv6IfDn_ + "/" + child__.getRn(key__)
+					dns[ipv6AddrDn__] = true
+				}
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data IPv6) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "ipv6Entity.attributes", map[string]interface{}{})
+	}
+	if !(data.AccessListMatchLocal.IsNull() && data.AdminState.IsNull() && data.Control.IsNull() && data.DropNdFragments.IsNull() && data.QueuePackets.IsNull() && data.StaticNeighborOutsideSubnet.IsNull() && data.SwitchPackets.IsNull() && len(data.Vrfs) == 0) {
+		ipv6InstRn := "inst"
+		ipv6InstDn := dn + "/" + ipv6InstRn
+		_ = ipv6InstDn
+		{
+			ipv6InstBody := ""
+			if !data.AccessListMatchLocal.IsNull() {
+				ipv6InstBody, _ = sjson.Set(ipv6InstBody, "ipv6Inst.attributes.accessListMatchLocal", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AdminState.IsNull() {
+				ipv6InstBody, _ = sjson.Set(ipv6InstBody, "ipv6Inst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Control.IsNull() {
+				ipv6InstBody, _ = sjson.Set(ipv6InstBody, "ipv6Inst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DropNdFragments.IsNull() {
+				ipv6InstBody, _ = sjson.Set(ipv6InstBody, "ipv6Inst.attributes.dropNdFragments", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QueuePackets.IsNull() {
+				ipv6InstBody, _ = sjson.Set(ipv6InstBody, "ipv6Inst.attributes.queuePackets", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.StaticNeighborOutsideSubnet.IsNull() {
+				ipv6InstBody, _ = sjson.Set(ipv6InstBody, "ipv6Inst.attributes.staticNeighborOutsideSubnet", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SwitchPackets.IsNull() {
+				ipv6InstBody, _ = sjson.Set(ipv6InstBody, "ipv6Inst.attributes.switchPackets", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key, child := range data.Vrfs {
+				_ = child
+				ipv6DomRn := child.getRn(key)
+				ipv6DomDn := ipv6InstDn + "/" + ipv6DomRn
+				_ = ipv6DomDn
+				if !existed(ipv6DomDn) {
+					ipv6InstBody, _ = sjson.Set(ipv6InstBody, "ipv6Inst.children.-1.ipv6Dom.attributes", map[string]interface{}{"rn": ipv6DomRn, "status": "deleted"})
+					continue
+				}
+				ipv6DomBody := ""
+				ipv6DomBody, _ = sjson.Set(ipv6DomBody, "ipv6Dom.attributes.rn", ipv6DomRn)
+				for key_, child_ := range child.StaticRoutes {
+					_ = child_
+					ipv6RouteRn_ := child_.getRn(key_)
+					ipv6RouteDn_ := ipv6DomDn + "/" + ipv6RouteRn_
+					_ = ipv6RouteDn_
+					if !existed(ipv6RouteDn_) {
+						ipv6DomBody, _ = sjson.Set(ipv6DomBody, "ipv6Dom.children.-1.ipv6Route.attributes", map[string]interface{}{"rn": ipv6RouteRn_, "status": "deleted"})
+						continue
+					}
+					ipv6RouteBody_ := ""
+					ipv6RouteBody_, _ = sjson.Set(ipv6RouteBody_, "ipv6Route.attributes.rn", ipv6RouteRn_)
+					if !child_.Control.IsNull() {
+						ipv6RouteBody_, _ = sjson.Set(ipv6RouteBody_, "ipv6Route.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Description.IsNull() {
+						ipv6RouteBody_, _ = sjson.Set(ipv6RouteBody_, "ipv6Route.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Preference.IsNull() {
+						ipv6RouteBody_, _ = sjson.Set(ipv6RouteBody_, "ipv6Route.attributes.pref", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Tag.IsNull() {
+						ipv6RouteBody_, _ = sjson.Set(ipv6RouteBody_, "ipv6Route.attributes.tag", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key__, child__ := range child_.NextHops {
+						_ = child__
+						keyParts := strings.SplitN(key__, ";", 3)
+						_ = keyParts
+						ipv6NexthopRn__ := child__.getRn(key__)
+						ipv6NexthopDn__ := ipv6RouteDn_ + "/" + ipv6NexthopRn__
+						_ = ipv6NexthopDn__
+						if !existed(ipv6NexthopDn__) {
+							ipv6RouteBody_, _ = sjson.Set(ipv6RouteBody_, "ipv6Route.children.-1.ipv6Nexthop.attributes", map[string]interface{}{"rn": ipv6NexthopRn__, "status": "deleted"})
+							continue
+						}
+						ipv6NexthopBody__ := ""
+						ipv6NexthopBody__, _ = sjson.Set(ipv6NexthopBody__, "ipv6Nexthop.attributes.rn", ipv6NexthopRn__)
+						if !child__.Description.IsNull() {
+							ipv6NexthopBody__, _ = sjson.Set(ipv6NexthopBody__, "ipv6Nexthop.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Object.IsNull() {
+							ipv6NexthopBody__, _ = sjson.Set(ipv6NexthopBody__, "ipv6Nexthop.attributes.object", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Preference.IsNull() {
+							ipv6NexthopBody__, _ = sjson.Set(ipv6NexthopBody__, "ipv6Nexthop.attributes.pref", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Tag.IsNull() {
+							ipv6NexthopBody__, _ = sjson.Set(ipv6NexthopBody__, "ipv6Nexthop.attributes.tag", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Name.IsNull() {
+							ipv6NexthopBody__, _ = sjson.Set(ipv6NexthopBody__, "ipv6Nexthop.attributes.rtname", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.RewriteEncapsulation.IsNull() {
+							ipv6NexthopBody__, _ = sjson.Set(ipv6NexthopBody__, "ipv6Nexthop.attributes.rwEncap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						ipv6RouteBody_, _ = sjson.SetRaw(ipv6RouteBody_, "ipv6Route.children.-1", ipv6NexthopBody__)
+					}
+					ipv6DomBody, _ = sjson.SetRaw(ipv6DomBody, "ipv6Dom.children.-1", ipv6RouteBody_)
+				}
+				for key_, child_ := range child.Interfaces {
+					_ = child_
+					ipv6IfRn_ := child_.getRn(key_)
+					ipv6IfDn_ := ipv6DomDn + "/" + ipv6IfRn_
+					_ = ipv6IfDn_
+					if !existed(ipv6IfDn_) {
+						ipv6DomBody, _ = sjson.Set(ipv6DomBody, "ipv6Dom.children.-1.ipv6If.attributes", map[string]interface{}{"rn": ipv6IfRn_, "status": "deleted"})
+						continue
+					}
+					ipv6IfBody_ := ""
+					ipv6IfBody_, _ = sjson.Set(ipv6IfBody_, "ipv6If.attributes.rn", ipv6IfRn_)
+					if !child_.AutoConfiguration.IsNull() {
+						ipv6IfBody_, _ = sjson.Set(ipv6IfBody_, "ipv6If.attributes.autoconfig", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DefaultRoute.IsNull() {
+						ipv6IfBody_, _ = sjson.Set(ipv6IfBody_, "ipv6If.attributes.defaultRoute", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Forward.IsNull() {
+						ipv6IfBody_, _ = sjson.Set(ipv6IfBody_, "ipv6If.attributes.forward", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LinkLocalAddressUseBia.IsNull() {
+						ipv6IfBody_, _ = sjson.Set(ipv6IfBody_, "ipv6If.attributes.llAddrUseBia", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.UseLinkLocalAddress.IsNull() {
+						ipv6IfBody_, _ = sjson.Set(ipv6IfBody_, "ipv6If.attributes.useLinkLocalAddr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Urpf.IsNull() {
+						ipv6IfBody_, _ = sjson.Set(ipv6IfBody_, "ipv6If.attributes.urpf", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LinkLocalAddress.IsNull() {
+						ipv6IfBody_, _ = sjson.Set(ipv6IfBody_, "ipv6If.attributes.llAddr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key__, child__ := range child_.Addresses {
+						_ = child__
+						ipv6AddrRn__ := child__.getRn(key__)
+						ipv6AddrDn__ := ipv6IfDn_ + "/" + ipv6AddrRn__
+						_ = ipv6AddrDn__
+						if !existed(ipv6AddrDn__) {
+							ipv6IfBody_, _ = sjson.Set(ipv6IfBody_, "ipv6If.children.-1.ipv6Addr.attributes", map[string]interface{}{"rn": ipv6AddrRn__, "status": "deleted"})
+							continue
+						}
+						ipv6AddrBody__ := ""
+						ipv6AddrBody__, _ = sjson.Set(ipv6AddrBody__, "ipv6Addr.attributes.rn", ipv6AddrRn__)
+						if !child__.Type.IsNull() {
+							ipv6AddrBody__, _ = sjson.Set(ipv6AddrBody__, "ipv6Addr.attributes.type", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Tag.IsNull() {
+							ipv6AddrBody__, _ = sjson.Set(ipv6AddrBody__, "ipv6Addr.attributes.tag", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AggregatePrefixLength.IsNull() {
+							ipv6AddrBody__, _ = sjson.Set(ipv6AddrBody__, "ipv6Addr.attributes.aggregatePrefixLength", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Control.IsNull() {
+							ipv6AddrBody__, _ = sjson.Set(ipv6AddrBody__, "ipv6Addr.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Preference.IsNull() {
+							ipv6AddrBody__, _ = sjson.Set(ipv6AddrBody__, "ipv6Addr.attributes.pref", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.UseBia.IsNull() {
+							ipv6AddrBody__, _ = sjson.Set(ipv6AddrBody__, "ipv6Addr.attributes.useBia", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.VpcPeer.IsNull() {
+							ipv6AddrBody__, _ = sjson.Set(ipv6AddrBody__, "ipv6Addr.attributes.vpcPeer", "DME_UNSET_PROPERTY_MARKER")
+						}
+						ipv6IfBody_, _ = sjson.SetRaw(ipv6IfBody_, "ipv6If.children.-1", ipv6AddrBody__)
+					}
+					ipv6DomBody, _ = sjson.SetRaw(ipv6DomBody, "ipv6Dom.children.-1", ipv6IfBody_)
+				}
+				ipv6InstBody, _ = sjson.SetRaw(ipv6InstBody, "ipv6Inst.children.-1", ipv6DomBody)
+			}
+			if ipv6InstBody != "" {
+				ipv6InstBody, _ = sjson.Set(ipv6InstBody, "ipv6Inst.attributes.rn", ipv6InstRn)
+				body, _ = sjson.SetRaw(body, "ipv6Entity.children.-1", ipv6InstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -937,6 +1169,8 @@ func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6,
 				stateChild := state.Vrfs[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipv6Inst")+".children").Array() {
@@ -951,6 +1185,8 @@ func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6,
 								stateChild := stateChild.StaticRoutes[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("ipv6Route.attributes.prefix").String() == key {
 										if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
@@ -1019,6 +1255,8 @@ func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6,
 								stateChild := stateChild.Interfaces[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("ipv6If.attributes.id").String() == key {
 										if !stateChild.AutoConfiguration.IsNull() && configChild.AutoConfiguration.IsNull() {

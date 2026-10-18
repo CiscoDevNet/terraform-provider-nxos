@@ -157,6 +157,14 @@ var PTPSubtreeClassMinVersions = map[string]string{}
 // PTPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var PTPMinVersions = map[string]helpers.MinVersion{}
 
+// PTPListClasses holds the list child classes of the resource.
+var PTPListClasses = map[string]bool{"ptpPtpDomain": true, "ptpPtpIf": true, "ptpPtpPeer": true}
+
+// getPTPTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getPTPTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"ptpPtpDomain", "ptpPtpNotifyHighCorr", "ptpPtpNotifyPortStateChg", "ptpPtpIf", "ptpPtpPeer"}, PTPSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -1244,7 +1252,351 @@ func (data PTP) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data PTP) toBodyWithDeletes(ctx context.Context, state PTP, config PTP, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data PTP) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Domains {
+		ptpPtpDomainDn := dn + "/" + child.getRn(key)
+		dns[ptpPtpDomainDn] = true
+	}
+	if !(data.NotifyHighCorrectionInterval.IsNull() && data.NotifyHighCorrection.IsNull() && data.NotifyHighCorrectionPeriodic.IsNull()) {
+		ptpPtpNotifyHighCorrDn := dn + "/" + "notifyhighcorr"
+		dns[ptpPtpNotifyHighCorrDn] = true
+	}
+	if !(data.NotifyPortStateChangeCategory.IsNull() && data.NotifyPortStateChangeInterval.IsNull() && data.NotifyPortStateChange.IsNull() && data.NotifyPortStateChangePeriodic.IsNull()) {
+		ptpPtpNotifyPortStateChgDn := dn + "/" + "notifyportstatechg"
+		dns[ptpPtpNotifyPortStateChgDn] = true
+	}
+	for key, child := range data.Interfaces {
+		ptpPtpIfDn := dn + "/" + child.getRn(key)
+		dns[ptpPtpIfDn] = true
+		for key_, child_ := range child.Peers {
+			ptpPtpPeerDn_ := ptpPtpIfDn + "/" + child_.getRn(key_)
+			dns[ptpPtpPeerDn_] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data PTP) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AclRedirect.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.aclRedirect", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ClockIdentity.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.clockIdentity", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ClockOperationOneStep.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.clockOperationOneStep", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ClockPeriodicUpdate.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.clockPeriodicUpdate", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ClockPeriodicUpdateInterval.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.clockPeriodicUpdateInterval", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ClockSyncAuto.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.clockSyncAuto", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ConvergenceTime.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.convergenceTime", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.CorrectionRangeLogging.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.correctionRangeLogging", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.CorrectionRangeThreshold.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.correctionRangeThreshold", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.DeviceType.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.deviceType", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.DomainNumber.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.domainNum", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.EnhancedClientScale.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.enhancedClientScale", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ForwardVersion1.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.forwardVersion1", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.GrandmasterCapableConvergenceTime.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.gmCapConvergenceTime", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.GrandmasterCapable.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.grandmasterCapable", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Ipv6MulticastReceiveScope.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.ipv6McastRxScope", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Ipv6MulticastTransmitScope.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.ipv6McastTxScope", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MeanPathDelay.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.meanPathDelay", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Management.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.mgmt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MultiDomain.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.multiDomain", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MultiDomainTransitionPriority1.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.multiDomainTransPriority1", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MultiDomainTransitionPriority2.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.multiDomainTransPriority2", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.NotifyGrandmasterChange.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.notifyGmChange", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.NotifyParentChange.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.notifyParentChange", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Offload.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.offload", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PeerDelayRequestInterval.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.peerDelayReqInterval", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Priority1.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.priority1", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Priority2.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.priority2", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.UsingSystemClock.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.ptpUsingSysClock", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Scale1g.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.scale1g", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.SourceIp.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.sourceIp", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.SourceIpv6.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.sourceIpv6", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ToleranceMeanPathDelayState.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.toleranceMPDState", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ToleranceMeanPathDelayValue.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.toleranceMPDVal", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ToleranceReversePathDelayState.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.toleranceRPDState", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ToleranceReversePathDelayValue.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.toleranceRPDVal", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.VrfName.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.vrfName", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.VrfNameIpv6.IsNull() {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes.vrfNameIpv6", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "ptpPtpEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Domains {
+		_ = child
+		ptpPtpDomainRn := child.getRn(key)
+		ptpPtpDomainDn := dn + "/" + ptpPtpDomainRn
+		_ = ptpPtpDomainDn
+		if !existed(ptpPtpDomainDn) {
+			body, _ = sjson.Set(body, "ptpPtpEntity.children.-1.ptpPtpDomain.attributes", map[string]interface{}{"rn": ptpPtpDomainRn, "status": "deleted"})
+			continue
+		}
+		ptpPtpDomainBody := ""
+		ptpPtpDomainBody, _ = sjson.Set(ptpPtpDomainBody, "ptpPtpDomain.attributes.rn", ptpPtpDomainRn)
+		if !child.ClockAccuracyThreshold.IsNull() {
+			ptpPtpDomainBody, _ = sjson.Set(ptpPtpDomainBody, "ptpPtpDomain.attributes.clockAccThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ClockClassThreshold.IsNull() {
+			ptpPtpDomainBody, _ = sjson.Set(ptpPtpDomainBody, "ptpPtpDomain.attributes.clockClassThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Priority.IsNull() {
+			ptpPtpDomainBody, _ = sjson.Set(ptpPtpDomainBody, "ptpPtpDomain.attributes.priority", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "ptpPtpEntity.children.-1", ptpPtpDomainBody)
+	}
+	if !(data.NotifyHighCorrectionInterval.IsNull() && data.NotifyHighCorrection.IsNull() && data.NotifyHighCorrectionPeriodic.IsNull()) {
+		ptpPtpNotifyHighCorrRn := "notifyhighcorr"
+		ptpPtpNotifyHighCorrDn := dn + "/" + ptpPtpNotifyHighCorrRn
+		_ = ptpPtpNotifyHighCorrDn
+		if !existed(ptpPtpNotifyHighCorrDn) {
+			body, _ = sjson.Set(body, "ptpPtpEntity.children.-1.ptpPtpNotifyHighCorr.attributes", map[string]interface{}{"rn": ptpPtpNotifyHighCorrRn, "status": "deleted"})
+		} else {
+			ptpPtpNotifyHighCorrBody := ""
+			if !data.NotifyHighCorrectionInterval.IsNull() {
+				ptpPtpNotifyHighCorrBody, _ = sjson.Set(ptpPtpNotifyHighCorrBody, "ptpPtpNotifyHighCorr.attributes.interval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.NotifyHighCorrection.IsNull() {
+				ptpPtpNotifyHighCorrBody, _ = sjson.Set(ptpPtpNotifyHighCorrBody, "ptpPtpNotifyHighCorr.attributes.notify", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.NotifyHighCorrectionPeriodic.IsNull() {
+				ptpPtpNotifyHighCorrBody, _ = sjson.Set(ptpPtpNotifyHighCorrBody, "ptpPtpNotifyHighCorr.attributes.periodic", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if ptpPtpNotifyHighCorrBody != "" {
+				ptpPtpNotifyHighCorrBody, _ = sjson.Set(ptpPtpNotifyHighCorrBody, "ptpPtpNotifyHighCorr.attributes.rn", ptpPtpNotifyHighCorrRn)
+				body, _ = sjson.SetRaw(body, "ptpPtpEntity.children.-1", ptpPtpNotifyHighCorrBody)
+			}
+		}
+	}
+	if !(data.NotifyPortStateChangeCategory.IsNull() && data.NotifyPortStateChangeInterval.IsNull() && data.NotifyPortStateChange.IsNull() && data.NotifyPortStateChangePeriodic.IsNull()) {
+		ptpPtpNotifyPortStateChgRn := "notifyportstatechg"
+		ptpPtpNotifyPortStateChgDn := dn + "/" + ptpPtpNotifyPortStateChgRn
+		_ = ptpPtpNotifyPortStateChgDn
+		if !existed(ptpPtpNotifyPortStateChgDn) {
+			body, _ = sjson.Set(body, "ptpPtpEntity.children.-1.ptpPtpNotifyPortStateChg.attributes", map[string]interface{}{"rn": ptpPtpNotifyPortStateChgRn, "status": "deleted"})
+		} else {
+			ptpPtpNotifyPortStateChgBody := ""
+			if !data.NotifyPortStateChangeCategory.IsNull() {
+				ptpPtpNotifyPortStateChgBody, _ = sjson.Set(ptpPtpNotifyPortStateChgBody, "ptpPtpNotifyPortStateChg.attributes.category", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.NotifyPortStateChangeInterval.IsNull() {
+				ptpPtpNotifyPortStateChgBody, _ = sjson.Set(ptpPtpNotifyPortStateChgBody, "ptpPtpNotifyPortStateChg.attributes.interval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.NotifyPortStateChange.IsNull() {
+				ptpPtpNotifyPortStateChgBody, _ = sjson.Set(ptpPtpNotifyPortStateChgBody, "ptpPtpNotifyPortStateChg.attributes.notify", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.NotifyPortStateChangePeriodic.IsNull() {
+				ptpPtpNotifyPortStateChgBody, _ = sjson.Set(ptpPtpNotifyPortStateChgBody, "ptpPtpNotifyPortStateChg.attributes.periodic", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if ptpPtpNotifyPortStateChgBody != "" {
+				ptpPtpNotifyPortStateChgBody, _ = sjson.Set(ptpPtpNotifyPortStateChgBody, "ptpPtpNotifyPortStateChg.attributes.rn", ptpPtpNotifyPortStateChgRn)
+				body, _ = sjson.SetRaw(body, "ptpPtpEntity.children.-1", ptpPtpNotifyPortStateChgBody)
+			}
+		}
+	}
+	for key, child := range data.Interfaces {
+		_ = child
+		ptpPtpIfRn := child.getRn(key)
+		ptpPtpIfDn := dn + "/" + ptpPtpIfRn
+		_ = ptpPtpIfDn
+		if !existed(ptpPtpIfDn) {
+			body, _ = sjson.Set(body, "ptpPtpEntity.children.-1.ptpPtpIf.attributes", map[string]interface{}{"rn": ptpPtpIfRn, "status": "deleted"})
+			continue
+		}
+		ptpPtpIfBody := ""
+		ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.rn", ptpPtpIfRn)
+		if !child.AnnounceIntervalType.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.announceIntervalType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AnnounceIntervalValue.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.announceIntervalVal", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AnnounceTimeoutType.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.announceTimeoutType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AnnounceTimeoutValue.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.announceTimeoutVal", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AsymmetricDelayValue.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.asymmetricDelayValue", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AsymmetricDirection.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.asymmetricDirection", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DelayRequestMinIntervalType.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.delayRequestMinIntervalType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DelayRequestMinIntervalValue.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.delayRequestMinIntervalVal", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Ipv6MulticastReceiveScope.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ipv6McastRxScope", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Ipv6MulticastTransmitScope.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ipv6McastTxScope", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.NegotiationSchema.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.negoSchema", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.NeighborPropagationDelayThreshold.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.neighborPropagationDelayThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ProfileOverride.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.profileOverride", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Ptp.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ptp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Cost.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ptpCost", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DestinationMac.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ptpDestinationMac", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Domain.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ptpInterfaceDomain", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ReceiveNoMatch.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ptpRxNoMatch", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Role.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.role", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SyncIntervalType.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.syncIntervalType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SyncIntervalValue.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.syncIntervalVal", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Transmission.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.transmission", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Transport.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.transport", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.UnicastSource.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ucastSrc", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.UnicastSourceIpv6.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ucastSrcIpv6", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.UnicastVrf.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ucastVrf", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.UnicastVrfIpv6.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.ucastVrfIpv6", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Vlan.IsNull() {
+			ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.attributes.vlan", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.Peers {
+			_ = child_
+			ptpPtpPeerRn_ := child_.getRn(key_)
+			ptpPtpPeerDn_ := ptpPtpIfDn + "/" + ptpPtpPeerRn_
+			_ = ptpPtpPeerDn_
+			if !existed(ptpPtpPeerDn_) {
+				ptpPtpIfBody, _ = sjson.Set(ptpPtpIfBody, "ptpPtpIf.children.-1.ptpPtpPeer.attributes", map[string]interface{}{"rn": ptpPtpPeerRn_, "status": "deleted"})
+				continue
+			}
+			ptpPtpPeerBody_ := ""
+			ptpPtpPeerBody_, _ = sjson.Set(ptpPtpPeerBody_, "ptpPtpPeer.attributes.rn", ptpPtpPeerRn_)
+			if !child_.NegotiationSchema.IsNull() {
+				ptpPtpPeerBody_, _ = sjson.Set(ptpPtpPeerBody_, "ptpPtpPeer.attributes.negoSchema", "DME_UNSET_PROPERTY_MARKER")
+			}
+			ptpPtpIfBody, _ = sjson.SetRaw(ptpPtpIfBody, "ptpPtpIf.children.-1", ptpPtpPeerBody_)
+		}
+		body, _ = sjson.SetRaw(body, "ptpPtpEntity.children.-1", ptpPtpIfBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data PTP) toBodyWithDeletes(ctx context.Context, state PTP, config PTP, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1435,39 +1787,53 @@ func (data PTP) toBodyWithDeletes(ctx context.Context, state PTP, config PTP, im
 				}
 			}
 		}
-		if !state.NotifyHighCorrectionInterval.IsNull() && config.NotifyHighCorrectionInterval.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyHighCorr")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.NotifyHighCorrectionInterval.IsNull() && state.NotifyHighCorrection.IsNull() && state.NotifyHighCorrectionPeriodic.IsNull()) && (config.NotifyHighCorrectionInterval.IsNull() && config.NotifyHighCorrection.IsNull() && config.NotifyHighCorrectionPeriodic.IsNull()) && deleteEmptied(data.getDn()+"/notifyhighcorr") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyHighCorr")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.NotifyHighCorrectionInterval.IsNull() && config.NotifyHighCorrectionInterval.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyHighCorr")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.NotifyHighCorrection.IsNull() && config.NotifyHighCorrection.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyHighCorr")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"notify", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.NotifyHighCorrectionPeriodic.IsNull() && config.NotifyHighCorrectionPeriodic.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyHighCorr")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"periodic", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
-		if !state.NotifyHighCorrection.IsNull() && config.NotifyHighCorrection.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyHighCorr")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"notify", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.NotifyHighCorrectionPeriodic.IsNull() && config.NotifyHighCorrectionPeriodic.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyHighCorr")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"periodic", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.NotifyPortStateChangeCategory.IsNull() && config.NotifyPortStateChangeCategory.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"category", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.NotifyPortStateChangeInterval.IsNull() && config.NotifyPortStateChangeInterval.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.NotifyPortStateChange.IsNull() && config.NotifyPortStateChange.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"notify", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.NotifyPortStateChangePeriodic.IsNull() && config.NotifyPortStateChangePeriodic.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"periodic", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.NotifyPortStateChangeCategory.IsNull() && state.NotifyPortStateChangeInterval.IsNull() && state.NotifyPortStateChange.IsNull() && state.NotifyPortStateChangePeriodic.IsNull()) && (config.NotifyPortStateChangeCategory.IsNull() && config.NotifyPortStateChangeInterval.IsNull() && config.NotifyPortStateChange.IsNull() && config.NotifyPortStateChangePeriodic.IsNull()) && deleteEmptied(data.getDn()+"/notifyportstatechg") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.NotifyPortStateChangeCategory.IsNull() && config.NotifyPortStateChangeCategory.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"category", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.NotifyPortStateChangeInterval.IsNull() && config.NotifyPortStateChangeInterval.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.NotifyPortStateChange.IsNull() && config.NotifyPortStateChange.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"notify", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.NotifyPortStateChangePeriodic.IsNull() && config.NotifyPortStateChangePeriodic.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ptpPtpNotifyPortStateChg")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"periodic", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.Interfaces {
 			if configChild, ok := config.Interfaces[key]; ok {
 				stateChild := state.Interfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("ptpPtpIf.attributes.id").String() == key {
 						if !stateChild.AnnounceIntervalType.IsNull() && configChild.AnnounceIntervalType.IsNull() {

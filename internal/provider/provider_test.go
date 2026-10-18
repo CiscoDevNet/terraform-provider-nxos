@@ -43,6 +43,22 @@ var testAccProtoV6ProviderFactories = map[string]func() (tfprotov6.ProviderServe
 	"nxos": providerserver.NewProtocol6WithError(New("test")()),
 }
 
+// testAccNoResourcesConfig is a test configuration without resources, which destroys all resources of previous steps.
+const testAccNoResourcesConfig = "terraform {}\n"
+
+// testAccDeletionPolicyTests returns true if the test steps of the reset deletion policy are run for all resources, which
+// requires the NXOS_TEST_DELETION_POLICIES environment variable. The deletion policies are always tested on
+// representative resources in deletion_policy_test.go.
+func testAccDeletionPolicyTests() bool {
+	return os.Getenv("NXOS_TEST_DELETION_POLICIES") != ""
+}
+
+// testAccWithDeletionPolicy adds the deletion policy to the "test" resource of a generated test configuration.
+func testAccWithDeletionPolicy(config, policy string) string {
+	header := "\" \"test\" {\n"
+	return strings.Replace(config, header, header+"\tdeletion_policy = \""+policy+"\"\n", 1)
+}
+
 func testAccPreCheck(t *testing.T) {
 	// You can add code here to run prior to any test case execution, for example assertions
 	// about the appropriate environment variables being set are common to see in a pre-check

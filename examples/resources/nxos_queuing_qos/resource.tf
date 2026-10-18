@@ -22,6 +22,15 @@ resource "nxos_queuing_qos" "example" {
           queue_limit         = 1000
           burst_detect_state  = "enabled"
         }
+        "c-out-q2" = {
+          remaining_bandwidth = 10
+        }
+        "c-out-q3" = {
+          remaining_bandwidth = 10
+        }
+        "c-out-q-default" = {
+          remaining_bandwidth = 10
+        }
       }
     }
   }

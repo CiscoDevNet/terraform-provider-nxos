@@ -104,6 +104,14 @@ var VRFSubtreeClassMinVersions = map[string]string{}
 // VRFMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var VRFMinVersions = map[string]helpers.MinVersion{}
 
+// VRFListClasses holds the list child classes of the resource.
+var VRFListClasses = map[string]bool{"l3Inst": true, "rtctrlDomAf": true, "rtctrlAfCtrl": true, "rtctrlRttP": true, "rtctrlRttEntry": true}
+
+// getVRFTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getVRFTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"l3Inst", "rtctrlDom", "rtctrlDomAf", "rtctrlAfCtrl", "rtctrlRttP", "rtctrlMapP", "rtctrlDomDefMapP", "rtctrlRttEntry"}, VRFSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -669,7 +677,220 @@ func (data VRF) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data VRF) toBodyWithDeletes(ctx context.Context, state VRF, config VRF, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data VRF) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Vrfs {
+		l3InstDn := dn + "/" + child.getRn(key)
+		dns[l3InstDn] = true
+		if !(child.RoutingEncap.IsNull() && child.RouteDistinguisher.IsNull() && len(child.AddressFamilies) == 0) {
+			rtctrlDomDn_ := l3InstDn + "/" + fmt.Sprintf("dom-%[1]s", key)
+			dns[rtctrlDomDn_] = true
+			for key_, child_ := range child.AddressFamilies {
+				rtctrlDomAfDn_ := rtctrlDomDn_ + "/" + child_.getRn(key_)
+				dns[rtctrlDomAfDn_] = true
+				for key__, child__ := range child_.RouteTargetAddressFamilies {
+					rtctrlAfCtrlDn__ := rtctrlDomAfDn_ + "/" + child__.getRn(key__)
+					dns[rtctrlAfCtrlDn__] = true
+					for key___, child___ := range child__.RouteTargetDirections {
+						rtctrlRttPDn___ := rtctrlAfCtrlDn__ + "/" + child___.getRn(key___)
+						dns[rtctrlRttPDn___] = true
+						if !(child___.Name.IsNull() && child___.Description.IsNull() && child___.RouteMap.IsNull()) {
+							rtctrlMapPDn____ := rtctrlRttPDn___ + "/" + "rtctrlmap"
+							dns[rtctrlMapPDn____] = true
+						}
+						if !(child___.AdvertiseVpn.IsNull() && child___.AllowVpn.IsNull() && child___.DefaultVrfPrefixLimit.IsNull() && child___.DefaultVrfRouteMap.IsNull()) {
+							rtctrlDomDefMapPDn____ := rtctrlRttPDn___ + "/" + "rtctrldefmap"
+							dns[rtctrlDomDefMapPDn____] = true
+						}
+						for key____, child____ := range child___.RouteTargets {
+							rtctrlRttEntryDn____ := rtctrlRttPDn___ + "/" + child____.getRn(key____)
+							dns[rtctrlRttEntryDn____] = true
+						}
+					}
+				}
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data VRF) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "topSystem.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Vrfs {
+		_ = child
+		l3InstRn := child.getRn(key)
+		l3InstDn := dn + "/" + l3InstRn
+		_ = l3InstDn
+		if !existed(l3InstDn) {
+			body, _ = sjson.Set(body, "topSystem.children.-1.l3Inst.attributes", map[string]interface{}{"rn": l3InstRn, "status": "deleted"})
+			continue
+		}
+		l3InstBody := ""
+		l3InstBody, _ = sjson.Set(l3InstBody, "l3Inst.attributes.rn", l3InstRn)
+		if !child.Description.IsNull() {
+			l3InstBody, _ = sjson.Set(l3InstBody, "l3Inst.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AdminState.IsNull() {
+			l3InstBody, _ = sjson.Set(l3InstBody, "l3Inst.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ControllerId.IsNull() {
+			l3InstBody, _ = sjson.Set(l3InstBody, "l3Inst.attributes.ctrlrId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Encap.IsNull() {
+			l3InstBody, _ = sjson.Set(l3InstBody, "l3Inst.attributes.encap", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.L3vni.IsNull() {
+			l3InstBody, _ = sjson.Set(l3InstBody, "l3Inst.attributes.l3vni", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Oui.IsNull() {
+			l3InstBody, _ = sjson.Set(l3InstBody, "l3Inst.attributes.oui", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.VpnId.IsNull() {
+			l3InstBody, _ = sjson.Set(l3InstBody, "l3Inst.attributes.vpnId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !(child.RoutingEncap.IsNull() && child.RouteDistinguisher.IsNull() && len(child.AddressFamilies) == 0) {
+			rtctrlDomRn_ := fmt.Sprintf("dom-%[1]s", key)
+			rtctrlDomDn_ := l3InstDn + "/" + rtctrlDomRn_
+			_ = rtctrlDomDn_
+			if !existed(rtctrlDomDn_) {
+				l3InstBody, _ = sjson.Set(l3InstBody, "l3Inst.children.-1.rtctrlDom.attributes", map[string]interface{}{"rn": rtctrlDomRn_, "status": "deleted"})
+			} else {
+				rtctrlDomBody_ := ""
+				if !child.RoutingEncap.IsNull() {
+					rtctrlDomBody_, _ = sjson.Set(rtctrlDomBody_, "rtctrlDom.attributes.encap", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.RouteDistinguisher.IsNull() {
+					rtctrlDomBody_, _ = sjson.Set(rtctrlDomBody_, "rtctrlDom.attributes.rd", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.AddressFamilies {
+					_ = child_
+					rtctrlDomAfRn_ := child_.getRn(key_)
+					rtctrlDomAfDn_ := rtctrlDomDn_ + "/" + rtctrlDomAfRn_
+					_ = rtctrlDomAfDn_
+					if !existed(rtctrlDomAfDn_) {
+						rtctrlDomBody_, _ = sjson.Set(rtctrlDomBody_, "rtctrlDom.children.-1.rtctrlDomAf.attributes", map[string]interface{}{"rn": rtctrlDomAfRn_, "status": "deleted"})
+						continue
+					}
+					rtctrlDomAfBody_ := ""
+					rtctrlDomAfBody_, _ = sjson.Set(rtctrlDomAfBody_, "rtctrlDomAf.attributes.rn", rtctrlDomAfRn_)
+					for key__, child__ := range child_.RouteTargetAddressFamilies {
+						_ = child__
+						rtctrlAfCtrlRn__ := child__.getRn(key__)
+						rtctrlAfCtrlDn__ := rtctrlDomAfDn_ + "/" + rtctrlAfCtrlRn__
+						_ = rtctrlAfCtrlDn__
+						if !existed(rtctrlAfCtrlDn__) {
+							rtctrlDomAfBody_, _ = sjson.Set(rtctrlDomAfBody_, "rtctrlDomAf.children.-1.rtctrlAfCtrl.attributes", map[string]interface{}{"rn": rtctrlAfCtrlRn__, "status": "deleted"})
+							continue
+						}
+						rtctrlAfCtrlBody__ := ""
+						rtctrlAfCtrlBody__, _ = sjson.Set(rtctrlAfCtrlBody__, "rtctrlAfCtrl.attributes.rn", rtctrlAfCtrlRn__)
+						for key___, child___ := range child__.RouteTargetDirections {
+							_ = child___
+							rtctrlRttPRn___ := child___.getRn(key___)
+							rtctrlRttPDn___ := rtctrlAfCtrlDn__ + "/" + rtctrlRttPRn___
+							_ = rtctrlRttPDn___
+							if !existed(rtctrlRttPDn___) {
+								rtctrlAfCtrlBody__, _ = sjson.Set(rtctrlAfCtrlBody__, "rtctrlAfCtrl.children.-1.rtctrlRttP.attributes", map[string]interface{}{"rn": rtctrlRttPRn___, "status": "deleted"})
+								continue
+							}
+							rtctrlRttPBody___ := ""
+							rtctrlRttPBody___, _ = sjson.Set(rtctrlRttPBody___, "rtctrlRttP.attributes.rn", rtctrlRttPRn___)
+							if !(child___.Name.IsNull() && child___.Description.IsNull() && child___.RouteMap.IsNull()) {
+								rtctrlMapPRn____ := "rtctrlmap"
+								rtctrlMapPDn____ := rtctrlRttPDn___ + "/" + rtctrlMapPRn____
+								_ = rtctrlMapPDn____
+								if !existed(rtctrlMapPDn____) {
+									rtctrlRttPBody___, _ = sjson.Set(rtctrlRttPBody___, "rtctrlRttP.children.-1.rtctrlMapP.attributes", map[string]interface{}{"rn": rtctrlMapPRn____, "status": "deleted"})
+								} else {
+									rtctrlMapPBody____ := ""
+									if !child___.Name.IsNull() {
+										rtctrlMapPBody____, _ = sjson.Set(rtctrlMapPBody____, "rtctrlMapP.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child___.Description.IsNull() {
+										rtctrlMapPBody____, _ = sjson.Set(rtctrlMapPBody____, "rtctrlMapP.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child___.RouteMap.IsNull() {
+										rtctrlMapPBody____, _ = sjson.Set(rtctrlMapPBody____, "rtctrlMapP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if rtctrlMapPBody____ != "" {
+										rtctrlMapPBody____, _ = sjson.Set(rtctrlMapPBody____, "rtctrlMapP.attributes.rn", rtctrlMapPRn____)
+										rtctrlRttPBody___, _ = sjson.SetRaw(rtctrlRttPBody___, "rtctrlRttP.children.-1", rtctrlMapPBody____)
+									}
+								}
+							}
+							if !(child___.AdvertiseVpn.IsNull() && child___.AllowVpn.IsNull() && child___.DefaultVrfPrefixLimit.IsNull() && child___.DefaultVrfRouteMap.IsNull()) {
+								rtctrlDomDefMapPRn____ := "rtctrldefmap"
+								rtctrlDomDefMapPDn____ := rtctrlRttPDn___ + "/" + rtctrlDomDefMapPRn____
+								_ = rtctrlDomDefMapPDn____
+								if !existed(rtctrlDomDefMapPDn____) {
+									rtctrlRttPBody___, _ = sjson.Set(rtctrlRttPBody___, "rtctrlRttP.children.-1.rtctrlDomDefMapP.attributes", map[string]interface{}{"rn": rtctrlDomDefMapPRn____, "status": "deleted"})
+								} else {
+									rtctrlDomDefMapPBody____ := ""
+									if !child___.AdvertiseVpn.IsNull() {
+										rtctrlDomDefMapPBody____, _ = sjson.Set(rtctrlDomDefMapPBody____, "rtctrlDomDefMapP.attributes.advtVpn", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child___.AllowVpn.IsNull() {
+										rtctrlDomDefMapPBody____, _ = sjson.Set(rtctrlDomDefMapPBody____, "rtctrlDomDefMapP.attributes.allowVpn", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child___.DefaultVrfPrefixLimit.IsNull() {
+										rtctrlDomDefMapPBody____, _ = sjson.Set(rtctrlDomDefMapPBody____, "rtctrlDomDefMapP.attributes.pfxLimit", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child___.DefaultVrfRouteMap.IsNull() {
+										rtctrlDomDefMapPBody____, _ = sjson.Set(rtctrlDomDefMapPBody____, "rtctrlDomDefMapP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if rtctrlDomDefMapPBody____ != "" {
+										rtctrlDomDefMapPBody____, _ = sjson.Set(rtctrlDomDefMapPBody____, "rtctrlDomDefMapP.attributes.rn", rtctrlDomDefMapPRn____)
+										rtctrlRttPBody___, _ = sjson.SetRaw(rtctrlRttPBody___, "rtctrlRttP.children.-1", rtctrlDomDefMapPBody____)
+									}
+								}
+							}
+							for key____, child____ := range child___.RouteTargets {
+								_ = child____
+								rtctrlRttEntryRn____ := child____.getRn(key____)
+								rtctrlRttEntryDn____ := rtctrlRttPDn___ + "/" + rtctrlRttEntryRn____
+								_ = rtctrlRttEntryDn____
+								if !existed(rtctrlRttEntryDn____) {
+									rtctrlRttPBody___, _ = sjson.Set(rtctrlRttPBody___, "rtctrlRttP.children.-1.rtctrlRttEntry.attributes", map[string]interface{}{"rn": rtctrlRttEntryRn____, "status": "deleted"})
+									continue
+								}
+								rtctrlRttEntryBody____ := ""
+								rtctrlRttEntryBody____, _ = sjson.Set(rtctrlRttEntryBody____, "rtctrlRttEntry.attributes.rn", rtctrlRttEntryRn____)
+								rtctrlRttPBody___, _ = sjson.SetRaw(rtctrlRttPBody___, "rtctrlRttP.children.-1", rtctrlRttEntryBody____)
+							}
+							rtctrlAfCtrlBody__, _ = sjson.SetRaw(rtctrlAfCtrlBody__, "rtctrlAfCtrl.children.-1", rtctrlRttPBody___)
+						}
+						rtctrlDomAfBody_, _ = sjson.SetRaw(rtctrlDomAfBody_, "rtctrlDomAf.children.-1", rtctrlAfCtrlBody__)
+					}
+					rtctrlDomBody_, _ = sjson.SetRaw(rtctrlDomBody_, "rtctrlDom.children.-1", rtctrlDomAfBody_)
+				}
+				if rtctrlDomBody_ != "" {
+					rtctrlDomBody_, _ = sjson.Set(rtctrlDomBody_, "rtctrlDom.attributes.rn", rtctrlDomRn_)
+					l3InstBody, _ = sjson.SetRaw(l3InstBody, "l3Inst.children.-1", rtctrlDomBody_)
+				}
+			}
+		}
+		body, _ = sjson.SetRaw(body, "topSystem.children.-1", l3InstBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data VRF) toBodyWithDeletes(ctx context.Context, state VRF, config VRF, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -799,6 +1020,8 @@ func (data VRF) toBodyWithDeletes(ctx context.Context, state VRF, config VRF, im
 				stateChild := state.Vrfs[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("l3Inst.attributes.name").String() == key {
 						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {

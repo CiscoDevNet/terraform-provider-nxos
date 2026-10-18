@@ -33,45 +33,78 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosSPAN(t *testing.T) {
+// TestAccSPANResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccSPANResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_span.test", "sessions.1.config_state", "up"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_span.test", "sessions.1.description", "My SPAN session"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_span.test", "sessions.1.type", "local"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_span.test", "sessions.1.source_interfaces.eth1/1.direction", "rx"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_span.test", "sessions.1.source_vlans.vlan-100.direction", "rx"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_span.test", "sessions.1.config_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_span.test", "sessions.1.description", "My SPAN session"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_span.test", "sessions.1.type", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_span.test", "sessions.1.source_interfaces.eth1/1.direction", "rx"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_span.test", "sessions.1.source_vlans.vlan-100.direction", "rx"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccSPANResourceConfig_minimum(),
+		},
+		{
+			Config: testAccSPANResourceConfig_all() + testAccSPANResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_span.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccSPANResourceImportStateIdFunc("nxos_span.test"),
+		},
+		{
+			ResourceName:       "nxos_span.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccSPANResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccSPANResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_span.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccSPANResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosSPANConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_span.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosSPANImportStateIdFunc("nxos_span.test"),
-			},
-			{
-				ResourceName:       "nxos_span.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosSPANImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccSPANResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -85,7 +118,7 @@ func nxosSPANImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosSPANConfig_minimum() string {
+func testAccSPANResourceConfig_minimum() string {
 	config := `resource "nxos_span" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
@@ -94,7 +127,7 @@ func testAccNxosSPANConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosSPANConfig_all() string {
+func testAccSPANResourceConfig_all() string {
 	config := `resource "nxos_span" "test" {` + "\n"
 	config += `	sessions = {` + "\n"
 	config += `		"1" = {` + "\n"
@@ -119,6 +152,14 @@ func testAccNxosSPANConfig_all() string {
 	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccSPANResourceConfig_dataSource() string {
+	return `
+data "nxos_span" "test" {
+	depends_on = [nxos_span.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

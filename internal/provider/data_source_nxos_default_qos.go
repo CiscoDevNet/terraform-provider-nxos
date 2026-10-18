@@ -358,7 +358,8 @@ func (d *DefaultQoSDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipqosCMapEntity", "ipqosCMapInst", "ipqosDscp", "ipqosNotDscp", "ipqosDscpTunnel", "ipqosCos", "ipqosNotCos", "ipqosPrecedence", "ipqosNotPrecedence", "ipqosQoSGrp", "ipqosAcl", "ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosSetDscp", "ipqosSetDscpTunnel", "ipqosSetCos", "ipqosSetPrecedence", "ipqosSetDlbMode", "ipqosPolice", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst", "ipqosNveIf", "ipqosInst"}, DefaultQoSSubtreeClassMinVersions)
+
+	res, err := getDefaultQoSTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

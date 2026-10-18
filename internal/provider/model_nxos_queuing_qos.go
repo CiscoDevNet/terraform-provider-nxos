@@ -114,6 +114,14 @@ var QueuingQoSSubtreeClassMinVersions = map[string]string{}
 // QueuingQoSMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var QueuingQoSMinVersions = map[string]helpers.MinVersion{}
 
+// QueuingQoSListClasses holds the list child classes of the resource.
+var QueuingQoSListClasses = map[string]bool{"ipqosPMapInst": true, "ipqosMatchCMap": true, "ipqosIf": true}
+
+// getQueuingQoSTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getQueuingQoSTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosRandomDetect", "ipqosAfd", "ipqosSetBW", "ipqosShape", "ipqosQueueLimit", "ipqosBurstDetect", "ipqosBurstDetectState", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ipqosIf", "ipqosInst"}, QueuingQoSSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -1201,7 +1209,446 @@ func (data QueuingQoS) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS, config QueuingQoS, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data QueuingQoS) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(len(data.PolicyMaps) == 0) {
+		ipqosPMapEntityDn := dn + "/" + "p"
+		dns[ipqosPMapEntityDn] = true
+		for key, child := range data.PolicyMaps {
+			ipqosPMapInstDn := ipqosPMapEntityDn + "/" + child.getRn(key)
+			dns[ipqosPMapInstDn] = true
+			for key_, child_ := range child.MatchClassMaps {
+				ipqosMatchCMapDn_ := ipqosPMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosMatchCMapDn_] = true
+				if !(child_.Priority.IsNull()) {
+					ipqosPriorityDn__ := ipqosMatchCMapDn_ + "/" + "prio"
+					dns[ipqosPriorityDn__] = true
+				}
+				if !(child_.RemainingBandwidth.IsNull()) {
+					ipqosSetRemBWDn__ := ipqosMatchCMapDn_ + "/" + "setRemBW"
+					dns[ipqosSetRemBWDn__] = true
+				}
+				if !(child_.CapAverage.IsNull() && child_.DropAvailability.IsNull() && child_.RandomDetectEcn.IsNull() && child_.MaxThreshold.IsNull() && child_.MaxThresholdUnit.IsNull() && child_.MinThreshold.IsNull() && child_.MinThresholdUnit.IsNull() && child_.Optimization.IsNull() && child_.Weight.IsNull()) {
+					ipqosRandomDetectDn__ := ipqosMatchCMapDn_ + "/" + "RandDet"
+					dns[ipqosRandomDetectDn__] = true
+				}
+				if !(child_.AfdEcn.IsNull() && child_.QueueDesiredUnit.IsNull() && child_.QueueDesired.IsNull()) {
+					ipqosAfdDn__ := ipqosMatchCMapDn_ + "/" + "afd"
+					dns[ipqosAfdDn__] = true
+				}
+				if !(child_.Bandwidth.IsNull()) {
+					ipqosSetBWDn__ := ipqosMatchCMapDn_ + "/" + "setBW"
+					dns[ipqosSetBWDn__] = true
+				}
+				if !(child_.ShapeMaxRate.IsNull() && child_.ShapeMaxRateUnit.IsNull() && child_.ShapeMinRate.IsNull() && child_.ShapeMinRateUnit.IsNull()) {
+					ipqosShapeDn__ := ipqosMatchCMapDn_ + "/" + "shape"
+					dns[ipqosShapeDn__] = true
+				}
+				if !(child_.QueueLimitUnit.IsNull() && child_.QueueLimit.IsNull() && child_.QueueLimitDynamic.IsNull()) {
+					ipqosQueueLimitDn__ := ipqosMatchCMapDn_ + "/" + "QueueLimit"
+					dns[ipqosQueueLimitDn__] = true
+				}
+				if !(child_.BurstDetectFallThresholdUnit.IsNull() && child_.BurstDetectFallThreshold.IsNull() && child_.BurstDetectRiseThresholdUnit.IsNull() && child_.BurstDetectRiseThreshold.IsNull()) {
+					ipqosBurstDetectDn__ := ipqosMatchCMapDn_ + "/" + "burstdetect"
+					dns[ipqosBurstDetectDn__] = true
+				}
+				if !(child_.BurstDetectState.IsNull()) {
+					ipqosBurstDetectStateDn__ := ipqosMatchCMapDn_ + "/" + "burstdetectstate"
+					dns[ipqosBurstDetectStateDn__] = true
+				}
+			}
+		}
+	}
+	if !((data.SystemOutPolicyMapName.IsNull() && data.PolicyMapStatistics.IsNull()) && len(data.PolicyInterfaceOut) == 0) {
+		ipqosServPolDn := dn + "/" + "policy"
+		dns[ipqosServPolDn] = true
+		if !((data.SystemOutPolicyMapName.IsNull() && data.PolicyMapStatistics.IsNull()) && len(data.PolicyInterfaceOut) == 0) {
+			ipqosEgressDn := ipqosServPolDn + "/" + "out"
+			dns[ipqosEgressDn] = true
+			if !(data.SystemOutPolicyMapName.IsNull() && data.PolicyMapStatistics.IsNull()) {
+				ipqosSystemDn := ipqosEgressDn + "/" + "sys"
+				dns[ipqosSystemDn] = true
+				if !(data.SystemOutPolicyMapName.IsNull() && data.PolicyMapStatistics.IsNull()) {
+					ipqosInstDn := ipqosSystemDn + "/" + "pmap"
+					dns[ipqosInstDn] = true
+				}
+			}
+			for key, child := range data.PolicyInterfaceOut {
+				ipqosIfDn := ipqosEgressDn + "/" + child.getRn(key)
+				dns[ipqosIfDn] = true
+				if !(child.PolicyMapName.IsNull() && child.PolicyMapStatistics.IsNull()) {
+					ipqosInstDn_ := ipqosIfDn + "/" + "pmap"
+					dns[ipqosInstDn_] = true
+				}
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data QueuingQoS) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "ipqosQueuing.attributes", map[string]interface{}{})
+	}
+	if !(len(data.PolicyMaps) == 0) {
+		ipqosPMapEntityRn := "p"
+		ipqosPMapEntityDn := dn + "/" + ipqosPMapEntityRn
+		_ = ipqosPMapEntityDn
+		{
+			ipqosPMapEntityBody := ""
+			for key, child := range data.PolicyMaps {
+				_ = child
+				ipqosPMapInstRn := child.getRn(key)
+				ipqosPMapInstDn := ipqosPMapEntityDn + "/" + ipqosPMapInstRn
+				_ = ipqosPMapInstDn
+				if !existed(ipqosPMapInstDn) {
+					ipqosPMapEntityBody, _ = sjson.Set(ipqosPMapEntityBody, "ipqosPMapEntity.children.-1.ipqosPMapInst.attributes", map[string]interface{}{"rn": ipqosPMapInstRn, "status": "deleted"})
+					continue
+				}
+				ipqosPMapInstBody := ""
+				ipqosPMapInstBody, _ = sjson.Set(ipqosPMapInstBody, "ipqosPMapInst.attributes.rn", ipqosPMapInstRn)
+				if !child.MatchType.IsNull() {
+					ipqosPMapInstBody, _ = sjson.Set(ipqosPMapInstBody, "ipqosPMapInst.attributes.matchType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.MatchClassMaps {
+					_ = child_
+					ipqosMatchCMapRn_ := child_.getRn(key_)
+					ipqosMatchCMapDn_ := ipqosPMapInstDn + "/" + ipqosMatchCMapRn_
+					_ = ipqosMatchCMapDn_
+					if !existed(ipqosMatchCMapDn_) {
+						ipqosPMapInstBody, _ = sjson.Set(ipqosPMapInstBody, "ipqosPMapInst.children.-1.ipqosMatchCMap.attributes", map[string]interface{}{"rn": ipqosMatchCMapRn_, "status": "deleted"})
+						continue
+					}
+					ipqosMatchCMapBody_ := ""
+					ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.attributes.rn", ipqosMatchCMapRn_)
+					if !child_.NextClassMap.IsNull() {
+						ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.attributes.nextCMap", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PreviousClassMap.IsNull() {
+						ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.attributes.prevCMap", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(child_.Priority.IsNull()) {
+						ipqosPriorityRn__ := "prio"
+						ipqosPriorityDn__ := ipqosMatchCMapDn_ + "/" + ipqosPriorityRn__
+						_ = ipqosPriorityDn__
+						if !existed(ipqosPriorityDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosPriority.attributes", map[string]interface{}{"rn": ipqosPriorityRn__, "status": "deleted"})
+						} else {
+							ipqosPriorityBody__ := ""
+							if !child_.Priority.IsNull() {
+								ipqosPriorityBody__, _ = sjson.Set(ipqosPriorityBody__, "ipqosPriority.attributes.level", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosPriorityBody__ != "" {
+								ipqosPriorityBody__, _ = sjson.Set(ipqosPriorityBody__, "ipqosPriority.attributes.rn", ipqosPriorityRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosPriorityBody__)
+							}
+						}
+					}
+					if !(child_.RemainingBandwidth.IsNull()) {
+						ipqosSetRemBWRn__ := "setRemBW"
+						ipqosSetRemBWDn__ := ipqosMatchCMapDn_ + "/" + ipqosSetRemBWRn__
+						_ = ipqosSetRemBWDn__
+						if !existed(ipqosSetRemBWDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosSetRemBW.attributes", map[string]interface{}{"rn": ipqosSetRemBWRn__, "status": "deleted"})
+						} else {
+							ipqosSetRemBWBody__ := ""
+							if !child_.RemainingBandwidth.IsNull() {
+								ipqosSetRemBWBody__, _ = sjson.Set(ipqosSetRemBWBody__, "ipqosSetRemBW.attributes.val", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosSetRemBWBody__ != "" {
+								ipqosSetRemBWBody__, _ = sjson.Set(ipqosSetRemBWBody__, "ipqosSetRemBW.attributes.rn", ipqosSetRemBWRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosSetRemBWBody__)
+							}
+						}
+					}
+					if !(child_.CapAverage.IsNull() && child_.DropAvailability.IsNull() && child_.RandomDetectEcn.IsNull() && child_.MaxThreshold.IsNull() && child_.MaxThresholdUnit.IsNull() && child_.MinThreshold.IsNull() && child_.MinThresholdUnit.IsNull() && child_.Optimization.IsNull() && child_.Weight.IsNull()) {
+						ipqosRandomDetectRn__ := "RandDet"
+						ipqosRandomDetectDn__ := ipqosMatchCMapDn_ + "/" + ipqosRandomDetectRn__
+						_ = ipqosRandomDetectDn__
+						if !existed(ipqosRandomDetectDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosRandomDetect.attributes", map[string]interface{}{"rn": ipqosRandomDetectRn__, "status": "deleted"})
+						} else {
+							ipqosRandomDetectBody__ := ""
+							if !child_.CapAverage.IsNull() {
+								ipqosRandomDetectBody__, _ = sjson.Set(ipqosRandomDetectBody__, "ipqosRandomDetect.attributes.capAverage", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.DropAvailability.IsNull() {
+								ipqosRandomDetectBody__, _ = sjson.Set(ipqosRandomDetectBody__, "ipqosRandomDetect.attributes.dropAvail", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.RandomDetectEcn.IsNull() {
+								ipqosRandomDetectBody__, _ = sjson.Set(ipqosRandomDetectBody__, "ipqosRandomDetect.attributes.ecn", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.MaxThreshold.IsNull() {
+								ipqosRandomDetectBody__, _ = sjson.Set(ipqosRandomDetectBody__, "ipqosRandomDetect.attributes.maxThreshold", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.MaxThresholdUnit.IsNull() {
+								ipqosRandomDetectBody__, _ = sjson.Set(ipqosRandomDetectBody__, "ipqosRandomDetect.attributes.maxThresholdUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.MinThreshold.IsNull() {
+								ipqosRandomDetectBody__, _ = sjson.Set(ipqosRandomDetectBody__, "ipqosRandomDetect.attributes.minThreshold", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.MinThresholdUnit.IsNull() {
+								ipqosRandomDetectBody__, _ = sjson.Set(ipqosRandomDetectBody__, "ipqosRandomDetect.attributes.minThresholdUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.Optimization.IsNull() {
+								ipqosRandomDetectBody__, _ = sjson.Set(ipqosRandomDetectBody__, "ipqosRandomDetect.attributes.optimization", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.Weight.IsNull() {
+								ipqosRandomDetectBody__, _ = sjson.Set(ipqosRandomDetectBody__, "ipqosRandomDetect.attributes.weight", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosRandomDetectBody__ != "" {
+								ipqosRandomDetectBody__, _ = sjson.Set(ipqosRandomDetectBody__, "ipqosRandomDetect.attributes.rn", ipqosRandomDetectRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosRandomDetectBody__)
+							}
+						}
+					}
+					if !(child_.AfdEcn.IsNull() && child_.QueueDesiredUnit.IsNull() && child_.QueueDesired.IsNull()) {
+						ipqosAfdRn__ := "afd"
+						ipqosAfdDn__ := ipqosMatchCMapDn_ + "/" + ipqosAfdRn__
+						_ = ipqosAfdDn__
+						if !existed(ipqosAfdDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosAfd.attributes", map[string]interface{}{"rn": ipqosAfdRn__, "status": "deleted"})
+						} else {
+							ipqosAfdBody__ := ""
+							if !child_.AfdEcn.IsNull() {
+								ipqosAfdBody__, _ = sjson.Set(ipqosAfdBody__, "ipqosAfd.attributes.ecn", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.QueueDesiredUnit.IsNull() {
+								ipqosAfdBody__, _ = sjson.Set(ipqosAfdBody__, "ipqosAfd.attributes.queueDesiredUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.QueueDesired.IsNull() {
+								ipqosAfdBody__, _ = sjson.Set(ipqosAfdBody__, "ipqosAfd.attributes.queueDesiredVal", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosAfdBody__ != "" {
+								ipqosAfdBody__, _ = sjson.Set(ipqosAfdBody__, "ipqosAfd.attributes.rn", ipqosAfdRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosAfdBody__)
+							}
+						}
+					}
+					if !(child_.Bandwidth.IsNull()) {
+						ipqosSetBWRn__ := "setBW"
+						ipqosSetBWDn__ := ipqosMatchCMapDn_ + "/" + ipqosSetBWRn__
+						_ = ipqosSetBWDn__
+						if !existed(ipqosSetBWDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosSetBW.attributes", map[string]interface{}{"rn": ipqosSetBWRn__, "status": "deleted"})
+						} else {
+							ipqosSetBWBody__ := ""
+							if !child_.Bandwidth.IsNull() {
+								ipqosSetBWBody__, _ = sjson.Set(ipqosSetBWBody__, "ipqosSetBW.attributes.val", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosSetBWBody__ != "" {
+								ipqosSetBWBody__, _ = sjson.Set(ipqosSetBWBody__, "ipqosSetBW.attributes.rn", ipqosSetBWRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosSetBWBody__)
+							}
+						}
+					}
+					if !(child_.ShapeMaxRate.IsNull() && child_.ShapeMaxRateUnit.IsNull() && child_.ShapeMinRate.IsNull() && child_.ShapeMinRateUnit.IsNull()) {
+						ipqosShapeRn__ := "shape"
+						ipqosShapeDn__ := ipqosMatchCMapDn_ + "/" + ipqosShapeRn__
+						_ = ipqosShapeDn__
+						if !existed(ipqosShapeDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosShape.attributes", map[string]interface{}{"rn": ipqosShapeRn__, "status": "deleted"})
+						} else {
+							ipqosShapeBody__ := ""
+							if !child_.ShapeMaxRate.IsNull() {
+								ipqosShapeBody__, _ = sjson.Set(ipqosShapeBody__, "ipqosShape.attributes.max", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ShapeMaxRateUnit.IsNull() {
+								ipqosShapeBody__, _ = sjson.Set(ipqosShapeBody__, "ipqosShape.attributes.maxRateUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ShapeMinRate.IsNull() {
+								ipqosShapeBody__, _ = sjson.Set(ipqosShapeBody__, "ipqosShape.attributes.min", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ShapeMinRateUnit.IsNull() {
+								ipqosShapeBody__, _ = sjson.Set(ipqosShapeBody__, "ipqosShape.attributes.minRateUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosShapeBody__ != "" {
+								ipqosShapeBody__, _ = sjson.Set(ipqosShapeBody__, "ipqosShape.attributes.rn", ipqosShapeRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosShapeBody__)
+							}
+						}
+					}
+					if !(child_.QueueLimitUnit.IsNull() && child_.QueueLimit.IsNull() && child_.QueueLimitDynamic.IsNull()) {
+						ipqosQueueLimitRn__ := "QueueLimit"
+						ipqosQueueLimitDn__ := ipqosMatchCMapDn_ + "/" + ipqosQueueLimitRn__
+						_ = ipqosQueueLimitDn__
+						if !existed(ipqosQueueLimitDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosQueueLimit.attributes", map[string]interface{}{"rn": ipqosQueueLimitRn__, "status": "deleted"})
+						} else {
+							ipqosQueueLimitBody__ := ""
+							if !child_.QueueLimitUnit.IsNull() {
+								ipqosQueueLimitBody__, _ = sjson.Set(ipqosQueueLimitBody__, "ipqosQueueLimit.attributes.QueueLimitUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.QueueLimit.IsNull() {
+								ipqosQueueLimitBody__, _ = sjson.Set(ipqosQueueLimitBody__, "ipqosQueueLimit.attributes.QueueLimitVal", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.QueueLimitDynamic.IsNull() {
+								ipqosQueueLimitBody__, _ = sjson.Set(ipqosQueueLimitBody__, "ipqosQueueLimit.attributes.dynamic", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosQueueLimitBody__ != "" {
+								ipqosQueueLimitBody__, _ = sjson.Set(ipqosQueueLimitBody__, "ipqosQueueLimit.attributes.rn", ipqosQueueLimitRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosQueueLimitBody__)
+							}
+						}
+					}
+					if !(child_.BurstDetectFallThresholdUnit.IsNull() && child_.BurstDetectFallThreshold.IsNull() && child_.BurstDetectRiseThresholdUnit.IsNull() && child_.BurstDetectRiseThreshold.IsNull()) {
+						ipqosBurstDetectRn__ := "burstdetect"
+						ipqosBurstDetectDn__ := ipqosMatchCMapDn_ + "/" + ipqosBurstDetectRn__
+						_ = ipqosBurstDetectDn__
+						if !existed(ipqosBurstDetectDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosBurstDetect.attributes", map[string]interface{}{"rn": ipqosBurstDetectRn__, "status": "deleted"})
+						} else {
+							ipqosBurstDetectBody__ := ""
+							if !child_.BurstDetectFallThresholdUnit.IsNull() {
+								ipqosBurstDetectBody__, _ = sjson.Set(ipqosBurstDetectBody__, "ipqosBurstDetect.attributes.fallThresUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.BurstDetectFallThreshold.IsNull() {
+								ipqosBurstDetectBody__, _ = sjson.Set(ipqosBurstDetectBody__, "ipqosBurstDetect.attributes.fallThreshold", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.BurstDetectRiseThresholdUnit.IsNull() {
+								ipqosBurstDetectBody__, _ = sjson.Set(ipqosBurstDetectBody__, "ipqosBurstDetect.attributes.riseThresUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.BurstDetectRiseThreshold.IsNull() {
+								ipqosBurstDetectBody__, _ = sjson.Set(ipqosBurstDetectBody__, "ipqosBurstDetect.attributes.riseThreshold", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosBurstDetectBody__ != "" {
+								ipqosBurstDetectBody__, _ = sjson.Set(ipqosBurstDetectBody__, "ipqosBurstDetect.attributes.rn", ipqosBurstDetectRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosBurstDetectBody__)
+							}
+						}
+					}
+					if !(child_.BurstDetectState.IsNull()) {
+						ipqosBurstDetectStateRn__ := "burstdetectstate"
+						ipqosBurstDetectStateDn__ := ipqosMatchCMapDn_ + "/" + ipqosBurstDetectStateRn__
+						_ = ipqosBurstDetectStateDn__
+						if !existed(ipqosBurstDetectStateDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosBurstDetectState.attributes", map[string]interface{}{"rn": ipqosBurstDetectStateRn__, "status": "deleted"})
+						} else {
+							ipqosBurstDetectStateBody__ := ""
+							if !child_.BurstDetectState.IsNull() {
+								ipqosBurstDetectStateBody__, _ = sjson.Set(ipqosBurstDetectStateBody__, "ipqosBurstDetectState.attributes.val", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosBurstDetectStateBody__ != "" {
+								ipqosBurstDetectStateBody__, _ = sjson.Set(ipqosBurstDetectStateBody__, "ipqosBurstDetectState.attributes.rn", ipqosBurstDetectStateRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosBurstDetectStateBody__)
+							}
+						}
+					}
+					ipqosPMapInstBody, _ = sjson.SetRaw(ipqosPMapInstBody, "ipqosPMapInst.children.-1", ipqosMatchCMapBody_)
+				}
+				ipqosPMapEntityBody, _ = sjson.SetRaw(ipqosPMapEntityBody, "ipqosPMapEntity.children.-1", ipqosPMapInstBody)
+			}
+			if ipqosPMapEntityBody != "" {
+				ipqosPMapEntityBody, _ = sjson.Set(ipqosPMapEntityBody, "ipqosPMapEntity.attributes.rn", ipqosPMapEntityRn)
+				body, _ = sjson.SetRaw(body, "ipqosQueuing.children.-1", ipqosPMapEntityBody)
+			}
+		}
+	}
+	if !((data.SystemOutPolicyMapName.IsNull() && data.PolicyMapStatistics.IsNull()) && len(data.PolicyInterfaceOut) == 0) {
+		ipqosServPolRn := "policy"
+		ipqosServPolDn := dn + "/" + ipqosServPolRn
+		_ = ipqosServPolDn
+		{
+			ipqosServPolBody := ""
+			if !((data.SystemOutPolicyMapName.IsNull() && data.PolicyMapStatistics.IsNull()) && len(data.PolicyInterfaceOut) == 0) {
+				ipqosEgressRn := "out"
+				ipqosEgressDn := ipqosServPolDn + "/" + ipqosEgressRn
+				_ = ipqosEgressDn
+				{
+					ipqosEgressBody := ""
+					if !(data.SystemOutPolicyMapName.IsNull() && data.PolicyMapStatistics.IsNull()) {
+						ipqosSystemRn := "sys"
+						ipqosSystemDn := ipqosEgressDn + "/" + ipqosSystemRn
+						_ = ipqosSystemDn
+						if !existed(ipqosSystemDn) {
+							ipqosEgressBody, _ = sjson.Set(ipqosEgressBody, "ipqosEgress.children.-1.ipqosSystem.attributes", map[string]interface{}{"rn": ipqosSystemRn, "status": "deleted"})
+						} else {
+							ipqosSystemBody := ""
+							if !(data.SystemOutPolicyMapName.IsNull() && data.PolicyMapStatistics.IsNull()) {
+								ipqosInstRn := "pmap"
+								ipqosInstDn := ipqosSystemDn + "/" + ipqosInstRn
+								_ = ipqosInstDn
+								if !existed(ipqosInstDn) {
+									ipqosSystemBody, _ = sjson.Set(ipqosSystemBody, "ipqosSystem.children.-1.ipqosInst.attributes", map[string]interface{}{"rn": ipqosInstRn, "status": "deleted"})
+								} else {
+									ipqosInstBody := ""
+									if !data.SystemOutPolicyMapName.IsNull() {
+										ipqosInstBody, _ = sjson.Set(ipqosInstBody, "ipqosInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !data.PolicyMapStatistics.IsNull() {
+										ipqosInstBody, _ = sjson.Set(ipqosInstBody, "ipqosInst.attributes.stats", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if ipqosInstBody != "" {
+										ipqosInstBody, _ = sjson.Set(ipqosInstBody, "ipqosInst.attributes.rn", ipqosInstRn)
+										ipqosSystemBody, _ = sjson.SetRaw(ipqosSystemBody, "ipqosSystem.children.-1", ipqosInstBody)
+									}
+								}
+							}
+							if ipqosSystemBody != "" {
+								ipqosSystemBody, _ = sjson.Set(ipqosSystemBody, "ipqosSystem.attributes.rn", ipqosSystemRn)
+								ipqosEgressBody, _ = sjson.SetRaw(ipqosEgressBody, "ipqosEgress.children.-1", ipqosSystemBody)
+							}
+						}
+					}
+					for key, child := range data.PolicyInterfaceOut {
+						_ = child
+						ipqosIfRn := child.getRn(key)
+						ipqosIfDn := ipqosEgressDn + "/" + ipqosIfRn
+						_ = ipqosIfDn
+						ipqosIfBody := ""
+						ipqosIfBody, _ = sjson.Set(ipqosIfBody, "ipqosIf.attributes.rn", ipqosIfRn)
+						if !(child.PolicyMapName.IsNull() && child.PolicyMapStatistics.IsNull()) {
+							ipqosInstRn_ := "pmap"
+							ipqosInstDn_ := ipqosIfDn + "/" + ipqosInstRn_
+							_ = ipqosInstDn_
+							if !existed(ipqosInstDn_) {
+								ipqosIfBody, _ = sjson.Set(ipqosIfBody, "ipqosIf.children.-1.ipqosInst.attributes", map[string]interface{}{"rn": ipqosInstRn_, "status": "deleted"})
+							} else {
+								ipqosInstBody_ := ""
+								if !child.PolicyMapName.IsNull() {
+									ipqosInstBody_, _ = sjson.Set(ipqosInstBody_, "ipqosInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !child.PolicyMapStatistics.IsNull() {
+									ipqosInstBody_, _ = sjson.Set(ipqosInstBody_, "ipqosInst.attributes.stats", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if ipqosInstBody_ != "" {
+									ipqosInstBody_, _ = sjson.Set(ipqosInstBody_, "ipqosInst.attributes.rn", ipqosInstRn_)
+									ipqosIfBody, _ = sjson.SetRaw(ipqosIfBody, "ipqosIf.children.-1", ipqosInstBody_)
+								}
+							}
+						}
+						ipqosEgressBody, _ = sjson.SetRaw(ipqosEgressBody, "ipqosEgress.children.-1", ipqosIfBody)
+					}
+					if ipqosEgressBody != "" {
+						ipqosEgressBody, _ = sjson.Set(ipqosEgressBody, "ipqosEgress.attributes.rn", ipqosEgressRn)
+						ipqosServPolBody, _ = sjson.SetRaw(ipqosServPolBody, "ipqosServPol.children.-1", ipqosEgressBody)
+					}
+				}
+			}
+			if ipqosServPolBody != "" {
+				ipqosServPolBody, _ = sjson.Set(ipqosServPolBody, "ipqosServPol.attributes.rn", ipqosServPolRn)
+				body, _ = sjson.SetRaw(body, "ipqosQueuing.children.-1", ipqosServPolBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS, config QueuingQoS, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1294,6 +1741,8 @@ func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS, 
 				stateChild := state.PolicyMaps[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/p" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosPMapEntity")+".children").Array() {
 					if mv.Get("ipqosPMapInst.attributes.name").String() == key {
 						if !stateChild.MatchType.IsNull() && configChild.MatchType.IsNull() {
@@ -1316,6 +1765,8 @@ func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS, 
 								stateChild := stateChild.MatchClassMaps[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("ipqosMatchCMap.attributes.name").String() == key {
 										if !stateChild.NextClassMap.IsNull() && configChild.NextClassMap.IsNull() {
@@ -1336,113 +1787,167 @@ func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS, 
 										}
 									}
 									if listChildPath_ != "" {
-										if !stateChild.Priority.IsNull() && configChild.Priority.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPriority")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"level", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.Priority.IsNull()) && (configChild.Priority.IsNull()) && deleteEmptied(listChildDn_+"/prio") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPriority")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.Priority.IsNull() && configChild.Priority.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPriority")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"level", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.RemainingBandwidth.IsNull() && configChild.RemainingBandwidth.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetRemBW")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.RemainingBandwidth.IsNull()) && (configChild.RemainingBandwidth.IsNull()) && deleteEmptied(listChildDn_+"/setRemBW") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetRemBW")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.RemainingBandwidth.IsNull() && configChild.RemainingBandwidth.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetRemBW")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.CapAverage.IsNull() && configChild.CapAverage.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"capAverage", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.CapAverage.IsNull() && stateChild.DropAvailability.IsNull() && stateChild.RandomDetectEcn.IsNull() && stateChild.MaxThreshold.IsNull() && stateChild.MaxThresholdUnit.IsNull() && stateChild.MinThreshold.IsNull() && stateChild.MinThresholdUnit.IsNull() && stateChild.Optimization.IsNull() && stateChild.Weight.IsNull()) && (configChild.CapAverage.IsNull() && configChild.DropAvailability.IsNull() && configChild.RandomDetectEcn.IsNull() && configChild.MaxThreshold.IsNull() && configChild.MaxThresholdUnit.IsNull() && configChild.MinThreshold.IsNull() && configChild.MinThresholdUnit.IsNull() && configChild.Optimization.IsNull() && configChild.Weight.IsNull()) && deleteEmptied(listChildDn_+"/RandDet") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.CapAverage.IsNull() && configChild.CapAverage.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"capAverage", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.DropAvailability.IsNull() && configChild.DropAvailability.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dropAvail", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.RandomDetectEcn.IsNull() && configChild.RandomDetectEcn.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ecn", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.MaxThreshold.IsNull() && configChild.MaxThreshold.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxThreshold", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.MaxThresholdUnit.IsNull() && configChild.MaxThresholdUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxThresholdUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.MinThreshold.IsNull() && configChild.MinThreshold.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minThreshold", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.MinThresholdUnit.IsNull() && configChild.MinThresholdUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minThresholdUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Optimization.IsNull() && configChild.Optimization.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"optimization", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Weight.IsNull() && configChild.Weight.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"weight", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.DropAvailability.IsNull() && configChild.DropAvailability.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dropAvail", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.AfdEcn.IsNull() && stateChild.QueueDesiredUnit.IsNull() && stateChild.QueueDesired.IsNull()) && (configChild.AfdEcn.IsNull() && configChild.QueueDesiredUnit.IsNull() && configChild.QueueDesired.IsNull()) && deleteEmptied(listChildDn_+"/afd") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosAfd")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.AfdEcn.IsNull() && configChild.AfdEcn.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosAfd")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ecn", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.QueueDesiredUnit.IsNull() && configChild.QueueDesiredUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosAfd")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queueDesiredUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.QueueDesired.IsNull() && configChild.QueueDesired.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosAfd")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queueDesiredVal", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.RandomDetectEcn.IsNull() && configChild.RandomDetectEcn.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ecn", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.Bandwidth.IsNull()) && (configChild.Bandwidth.IsNull()) && deleteEmptied(listChildDn_+"/setBW") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetBW")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.Bandwidth.IsNull() && configChild.Bandwidth.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetBW")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.MaxThreshold.IsNull() && configChild.MaxThreshold.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxThreshold", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.ShapeMaxRate.IsNull() && stateChild.ShapeMaxRateUnit.IsNull() && stateChild.ShapeMinRate.IsNull() && stateChild.ShapeMinRateUnit.IsNull()) && (configChild.ShapeMaxRate.IsNull() && configChild.ShapeMaxRateUnit.IsNull() && configChild.ShapeMinRate.IsNull() && configChild.ShapeMinRateUnit.IsNull()) && deleteEmptied(listChildDn_+"/shape") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosShape")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.ShapeMaxRate.IsNull() && configChild.ShapeMaxRate.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosShape")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"max", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ShapeMaxRateUnit.IsNull() && configChild.ShapeMaxRateUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosShape")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxRateUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ShapeMinRate.IsNull() && configChild.ShapeMinRate.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosShape")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"min", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ShapeMinRateUnit.IsNull() && configChild.ShapeMinRateUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosShape")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minRateUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.MaxThresholdUnit.IsNull() && configChild.MaxThresholdUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxThresholdUnit", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.QueueLimitUnit.IsNull() && stateChild.QueueLimit.IsNull() && stateChild.QueueLimitDynamic.IsNull()) && (configChild.QueueLimitUnit.IsNull() && configChild.QueueLimit.IsNull() && configChild.QueueLimitDynamic.IsNull()) && deleteEmptied(listChildDn_+"/QueueLimit") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosQueueLimit")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.QueueLimitUnit.IsNull() && configChild.QueueLimitUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosQueueLimit")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"QueueLimitUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.QueueLimit.IsNull() && configChild.QueueLimit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosQueueLimit")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"QueueLimitVal", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.QueueLimitDynamic.IsNull() && configChild.QueueLimitDynamic.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosQueueLimit")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dynamic", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.MinThreshold.IsNull() && configChild.MinThreshold.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minThreshold", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.BurstDetectFallThresholdUnit.IsNull() && stateChild.BurstDetectFallThreshold.IsNull() && stateChild.BurstDetectRiseThresholdUnit.IsNull() && stateChild.BurstDetectRiseThreshold.IsNull()) && (configChild.BurstDetectFallThresholdUnit.IsNull() && configChild.BurstDetectFallThreshold.IsNull() && configChild.BurstDetectRiseThresholdUnit.IsNull() && configChild.BurstDetectRiseThreshold.IsNull()) && deleteEmptied(listChildDn_+"/burstdetect") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetect")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.BurstDetectFallThresholdUnit.IsNull() && configChild.BurstDetectFallThresholdUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fallThresUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.BurstDetectFallThreshold.IsNull() && configChild.BurstDetectFallThreshold.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fallThreshold", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.BurstDetectRiseThresholdUnit.IsNull() && configChild.BurstDetectRiseThresholdUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"riseThresUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.BurstDetectRiseThreshold.IsNull() && configChild.BurstDetectRiseThreshold.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetect")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"riseThreshold", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.MinThresholdUnit.IsNull() && configChild.MinThresholdUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minThresholdUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.Optimization.IsNull() && configChild.Optimization.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"optimization", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.Weight.IsNull() && configChild.Weight.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosRandomDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"weight", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.AfdEcn.IsNull() && configChild.AfdEcn.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosAfd")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ecn", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.QueueDesiredUnit.IsNull() && configChild.QueueDesiredUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosAfd")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queueDesiredUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.QueueDesired.IsNull() && configChild.QueueDesired.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosAfd")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queueDesiredVal", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.Bandwidth.IsNull() && configChild.Bandwidth.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetBW")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ShapeMaxRate.IsNull() && configChild.ShapeMaxRate.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosShape")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"max", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ShapeMaxRateUnit.IsNull() && configChild.ShapeMaxRateUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosShape")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxRateUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ShapeMinRate.IsNull() && configChild.ShapeMinRate.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosShape")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"min", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ShapeMinRateUnit.IsNull() && configChild.ShapeMinRateUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosShape")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minRateUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.QueueLimitUnit.IsNull() && configChild.QueueLimitUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosQueueLimit")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"QueueLimitUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.QueueLimit.IsNull() && configChild.QueueLimit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosQueueLimit")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"QueueLimitVal", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.QueueLimitDynamic.IsNull() && configChild.QueueLimitDynamic.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosQueueLimit")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dynamic", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.BurstDetectFallThresholdUnit.IsNull() && configChild.BurstDetectFallThresholdUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fallThresUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.BurstDetectFallThreshold.IsNull() && configChild.BurstDetectFallThreshold.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fallThreshold", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.BurstDetectRiseThresholdUnit.IsNull() && configChild.BurstDetectRiseThresholdUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"riseThresUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.BurstDetectRiseThreshold.IsNull() && configChild.BurstDetectRiseThreshold.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetect")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"riseThreshold", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.BurstDetectState.IsNull() && configChild.BurstDetectState.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetectState")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.BurstDetectState.IsNull()) && (configChild.BurstDetectState.IsNull()) && deleteEmptied(listChildDn_+"/burstdetectstate") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetectState")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.BurstDetectState.IsNull() && configChild.BurstDetectState.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosBurstDetectState")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
 									}
 								}
@@ -1452,19 +1957,27 @@ func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS, 
 				}
 			}
 		}
-		if !state.SystemOutPolicyMapName.IsNull() && config.SystemOutPolicyMapName.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosServPol")+".children", "ipqosEgress")+".children", "ipqosSystem")+".children", "ipqosInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.PolicyMapStatistics.IsNull() && config.PolicyMapStatistics.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosServPol")+".children", "ipqosEgress")+".children", "ipqosSystem")+".children", "ipqosInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stats", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.SystemOutPolicyMapName.IsNull() && state.PolicyMapStatistics.IsNull()) && (config.SystemOutPolicyMapName.IsNull() && config.PolicyMapStatistics.IsNull()) && deleteEmptied(data.getDn()+"/policy"+"/out"+"/sys"+"/pmap") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosServPol")+".children", "ipqosEgress")+".children", "ipqosSystem")+".children", "ipqosInst")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.SystemOutPolicyMapName.IsNull() && config.SystemOutPolicyMapName.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosServPol")+".children", "ipqosEgress")+".children", "ipqosSystem")+".children", "ipqosInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.PolicyMapStatistics.IsNull() && config.PolicyMapStatistics.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosServPol")+".children", "ipqosEgress")+".children", "ipqosSystem")+".children", "ipqosInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stats", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.PolicyInterfaceOut {
 			if configChild, ok := config.PolicyInterfaceOut[key]; ok {
 				stateChild := state.PolicyInterfaceOut[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/policy" + "/out" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosEgress")+".children").Array() {
@@ -1474,13 +1987,19 @@ func (data QueuingQoS) toBodyWithDeletes(ctx context.Context, state QueuingQoS, 
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.PolicyMapName.IsNull() && configChild.PolicyMapName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.PolicyMapStatistics.IsNull() && configChild.PolicyMapStatistics.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stats", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.PolicyMapName.IsNull() && stateChild.PolicyMapStatistics.IsNull()) && (configChild.PolicyMapName.IsNull() && configChild.PolicyMapStatistics.IsNull()) && deleteEmptied(listChildDn+"/pmap") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.PolicyMapName.IsNull() && configChild.PolicyMapName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.PolicyMapStatistics.IsNull() && configChild.PolicyMapStatistics.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stats", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}

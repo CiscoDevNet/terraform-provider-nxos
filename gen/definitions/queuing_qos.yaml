@@ -62,6 +62,13 @@ child_classes:
                 description: 'Insert after the given class-map.'
                 example: c-out-q2
                 exclude_test: true
+            example_entries:
+              - name: c-out-q2
+                remaining_bandwidth: 10
+              - name: c-out-q3
+                remaining_bandwidth: 10
+              - name: c-out-q-default
+                remaining_bandwidth: 10
             child_classes:
               - class_name: ipqosPriority
                 doc_path: Qos/ipqos:Priority/
@@ -420,61 +427,3 @@ child_classes:
                     type: Bool
                     description: 'Turn on/off statistics.'
                     example: false
-test_prerequisites:
-  - dn: sys/ipqos/queuing/p/name-[PM1]
-    class_name: ipqosPMapInst
-    attributes:
-      - name: name
-        value: PM1
-  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]
-    class_name: ipqosMatchCMap
-    attributes:
-      - name: name
-        value: c-out-q1
-    dependencies: [0]
-  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/prio
-    class_name: ipqosPriority
-    no_delete: true
-    attributes:
-      - name: level
-        value: 3
-    dependencies: [1]
-  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]
-    class_name: ipqosMatchCMap
-    attributes:
-      - name: name
-        value: c-out-q2
-    dependencies: [0]
-  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]/setRemBW
-    class_name: ipqosSetRemBW
-    no_delete: true
-    attributes:
-      - name: val
-        value: 10
-    dependencies: [3]
-  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]
-    class_name: ipqosMatchCMap
-    attributes:
-      - name: name
-        value: c-out-q3
-    dependencies: [0]
-  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]/setRemBW
-    class_name: ipqosSetRemBW
-    no_delete: true
-    attributes:
-      - name: val
-        value: 10
-    dependencies: [5]
-  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]
-    class_name: ipqosMatchCMap
-    attributes:
-      - name: name
-        value: c-out-q-default
-    dependencies: [0]
-  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]/setRemBW
-    class_name: ipqosSetRemBW
-    no_delete: true
-    attributes:
-      - name: val
-        value: 10
-    dependencies: [7]

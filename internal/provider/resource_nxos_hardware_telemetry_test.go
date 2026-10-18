@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosHardwareTelemetry(t *testing.T) {
+// TestAccHardwareTelemetryResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccHardwareTelemetryResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_agent_address", "172.24.141.69"))
@@ -44,38 +48,71 @@ func TestAccNxosHardwareTelemetry(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_max_datagram_size", "1400"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "sflow_receiver_port", "2055"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "receivers.management;10.92.198.113.source_address", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hardware_telemetry.test", "sflow_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hardware_telemetry.test", "sflow_agent_address", "172.24.141.69"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hardware_telemetry.test", "sflow_counter_poll_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hardware_telemetry.test", "sflow_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hardware_telemetry.test", "sflow_max_header_size", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hardware_telemetry.test", "sflow_packet_sampling_rate", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hardware_telemetry.test", "sflow_receiver_max_datagram_size", "1400"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hardware_telemetry.test", "sflow_receiver_port", "2055"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hardware_telemetry.test", "receivers.management;10.92.198.113.source_address", "10.0.0.1"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccHardwareTelemetryResourcePrerequisitesConfig + testAccHardwareTelemetryResourceConfig_minimum(),
+		},
+		{
+			Config: testAccHardwareTelemetryResourcePrerequisitesConfig + testAccHardwareTelemetryResourceConfig_all() + testAccHardwareTelemetryResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_hardware_telemetry.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccHardwareTelemetryResourceImportStateIdFunc("nxos_hardware_telemetry.test"),
+		},
+		{
+			ResourceName:       "nxos_hardware_telemetry.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccHardwareTelemetryResourcePrerequisitesConfig + testAccHardwareTelemetryResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccHardwareTelemetryResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccHardwareTelemetryResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_hardware_telemetry.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccHardwareTelemetryResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccHardwareTelemetryResourcePrerequisitesConfig + testAccHardwareTelemetryResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosHardwareTelemetryPrerequisitesConfig + testAccNxosHardwareTelemetryConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_hardware_telemetry.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosHardwareTelemetryImportStateIdFunc("nxos_hardware_telemetry.test"),
-			},
-			{
-				ResourceName:       "nxos_hardware_telemetry.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosHardwareTelemetryImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccHardwareTelemetryResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -85,7 +122,7 @@ func nxosHardwareTelemetryImportStateIdFunc(resourceName string) resource.Import
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosHardwareTelemetryPrerequisitesConfig = `
+const testAccHardwareTelemetryResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/sflow"
   class_name = "fmSflow"
@@ -100,7 +137,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosHardwareTelemetryConfig_minimum() string {
+func testAccHardwareTelemetryResourceConfig_minimum() string {
 	config := `resource "nxos_hardware_telemetry" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -110,7 +147,7 @@ func testAccNxosHardwareTelemetryConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosHardwareTelemetryConfig_all() string {
+func testAccHardwareTelemetryResourceConfig_all() string {
 	config := `resource "nxos_hardware_telemetry" "test" {` + "\n"
 	config += `	sflow_admin_state = "enabled"` + "\n"
 	config += `	sflow_agent_address = "172.24.141.69"` + "\n"
@@ -132,6 +169,14 @@ func testAccNxosHardwareTelemetryConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccHardwareTelemetryResourceConfig_dataSource() string {
+	return `
+data "nxos_hardware_telemetry" "test" {
+	depends_on = [nxos_hardware_telemetry.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

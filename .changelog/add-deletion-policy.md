@@ -1,3 +1,2 @@
 - Add `deletion_policy` provider option and resource attribute to control what happens on the device when objects are removed: `delete` (default, deletes the managed object including unmanaged configuration below it on destroy), `reset` (deletes the objects created by the resource and resets the managed attributes of objects that already existed) or `retain` (leaves the device unchanged on destroy)
 - With the `delete` deletion policy, single child objects are deleted on update once none of their attributes and children are configured anymore unless the device holds list entries below them that are not managed by the resource, instead of only resetting their attributes
-- Add "Deletion Policy" guide
